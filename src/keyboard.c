@@ -24,41 +24,42 @@
 #include <gtk/gtk.h>
 #include <cspi/spi.h>
 #include "system.h"
+#include "trace.h"
 #include "keyboard.h"
 #include "key.h"
 
 #define FLO_ANIMATION_TIMEOUT 50
 
 struct key *keyboard[256];
-GnomeCanvasGroup *canvas_group=NULL;
-GnomeCanvas *canvas=NULL;
+GnomeCanvasGroup *keyboard_canvas_group=NULL;
+GnomeCanvas *keyboard_canvas=NULL;
 guchar *keyboard_map;
 guint keyboard_width, keyboard_height;
-GdkModifierType modstatus=0;
-guint shift=0;
-guint control=0;
-struct key *current=NULL;
+GdkModifierType keyboard_modstatus=0;
+guint keyboard_shift=0;
+guint keyboard_control=0;
+struct key *keyboard_current=NULL;
 struct key *key_pressed=NULL;
-static gdouble timer=0.0;
-gdouble step=0.0;
+static gdouble keyboard_timer=0.0;
+gdouble keyboard_timer_step=0.0;
 
 void keyboard_switch_mode(GdkModifierType mod, gboolean pressed)
 {
 	int i;
 
-	/* assumption : only the shift and control keys are double */
+	/* assumption : only the keyboard_shift and keyboard_control keys are double */
 	if (mod & GDK_SHIFT_MASK) { 
-		if (pressed) shift++; else shift--;
-		if (shift) modstatus|=mod; else modstatus&=~mod;
+		if (pressed) keyboard_shift++; else keyboard_shift--;
+		if (keyboard_shift) keyboard_modstatus|=mod; else keyboard_modstatus&=~mod;
 	}
 	else if (mod & GDK_CONTROL_MASK) { 
-		if (pressed) control++; else control--;
-		if (control) modstatus|=mod; else modstatus&=~mod;
+		if (pressed) keyboard_control++; else keyboard_control--;
+		if (keyboard_control) keyboard_modstatus|=mod; else keyboard_modstatus&=~mod;
 	}
-	else if (pressed) modstatus|=mod; else modstatus&=~mod;
+	else if (pressed) keyboard_modstatus|=mod; else keyboard_modstatus&=~mod;
 
 	for (i=0;i<256;i++) {
-		if (keyboard[i]) key_switch_mode(keyboard[i], modstatus);
+		if (keyboard[i]) key_switch_mode(keyboard[i], keyboard_modstatus);
 	}
 }
 
@@ -83,7 +84,7 @@ void keyboard_key_release(struct key *key)
 gboolean keyboard_leave_event (GtkWidget *item, GdkEvent *event, gpointer user_data)
 {
 	if (key_pressed && key_pressed->pressed && !key_pressed->modifier) keyboard_key_release(key_pressed);
-	current=NULL;
+	keyboard_current=NULL;
 	return FALSE;
 }
 
@@ -91,16 +92,16 @@ gboolean keyboard_press_timeout (gpointer data)
 {
 	struct key *key=(struct key *)data;
 	gboolean ret=TRUE;
-	if (timer>=1.0) {
+	if (keyboard_timer>=1.0) {
 		gboolean pressed=key->pressed;
 		if (!key->modifier || !pressed) keyboard_key_press(key);
 		if (!key->modifier || (key->modifier && pressed)) keyboard_key_release(key);
 		ret=FALSE;
 	}
-	if ((timer==0.0) || (!ret) || (current!=key)) {
+	if ((keyboard_timer==0.0) || (!ret) || (keyboard_current!=key)) {
 		key_update_timer(key, 0.0); ret=FALSE;
 	}
-	else { key_update_timer(key, timer); timer+=step; }
+	else { key_update_timer(key, keyboard_timer); keyboard_timer+=keyboard_timer_step; }
 	return ret;
 }
 
@@ -113,17 +114,17 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 
 	switch (event->type) {
 		case GDK_MOTION_NOTIFY:
-			gnome_canvas_w2c(canvas, ((GdkEventMotion*)event)->x, 
+			gnome_canvas_w2c(keyboard_canvas, ((GdkEventMotion*)event)->x, 
 				((GdkEventMotion*)event)->y, &x, &y);
 			break;
 		case GDK_ENTER_NOTIFY:
 		case GDK_LEAVE_NOTIFY:
-			gnome_canvas_w2c(canvas, ((GdkEventCrossing*)event)->x, 
+			gnome_canvas_w2c(keyboard_canvas, ((GdkEventCrossing*)event)->x, 
 				((GdkEventCrossing*)event)->y, &x, &y);
 			break;
 		case GDK_BUTTON_PRESS:
 		case GDK_BUTTON_RELEASE:
-			gnome_canvas_w2c(canvas, ((GdkEventButton*)event)->x, 
+			gnome_canvas_w2c(keyboard_canvas, ((GdkEventButton*)event)->x, 
 				((GdkEventButton*)event)->y, &x, &y);
 			break;
 		default:
@@ -133,27 +134,27 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 	code=keyboard_map[x+(keyboard_width*y)];
 	if (code) key=keyboard[code];
 
-	if (current!=key && (event->type==GDK_ENTER_NOTIFY || event->type==GDK_LEAVE_NOTIFY ||
+	if (keyboard_current!=key && (event->type==GDK_ENTER_NOTIFY || event->type==GDK_LEAVE_NOTIFY ||
 		event->type==GDK_MOTION_NOTIFY)) {
-		current=key;
-		if (step==0.0) {
+		keyboard_current=key;
+		if (keyboard_timer_step==0.0) {
 			if (key) {
 				key_set_color(key, KEY_MOUSE_OVER_COLOR);
 			}
 			else { 
 				key_set_color(key, key->pressed?KEY_ACTIVATED_COLOR:KEY_COLOR);
-				current=NULL;
+				keyboard_current=NULL;
 			}
 		} else {
-			if (key) {timer=step; g_timeout_add(FLO_ANIMATION_TIMEOUT, keyboard_press_timeout, key);}
-			else { current=NULL; }
+			if (key) {keyboard_timer=keyboard_timer_step; g_timeout_add(FLO_ANIMATION_TIMEOUT, keyboard_press_timeout, key);}
+			else { keyboard_current=NULL; }
 		}
 	} else if (event->type==GDK_BUTTON_PRESS && (!data->modifier || !data->pressed)) {
-		timer=0.0; key_pressed=data;
+		keyboard_timer=0.0; key_pressed=data;
 		keyboard_key_press(data);
 	} else if ((event->type==GDK_BUTTON_RELEASE && !data->modifier) || 
 		(event->type==GDK_BUTTON_PRESS && key->modifier && data->pressed)) {
-		timer=0.0;
+		keyboard_timer=0.0;
 		keyboard_key_release(data);
 	}
 
@@ -169,8 +170,8 @@ struct key *keyboard_insertkey (char *code, char *label, double x, double y)
 	guint len;
 	gchar *name;
 
-	if (1!=sscanf(code, "%d", &icode)) fatal("Invalid key.");
-        group=(GnomeCanvasClipgroup *)gnome_canvas_item_new(canvas_group, GNOME_TYPE_CANVAS_CLIPGROUP, 
+	if (1!=sscanf(code, "%d", &icode)) flo_fatal("Invalid key.");
+        group=(GnomeCanvasClipgroup *)gnome_canvas_item_new(keyboard_canvas_group, GNOME_TYPE_CANVAS_CLIPGROUP, 
 		"x", x*2.0, "y", y*2.0, NULL);
 
 	gdk_keymap_get_entries_for_keycode(NULL, icode, NULL, &keyvals, &len);
@@ -188,7 +189,7 @@ struct key *keyboard_insertkey (char *code, char *label, double x, double y)
 	return keyboard[icode];
 }
 
-void keyboard_init (GKeyFile *gkf, GnomeCanvas *lcanvas)
+void keyboard_init (GKeyFile *gkf, GnomeCanvas *canvas)
 {
 	struct key *nkey=NULL;
 	gchar **general;
@@ -200,20 +201,22 @@ void keyboard_init (GKeyFile *gkf, GnomeCanvas *lcanvas)
 	gchar *colors[NUM_COLORS];
 	gdouble click_time;
 	guint i;
+	gdouble scale;
 
 	for (i=0;i<256;i++) {
 		keyboard[i]=NULL;
 	}
 
 	click_time=g_key_file_get_double(gkf, "Settings", "AutoClick", NULL);
-	if (click_time<=0.0) step=0.0; else step=FLO_ANIMATION_TIMEOUT/click_time;
+	if (click_time<=0.0) keyboard_timer_step=0.0; else keyboard_timer_step=FLO_ANIMATION_TIMEOUT/click_time;
 
-	canvas=lcanvas;
-        gnome_canvas_set_pixels_per_unit(canvas,g_key_file_get_double(gkf, "Window", "zoom", NULL));
-        gnome_canvas_set_scroll_region(canvas,0.0,0.0,
+	keyboard_canvas=canvas;
+	scale=g_key_file_get_double(gkf, "Window", "zoom", NULL);
+        gnome_canvas_set_pixels_per_unit(keyboard_canvas, scale);
+	gnome_canvas_set_scroll_region(canvas,0.0,0.0,
 		2.0*g_key_file_get_double(gkf, "Window", "width", NULL),
 		2.0*g_key_file_get_double(gkf, "Window", "height", NULL));
-	canvas_group=gnome_canvas_root(canvas);
+	keyboard_canvas_group=gnome_canvas_root(canvas);
 
 	colors[KEY_COLOR]=g_key_file_get_string(gkf, "Colors", "Key", NULL);
 	colors[KEY_OUTLINE_COLOR]=g_key_file_get_string(gkf, "Colors", "Outline", NULL);
@@ -222,24 +225,24 @@ void keyboard_init (GKeyFile *gkf, GnomeCanvas *lcanvas)
 	colors[KEY_MOUSE_OVER_COLOR]=g_key_file_get_string(gkf, "Colors", "MouseOver", NULL);
 	gtk_layout_get_size(GTK_LAYOUT(canvas), &keyboard_width, &keyboard_height);
 	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
-	memset(keyboard_map, 0, keyboard_width*keyboard_height);
-	key_init(canvas, colors, keyboard_map);
+	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
+	key_init(keyboard_canvas, colors, keyboard_map, scale/10.0);
 
         layout=g_key_file_get_keys(gkf, "Layout", NULL, NULL);
-	if (!layout) fatal ("Pas de catégorie Layout dans le fichier");
+	if (!layout) flo_fatal ("Pas de catégorie Layout dans le fichier");
         browse=layout;
         while (*browse) {
                 params=g_key_file_get_double_list(gkf, "Layout", *browse, &len, NULL);
 		label=g_key_file_get_string(gkf, "Labels", *browse, NULL);
-		if (!params) fatal("Program error");
+		if (!params) flo_fatal("Program error");
 		nkey=keyboard_insertkey(*browse, label, *params, *(params+1));
 		if (len==2) key_draw2(nkey, *params, *(params+1));
 		else if (len==4) key_draw4(nkey, *params, *(params+1), *(params+2), *(params+3));
-		else fatal("Invalid key arguments");
+		else flo_fatal("Invalid key arguments");
 		gtk_signal_connect(GTK_OBJECT(nkey->group), "event", GTK_SIGNAL_FUNC(keyboard_handle_event), nkey);
 		g_free(label);
                 g_free(params); 
-		if (!nkey) fatal ("Unable to create key");
+		if (!nkey) flo_fatal ("Unable to create key");
 
 		nkey=NULL;
 		browse++;	

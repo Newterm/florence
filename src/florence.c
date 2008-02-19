@@ -20,7 +20,7 @@
 */
 
 #include "system.h"
-
+#include "trace.h"
 #include "keyboard.h"
 #include <gtk/gtk.h>
 #include <libgnomecanvas/libgnomecanvas.h>
@@ -30,19 +30,12 @@
 guint flo_width=640;
 guint flo_height=240;
 
-void fatal (char *s)
-{
-	fprintf(stderr, (_("FATAL ERROR :\n")));
-	fprintf(stderr, (_("%s\n")), s);
-	exit(1);
-}
-
-void destroy (void)
+void flo_destroy (void)
 {
 	gtk_exit (0);
 }
 
-void focus_event (const AccessibleEvent *event, void *user_data)
+void flo_focus_event (const AccessibleEvent *event, void *user_data)
 {
 	GtkWindow *window=(GtkWindow *)user_data;
 	AccessibleComponent *component;
@@ -77,7 +70,7 @@ void focus_event (const AccessibleEvent *event, void *user_data)
 	}
 }
 
-void traverse (Accessible *obj)
+void flo_traverse (Accessible *obj)
 {
 	int n_children, i;
 	Accessible *child;
@@ -88,20 +81,20 @@ void traverse (Accessible *obj)
                 for (i = 0; i < n_children; ++i)
                 {
                         child=Accessible_getChildAtIndex (obj, i);
-                        traverse(child);
+                        flo_traverse(child);
                         Accessible_unref(child);
                 }
 	}
 }
 
-void window_create_event (const AccessibleEvent *event, gpointer user_data)
+void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
 {
 	/* For some reason, focus state change does happen after traverse 
 	 * ==> did I misunderstand? */
-	traverse(event->source);
+	flo_traverse(event->source);
 }
 
-gboolean spi_event_check (gpointer data)
+gboolean flo_spi_event_check (gpointer data)
 {
 	AccessibleEvent *event;
 	while (event=SPI_nextEvent(FALSE)) {}
@@ -113,19 +106,21 @@ void flo_set_mask(GdkWindow *window)
 	int x, y, o;
 	guchar *kbmap=keyboard_get_map();
 	GdkBitmap *mask;
-	guchar *data=g_malloc(sizeof(guchar)*flo_width*flo_height/8);
+	guint width=(flo_width&0xFFFFFFF8)+(flo_width&0x7?8:0);
+	guchar *data=g_malloc((sizeof(guchar)*width*flo_height)>>3);
 	guchar byte;
 
 	for (y=0;y<flo_height;y++) {
-		for (x=0;x<(flo_width/8);x++) {
+		for (x=0;x<(width>>3);x++) {
 			byte=0;
-			/* here with have a big/little endian problem
-			 * ==> TODO : use autotools' copnfig.h */
+			/* here with may have a big/little endian problem
+			 * unless gdk or xlib handles it? 
+			 * ==> TODO : check and use autotools' config.h if necessary */
 			for(o=7;o>=0;o--) {
 				byte<<=1;
-				if (kbmap[(8*x)+(y*flo_width)+o]) byte|=1; else byte&=0xfe;
+				if (kbmap[(x<<3)+(y*flo_width)+o]) byte|=1; else byte&=0xfe;
 			}
-			data[x+(y*flo_width/8)]=byte;
+			data[x+((y*width)>>3)]=byte;
 		}
 	}
 	mask=gdk_bitmap_create_from_data(window, data, flo_width, flo_height);
@@ -145,19 +140,19 @@ int florence (char *config)
 	GKeyFile *gkf;
 	gboolean showOnFocus;
 	guint borderWidth;
+	/*GdkColor *outline_color;*/
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_signal_connect(GTK_OBJECT(window), "destroy", GTK_SIGNAL_FUNC(destroy), NULL);
-	gtk_container_border_width(GTK_CONTAINER(window), 10);
-	
-	gtk_window_set_keep_above((GtkWindow *)window, TRUE);
-	gtk_window_set_accept_focus((GtkWindow *)window, FALSE);
-	gtk_window_set_skip_taskbar_hint((GtkWindow *)window, TRUE);
+	gtk_signal_connect(GTK_OBJECT(window), "destroy", GTK_SIGNAL_FUNC(flo_destroy), NULL);
+
+	gtk_window_set_keep_above(GTK_WINDOW(window), TRUE);
+	gtk_window_set_accept_focus(GTK_WINDOW(window), FALSE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window), TRUE);
 
 	printf((_("Using config file %s\n")),config);
         gkf=g_key_file_new();
         if (!g_key_file_load_from_file(gkf, config, G_KEY_FILE_NONE, NULL))
-                fatal ("Unable to load config file");
+                flo_fatal ("Unable to load config file");
 	showOnFocus=g_key_file_get_boolean(gkf, "Settings", "ShowOnEditable", NULL);
 
 	canvas=gnome_canvas_new_aa();
@@ -170,16 +165,19 @@ int florence (char *config)
 	if (g_key_file_get_boolean(gkf, "Window", "Shaped", NULL)) {
 		gtk_window_set_decorated((GtkWindow *)window, FALSE);
 		gtk_container_set_border_width(GTK_CONTAINER(window), 0);
-		gtk_window_set_default_size((GtkWindow *)window, flo_width, flo_height);
+		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 		gtk_widget_show(window);
+		/*gnome_canvas_get_color(canvas, g_key_file_get_string(gkf, "Colors", "Outline", NULL), outline_color);*/
+		/*gtk_widget_modify_bg(GTK_WIDGET(window), GTK_STATE_NORMAL, outline_color);*/
 		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(canvas)));
 	}
 	else {
 		borderWidth=gtk_container_get_border_width(GTK_CONTAINER(window));
 		flo_width+=2*borderWidth;
 		flo_height+=2*borderWidth;
-		gtk_window_set_default_size((GtkWindow *)window, flo_width, flo_height);
+		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 	}
+	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
 	g_key_file_free(gkf);
 
@@ -188,11 +186,11 @@ int florence (char *config)
 		gtk_widget_hide(window);
 
 		/* SPI binding */
-		focus_listener=SPI_createAccessibleEventListener (focus_event, (void*)window);
+		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)window);
 		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
-		window_listener=SPI_createAccessibleEventListener (window_create_event, NULL);
+		window_listener=SPI_createAccessibleEventListener (flo_window_create_event, NULL);
 		SPI_registerGlobalEventListener(window_listener, "window:create");
-		g_timeout_add(FLO_SPI_TIME_INTERVAL, spi_event_check, NULL);
+		g_timeout_add(FLO_SPI_TIME_INTERVAL, flo_spi_event_check, NULL);
 	} else {
 		gtk_widget_show(window);
 	}

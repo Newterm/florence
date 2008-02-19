@@ -20,15 +20,17 @@
 */
 
 #include "key.h"
+#include "trace.h"
 #include <string.h>
 #include <libart_lgpl/art_svp_render_aa.h>
 
 gchar *colors[NUM_COLORS];
 guchar *keyboard_map;
 gint keyboard_map_rowstride;
+gdouble key_scale;
 GnomeCanvas *canvas;
 
-void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf)
+void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf, gdouble scale)
 {
 	gint i;
 	for (i=0;i<NUM_COLORS;i++) {
@@ -39,6 +41,7 @@ void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf)
 	}
 	keyboard_map=buf;
 	canvas=gnome_canvas;
+	key_scale=scale;
 }
 
 void key_exit()
@@ -80,14 +83,20 @@ void key_free(struct key *key)
 void key_update_draw (void *callback_data, int y, int start, ArtSVPRenderAAStep *steps, int n_steps)
 {
 	struct key *key=(struct key *)callback_data;
-	int i, j;
-	int x=steps[0].x;
-	guchar *adr=keyboard_map+(y*keyboard_map_rowstride);
-	for (i=1;i<n_steps;i++) {
+	int i=0, x=0, j;
+	int value=start>>16;
+	guchar *adr;
+
+	if (n_steps && value==0) { i=1 ; x=steps[0].x; value+=steps[0].delta>>16; }
+	adr=keyboard_map+(y*keyboard_map_rowstride);
+	for (;i<n_steps;i++) {
 		j=x;
-		while (j<steps[i].x) *(adr+(j++))=(guchar)key->code;
+		if (value<-128||value>128) while (j<steps[i].x) *(adr+(j++))=(guchar)key->code;
 		x=steps[i].x;
+		value+=steps[i].delta>>16;
 	}
+	j=x;
+	if (n_steps && (value<-128||value>128)) while (j<keyboard_map_rowstride) *(adr+(j++))=(guchar)key->code;
 }
 
 void key_update_map(struct key *key, GnomeCanvasPathDef *path)
@@ -109,8 +118,8 @@ void key_update_map(struct key *key, GnomeCanvasPathDef *path)
 	affine[5]+=y;
 
 	bpath=gnome_canvas_path_def_bpath(path);
-	vpath=art_bez_path_to_vec(art_bpath_affine_transform(bpath, affine), 0.1);
-	svp=art_svp_from_vpath(vpath);
+	vpath=(ArtVpath *)art_bez_path_to_vec(art_bpath_affine_transform(bpath, affine), 0.1);
+	svp=(ArtSVP *)art_svp_from_vpath(vpath);
 	art_svp_render_aa(svp, 0, 0, w, h, key_update_draw, key);
 
 	art_free(svp);
@@ -123,7 +132,7 @@ guint key_getKeyval (struct key *key)
 	guint len;
 	if (!gdk_keymap_get_entries_for_keycode(NULL, key->code, NULL, &keyvals, &len)) {
 		fprintf (stderr, "keycode=<%d> ==> no keyval\n", key->code);
-		fatal ("Unknown keycode.");
+		flo_fatal ("Unknown keycode.");
 	}
 	return *keyvals;
 }
@@ -285,7 +294,8 @@ void key_draw4(struct key *key, double x, double y, double w, double h)
 	else {
 	        key->items=g_malloc(sizeof(GnomeCanvasItem *));
         	key->textItem=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_TEXT,
-                	"x", 0.0, "y", 0.0, "text", key_getLabel(key, 0), "fill_color", colors[KEY_TEXT_COLOR], NULL);
+                	"x", 0.0, "y", 0.0, "text", key_getLabel(key, 0), "fill_color", colors[KEY_TEXT_COLOR],
+			"size-set", TRUE, "size-points", 12.0*key_scale, NULL);
         	*(key->items)=NULL;
 	}
 }

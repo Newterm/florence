@@ -1,2 +1,7 @@
-2008-02-02:
-	* Project start
+2008-02-02 François Agrech <f.agrech@gmail.com>
+	* ChangeLog start
+
+2008-02-19 François Agrech <f.agrech@gmail.com>
+	* Fix shape when window size is not multiple of 8 (because of odd
+	zoom parameter)
+	* Add font scaling according to window size
