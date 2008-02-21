@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.0.2], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.0.3], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -7,7 +7,7 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 
 # Checks for libraries.
-DEP_MODULES="cspi-1.0 libgnomecanvas-2.0"
+DEP_MODULES="cspi-1.0 libgnomecanvas-2.0 gtk+-2.0 >= 2.10.0"
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
@@ -27,6 +27,6 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 # Checks for library functions.
 AC_CHECK_FUNCS([memchr memset])
 
-AC_CONFIG_FILES([Makefile src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile])
 AC_OUTPUT
 

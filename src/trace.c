@@ -25,8 +25,8 @@
 
 void flo_fatal (char *s)
 {
-        fprintf(stderr, (_("FATAL ERROR :\n")));
-        fprintf(stderr, (_("%s\n")), s);
+        fprintf(stderr, _("FATAL ERROR :\n"));
+        fprintf(stderr, _("%s\n"), s);
         exit(1);
 }
 

@@ -65,7 +65,7 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 			gtk_window_set_keep_above(window, TRUE);
 		}
 		else {
-			gtk_widget_hide(GTK_WIDGET(window));
+			gtk_widget_hide(GTK_WIDGET(window)); 
 		}
 	}
 }
@@ -75,15 +75,15 @@ void flo_traverse (Accessible *obj)
 	int n_children, i;
 	Accessible *child;
 
-        n_children = Accessible_getChildCount (obj);
-        if (!Accessible_isTable (obj))
-        {
-                for (i = 0; i < n_children; ++i)
-                {
-                        child=Accessible_getChildAtIndex (obj, i);
-                        flo_traverse(child);
-                        Accessible_unref(child);
-                }
+	n_children = Accessible_getChildCount (obj);
+	if (!Accessible_isTable (obj))
+	{
+		for (i = 0; i < n_children; ++i)
+		{
+			child=Accessible_getChildAtIndex (obj, i);
+			flo_traverse(child);
+			Accessible_unref(child);
+		}
 	}
 }
 
@@ -99,6 +99,30 @@ gboolean flo_spi_event_check (gpointer data)
 	AccessibleEvent *event;
 	while (event=SPI_nextEvent(FALSE)) {}
 	return TRUE;
+}
+
+void flo_about()
+{
+	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
+	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
+		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
+		"logo-icon-name", "florence.svg", "website", "http://florence.sourceforge.net",
+		"license", _("Copyright (C) 2008 François Agrech\n\
+\n\
+This program is free software; you can redistribute it and/or modify\n\
+it under the terms of the GNU General Public License as published by\n\
+the Free Software Foundation; either version 2, or (at your option)\n\
+any later version.\n\
+\n\
+This program is distributed in the hope that it will be useful,\n\
+but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
+GNU General Public License for more details.\n\
+\n\
+You should have received a copy of the GNU General Public License\n\
+along with this program; if not, write to the Free Software Foundation,\n\
+Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."),
+		NULL);
 }
 
 void flo_set_mask(GdkWindow *window)
@@ -130,6 +154,54 @@ void flo_set_mask(GdkWindow *window)
 	g_free(data);
 }
 
+void flo_tray_icon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
+{
+	static gint x=0;
+	static gint y=0;
+	GtkWidget *window=GTK_WIDGET(user_data);
+	if (GTK_WIDGET_VISIBLE(window)) {
+		gtk_window_get_position(GTK_WINDOW(window), &x, &y);
+		gtk_widget_hide(window);
+	} else { 
+		gtk_window_move(GTK_WINDOW(window), x, y);
+		gtk_widget_show(window);
+	}
+}
+
+void flo_tray_icon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)
+{
+	GtkWidget *menu, *about, *quit;
+ 
+	menu = gtk_menu_new();
+
+	quit = gtk_image_menu_item_new_with_mnemonic(_("_Quit"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quit), gtk_image_new_from_stock(GTK_STOCK_QUIT,GTK_ICON_SIZE_MENU));
+	g_signal_connect_swapped(quit, "activate", G_CALLBACK(flo_destroy), NULL);
+
+	about = gtk_image_menu_item_new_with_mnemonic(_("_About"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(about), gtk_image_new_from_stock(GTK_STOCK_ABOUT,GTK_ICON_SIZE_MENU));
+	g_signal_connect(about, "activate", G_CALLBACK(flo_about), NULL);
+
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), about);
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), quit);
+	gtk_widget_show_all(menu);
+ 
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,gtk_status_icon_position_menu, status_icon,button, activate_time);
+}
+
+void flo_create_tray_icon(GtkWidget *window)
+{
+	GtkStatusIcon *tray_icon;
+
+	tray_icon = gtk_status_icon_new();
+	g_signal_connect(G_OBJECT(tray_icon), "activate", G_CALLBACK(flo_tray_icon_on_click), (gpointer)window);
+	g_signal_connect(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(flo_tray_icon_on_menu), NULL);
+	gtk_status_icon_set_from_icon_name(tray_icon, "florence.svg");
+	gtk_status_icon_set_tooltip(tray_icon, _("Florence Virtual Keyboard"));
+	gtk_status_icon_set_visible(tray_icon, TRUE);
+}
+
 int florence (char *config)
 {
 	AccessibleEventListener *focus_listener;
@@ -140,7 +212,6 @@ int florence (char *config)
 	GKeyFile *gkf;
 	gboolean showOnFocus;
 	guint borderWidth;
-	/*GdkColor *outline_color;*/
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_signal_connect(GTK_OBJECT(window), "destroy", GTK_SIGNAL_FUNC(flo_destroy), NULL);
@@ -149,10 +220,10 @@ int florence (char *config)
 	gtk_window_set_accept_focus(GTK_WINDOW(window), FALSE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window), TRUE);
 
-	printf((_("Using config file %s\n")),config);
-        gkf=g_key_file_new();
-        if (!g_key_file_load_from_file(gkf, config, G_KEY_FILE_NONE, NULL))
-                flo_fatal ("Unable to load config file");
+	printf(_("Using config file %s\n"),config);
+	gkf=g_key_file_new();
+	if (!g_key_file_load_from_file(gkf, config, G_KEY_FILE_NONE, NULL))
+		flo_fatal ("Unable to load config file");
 	showOnFocus=g_key_file_get_boolean(gkf, "Settings", "ShowOnEditable", NULL);
 
 	canvas=gnome_canvas_new_aa();
@@ -167,8 +238,6 @@ int florence (char *config)
 		gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 		gtk_widget_show(window);
-		/*gnome_canvas_get_color(canvas, g_key_file_get_string(gkf, "Colors", "Outline", NULL), outline_color);*/
-		/*gtk_widget_modify_bg(GTK_WIDGET(window), GTK_STATE_NORMAL, outline_color);*/
 		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(canvas)));
 	}
 	else {
@@ -195,8 +264,7 @@ int florence (char *config)
 		gtk_widget_show(window);
 	}
 
-	printf((_("Florence is ready.\n")));
-	fflush(stdout);
+	flo_create_tray_icon(window);
 	gtk_main();
 
 	keyboard_exit();

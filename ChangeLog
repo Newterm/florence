@@ -1,7 +1,15 @@
 2008-02-02 François Agrech <f.agrech@gmail.com>
 	* ChangeLog start
+	* Version 0.0.1
 
 2008-02-19 François Agrech <f.agrech@gmail.com>
+	* Version 0.0.2
 	* Fix shape when window size is not multiple of 8 (because of odd
-	zoom parameter)
+	  zoom parameter)
 	* Add font scaling according to window size
+
+2008-02-21 François Agrech <f.agrech@gmail.com>
+	* Version 0.0.3
+	* Add a desktop entry with a nice svg icon
+	* Add a systray icon (Requires GTK 2.10)
+

@@ -218,11 +218,11 @@ void keyboard_init (GKeyFile *gkf, GnomeCanvas *canvas)
 		2.0*g_key_file_get_double(gkf, "Window", "height", NULL));
 	keyboard_canvas_group=gnome_canvas_root(canvas);
 
-	colors[KEY_COLOR]=g_key_file_get_string(gkf, "Colors", "Key", NULL);
-	colors[KEY_OUTLINE_COLOR]=g_key_file_get_string(gkf, "Colors", "Outline", NULL);
-	colors[KEY_TEXT_COLOR]=g_key_file_get_string(gkf, "Colors", "Text", NULL);
-	colors[KEY_ACTIVATED_COLOR]=g_key_file_get_string(gkf, "Colors", "Activated", NULL);
-	colors[KEY_MOUSE_OVER_COLOR]=g_key_file_get_string(gkf, "Colors", "MouseOver", NULL);
+	colors[KEY_COLOR]=g_key_file_get_string(gkf, "Colours", "Key", NULL);
+	colors[KEY_OUTLINE_COLOR]=g_key_file_get_string(gkf, "Colours", "Outline", NULL);
+	colors[KEY_TEXT_COLOR]=g_key_file_get_string(gkf, "Colours", "Text", NULL);
+	colors[KEY_ACTIVATED_COLOR]=g_key_file_get_string(gkf, "Colours", "Activated", NULL);
+	colors[KEY_MOUSE_OVER_COLOR]=g_key_file_get_string(gkf, "Colours", "MouseOver", NULL);
 	gtk_layout_get_size(GTK_LAYOUT(canvas), &keyboard_width, &keyboard_height);
 	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
 	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
