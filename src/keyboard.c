@@ -1,4 +1,5 @@
 /* 
+
    Florence - Florence is a simple virtual keyboard for Gnome.
 
    Copyright (C) 2008 François Agrech
@@ -23,6 +24,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <cspi/spi.h>
+#include <gconf/gconf-client.h>
 #include "system.h"
 #include "trace.h"
 #include "keyboard.h"
@@ -39,9 +41,19 @@ GdkModifierType keyboard_modstatus=0;
 guint keyboard_shift=0;
 guint keyboard_control=0;
 struct key *keyboard_current=NULL;
-struct key *key_pressed=NULL;
+struct key *keyboard_pressed=NULL;
 static gdouble keyboard_timer=0.0;
 gdouble keyboard_timer_step=0.0;
+
+guint keyboard_get_width(void)
+{
+	return keyboard_width;
+}
+
+guint keyboard_get_height(void)
+{
+	return keyboard_height;
+}
 
 void keyboard_switch_mode(GdkModifierType mod, gboolean pressed)
 {
@@ -83,7 +95,7 @@ void keyboard_key_release(struct key *key)
 
 gboolean keyboard_leave_event (GtkWidget *item, GdkEvent *event, gpointer user_data)
 {
-	if (key_pressed && key_pressed->pressed && !key_pressed->modifier) keyboard_key_release(key_pressed);
+	if (keyboard_pressed && keyboard_pressed->pressed && !keyboard_pressed->modifier) keyboard_key_release(keyboard_pressed);
 	keyboard_current=NULL;
 	return FALSE;
 }
@@ -150,7 +162,7 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 			else { keyboard_current=NULL; }
 		}
 	} else if (event->type==GDK_BUTTON_PRESS && (!data->modifier || !data->pressed)) {
-		keyboard_timer=0.0; key_pressed=data;
+		keyboard_timer=0.0; keyboard_pressed=data;
 		keyboard_key_press(data);
 	} else if ((event->type==GDK_BUTTON_RELEASE && !data->modifier) || 
 		(event->type==GDK_BUTTON_PRESS && key->modifier && data->pressed)) {
@@ -170,7 +182,7 @@ struct key *keyboard_insertkey (char *code, char *label, double x, double y)
 	guint len;
 	gchar *name;
 
-	if (1!=sscanf(code, "%d", &icode)) flo_fatal("Invalid key.");
+	if (1!=sscanf(code, "%d", &icode)) flo_fatal(_("Invalid key."));
         group=(GnomeCanvasClipgroup *)gnome_canvas_item_new(keyboard_canvas_group, GNOME_TYPE_CANVAS_CLIPGROUP, 
 		"x", x*2.0, "y", y*2.0, NULL);
 
@@ -189,65 +201,79 @@ struct key *keyboard_insertkey (char *code, char *label, double x, double y)
 	return keyboard[icode];
 }
 
-void keyboard_init (GKeyFile *gkf, GnomeCanvas *canvas)
+void keyboard_create(gchar *file, gdouble scale, gchar *colours[])
 {
 	struct key *nkey=NULL;
-	gchar **general;
         gchar **layout;
         gchar **browse;
 	gdouble *params;
 	gchar *label;
 	gsize len;
-	gchar *colors[NUM_COLORS];
-	gdouble click_time;
-	guint i;
-	gdouble scale;
+	GKeyFile *gkf;
 
-	for (i=0;i<256;i++) {
-		keyboard[i]=NULL;
-	}
+	flo_info(_("Using layout file <%s>"), file);
+	gkf=g_key_file_new();
+	if (!g_key_file_load_from_file(gkf, file, G_KEY_FILE_NONE, NULL))
+		flo_fatal (_("Unable to load layout file"));
 
-	click_time=g_key_file_get_double(gkf, "Settings", "AutoClick", NULL);
-	if (click_time<=0.0) keyboard_timer_step=0.0; else keyboard_timer_step=FLO_ANIMATION_TIMEOUT/click_time;
-
-	keyboard_canvas=canvas;
-	scale=g_key_file_get_double(gkf, "Window", "zoom", NULL);
-        gnome_canvas_set_pixels_per_unit(keyboard_canvas, scale);
-	gnome_canvas_set_scroll_region(canvas,0.0,0.0,
-		2.0*g_key_file_get_double(gkf, "Window", "width", NULL),
-		2.0*g_key_file_get_double(gkf, "Window", "height", NULL));
-	keyboard_canvas_group=gnome_canvas_root(canvas);
-
-	colors[KEY_COLOR]=g_key_file_get_string(gkf, "Colours", "Key", NULL);
-	colors[KEY_OUTLINE_COLOR]=g_key_file_get_string(gkf, "Colours", "Outline", NULL);
-	colors[KEY_TEXT_COLOR]=g_key_file_get_string(gkf, "Colours", "Text", NULL);
-	colors[KEY_ACTIVATED_COLOR]=g_key_file_get_string(gkf, "Colours", "Activated", NULL);
-	colors[KEY_MOUSE_OVER_COLOR]=g_key_file_get_string(gkf, "Colours", "MouseOver", NULL);
-	gtk_layout_get_size(GTK_LAYOUT(canvas), &keyboard_width, &keyboard_height);
+	gnome_canvas_set_scroll_region(keyboard_canvas,0.0,0.0,
+		2.0*g_key_file_get_double(gkf, "Size", "Width", NULL),
+		2.0*g_key_file_get_double(gkf, "Size", "Height", NULL));
+	gnome_canvas_w2c(keyboard_canvas, 2.0*g_key_file_get_double(gkf, "Size", "Width", NULL),
+		2.0*g_key_file_get_double(gkf, "Size", "Height", NULL), &keyboard_width, &keyboard_height);
 	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
 	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
-	key_init(keyboard_canvas, colors, keyboard_map, scale/10.0);
+	key_init(keyboard_canvas, colours, keyboard_map, scale/10.0);
 
         layout=g_key_file_get_keys(gkf, "Layout", NULL, NULL);
-	if (!layout) flo_fatal ("Pas de catégorie Layout dans le fichier");
+	if (!layout) flo_fatal (_("Pas de catégorie Layout dans le fichier"));
         browse=layout;
         while (*browse) {
                 params=g_key_file_get_double_list(gkf, "Layout", *browse, &len, NULL);
 		label=g_key_file_get_string(gkf, "Labels", *browse, NULL);
-		if (!params) flo_fatal("Program error");
+		if (!params) flo_fatal(_("Program error"));
 		nkey=keyboard_insertkey(*browse, label, *params, *(params+1));
 		if (len==2) key_draw2(nkey, *params, *(params+1));
 		else if (len==4) key_draw4(nkey, *params, *(params+1), *(params+2), *(params+3));
-		else flo_fatal("Invalid key arguments");
+		else flo_fatal(_("Invalid key arguments"));
 		gtk_signal_connect(GTK_OBJECT(nkey->group), "event", GTK_SIGNAL_FUNC(keyboard_handle_event), nkey);
 		g_free(label);
                 g_free(params); 
-		if (!nkey) flo_fatal ("Unable to create key");
+		if (!nkey) flo_fatal (_("Unable to create key"));
 
 		nkey=NULL;
 		browse++;	
         }
         g_strfreev(layout);
+	g_key_file_free(gkf);
+}
+
+void keyboard_init (GnomeCanvas *canvas)
+{
+	gchar *colours[NUM_COLORS];
+	gdouble click_time;
+	gdouble scale;
+	guint i;
+
+	for (i=0;i<256;i++) {
+		keyboard[i]=NULL;
+	}
+
+	click_time=gconf_value_get_float(settings_get_value("behaviour/auto_click"));
+	if (click_time<=0.0) keyboard_timer_step=0.0; else keyboard_timer_step=FLO_ANIMATION_TIMEOUT/click_time;
+
+	keyboard_canvas=canvas;
+	scale=gconf_value_get_float(settings_get_value("window/zoom"));
+        gnome_canvas_set_pixels_per_unit(keyboard_canvas, scale);
+	keyboard_canvas_group=gnome_canvas_root(canvas);
+
+	colours[KEY_COLOR]=gconf_value_get_string(settings_get_value("colours/key"));
+	colours[KEY_OUTLINE_COLOR]=gconf_value_get_string(settings_get_value("colours/outline"));
+	colours[KEY_TEXT_COLOR]=gconf_value_get_string(settings_get_value("colours/label"));
+	colours[KEY_ACTIVATED_COLOR]=gconf_value_get_string(settings_get_value("colours/activated"));
+	colours[KEY_MOUSE_OVER_COLOR]=gconf_value_get_string(settings_get_value("colours/mouseover"));
+
+	keyboard_create(gconf_value_get_string(settings_get_value("layout/file")), scale, colours);
 	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), NULL);
 }
 

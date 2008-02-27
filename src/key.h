@@ -35,7 +35,7 @@ struct key {
 	GdkModifierType modifier;
 };
 
-enum colors {
+enum colours {
 	KEY_COLOR,
 	KEY_OUTLINE_COLOR,
 	KEY_ACTIVATED_COLOR,
@@ -44,13 +44,13 @@ enum colors {
 	NUM_COLORS
 };
 
-void key_init(GnomeCanvas *gnome_canvas, gchar *colors[], guchar *buf, gdouble scale);
+void key_init(GnomeCanvas *gnome_canvas, gchar *colours[], guchar *buf, gdouble scale);
 void key_exit();
 struct key *key_new(guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *label);
 void key_free(struct key *key);
 void key_draw4(struct key *key, double x, double y, double w, double h);
 void key_draw2(struct key *key, double x, double y);
-void key_set_color(struct key *key, enum colors color);
+void key_set_color(struct key *key, enum colours color);
 void key_switch_mode(struct key *key, GdkModifierType mod);
 void key_update_timer(struct key *key, double value);
 

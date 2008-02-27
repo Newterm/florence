@@ -22,12 +22,26 @@
 #include "trace.h"
 #include "system.h"
 #include <stdio.h>
+#include <stdarg.h>
 
-void flo_fatal (char *s)
+void flo_fatal(char *s, ...)
 {
+	va_list ap;
         fprintf(stderr, _("FATAL ERROR :\n"));
-        fprintf(stderr, _("%s\n"), s);
+	va_start(ap, s);
+        vfprintf(stderr, s, ap);
+	fprintf(stderr, "\n");
+	va_end(ap);
         exit(1);
+}
+
+void flo_info(char *s, ...)
+{
+	va_list ap;
+	va_start(ap, s);
+        vprintf(s, ap);
+        printf("\n");
+	va_end(ap);
 }
 
 

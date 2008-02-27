@@ -32,13 +32,10 @@ static void usage (int status);
 
 /* The name the program was run with, stripped of any leading path. */
 char *program_name=NULL;
-char *config_file=NULL;
-char default_config_file[]=CONFIGFILE;
 
 /* Option flags and variables */
 static struct option const long_options[] =
 {
-	{"config", required_argument, 0, 'c'},
 	{"help", no_argument, 0, 'h'},
 	{"version", no_argument, 0, 'V'},
 	{NULL, 0, NULL, 0}
@@ -54,10 +51,11 @@ int main (int argc, char **argv)
 
 	i = decode_switches (argc, argv);
 
-	gtk_init (&argc, &argv);
+	gtk_init(&argc, &argv);
+	gconf_init(argc, argv, NULL);
+	g_type_init();
 
-	if (!config_file) config_file=(char*)default_config_file;
-	return florence(config_file);
+	return florence();
 }
 
 /* Set all the option flags according to the switches specified.
@@ -68,7 +66,6 @@ decode_switches (int argc, char **argv)
 int c;
 
 	while ((c = getopt_long (argc, argv, 
-		"c"  /* config file */
 		"h"  /* help */
 		"V", /* version */
 		long_options, (int *) 0)) != EOF)
@@ -80,9 +77,6 @@ int c;
 			exit (0);
 		case 'h':
 			usage (0);
-		case 'c':
-			config_file=optarg;
-			break;
 		default:
 			usage (EXIT_FAILURE);
 		}
@@ -98,7 +92,6 @@ Florence is a simple virtual keyboard for Gnome.\n"), program_name);
 	printf (_("Usage: %s [OPTION]...\n"), program_name);
 	printf (_("\
 Options:\n\
-  -c, --config=<file>        use configuration <file> instead of default /etc/florence.conf\n\
   -h, --help                 display this help and exit\n\
   -V, --version              output version information and exit\n\n\
 Report bugs to <f.agerch@gmail.com>.\n"), program_name);

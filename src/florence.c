@@ -22,13 +22,16 @@
 #include "system.h"
 #include "trace.h"
 #include "keyboard.h"
+#include "trayicon.h"
+#include "settings.h"
+#include <gconf/gconf-client.h>
 #include <gtk/gtk.h>
 #include <libgnomecanvas/libgnomecanvas.h>
 #include <cspi/spi.h>
 
 #define FLO_SPI_TIME_INTERVAL 100
-guint flo_width=640;
-guint flo_height=240;
+guint flo_width=600;
+guint flo_height=200;
 
 void flo_destroy (void)
 {
@@ -101,30 +104,6 @@ gboolean flo_spi_event_check (gpointer data)
 	return TRUE;
 }
 
-void flo_about()
-{
-	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
-	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
-		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
-		"logo-icon-name", "florence.svg", "website", "http://florence.sourceforge.net",
-		"license", _("Copyright (C) 2008 François Agrech\n\
-\n\
-This program is free software; you can redistribute it and/or modify\n\
-it under the terms of the GNU General Public License as published by\n\
-the Free Software Foundation; either version 2, or (at your option)\n\
-any later version.\n\
-\n\
-This program is distributed in the hope that it will be useful,\n\
-but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-GNU General Public License for more details.\n\
-\n\
-You should have received a copy of the GNU General Public License\n\
-along with this program; if not, write to the Free Software Foundation,\n\
-Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."),
-		NULL);
-}
-
 void flo_set_mask(GdkWindow *window)
 {
 	int x, y, o;
@@ -154,62 +133,28 @@ void flo_set_mask(GdkWindow *window)
 	g_free(data);
 }
 
-void flo_tray_icon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
+void flo_set_show_on_focus (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	static gint x=0;
-	static gint y=0;
-	GtkWidget *window=GTK_WIDGET(user_data);
-	if (GTK_WIDGET_VISIBLE(window)) {
-		gtk_window_get_position(GTK_WINDOW(window), &x, &y);
-		gtk_widget_hide(window);
-	} else { 
-		gtk_window_move(GTK_WINDOW(window), x, y);
-		gtk_widget_show(window);
-	}
+	flo_info("always on screen = %d", gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
-void flo_tray_icon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)
+void flo_set_zoom (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	GtkWidget *menu, *about, *quit;
- 
-	menu = gtk_menu_new();
-
-	quit = gtk_image_menu_item_new_with_mnemonic(_("_Quit"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quit), gtk_image_new_from_stock(GTK_STOCK_QUIT,GTK_ICON_SIZE_MENU));
-	g_signal_connect_swapped(quit, "activate", G_CALLBACK(flo_destroy), NULL);
-
-	about = gtk_image_menu_item_new_with_mnemonic(_("_About"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(about), gtk_image_new_from_stock(GTK_STOCK_ABOUT,GTK_ICON_SIZE_MENU));
-	g_signal_connect(about, "activate", G_CALLBACK(flo_about), NULL);
-
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), about);
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
-	gtk_menu_shell_append(GTK_MENU_SHELL(menu), quit);
-	gtk_widget_show_all(menu);
- 
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,gtk_status_icon_position_menu, status_icon,button, activate_time);
 }
 
-void flo_create_tray_icon(GtkWidget *window)
+void flo_register_settings_cb(void)
 {
-	GtkStatusIcon *tray_icon;
-
-	tray_icon = gtk_status_icon_new();
-	g_signal_connect(G_OBJECT(tray_icon), "activate", G_CALLBACK(flo_tray_icon_on_click), (gpointer)window);
-	g_signal_connect(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(flo_tray_icon_on_menu), NULL);
-	gtk_status_icon_set_from_icon_name(tray_icon, "florence.svg");
-	gtk_status_icon_set_tooltip(tray_icon, _("Florence Virtual Keyboard"));
-	gtk_status_icon_set_visible(tray_icon, TRUE);
+	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus);
+	settings_changecb_register("window/zoom", flo_set_zoom);
 }
 
-int florence (char *config)
+int florence (void)
 {
 	AccessibleEventListener *focus_listener;
 	AccessibleEventListener *window_listener;
 	AccessibleKeystrokeListener *keystroke_listener;
 	GtkWidget *window;
 	GtkWidget *canvas;
-	GKeyFile *gkf;
 	gboolean showOnFocus;
 	guint borderWidth;
 
@@ -220,20 +165,18 @@ int florence (char *config)
 	gtk_window_set_accept_focus(GTK_WINDOW(window), FALSE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window), TRUE);
 
-	printf(_("Using config file %s\n"),config);
-	gkf=g_key_file_new();
-	if (!g_key_file_load_from_file(gkf, config, G_KEY_FILE_NONE, NULL))
-		flo_fatal ("Unable to load config file");
-	showOnFocus=g_key_file_get_boolean(gkf, "Settings", "ShowOnEditable", NULL);
+	settings_init();
+	flo_register_settings_cb();
+	showOnFocus=!gconf_value_get_bool(settings_get_value("behaviour/always_on_screen"));
 
 	canvas=gnome_canvas_new_aa();
-	keyboard_init(gkf, (GnomeCanvas *)canvas);
+	keyboard_init((GnomeCanvas *)canvas);
+	flo_width=keyboard_get_width();
+	flo_height=keyboard_get_height();
 	gtk_container_add(GTK_CONTAINER(window), canvas);
 	gtk_widget_show(canvas);
 
-	gnome_canvas_w2c(GNOME_CANVAS(canvas), 2.0*g_key_file_get_double(gkf, "Window", "width", NULL),
-		2.0*g_key_file_get_double(gkf, "Window", "height", NULL), &flo_width, &flo_height);
-	if (g_key_file_get_boolean(gkf, "Window", "Shaped", NULL)) {
+	if (gconf_value_get_bool(settings_get_value("window/shaped"))) {
 		gtk_window_set_decorated((GtkWindow *)window, FALSE);
 		gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
@@ -247,8 +190,6 @@ int florence (char *config)
 		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 	}
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
-
-	g_key_file_free(gkf);
 
 	SPI_init ();
 	if (showOnFocus) {
@@ -264,9 +205,10 @@ int florence (char *config)
 		gtk_widget_show(window);
 	}
 
-	flo_create_tray_icon(window);
+	trayicon_create(window, flo_destroy);
 	gtk_main();
 
+	settings_exit();
 	keyboard_exit();
 	return SPI_exit();
 }

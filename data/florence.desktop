@@ -9,8 +9,4 @@ Terminal=false
 Type=Application
 Icon=florence.svg
 Categories=Application;Accessibility;
-X-GNOME-Bugzilla-Bugzilla=GNOME
-X-GNOME-Bugzilla-Product=florence
-X-GNOME-Bugzilla-Component=general
-StartupNotify=true
 

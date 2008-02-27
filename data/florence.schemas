@@ -1,0 +1,159 @@
+<gconfschemafile>
+	<schemalist>
+
+		<schema>
+			<key>/schemas/apps/florence/behaviour/always_on_screen</key>
+			<applyto>/apps/florence/behaviour/always_on_screen</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Always on screen/only show on editable</short>
+				<long>Set to true, Florence will be always shown. To false, it will be shown when an editable widget is selected</long>
+			</locale>
+			<locale name="fr">
+				<short>Toujours à l'écran/seulement sur les éditables</short>
+				<long>Positionné à vrai, Florence sera toujours à l'écran. À faux, Florence ne sera affiché que lorsqu'un objet éditable est sélectionné</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/auto_click</key>
+			<applyto>/apps/florence/behaviour/auto_click</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>1300</default>
+			<locale name="C">
+				<short>Auto click timeout</short>
+				<long>Time, in milliseconds, to wait when the mouse is over a key before the key is automatically pressed. Set to 0 to disable auto click.</long>
+			</locale>
+			<locale name="fr">
+				<short>Déclencheur d'auto click</short>
+				<long>Temps, en millisecondes, à attendre lorsque la souris est sur une touche avant que la touche soir automatiquement préssée. Mettre à 0 pour désactiver l'auto click.</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/florence/window/zoom</key>
+			<applyto>/apps/florence/window/zoom</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>10</default>
+			<locale name="C">
+				<short>Scaling factor of the window</short>
+				<long>Sets the size of the window and of the keys</long>
+			</locale>
+			<locale name="fr">
+				<short>Taille de la fenêtre</short>
+				<long>Détermine la grosseur des touches et de la fenêtre</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/shaped</key>
+			<applyto>/apps/florence/window/shaped</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>false</default>
+			<locale name="C">
+				<short>Shape mode</short>
+				<long>Set to true to have Florence appear in shape mode (no window decoration). Set to false to have Florence appear in rectangular mode.</long>
+			</locale>
+			<locale name="fr">
+				<short>Mode forma</short>
+				<long>Mettre à vrai pour que Florence s'affiche en mode forme (pas de décoration). Mettre à faux pour avoir Florence en mode rectangulaire.</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/florence/colours/key</key>
+			<applyto>/apps/florence/colours/key</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#000000</default>
+			<locale name="C">
+				<short>key color</short>
+				<long>Color of the keys</long>
+			</locale>
+			<locale name="fr">
+				<short>Couleur des touches</short>
+				<long>Couleur des touches</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/colours/outline</key>
+			<applyto>/apps/florence/colours/outline</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#808080</default>
+			<locale name="C">
+				<short>Outline color</short>
+				<long>Color of the outline of the keys</long>
+			</locale>
+			<locale name="fr">
+				<short>Couleur des bordures</short>
+				<long>Couleur des bordures des touches</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/colours/label</key>
+			<applyto>/apps/florence/colours/label</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#FFFFFF</default>
+			<locale name="C">
+				<short>Text color</short>
+				<long>Color of the labels of the keys</long>
+			</locale>
+			<locale name="fr">
+				<short>Couleur du texte</short>
+				<long>Couleur des symboles sur les touches</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/colours/activated</key>
+			<applyto>/apps/florence/colours/activated</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#FF0000</default>
+			<locale name="C">
+				<short>Activated color</short>
+				<long>Color of the pressed keys</long>
+			</locale>
+			<locale name="fr">
+				<short>Couleur d'activation</short>
+				<long>Couleur des touches pressées</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/colours/mouseover</key>
+			<applyto>/apps/florence/colours/mouseover</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#0000FF</default>
+			<locale name="C">
+				<short>Mouse over color</short>
+				<long>Color of the key when the mouse is over</long>
+			</locale>
+			<locale name="fr">
+				<short>Couleur des touches sous la souris</short>
+				<long>Couleur de la touche quand la souris passe dessus</long>
+			</locale>
+		</schema>
+
+		<schema>
+			<key>/schemas/apps/florence/layout/file</key>
+			<applyto>/apps/florence/layout/file</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>@LAYOUTDIR@/florence.layout</default>
+			<locale name="C">
+				<short>Path of the layout file</short>
+				<long>The layout file contains the layout of the keys on the keyboard</long>
+			</locale>
+			<locale name="fr">
+				<short>Chemin vers le fichier layout</short>
+				<long>Le fichier layout contient l'arrangement des touches sur le clavier</long>
+			</locale>
+		</schema>
+
+	</schemalist>
+</gconfschemafile>

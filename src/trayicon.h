@@ -19,6 +19,5 @@
 
 */
 
-void flo_fatal (char *s, ...);
-void flo_info (char *s, ...);
+void trayicon_create(GtkWidget *window, GCallback *quit_cb);
 

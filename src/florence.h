@@ -19,5 +19,5 @@
 
 */
 
-int florence (char *config);
+int florence (void);
 

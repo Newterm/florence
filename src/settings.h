@@ -19,6 +19,12 @@
 
 */
 
-void flo_fatal (char *s, ...);
-void flo_info (char *s, ...);
+#include <gconf/gconf-client.h>
+#include <gtk/gtk.h>
+
+void settings_init(void);
+void settings_exit(void);
+void settings(void);
+void settings_changecb_register(gchar *name, GCallback cb);
+GConfValue *settings_get_value(gchar *name);
 

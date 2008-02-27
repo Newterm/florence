@@ -13,3 +13,10 @@
 	* Add a desktop entry with a nice svg icon
 	* Add a systray icon (Requires GTK 2.10)
 
+2008-02-21 François Agrech <f.agrech@gmail.com>
+	* Version 0.0.4
+	* New configuration GUI (requires libglade)
+	* Move configuration to GConf
+	* Note : configuration doesn't work yet but the infrastructure is in
+	place
+
