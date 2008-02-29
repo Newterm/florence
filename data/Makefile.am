@@ -8,8 +8,10 @@ schema_DATA=florence.schemas
 desktopdir=$(datadir)/applications
 desktop_DATA=florence.desktop
 
-iconsdir=$(datadir)/icons/apps/florence/scalable
-icons_DATA=florence.svg
+scalableiconsdir=$(datadir)/icons/apps/florence/scalable
+scalableicons_DATA=florence.svg
+iconsdir=$(datadir)/icons/apps/florence/32x32
+icons_DATA=florence.png
 
 gladedir=$(datadir)/florence
 glade_DATA=florence.glade 

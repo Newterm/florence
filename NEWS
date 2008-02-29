@@ -20,3 +20,8 @@
 	* Note : configuration doesn't work yet but the infrastructure is in
 	place
 
+2008-02-29 François Agrech <f.agrech@gmail.com>
+	* Version 0.0.5
+	* Configuration works
+	* There is a bug to investigate with resizing (makes Florence crash)
+

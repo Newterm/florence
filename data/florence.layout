@@ -18,26 +18,10 @@
 #  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 #
 
-[Settings]
-# Set to true to make the keyboard visible only editable widget is focused 
-ShowOnEditable=false
-# AutoClick : timeout before the key is pressed when mouse is over.
-# 0 = no autoclick
-AutoClick=1300
-
-[Window]
-Shaped=false
-zoom=10
-# Depends on layout
-width=30
-height=10
-
-[Colours]
-Text=white
-Key=black
-Outline=gray
-Activated=red
-MouseOver=blue
+# Size of the layout
+[Size]
+Width=30
+Height=10
 
 [Labels]
 # keycode=label

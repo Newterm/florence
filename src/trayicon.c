@@ -23,14 +23,17 @@
 #include "config.h"
 #include "settings.h"
 #include <gtk/gtk.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 GCallback trayicon_quit;
 
 void trayicon_about(void)
 {
+	/* TODO: the icon doesn't seem to work */
 	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
 		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
+		"logo", gdk_pixbuf_new_from_file("florence.svg", NULL),
 		"logo-icon-name", "florence.svg", "website", "http://florence.sourceforge.net",
 		"license", _("Copyright (C) 2008 François Agrech\n\
 \n\
@@ -78,7 +81,7 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(about), gtk_image_new_from_stock(GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU));
 	g_signal_connect(about, "activate", G_CALLBACK(trayicon_about), NULL);
 
-	config = gtk_image_menu_item_new_with_mnemonic(_("_Settings"));
+	config = gtk_image_menu_item_new_with_mnemonic(_("_Preferences"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(config), gtk_image_new_from_stock(GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU));
 	g_signal_connect(config, "activate", G_CALLBACK(settings), NULL);
 
@@ -99,6 +102,7 @@ void trayicon_create(GtkWidget *window, GCallback *quit_cb)
 	tray_icon = gtk_status_icon_new();
 	g_signal_connect(G_OBJECT(tray_icon), "activate", G_CALLBACK(trayicon_on_click), (gpointer)window);
 	g_signal_connect(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(trayicon_on_menu), NULL);
+	/* TODO: this doesn't work!!! */
 	gtk_status_icon_set_from_icon_name(tray_icon, "florence.svg");
 	gtk_status_icon_set_tooltip(tray_icon, _("Florence Virtual Keyboard"));
 	gtk_status_icon_set_visible(tray_icon, TRUE);

@@ -20,5 +20,6 @@
 */
 
 void flo_fatal (char *s, ...);
+void flo_error (char *s, ...);
 void flo_info (char *s, ...);
 

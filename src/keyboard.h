@@ -26,4 +26,5 @@ void keyboard_exit (void);
 guint keyboard_get_width(void);
 guint keyboard_get_height(void);
 guchar *keyboard_get_map(void);
+void keyboard_resize(gdouble zoom);
 

@@ -36,6 +36,7 @@ struct key *keyboard[256];
 GnomeCanvasGroup *keyboard_canvas_group=NULL;
 GnomeCanvas *keyboard_canvas=NULL;
 guchar *keyboard_map;
+gdouble keyboard_vwidth, keyboard_vheight;
 guint keyboard_width, keyboard_height;
 GdkModifierType keyboard_modstatus=0;
 guint keyboard_shift=0;
@@ -53,6 +54,21 @@ guint keyboard_get_width(void)
 guint keyboard_get_height(void)
 {
 	return keyboard_height;
+}
+
+void keyboard_resize(gdouble zoom)
+{
+	gint i;
+	gnome_canvas_set_pixels_per_unit(keyboard_canvas, zoom);
+	gnome_canvas_w2c(keyboard_canvas, keyboard_vwidth, keyboard_vheight , &keyboard_width, &keyboard_height);
+	if (keyboard_map) g_free(keyboard_map);
+	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
+	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
+        for(i=0;i<256;i++) {
+                if (keyboard[i]) {
+			key_resize(keyboard[i], keyboard_map, zoom/10.0);
+		}
+	}
 }
 
 void keyboard_switch_mode(GdkModifierType mod, gboolean pressed)
@@ -201,6 +217,48 @@ struct key *keyboard_insertkey (char *code, char *label, double x, double y)
 	return keyboard[icode];
 }
 
+void keyboard_change_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	guint i;
+	enum colours colclass=(enum colours)user_data;
+	gchar *color=gconf_value_get_string(gconf_entry_get_value(entry));
+	key_update_color(colclass, color);
+	for(i=0;i<256;i++) {
+		if (keyboard[i]) {
+			switch(colclass) {
+				case KEY_COLOR: 
+					if (!keyboard[i]->pressed) key_set_color(keyboard[i], colclass);
+					break;
+				case KEY_TEXT_COLOR:
+					key_update_text_color(keyboard[i]);
+					break;
+				case KEY_ACTIVATED_COLOR:
+					if (keyboard[i]->pressed) key_set_color(keyboard[i], colclass);
+				case KEY_MOUSE_OVER_COLOR:
+					/* unlikely and if that ever happen, just move to another key */
+					break;
+				default:
+					flo_error(_("Should never happen: unknown color class updated"));
+					break;
+			}
+		}
+	}
+}
+
+void keyboard_change_auto_click(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	keyboard_timer_step=gconf_value_get_float(gconf_entry_get_value(entry));
+}
+
+void keyboard_settings_connect(void)
+{
+	settings_changecb_register("colours/key", keyboard_change_color, (gpointer)KEY_COLOR);
+	settings_changecb_register("colours/label", keyboard_change_color, (gpointer)KEY_TEXT_COLOR);
+	settings_changecb_register("colours/activated", keyboard_change_color, (gpointer)KEY_ACTIVATED_COLOR);
+	settings_changecb_register("colours/mouseover", keyboard_change_color, (gpointer)KEY_MOUSE_OVER_COLOR);
+	settings_changecb_register("behaviour/auto_click", keyboard_change_auto_click, NULL);
+}
+
 void keyboard_create(gchar *file, gdouble scale, gchar *colours[])
 {
 	struct key *nkey=NULL;
@@ -219,8 +277,9 @@ void keyboard_create(gchar *file, gdouble scale, gchar *colours[])
 	gnome_canvas_set_scroll_region(keyboard_canvas,0.0,0.0,
 		2.0*g_key_file_get_double(gkf, "Size", "Width", NULL),
 		2.0*g_key_file_get_double(gkf, "Size", "Height", NULL));
-	gnome_canvas_w2c(keyboard_canvas, 2.0*g_key_file_get_double(gkf, "Size", "Width", NULL),
-		2.0*g_key_file_get_double(gkf, "Size", "Height", NULL), &keyboard_width, &keyboard_height);
+	keyboard_vwidth=2.0*g_key_file_get_double(gkf, "Size", "Width", NULL);
+	keyboard_vheight=2.0*g_key_file_get_double(gkf, "Size", "Height", NULL);
+	gnome_canvas_w2c(keyboard_canvas, keyboard_vwidth, keyboard_vheight , &keyboard_width, &keyboard_height);
 	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
 	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
 	key_init(keyboard_canvas, colours, keyboard_map, scale/10.0);
@@ -275,6 +334,8 @@ void keyboard_init (GnomeCanvas *canvas)
 
 	keyboard_create(gconf_value_get_string(settings_get_value("layout/file")), scale, colours);
 	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), NULL);
+
+	keyboard_settings_connect();
 }
 
 void keyboard_exit (void)

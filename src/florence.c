@@ -32,6 +32,7 @@
 #define FLO_SPI_TIME_INTERVAL 100
 guint flo_width=600;
 guint flo_height=200;
+gboolean always_on_screen=TRUE;
 
 void flo_destroy (void)
 {
@@ -101,10 +102,10 @@ gboolean flo_spi_event_check (gpointer data)
 {
 	AccessibleEvent *event;
 	while (event=SPI_nextEvent(FALSE)) {}
-	return TRUE;
+	return !always_on_screen;
 }
 
-void flo_set_mask(GdkWindow *window)
+void flo_set_mask(GdkWindow *window, gboolean shape)
 {
 	int x, y, o;
 	guchar *kbmap=keyboard_get_map();
@@ -115,14 +116,16 @@ void flo_set_mask(GdkWindow *window)
 
 	for (y=0;y<flo_height;y++) {
 		for (x=0;x<(width>>3);x++) {
-			byte=0;
-			/* here with may have a big/little endian problem
-			 * unless gdk or xlib handles it? 
-			 * ==> TODO : check and use autotools' config.h if necessary */
-			for(o=7;o>=0;o--) {
-				byte<<=1;
-				if (kbmap[(x<<3)+(y*flo_width)+o]) byte|=1; else byte&=0xfe;
-			}
+			if (shape) {
+				byte=0;
+				/* here with may have a big/little endian problem
+				 * unless gdk or Xlib handles it? 
+				 * ==> TODO : check and use autotools' config.h if necessary */
+				for(o=7;o>=0;o--) {
+					byte<<=1;
+					if (kbmap[(x<<3)+(y*flo_width)+o]) byte|=1; else byte&=0xfe;
+				}
+			} else byte=0xFF;
 			data[x+((y*width)>>3)]=byte;
 		}
 	}
@@ -133,29 +136,70 @@ void flo_set_mask(GdkWindow *window)
 	g_free(data);
 }
 
-void flo_set_show_on_focus (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void flo_switch_mode (GtkWidget *window, gboolean on_screen)
 {
-	flo_info("always on screen = %d", gconf_value_get_bool(gconf_entry_get_value(entry)));
+	static AccessibleEventListener *focus_listener;
+	static AccessibleEventListener *window_listener;
+
+	if (!on_screen) {
+		gtk_widget_hide(window);
+		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)window);
+		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
+		window_listener=SPI_createAccessibleEventListener (flo_window_create_event, NULL);
+		SPI_registerGlobalEventListener(window_listener, "window:create");
+		g_timeout_add(FLO_SPI_TIME_INTERVAL, flo_spi_event_check, NULL);
+	} else {
+		if (!always_on_screen) {
+			SPI_deregisterGlobalEventListener(focus_listener, "object:state-changed:focused");
+			SPI_deregisterGlobalEventListener(window_listener, "window:create");
+		}
+		gtk_widget_show(window);
+	}
+
+	always_on_screen=on_screen;
 }
 
-void flo_set_zoom (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void flo_set_shaped(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	gtk_widget_show(GTK_WIDGET(user_data));
+	flo_set_mask(gtk_widget_get_parent_window(
+		GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
+		gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
-void flo_register_settings_cb(void)
+void flo_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus);
-	settings_changecb_register("window/zoom", flo_set_zoom);
+	gtk_window_set_decorated(GTK_WIDGET(user_data), gconf_value_get_bool(gconf_entry_get_value(entry)));
+}
+
+void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	flo_switch_mode(GTK_WIDGET(user_data), gconf_value_get_bool(gconf_entry_get_value(entry)));
+}
+
+void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	keyboard_resize(gconf_value_get_float(gconf_entry_get_value(entry)));
+	flo_width=keyboard_get_width();
+	flo_height=keyboard_get_height();
+	gtk_widget_set_size_request(GTK_WIDGET(user_data), flo_width, flo_height);
+	flo_set_mask(gtk_widget_get_parent_window(
+		GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
+		gconf_value_get_bool(settings_get_value("window/shaped")));
+}
+
+void flo_register_settings_cb(GtkWidget *window)
+{
+	settings_changecb_register("window/shaped", flo_set_shaped, window);
+	settings_changecb_register("window/decorated", flo_set_decorated, window);
+	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, window);
+	settings_changecb_register("window/zoom", flo_set_zoom, window);
 }
 
 int florence (void)
 {
-	AccessibleEventListener *focus_listener;
-	AccessibleEventListener *window_listener;
-	AccessibleKeystrokeListener *keystroke_listener;
 	GtkWidget *window;
 	GtkWidget *canvas;
-	gboolean showOnFocus;
 	guint borderWidth;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -166,8 +210,7 @@ int florence (void)
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window), TRUE);
 
 	settings_init();
-	flo_register_settings_cb();
-	showOnFocus=!gconf_value_get_bool(settings_get_value("behaviour/always_on_screen"));
+	flo_register_settings_cb(window);
 
 	canvas=gnome_canvas_new_aa();
 	keyboard_init((GnomeCanvas *)canvas);
@@ -176,12 +219,14 @@ int florence (void)
 	gtk_container_add(GTK_CONTAINER(window), canvas);
 	gtk_widget_show(canvas);
 
+	gtk_window_set_decorated((GtkWindow *)window,
+		gconf_value_get_bool(settings_get_value("window/decorated")));
+
 	if (gconf_value_get_bool(settings_get_value("window/shaped"))) {
-		gtk_window_set_decorated((GtkWindow *)window, FALSE);
 		gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 		gtk_widget_show(window);
-		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(canvas)));
+		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(canvas)), TRUE);
 	}
 	else {
 		borderWidth=gtk_container_get_border_width(GTK_CONTAINER(window));
@@ -192,18 +237,7 @@ int florence (void)
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
 	SPI_init ();
-	if (showOnFocus) {
-		gtk_widget_hide(window);
-
-		/* SPI binding */
-		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)window);
-		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
-		window_listener=SPI_createAccessibleEventListener (flo_window_create_event, NULL);
-		SPI_registerGlobalEventListener(window_listener, "window:create");
-		g_timeout_add(FLO_SPI_TIME_INTERVAL, flo_spi_event_check, NULL);
-	} else {
-		gtk_widget_show(window);
-	}
+	flo_switch_mode(window, gconf_value_get_bool(settings_get_value("behaviour/always_on_screen")));
 
 	trayicon_create(window, flo_destroy);
 	gtk_main();

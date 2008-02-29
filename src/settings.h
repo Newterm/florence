@@ -25,6 +25,6 @@
 void settings_init(void);
 void settings_exit(void);
 void settings(void);
-void settings_changecb_register(gchar *name, GCallback cb);
+void settings_changecb_register(gchar *name, GCallback cb, gpointer user_data);
 GConfValue *settings_get_value(gchar *name);
 

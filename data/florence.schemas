@@ -55,11 +55,26 @@
 			<default>false</default>
 			<locale name="C">
 				<short>Shape mode</short>
-				<long>Set to true to have Florence appear in shape mode (no window decoration). Set to false to have Florence appear in rectangular mode.</long>
+				<long>Set to true to have Florence appear in shape mode. Set to false to have Florence appear in rectangular mode.</long>
 			</locale>
 			<locale name="fr">
-				<short>Mode forma</short>
-				<long>Mettre à vrai pour que Florence s'affiche en mode forme (pas de décoration). Mettre à faux pour avoir Florence en mode rectangulaire.</long>
+				<short>Mode forme</short>
+				<long>Mettre à vrai pour que Florence s'affiche en mode forme. Mettre à faux pour avoir Florence en mode rectangulaire.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/decorated</key>
+			<applyto>/apps/florence/window/decorated</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Decorate window</short>
+				<long>Window has a title bar and buttons.</long>
+			</locale>
+			<locale name="fr">
+				<short>Fenêtre décorée</short>
+				<long>La fenêtre a une barre de titre et des boutons.</long>
 			</locale>
 		</schema>
 

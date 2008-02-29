@@ -13,9 +13,12 @@
    id="svg2160"
    sodipodi:version="0.32"
    inkscape:version="0.45.1"
-   sodipodi:docbase="/home/agrouffff"
+   sodipodi:docbase="/home/agrouffff/gavk/data"
    sodipodi:docname="florence.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   inkscape:export-filename="/home/agrouffff/gavk/data/florence.png"
+   inkscape:export-xdpi="60.91"
+   inkscape:export-ydpi="60.91">
   <sodipodi:namedview
      id="base"
      pagecolor="#ffffff"
@@ -33,7 +36,7 @@
      inkscape:window-width="872"
      inkscape:window-height="624"
      inkscape:window-x="12"
-     inkscape:window-y="94" />
+     inkscape:window-y="93" />
   <defs
      id="defs2162">
     <linearGradient
@@ -91,22 +94,6 @@
      id="layer1"
      inkscape:label="Layer 1">
     <rect
-       id="rect4580"
-       x="17.785717"
-       y="9"
-       width="12.857142"
-       height="12.571428"
-       ry="3.7142856"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4574)" />
-    <rect
-       id="rect4582"
-       x="34.000008"
-       y="9"
-       width="12.857142"
-       height="12.571428"
-       ry="3.7142856"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4574)" />
-    <rect
        id="rect4584"
        x="17.714285"
        y="24"
@@ -136,6 +123,52 @@
            x="4.0683594"
            id="tspan4588"
            y="18.571428">F</tspan></text>
+    </g>
+    <g
+       id="g2174"
+       transform="translate(16.214286,0)">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4574)"
+         ry="3.7142856"
+         height="12.571428"
+         width="12.857142"
+         y="9"
+         x="1.5714288"
+         id="rect2176" />
+      <text
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier New"
+         xml:space="preserve"
+         id="text2178"
+         y="18.571428"
+         x="4.0683594"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="4.0683594"
+           id="tspan2180"
+           y="18.571428">L</tspan></text>
+    </g>
+    <g
+       id="g2182"
+       transform="translate(32.428572,0)">
+      <rect
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;filter:url(#filter4574)"
+         ry="3.7142856"
+         height="12.571428"
+         width="12.857142"
+         y="9"
+         x="1.5714288"
+         id="rect2184" />
+      <text
+         style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Courier New"
+         xml:space="preserve"
+         id="text2186"
+         y="18.571428"
+         x="4.0683594"
+         sodipodi:linespacing="125%"><tspan
+           sodipodi:role="line"
+           x="4.0683594"
+           id="tspan2188"
+           y="18.571428">O</tspan></text>
     </g>
   </g>
 </svg>

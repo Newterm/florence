@@ -13,6 +13,8 @@ DEPENDANCIES
       * gtk >= 2.10
       * libgnomecanvas >= 2.0
       * cspi >= 1.0
+      * libgconf >= 2.0
+      * libglade >= 2.0
 
 QUICK INSTALL
 *************

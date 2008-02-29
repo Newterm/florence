@@ -34,10 +34,8 @@ void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf, gdouble sca
 {
 	gint i;
 	for (i=0;i<NUM_COLORS;i++) {
-		if (cols[i]!=NULL) {
-			colours[i]=g_malloc((1+strlen(cols[i]))*sizeof(gchar));
-			strcpy(colours[i], cols[i]);
-		}
+		colours[i]=NULL;
+		key_update_color(i, cols[i]);
 	}
 	keyboard_map=buf;
 	canvas=gnome_canvas;
@@ -78,6 +76,27 @@ void key_free(struct key *key)
 	while (br) gtk_object_destroy(GTK_OBJECT(br++));
 	if (key->items) g_free(key->items);
 	g_free(key);
+}
+
+void key_resize(struct key *key, guchar *buf, gdouble zoom)
+{
+	GnomeCanvasPathDef *bpath;
+	key_scale=zoom;
+	keyboard_map=buf;
+	if (key->textItem) {
+		gnome_canvas_item_set(key->textItem, "size-points", 12.0*key_scale, NULL);
+	}
+	g_object_get(G_OBJECT(key->group), "path", &bpath, NULL);
+	key_update_map(key, bpath);
+}
+
+void key_update_color(enum colours colclass, gchar *color)
+{
+	if (color) {
+		if(colours[colclass]) g_free(colours[colclass]);
+		colours[colclass]=g_malloc((1+strlen(color))*sizeof(gchar));
+		strcpy(colours[colclass], color);
+	}
 }
 
 void key_update_draw (void *callback_data, int y, int start, ArtSVPRenderAAStep *steps, int n_steps)
@@ -304,6 +323,21 @@ void key_draw2(struct key *key, double x, double y)
 {
 	if (key_getKeyval(key)==gdk_keyval_from_name("Return")) { key_draw_return(key, x, y); }
 	else key_draw4(key, x, y, 2.0, 2.0);
+}
+
+void key_update_text_color (struct key *key)
+{
+	GnomeCanvasItem **br=key->items;
+	if (key->textItem) {
+		gnome_canvas_item_set(key->textItem, "fill_color", colours[KEY_TEXT_COLOR], NULL);
+	} else if (key->items) {
+		while (*br) {
+			if ((key->modifier & GDK_LOCK_MASK)&&br==key->items)
+				gnome_canvas_item_set(*(br++), "outline_color", colours[KEY_TEXT_COLOR], NULL);
+			else
+				gnome_canvas_item_set(*(br++), "fill_color", colours[KEY_TEXT_COLOR], NULL);
+		}
+	}
 }
 
 void key_set_color(struct key *key, enum colours color)
