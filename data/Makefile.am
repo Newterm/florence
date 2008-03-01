@@ -10,8 +10,6 @@ desktop_DATA=florence.desktop
 
 scalableiconsdir=$(datadir)/icons/apps/florence/scalable
 scalableicons_DATA=florence.svg
-iconsdir=$(datadir)/icons/apps/florence/32x32
-icons_DATA=florence.png
 
 gladedir=$(datadir)/florence
 glade_DATA=florence.glade 

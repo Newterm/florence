@@ -31,6 +31,7 @@ struct key {
         GnomeCanvasItem **items;
         GnomeCanvasItem *shape;
         GnomeCanvasItem *timer;
+	ArtBpath *bpath;
 	gboolean pressed;
 	GdkModifierType modifier;
 };

@@ -63,6 +63,7 @@ void keyboard_resize(gdouble zoom)
 	gnome_canvas_w2c(keyboard_canvas, keyboard_vwidth, keyboard_vheight , &keyboard_width, &keyboard_height);
 	if (keyboard_map) g_free(keyboard_map);
 	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
+	if (!keyboard_map) flo_fatal(_("Out of memory"));
 	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
         for(i=0;i<256;i++) {
                 if (keyboard[i]) {
@@ -112,6 +113,7 @@ void keyboard_key_release(struct key *key)
 gboolean keyboard_leave_event (GtkWidget *item, GdkEvent *event, gpointer user_data)
 {
 	if (keyboard_pressed && keyboard_pressed->pressed && !keyboard_pressed->modifier) keyboard_key_release(keyboard_pressed);
+	if (keyboard_current) key_set_color(keyboard_current, keyboard_current->pressed?KEY_ACTIVATED_COLOR:KEY_COLOR);
 	keyboard_current=NULL;
 	return FALSE;
 }
@@ -164,19 +166,20 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 
 	if (keyboard_current!=key && (event->type==GDK_ENTER_NOTIFY || event->type==GDK_LEAVE_NOTIFY ||
 		event->type==GDK_MOTION_NOTIFY)) {
-		keyboard_current=key;
 		if (keyboard_timer_step==0.0) {
 			if (key) {
 				key_set_color(key, KEY_MOUSE_OVER_COLOR);
 			}
-			else { 
-				key_set_color(key, key->pressed?KEY_ACTIVATED_COLOR:KEY_COLOR);
+			if (keyboard_current && keyboard_current!=key) { 
+				key_set_color(keyboard_current, keyboard_current->pressed?KEY_ACTIVATED_COLOR:KEY_COLOR);
 				keyboard_current=NULL;
 			}
 		} else {
-			if (key) {keyboard_timer=keyboard_timer_step; g_timeout_add(FLO_ANIMATION_TIMEOUT, keyboard_press_timeout, key);}
+			if (key) {keyboard_timer=keyboard_timer_step;
+			g_timeout_add(FLO_ANIMATION_TIMEOUT, keyboard_press_timeout, key);}
 			else { keyboard_current=NULL; }
 		}
+		keyboard_current=key;
 	} else if (event->type==GDK_BUTTON_PRESS && (!data->modifier || !data->pressed)) {
 		keyboard_timer=0.0; keyboard_pressed=data;
 		keyboard_key_press(data);
@@ -221,7 +224,7 @@ void keyboard_change_color (GConfClient *client, guint xnxn_id, GConfEntry *entr
 {
 	guint i;
 	enum colours colclass=(enum colours)user_data;
-	gchar *color=gconf_value_get_string(gconf_entry_get_value(entry));
+	gchar *color=(gchar *)gconf_value_get_string(gconf_entry_get_value(entry));
 	key_update_color(colclass, color);
 	for(i=0;i<256;i++) {
 		if (keyboard[i]) {
@@ -247,7 +250,11 @@ void keyboard_change_color (GConfClient *client, guint xnxn_id, GConfEntry *entr
 
 void keyboard_change_auto_click(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	keyboard_timer_step=gconf_value_get_float(gconf_entry_get_value(entry));
+	gdouble click_time=gconf_value_get_float(gconf_entry_get_value(entry));
+	if (click_time>=0.01)
+		keyboard_timer_step=keyboard_timer_step=FLO_ANIMATION_TIMEOUT/click_time;
+	else
+		keyboard_timer_step=0.0;
 }
 
 void keyboard_settings_connect(void)
@@ -318,7 +325,7 @@ void keyboard_init (GnomeCanvas *canvas)
 		keyboard[i]=NULL;
 	}
 
-	click_time=gconf_value_get_float(settings_get_value("behaviour/auto_click"));
+	click_time=(gdouble)gconf_value_get_float(settings_get_value("behaviour/auto_click"));
 	if (click_time<=0.0) keyboard_timer_step=0.0; else keyboard_timer_step=FLO_ANIMATION_TIMEOUT/click_time;
 
 	keyboard_canvas=canvas;
@@ -326,11 +333,11 @@ void keyboard_init (GnomeCanvas *canvas)
         gnome_canvas_set_pixels_per_unit(keyboard_canvas, scale);
 	keyboard_canvas_group=gnome_canvas_root(canvas);
 
-	colours[KEY_COLOR]=gconf_value_get_string(settings_get_value("colours/key"));
-	colours[KEY_OUTLINE_COLOR]=gconf_value_get_string(settings_get_value("colours/outline"));
-	colours[KEY_TEXT_COLOR]=gconf_value_get_string(settings_get_value("colours/label"));
-	colours[KEY_ACTIVATED_COLOR]=gconf_value_get_string(settings_get_value("colours/activated"));
-	colours[KEY_MOUSE_OVER_COLOR]=gconf_value_get_string(settings_get_value("colours/mouseover"));
+	colours[KEY_COLOR]=(gchar *)gconf_value_get_string(settings_get_value("colours/key"));
+	colours[KEY_OUTLINE_COLOR]=(gchar *)gconf_value_get_string(settings_get_value("colours/outline"));
+	colours[KEY_TEXT_COLOR]=(gchar *)gconf_value_get_string(settings_get_value("colours/label"));
+	colours[KEY_ACTIVATED_COLOR]=(gchar *)gconf_value_get_string(settings_get_value("colours/activated"));
+	colours[KEY_MOUSE_OVER_COLOR]=(gchar *)gconf_value_get_string(settings_get_value("colours/mouseover"));
 
 	keyboard_create(gconf_value_get_string(settings_get_value("layout/file")), scale, colours);
 	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), NULL);

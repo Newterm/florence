@@ -25,10 +25,10 @@
 #include <libart_lgpl/art_svp_render_aa.h>
 
 gchar *colours[NUM_COLORS];
-guchar *keyboard_map;
 gint keyboard_map_rowstride;
 gdouble key_scale;
 GnomeCanvas *canvas;
+guchar *keyboard_map;
 
 void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf, gdouble scale)
 {
@@ -78,18 +78,6 @@ void key_free(struct key *key)
 	g_free(key);
 }
 
-void key_resize(struct key *key, guchar *buf, gdouble zoom)
-{
-	GnomeCanvasPathDef *bpath;
-	key_scale=zoom;
-	keyboard_map=buf;
-	if (key->textItem) {
-		gnome_canvas_item_set(key->textItem, "size-points", 12.0*key_scale, NULL);
-	}
-	g_object_get(G_OBJECT(key->group), "path", &bpath, NULL);
-	key_update_map(key, bpath);
-}
-
 void key_update_color(enum colours colclass, gchar *color)
 {
 	if (color) {
@@ -110,23 +98,24 @@ void key_update_draw (void *callback_data, int y, int start, ArtSVPRenderAAStep 
 	adr=keyboard_map+(y*keyboard_map_rowstride);
 	for (;i<n_steps;i++) {
 		j=x;
-		if (value<-128||value>128) while (j<steps[i].x) *(adr+(j++))=(guchar)key->code;
+		/* TODO: there is a memory problem. Check resize */
+		if (value<-128||value>128)
+			while ((j<keyboard_map_rowstride) && (j<steps[i].x)) adr[j++]=(guchar)key->code;
 		x=steps[i].x;
 		value+=steps[i].delta>>16;
 	}
 	j=x;
-	if (n_steps && (value<-128||value>128)) while (j<keyboard_map_rowstride) *(adr+(j++))=(guchar)key->code;
+	if (n_steps && (value<-128||value>128)) while (j<keyboard_map_rowstride) adr[j++]=(guchar)key->code;
 }
 
-void key_update_map(struct key *key, GnomeCanvasPathDef *path)
+void key_update_map(struct key *key)
 {
-	ArtBpath *bpath;
 	ArtVpath *vpath;
 	ArtSVP *svp;
 	guint w, h;
 	guint x, y;
 	gdouble dx, dy;
-	gdouble affine[6];
+	static double affine[6];
 	
 	gtk_layout_get_size(GTK_LAYOUT(canvas), &w, &h);
 	keyboard_map_rowstride=w;
@@ -136,13 +125,22 @@ void key_update_map(struct key *key, GnomeCanvasPathDef *path)
 	affine[4]+=x;
 	affine[5]+=y;
 
-	bpath=gnome_canvas_path_def_bpath(path);
-	vpath=(ArtVpath *)art_bez_path_to_vec(art_bpath_affine_transform(bpath, affine), 0.1);
+	vpath=(ArtVpath *)art_bez_path_to_vec(art_bpath_affine_transform(key->bpath, affine), 0.1);
 	svp=(ArtSVP *)art_svp_from_vpath(vpath);
 	art_svp_render_aa(svp, 0, 0, w, h, key_update_draw, key);
 
 	art_free(svp);
 	art_free(vpath);
+}
+
+void key_resize(struct key *key, guchar *buf, gdouble zoom)
+{
+	key_scale=zoom;
+	keyboard_map=buf;
+	if (key->textItem) {
+		gnome_canvas_item_set(key->textItem, "size-set", TRUE, "size-points", 12.0*key_scale, NULL);
+	}
+	key_update_map(key);
 }
 
 guint key_getKeyval (struct key *key)
@@ -200,8 +198,9 @@ void key_draw_return(struct key *key, double x, double y)
 		"bpath", bpath, "fill_color", colours[KEY_COLOR], "outline_color",
 		colours[KEY_OUTLINE_COLOR], "width_units", 0.1, NULL);
 	gnome_canvas_item_set((GnomeCanvasItem *)key->group, "path", bpath, NULL);
-	key_update_map(key, bpath);
-	gnome_canvas_path_def_unref(bpath);
+	key->bpath=gnome_canvas_path_def_bpath(bpath);
+	key_update_map(key);
+	/*gnome_canvas_path_def_unref(bpath);*/
 
 	points=gnome_canvas_points_new(3);
 	*(points->coords)=1.0;*(points->coords+1)=-2.0;
@@ -302,8 +301,9 @@ void key_draw4(struct key *key, double x, double y, double w, double h)
 		"bpath", bpath, "fill_color", colours[KEY_COLOR], "outline_color",
 		colours[KEY_OUTLINE_COLOR], "width_units", 0.1, NULL);
 	gnome_canvas_item_set((GnomeCanvasItem *)key->group, "path", bpath, NULL);
-	key_update_map(key, bpath);
-	gnome_canvas_path_def_unref(bpath);
+	key->bpath=gnome_canvas_path_def_bpath(bpath);
+	key_update_map(key);
+	/*gnome_canvas_path_def_unref(bpath);*/
 
 	keyval=key_getKeyval(key);
 	if (keyval==gdk_keyval_from_name("BackSpace")) { key_draw_backspace(key, x, y, w); }

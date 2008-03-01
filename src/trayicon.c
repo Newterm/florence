@@ -33,8 +33,8 @@ void trayicon_about(void)
 	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
 		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
-		"logo", gdk_pixbuf_new_from_file("florence.svg", NULL),
-		"logo-icon-name", "florence.svg", "website", "http://florence.sourceforge.net",
+		"logo", gdk_pixbuf_new_from_file(ICONDIR "/scalable/florence.svg", NULL),
+		"website", "http://florence.sourceforge.net",
 		"license", _("Copyright (C) 2008 François Agrech\n\
 \n\
 This program is free software; you can redistribute it and/or modify\n\
@@ -103,7 +103,7 @@ void trayicon_create(GtkWidget *window, GCallback *quit_cb)
 	g_signal_connect(G_OBJECT(tray_icon), "activate", G_CALLBACK(trayicon_on_click), (gpointer)window);
 	g_signal_connect(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(trayicon_on_menu), NULL);
 	/* TODO: this doesn't work!!! */
-	gtk_status_icon_set_from_icon_name(tray_icon, "florence.svg");
+	gtk_status_icon_set_from_icon_name(tray_icon, "florence");
 	gtk_status_icon_set_tooltip(tray_icon, _("Florence Virtual Keyboard"));
 	gtk_status_icon_set_visible(tray_icon, TRUE);
 }

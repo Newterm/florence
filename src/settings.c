@@ -24,6 +24,7 @@
 #include <gconf/gconf-client.h>
 #include <glade/glade.h>
 #include <gtk/gtk.h>
+#include "system.h"
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
 
@@ -57,7 +58,7 @@ void settings_color_change(GtkColorButton *button, char *key)
 	strcpy(string_buffer, "colours/");
 	strcat(string_buffer, key);
 	gtk_color_button_get_color(button, &color);
-	sprintf(strcolor, "\#%02X%02X%02X", (color.red)>>8, (color.green)>>8, (color.blue)>>8);
+	sprintf(strcolor, "#%02X%02X%02X", (color.red)>>8, (color.green)>>8, (color.blue)>>8);
 	gconf_change_set_set_string(gconfchangeset, settings_get_full_path(string_buffer), strcolor);
 }
 
@@ -112,22 +113,22 @@ void settings_auto_click(GtkHScale *scale)
 		gtk_range_get_value(GTK_RANGE(scale)));
 }
 
-void settings_rollback(GtkWidget *window, GtkWidget *button)
-{
-	/* TODO :here a confirmation window */
-	settings_close(window, button);
-}
-
 void settings_commit(GtkWidget *window, GtkWidget *button)
 {
 	gconf_client_commit_change_set(gconfclient, gconfchangeset, TRUE, NULL);
 }
 
-void settings_close(GtkWidget *window, gpointer *button)
+void settings_close(GtkWidget *window, GtkWidget *button)
 {
 	gconf_change_set_clear (gconfchangeset);
 	gconf_change_set_unref(gconfchangeset);
 	gtk_object_destroy(GTK_OBJECT(window));
+}
+
+void settings_rollback(GtkWidget *window, GtkWidget *button)
+{
+	/* TODO :here a confirmation window */
+	settings_close(window, button);
 }
 
 /* public functions */
@@ -143,7 +144,7 @@ void settings_exit(void)
 	g_object_unref(gconfclient);
 }
 
-void settings_changecb_register(gchar *name, GCallback cb, gpointer user_data)
+void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data)
 {
 	gconf_client_notify_add(gconfclient, settings_get_full_path(name), cb, user_data, NULL, NULL);
 }
