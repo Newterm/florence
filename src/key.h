@@ -45,7 +45,7 @@ enum colours {
 	NUM_COLORS
 };
 
-void key_init(GnomeCanvas *gnome_canvas, gchar *colours[], guchar *buf, gdouble scale);
+void key_init(GnomeCanvas *gnome_canvas, gchar *colours[], guchar *buf, gdouble scale, gdouble width, gdouble height);
 void key_exit();
 struct key *key_new(guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *label);
 void key_free(struct key *key);

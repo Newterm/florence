@@ -19,6 +19,7 @@
 
 */
 
+#include "system.h"
 #include "key.h"
 #include "trace.h"
 #include <string.h>
@@ -29,8 +30,9 @@ gint keyboard_map_rowstride;
 gdouble key_scale;
 GnomeCanvas *canvas;
 guchar *keyboard_map;
+gdouble keyboard_vwidth, keyboard_vheight;
 
-void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf, gdouble scale)
+void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf, gdouble scale, gdouble width, gdouble height)
 {
 	gint i;
 	for (i=0;i<NUM_COLORS;i++) {
@@ -40,6 +42,8 @@ void key_init(GnomeCanvas *gnome_canvas, gchar *cols[], guchar *buf, gdouble sca
 	keyboard_map=buf;
 	canvas=gnome_canvas;
 	key_scale=scale;
+	keyboard_vwidth=width;
+	keyboard_vheight=height;
 }
 
 void key_exit()
@@ -110,14 +114,14 @@ void key_update_draw (void *callback_data, int y, int start, ArtSVPRenderAAStep 
 
 void key_update_map(struct key *key)
 {
-	ArtVpath *vpath;
-	ArtSVP *svp;
+	ArtVpath *vpath=NULL;
+	ArtSVP *svp=NULL;
 	guint w, h;
 	guint x, y;
 	gdouble dx, dy;
-	static double affine[6];
+	double affine[6];
 	
-	gtk_layout_get_size(GTK_LAYOUT(canvas), &w, &h);
+	gnome_canvas_w2c(canvas, keyboard_vwidth, keyboard_vheight, &w, &h);
 	keyboard_map_rowstride=w;
 	gnome_canvas_w2c_affine(canvas, affine);
 	g_object_get(G_OBJECT(key->group), "x", &dx, "y", &dy, NULL);
@@ -125,8 +129,10 @@ void key_update_map(struct key *key)
 	affine[4]+=x;
 	affine[5]+=y;
 
-	vpath=(ArtVpath *)art_bez_path_to_vec(art_bpath_affine_transform(key->bpath, affine), 0.1);
-	svp=(ArtSVP *)art_svp_from_vpath(vpath);
+	vpath=art_bez_path_to_vec(art_bpath_affine_transform(key->bpath, affine), 0.1);
+	if (!vpath) flo_fatal(_("Unable to create vpath"));
+	svp=art_svp_from_vpath(vpath);
+	if (!svp) flo_fatal(_("Unable to create svp"));
 	art_svp_render_aa(svp, 0, 0, w, h, key_update_draw, key);
 
 	art_free(svp);
@@ -149,7 +155,7 @@ guint key_getKeyval (struct key *key)
 	guint len;
 	if (!gdk_keymap_get_entries_for_keycode(NULL, key->code, NULL, &keyvals, &len)) {
 		fprintf (stderr, "keycode=<%d> ==> no keyval\n", key->code);
-		flo_fatal ("Unknown keycode.");
+		flo_fatal (_("Unknown keycode."));
 	}
 	return *keyvals;
 }

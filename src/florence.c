@@ -33,7 +33,6 @@
 guint flo_width=600;
 guint flo_height=200;
 gboolean always_on_screen=TRUE;
-GdkBitmap *flo_mask=NULL;
 
 void flo_destroy (void)
 {
@@ -109,12 +108,12 @@ gboolean flo_spi_event_check (gpointer data)
 void flo_set_mask(GdkWindow *window, gboolean shape)
 {
 	int x, y, o;
+	GdkBitmap *mask=NULL;
 	guchar *kbmap=keyboard_get_map();
 	guint width=(flo_width&0xFFFFFFF8)+(flo_width&0x7?8:0);
 	guchar *data=g_malloc((sizeof(guchar)*width*flo_height)>>3);
 	guchar byte;
 
-	if (flo_mask) { g_object_unref(G_OBJECT(flo_mask)); flo_mask=NULL; }
 	if (!data) flo_fatal(_("Unable to allocate memory for mask"));
 	for (y=0;y<flo_height;y++) {
 		for (x=0;x<(width>>3);x++) {
@@ -131,9 +130,11 @@ void flo_set_mask(GdkWindow *window, gboolean shape)
 			data[x+((y*width)>>3)]=byte;
 		}
 	}
-	flo_mask=gdk_bitmap_create_from_data(window, data, flo_width, flo_height);
-	gdk_window_shape_combine_mask(window, flo_mask, 0, 0);
+	mask=gdk_bitmap_create_from_data(window, data, flo_width, flo_height);
+	if (!mask) flo_fatal(_("Unable to create mask"));
+	gdk_window_shape_combine_mask(window, mask, 0, 0);
 
+	g_object_unref(G_OBJECT(mask));
 	g_free(data);
 }
 

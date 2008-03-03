@@ -25,3 +25,7 @@
 	* Configuration works
 	* There is a bug to investigate with resizing (makes Florence crash)
 
+2008-03-03 François Agrech <f.agrech@gmail.com>
+	* Version 0.0.6
+	* fixed issue with resizing.
+

@@ -286,10 +286,10 @@ void keyboard_create(gchar *file, gdouble scale, gchar *colours[])
 		2.0*g_key_file_get_double(gkf, "Size", "Height", NULL));
 	keyboard_vwidth=2.0*g_key_file_get_double(gkf, "Size", "Width", NULL);
 	keyboard_vheight=2.0*g_key_file_get_double(gkf, "Size", "Height", NULL);
-	gnome_canvas_w2c(keyboard_canvas, keyboard_vwidth, keyboard_vheight , &keyboard_width, &keyboard_height);
+	gnome_canvas_w2c(keyboard_canvas, keyboard_vwidth, keyboard_vheight, &keyboard_width, &keyboard_height);
 	keyboard_map=g_malloc(sizeof(guchar)*keyboard_width*keyboard_height);
 	memset(keyboard_map, 0, sizeof(guchar)*keyboard_width*keyboard_height);
-	key_init(keyboard_canvas, colours, keyboard_map, scale/10.0);
+	key_init(keyboard_canvas, colours, keyboard_map, scale/10.0, keyboard_vwidth, keyboard_vheight);
 
         layout=g_key_file_get_keys(gkf, "Layout", NULL, NULL);
 	if (!layout) flo_fatal (_("Pas de catégorie Layout dans le fichier"));
