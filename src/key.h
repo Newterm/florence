@@ -19,9 +19,13 @@
 
 */
 
+#ifndef FLO_KEY
+#define FLO_KEY
+
 #include <libgnomecanvas/libgnomecanvas.h>
 
 struct key {
+	struct keyboard *keyboard;
 	gchar *label;
         guint code;
 	gdouble width;
@@ -31,7 +35,6 @@ struct key {
         GnomeCanvasItem **items;
         GnomeCanvasItem *shape;
         GnomeCanvasItem *timer;
-	ArtBpath *bpath;
 	gboolean pressed;
 	GdkModifierType modifier;
 };
@@ -45,12 +48,12 @@ enum colours {
 	NUM_COLORS
 };
 
-void key_init(GnomeCanvas *gnome_canvas, gchar *colours[], guchar *buf, gdouble scale, gdouble width, gdouble height);
+void key_init(gchar *colours[]);
 void key_exit();
-struct key *key_new(guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *label);
+struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *label);
 void key_free(struct key *key);
 
-void key_resize(struct key *key, guchar *buf, gdouble zoom);
+void key_resize(struct key *key, gdouble zoom);
 void key_update_color(enum colours colclass, gchar *color);
 void key_update_text_color(struct key *key);
 void key_set_color(struct key *key, enum colours color);
@@ -61,4 +64,7 @@ void key_draw2(struct key *key, double x, double y);
 void key_switch_mode(struct key *key, GdkModifierType mod);
 void key_update_timer(struct key *key, double value);
 
+struct keyboard* key_get_keyboard(struct key *key);
+
+#endif
 

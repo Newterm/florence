@@ -34,31 +34,19 @@ QUICK USAGE
 ***********
 
 First you need to activate technical help in Gnome:
-Go to System->settings->technical help (or somewhere near there).
+open a terminal and type :
+$ gnome_at_properties
 Activate the technical help with the check button.
 Click close and disconnect: this will close your Gnome session.
 Florence can be launched by the applications menu (under Accessibility).
 The icon in the systray indicates that Florence is running. Click on it to make the
 keyboard appear/disappear.
-If Florence is in waiting moder, Florence will appear if you click on an editable widget
+If Florence is in waiting mode, Florence will appear if you click on an editable widget
 (like the address bar in epiphany or the text area in a text editor). If you click on an
 uneditable widget, Florence will disappear.
 If you don't like this behaviour, you can switch to normal virtual keyboard always on 
-screen.
-The configuration file for that is there /usr/local/etc/florence.conf
-To edit it:
-$ gedit /usr/local/etc/florence.conf
-(note: you may need to be root to do that)
-Set ShowOnEditable (in the [Settings] section) to false and restart Florence.
-It is a very good idea to also set Shaped to false then, or you won't be able to move
-Florence around anymore.
-You have also the AutoClick setting which sets the number of milliseconds the mouse is
-over the key before the key is automatically pressed. If you don't want auto click, set
-it to 0.
-You can also change the colours in the [Colors] section.
-You can set the zoom factor that determines the size of the window in the [Window]
-section.
-You don't need to touch other settings for now.
+screen: right click on the Florence notification icon, choose the preferences menu and
+check the 'Always on screen' button.
 
 GET HELP
 ********

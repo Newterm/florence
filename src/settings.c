@@ -120,15 +120,27 @@ void settings_commit(GtkWidget *window, GtkWidget *button)
 
 void settings_close(GtkWidget *window, GtkWidget *button)
 {
-	gconf_change_set_clear (gconfchangeset);
-	gconf_change_set_unref(gconfchangeset);
-	gtk_object_destroy(GTK_OBJECT(window));
+	GtkWidget *dialog, *label;
+	gint result;
+	if (gconf_change_set_size(gconfchangeset)) {
+		dialog=gtk_dialog_new_with_buttons("Corfirm", window, GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_APPLY, GTK_RESPONSE_ACCEPT, GTK_STOCK_DISCARD, GTK_RESPONSE_REJECT, NULL);
+		label=gtk_label_new(_("Discard changes?"));
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		gtk_widget_show_all(dialog);
+		result=gtk_dialog_run(GTK_DIALOG(dialog));
+		if (result==GTK_RESPONSE_ACCEPT) {
+			settings_commit(window, button);
+		}
+	}
+	settings_rollback(window, button);
 }
 
 void settings_rollback(GtkWidget *window, GtkWidget *button)
 {
-	/* TODO :here a confirmation window */
-	settings_close(window, button);
+	gconf_change_set_clear (gconfchangeset);
+	gconf_change_set_unref(gconfchangeset);
+	gtk_object_destroy(GTK_OBJECT(window));
 }
 
 /* public functions */

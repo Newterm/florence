@@ -19,12 +19,31 @@
 
 */
 
+#include "key.h"
 #include <libgnomecanvas/libgnomecanvas.h>
 
-void keyboard_init (GnomeCanvas *canvas);
-void keyboard_exit (void);
-guint keyboard_get_width(void);
-guint keyboard_get_height(void);
-guchar *keyboard_get_map(void);
-void keyboard_resize(gdouble zoom);
+struct keyboard {
+	struct key *keys[256];
+	GnomeCanvasGroup *canvas_group;
+	GnomeCanvas *canvas;
+	guchar *map;
+	gdouble dwidth, dheight, zoom;
+	guint width, height;
+	GdkModifierType modstatus;
+	guint shift;
+	guint control;
+	struct key *current;
+	struct key *pressed;
+	gdouble timer;
+	gdouble timer_step;
+};
+
+struct keyboard *keyboard_new (GnomeCanvas *canvas);
+void keyboard_free (struct keyboard *keyboard);
+GnomeCanvas *keyboard_get_canvas(struct keyboard *keyboard);
+guint keyboard_get_width(struct keyboard *keyboard);
+guint keyboard_get_height(struct keyboard *keyboard);
+guchar *keyboard_get_map(struct keyboard *keyboard);
+gdouble keyboard_get_zoom(struct keyboard *keyboard);
+void keyboard_resize(struct keyboard *keyboard, gdouble zoom);
 

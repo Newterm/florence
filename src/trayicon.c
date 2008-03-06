@@ -33,7 +33,7 @@ void trayicon_about(void)
 	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
 		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
-		"logo", gdk_pixbuf_new_from_file(ICONDIR "/scalable/florence.svg", NULL),
+		"logo", gdk_pixbuf_new_from_file(ICONDIR "/florence.svg", NULL),
 		"website", "http://florence.sourceforge.net",
 		"license", _("Copyright (C) 2008 François Agrech\n\
 \n\
@@ -58,12 +58,13 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 	static gint x=0;
 	static gint y=0;
 	GtkWidget *window=GTK_WIDGET(user_data);
+	gtk_window_deiconify(window);
 	if (GTK_WIDGET_VISIBLE(window)) {
 		gtk_window_get_position(GTK_WINDOW(window), &x, &y);
 		gtk_widget_hide(window);
 	} else { 
 		gtk_window_move(GTK_WINDOW(window), x, y);
-		gtk_widget_show(window);
+		gtk_window_present(window);
 	}
 }
 

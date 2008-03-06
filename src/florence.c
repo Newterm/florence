@@ -30,8 +30,8 @@
 #include <cspi/spi.h>
 
 #define FLO_SPI_TIME_INTERVAL 100
-guint flo_width=600;
-guint flo_height=200;
+
+struct keyboard *keyboard;
 gboolean always_on_screen=TRUE;
 
 void flo_destroy (void)
@@ -54,14 +54,16 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 				screen_height=gdk_screen_get_height(gdk_screen_get_default());
 				screen_width=gdk_screen_get_width(gdk_screen_get_default());
 				AccessibleComponent_getExtents(component, &x, &y, &w, &h, SPI_COORD_TYPE_SCREEN);
-				if (x<0) x=0;
-				else if (flo_width<(screen_width-x-w)) x=screen_width-flo_width;
-				if (flo_height<(screen_height-y-h)) {
+				if (x<0) { x=0;
+				} else if (keyboard_get_width(keyboard)<(screen_width-x-w)) {
+					x=screen_width-keyboard_get_width(keyboard);
+				}
+				if (keyboard_get_height(keyboard)<(screen_height-y-h)) {
 					gtk_window_move(window, x, y+h);
-				} else if (y>flo_height) {
-					gtk_window_move(window, x, y-flo_height);
+				} else if (y>keyboard_get_height(keyboard)) {
+					gtk_window_move(window, x, y-keyboard_get_height(keyboard));
 				} else {
-					gtk_window_move(window, x, screen_height-flo_height);
+					gtk_window_move(window, x, screen_height-keyboard_get_height(keyboard));
 				}
 			}
 			gtk_widget_show(GTK_WIDGET(window));
@@ -109,13 +111,13 @@ void flo_set_mask(GdkWindow *window, gboolean shape)
 {
 	int x, y, o;
 	GdkBitmap *mask=NULL;
-	guchar *kbmap=keyboard_get_map();
-	guint width=(flo_width&0xFFFFFFF8)+(flo_width&0x7?8:0);
-	guchar *data=g_malloc((sizeof(guchar)*width*flo_height)>>3);
+	guchar *kbmap=keyboard_get_map(keyboard);
+	guint width=(keyboard_get_width(keyboard)&0xFFFFFFF8)+(keyboard_get_width(keyboard)&0x7?8:0);
+	guchar *data=g_malloc((sizeof(guchar)*width*keyboard_get_height(keyboard))>>3);
 	guchar byte;
 
 	if (!data) flo_fatal(_("Unable to allocate memory for mask"));
-	for (y=0;y<flo_height;y++) {
+	for (y=0;y<keyboard_get_height(keyboard);y++) {
 		for (x=0;x<(width>>3);x++) {
 			if (shape) {
 				byte=0;
@@ -124,13 +126,13 @@ void flo_set_mask(GdkWindow *window, gboolean shape)
 				 * ==> TODO : check and use autotools' config.h if necessary */
 				for(o=7;o>=0;o--) {
 					byte<<=1;
-					if (kbmap[(x*8)+(y*flo_width)+o]) byte|=1; else byte&=0xfe;
+					if (kbmap[(x*8)+(y*keyboard_get_width(keyboard))+o]) byte|=1; else byte&=0xfe;
 				}
 			} else byte=0xFF;
 			data[x+((y*width)>>3)]=byte;
 		}
 	}
-	mask=gdk_bitmap_create_from_data(window, data, flo_width, flo_height);
+	mask=gdk_bitmap_create_from_data(window, data, keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	if (!mask) flo_fatal(_("Unable to create mask"));
 	gdk_window_shape_combine_mask(window, mask, 0, 0);
 
@@ -181,10 +183,8 @@ void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry
 
 void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	keyboard_resize(gconf_value_get_float(gconf_entry_get_value(entry)));
-	flo_width=keyboard_get_width();
-	flo_height=keyboard_get_height();
-	gtk_widget_set_size_request(GTK_WIDGET(user_data), flo_width, flo_height);
+	keyboard_resize(keyboard, gconf_value_get_float(gconf_entry_get_value(entry)));
+	gtk_widget_set_size_request(GTK_WIDGET(user_data), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	flo_set_mask(gtk_widget_get_parent_window(
 		GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
 		gconf_value_get_bool(settings_get_value("window/shaped")));
@@ -215,26 +215,18 @@ int florence (void)
 	flo_register_settings_cb(window);
 
 	canvas=gnome_canvas_new_aa();
-	keyboard_init((GnomeCanvas *)canvas);
-	flo_width=keyboard_get_width();
-	flo_height=keyboard_get_height();
+	keyboard=keyboard_new((GnomeCanvas *)canvas);
 	gtk_container_add(GTK_CONTAINER(window), canvas);
 	gtk_widget_show(canvas);
 
 	gtk_window_set_decorated((GtkWindow *)window,
 		gconf_value_get_bool(settings_get_value("window/decorated")));
 
+	gtk_container_set_border_width(GTK_CONTAINER(window), 0);
+	gtk_widget_set_size_request(GTK_WIDGET(window), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	if (gconf_value_get_bool(settings_get_value("window/shaped"))) {
-		gtk_container_set_border_width(GTK_CONTAINER(window), 0);
-		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 		gtk_widget_show(window);
 		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(canvas)), TRUE);
-	}
-	else {
-		borderWidth=gtk_container_get_border_width(GTK_CONTAINER(window));
-		flo_width+=2*borderWidth;
-		flo_height+=2*borderWidth;
-		gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 	}
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
@@ -245,7 +237,7 @@ int florence (void)
 	gtk_main();
 
 	settings_exit();
-	keyboard_exit();
+	keyboard_free(keyboard);
 	return SPI_exit();
 }
 

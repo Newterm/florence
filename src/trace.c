@@ -32,7 +32,7 @@ void flo_fatal(char *s, ...)
         vfprintf(stderr, s, ap);
 	fprintf(stderr, "\n");
 	va_end(ap);
-        exit(1);
+        exit(EXIT_FAILURE);
 }
 
 void flo_info(char *s, ...)

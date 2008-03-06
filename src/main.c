@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <getopt.h>
 #include <gtk/gtk.h>
+#include <gconf/gconf-client.h>
 #include "system.h"
 #include "florence.h"
 
@@ -45,7 +46,10 @@ static int decode_switches (int argc, char **argv);
 
 int main (int argc, char **argv)
 {
-	int i;
+	GConfClient *gconfclient;
+	GtkWidget *dialog, *label;
+	int i, result;
+	int ret=EXIT_FAILURE;
 
 	program_name = argv[0];
 
@@ -55,7 +59,27 @@ int main (int argc, char **argv)
 	gconf_init(argc, argv, NULL);
 	g_type_init();
 
-	return florence();
+	gconfclient=gconf_client_get_default();
+	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface", GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
+	if (!gconf_client_get_bool(gconfclient, "/desktop/gnome/interface/accessibility", NULL)) {
+		dialog=gtk_dialog_new_with_buttons(_("Enable accessibility"), NULL, 
+			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
+			GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL);
+		label=gtk_label_new(_("Accessibility is disabled.\n"
+			"Florence requires that accessibility is enabled to function.\n"
+			"Click OK to enable accessibility and restart GNOME.\n"
+			"Alternatively, you may enable accessibility with gnome-at-properties."));
+		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+		gtk_widget_show_all(dialog);
+		result=gtk_dialog_run(GTK_DIALOG(dialog));
+		if (result==GTK_RESPONSE_ACCEPT) {
+			gconf_client_set_bool(gconfclient, "/desktop/gnome/interface/accessibility", TRUE, NULL);
+			system("gnome-session-save --kill");
+			ret=EXIT_SUCCESS;
+		}
+	} else { ret=florence(); }
+
+	return ret;
 }
 
 /* Set all the option flags according to the switches specified.
@@ -92,9 +116,9 @@ Florence is a simple virtual keyboard for Gnome.\n"), program_name);
 	printf (_("Usage: %s [OPTION]...\n"), program_name);
 	printf (_("\
 Options:\n\
-  -h, --help                 display this help and exit\n\
-  -V, --version              output version information and exit\n\n\
-Report bugs to <f.agerch@gmail.com>.\n"), program_name);
+  -h, --help		 display this help and exit\n\
+  -V, --version	      output version information and exit\n\n\
+Report bugs to <f.agerch@gmail.com>.\n"));
 	exit (status);
 }
 
