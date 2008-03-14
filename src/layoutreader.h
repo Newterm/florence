@@ -19,8 +19,12 @@
 
 */
 
-void flo_fatal (char *s, ...);
-void flo_error (char *s, ...);
-void flo_info (char *s, ...);
-void flo_debug (char *s, ...);
+#include "key.h"
+
+typedef void (*layoutreader_keyprocess) (void *userdata, enum key_class class, unsigned char code,
+	double xpos, double ypos, double width, double height, char *label);
+typedef void (*layoutreader_sizeprocess) (void *userdata, double width, double height);
+
+void layoutreader_iterate(char *layout, layoutreader_keyprocess keyfunc, layoutreader_sizeprocess sizefunc,
+	void *userdata);
 

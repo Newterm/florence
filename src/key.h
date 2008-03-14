@@ -39,6 +39,16 @@ struct key {
 	GdkModifierType modifier;
 };
 
+enum key_class {
+	KEY_NOCLASS,
+	KEY_DEFAULT,
+	KEY_RETURN,
+	KEY_BACKSPACE,
+	KEY_TAB,
+	KEY_SHIFT,
+	KEY_CAPSLOCK
+};
+
 enum colours {
 	KEY_COLOR,
 	KEY_OUTLINE_COLOR,
@@ -57,9 +67,7 @@ void key_resize(struct key *key, gdouble zoom);
 void key_update_color(enum colours colclass, gchar *color);
 void key_update_text_color(struct key *key);
 void key_set_color(struct key *key, enum colours color);
-
-void key_draw4(struct key *key, double x, double y, double w, double h);
-void key_draw2(struct key *key, double x, double y);
+void key_draw(struct key *key, enum key_class class, double w, double h);
 
 void key_switch_mode(struct key *key, GdkModifierType mod);
 void key_update_timer(struct key *key, double value);

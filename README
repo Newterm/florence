@@ -6,6 +6,10 @@ Florence is a virtual keyboard for GNOME. You need it if you can't use a real ke
 either because of a handicap, disease, broken keyboard or tablet PC but you can use a 
 pointing device. If you can't use a pointing device, there is gok:
 http://www.gok.ca/
+Florence is scalable and out of your way when you don't need it.
+It appears on the screen only when you need it.
+There is an aauto-click functionality To help people having difficulties to use the 
+click button, there is an auto-click functionality.
 
 DEPENDANCIES
 ************
@@ -15,14 +19,18 @@ DEPENDANCIES
       * cspi >= 1.0
       * libgconf >= 2.0
       * libglade >= 2.0
+      * libxml >= 2.0
 
 QUICK INSTALL
 *************
 
-      $ ./configure --prefix=/usr
-      $ make
-      $ su
-      # make install
+      * Make sure you have all the dependancies installed.
+      * Open a terminal and type (don't type the $ or #):
+
+            $ ./configure --prefix=/usr
+            $ make
+            $ su
+            # make install
 
 UNINSTALL
 *********
@@ -33,20 +41,19 @@ UNINSTALL
 QUICK USAGE
 ***********
 
-First you need to activate technical help in Gnome:
-open a terminal and type :
-$ gnome_at_properties
-Activate the technical help with the check button.
-Click close and disconnect: this will close your Gnome session.
 Florence can be launched by the applications menu (under Accessibility).
-The icon in the systray indicates that Florence is running. Click on it to make the
+The icon in the systray indicates Florence is running. Click on the icon to make the
 keyboard appear/disappear.
-If Florence is in waiting mode, Florence will appear if you click on an editable widget
-(like the address bar in epiphany or the text area in a text editor). If you click on an
-uneditable widget, Florence will disappear.
+If Florence is not in "always on screen" mode, it will appear when you click on an editable
+widget (like the address bar in epiphany or the text area in a text editor). When you click
+on an uneditable widget, Florence will disappear.
 If you don't like this behaviour, you can switch to normal virtual keyboard always on 
 screen: right click on the Florence notification icon, choose the preferences menu and
 check the 'Always on screen' button.
+Auto-click timeout is configurable on the preferences window. It is set in milliseconds.
+When the mouse is over for more than the auto-click timeout, the key is automatically
+pressed.
+Set auto-click to 0 to deactivate it.
 
 GET HELP
 ********

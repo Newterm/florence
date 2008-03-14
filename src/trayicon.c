@@ -58,13 +58,13 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 	static gint x=0;
 	static gint y=0;
 	GtkWidget *window=GTK_WIDGET(user_data);
-	gtk_window_deiconify(window);
+	gtk_window_deiconify(GTK_WINDOW(window));
 	if (GTK_WIDGET_VISIBLE(window)) {
 		gtk_window_get_position(GTK_WINDOW(window), &x, &y);
 		gtk_widget_hide(window);
 	} else { 
 		gtk_window_move(GTK_WINDOW(window), x, y);
-		gtk_window_present(window);
+		gtk_window_present(GTK_WINDOW(window));
 	}
 }
 
@@ -95,7 +95,7 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,gtk_status_icon_position_menu, status_icon,button, activate_time);
 }
 
-void trayicon_create(GtkWidget *window, GCallback *quit_cb)
+void trayicon_create(GtkWidget *window, GCallback quit_cb)
 {
 	GtkStatusIcon *tray_icon;
 

@@ -173,7 +173,7 @@ void flo_set_shaped(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoin
 
 void flo_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	gtk_window_set_decorated(GTK_WIDGET(user_data), gconf_value_get_bool(gconf_entry_get_value(entry)));
+	gtk_window_set_decorated(GTK_WINDOW(user_data), gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
 void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
@@ -187,7 +187,7 @@ void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointe
 	gtk_widget_set_size_request(GTK_WIDGET(user_data), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	flo_set_mask(gtk_widget_get_parent_window(
 		GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
-		gconf_value_get_bool(settings_get_value("window/shaped")));
+		settings_get_bool("window/shaped"));
 }
 
 void flo_register_settings_cb(GtkWidget *window)
@@ -220,20 +220,20 @@ int florence (void)
 	gtk_widget_show(canvas);
 
 	gtk_window_set_decorated((GtkWindow *)window,
-		gconf_value_get_bool(settings_get_value("window/decorated")));
+		settings_get_bool("window/decorated"));
 
 	gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 	gtk_widget_set_size_request(GTK_WIDGET(window), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
-	if (gconf_value_get_bool(settings_get_value("window/shaped"))) {
+	if (settings_get_bool("window/shaped")) {
 		gtk_widget_show(window);
 		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(canvas)), TRUE);
 	}
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
 	SPI_init ();
-	flo_switch_mode(window, gconf_value_get_bool(settings_get_value("behaviour/always_on_screen")));
+	flo_switch_mode(window, settings_get_bool("behaviour/always_on_screen"));
 
-	trayicon_create(window, flo_destroy);
+	trayicon_create(window, G_CALLBACK(flo_destroy));
 	gtk_main();
 
 	settings_exit();

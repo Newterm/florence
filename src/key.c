@@ -128,9 +128,9 @@ void key_update_map(struct key *key)
 
 	g_object_get(G_OBJECT(key->shape), "bpath", &gcbpath, NULL);
 	bpath=gnome_canvas_path_def_bpath(gcbpath);
-	vpath=art_bez_path_to_vec(art_bpath_affine_transform(bpath, affine), 0.1);
+	vpath=(ArtVpath *)art_bez_path_to_vec(art_bpath_affine_transform(bpath, affine), 0.1);
 	if (!vpath) flo_fatal(_("Unable to create vpath"));
-	svp=art_svp_from_vpath(vpath);
+	svp=(ArtSVP *)art_svp_from_vpath(vpath);
 	if (!svp) flo_fatal(_("Unable to create svp"));
 	art_svp_render_aa(svp, 0, 0, keyboard_get_width(key->keyboard),
 		keyboard_get_height(key->keyboard), key_update_draw, key);
@@ -179,24 +179,24 @@ gchar *key_getLabel(struct key *key, GdkModifierType mod)
 	return label;
 }
 
-void key_draw_return(struct key *key, double x, double y)
+void key_draw_return(struct key *key)
 {
 	GnomeCanvasPathDef *bpath;
 	GnomeCanvasPoints *points;
+	double w=key->width;
+	double h=key->height;
 
 	key->textItem=NULL;
         key->items=g_malloc(2*sizeof(GnomeCanvasItem *));
-	key->width=3.0;
-	key->height=4.0;
 
 	bpath=gnome_canvas_path_def_new_sized(7);
-	gnome_canvas_path_def_moveto(bpath, -3.0, -2.0);
-	gnome_canvas_path_def_curveto(bpath, -3.0, -3.0, -3.0, -4.0, -1.0, -4.0);
-	gnome_canvas_path_def_lineto(bpath, 1.0, -4.0);
-	gnome_canvas_path_def_curveto(bpath, 3.0, -4.0, 3.0, -2.0, 3.0, 0.0);
-	gnome_canvas_path_def_curveto(bpath, 3.0, 2.0, 3.0, 4.0, 1.0, 4.0);
-	gnome_canvas_path_def_curveto(bpath, -1.0, 4.0, -1.0, 2.0, -1.0, 0.0);
-	gnome_canvas_path_def_curveto(bpath, -3.0, 0.0, -3.0, -1.0, -3.0, -2.0);
+	gnome_canvas_path_def_moveto(bpath, -w, -h/2.0);
+	gnome_canvas_path_def_curveto(bpath, -w, -h*0.75, -w, -h, -w/3.0, -h);
+	gnome_canvas_path_def_lineto(bpath, w/3.0, -h);
+	gnome_canvas_path_def_curveto(bpath, w, -h, w, -h/2.0, w, 0.0);
+	gnome_canvas_path_def_curveto(bpath, w, h/2.0, w, h, w/3.0, h);
+	gnome_canvas_path_def_curveto(bpath, -w/3.0, h, -w/3.0, h/2.0, -w/3.0, 0.0);
+	gnome_canvas_path_def_curveto(bpath, -w, 0.0, -w, -1.0, -w, -h/2.0);
 	gnome_canvas_path_def_closepath(bpath);
 	key->shape=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_BPATH,
 		"bpath", bpath, "fill_color", key_colours[KEY_COLOR], "outline_color",
@@ -206,9 +206,9 @@ void key_draw_return(struct key *key, double x, double y)
 	gnome_canvas_path_def_unref(bpath);
 
 	points=gnome_canvas_points_new(3);
-	*(points->coords)=1.0;*(points->coords+1)=-2.0;
-	*(points->coords+2)=1.0;*(points->coords+3)=-1.5;
-	*(points->coords+4)=-1.0;*(points->coords+5)=-1.5;
+	*(points->coords)=w/3.0;*(points->coords+1)=-h/2.0;
+	*(points->coords+2)=w/3.0;*(points->coords+3)=-h*3.0/8.0;
+	*(points->coords+4)=-w/3.0;*(points->coords+5)=-h*3.0/8.0;
 	*(key->items)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
 		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "last_arrowhead", TRUE, 
 		"arrow_shape_b", -0.4, "arrow_shape_a", -0.4, "arrow_shape_c", 0.4, "width_units", 0.3, NULL);
@@ -217,7 +217,7 @@ void key_draw_return(struct key *key, double x, double y)
         *(key->items+1)=NULL;
 }
 
-void key_draw_backspace(struct key *key, double x, double y, double w)
+void key_draw_backspace(struct key *key, double w)
 {
 	key->textItem=NULL;
         key->items=g_malloc(2*sizeof(GnomeCanvasItem *));
@@ -233,7 +233,7 @@ void key_draw_backspace(struct key *key, double x, double y, double w)
 	*(key->items+1)=NULL;
 }
 
-void key_draw_shift(struct key *key, double x, double y, double h)
+void key_draw_shift(struct key *key, double h)
 {
 	key->textItem=NULL;
         key->items=g_malloc(3*sizeof(GnomeCanvasItem *));
@@ -249,7 +249,7 @@ void key_draw_shift(struct key *key, double x, double y, double h)
 	*(key->items+1)=NULL;
 }
 
-void key_draw_tab(struct key *key, double x, double y, double w)
+void key_draw_tab(struct key *key, double w)
 {
 	key->textItem=NULL;
         key->items=g_malloc(3*sizeof(GnomeCanvasItem *));
@@ -273,7 +273,7 @@ void key_draw_tab(struct key *key, double x, double y, double w)
 	*(key->items+2)=NULL;
 }
 
-void key_draw_capslock(struct key *key, double x, double y)
+void key_draw_capslock(struct key *key)
 {
 	key->textItem=NULL;
         key->items=g_malloc(3*sizeof(GnomeCanvasItem *));
@@ -286,12 +286,11 @@ void key_draw_capslock(struct key *key, double x, double y)
 	*(key->items+2)=NULL;
 }
 
-void key_draw4(struct key *key, double x, double y, double w, double h)
+void key_draw_general(struct key *key, enum key_class class)
 {
 	GnomeCanvasPathDef *bpath;
-	guint keyval;
-	key->width=w;
-	key->height=h;
+	double w=key->width;
+	double h=key->height;
 
 	bpath=gnome_canvas_path_def_new_sized(5);
 	gnome_canvas_path_def_moveto(bpath, -w, 0.0);
@@ -307,24 +306,29 @@ void key_draw4(struct key *key, double x, double y, double w, double h)
 	key_update_map(key);
 	gnome_canvas_path_def_unref(bpath);
 
-	keyval=key_getKeyval(key);
-	if (keyval==gdk_keyval_from_name("BackSpace")) { key_draw_backspace(key, x, y, w); }
-	else if (keyval==gdk_keyval_from_name("Tab")) { key_draw_tab(key, x, y, w); }
-	else if (keyval==gdk_keyval_from_name("Caps_Lock")) { key_draw_capslock(key, x, y); }
-	else if (key->modifier & GDK_SHIFT_MASK) { key_draw_shift(key, x, y, h); }
-	else {
-	        key->items=g_malloc(sizeof(GnomeCanvasItem *));
-        	key->textItem=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_TEXT,
-                	"x", 0.0, "y", 0.0, "text", key_getLabel(key, 0), "fill_color", key_colours[KEY_TEXT_COLOR],
-			"size-set", TRUE, "size-points", 1.2*keyboard_get_zoom(key->keyboard), NULL);
-        	*(key->items)=NULL;
+	switch(class) {
+		case KEY_BACKSPACE: key_draw_backspace(key, w); break;
+		case KEY_TAB: key_draw_tab(key, w); break;
+		case KEY_CAPSLOCK: key_draw_capslock(key); break;
+		case KEY_SHIFT: key_draw_shift(key, h); break;
+		case KEY_DEFAULT:
+	        	key->items=g_malloc(sizeof(GnomeCanvasItem *));
+        		key->textItem=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_TEXT,
+				"x", 0.0, "y", 0.0, "text", key_getLabel(key, 0), "fill_color", key_colours[KEY_TEXT_COLOR],
+				"size-set", TRUE, "size-points", 1.2*keyboard_get_zoom(key->keyboard), NULL);
+				*(key->items)=NULL;
+			break;
+		default:
+			flo_fatal(_("Unknown key class :%d"), class);
 	}
 }
 
-void key_draw2(struct key *key, double x, double y)
+void key_draw(struct key *key, enum key_class class, double w, double h)
 {
-	if (key_getKeyval(key)==gdk_keyval_from_name("Return")) { key_draw_return(key, x, y); }
-	else key_draw4(key, x, y, 2.0, 2.0);
+	key->width=w;
+	key->height=h;
+	if (class==KEY_RETURN) key_draw_return(key);
+	else key_draw_general(key, class);
 }
 
 void key_update_text_color (struct key *key)

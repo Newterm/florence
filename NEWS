@@ -4,8 +4,7 @@
 
 2008-02-19 François Agrech <f.agrech@gmail.com>
 	* Version 0.0.2
-	* Fix shape when window size is not multiple of 8 (because of odd
-	  zoom parameter)
+	* Fix shape when window size is not multiple of 8 (because of odd zoom parameter)
 	* Add font scaling according to window size
 
 2008-02-21 François Agrech <f.agrech@gmail.com>
@@ -17,8 +16,7 @@
 	* Version 0.0.4
 	* New configuration GUI (requires libglade)
 	* Move configuration to GConf
-	* Note : configuration doesn't work yet but the infrastructure is in
-	place
+	* Note: configuration doesn't work yet but the infrastructure is in place
 
 2008-02-29 François Agrech <f.agrech@gmail.com>
 	* Version 0.0.5
@@ -28,4 +26,14 @@
 2008-03-03 François Agrech <f.agrech@gmail.com>
 	* Version 0.0.6
 	* fixed issue with resizing.
+
+2008-03-06 François Agrech <f.agrech@gmail.com>
+	* Version 0.1.0
+	* polish
+
+2008-03-13 François Agrech <f.agrech@gmail.com>
+	* Version 0.1.1
+	* Internal change: add a class parameter for keys.
+	* No more layout key file but xml/xsd instead. (Makes florence dependant on libxml).
+	* Add info-bubbles on preferences window.
 

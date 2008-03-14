@@ -1,99 +1,360 @@
-# 
-#  Florence - Florence is a simple virtual keyboard for Gnome.
-#
-#  Copyright (C) 2008 François Agrech
-#
-#  This program is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2, or (at your option)
-#  any later version.
-#
-#  This program is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with this program; if not, write to the Free Software Foundation,
-#  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
-#
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Florence - Florence is a simple virtual keyboard for Gnome.
 
-# Size of the layout
-[Size]
-Width=30
-Height=10
+  Copyright (C) 2008 François Agrech
 
-[Labels]
-# keycode=label
-# Will be printed on the key
-37=Ctrl
-64=Alt
-109=Ctrl
-113=AltGr
-115=Super
-116=Super
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
 
-[Layout]
-# keycode=xpos;ypos;width (default=2);height (default=2)
-49=1;1
-10=3;1
-11=5;1
-12=7;1
-13=9;1
-14=11;1
-15=13;1
-16=15;1
-17=17;1
-18=19;1
-19=21;1
-20=23;1
-21=25;1
-22=28;1;4;2
-23=1.5;3;3;2
-24=4;3
-25=6;3
-26=8;3
-27=10;3
-28=12;3
-29=14;3
-30=16;3
-31=18;3
-32=20;3
-33=22;3
-34=24;3
-35=26;3
-36=28.5;4
-66=2;5;4;2
-38=5;5
-39=7;5
-40=9;5
-41=11;5
-42=13;5
-43=15;5
-44=17;5
-45=19;5
-46=21;5
-47=23;5
-48=25;5
-51=27;5
-50=1.5;7;3;2
-94=4;7
-52=6;7
-53=8;7
-54=10;7
-55=12;7
-56=14;7
-57=16;7
-58=18;7
-59=20;7
-60=22;7
-61=24;7
-62=27.5;7;5;2
-37=1.5;9;3;2
-115=4.5;9;3;2
-64=7.5;9;3;2
-65=15;9;12;2
-113=22.5;9;3;2
-116=25.5;9;3;2
-109=28.5;9;3;2
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+-->
+<keyboard
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="florence"
+  xmlns:flo="florence"
+  xsi:schemaLocation="florence florence.xsd">
+	<width>30</width>
+	<height>10</height>
+	<key>
+		<code>49</code>
+		<xpos>1</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>10</code>
+		<xpos>3</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>11</code>
+		<xpos>5</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>12</code>
+		<xpos>7</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>13</code>
+		<xpos>9</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>14</code>
+		<xpos>11</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>15</code>
+		<xpos>13</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>16</code>
+		<xpos>15</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>17</code>
+		<xpos>17</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>18</code>
+		<xpos>19</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>19</code>
+		<xpos>21</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>20</code>
+		<xpos>23</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>21</code>
+		<xpos>25</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<class>backspace</class>
+		<code>22</code>
+		<xpos>28</xpos>
+		<ypos>1</ypos>
+		<width>4</width>
+	</key>
+	<key>
+		<class>tab</class>
+		<code>23</code>
+		<xpos>1.5</xpos>
+		<ypos>3</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>24</code>
+		<xpos>4</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>25</code>
+		<xpos>6</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>26</code>
+		<xpos>8</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>27</code>
+		<xpos>10</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>28</code>
+		<xpos>12</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>29</code>
+		<xpos>14</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>30</code>
+		<xpos>16</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>31</code>
+		<xpos>18</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>32</code>
+		<xpos>20</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>33</code>
+		<xpos>22</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>34</code>
+		<xpos>24</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>35</code>
+		<xpos>26</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<class>return</class>
+		<code>36</code>
+		<xpos>28.5</xpos>
+		<ypos>4</ypos>
+		<width>3</width>
+		<height>4</height>
+	</key>
+	<key>
+		<class>capslock</class>
+		<code>66</code>
+		<xpos>2</xpos>
+		<ypos>5</ypos>
+		<width>4</width>
+	</key>
+	<key>
+		<code>38</code>
+		<xpos>5</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>39</code>
+		<xpos>7</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>40</code>
+		<xpos>9</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>41</code>
+		<xpos>11</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>42</code>
+		<xpos>13</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>43</code>
+		<xpos>15</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>44</code>
+		<xpos>17</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>45</code>
+		<xpos>19</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>46</code>
+		<xpos>21</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>47</code>
+		<xpos>23</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>48</code>
+		<xpos>25</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>51</code>
+		<xpos>27</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<class>shift</class>
+		<code>50</code>
+		<xpos>1.5</xpos>
+		<ypos>7</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>94</code>
+		<xpos>4</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>52</code>
+		<xpos>6</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>53</code>
+		<xpos>8</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>54</code>
+		<xpos>10</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>55</code>
+		<xpos>12</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>56</code>
+		<xpos>14</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>57</code>
+		<xpos>16</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>58</code>
+		<xpos>18</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>59</code>
+		<xpos>20</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>60</code>
+		<xpos>22</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>61</code>
+		<xpos>24</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<class>shift</class>
+		<code>62</code>
+		<xpos>27.5</xpos>
+		<ypos>7</ypos>
+		<width>5</width>
+	</key>
+	<key>
+		<code>37</code>
+		<label>Ctrl</label>
+		<xpos>1.5</xpos>
+		<ypos>9</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>115</code>
+		<label>Super</label>
+		<xpos>4.5</xpos>
+		<ypos>9</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>64</code>
+		<label>Alt</label>
+		<xpos>7.5</xpos>
+		<ypos>9</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>65</code>
+		<xpos>15</xpos>
+		<ypos>9</ypos>
+		<width>12</width>
+	</key>
+	<key>
+		<code>113</code>
+		<label>AltGr</label>
+		<xpos>22.5</xpos>
+		<ypos>9</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>116</code>
+		<label>Super</label>
+		<xpos>25.5</xpos>
+		<ypos>9</ypos>
+		<width>3</width>
+	</key>
+	<key>
+		<code>109</code>
+		<label>Ctrl</label>
+		<xpos>28.5</xpos>
+		<ypos>9</ypos>
+		<width>3</width>
+	</key>
+</keyboard>
 

@@ -118,13 +118,21 @@ void settings_commit(GtkWidget *window, GtkWidget *button)
 	gconf_client_commit_change_set(gconfclient, gconfchangeset, TRUE, NULL);
 }
 
+void settings_rollback(GtkWidget *window, GtkWidget *button)
+{
+	gconf_change_set_clear (gconfchangeset);
+	gconf_change_set_unref(gconfchangeset);
+	gtk_object_destroy(GTK_OBJECT(window));
+}
+
 void settings_close(GtkWidget *window, GtkWidget *button)
 {
 	GtkWidget *dialog, *label;
 	gint result;
 	if (gconf_change_set_size(gconfchangeset)) {
-		dialog=gtk_dialog_new_with_buttons("Corfirm", window, GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
-			GTK_STOCK_APPLY, GTK_RESPONSE_ACCEPT, GTK_STOCK_DISCARD, GTK_RESPONSE_REJECT, NULL);
+		dialog=gtk_dialog_new_with_buttons("Corfirm", GTK_WINDOW(window),
+			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_APPLY,
+			GTK_RESPONSE_ACCEPT, GTK_STOCK_DISCARD, GTK_RESPONSE_REJECT, NULL);
 		label=gtk_label_new(_("Discard changes?"));
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 		gtk_widget_show_all(dialog);
@@ -134,13 +142,6 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 		}
 	}
 	settings_rollback(window, button);
-}
-
-void settings_rollback(GtkWidget *window, GtkWidget *button)
-{
-	gconf_change_set_clear (gconfchangeset);
-	gconf_change_set_unref(gconfchangeset);
-	gtk_object_destroy(GTK_OBJECT(window));
 }
 
 /* public functions */
@@ -161,9 +162,34 @@ void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer 
 	gconf_client_notify_add(gconfclient, settings_get_full_path(name), cb, user_data, NULL, NULL);
 }
 
-GConfValue *settings_get_value(gchar *name)
+gdouble settings_get_double(const gchar *name)
 {
-	return gconf_client_get(gconfclient, settings_get_full_path(name), NULL);
+	GError *err=NULL;
+	char *fullpath=settings_get_full_path(name);
+	gdouble ret=gconf_client_get_float(gconfclient, fullpath, &err);
+	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
+	flo_debug("GCONF:%s=<%f>", fullpath, ret);
+	return ret+0;
+}
+
+gchar *settings_get_string(gchar *name)
+{
+	GError *err=NULL;
+	char *fullpath=settings_get_full_path(name);
+	gchar *ret=gconf_client_get_string(gconfclient, fullpath, &err);
+	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
+	flo_debug("GCONF:%s=<%s>", fullpath, ret);
+	return ret;
+}
+
+gboolean settings_get_bool(gchar *name)
+{
+	GError *err=NULL;
+	char *fullpath=settings_get_full_path(name);
+	gboolean ret=gconf_client_get_bool(gconfclient, fullpath, &err);
+	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
+	flo_debug("GCONF:%s=<%s>", fullpath, ret?"TRUE":"FALSE");
+	return ret;
 }
 
 void settings(void)
@@ -173,23 +199,23 @@ void settings(void)
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
 
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
-		settings_convert_color(gconf_value_get_string(settings_get_value("colours/key"))));
+		settings_convert_color(settings_get_string("colours/key")));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_labels")),
-		settings_convert_color(gconf_value_get_string(settings_get_value("colours/label"))));
+		settings_convert_color(settings_get_string("colours/label")));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_activated")),
-		settings_convert_color(gconf_value_get_string(settings_get_value("colours/activated"))));
+		settings_convert_color(settings_get_string("colours/activated")));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_mouseover")),
-		settings_convert_color(gconf_value_get_string(settings_get_value("colours/mouseover"))));
+		settings_convert_color(settings_get_string("colours/mouseover")));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_shaped")),
-		gconf_value_get_bool(settings_get_value("window/shaped")));
+		settings_get_bool("window/shaped"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_decorate")),
-		gconf_value_get_bool(settings_get_value("window/decorated")));
+		settings_get_bool("window/decorated"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_always_on")),
-		gconf_value_get_bool(settings_get_value("behaviour/always_on_screen")));
+		settings_get_bool("behaviour/always_on_screen"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_zoom")),
-		gconf_value_get_float(settings_get_value("window/zoom")));
+		settings_get_double("window/zoom"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
-		gconf_value_get_float(settings_get_value("behaviour/auto_click")));
+		settings_get_double("behaviour/auto_click"));
 
 	glade_xml_signal_autoconnect(gladexml);
 }

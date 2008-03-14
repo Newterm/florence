@@ -54,3 +54,14 @@ void flo_error(char *s, ...)
 	va_end(ap);
 }
 
+void flo_debug(char *s, ...)
+{
+	if (getenv("FLO_DEBUG") && !strcmp(getenv("FLO_DEBUG"), "1")) {
+		va_list ap;
+		va_start(ap, s);
+        	vprintf(s, ap);
+		printf("\n");
+		va_end(ap);
+	}
+}
+

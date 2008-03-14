@@ -23,7 +23,7 @@
 #include <libgnomecanvas/libgnomecanvas.h>
 
 struct keyboard {
-	struct key *keys[256];
+	struct key **keys;
 	GnomeCanvasGroup *canvas_group;
 	GnomeCanvas *canvas;
 	guchar *map;

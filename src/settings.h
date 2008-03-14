@@ -26,5 +26,7 @@ void settings_init(void);
 void settings_exit(void);
 void settings(void);
 void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data);
-GConfValue *settings_get_value(gchar *name);
+gdouble settings_get_double(gchar *name);
+gchar *settings_get_string(gchar *name);
+gboolean settings_get_bool(gchar *name);
 

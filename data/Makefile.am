@@ -15,7 +15,7 @@ gladedir=$(datadir)/florence
 glade_DATA=florence.glade 
 
 layoutdir=$(datadir)/florence
-layout_DATA=florence.layout
+layout_DATA=florence.layout florence.xsd
 
 install-data-local:
 	sed -i "s!@LAYOUTDIR@!$(datadir)/florence!g" $(srcdir)/$(schema_DATA) #UGLY HACK

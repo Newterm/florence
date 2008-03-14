@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Florence - Florence is a simple virtual keyboard for Gnome.
+
+  Copyright (C) 2008 François Agrech
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+-->
+
+<xs:schema 
+  xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+  elementFormDefault="qualified"
+  targetNamespace="florence"
+  xmlns:flo="florence">
+
+	<xs:element name="keyboard" type="flo:keyboardT"/>
+	
+	<xs:complexType name="keyboardT">
+		<xs:sequence>
+			<xs:element name="width" type="xs:decimal"/>
+			<xs:element name="height" type="xs:decimal"/>
+			<xs:element name="key" type="flo:keyT" maxOccurs="256"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="keyT">
+		<xs:all>
+			<xs:element name="code" type="flo:codeT"/>
+			<xs:element name="xpos" type="xs:decimal"/>
+			<xs:element name="ypos" type="xs:decimal"/>
+			<xs:element name="width" type="xs:decimal" default="2" minOccurs="0"/>
+			<xs:element name="height" type="xs:decimal" default="2" minOccurs="0"/>
+			<xs:element name="label" type="xs:string" minOccurs="0"/>
+			<xs:element name="class" type="flo:classT" minOccurs="0" default="default"/>
+		</xs:all>
+	</xs:complexType>
+
+	<xs:simpleType name="codeT">
+		<xs:restriction base="xs:integer">
+			<xs:minInclusive value="0"/>
+			<xs:maxInclusive value="255"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="classT">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="default"/>
+			<xs:enumeration value="return"/>
+			<xs:enumeration value="backspace"/>
+			<xs:enumeration value="tab"/>
+			<xs:enumeration value="shift"/>
+			<xs:enumeration value="capslock"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+</xs:schema>
+

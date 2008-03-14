@@ -19,5 +19,5 @@
 
 */
 
-void trayicon_create(GtkWidget *window, GCallback *quit_cb);
+void trayicon_create(GtkWidget *window, GCallback quit_cb);
 
