@@ -18,11 +18,18 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 -->
-<keyboard
+<layout
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns="florence"
   xmlns:flo="florence"
   xsi:schemaLocation="florence florence.xsd">
+<informations>
+	<name>Standard keyboard</name>
+	<author>François Agrech</author>
+	<date>2008-03-15</date>
+	<florence_version>0.1.2</florence_version>
+</informations>
+<keyboard>
 	<width>30</width>
 	<height>10</height>
 	<key>
@@ -357,4 +364,171 @@
 		<width>3</width>
 	</key>
 </keyboard>
+<extension>
+	<name>Arrows</name>
+	<placement>right</placement>
+	<keyboard>
+	<width>6</width>
+	<height>10</height>
+	<key>
+		<code>106</code>
+		<label>Ins</label>
+		<xpos>1</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<class>home</class>
+		<code>97</code>
+		<xpos>3</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<class>pgup</class>
+		<code>99</code>
+		<xpos>5</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>107</code>
+		<label>Del</label>
+		<xpos>1</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>103</code>
+		<label>End</label>
+		<xpos>3</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<class>pgdown</class>
+		<code>105</code>
+		<xpos>5</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<class>uparrow</class>
+		<code>98</code>
+		<xpos>3</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<class>leftarrow</class>
+		<code>100</code>
+		<xpos>1</xpos>
+		<ypos>9</ypos>
+	</key>
+	<key>
+		<class>downarrow</class>
+		<code>104</code>
+		<xpos>3</xpos>
+		<ypos>9</ypos>
+	</key>
+	<key>
+		<class>rightarrow</class>
+		<code>102</code>
+		<xpos>5</xpos>
+		<ypos>9</ypos>
+	</key>
+	</keyboard>
+</extension>
+<extension>
+	<name>Numpad</name>
+	<placement>right</placement>
+	<keyboard>
+	<width>8</width>
+	<height>10</height>
+	<key>
+		<code>77</code>
+		<label>NL</label>
+		<xpos>1</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>112</code>
+		<xpos>3</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>63</code>
+		<xpos>5</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>82</code>
+		<xpos>7</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>79</code>
+		<xpos>1</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>80</code>
+		<xpos>3</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>81</code>
+		<xpos>5</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<code>86</code>
+		<xpos>7</xpos>
+		<ypos>4</ypos>
+		<height>4</height>
+	</key>
+	<key>
+		<code>83</code>
+		<xpos>1</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>84</code>
+		<xpos>3</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>85</code>
+		<xpos>5</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<code>87</code>
+		<xpos>1</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>88</code>
+		<xpos>3</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>89</code>
+		<xpos>5</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<code>108</code>
+		<label>Ent</label>
+		<xpos>7</xpos>
+		<ypos>8</ypos>
+		<height>4</height>
+	</key>
+	<key>
+		<code>90</code>
+		<xpos>2</xpos>
+		<ypos>9</ypos>
+		<width>4</width>
+	</key>
+	<key>
+		<code>91</code>
+		<xpos>5</xpos>
+		<ypos>9</ypos>
+	</key>
+	</keyboard>
+</extension>
+</layout>
 

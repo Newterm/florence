@@ -34,6 +34,11 @@
 2008-03-13 François Agrech <f.agrech@gmail.com>
 	* Version 0.1.1
 	* Internal change: add a class parameter for keys.
-	* No more layout key file but xml instead. (Makes florence dependant on libxml).
+	* No more layout key file but xml/xsd instead. (Makes florence dependant on libxml).
 	* Add info-bubbles on preferences window.
+
+2008-03-19 François Agrech <f.agrech@gmail.com>
+	* Version 0.1.2
+	* Add extensions infrasctructure
+	* Add arrows keyboard extension
 

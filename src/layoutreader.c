@@ -21,7 +21,6 @@
 
 #include "system.h"
 #include "layoutreader.h"
-#include <libxml/xmlreader.h>
 
 #ifndef LIBXML_READER_ENABLED
 #error "Xinclude support not compiled in."));
@@ -29,12 +28,19 @@
 
 #define BUFFER_SIZE 32
 
-int layoutreader_goto(xmlTextReaderPtr reader, xmlChar *name, int level)
+int layoutreader_goto(xmlTextReaderPtr reader, xmlChar *name, xmlReaderTypes type, int level)
 {
 	int ret;
 	while ((ret=xmlTextReaderRead(reader))==1 && !(xmlTextReaderDepth(reader)==level && 
-		xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT && 
-		!strcmp(xmlTextReaderConstName(reader), name)));
+		xmlTextReaderNodeType(reader)==type && !strcmp(xmlTextReaderConstName(reader), name))) {
+		switch(type) {
+			case XML_READER_TYPE_ELEMENT:
+				if (xmlTextReaderDepth(reader)!=level) { return FALSE; }
+				break;
+			case XML_READER_TYPE_END_ELEMENT:
+				if (xmlTextReaderDepth(reader)<level) { return FALSE; }
+		}
+	}
 	return ret==1;
 }
 
@@ -47,7 +53,7 @@ xmlChar *layoutreader_readnode(xmlTextReaderPtr reader, int level, xmlChar **nam
 	if (xmlTextReaderDepth(reader)==level) {
 		*name=(xmlChar *)xmlTextReaderConstName(reader);
 		ret=1;
-	}
+	} else *name=NULL;
 	if (ret==1 && (ret=xmlTextReaderRead(reader))==1 && xmlTextReaderDepth(reader)==(level+1) &&
                 xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
                 strncpy(buffer, (char *)xmlTextReaderConstValue(reader), BUFFER_SIZE); value=(xmlChar *) buffer;
@@ -56,6 +62,17 @@ xmlChar *layoutreader_readnode(xmlTextReaderPtr reader, int level, xmlChar **nam
 	}
 
 	return value;
+}
+
+enum layout_placement layoutreader_getplacement(xmlChar *placement)
+{
+	enum layout_placement ret=LAYOUT_VOID;
+	if (!strcmp(placement, "left")) ret=LAYOUT_LEFT;
+	else if (!strcmp(placement, "right")) ret=LAYOUT_RIGHT;
+	else if (!strcmp(placement, "up")) ret=LAYOUT_UP;
+	else if (!strcmp(placement, "down")) ret=LAYOUT_DOWN;
+	else flo_fatal(_("Unknown placement %s"), placement);
+	return ret;
 }
 
 enum key_class layoutreader_getclass(xmlChar *class)
@@ -67,10 +84,18 @@ enum key_class layoutreader_getclass(xmlChar *class)
 	else if (!strcmp(class, "tab")) ret=KEY_TAB;
 	else if (!strcmp(class, "shift")) ret=KEY_SHIFT;
 	else if (!strcmp(class, "capslock")) ret=KEY_CAPSLOCK;
+	else if (!strcmp(class, "leftarrow")) ret=KEY_LEFTARROW;
+	else if (!strcmp(class, "rightarrow")) ret=KEY_RIGHTARROW;
+	else if (!strcmp(class, "uparrow")) ret=KEY_UPARROW;
+	else if (!strcmp(class, "downarrow")) ret=KEY_DOWNARROW;
+	else if (!strcmp(class, "home")) ret=KEY_HOME;
+	else if (!strcmp(class, "pgup")) ret=KEY_PGUP;
+	else if (!strcmp(class, "pgdown")) ret=KEY_PGDOWN;
+	else flo_fatal(_("Unknown key class %s"), class);
 	return ret;
 }
 
-double layoutreader_getvalue(xmlTextReaderPtr reader, xmlChar *name, int level)
+double layoutreader_getdouble(xmlTextReaderPtr reader, xmlChar *name, int level)
 {
 	int ret;
 	double val;
@@ -78,7 +103,7 @@ double layoutreader_getvalue(xmlTextReaderPtr reader, xmlChar *name, int level)
 	while (((ret=xmlTextReaderRead(reader))==1) && !(xmlTextReaderDepth(reader)==level && 
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT && 
 		!strcmp(xmlTextReaderConstName(reader), name))) {
-		if (xmlTextReaderDepth(reader)<level) { flo_info(_("Out of element")); ret=-1; break; }
+		if (xmlTextReaderDepth(reader)<level) { flo_warn(_("Out of element")); ret=-1; break; }
 	}
 	if (ret==1 && ((ret=xmlTextReaderRead(reader))==1) && xmlTextReaderDepth(reader)==(level+1) &&
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
@@ -92,7 +117,30 @@ double layoutreader_getvalue(xmlTextReaderPtr reader, xmlChar *name, int level)
 	return val;
 }
 
-void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, void *userdata)
+xmlChar *layoutreader_getstring(xmlTextReaderPtr reader, xmlChar *name, int level)
+{
+	int ret;
+	xmlChar *val;
+
+	while (((ret=xmlTextReaderRead(reader))==1) && !(xmlTextReaderDepth(reader)==level && 
+		xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT && 
+		!strcmp(xmlTextReaderConstName(reader), name))) {
+		if (xmlTextReaderDepth(reader)<level) { flo_info(_("Out of element")); ret=-1; break; }
+	}
+	if (ret==1 && ((ret=xmlTextReaderRead(reader))==1) && xmlTextReaderDepth(reader)==(level+1) &&
+		xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
+		val=g_malloc((sizeof(xmlChar)*strlen(xmlTextReaderConstValue(reader)+1)));
+		strcpy(val, xmlTextReaderConstValue(reader));
+		if (ret!=1 || ((ret=xmlTextReaderRead(reader))!=1) || !(xmlTextReaderDepth(reader)==level &&
+			xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT)) {
+			flo_fatal(_("layout parse error"));
+		}
+	} else { flo_fatal(_("layout parse error: %s not found"), name); }
+
+	return val;
+}
+
+void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, void *userdata, int level)
 {
 	static char label_buffer[BUFFER_SIZE];
 	xmlChar *nodename, *nodevalue;
@@ -106,7 +154,7 @@ void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyf
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT) )
 	{
 		if (xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT) {
-			nodevalue=(xmlChar *)layoutreader_readnode(reader, 2, &nodename);
+			nodevalue=(xmlChar *)layoutreader_readnode(reader, level+1, &nodename);
 			if (!strcmp(nodename, "code")) {
 				code=atoi(nodevalue);
 			} else if (!strcmp(nodename, "xpos")) {
@@ -128,19 +176,60 @@ void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyf
 	keyfunc(userdata, class, code, xpos, ypos, width, height, label);
 }
 
-void layoutreader_read(xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, layoutreader_sizeprocess sizefunc,
-	void *userdata)
+void layoutreader_readkeyboard(xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, layoutreader_sizeprocess sizefunc,
+	void *userdata, int level)
 {
 	double w, h;
-	if (!layoutreader_goto(reader, "keyboard", 0)) flo_fatal(_("No keyboard element in layout"));
-	w=layoutreader_getvalue(reader, "width", 1);
-	h=layoutreader_getvalue(reader, "height", 1);
+	if (!layoutreader_goto(reader, "keyboard", XML_READER_TYPE_ELEMENT, level))
+		flo_fatal(_("No keyboard element in layout"));
+	w=layoutreader_getdouble(reader, "width", level+1);
+	h=layoutreader_getdouble(reader, "height", level+1);
 	sizefunc(userdata, w, h);
-	while(layoutreader_goto(reader, "key", 1)) layoutreader_readkey(reader, keyfunc, userdata);
+	while(layoutreader_goto(reader, "key", XML_READER_TYPE_ELEMENT, level+1))
+		layoutreader_readkey(reader, keyfunc, userdata, level+1);
+	if (strcmp(xmlTextReaderConstName(reader), "keyboard") &&
+		!layoutreader_goto(reader, "keyboard", XML_READER_TYPE_END_ELEMENT, level))
+		flo_fatal(_("keyboard element not closed in layout"));
 }
 
-void layoutreader_iterate(char *layout, layoutreader_keyprocess keyfunc, layoutreader_sizeprocess sizefunc,
-	void *userdata)
+void layoutreader_readinfos(xmlTextReaderPtr reader, layoutreader_infosprocess infosfunc)
+{
+	xmlChar *version, *name;
+	if (!layoutreader_goto(reader, "informations", XML_READER_TYPE_ELEMENT, 1))
+		flo_fatal(_("No informations element in layout"));
+	name=layoutreader_getstring(reader, "name", 2);
+	version=layoutreader_getstring(reader, "florence_version", 2);
+	infosfunc(name, version);
+	g_free(name);
+	g_free(version);
+	if (!layoutreader_goto(reader, "informations", XML_READER_TYPE_END_ELEMENT, 1))
+		flo_fatal(_("informations element not closed in layout"));
+}
+
+int layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_extprocess extfunc, void *userdata)
+{
+	xmlChar *name, *buffer;
+	enum layout_placement placement;
+	int order;
+	int ret=FALSE;
+
+	if (layoutreader_goto(reader, "extension", XML_READER_TYPE_ELEMENT, 1))
+	{
+		name=layoutreader_getstring(reader, "name", 2);
+		buffer=layoutreader_getstring(reader, "placement", 2);
+		placement=layoutreader_getplacement(buffer);
+		g_free(buffer);
+		extfunc(reader, name, placement, userdata);
+		g_free(name);
+		if (!layoutreader_goto(reader, "extension", XML_READER_TYPE_END_ELEMENT, 1))
+			flo_fatal(_("Unclosed informations element in layout"));
+		ret=TRUE;
+	}
+
+	return ret;
+}
+
+xmlTextReaderPtr layoutreader_new(char *layout)
 {
 	xmlTextReaderPtr reader;
 
@@ -151,9 +240,16 @@ void layoutreader_iterate(char *layout, layoutreader_keyprocess keyfunc, layoutr
 	flo_info(_("Using layout file %s"), layout);
 	if (xmlTextReaderSchemaValidate(reader, DATADIR "/florence.xsd"))
 		flo_fatal(_("Unable to activate schema validation from %s."), DATADIR "/florence.xsd");
-	layoutreader_read(reader, keyfunc, sizefunc, userdata);
+	if (!layoutreader_goto(reader, "layout", XML_READER_TYPE_ELEMENT, 0))
+		flo_fatal(_("No layout element in layout"));
+
+	return reader;
+}
+
+void layoutreader_free(xmlTextReaderPtr reader)
+{
 	if (xmlTextReaderIsValid(reader) != 1)
-		flo_fatal(_("Invalid layout :%s (checked against %s)"), layout, DATADIR "/florence.xsd");
+		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.xsd");
 	xmlFreeTextReader(reader);
 
 	xmlCleanupParser();

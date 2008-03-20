@@ -27,7 +27,7 @@
 void flo_fatal(char *s, ...)
 {
 	va_list ap;
-        fprintf(stderr, _("FATAL ERROR :\n"));
+        fprintf(stderr, _("FATAL ERROR: "));
 	va_start(ap, s);
         vfprintf(stderr, s, ap);
 	fprintf(stderr, "\n");
@@ -44,10 +44,20 @@ void flo_info(char *s, ...)
 	va_end(ap);
 }
 
+void flo_warn(char *s, ...)
+{
+	va_list ap;
+	fprintf(stderr, _("WARNING: "));
+	va_start(ap, s);
+        vfprintf(stderr, s, ap);
+        fprintf(stderr, "\n");
+	va_end(ap);
+}
+
 void flo_error(char *s, ...)
 {
 	va_list ap;
-        fprintf(stderr, _("ERROR :\n"));
+        fprintf(stderr, _("ERROR: "));
 	va_start(ap, s);
         vfprintf(stderr, s, ap);
 	fprintf(stderr, "\n");

@@ -29,7 +29,6 @@ GCallback trayicon_quit;
 
 void trayicon_about(void)
 {
-	/* TODO: the icon doesn't seem to work */
 	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
 		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
@@ -75,15 +74,18 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 	menu = gtk_menu_new();
 
 	quit = gtk_image_menu_item_new_with_mnemonic(_("_Quit"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quit), gtk_image_new_from_stock(GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quit),
+		gtk_image_new_from_stock(GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU));
 	g_signal_connect_swapped(quit, "activate", trayicon_quit, NULL);
 
 	about = gtk_image_menu_item_new_with_mnemonic(_("_About"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(about), gtk_image_new_from_stock(GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(about),
+		gtk_image_new_from_stock(GTK_STOCK_ABOUT, GTK_ICON_SIZE_MENU));
 	g_signal_connect(about, "activate", G_CALLBACK(trayicon_about), NULL);
 
 	config = gtk_image_menu_item_new_with_mnemonic(_("_Preferences"));
-	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(config), gtk_image_new_from_stock(GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(config),
+		gtk_image_new_from_stock(GTK_STOCK_PREFERENCES, GTK_ICON_SIZE_MENU));
 	g_signal_connect(config, "activate", G_CALLBACK(settings), NULL);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), config);
@@ -103,7 +105,6 @@ void trayicon_create(GtkWidget *window, GCallback quit_cb)
 	tray_icon = gtk_status_icon_new();
 	g_signal_connect(G_OBJECT(tray_icon), "activate", G_CALLBACK(trayicon_on_click), (gpointer)window);
 	g_signal_connect(G_OBJECT(tray_icon), "popup-menu", G_CALLBACK(trayicon_on_menu), NULL);
-	/* TODO: this doesn't work!!! */
 	gtk_status_icon_set_from_icon_name(tray_icon, "florence");
 	gtk_status_icon_set_tooltip(tray_icon, _("Florence Virtual Keyboard"));
 	gtk_status_icon_set_visible(tray_icon, TRUE);

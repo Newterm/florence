@@ -64,6 +64,8 @@ void keyboard_resize(struct keyboard *keyboard, gdouble zoom)
 	keyboard->zoom=zoom;
 	gnome_canvas_set_pixels_per_unit(keyboard->canvas, zoom);
 	gnome_canvas_w2c(keyboard->canvas, keyboard->dwidth, keyboard->dheight , &(keyboard->width), &(keyboard->height));
+	gtk_widget_set_size_request(GTK_WIDGET(keyboard_get_canvas(keyboard)),
+		keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	if (keyboard->map) g_free(keyboard->map);
 	keyboard->map=g_malloc(sizeof(guchar)*keyboard->width*keyboard->height);
 	if (!keyboard->map) flo_fatal(_("Out of memory"));
@@ -312,7 +314,7 @@ void keyboard_setsize(void *userdata, double width, double height)
 	memset(keyboard->map, 0, sizeof(guchar)*keyboard->width*keyboard->height);
 }
 
-struct keyboard *keyboard_new (GnomeCanvas *canvas)
+struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextReaderPtr reader, int level)
 {
 	struct keyboard *keyboard=NULL;
 	gchar *colours[NUM_COLORS];
@@ -321,8 +323,7 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas)
 
 	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
-	if (!(keyboard->keys=g_malloc(256*sizeof(struct key *)))) flo_fatal(_("Unable to allocate memory for keys"));
-	memset(keyboard->keys, 0, 256*sizeof(struct key *));
+	keyboard->keys=keys;
 
 	click_time=settings_get_double("behaviour/auto_click");
 	if (click_time<=0.0) keyboard->timer_step=0.0; else keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;
@@ -338,10 +339,11 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas)
 	colours[KEY_MOUSE_OVER_COLOR]=(gchar *)settings_get_string("colours/mouseover");
 
 	key_init(colours);
-	layoutreader_iterate(settings_get_string("layout/file"), keyboard_insertkey, keyboard_setsize, keyboard);
+	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, level);
 	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), keyboard);
 
 	keyboard_settings_connect(keyboard);
+	gtk_widget_set_size_request(GTK_WIDGET(canvas), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	return keyboard;
 }
 

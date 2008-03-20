@@ -37,3 +37,8 @@
 	* No more layout key file but xml/xsd instead. (Makes florence dependant on libxml).
 	* Add info-bubbles on preferences window.
 
+2008-03-19 François Agrech <f.agrech@gmail.com>
+	* Version 0.1.2
+	* Add extensions infrasctructure
+	* Add arrows keyboard extension
+

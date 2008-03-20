@@ -169,6 +169,21 @@
 				<long>Le fichier layout contient l'arrangement des touches sur le clavier</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/layout/extensions</key>
+			<applyto>/apps/florence/layout/extensions</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>List of colon-separated (:) extension names</short>
+				<long>List of keyboard extensions names (colon-separated). extension names must be found in layout file</long>
+			</locale>
+			<locale name="fr">
+				<short>Liste des noms d'extension (séparés par des deux-points)</short>
+				<long>Liste des noms d'extension du clavier séparés par des deux-points (:). Les noms d'extension doivent se trouver dans le fichier layout</long>
+			</locale>
+		</schema>
 
 	</schemalist>
 </gconfschemafile>

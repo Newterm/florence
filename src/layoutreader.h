@@ -20,11 +20,27 @@
 */
 
 #include "key.h"
+#include <libxml/xmlreader.h>
 
+enum layout_placement {
+	LAYOUT_VOID,
+	LAYOUT_LEFT,
+	LAYOUT_RIGHT,
+	LAYOUT_UP,
+	LAYOUT_DOWN
+};
+
+typedef void (*layoutreader_infosprocess) (char *name, char *version);
 typedef void (*layoutreader_keyprocess) (void *userdata, enum key_class class, unsigned char code,
 	double xpos, double ypos, double width, double height, char *label);
 typedef void (*layoutreader_sizeprocess) (void *userdata, double width, double height);
-
-void layoutreader_iterate(char *layout, layoutreader_keyprocess keyfunc, layoutreader_sizeprocess sizefunc,
+typedef void (*layoutreader_extprocess) (xmlTextReaderPtr reader, char *name, enum layout_placement placement,
 	void *userdata);
+
+xmlTextReaderPtr layoutreader_new(char *layout);
+void layoutreader_free(xmlTextReaderPtr reader);
+void layoutreader_readinfos(xmlTextReaderPtr reader, layoutreader_infosprocess infosfunc);
+void layoutreader_readkeyboard(xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc,
+	layoutreader_sizeprocess sizefunc, void *userdata, int level);
+int layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_extprocess extfunc, void *userdata);
 

@@ -32,7 +32,7 @@ GConfClient *gconfclient;
 GConfChangeSet *gconfchangeset;
 
 /* private functions */
-char *settings_get_full_path(char *path)
+char *settings_get_full_path(const char *path)
 {
 	static char string_buffer[64];
 	strcpy(string_buffer, FLO_SETTINGS_ROOT);
@@ -172,7 +172,7 @@ gdouble settings_get_double(const gchar *name)
 	return ret+0;
 }
 
-gchar *settings_get_string(gchar *name)
+gchar *settings_get_string(const gchar *name)
 {
 	GError *err=NULL;
 	char *fullpath=settings_get_full_path(name);
@@ -182,7 +182,7 @@ gchar *settings_get_string(gchar *name)
 	return ret;
 }
 
-gboolean settings_get_bool(gchar *name)
+gboolean settings_get_bool(const gchar *name)
 {
 	GError *err=NULL;
 	char *fullpath=settings_get_full_path(name);

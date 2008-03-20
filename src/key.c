@@ -286,6 +286,82 @@ void key_draw_capslock(struct key *key)
 	*(key->items+2)=NULL;
 }
 
+void key_draw_arrow(struct key *key, double w, double h, enum key_class class)
+{
+	GnomeCanvasPoints *points;
+	key->textItem=NULL;
+        key->items=g_malloc(2*sizeof(GnomeCanvasItem *));
+	points=gnome_canvas_points_new(2);
+	switch (class) {
+		case KEY_LEFTARROW:
+			*(points->coords)=w/4.0;*(points->coords+1)=0.0;
+			*(points->coords+2)=-w/4.0;*(points->coords+3)=0.0;
+			break;
+		case KEY_RIGHTARROW:
+			*(points->coords)=-w/4.0;*(points->coords+1)=0.0;
+			*(points->coords+2)=w/4.0;*(points->coords+3)=0.0;
+			break;
+		case KEY_UPARROW:
+			*(points->coords)=0.0;*(points->coords+1)=h/4.0;
+			*(points->coords+2)=0.0;*(points->coords+3)=-h/4.0;
+			break;
+		case KEY_DOWNARROW:
+			*(points->coords)=0.0;*(points->coords+1)=-h/4.0;
+			*(points->coords+2)=0.0;*(points->coords+3)=h/4.0;
+			break;
+		case KEY_HOME:
+			*(points->coords)=0.0;*(points->coords+1)=0.0;
+			*(points->coords+2)=-w/2.0;*(points->coords+3)=-h/2.0;
+			break;
+		default:
+			flo_fatal(_("The impossible happened"));
+	}
+	*(key->items)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "last_arrowhead", TRUE,
+		"arrow_shape_b", -0.4, "arrow_shape_a", -0.4, "arrow_shape_c", 0.4, "width_units", 0.3, NULL);
+	gnome_canvas_points_unref(points);
+	*(key->items+1)=NULL;
+}
+
+void key_draw_pg(struct key *key, double w, double h, enum key_class class)
+{
+	GnomeCanvasPoints *points;
+	key->textItem=NULL;
+        key->items=g_malloc(4*sizeof(GnomeCanvasItem *));
+	points=gnome_canvas_points_new(2);
+	*(points->coords)=0.0;
+	*(points->coords+2)=0.0;
+	switch (class) {
+		case KEY_PGUP:
+			*(points->coords+1)=h*0.3;
+			*(points->coords+3)=-h/2.0;
+			break;
+		case KEY_PGDOWN:
+			*(points->coords+1)=-h*0.3;
+			*(points->coords+3)=h/2.0;
+			break;
+		default:
+			flo_fatal(_("Something is seriously broken"));
+	}
+	*(key->items)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "last_arrowhead", TRUE,
+		"arrow_shape_b", -0.4, "arrow_shape_a", -0.4, "arrow_shape_c", 0.4, "width_units", 0.3, NULL);
+	*(points->coords)=-w/4.0;*(points->coords+1)=0.0;
+	*(points->coords+2)=w/4.0;*(points->coords+3)=0.0;
+	*(key->items+1)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "width_units", 0.1, NULL);
+	*(points->coords+1)=-h*0.15;
+	*(points->coords+3)=-h*0.15;
+	*(key->items+1)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "width_units", 0.1, NULL);
+	*(points->coords+1)=h*0.15;
+	*(points->coords+3)=h*0.15;
+	*(key->items+1)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "width_units", 0.1, NULL);
+	gnome_canvas_points_unref(points);
+	*(key->items+1)=NULL;
+}
+
 void key_draw_general(struct key *key, enum key_class class)
 {
 	GnomeCanvasPathDef *bpath;
@@ -311,6 +387,13 @@ void key_draw_general(struct key *key, enum key_class class)
 		case KEY_TAB: key_draw_tab(key, w); break;
 		case KEY_CAPSLOCK: key_draw_capslock(key); break;
 		case KEY_SHIFT: key_draw_shift(key, h); break;
+		case KEY_PGUP:
+		case KEY_PGDOWN: key_draw_pg(key, w, h, class); break;
+		case KEY_HOME:
+		case KEY_LEFTARROW:
+		case KEY_RIGHTARROW:
+		case KEY_UPARROW:
+		case KEY_DOWNARROW: key_draw_arrow(key, w, h, class); break;
 		case KEY_DEFAULT:
 	        	key->items=g_malloc(sizeof(GnomeCanvasItem *));
         		key->textItem=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_TEXT,

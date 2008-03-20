@@ -25,17 +25,24 @@ QUICK INSTALL
 *************
 
       * Make sure you have all the dependancies installed.
+        Ubuntu/debian: use the following commands to install dependancies:
+
+            $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
+              libatspi-dev libatspi-dev
+            
       * Open a terminal and type (don't type the $ or #):
 
             $ ./configure --prefix=/usr
             $ make
             $ su
             # make install
+            (for ubuntu, replace the last two commands with "sudo make install")
 
 UNINSTALL
 *********
 
       # make uninstall
+      (for ubuntu, "sudo make uninstall")
 
 
 QUICK USAGE
@@ -65,4 +72,32 @@ CONTRIBUTE
 **********
 
 Email me at f.agrech@gmail.com
+
+RUNNING FLORENCE ON XFCE
+************************
+
+This works on any desktop environment actually.
+You need to start the at-spi redistry daemon at session startup:
+add this line to your ~/.xinitrc file before the last command (for xfce it is probably
+startxfce4):
+     /usr/libexec/at-spi-registryd &
+Some distro may put the at-spi-registryd command elsewhere. Use the find command to find
+out if your distro did indeed put the command under /usr/libexec:
+     find /usr -name at-spi-registryd
+And adapt your .xinitrc according to the result.
+GNOME does start the daemon automatically if it is configured with the gnome-at-property
+dialog.
+If your DE is XDG compliant (like XFCE), Florence should be accessible via the menu.
+Anyway, starting florence from the command line will always work.
+
+RUNNING FLORENCE ON KDE
+***********************
+
+Florence can work on KDE, provided you install all the dependancies (including GTK and
+the at-spi registry daemon).
+You must start the at-spi registry daemon at session startup.
+QT applications don't support at-spi yet. You can still use Florence on screen, but the
+keyboard won't detect QT editable widgets. This makes Florence unusable in hidden mode on
+KDE, unless you don't use QT applications, but that is highly unlikely on KDE.
+Always check "always on screen" on KDE.
 

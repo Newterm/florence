@@ -21,6 +21,7 @@
 
 #include "key.h"
 #include <libgnomecanvas/libgnomecanvas.h>
+#include <libxml/xmlreader.h>
 
 struct keyboard {
 	struct key **keys;
@@ -38,7 +39,7 @@ struct keyboard {
 	gdouble timer_step;
 };
 
-struct keyboard *keyboard_new (GnomeCanvas *canvas);
+struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextReaderPtr reader, int level);
 void keyboard_free (struct keyboard *keyboard);
 GnomeCanvas *keyboard_get_canvas(struct keyboard *keyboard);
 guint keyboard_get_width(struct keyboard *keyboard);

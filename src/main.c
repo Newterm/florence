@@ -26,6 +26,7 @@
 #include <gconf/gconf-client.h>
 #include "system.h"
 #include "florence.h"
+#include "trace.h"
 
 #define EXIT_FAILURE 1
 
@@ -51,9 +52,9 @@ int main (int argc, char **argv)
 	int i, result;
 	int ret=EXIT_FAILURE;
 
+	flo_info(_("Florence version %s"), VERSION);
 	program_name = argv[0];
-
-	i = decode_switches (argc, argv);
+	decode_switches (argc, argv);
 
 	gtk_init(&argc, &argv);
 	gconf_init(argc, argv, NULL);
