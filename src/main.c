@@ -27,6 +27,7 @@
 #include "system.h"
 #include "florence.h"
 #include "trace.h"
+#include "settings.h"
 
 #define EXIT_FAILURE 1
 
@@ -40,6 +41,7 @@ static struct option const long_options[] =
 {
 	{"help", no_argument, 0, 'h'},
 	{"version", no_argument, 0, 'V'},
+	{"config", no_argument, 0, 'c'},
 	{NULL, 0, NULL, 0}
 };
 
@@ -49,12 +51,13 @@ int main (int argc, char **argv)
 {
 	GConfClient *gconfclient;
 	GtkWidget *dialog, *label;
-	int i, result;
+	int result;
 	int ret=EXIT_FAILURE;
+	int config;
 
-	flo_info(_("Florence version %s"), VERSION);
 	program_name = argv[0];
-	decode_switches (argc, argv);
+	config=decode_switches (argc, argv);
+	flo_info(_("Florence version %s"), VERSION);
 
 	gtk_init(&argc, &argv);
 	gconf_init(argc, argv, NULL);
@@ -78,6 +81,11 @@ int main (int argc, char **argv)
 			system("gnome-session-save --kill");
 			ret=EXIT_SUCCESS;
 		}
+	} else if (config) {
+		settings_init(TRUE);
+		settings();
+		settings_exit();
+		gtk_main();
 	} else { ret=florence(); }
 
 	return ret;
@@ -88,26 +96,29 @@ int main (int argc, char **argv)
 static int
 decode_switches (int argc, char **argv)
 {
-int c;
+	int c;
 
 	while ((c = getopt_long (argc, argv, 
 		"h"  /* help */
-		"V", /* version */
+		"V"  /* version */
+		"c", /* configuration */
 		long_options, (int *) 0)) != EOF)
-{
-	switch (c)
 	{
-		case 'V':
-			printf ("florence %s\n", VERSION);
-			exit (0);
-		case 'h':
-			usage (0);
-		default:
-			usage (EXIT_FAILURE);
+		switch (c)
+		{
+			case 'V':
+				printf ("Florence (%s) %s\n", argv[0], VERSION);
+				exit (0);
+			case 'h':
+				usage (0);
+			case 'c':
+				return 1;
+			default:
+				usage (EXIT_FAILURE);
 		}
 	}
 
-	return optind;
+	return 0;
 }
 
 static void usage (int status)
@@ -117,8 +128,9 @@ Florence is a simple virtual keyboard for Gnome.\n"), program_name);
 	printf (_("Usage: %s [OPTION]...\n"), program_name);
 	printf (_("\
 Options:\n\
-  -h, --help		 display this help and exit\n\
-  -V, --version	      output version information and exit\n\n\
+  -h, --help          display this help and exit\n\
+  -V, --version	      output version information and exit\n\
+  -c, --config        opens configuration window\n\n\
 Report bugs to <f.agerch@gmail.com>.\n"));
 	exit (status);
 }

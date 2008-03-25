@@ -20,8 +20,8 @@
 */
 
 #include "system.h"
+#include "florence.h"
 #include "trace.h"
-#include "keyboard.h"
 #include "trayicon.h"
 #include "settings.h"
 #include "layoutreader.h"
@@ -33,7 +33,7 @@
 
 #define FLO_SPI_TIME_INTERVAL 100
 
-GSList *keyboards=NULL;
+GSList *extensions=NULL;
 struct key **keys=NULL;
 guint flo_width, flo_height;
 gboolean always_on_screen=TRUE;
@@ -114,6 +114,7 @@ gboolean flo_spi_event_check (gpointer data)
 void flo_set_mask(GdkWindow *window, gboolean shape)
 {
 	GSList *list;
+	struct extension *extension;
 	struct keyboard *keyboard;
 	int x, y, offset;
 	GdkBitmap *mask=NULL;
@@ -124,20 +125,23 @@ void flo_set_mask(GdkWindow *window, gboolean shape)
 	if (!data) flo_fatal(_("Unable to allocate memory for mask"));
 
 	if (shape) for (y=0;y<flo_height;y++) {
-		list=keyboards; offset=0;
+		list=extensions; offset=0;
 		while (list) {
-			keyboard=(struct keyboard *)(list->data);
-			for (x=0;x<keyboard_get_width(keyboard);x++) {
-				/* here we may have a big/little endian problem
-				 * unless gdk or Xlib handles it? 
-				 * ==> TODO : check and use autotools' config.h if necessary */
-				if (keyboard_get_map(keyboard)[x+(y*keyboard_get_width(keyboard))]) {
-					data[(x+offset+(y*width))>>3]|=1<<((x+offset)&7);
-				} else {
-					data[(x+offset+(y*width))>>3]&=(~(1<<((x+offset)&7)));
+			extension=(struct extension *)(list->data);
+			if (extension->is_active) {
+				keyboard=extension->keyboard;
+				for (x=0;x<keyboard_get_width(keyboard);x++) {
+					/* here we may have a big/little endian problem
+					 * unless gdk or Xlib handles it? 
+					 * ==> TODO : check and use autotools' config.h if necessary */
+					if (keyboard_get_map(keyboard)[x+(y*keyboard_get_width(keyboard))]) {
+						data[(x+offset+(y*width))>>3]|=1<<((x+offset)&7);
+					} else {
+						data[(x+offset+(y*width))>>3]&=(~(1<<((x+offset)&7)));
+					}
 				}
+				offset+=keyboard_get_width(keyboard);
 			}
-			offset+=keyboard_get_width(keyboard);
 			list=g_slist_next(list);
 		}
 	} else for (x=0;x<(width*flo_height)>>3;x++) data[x]=0xFF;
@@ -193,11 +197,14 @@ void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry
 
 void flo_resize_keyboard(gpointer data, gpointer user_data)
 {
-	struct keyboard *keyboard=(struct keyboard *)data;
+	struct extension *extension=(struct extension *)data;
+	struct keyboard *keyboard=extension->keyboard;
 	gdouble *zoom=(gdouble *)user_data;
 	keyboard_resize(keyboard, *zoom);
-	flo_width+=keyboard_get_width(keyboard);
-	flo_height=keyboard_get_height(keyboard);
+	if (extension->is_active) {
+		flo_width+=keyboard_get_width(keyboard);
+		flo_height=keyboard_get_height(keyboard);
+	}
 }
 
 void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
@@ -205,19 +212,11 @@ void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointe
 	gdouble zoom;
 	zoom=gconf_value_get_float(gconf_entry_get_value(entry));
 	flo_width=0; flo_height=0;
-	g_slist_foreach(keyboards, flo_resize_keyboard, (gpointer)&zoom);
+	g_slist_foreach(extensions, flo_resize_keyboard, (gpointer)&zoom);
 	gtk_widget_set_size_request(GTK_WIDGET(user_data), flo_width, flo_height);
 	flo_set_mask(gtk_widget_get_parent_window(
 		GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
 		settings_get_bool("window/shaped"));
-}
-
-void flo_register_settings_cb(GtkWidget *window)
-{
-	settings_changecb_register("window/shaped", flo_set_shaped, window);
-	settings_changecb_register("window/decorated", flo_set_decorated, window);
-	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, window);
-	settings_changecb_register("window/zoom", flo_set_zoom, window);
 }
 
 void flo_layout_infos(char *name, char *version)
@@ -231,16 +230,16 @@ void flo_layout_infos(char *name, char *version)
 gboolean flo_extension_activated(char *name)
 {
 	gboolean ret=FALSE;
-	gchar *extensionstr=NULL;
-	gchar **extensions=NULL;
-	gchar **extension=NULL;
-	if (extensionstr=settings_get_string("layout/extensions")) {
-		extensions=g_strsplit(extensionstr, ":", -1);
-		extension=extensions;
-		while (extension && *extension) {
-			if (!strcmp(name, *(extension++))) { ret=TRUE; break; }
+	gchar *allextstr=NULL;
+	gchar **extstrs=NULL;
+	gchar **extstr=NULL;
+	if (allextstr=settings_get_string("layout/extensions")) {
+		extstrs=g_strsplit(allextstr, ":", -1);
+		extstr=extstrs;
+		while (extstr && *extstr) {
+			if (!strcmp(name, *(extstr++))) { ret=TRUE; break; }
 		}
-		g_strfreev(extensions);
+		g_strfreev(extstrs);
 	}
 	return ret;
 }
@@ -249,38 +248,92 @@ void flo_add_extension(xmlTextReaderPtr reader, char *name, enum layout_placemen
 {
 	GtkWidget *canvas;
 	struct keyboard *keyboard;
+	struct extension *extension;
 	GtkContainer *hbox=GTK_CONTAINER(userdata);
 
-	if (!keyboards || flo_extension_activated(name)) {
-		canvas=gnome_canvas_new_aa();
-		keyboard=keyboard_new((GnomeCanvas *)canvas, keys, reader, keyboards?2:1);
-		gtk_container_add(hbox, canvas);
-		gtk_widget_show(canvas);
-		keyboards=g_slist_append(keyboards, (gpointer)keyboard);
+	canvas=gnome_canvas_new_aa();
+	keyboard=keyboard_new((GnomeCanvas *)canvas, keys, reader, extensions?2:1);
+	gtk_container_add(hbox, canvas);
+	extension=g_malloc(sizeof(extension));
+	extension->is_active=FALSE;
 
-		switch (placement) {
-			case LAYOUT_VOID:
-				flo_width=keyboard_get_width(keyboard);
-				flo_height=keyboard_get_height(keyboard);
-				break;
-			case LAYOUT_LEFT:
-			case LAYOUT_RIGHT:
-				flo_width+=keyboard_get_width(keyboard);
-				break;
-			case LAYOUT_DOWN:
-			case LAYOUT_UP:
-				flo_height+=keyboard_get_height(keyboard);
-				break;
-			default:
-				flo_fatal("Unknown placement type: %d", placement);
+	if (!extensions || flo_extension_activated(name)) {
+		gtk_widget_show(canvas);
+		extension->is_active=TRUE;
+	} else { gtk_widget_hide(canvas); }
+	if (extension->is_active) switch (placement) {
+		case LAYOUT_VOID:
+			flo_width=keyboard_get_width(keyboard);
+			flo_height=keyboard_get_height(keyboard);
+			break;
+		case LAYOUT_LEFT:
+		case LAYOUT_RIGHT:
+			flo_width+=keyboard_get_width(keyboard);
+			break;
+		case LAYOUT_DOWN:
+		case LAYOUT_UP:
+			flo_height+=keyboard_get_height(keyboard);
+			break;
+		default:
+			flo_fatal("Unknown placement type: %d", placement);
+	}
+
+	extension->keyboard=keyboard;
+	if (name) {
+		extension->name=g_malloc(strlen(name)+1);
+		strcpy(extension->name, name);
+	} else {
+		extension->name=NULL;
+	}
+	extensions=g_slist_append(extensions, (gpointer)extension);
+}
+
+void flo_update_extension(gpointer data, gpointer user_data)
+{
+	struct extension *extension=(struct extension *)data;
+	if (extension->name) {
+		if (flo_extension_activated(extension->name)) {
+			/* TODO: placement */
+			flo_width+=keyboard_get_width(extension->keyboard);
+			gtk_widget_show(GTK_WIDGET(keyboard_get_canvas(extension->keyboard)));
+			extension->is_active=TRUE;
+		} else {
+			gtk_widget_hide(GTK_WIDGET(keyboard_get_canvas(extension->keyboard)));
+			extension->is_active=FALSE;
 		}
 	}
 }
 
-void flo_free_keyboard(gpointer data, gpointer user_data)
+void flo_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	struct keyboard *keyboard=(struct keyboard *)data;
-	keyboard_free(keyboard);
+	struct extension *extension=(struct extension *)extensions->data;
+	flo_width=keyboard_get_width(extension->keyboard);
+	g_slist_foreach(extensions, flo_update_extension, NULL);
+	gtk_widget_set_size_request(GTK_WIDGET(user_data), flo_width, flo_height);
+	if (settings_get_bool("window/shaped")) {
+		flo_set_mask(gtk_widget_get_parent_window(
+			GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
+			TRUE);
+	}
+}
+
+void flo_free_extension(gpointer data, gpointer user_data)
+{
+	struct extension *extension=(struct extension *)data;
+	if (extension) {
+		if (extension->name) g_free(extension->name);
+		if (extension->keyboard) keyboard_free(extension->keyboard);
+		g_free(extension);
+	}
+}
+
+void flo_register_settings_cb(GtkWidget *window)
+{
+	settings_changecb_register("window/shaped", flo_set_shaped, window);
+	settings_changecb_register("window/decorated", flo_set_decorated, window);
+	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, window);
+	settings_changecb_register("window/zoom", flo_set_zoom, window);
+	settings_changecb_register("layout/extensions", flo_update_extensions, window);
 }
 
 int florence (void)
@@ -297,7 +350,7 @@ int florence (void)
 	gtk_window_set_accept_focus(GTK_WINDOW(window), FALSE);
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(window), TRUE);
 
-	settings_init();
+	settings_init(FALSE);
 	flo_register_settings_cb(window);
 
         if (!(keys=g_malloc(256*sizeof(struct key *)))) flo_fatal(_("Unable to allocate memory for keys"));
@@ -319,7 +372,7 @@ int florence (void)
 	gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 	if (settings_get_bool("window/shaped")) {
 		gtk_widget_show(window);
-		flo_set_mask(gtk_widget_get_parent_window(GTK_WIDGET(hbox)), TRUE);
+		flo_set_mask(gtk_widget_get_parent_window(hbox), TRUE);
 	}
 	gtk_window_set_resizable(GTK_WINDOW(window), FALSE);
 
@@ -330,8 +383,9 @@ int florence (void)
 	gtk_main();
 
 	settings_exit();
-	g_slist_foreach(keyboards, flo_free_keyboard, NULL);
-	g_slist_free(keyboards);
+	g_slist_foreach(extensions, flo_free_extension, NULL);
+	g_slist_free(extensions);
+	if (keys) g_free(keys);
 	return SPI_exit();
 }
 

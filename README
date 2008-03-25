@@ -25,10 +25,17 @@ QUICK INSTALL
 *************
 
       * Make sure you have all the dependancies installed.
-        Ubuntu/debian: use the following commands to install dependancies:
+
+        Mandriva:
+
+            $ su
+	    # urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel at-spi-devel \
+	      libgnomecanvas2-devel
+
+        Ubuntu/debian:
 
             $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
-              libatspi-dev libatspi-dev
+              libatspi-dev libgnomecanvas2-dev
             
       * Open a terminal and type (don't type the $ or #):
 
@@ -41,6 +48,7 @@ QUICK INSTALL
 UNINSTALL
 *********
 
+      $ su
       # make uninstall
       (for ubuntu, "sudo make uninstall")
 
@@ -73,31 +81,36 @@ CONTRIBUTE
 
 Email me at f.agrech@gmail.com
 
-RUNNING FLORENCE ON XFCE
-************************
+RUNNING FLORENCE WITHOUT GNOME 
+******************************
 
-This works on any desktop environment actually.
+This works on any desktop. Tested on XFCE and WindowMaker.
 You need to start the at-spi redistry daemon at session startup:
-add this line to your ~/.xinitrc file before the last command (for xfce it is probably
-startxfce4):
-     /usr/libexec/at-spi-registryd &
+Start at-spi registry daemon before Florence (at session startup):
+     Gentoo:
+     $ /usr/libexec/at-spi-registryd &
+     Mandriva:
+     $ /usr/lib/at-spi-registryd &
 Some distro may put the at-spi-registryd command elsewhere. Use the find command to find
-out if your distro did indeed put the command under /usr/libexec:
+out where your distro put at-spi-registryd:
      find /usr -name at-spi-registryd
-And adapt your .xinitrc according to the result.
+Adapt according to the result.
 GNOME does start the daemon automatically if it is configured with the gnome-at-property
 dialog.
 If your DE is XDG compliant (like XFCE), Florence should be accessible via the menu.
 Anyway, starting florence from the command line will always work.
+If you don't have a systray, you can install pksystray.
+You can also access the preferences dialog with:
+     $ florence --config
 
 RUNNING FLORENCE ON KDE
 ***********************
 
 Florence can work on KDE, provided you install all the dependancies (including GTK and
 the at-spi registry daemon).
-You must start the at-spi registry daemon at session startup.
+You must start the at-spi registry daemon at session startup (at-spi-registryd).
 QT applications don't support at-spi yet. You can still use Florence on screen, but the
 keyboard won't detect QT editable widgets. This makes Florence unusable in hidden mode on
 KDE, unless you don't use QT applications, but that is highly unlikely on KDE.
-Always check "always on screen" on KDE.
+Always check the "always on screen" box (in preferences dialog) on KDE.
 

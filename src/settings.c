@@ -28,8 +28,9 @@
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
 
-GConfClient *gconfclient;
-GConfChangeSet *gconfchangeset;
+GConfClient *gconfclient=NULL;
+GConfChangeSet *gconfchangeset=NULL;
+gboolean settings_gtk_exit=FALSE;
 
 /* private functions */
 char *settings_get_full_path(const char *path)
@@ -83,22 +84,24 @@ void settings_labels_color(GtkColorButton *button)
 	settings_color_change(button, "label");
 }
 
-void settings_shaped(GtkToggleButton *button)
-{
-	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/shaped"),
-		gtk_toggle_button_get_active(button));
-}
-
-void settings_decorate(GtkToggleButton *button)
-{
-	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/decorated"),
-		gtk_toggle_button_get_active(button));
-}
-
 void settings_always_on(GtkToggleButton *button)
 {
+	gboolean always_on_screen=gtk_toggle_button_get_active(button);
 	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("behaviour/always_on_screen"),
-		gtk_toggle_button_get_active(button));
+		always_on_screen);
+	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/decorated"),
+		always_on_screen);
+	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/shaped"),
+		!always_on_screen);
+}
+
+void settings_arrows(GtkToggleButton *button)
+{
+	if (gtk_toggle_button_get_active(button)) {
+		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/extensions"), "Arrows");
+	} else {
+		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/extensions"), "");
+	}
 }
 
 void settings_zoom(GtkHScale *scale)
@@ -120,9 +123,12 @@ void settings_commit(GtkWidget *window, GtkWidget *button)
 
 void settings_rollback(GtkWidget *window, GtkWidget *button)
 {
-	gconf_change_set_clear (gconfchangeset);
-	gconf_change_set_unref(gconfchangeset);
-	gtk_object_destroy(GTK_OBJECT(window));
+	if (gconfchangeset) {
+		gconf_change_set_clear(gconfchangeset);
+		gconf_change_set_unref(gconfchangeset);
+	}
+	if (window) gtk_object_destroy(GTK_OBJECT(window));
+	if (settings_gtk_exit) gtk_exit(0);
 }
 
 void settings_close(GtkWidget *window, GtkWidget *button)
@@ -144,9 +150,15 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 	settings_rollback(window, button);
 }
 
-/* public functions */
-void settings_init(void)
+void settings_destroy(GtkWidget *window)
 {
+	if (settings_gtk_exit) gtk_exit(0);
+}
+
+/* public functions */
+void settings_init(gboolean exit)
+{
+	settings_gtk_exit=exit;
 	gconfclient=gconf_client_get_default();
 	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 	glade_init();
@@ -169,7 +181,7 @@ gdouble settings_get_double(const gchar *name)
 	gdouble ret=gconf_client_get_float(gconfclient, fullpath, &err);
 	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
 	flo_debug("GCONF:%s=<%f>", fullpath, ret);
-	return ret+0;
+	return ret;
 }
 
 gchar *settings_get_string(const gchar *name)
@@ -206,10 +218,8 @@ void settings(void)
 		settings_convert_color(settings_get_string("colours/activated")));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_mouseover")),
 		settings_convert_color(settings_get_string("colours/mouseover")));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_shaped")),
-		settings_get_bool("window/shaped"));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_decorate")),
-		settings_get_bool("window/decorated"));
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")),
+		!strcmp(settings_get_string("layout/extensions"), "Arrows"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_always_on")),
 		settings_get_bool("behaviour/always_on_screen"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_zoom")),

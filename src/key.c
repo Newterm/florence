@@ -327,7 +327,7 @@ void key_draw_pg(struct key *key, double w, double h, enum key_class class)
 {
 	GnomeCanvasPoints *points;
 	key->textItem=NULL;
-        key->items=g_malloc(4*sizeof(GnomeCanvasItem *));
+        key->items=g_malloc(5*sizeof(GnomeCanvasItem *));
 	points=gnome_canvas_points_new(2);
 	*(points->coords)=0.0;
 	*(points->coords+2)=0.0;
@@ -352,14 +352,14 @@ void key_draw_pg(struct key *key, double w, double h, enum key_class class)
 		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "width_units", 0.1, NULL);
 	*(points->coords+1)=-h*0.15;
 	*(points->coords+3)=-h*0.15;
-	*(key->items+1)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+	*(key->items+2)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
 		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "width_units", 0.1, NULL);
 	*(points->coords+1)=h*0.15;
 	*(points->coords+3)=h*0.15;
-	*(key->items+1)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
+	*(key->items+3)=gnome_canvas_item_new((GnomeCanvasGroup *)key->group, GNOME_TYPE_CANVAS_LINE,
 		"points", points, "fill_color", key_colours[KEY_TEXT_COLOR], "width_units", 0.1, NULL);
 	gnome_canvas_points_unref(points);
-	*(key->items+1)=NULL;
+	*(key->items+4)=NULL;
 }
 
 void key_draw_general(struct key *key, enum key_class class)

@@ -19,5 +19,13 @@
 
 */
 
+#include "keyboard.h"
+
+struct extension {
+	struct keyboard *keyboard;
+	char *name;
+	int is_active;
+};
+
 int florence (void);
 

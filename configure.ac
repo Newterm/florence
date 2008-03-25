@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.1.2], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.1.3], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
