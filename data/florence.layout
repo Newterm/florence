@@ -27,7 +27,7 @@
 	<name>Standard keyboard</name>
 	<author>François Agrech</author>
 	<date>2008-03-15</date>
-	<florence_version>0.1.2</florence_version>
+	<florence_version>0.1.3</florence_version>
 </informations>
 <keyboard>
 	<width>30</width>

@@ -87,12 +87,12 @@ void settings_labels_color(GtkColorButton *button)
 void settings_always_on(GtkToggleButton *button)
 {
 	gboolean always_on_screen=gtk_toggle_button_get_active(button);
-	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("behaviour/always_on_screen"),
-		always_on_screen);
 	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/decorated"),
 		always_on_screen);
 	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/shaped"),
 		!always_on_screen);
+	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("behaviour/always_on_screen"),
+		always_on_screen);
 }
 
 void settings_arrows(GtkToggleButton *button)
