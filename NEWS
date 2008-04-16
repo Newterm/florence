@@ -49,3 +49,8 @@
 	* Add non-GNOME informations in README file
 	* Add distro-specific informations in README file
 
+2008-04-16 François Agrech <f.agrech@gmail.com>
+	* Version 0.2.0
+	* New style framework (pseudo-svg keys and symbols)
+	* New Numpad expension
+

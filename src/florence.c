@@ -357,6 +357,7 @@ int florence (void)
         memset(keys, 0, 256*sizeof(struct key *));
 	layout=layoutreader_new(settings_get_string("layout/file"));
 	layoutreader_readinfos(layout, flo_layout_infos);
+        key_init(layout);
 	hbox=gtk_hbox_new(FALSE, 0);
 	flo_add_extension(layout, NULL, LAYOUT_VOID, (void *)hbox);
 	while (layoutreader_readextension(layout, flo_add_extension, (void *)hbox));
@@ -383,8 +384,10 @@ int florence (void)
 	gtk_main();
 
 	settings_exit();
-	g_slist_foreach(extensions, flo_free_extension, NULL);
-	g_slist_free(extensions);
+	if (extensions) {
+		g_slist_foreach(extensions, flo_free_extension, NULL);
+		g_slist_free(extensions);
+	}
 	if (keys) g_free(keys);
 	return SPI_exit();
 }

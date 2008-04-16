@@ -32,6 +32,10 @@ void flo_fatal(char *s, ...)
         vfprintf(stderr, s, ap);
 	fprintf(stderr, "\n");
 	va_end(ap);
+	if (!getenv("FLO_DEBUG") || strcmp(getenv("FLO_DEBUG"), "1")) {
+		fprintf(stderr, _("If you need help, please rerun with FLO_DEBUG environment variable set to '1'\n"));
+		fprintf(stderr, _("and send the output to f.agrech@gmail.com\n\n"));
+	}
         exit(EXIT_FAILURE);
 }
 

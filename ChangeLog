@@ -42,3 +42,15 @@
 	* Add extensions infrasctructure
 	* Add arrows keyboard extension
 
+2008-03-25 François Agrech <f.agrech@gmail.com>
+	* Version 0.1.3
+	* Add config command line parameter
+	* Add arrows parameter in configuration GUI
+	* Add non-GNOME informations in README file
+	* Add distro-specific informations in README file
+
+2008-04-16 François Agrech <f.agrech@gmail.com>
+	* Version 0.2.0
+	* New style framework (pseudo-svg keys and symbols)
+	* New Numpad expension
+

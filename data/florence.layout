@@ -26,9 +26,235 @@
 <informations>
 	<name>Standard keyboard</name>
 	<author>François Agrech</author>
-	<date>2008-03-15</date>
-	<florence_version>0.1.3</florence_version>
+	<date>2008-03-28</date>
+	<florence_version>0.2.0</florence_version>
 </informations>
+
+<style>
+	<shape><name>default</name><path>
+		<moveto><x>-2</x><y>0</y></moveto>
+		<curveto>
+			<p1><x>-2</x><y>1</y></p1>
+			<p2><x>-2</x><y>2</y></p2>
+			<p3><x>0</x><y>2</y></p3>
+		</curveto>
+		<curveto>
+			<p1><x>2</x><y>2</y></p1>
+			<p2><x>2</x><y>1</y></p2>
+			<p3><x>2</x><y>0</y></p3>
+		</curveto>
+		<curveto>
+			<p1><x>2</x><y>-1</y></p1>
+			<p2><x>2</x><y>-2</y></p2>
+			<p3><x>0</x><y>-2</y></p3>
+		</curveto>
+		<curveto>
+			<p1><x>-2</x><y>-2</y></p1>
+			<p2><x>-2</x><y>-1</y></p2>
+			<p3><x>-2</x><y>0</y></p3>
+		</curveto>
+	</path></shape>
+	<shape><name>Return</name><path>
+		<moveto><x>-2</x><y>-1</y></moveto>
+		<curveto>
+			<p1><x>-2</x><y>-1.5</y></p1>
+			<p2><x>-2</x><y>-2</y></p2>
+			<p3><x>-0.667</x><y>-2</y></p3>
+		</curveto>
+		<lineto><x>0.667</x><y>-2</y></lineto>
+		<curveto>
+			<p1><x>2</x><y>-2</y></p1>
+			<p2><x>2</x><y>-1</y></p2>
+			<p3><x>2</x><y>0</y></p3>
+		</curveto>
+		<curveto>
+			<p1><x>2</x><y>1</y></p1>
+			<p2><x>2</x><y>2</y></p2>
+			<p3><x>0.667</x><y>2</y></p3>
+		</curveto>
+		<curveto>
+			<p1><x>-0.667</x><y>2</y></p1>
+			<p2><x>-0.667</x><y>1</y></p2>
+			<p3><x>-0.667</x><y>0</y></p3>
+		</curveto>
+		<curveto>
+			<p1><x>-2</x><y>0</y></p1>
+			<p2><x>-2</x><y>-0.5</y></p2>
+			<p3><x>-2</x><y>-1</y></p3>
+		</curveto>
+	</path></shape>
+	<symbol>
+		<name>Control_[LR]</name>
+		<label>Ctrl</label>
+	</symbol>
+	<symbol>
+		<name>Super_[LR]</name>
+		<label>Super</label>
+	</symbol>
+	<symbol>
+		<name>(Alt_[LR]|Meta_L)</name>
+		<label>Alt</label>
+	</symbol>
+	<symbol>
+		<name>ISO_Level3_Shift</name>
+		<label>AltGr</label>
+	</symbol>
+	<symbol>
+		<name>BackSpace</name>
+		<draw><arrow>
+			<p><x>1</x><y>0</y></p>
+			<p><x>-1</x><y>0</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>Tab</name>
+		<draw>
+			<arrow><p><x>-0.75</x><y>0</y></p>
+			<p><x>0.5</x><y>0</y></p></arrow>
+			<line><p><x>0.75</x><y>-0.5</y></p>
+			<p><x>0.75</x><y>0.5</y></p></line>
+		</draw>
+	</symbol>
+	<symbol>
+		<name>ISO_Left_Tab</name>
+		<draw>
+			<arrow><p><x>0.75</x><y>0</y></p>
+			<p><x>-0.5</x><y>0</y></p></arrow>
+			<line><p><x>-0.75</x><y>-0.5</y></p>
+			<p><x>-0.75</x><y>0.5</y></p></line>
+		</draw>
+	</symbol>
+	<symbol>
+		<name>Return</name>
+		<draw><arrow>
+			<p><x>1.333</x><y>-2.125</y></p>
+			<p><x>1.333</x><y>-1.625</y></p>
+			<p><x>-1.333</x><y>-1.625</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>Caps_Lock</name>
+		<draw>
+			<rect><p1><x>-0.5</x><y>-0.25</y></p1>
+			<p2><x>0.5</x><y>0.75</y></p2></rect>
+			<path>
+				<moveto><x>-0.25</x><y>-0.25</y></moveto>
+				<lineto><x>-0.25</x><y>-0.5</y></lineto>
+				<curveto>
+					<p1><x>-0.25</x><y>-0.625</y></p1>
+					<p2><x>-0.125</x><y>-0.75</y></p2>
+					<p3><x>0</x><y>-0.75</y></p3>
+				</curveto>
+				<curveto>
+					<p1><x>0.125</x><y>-0.75</y></p1>
+					<p2><x>0.25</x><y>-0.625</y></p2>
+					<p3><x>0.25</x><y>-0.5</y></p3>
+				</curveto>
+				<lineto><x>0.25</x><y>-0.25</y></lineto>
+			</path>
+		</draw>
+	</symbol>
+	<symbol>
+		<name>(Shift_[LR]|(KP_|)Up)</name>
+		<draw><arrow>
+			<p><x>0</x><y>0.5</y></p>
+			<p><x>0</x><y>-0.5</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Insert</name>
+		<label>Ins</label>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Home</name>
+		<draw><arrow>
+			<p><x>0</x><y>0</y></p>
+			<p><x>-1</x><y>-1</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Page_Up</name>
+		<draw><arrow>
+			<p><x>0</x><y>0.6</y></p>
+			<p><x>0</x><y>-1</y></p>
+		</arrow>
+		<line>
+			<p><x>-0.5</x><y>0</y></p>
+			<p><x>0.5</x><y>0</y></p>
+			<width>0.1</width>
+		</line>
+		<line>
+			<p><x>-0.5</x><y>0.3</y></p>
+			<p><x>0.5</x><y>0.3</y></p>
+			<width>0.1</width>
+		</line>
+		<line>
+			<p><x>-0.5</x><y>-0.3</y></p>
+			<p><x>0.5</x><y>-0.3</y></p>
+			<width>0.1</width>
+		</line></draw>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Delete</name>
+		<label>Del</label>
+	</symbol>
+	<symbol>
+		<name>(KP_|)End</name>
+		<label>End</label>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Page_Down</name>
+		<draw><arrow>
+			<p><x>0</x><y>-0.6</y></p>
+			<p><x>0</x><y>1</y></p>
+		</arrow>
+		<line>
+			<p><x>-0.5</x><y>0</y></p>
+			<p><x>0.5</x><y>0</y></p>
+			<width>0.1</width>
+		</line>
+		<line>
+			<p><x>-0.5</x><y>0.3</y></p>
+			<p><x>0.5</x><y>0.3</y></p>
+			<width>0.1</width>
+		</line>
+		<line>
+			<p><x>-0.5</x><y>-0.3</y></p>
+			<p><x>0.5</x><y>-0.3</y></p>
+			<width>0.1</width>
+		</line></draw>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Down</name>
+		<draw><arrow>
+			<p><x>0</x><y>-0.5</y></p>
+			<p><x>0</x><y>0.5</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Left</name>
+		<draw><arrow>
+			<p><x>0.5</x><y>0</y></p>
+			<p><x>-0.5</x><y>0</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>(KP_|)Right</name>
+		<draw><arrow>
+			<p><x>-0.5</x><y>0</y></p>
+			<p><x>0.5</x><y>0</y></p>
+		</arrow></draw>
+	</symbol>
+	<symbol>
+		<name>KP_Enter</name>
+		<label>Ent</label>
+	</symbol>
+	<symbol>
+		<name>Num_Lock</name>
+		<label>NL</label>
+	</symbol>
+</style>
+
 <keyboard>
 	<width>30</width>
 	<height>10</height>
@@ -98,14 +324,12 @@
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<class>backspace</class>
 		<code>22</code>
 		<xpos>28</xpos>
 		<ypos>1</ypos>
 		<width>4</width>
 	</key>
 	<key>
-		<class>tab</class>
 		<code>23</code>
 		<xpos>1.5</xpos>
 		<ypos>3</ypos>
@@ -172,15 +396,14 @@
 		<ypos>3</ypos>
 	</key>
 	<key>
-		<class>return</class>
 		<code>36</code>
+		<shape>Return</shape>
 		<xpos>28.5</xpos>
 		<ypos>4</ypos>
 		<width>3</width>
 		<height>4</height>
 	</key>
 	<key>
-		<class>capslock</class>
 		<code>66</code>
 		<xpos>2</xpos>
 		<ypos>5</ypos>
@@ -247,7 +470,6 @@
 		<ypos>5</ypos>
 	</key>
 	<key>
-		<class>shift</class>
 		<code>50</code>
 		<xpos>1.5</xpos>
 		<ypos>7</ypos>
@@ -309,7 +531,6 @@
 		<ypos>7</ypos>
 	</key>
 	<key>
-		<class>shift</class>
 		<code>62</code>
 		<xpos>27.5</xpos>
 		<ypos>7</ypos>
@@ -317,21 +538,18 @@
 	</key>
 	<key>
 		<code>37</code>
-		<label>Ctrl</label>
 		<xpos>1.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 	<key>
 		<code>115</code>
-		<label>Super</label>
 		<xpos>4.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 	<key>
 		<code>64</code>
-		<label>Alt</label>
 		<xpos>7.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
@@ -344,26 +562,24 @@
 	</key>
 	<key>
 		<code>113</code>
-		<label>AltGr</label>
 		<xpos>22.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 	<key>
 		<code>116</code>
-		<label>Super</label>
 		<xpos>25.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 	<key>
 		<code>109</code>
-		<label>Ctrl</label>
 		<xpos>28.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 </keyboard>
+
 <extension>
 	<name>Arrows</name>
 	<placement>right</placement>
@@ -372,66 +588,57 @@
 	<height>10</height>
 	<key>
 		<code>106</code>
-		<label>Ins</label>
 		<xpos>1</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<class>home</class>
 		<code>97</code>
 		<xpos>3</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<class>pgup</class>
 		<code>99</code>
 		<xpos>5</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>107</code>
-		<label>Del</label>
 		<xpos>1</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>103</code>
-		<label>End</label>
 		<xpos>3</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
-		<class>pgdown</class>
 		<code>105</code>
 		<xpos>5</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
-		<class>uparrow</class>
 		<code>98</code>
 		<xpos>3</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
-		<class>leftarrow</class>
 		<code>100</code>
 		<xpos>1</xpos>
 		<ypos>9</ypos>
 	</key>
 	<key>
-		<class>downarrow</class>
 		<code>104</code>
 		<xpos>3</xpos>
 		<ypos>9</ypos>
 	</key>
 	<key>
-		<class>rightarrow</class>
 		<code>102</code>
 		<xpos>5</xpos>
 		<ypos>9</ypos>
 	</key>
 	</keyboard>
 </extension>
+
 <extension>
 	<name>Numpad</name>
 	<placement>right</placement>
@@ -440,7 +647,6 @@
 	<height>10</height>
 	<key>
 		<code>77</code>
-		<label>NL</label>
 		<xpos>1</xpos>
 		<ypos>1</ypos>
 	</key>
@@ -512,7 +718,6 @@
 	</key>
 	<key>
 		<code>108</code>
-		<label>Ent</label>
 		<xpos>7</xpos>
 		<ypos>8</ypos>
 		<height>4</height>

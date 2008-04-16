@@ -30,6 +30,7 @@
 	<xs:complexType name="layoutT">
 		<xs:sequence>
 			<xs:element name="informations" type="flo:informationsT"/>
+			<xs:element name="style" type="flo:styleT"/>
 			<xs:element name="keyboard" type="flo:keyboardT"/>
 			<xs:element name="extension" type="flo:extensionT" minOccurs="0" maxOccurs="256"/>
 		</xs:sequence>
@@ -43,6 +44,78 @@
 			<xs:element name="florence_version" type="xs:string"/>
 		</xs:sequence>
 	</xs:complexType>
+
+	<xs:complexType name="styleT">
+		<xs:sequence>
+			<xs:element name="shape" type="flo:shapeT" maxOccurs="unbounded"/>
+			<xs:element name="symbol" type="flo:symbolT" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+  
+	<xs:complexType name="shapeT">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string" default="default"/>
+			<xs:element name="path" type="flo:pathT"/>
+		</xs:sequence>
+	</xs:complexType>
+  
+	<xs:complexType name="symbolT">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:choice>
+				<xs:element name="label" type="xs:string"/>
+				<xs:element name="draw" type="flo:drawT"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="drawT">
+		<xs:choice maxOccurs="unbounded">
+			<xs:element name="arrow" type="flo:lineT"/>
+			<xs:element name="line" type="flo:lineT"/>
+			<xs:element name="path" type="flo:pathT"/>
+			<xs:element name="rect" type="flo:rectT"/>
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="rectT">
+		<xs:sequence>
+			<xs:element name="p1" type="flo:coordsT"/>
+			<xs:element name="p2" type="flo:coordsT"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="lineT">
+		<xs:sequence>
+			<xs:element name="p" type="flo:coordsT" maxOccurs="unbounded"/>
+			<xs:element name="width" type="xs:decimal" default="0.3" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="pathT">
+		<xs:sequence>
+			<xs:element name="moveto" type="flo:coordsT"/>
+			<xs:choice maxOccurs="unbounded">
+				<xs:element name="lineto" type="flo:coordsT"/>
+				<xs:element name="curveto" type="flo:curveT"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="curveT">
+		<xs:sequence>
+			<xs:element name="p1" type="flo:coordsT"/>
+			<xs:element name="p2" type="flo:coordsT"/>
+			<xs:element name="p3" type="flo:coordsT"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="coordsT">
+		<xs:sequence>
+			<xs:element name="x" type="xs:decimal"/>
+			<xs:element name="y" type="xs:decimal"/>
+		</xs:sequence>
+ 	</xs:complexType>
 
 	<xs:complexType name="extensionT">
 		<xs:sequence>
@@ -72,12 +145,11 @@
 	<xs:complexType name="keyT">
 		<xs:all>
 			<xs:element name="code" type="flo:codeT"/>
+			<xs:element name="shape" type="xs:string" default="default" minOccurs="0"/>
 			<xs:element name="xpos" type="xs:decimal"/>
 			<xs:element name="ypos" type="xs:decimal"/>
 			<xs:element name="width" type="xs:decimal" default="2" minOccurs="0"/>
 			<xs:element name="height" type="xs:decimal" default="2" minOccurs="0"/>
-			<xs:element name="label" type="xs:string" minOccurs="0"/>
-			<xs:element name="class" type="flo:classT" minOccurs="0" default="default"/>
 		</xs:all>
 	</xs:complexType>
 
@@ -85,24 +157,6 @@
 		<xs:restriction base="xs:integer">
 			<xs:minInclusive value="0"/>
 			<xs:maxInclusive value="255"/>
-		</xs:restriction>
-	</xs:simpleType>
-
-	<xs:simpleType name="classT">
-		<xs:restriction base="xs:string">
-			<xs:enumeration value="default"/>
-			<xs:enumeration value="return"/>
-			<xs:enumeration value="backspace"/>
-			<xs:enumeration value="tab"/>
-			<xs:enumeration value="shift"/>
-			<xs:enumeration value="capslock"/>
-			<xs:enumeration value="leftarrow"/>
-			<xs:enumeration value="rightarrow"/>
-			<xs:enumeration value="uparrow"/>
-			<xs:enumeration value="downarrow"/>
-			<xs:enumeration value="home"/>
-			<xs:enumeration value="pgup"/>
-			<xs:enumeration value="pgdown"/>
 		</xs:restriction>
 	</xs:simpleType>
 

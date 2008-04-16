@@ -23,6 +23,13 @@
 #define FLO_KEY
 
 #include <libgnomecanvas/libgnomecanvas.h>
+#include <libxml/xmlreader.h>
+#include "style.h"
+
+struct key_mod_sym {
+	GdkModifierType mod;
+	GnomeCanvasItem **sym;
+};
 
 struct key {
 	struct keyboard *keyboard;
@@ -31,50 +38,24 @@ struct key {
 	gdouble width;
 	gdouble height;
         GnomeCanvasClipgroup *group;
-	GnomeCanvasItem *textItem;
-        GnomeCanvasItem **items;
+        GnomeCanvasItem **symbol;
+	GSList *drawn_syms;
         GnomeCanvasItem *shape;
         GnomeCanvasItem *timer;
 	gboolean pressed;
 	GdkModifierType modifier;
 };
 
-enum key_class {
-	KEY_NOCLASS,
-	KEY_DEFAULT,
-	KEY_RETURN,
-	KEY_BACKSPACE,
-	KEY_TAB,
-	KEY_SHIFT,
-	KEY_CAPSLOCK,
-	KEY_LEFTARROW,
-	KEY_RIGHTARROW,
-	KEY_UPARROW,
-	KEY_DOWNARROW,
-	KEY_HOME,
-	KEY_PGUP,
-	KEY_PGDOWN
-};
-
-enum colours {
-	KEY_COLOR,
-	KEY_OUTLINE_COLOR,
-	KEY_ACTIVATED_COLOR,
-	KEY_TEXT_COLOR,
-	KEY_MOUSE_OVER_COLOR,
-	NUM_COLORS
-};
-
-void key_init(gchar *colours[]);
+void key_init(xmlTextReaderPtr layout);
 void key_exit();
-struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *label);
+struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *shape);
 void key_free(struct key *key);
 
 void key_resize(struct key *key, gdouble zoom);
-void key_update_color(enum colours colclass, gchar *color);
+void key_update_color(enum style_colours colclass, gchar *color);
 void key_update_text_color(struct key *key);
-void key_set_color(struct key *key, enum colours color);
-void key_draw(struct key *key, enum key_class class, double w, double h);
+void key_set_color(struct key *key, enum style_colours color);
+void key_draw(struct key *key, double w, double h);
 
 void key_switch_mode(struct key *key, GdkModifierType mod);
 void key_update_timer(struct key *key, double value);

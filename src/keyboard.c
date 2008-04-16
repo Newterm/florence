@@ -99,7 +99,7 @@ void keyboard_switch_mode(struct keyboard *keyboard, GdkModifierType mod, gboole
 
 void keyboard_key_press(struct key *key)
 {
-	key_set_color(key, KEY_ACTIVATED_COLOR);
+	key_set_color(key, STYLE_ACTIVATED_COLOR);
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
 	if (key->modifier & GDK_LOCK_MASK) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
 	key->pressed=TRUE;
@@ -111,7 +111,7 @@ void keyboard_key_release(struct key *key)
 	if (key->modifier & GDK_LOCK_MASK) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
 	key->pressed=FALSE;
-	key_set_color(key, KEY_COLOR);
+	key_set_color(key, STYLE_KEY_COLOR);
 	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key), key->modifier, FALSE);
 }
 
@@ -120,7 +120,8 @@ gboolean keyboard_leave_event (GtkWidget *item, GdkEvent *event, gpointer user_d
 	struct keyboard *keyboard=(struct keyboard *)user_data;
 	if (keyboard->pressed && keyboard->pressed->pressed && !keyboard->pressed->modifier)
 		keyboard_key_release(keyboard->pressed);
-	if (keyboard->current) key_set_color(keyboard->current, keyboard->current->pressed?KEY_ACTIVATED_COLOR:KEY_COLOR);
+	if (keyboard->current) key_set_color(keyboard->current,
+		keyboard->current->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
 	keyboard->current=NULL;
 	return FALSE;
 }
@@ -177,10 +178,11 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 		event->type==GDK_MOTION_NOTIFY)) {
 		if (keyboard->timer_step==0.0) {
 			if (key) {
-				key_set_color(key, KEY_MOUSE_OVER_COLOR);
+				key_set_color(key, STYLE_MOUSE_OVER_COLOR);
 			}
 			if (keyboard->current && keyboard->current!=key) { 
-				key_set_color(keyboard->current, keyboard->current->pressed?KEY_ACTIVATED_COLOR:KEY_COLOR);
+				key_set_color(keyboard->current,
+					keyboard->current->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
 				keyboard->current=NULL;
 			}
 		} else {
@@ -201,8 +203,8 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 	return FALSE;
 }
 
-struct key *keyboard_insertkey (struct keyboard *keyboard, enum key_class class, unsigned char code, double x,
-	double y, double w, double h, char *label)
+struct key *keyboard_insertkey (struct keyboard *keyboard, char *shape,
+	unsigned char code, double x, double y, double w, double h)
 {
 	GnomeCanvasClipgroup *group;
 	GdkModifierType mod=0;
@@ -210,7 +212,7 @@ struct key *keyboard_insertkey (struct keyboard *keyboard, enum key_class class,
 	guint len;
 	gchar *name;
 
-	flo_debug("[new key] class=%d code=%d x=%f y=%f w=%f h=%f label=%s", class, code, x, y, w, h, label);
+	flo_debug("[new key] code=%d x=%f y=%f w=%f h=%f shape=%s", code, x, y, w, h, shape);
         group=(GnomeCanvasClipgroup *)gnome_canvas_item_new(keyboard->canvas_group, GNOME_TYPE_CANVAS_CLIPGROUP, 
 		"x", x*2.0, "y", y*2.0, NULL);
 
@@ -225,13 +227,13 @@ struct key *keyboard_insertkey (struct keyboard *keyboard, enum key_class class,
 		else if ((!strcmp(name, "Super_L"))||(!strcmp(name, "Super_R"))) mod=GDK_MOD4_MASK;
 	}
 
-	keyboard->keys[code]=key_new(keyboard, code, group, mod, label);
-	key_draw(keyboard->keys[code], class, w, h);
+	keyboard->keys[code]=key_new(keyboard, code, group, mod, shape);
+	key_draw(keyboard->keys[code], w, h); key_resize(keyboard->keys[code], keyboard->zoom);
 	gtk_signal_connect(GTK_OBJECT(group), "event", GTK_SIGNAL_FUNC(keyboard_handle_event), keyboard->keys[code]);
 	return keyboard->keys[code];
 }
 
-void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum colours colclass)
+void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum style_colours colclass)
 {
 	guint i;
 	gchar *color=(gchar *)gconf_value_get_string(gconf_entry_get_value(entry));
@@ -239,15 +241,15 @@ void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum c
 	for(i=0;i<256;i++) {
 		if (keyboard->keys[i]) {
 			switch(colclass) {
-				case KEY_COLOR: 
+				case STYLE_KEY_COLOR: 
 					if (!keyboard->keys[i]->pressed) key_set_color(keyboard->keys[i], colclass);
 					break;
-				case KEY_TEXT_COLOR:
+				case STYLE_TEXT_COLOR:
 					key_update_text_color(keyboard->keys[i]);
 					break;
-				case KEY_ACTIVATED_COLOR:
+				case STYLE_ACTIVATED_COLOR:
 					if (keyboard->keys[i]->pressed) key_set_color(keyboard->keys[i], colclass);
-				case KEY_MOUSE_OVER_COLOR:
+				case STYLE_MOUSE_OVER_COLOR:
 					/* unlikely and if that ever happen, just move to another key */
 					break;
 				default:
@@ -261,25 +263,25 @@ void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum c
 void keyboard_change_key_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, KEY_COLOR);
+	keyboard_change_color(keyboard, entry, STYLE_KEY_COLOR);
 }
 
 void keyboard_change_text_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, KEY_TEXT_COLOR);
+	keyboard_change_color(keyboard, entry, STYLE_TEXT_COLOR);
 }
 
 void keyboard_change_activated_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, KEY_ACTIVATED_COLOR);
+	keyboard_change_color(keyboard, entry, STYLE_ACTIVATED_COLOR);
 }
 
 void keyboard_change_mouseover_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, KEY_MOUSE_OVER_COLOR);
+	keyboard_change_color(keyboard, entry, STYLE_MOUSE_OVER_COLOR);
 }
 
 void keyboard_change_auto_click(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
@@ -317,7 +319,6 @@ void keyboard_setsize(void *userdata, double width, double height)
 struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextReaderPtr reader, int level)
 {
 	struct keyboard *keyboard=NULL;
-	gchar *colours[NUM_COLORS];
 	gdouble click_time;
 	guint i;
 
@@ -332,13 +333,6 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextRe
 	keyboard->zoom=settings_get_double("window/zoom");
 	keyboard->canvas_group=gnome_canvas_root(canvas);
 
-	colours[KEY_COLOR]=(gchar *)settings_get_string("colours/key");
-	colours[KEY_OUTLINE_COLOR]=(gchar *)settings_get_string("colours/outline");
-	colours[KEY_TEXT_COLOR]=(gchar *)settings_get_string("colours/label");
-	colours[KEY_ACTIVATED_COLOR]=(gchar *)settings_get_string("colours/activated");
-	colours[KEY_MOUSE_OVER_COLOR]=(gchar *)settings_get_string("colours/mouseover");
-
-	key_init(colours);
 	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, level);
 	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), keyboard);
 
