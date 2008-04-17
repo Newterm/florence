@@ -21,10 +21,9 @@
 
 /* Note : this is both the viewer and the controller */
 
-#include <gconf/gconf-client.h>
 #include <glade/glade.h>
-#include <gtk/gtk.h>
 #include "system.h"
+#include "settings.h"
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
 
@@ -95,13 +94,45 @@ void settings_always_on(GtkToggleButton *button)
 		always_on_screen);
 }
 
+void settings_extension(GtkToggleButton *button, gchar *name)
+{
+        gchar *allextstr=NULL;
+        gchar **extstrs=NULL;
+        gchar **extstr=NULL;
+        gchar **newextstrs=NULL;
+        gchar **newextstr=NULL;
+	GConfValue *value;
+
+	/* Get this from change set in case it's not commited */
+	if (gconf_change_set_check_value(gconfchangeset, settings_get_full_path("layout/extensions"), &value)) {
+		allextstr=(gchar *)gconf_value_get_string(value);
+	} else value=NULL;
+	
+	if (value || (allextstr=settings_get_string("layout/extensions"))) {
+                extstrs=g_strsplit(allextstr, ":", -1);
+                extstr=extstrs;
+		newextstrs=g_malloc(sizeof(gchar *)*(2+g_strv_length(extstrs)));
+               	newextstr=newextstrs;
+		while (extstr && *extstr) { if (strcmp(*extstr, name)) *(newextstr++)=*(extstr++); else extstr++; }
+		if (gtk_toggle_button_get_active(button)) {
+			*(newextstr++)=name;
+		}
+		*newextstr=NULL;
+		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/extensions"),
+			g_strjoinv(":", newextstrs));
+                g_strfreev(extstrs);
+                g_free(newextstrs);
+        } else { flo_fatal(_("Can't get gconf value %"), settings_get_full_path("layout/extensions")); }
+}
+
 void settings_arrows(GtkToggleButton *button)
 {
-	if (gtk_toggle_button_get_active(button)) {
-		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/extensions"), "Arrows");
-	} else {
-		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/extensions"), "");
-	}
+	settings_extension(button, "Arrows");
+}
+
+void settings_numpad(GtkToggleButton *button)
+{
+	settings_extension(button, "Numpad");
 }
 
 void settings_zoom(GtkHScale *scale)
@@ -209,6 +240,8 @@ void settings(void)
 	GladeXML *gladexml;
 	gconfchangeset=gconf_change_set_new();
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
+	gchar **extstrs, **extstr;
+	gboolean arrows=FALSE, numpad=FALSE;
 
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
 		settings_convert_color(settings_get_string("colours/key")));
@@ -218,14 +251,22 @@ void settings(void)
 		settings_convert_color(settings_get_string("colours/activated")));
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_mouseover")),
 		settings_convert_color(settings_get_string("colours/mouseover")));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")),
-		!strcmp(settings_get_string("layout/extensions"), "Arrows"));
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_always_on")),
 		settings_get_bool("behaviour/always_on_screen"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_zoom")),
 		settings_get_double("window/zoom"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
 		settings_get_double("behaviour/auto_click"));
+
+	extstrs=extstr=g_strsplit(settings_get_string("layout/extensions"), ":", -1);
+	while (extstr && *extstr) {
+		if (!strcmp(*extstr, "Arrows")) arrows=TRUE;
+		if (!strcmp(*extstr, "Numpad")) numpad=TRUE;
+		extstr++;
+	}
+	g_strfreev(extstrs);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
 
 	glade_xml_signal_autoconnect(gladexml);
 }

@@ -101,14 +101,14 @@ void keyboard_key_press(struct key *key)
 {
 	key_set_color(key, STYLE_ACTIVATED_COLOR);
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
-	if (key->modifier & GDK_LOCK_MASK) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
+	if (key->modifier & (GDK_LOCK_MASK | GDK_MOD2_MASK)) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
 	key->pressed=TRUE;
 	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key), key->modifier, TRUE);
 }
 
 void keyboard_key_release(struct key *key)
 {
-	if (key->modifier & GDK_LOCK_MASK) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
+	if (key->modifier & (GDK_LOCK_MASK | GDK_MOD2_MASK)) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
 	key->pressed=FALSE;
 	key_set_color(key, STYLE_KEY_COLOR);
@@ -222,6 +222,7 @@ struct key *keyboard_insertkey (struct keyboard *keyboard, char *shape,
 		if ((!strcmp(name, "Shift_L"))||(!strcmp(name, "Shift_R"))) mod=GDK_SHIFT_MASK;
 		else if ((!strcmp(name, "Control_L"))||(!strcmp(name, "Control_R"))) mod=GDK_CONTROL_MASK;
 		else if (!strcmp(name, "Alt")) mod=GDK_MOD1_MASK;
+		else if (!strcmp(name, "Num_Lock")) mod=GDK_MOD2_MASK;
 		else if (!strcmp(name, "ISO_Level3_Shift")) mod=GDK_MOD5_MASK; /* AltGr */
 		else if (!strcmp(name, "Caps_Lock")) mod=GDK_LOCK_MASK;
 		else if ((!strcmp(name, "Super_L"))||(!strcmp(name, "Super_R"))) mod=GDK_MOD4_MASK;

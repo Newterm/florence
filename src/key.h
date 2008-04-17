@@ -24,10 +24,11 @@
 
 #include <libgnomecanvas/libgnomecanvas.h>
 #include <libxml/xmlreader.h>
+#include <gdk/gdk.h>
 #include "style.h"
 
-struct key_mod_sym {
-	GdkModifierType mod;
+struct key_symbol {
+	guint keyval;
 	GnomeCanvasItem **sym;
 };
 

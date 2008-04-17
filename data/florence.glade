@@ -17,59 +17,27 @@
             <property name="n_rows">2</property>
             <property name="n_columns">2</property>
             <child>
-              <widget class="GtkHBox" id="hbox1">
+              <widget class="GtkHBox" id="hbox4">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes" context="yes">background color of the keys</property>
+                <property name="tooltip" translatable="yes" context="yes">background color of the key when the mouse is over it.</property>
                 <child>
-                  <widget class="GtkColorButton" id="flo_keys">
+                  <widget class="GtkColorButton" id="flo_mouseover">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="response_id">0</property>
                     <property name="color">#000000000000</property>
-                    <signal name="color_set" handler="settings_keys_color"/>
+                    <signal name="color_set" handler="settings_mouseover_color"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="keys">
+                  <widget class="GtkLabel" id="mouseover">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes" context="yes">Keys</property>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="padding">4</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkHBox" id="hbox2">
-                <property name="visible">True</property>
-                <property name="tooltip" translatable="yes" context="yes">Color of the labels on the keys</property>
-                <child>
-                  <widget class="GtkColorButton" id="flo_labels">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="response_id">0</property>
-                    <property name="color">#000000000000</property>
-                    <signal name="color_set" handler="settings_labels_color"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkLabel" id="text">
-                    <property name="visible">True</property>
-                    <property name="label" translatable="yes" context="yes">Labels</property>
+                    <property name="label" translatable="yes" context="yes">Mouse Over</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -80,9 +48,12 @@
                 </child>
               </widget>
               <packing>
+                <property name="left_attach">1</property>
+                <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
+                <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
             <child>
@@ -123,27 +94,27 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkHBox" id="hbox4">
+              <widget class="GtkHBox" id="hbox2">
                 <property name="visible">True</property>
-                <property name="tooltip" translatable="yes" context="yes">background color of the key when the mouse is over it.</property>
+                <property name="tooltip" translatable="yes" context="yes">Color of the labels on the keys</property>
                 <child>
-                  <widget class="GtkColorButton" id="flo_mouseover">
+                  <widget class="GtkColorButton" id="flo_labels">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
                     <property name="response_id">0</property>
                     <property name="color">#000000000000</property>
-                    <signal name="color_set" handler="settings_mouseover_color"/>
+                    <signal name="color_set" handler="settings_labels_color"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="mouseover">
+                  <widget class="GtkLabel" id="text">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes" context="yes">Mouse Over</property>
+                    <property name="label" translatable="yes" context="yes">Labels</property>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -154,18 +125,44 @@
                 </child>
               </widget>
               <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options">GTK_FILL</property>
               </packing>
             </child>
+            <child>
+              <widget class="GtkHBox" id="hbox1">
+                <property name="visible">True</property>
+                <property name="tooltip" translatable="yes" context="yes">background color of the keys</property>
+                <child>
+                  <widget class="GtkColorButton" id="flo_keys">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">True</property>
+                    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+                    <property name="response_id">0</property>
+                    <property name="color">#000000000000</property>
+                    <signal name="color_set" handler="settings_keys_color"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <widget class="GtkLabel" id="keys">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes" context="yes">Keys</property>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="padding">4</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </widget>
+            </child>
           </widget>
-          <packing>
-            <property name="position">1</property>
-          </packing>
         </child>
         <child>
           <widget class="GtkHSeparator" id="flo_separator1">
@@ -174,7 +171,7 @@
           <packing>
             <property name="expand">False</property>
             <property name="padding">8</property>
-            <property name="position">2</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
@@ -182,7 +179,7 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <property name="tooltip" translatable="yes">Show the arrow keys</property>
+            <property name="tooltip" translatable="yes" context="yes">Show the arrow keys</property>
             <property name="label" translatable="yes" context="yes">Arrows keypad</property>
             <property name="response_id">0</property>
             <property name="draw_indicator">True</property>
@@ -190,6 +187,21 @@
           </widget>
           <packing>
             <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkCheckButton" id="flo_numpad">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+            <property name="tooltip" translatable="yes">Show the numpad</property>
+            <property name="label" translatable="yes">Numpad</property>
+            <property name="response_id">0</property>
+            <property name="draw_indicator">True</property>
+            <signal name="toggled" handler="settings_numpad"/>
+          </widget>
+          <packing>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>

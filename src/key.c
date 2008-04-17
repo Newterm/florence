@@ -55,18 +55,26 @@ struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup 
 	key->timer=NULL;
 	key->shape=NULL;
 	key->symbol=NULL;
+	key->drawn_syms=NULL;
 	return key;
 }
 
 void key_free(struct key *key)
 {
-	GnomeCanvasItem *br=*(key->symbol);
+	GnomeCanvasItem *br;
+	GSList *list=key->drawn_syms;
 	if (key->label) g_free(key->label);
 	if (key->group) gtk_object_destroy(GTK_OBJECT(key->group));
 	if (key->shape) gtk_object_destroy(GTK_OBJECT(key->shape));
 	if (key->timer) gtk_object_destroy(GTK_OBJECT(key->timer));
-	while (br) gtk_object_destroy(GTK_OBJECT(br++));
-	if (key->symbol) g_free(key->symbol);
+	while (list) {
+		br=*(((struct key_symbol *)list->data)->sym);
+		while (br) gtk_object_destroy(GTK_OBJECT(br++));
+		g_free(((struct key_symbol *)list->data)->sym);
+		g_free((struct key_symbol *)list->data);
+		list=g_slist_next(list);
+	}
+	g_slist_free(key->drawn_syms);
 	g_free(key);
 }
 
@@ -122,12 +130,17 @@ void key_update_map(struct key *key)
 
 void key_resize(struct key *key, gdouble zoom)
 {
-	GnomeCanvasItem **br=key->symbol;
-	if (br) while (*br) {
-		if (G_OBJECT_TYPE(*br)==GNOME_TYPE_CANVAS_TEXT) {
-			gnome_canvas_item_set(*br, "size-points", 1.2*zoom, NULL);
+	GnomeCanvasItem **br=NULL;
+	GSList *symbols=key->drawn_syms;
+	while (symbols) {
+		br=((struct key_symbol *)symbols->data)->sym;
+		while (*br) {
+			if (G_OBJECT_TYPE(*br)==GNOME_TYPE_CANVAS_TEXT) {
+				gnome_canvas_item_set(*br, "size-points", 1.2*zoom, NULL);
+			}
+			br++;
 		}
-		br++;
+		symbols=g_slist_next(symbols);
 	}
 	key_update_map(key);
 }
@@ -150,11 +163,9 @@ void key_draw(struct key *key, double w, double h)
 	key->width=w;
 	key->height=h;
 	key->shape=style_shape_draw(key_style, GNOME_CANVAS_GROUP(key->group), key->label?key->label:"default");
-	br=key->symbol=style_symbol_draw(key_style, GNOME_CANVAS_GROUP(key->group), key_getKeyval(key, 0));
 	art_affine_scale(matrix, w/2.0, h/2.0);
 	gnome_canvas_item_affine_relative(GNOME_CANVAS_ITEM(key->group), matrix);
-	art_affine_scale(matrix, 2.0/w, 2.0/h);
-	while (*br) gnome_canvas_item_affine_relative(*(br++), matrix);
+	key_switch_mode(key, 0);
 	key_update_map(key);
 }
 
@@ -165,8 +176,10 @@ void key_update_color(enum style_colours colclass, gchar *color)
 
 void key_update_text_color (struct key *key)
 {
-	GnomeCanvasItem **br=key->symbol;
-	if (key->symbol) {
+	GSList *symbols=key->drawn_syms;
+	GnomeCanvasItem **br=NULL;
+	while (symbols) {
+		br=((struct key_symbol *)symbols->data)->sym;
 		while (*br) {
 			if (G_OBJECT_TYPE(*br)==GNOME_TYPE_CANVAS_BPATH) {
 				gnome_canvas_item_set(*(br++), "outline_color", style_get_color(STYLE_TEXT_COLOR), NULL);
@@ -174,6 +187,7 @@ void key_update_text_color (struct key *key)
 				gnome_canvas_item_set(*(br++), "fill_color", style_get_color(STYLE_TEXT_COLOR), NULL);
 			}
 		}
+		symbols=g_slist_next(symbols);
 	}
 }
 
@@ -229,16 +243,33 @@ void key_update_timer(struct key *key, double value)
 
 void key_switch_mode(struct key *key, GdkModifierType mod)
 {
-	GnomeCanvasItem **br=key->symbol;
+	GnomeCanvasItem **br;
 	double matrix[6]; /* affine matrix */
+	GSList *syms=key->drawn_syms;
+	struct key_symbol *symbol=NULL;
+	guint keyval=key_getKeyval(key, mod);
 
-	if (br) while (*br) gtk_object_destroy(GTK_OBJECT(*(br++)));
-	g_free(key->symbol);
-	key->symbol=style_symbol_draw(key_style, GNOME_CANVAS_GROUP(key->group), key_getKeyval(key, mod));
-	art_affine_scale(matrix, 2.0/key->width, 2.0/key->height);
-	br=key->symbol;
-	if (*br) while (*br) gnome_canvas_item_affine_relative(*(br++), matrix);
-	key_resize(key, key->keyboard->zoom);
+	while (syms && (((struct key_symbol *)syms->data)->keyval!=keyval)) syms=g_slist_next(syms);
+	if (!syms) {
+		symbol=g_malloc(sizeof(struct key_symbol));
+		symbol->keyval=keyval;
+		symbol->sym=style_symbol_draw(key_style, GNOME_CANVAS_GROUP(key->group), keyval);
+		art_affine_scale(matrix, 2.0/key->width, 2.0/key->height);
+		br=symbol->sym;
+		if (*br) while (*br) {
+			if (G_OBJECT_TYPE(*br)==GNOME_TYPE_CANVAS_TEXT) {
+				gnome_canvas_item_set(*br, "size-points", 1.2*key->keyboard->zoom, NULL);
+			}
+			gnome_canvas_item_affine_relative(*(br++), matrix);
+		}
+		key->drawn_syms=g_slist_append(key->drawn_syms, (gpointer)symbol);
+	} else if (((struct key_symbol *)syms->data)->sym!=key->symbol) {
+		symbol=(struct key_symbol*)syms->data;
+		br=symbol->sym;
+		while (*br) gnome_canvas_item_show(*(br++));
+	}
+	if (symbol && (key->symbol!=symbol->sym) && (br=key->symbol)) while (*br) gnome_canvas_item_hide(*(br++));
+	key->symbol=symbol?symbol->sym:NULL;
 }
 
 struct keyboard *key_get_keyboard(struct key *key)
