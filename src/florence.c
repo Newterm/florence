@@ -195,7 +195,7 @@ void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry
 	flo_switch_mode(GTK_WIDGET(user_data), gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
-void flo_resize_keyboard(gpointer data, gpointer user_data)
+void flo_resize_extension(gpointer data, gpointer user_data)
 {
 	struct extension *extension=(struct extension *)data;
 	struct keyboard *keyboard=extension->keyboard;
@@ -212,7 +212,7 @@ void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointe
 	gdouble zoom;
 	zoom=gconf_value_get_float(gconf_entry_get_value(entry));
 	flo_width=0; flo_height=0;
-	g_slist_foreach(extensions, flo_resize_keyboard, (gpointer)&zoom);
+	g_slist_foreach(extensions, flo_resize_extension, (gpointer)&zoom);
 	gtk_widget_set_size_request(GTK_WIDGET(user_data), flo_width, flo_height);
 	flo_set_mask(gtk_widget_get_parent_window(
 		GTK_WIDGET(g_list_first(gtk_container_get_children(GTK_CONTAINER(user_data)))->data)),
@@ -247,15 +247,16 @@ gboolean flo_extension_activated(char *name)
 void flo_add_extension(xmlTextReaderPtr reader, char *name, enum layout_placement placement, void *userdata)
 {
 	GtkWidget *canvas;
-	struct keyboard *keyboard;
-	struct extension *extension;
+	struct keyboard *keyboard=NULL;
+	struct extension *extension=NULL;
 	GtkContainer *hbox=GTK_CONTAINER(userdata);
 
 	canvas=gnome_canvas_new_aa();
 	keyboard=keyboard_new((GnomeCanvas *)canvas, keys, reader, extensions?2:1);
 	gtk_container_add(hbox, canvas);
-	extension=g_malloc(sizeof(extension));
-	extension->is_active=FALSE;
+	extension=(struct extension *)g_malloc(sizeof(struct extension));
+	if (!extension) flo_fatal(_("Unable to allocate memory for extension"));
+	extension->is_active=(int)FALSE;
 
 	if (!extensions || flo_extension_activated(name)) {
 		gtk_widget_show(canvas);
@@ -280,7 +281,7 @@ void flo_add_extension(xmlTextReaderPtr reader, char *name, enum layout_placemen
 
 	extension->keyboard=keyboard;
 	if (name) {
-		extension->name=g_malloc(strlen(name)+1);
+		extension->name=g_malloc(sizeof(gchar)*(strlen(name)+1));
 		strcpy(extension->name, name);
 	} else {
 		extension->name=NULL;
@@ -292,14 +293,12 @@ void flo_update_extension(gpointer data, gpointer user_data)
 {
 	struct extension *extension=(struct extension *)data;
 	if (extension->name) {
-		if (flo_extension_activated(extension->name)) {
+		if (extension->is_active=flo_extension_activated(extension->name)) {
 			/* TODO: placement */
 			flo_width+=keyboard_get_width(extension->keyboard);
 			gtk_widget_show(GTK_WIDGET(keyboard_get_canvas(extension->keyboard)));
-			extension->is_active=TRUE;
 		} else {
 			gtk_widget_hide(GTK_WIDGET(keyboard_get_canvas(extension->keyboard)));
-			extension->is_active=FALSE;
 		}
 	}
 }
@@ -340,7 +339,6 @@ int florence (void)
 {
 	GtkWidget *window;
 	GtkWidget *hbox;
-	guint borderWidth;
 	xmlTextReaderPtr layout;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -366,9 +364,7 @@ int florence (void)
 	gtk_container_add(GTK_CONTAINER(window), hbox);
 	gtk_widget_show(hbox);
 
-	gtk_window_set_decorated((GtkWindow *)window,
-		settings_get_bool("window/decorated"));
-
+	gtk_window_set_decorated((GtkWindow *)window, settings_get_bool("window/decorated"));
 	gtk_container_set_border_width(GTK_CONTAINER(window), 0);
 	gtk_widget_set_size_request(GTK_WIDGET(window), flo_width, flo_height);
 	if (settings_get_bool("window/shaped")) {

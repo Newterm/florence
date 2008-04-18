@@ -183,12 +183,10 @@ gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_
 			if (keyboard->current && keyboard->current!=key) { 
 				key_set_color(keyboard->current,
 					keyboard->current->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
-				keyboard->current=NULL;
 			}
-		} else {
-			if (key) {keyboard->timer=keyboard->timer_step;
-			g_timeout_add(FLO_ANIMATION_PERIOD, keyboard_press_timeout, key);}
-			else { keyboard->current=NULL; }
+		} else if (key) {
+			keyboard->timer=keyboard->timer_step;
+			g_timeout_add(FLO_ANIMATION_PERIOD, keyboard_press_timeout, key);
 		}
 		keyboard->current=key;
 	} else if (event->type==GDK_BUTTON_PRESS && (!data->modifier || !data->pressed)) {
@@ -229,7 +227,8 @@ struct key *keyboard_insertkey (struct keyboard *keyboard, char *shape,
 	}
 
 	keyboard->keys[code]=key_new(keyboard, code, group, mod, shape);
-	key_draw(keyboard->keys[code], w, h); key_resize(keyboard->keys[code], keyboard->zoom);
+	key_draw(keyboard->keys[code], w, h, 0);
+	key_resize(keyboard->keys[code], keyboard->zoom);
 	gtk_signal_connect(GTK_OBJECT(group), "event", GTK_SIGNAL_FUNC(keyboard_handle_event), keyboard->keys[code]);
 	return keyboard->keys[code];
 }
@@ -321,7 +320,6 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextRe
 {
 	struct keyboard *keyboard=NULL;
 	gdouble click_time;
-	guint i;
 
 	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));

@@ -93,10 +93,10 @@ int main (int argc, char **argv)
 
 /* Set all the option flags according to the switches specified.
    Return the index of the first non-option argument.  */
-static int
-decode_switches (int argc, char **argv)
+static int decode_switches (int argc, char **argv)
 {
 	int c;
+	int ret=0;
 
 	while ((c = getopt_long (argc, argv, 
 		"h"  /* help */
@@ -112,13 +112,13 @@ decode_switches (int argc, char **argv)
 			case 'h':
 				usage (0);
 			case 'c':
-				return 1;
+				ret=1; break;
 			default:
 				usage (EXIT_FAILURE);
 		}
 	}
 
-	return 0;
+	return ret;
 }
 
 static void usage (int status)
@@ -131,7 +131,8 @@ Options:\n\
   -h, --help          display this help and exit\n\
   -V, --version	      output version information and exit\n\
   -c, --config        opens configuration window\n\n\
-Report bugs to <f.agerch@gmail.com>.\n"));
+Report bugs to <f.agerch@gmail.com>.\n\
+More informations at <http://florence.sourceforge.net>.\n"));
 	exit (status);
 }
 

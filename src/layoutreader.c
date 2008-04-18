@@ -117,7 +117,7 @@ xmlChar *layoutreader_readstring(xmlTextReaderPtr reader, xmlChar *name, int lev
 	if (strcmp(xmlTextReaderConstName(reader), name)) { ret=-1; }
 	if (ret==1 && ((ret=xmlTextReaderRead(reader))==1) && xmlTextReaderDepth(reader)==(level+1) &&
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
-		val=g_malloc(sizeof(xmlChar)*strlen(xmlTextReaderConstValue(reader))+1);
+		val=g_malloc(sizeof(xmlChar)*(strlen(xmlTextReaderConstValue(reader))+1));
 		strcpy(val, xmlTextReaderConstValue(reader));
 		if (ret!=1 || ((ret=xmlTextReaderRead(reader))!=1) || !(xmlTextReaderDepth(reader)==level &&
 			xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT)) {
@@ -153,7 +153,7 @@ void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyf
 			} else if (!strcmp(nodename, "height")) {
 				height=g_ascii_strtod(nodevalue, NULL);
 			} else if (!strcmp(nodename, "shape")) {
-				shape=g_malloc(strlen(nodevalue));
+				shape=g_malloc(sizeof(gchar)*(1+strlen(nodevalue)));
 				strcpy(shape, nodevalue);
 			} else { flo_fatal(_("Unknown element: %s"), nodename); }
 		}

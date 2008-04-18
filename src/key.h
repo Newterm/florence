@@ -56,7 +56,7 @@ void key_resize(struct key *key, gdouble zoom);
 void key_update_color(enum style_colours colclass, gchar *color);
 void key_update_text_color(struct key *key);
 void key_set_color(struct key *key, enum style_colours color);
-void key_draw(struct key *key, double w, double h);
+void key_draw(struct key *key, double w, double h, GdkModifierType mod);
 
 void key_switch_mode(struct key *key, GdkModifierType mod);
 void key_update_timer(struct key *key, double value);

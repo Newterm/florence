@@ -199,7 +199,7 @@ void style_symbol_free(gpointer data, gpointer userdata)
 gboolean style_symbol_matches(struct symbol *symbol, gchar *name)
 {
 	if (!name) return FALSE;
-	return g_regex_match_all(symbol->name, name, G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
+	return g_regex_match(symbol->name, name, G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
 }
 
 GnomeCanvasItem *style_symbol_bpath_draw(GnomeCanvasGroup *group, GnomeCanvasPathDef *path)

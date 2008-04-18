@@ -2,13 +2,13 @@ FLORENCE: A simple virtual keyboard for Gnome
 *********************************************
 
 http://florence.sourceforge.net
-Florence is a virtual keyboard for GNOME. You need it if you can't use a real keyboard
-either because of a handicap, disease, broken keyboard or tablet PC but you can use a 
-pointing device. If you can't use a pointing device, there is gok:
+Florence is an extensible scalable virtual keyboard for GNOME. You need it if you can't
+use a real keyboard either because of a handicap, disease, broken keyboard or tablet PC
+but you can use a pointing device. If you can't use a pointing device, there is gok:
 http://www.gok.ca/
-Florence is scalable and out of your way when you don't need it.
+Florence stays out of your way when you don't need it.
 It appears on the screen only when you need it.
-There is an aauto-click functionality To help people having difficulties to use the 
+There is an auto-click functionality To help people having difficulties to use the 
 click button, there is an auto-click functionality.
 
 DEPENDANCIES
@@ -109,8 +109,8 @@ RUNNING FLORENCE ON KDE
 Florence can work on KDE, provided you install all the dependancies (including GTK and
 the at-spi registry daemon).
 You must start the at-spi registry daemon at session startup (at-spi-registryd).
-QT applications don't support at-spi yet. You can still use Florence on screen, but the
+QT3 applications don't support at-spi yet. You can still use Florence on screen, but the
 keyboard won't detect QT editable widgets. This makes Florence unusable in hidden mode on
-KDE, unless you don't use QT applications, but that is highly unlikely on KDE.
-Always check the "always on screen" box (in preferences dialog) on KDE.
+KDE3, unless you don't use QT applications, but that is highly unlikely on KDE.
+Always check the "always on screen" box (in preferences dialog) on KDE3.
 

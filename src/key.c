@@ -25,6 +25,8 @@
 #include "keyboard.h"
 #include <math.h>
 #include <string.h>
+#include <libart_lgpl/art_bpath.h>
+#include <libart_lgpl/art_vpath.h>
 #include <libart_lgpl/art_svp_render_aa.h>
 
 #define PI 3.1415926535897931
@@ -36,7 +38,8 @@ void key_init(xmlTextReaderPtr layout)
 	key_style=style_new(layout);
 }
 
-void key_exit() {
+void key_exit()
+{
 	if (key_style) style_free(key_style);
 }
 
@@ -49,7 +52,7 @@ struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup 
 	key->pressed=FALSE;
 	key->modifier=mod;
 	if (label) {
-		key->label=g_malloc((1+strlen(label)*sizeof(gchar)));
+		key->label=g_malloc((1+strlen(label))*sizeof(gchar));
 		strcpy(key->label, label);
 	} else key->label=NULL;
 	key->timer=NULL;
@@ -64,9 +67,9 @@ void key_free(struct key *key)
 	GnomeCanvasItem *br;
 	GSList *list=key->drawn_syms;
 	if (key->label) g_free(key->label);
-	if (key->group) gtk_object_destroy(GTK_OBJECT(key->group));
 	if (key->shape) gtk_object_destroy(GTK_OBJECT(key->shape));
 	if (key->timer) gtk_object_destroy(GTK_OBJECT(key->timer));
+	if (key->group) gtk_object_destroy(GTK_OBJECT(key->group));
 	while (list) {
 		br=*(((struct key_symbol *)list->data)->sym);
 		while (br) gtk_object_destroy(GTK_OBJECT(br++));
@@ -112,8 +115,8 @@ void key_update_map(struct key *key)
 	gnome_canvas_w2c_affine(keyboard_get_canvas(key->keyboard), affine);
 	g_object_get(G_OBJECT(key->group), "x", &dx, "y", &dy, NULL);
 	gnome_canvas_w2c(keyboard_get_canvas(key->keyboard), dx, dy, &x, &y);
-	affine[0]*=key->width/2.0;affine[3]*=key->height/2.0;
 	affine[4]+=x;affine[5]+=y;
+	affine[0]*=key->width/2.0;affine[3]*=key->height/2.0;
 
 	g_object_get(G_OBJECT(key->shape), "bpath", &gcbpath, NULL);
 	bpath=gnome_canvas_path_def_bpath(gcbpath);
@@ -150,12 +153,13 @@ guint key_getKeyval(struct key *key, GdkModifierType mod)
 	guint keyval=0;
 	if (!gdk_keymap_translate_keyboard_state(gdk_keymap_get_default(), key->code, mod, 0,
 		&keyval, NULL, NULL, NULL)) {
-		flo_warn(_("Unable to translate keyboard state: keycode=%d modifiers=%d"), key->code, mod);
+		keyval=0;
+		/*flo_warn(_("Unable to translate keyboard state: keycode=%d modifiers=%d"), key->code, mod);*/
 	}
 	return keyval;
 }
 
-void key_draw(struct key *key, double w, double h)
+void key_draw(struct key *key, double w, double h, GdkModifierType mod)
 {
 	double matrix[6]; /* affine matrix */
 	GnomeCanvasItem **br=NULL;
@@ -165,6 +169,8 @@ void key_draw(struct key *key, double w, double h)
 	key->shape=style_shape_draw(key_style, GNOME_CANVAS_GROUP(key->group), key->label?key->label:"default");
 	art_affine_scale(matrix, w/2.0, h/2.0);
 	gnome_canvas_item_affine_relative(GNOME_CANVAS_ITEM(key->group), matrix);
+	key_switch_mode(key, GDK_SHIFT_MASK);
+	key_switch_mode(key, GDK_MOD5_MASK);
 	key_switch_mode(key, 0);
 	key_update_map(key);
 }
@@ -241,6 +247,13 @@ void key_update_timer(struct key *key, double value)
 	gnome_canvas_points_unref(points);
 }
 
+void key_swap_symbol(struct key *key, GnomeCanvasItem **symbol) 
+{
+	GnomeCanvasItem **br=key->symbol;
+	if (br) while (*br) gnome_canvas_item_hide(*(br++));
+	key->symbol=symbol;
+}
+
 void key_switch_mode(struct key *key, GdkModifierType mod)
 {
 	GnomeCanvasItem **br;
@@ -254,22 +267,22 @@ void key_switch_mode(struct key *key, GdkModifierType mod)
 		symbol=g_malloc(sizeof(struct key_symbol));
 		symbol->keyval=keyval;
 		symbol->sym=style_symbol_draw(key_style, GNOME_CANVAS_GROUP(key->group), keyval);
-		art_affine_scale(matrix, 2.0/key->width, 2.0/key->height);
 		br=symbol->sym;
 		if (*br) while (*br) {
 			if (G_OBJECT_TYPE(*br)==GNOME_TYPE_CANVAS_TEXT) {
 				gnome_canvas_item_set(*br, "size-points", 1.2*key->keyboard->zoom, NULL);
 			}
+			art_affine_scale(matrix, 2.0/key->width, 2.0/key->height);
 			gnome_canvas_item_affine_relative(*(br++), matrix);
 		}
 		key->drawn_syms=g_slist_append(key->drawn_syms, (gpointer)symbol);
+		key_swap_symbol(key, symbol->sym);
 	} else if (((struct key_symbol *)syms->data)->sym!=key->symbol) {
 		symbol=(struct key_symbol*)syms->data;
 		br=symbol->sym;
 		while (*br) gnome_canvas_item_show(*(br++));
+		key_swap_symbol(key, symbol->sym);
 	}
-	if (symbol && (key->symbol!=symbol->sym) && (br=key->symbol)) while (*br) gnome_canvas_item_hide(*(br++));
-	key->symbol=symbol?symbol->sym:NULL;
 }
 
 struct keyboard *key_get_keyboard(struct key *key)
