@@ -21,7 +21,7 @@
 			<applyto>/apps/florence/behaviour/auto_click</applyto>
 			<owner>florence</owner>
 			<type>float</type>
-			<default>1300</default>
+			<default>0</default>
 			<locale name="C">
 				<short>Auto click timeout</short>
 				<long>Time, in milliseconds, to wait when the mouse is over a key before the key is automatically pressed. Set to 0 to disable auto click.</long>

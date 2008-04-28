@@ -135,6 +135,11 @@ void settings_numpad(GtkToggleButton *button)
 	settings_extension(button, "Numpad");
 }
 
+void settings_function_keys(GtkToggleButton *button)
+{
+	settings_extension(button, "Function keys");
+}
+
 void settings_zoom(GtkHScale *scale)
 {
 	gconf_change_set_set_float(gconfchangeset, settings_get_full_path("window/zoom"),
@@ -241,7 +246,7 @@ void settings(void)
 	gconfchangeset=gconf_change_set_new();
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
 	gchar **extstrs, **extstr;
-	gboolean arrows=FALSE, numpad=FALSE;
+	gboolean arrows=FALSE, numpad=FALSE, function_keys=FALSE;
 
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
 		settings_convert_color(settings_get_string("colours/key")));
@@ -262,11 +267,14 @@ void settings(void)
 	while (extstr && *extstr) {
 		if (!strcmp(*extstr, "Arrows")) arrows=TRUE;
 		if (!strcmp(*extstr, "Numpad")) numpad=TRUE;
+		if (!strcmp(*extstr, "Function keys")) function_keys=TRUE;
 		extstr++;
 	}
 	g_strfreev(extstrs);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
 	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys")),
+		function_keys);
 
 	glade_xml_signal_autoconnect(gladexml);
 }

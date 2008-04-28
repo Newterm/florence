@@ -26,8 +26,8 @@ enum layout_placement {
 	LAYOUT_VOID,
 	LAYOUT_LEFT,
 	LAYOUT_RIGHT,
-	LAYOUT_UP,
-	LAYOUT_DOWN
+	LAYOUT_TOP,
+	LAYOUT_BOTTOM
 };
 
 /* callbacks */

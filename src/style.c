@@ -150,11 +150,15 @@ void style_symbol_addpath(char *name, GnomeCanvasPathDef *path, void *userdata)
 
 void style_symbol_new(xmlTextReaderPtr reader, char *name, char *label, void *userdata)
 {
+	gchar *regex;
 	struct style *style=(struct style *)userdata;
 	struct symbol *symbol=g_malloc(sizeof(struct symbol));
 	memset(symbol, 0, sizeof(struct symbol));
 	if (name) {
-		symbol->name=g_regex_new(name, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
+		regex=g_malloc((strlen(name)+3)*sizeof(gchar));
+		sprintf(regex, "^%s$", name);
+		symbol->name=g_regex_new(regex, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
+		g_free(regex);
 	}
 	if (label) {
 		symbol->label=g_malloc(sizeof(char)*(strlen(label)+1));
@@ -250,6 +254,7 @@ GnomeCanvasItem **style_symbol_draw(struct style *style, GnomeCanvasGroup *group
 			else keyval2=gdk_keyval_from_name(gdk_keyval_name(keyval)+5);
 		}
 		if (!name[0]) name[g_unichar_to_utf8(gdk_keyval_to_unicode(keyval2), name)]='\0';
+		/* if (!name[0] && gdk_keyval_name(keyval)) { strncpy(name, gdk_keyval_name(keyval), 3); name[3]='\0'; } */
 		ret=g_malloc(2*sizeof(GnomeCanvasItem *));
 		*ret=gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_TEXT, "x", 0.0, "y", 0.0, "text", name,
 			"fill_color", style_colours[STYLE_TEXT_COLOR], "size-set", TRUE, "size-points", 12.0, NULL);

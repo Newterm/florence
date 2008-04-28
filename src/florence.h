@@ -20,12 +20,18 @@
 */
 
 #include "keyboard.h"
+#include "layoutreader.h"
 
+/* An extension is a set of keys that can be show or hidden together
+ * Examples: the numpad or the arrows. The main extension can is the trunk of the keyboard */
 struct extension {
-	struct keyboard *keyboard;
-	char *name;
-	int is_active;
+	struct keyboard *keyboard; /* Extension data */
+	char *name;    /* NULL for main keyboard, "Arrows" or "Numpad" */
+	int is_active; /* TRUE if the extension is visible ; ignored for main */
+	enum layout_placement placement; /* Position of the extension relative to main */
 };
 
+/* Launches the virtual keyboard.
+ * Returns: 0 on normal exit. */
 int florence (void);
 

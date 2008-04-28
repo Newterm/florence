@@ -74,8 +74,8 @@ enum layout_placement layoutreader_getplacement(xmlChar *placement)
 	enum layout_placement ret=LAYOUT_VOID;
 	if (!strcmp(placement, "left")) ret=LAYOUT_LEFT;
 	else if (!strcmp(placement, "right")) ret=LAYOUT_RIGHT;
-	else if (!strcmp(placement, "up")) ret=LAYOUT_UP;
-	else if (!strcmp(placement, "down")) ret=LAYOUT_DOWN;
+	else if (!strcmp(placement, "top")) ret=LAYOUT_TOP;
+	else if (!strcmp(placement, "bottom")) ret=LAYOUT_BOTTOM;
 	else flo_fatal(_("Unknown placement %s"), placement);
 	return ret;
 }

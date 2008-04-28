@@ -32,55 +32,69 @@
 
 <style>
 	<shape><name>default</name><path>
-		<moveto><x>-2</x><y>0</y></moveto>
+		<moveto><x>-1</x><y>-2</y></moveto>
+		<lineto><x>1</x><y>-2</y></lineto>
 		<curveto>
-			<p1><x>-2</x><y>1</y></p1>
-			<p2><x>-2</x><y>2</y></p2>
-			<p3><x>0</x><y>2</y></p3>
+			<p1><x>1.5</x><y>-2</y></p1>
+			<p2><x>2</x><y>-1.5</y></p2>
+			<p3><x>2</x><y>-1</y></p3>
 		</curveto>
+		<lineto><x>2</x><y>1</y></lineto>
 		<curveto>
-			<p1><x>2</x><y>2</y></p1>
-			<p2><x>2</x><y>1</y></p2>
-			<p3><x>2</x><y>0</y></p3>
+			<p1><x>2</x><y>1.5</y></p1>
+			<p2><x>1.5</x><y>2</y></p2>
+			<p3><x>1</x><y>2</y></p3>
 		</curveto>
+		<lineto><x>-1</x><y>2</y></lineto>
 		<curveto>
-			<p1><x>2</x><y>-1</y></p1>
-			<p2><x>2</x><y>-2</y></p2>
-			<p3><x>0</x><y>-2</y></p3>
+			<p1><x>-1.5</x><y>2</y></p1>
+			<p2><x>-2</x><y>1.5</y></p2>
+			<p3><x>-2</x><y>1</y></p3>
 		</curveto>
+		<lineto><x>-2</x><y>-1</y></lineto>
 		<curveto>
-			<p1><x>-2</x><y>-2</y></p1>
-			<p2><x>-2</x><y>-1</y></p2>
-			<p3><x>-2</x><y>0</y></p3>
+			<p1><x>-2</x><y>-1.5</y></p1>
+			<p2><x>-1.5</x><y>-2</y></p2>
+			<p3><x>-1</x><y>-2</y></p3>
 		</curveto>
 	</path></shape>
 	<shape><name>Return</name><path>
-		<moveto><x>-2</x><y>-1</y></moveto>
+		<moveto><x>-2</x><y>-0.5</y></moveto>
+		<lineto><x>-2</x><y>-1.5</y></lineto>
 		<curveto>
-			<p1><x>-2</x><y>-1.5</y></p1>
-			<p2><x>-2</x><y>-2</y></p2>
-			<p3><x>-0.667</x><y>-2</y></p3>
+			<p1><x>-2</x><y>-1.75</y></p1>
+			<p2><x>-1.5</x><y>-2</y></p2>
+			<p3><x>-1</x><y>-2</y></p3>
 		</curveto>
-		<lineto><x>0.667</x><y>-2</y></lineto>
+		<lineto><x>1</x><y>-2</y></lineto>
 		<curveto>
-			<p1><x>2</x><y>-2</y></p1>
+			<p1><x>1.5</x><y>-2</y></p1>
 			<p2><x>2</x><y>-1</y></p2>
-			<p3><x>2</x><y>0</y></p3>
+			<p3><x>2</x><y>-0.75</y></p3>
 		</curveto>
+		<lineto><x>2</x><y>0.75</y></lineto>
 		<curveto>
 			<p1><x>2</x><y>1</y></p1>
-			<p2><x>2</x><y>2</y></p2>
-			<p3><x>0.667</x><y>2</y></p3>
+			<p2><x>1.5</x><y>2</y></p2>
+			<p3><x>1</x><y>2</y></p3>
 		</curveto>
+		<lineto><x>0</x><y>2</y></lineto>
 		<curveto>
-			<p1><x>-0.667</x><y>2</y></p1>
-			<p2><x>-0.667</x><y>1</y></p2>
-			<p3><x>-0.667</x><y>0</y></p3>
+			<p1><x>-0.15</x><y>2</y></p1>
+			<p2><x>-0.667</x><y>1.5</y></p2>
+			<p3><x>-0.667</x><y>1</y></p3>
 		</curveto>
+		<lineto><x>-0.667</x><y>0.5</y></lineto>
 		<curveto>
-			<p1><x>-2</x><y>0</y></p1>
-			<p2><x>-2</x><y>-0.5</y></p2>
-			<p3><x>-2</x><y>-1</y></p3>
+			<p1><x>-0.667</x><y>0.25</y></p1>
+			<p2><x>-0.75</x><y>0</y></p2>
+			<p3><x>-1</x><y>0</y></p3>
+		</curveto>
+		<lineto><x>-1.5</x><y>0</y></lineto>
+		<curveto>
+			<p1><x>-1.75</x><y>0</y></p1>
+			<p2><x>-2</x><y>-0.25</y></p2>
+			<p3><x>-2</x><y>-0.5</y></p3>
 		</curveto>
 	</path></shape>
 	<symbol>
@@ -252,6 +266,74 @@
 	<symbol>
 		<name>Num_Lock</name>
 		<label>NL</label>
+	</symbol>
+	<symbol>
+		<name>Escape</name>
+		<label>Esc</label>
+	</symbol>
+	<symbol>
+		<name>F1</name>
+		<label>F1</label>
+	</symbol>
+	<symbol>
+		<name>F2</name>
+		<label>F2</label>
+	</symbol>
+	<symbol>
+		<name>F3</name>
+		<label>F3</label>
+	</symbol>
+	<symbol>
+		<name>F4</name>
+		<label>F4</label>
+	</symbol>
+	<symbol>
+		<name>F5</name>
+		<label>F5</label>
+	</symbol>
+	<symbol>
+		<name>F6</name>
+		<label>F6</label>
+	</symbol>
+	<symbol>
+		<name>F7</name>
+		<label>F7</label>
+	</symbol>
+	<symbol>
+		<name>F8</name>
+		<label>F8</label>
+	</symbol>
+	<symbol>
+		<name>F9</name>
+		<label>F9</label>
+	</symbol>
+	<symbol>
+		<name>F10</name>
+		<label>F10</label>
+	</symbol>
+	<symbol>
+		<name>F11</name>
+		<label>F11</label>
+	</symbol>
+	<symbol>
+		<name>F12</name>
+		<label>F12</label>
+	</symbol>
+	<symbol>
+		<name>Print</name>
+		<label>Prt</label>
+	</symbol>
+	<symbol>
+		<name>Scroll_Lock</name>
+		<label>SL</label>
+	</symbol>
+	<symbol>
+		<name>Pause</name>
+		<label>Pse</label>
+	</symbol>
+	<symbol>
+		<name>(.*)tilde</name>
+		<label>~</label>
 	</symbol>
 </style>
 
@@ -732,6 +814,95 @@
 		<code>91</code>
 		<xpos>5</xpos>
 		<ypos>9</ypos>
+	</key>
+	</keyboard>
+</extension>
+
+<extension>
+	<name>Function keys</name>
+	<placement>top</placement>
+	<keyboard>
+	<width>44</width>
+	<height>2</height>
+	<key>
+		<code>9</code>
+		<xpos>1</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>67</code>
+		<xpos>5</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>68</code>
+		<xpos>7</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>69</code>
+		<xpos>9</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>70</code>
+		<xpos>11</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>71</code>
+		<xpos>14</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>72</code>
+		<xpos>16</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>73</code>
+		<xpos>18</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>74</code>
+		<xpos>20</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>75</code>
+		<xpos>23</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>76</code>
+		<xpos>25</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>95</code>
+		<xpos>27</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>96</code>
+		<xpos>29</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>111</code>
+		<xpos>39</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>78</code>
+		<xpos>41</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<code>110</code>
+		<xpos>43</xpos>
+		<ypos>1</ypos>
 	</key>
 	</keyboard>
 </extension>
