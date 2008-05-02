@@ -32,9 +32,6 @@ struct keyboard {
 	guchar *map; /* byte map representing the keyboard. the byte value is equal to the keycode. */
 	gdouble dwidth, dheight, zoom; /* logical with and height and pixels per unit */
 	guint width, height; /* width and height in pixels (width=dwidth*zoom) */
-	GdkModifierType modstatus; /* modifier mask representing the modifier state of the keyboard */
-	guint shift; /* number of shift keys pressed */
-	guint control; /* number of control keys pressed */
 	struct key *current; /* key under the mouse (NULL if the mouse is not over a key) */
 	struct key *pressed; /* key currently being pressed */
 	gdouble timer; /* counts the number of ms the mouse is over a key (for autoclickr) */

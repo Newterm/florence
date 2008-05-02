@@ -43,7 +43,8 @@ void key_exit()
 	if (key_style) style_free(key_style);
 }
 
-struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *label)
+struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod,
+	gboolean locker, gchar *label)
 {
 	struct key *key=g_malloc(sizeof(struct key));
 	key->keyboard=keyboard;
@@ -51,6 +52,7 @@ struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup 
 	key->group=group;
 	key->pressed=FALSE;
 	key->modifier=mod;
+	key->locker=locker;
 	if (label) {
 		key->label=g_malloc((1+strlen(label))*sizeof(gchar));
 		strcpy(key->label, label);

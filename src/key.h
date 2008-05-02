@@ -45,11 +45,13 @@ struct key {
         GnomeCanvasItem *timer;
 	gboolean pressed;
 	GdkModifierType modifier;
+	gboolean locker;
 };
 
 void key_init(xmlTextReaderPtr layout);
 void key_exit();
-struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod, gchar *shape);
+struct key *key_new(struct keyboard *keyboard, guint code, GnomeCanvasClipgroup *group, GdkModifierType mod,
+	gboolean locker, gchar *shape);
 void key_free(struct key *key);
 
 void key_resize(struct key *key, gdouble zoom);

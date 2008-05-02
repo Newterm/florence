@@ -54,3 +54,12 @@
 	* New style framework (pseudo-svg keys and symbols)
 	* New Numpad expension
 
+2008-04-30 François Agrech <f.agrech@gmail.com>
+	* Version 0.2.1
+	* New Function keys extension
+	* Default to no auto-click as it seems most users don't use it.
+	* Initalize the keyboard with the state of the real keyboard (lock keys).
+	* Get the modifier keys from XKB instead of hard coding them.
+	* Hack for the Alt key so it doesn't move the window when it is activated.
+	* Code commenting.
+

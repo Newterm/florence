@@ -255,6 +255,9 @@ void flo_resize_extension(gpointer data, gpointer user_data)
 			case LAYOUT_TOP:
 			case LAYOUT_BOTTOM:
 				flo_height+=keyboard_get_height(keyboard);
+				/* note vertical extension must be treated after horizontal ones */
+				gnome_canvas_set_scroll_region(keyboard_get_canvas(keyboard), 0, 0,
+					flo_width/(*zoom), keyboard->dheight);
 				break;
 			case LAYOUT_LEFT:
 			case LAYOUT_RIGHT:
@@ -362,6 +365,9 @@ void flo_update_extension(gpointer data, gpointer user_data)
 			/* Here we don't care about the bottom case because it's not currently used */
 			if (extension->placement==LAYOUT_TOP) {
 				flo_height+=keyboard_get_height(extension->keyboard);
+				gnome_canvas_set_scroll_region(keyboard_get_canvas(extension->keyboard),
+					0, 0, flo_width/keyboard_get_zoom(extension->keyboard),
+					extension->keyboard->dheight);
 			} else {
 				flo_width+=keyboard_get_width(extension->keyboard);
 			}

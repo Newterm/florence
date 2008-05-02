@@ -21,6 +21,7 @@
 */
 
 #include <stdio.h>
+#include <X11/XKBlib.h>
 #include <glib.h>
 #include <gtk/gtk.h>
 #include <cspi/spi.h>
@@ -34,6 +35,16 @@
 /* Determines the frame/sec used to animate click timer */
 /* 20 ms means 1/0.02=50 fps */
 #define FLO_ANIMATION_PERIOD 20
+
+/* XKB data */
+XkbDescPtr keyboard_xkb=NULL;
+/* This is a hack for the alt key.
+ * Usually, <Alt>+<left mouse button> is bound to the move window WM action
+ * This makes it impossible to click <Alt> and any other key in Florence because it moves the virtual
+ * keyboard instead of clicking on the key.
+ * With this hack, the Alt key is not actually pressed when you click on it, but alt_pressed is set to
+ * The Alt key code instead. The key is pressed when you click another key. */
+guint keyboard_alt_pressed=0;
 
 /* Returns Keyboard canvas */
 GnomeCanvas *keyboard_get_canvas(struct keyboard *keyboard)
@@ -87,23 +98,14 @@ void keyboard_resize(struct keyboard *keyboard, gdouble zoom)
 }
 
 /* Changes the mofifiers status of the keyboard and update the key labels according to it */
-void keyboard_switch_mode(struct keyboard *keyboard, GdkModifierType mod, gboolean pressed)
+void keyboard_switch_mode(struct keyboard *keyboard)
 {
 	int i;
+	XkbStateRec rec;
 
-	/* assumption : only the shift and control keys are double */
-	if (mod & GDK_SHIFT_MASK) { 
-		if (pressed) (keyboard->shift)++; else (keyboard->shift)--;
-		if (keyboard->shift) keyboard->modstatus|=mod; else keyboard->modstatus&=~mod;
-	}
-	else if (mod & GDK_CONTROL_MASK) { 
-		if (pressed) (keyboard->control)++; else (keyboard->control)--;
-		if (keyboard->control) keyboard->modstatus|=mod; else keyboard->modstatus&=~mod;
-	}
-	else if (pressed) keyboard->modstatus|=mod; else keyboard->modstatus&=~mod;
-
+	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()), XkbUseCoreKbd, &rec);
 	for (i=0;i<256;i++) {
-		if (keyboard->keys[i]) key_switch_mode(keyboard->keys[i], keyboard->modstatus);
+		if (keyboard->keys[i]) key_switch_mode(keyboard->keys[i], rec.mods);
 	}
 }
 
@@ -111,20 +113,28 @@ void keyboard_switch_mode(struct keyboard *keyboard, GdkModifierType mod, gboole
 void keyboard_key_press(struct key *key)
 {
 	key_set_color(key, STYLE_ACTIVATED_COLOR);
-	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
-	if (key->modifier & (GDK_LOCK_MASK | GDK_MOD2_MASK)) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
+	/* Alt hack (see comments on keyboard_alt_pressed line 41) */
+	if (key->modifier&GDK_MOD1_MASK) keyboard_alt_pressed=key->code;
+	else {
+		if (keyboard_alt_pressed)  SPI_generateKeyboardEvent(keyboard_alt_pressed, NULL, SPI_KEY_PRESS);
+		SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
+		if (keyboard_alt_pressed)  SPI_generateKeyboardEvent(keyboard_alt_pressed, NULL, SPI_KEY_RELEASE);
+	}
+	if (key->locker) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
 	key->pressed=TRUE;
-	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key), key->modifier, TRUE);
+	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key));
 }
 
 /* Send a kay release event */
 void keyboard_key_release(struct key *key)
 {
-	if (key->modifier & (GDK_LOCK_MASK | GDK_MOD2_MASK)) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
+	if (key->locker) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
+	/* Alt hack (see comments on keyboard_alt_pressed line 41) */
+	if (key->modifier&GDK_MOD1_MASK) keyboard_alt_pressed=0;
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
 	key->pressed=FALSE;
 	key_set_color(key, STYLE_KEY_COLOR);
-	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key), key->modifier, FALSE);
+	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key));
 }
 
 /* Callback called when the mouse leaves a key (the current key) */
@@ -225,30 +235,30 @@ struct key *keyboard_insertkey (struct keyboard *keyboard, char *shape,
 	unsigned char code, double x, double y, double w, double h)
 {
 	GnomeCanvasClipgroup *group;
-	GdkModifierType mod=0;
-	guint *keyvals;
-	guint len;
-	gchar *name;
+	GdkModifierType mod;
+	XkbStateRec rec;
+	XkbDescPtr xkb;
+	gboolean locker;
 
 	flo_debug("[new key] code=%d x=%f y=%f w=%f h=%f shape=%s", code, x, y, w, h, shape);
         group=(GnomeCanvasClipgroup *)gnome_canvas_item_new(keyboard->canvas_group, GNOME_TYPE_CANVAS_CLIPGROUP, 
 		"x", x*2.0, "y", y*2.0, NULL);
 
-	gdk_keymap_get_entries_for_keycode(NULL, code, NULL, &keyvals, &len);
-	name=gdk_keyval_name(*keyvals);
-	if (name) {
-		if ((!strcmp(name, "Shift_L"))||(!strcmp(name, "Shift_R"))) mod=GDK_SHIFT_MASK;
-		else if ((!strcmp(name, "Control_L"))||(!strcmp(name, "Control_R"))) mod=GDK_CONTROL_MASK;
-		else if (!strcmp(name, "Alt")) mod=GDK_MOD1_MASK;
-		else if (!strcmp(name, "Num_Lock")) mod=GDK_MOD2_MASK;
-		else if (!strcmp(name, "ISO_Level3_Shift")) mod=GDK_MOD5_MASK; /* AltGr */
-		else if (!strcmp(name, "Caps_Lock")) mod=GDK_LOCK_MASK;
-		else if ((!strcmp(name, "Super_L"))||(!strcmp(name, "Super_R"))) mod=GDK_MOD4_MASK;
-	}
-
-	keyboard->keys[code]=key_new(keyboard, code, group, mod, shape);
+	locker=XkbKeyAction(keyboard_xkb, code, 0)?XkbKeyAction(keyboard_xkb, code, 0)->type==XkbSA_LockMods:FALSE;
+	mod=keyboard_xkb->map->modmap[code];
+	keyboard->keys[code]=key_new(keyboard, code, group, mod, locker, shape);
 	key_draw(keyboard->keys[code], w, h, 0);
 	key_resize(keyboard->keys[code], keyboard->zoom);
+
+	/* Highlight the caps lock or num lock key if caps lock or num lock is activated */
+	if (mod) {
+		XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()), XkbUseCoreKbd, &rec);
+		if (mod&rec.locked_mods) {
+			key_set_color(keyboard->keys[code], STYLE_ACTIVATED_COLOR);
+			keyboard->keys[code]->pressed=TRUE;
+		}
+	}
+
 	gtk_signal_connect(GTK_OBJECT(group), "event", GTK_SIGNAL_FUNC(keyboard_handle_event), keyboard->keys[code]);
 	return keyboard->keys[code];
 }
@@ -351,6 +361,19 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextRe
 	struct keyboard *keyboard=NULL;
 	gdouble click_time;
 	guint i;
+	int maj = XkbMajorVersion;
+	int min = XkbMinorVersion;
+	int opcode_rtrn, event_rtrn, error_rtrn;
+
+	/* Check XKB Version */
+	if (!XkbLibraryVersion(&maj, &min) ||
+		!XkbQueryExtension((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min)) {
+		flo_fatal(_("XKB version mismatch"));
+	}
+	/* get the modifier map from xkb */
+	keyboard_xkb=XkbGetMap((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		XkbKeyActionsMask|XkbModifierMapMask, XkbUseCoreKbd);
 
 	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
@@ -362,10 +385,13 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextRe
 	keyboard->canvas=canvas;
 	keyboard->zoom=settings_get_double("window/zoom");
 	keyboard->canvas_group=gnome_canvas_root(canvas);
-
 	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, level);
-	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), keyboard);
+	XkbFreeClientMap(keyboard_xkb, XkbKeyActionsMask|XkbModifierMapMask, True);
 
+	/* Update the keyboard according to the status */
+	keyboard_switch_mode(keyboard);
+
+	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), keyboard);
 	keyboard_settings_connect(keyboard);
 	gtk_widget_set_size_request(GTK_WIDGET(canvas), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
 	return keyboard;

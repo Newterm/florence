@@ -27,7 +27,7 @@
 	<name>Standard keyboard</name>
 	<author>François Agrech</author>
 	<date>2008-03-28</date>
-	<florence_version>0.2.0</florence_version>
+	<florence_version>0.2.1</florence_version>
 </informations>
 
 <style>
@@ -69,18 +69,18 @@
 		<lineto><x>1</x><y>-2</y></lineto>
 		<curveto>
 			<p1><x>1.5</x><y>-2</y></p1>
-			<p2><x>2</x><y>-1</y></p2>
-			<p3><x>2</x><y>-0.75</y></p3>
+			<p2><x>2</x><y>-1.5</y></p2>
+			<p3><x>2</x><y>-1</y></p3>
 		</curveto>
-		<lineto><x>2</x><y>0.75</y></lineto>
+		<lineto><x>2</x><y>1</y></lineto>
 		<curveto>
-			<p1><x>2</x><y>1</y></p1>
+			<p1><x>2</x><y>1.5</y></p1>
 			<p2><x>1.5</x><y>2</y></p2>
 			<p3><x>1</x><y>2</y></p3>
 		</curveto>
 		<lineto><x>0</x><y>2</y></lineto>
 		<curveto>
-			<p1><x>-0.15</x><y>2</y></p1>
+			<p1><x>-0.333</x><y>2</y></p1>
 			<p2><x>-0.667</x><y>1.5</y></p2>
 			<p3><x>-0.667</x><y>1</y></p3>
 		</curveto>
