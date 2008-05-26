@@ -24,6 +24,9 @@
 #include "settings.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
+#ifdef WITHHELP
+	#include <libgnome/gnome-help.h>
+#endif
 
 GCallback trayicon_quit;
 
@@ -52,6 +55,16 @@ Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."),
 		NULL);
 }
 
+#ifdef WITHHELP
+/* Open yelp */
+void trayicon_help(void)
+{
+	if (!gnome_help_display_uri("ghelp:florence", NULL)) {
+		flo_error(_("Unable to open %s"), "ghelp:florence");
+	}
+}
+#endif
+
 void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 {
 	static gint x=0;
@@ -69,7 +82,7 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 
 void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)
 {
-	GtkWidget *menu, *about, *config, *quit;
+	GtkWidget *menu, *about, *help, *config, *quit;
  
 	menu = gtk_menu_new();
 
@@ -77,6 +90,13 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(quit),
 		gtk_image_new_from_stock(GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU));
 	g_signal_connect_swapped(quit, "activate", trayicon_quit, NULL);
+
+#ifdef WITHHELP
+	help = gtk_image_menu_item_new_with_mnemonic(_("_Help"));
+	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(help),
+		gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
+	g_signal_connect(help, "activate", G_CALLBACK(trayicon_help), NULL);
+#endif
 
 	about = gtk_image_menu_item_new_with_mnemonic(_("_About"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(about),
@@ -89,12 +109,15 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 	g_signal_connect(config, "activate", G_CALLBACK(settings), NULL);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), config);
+#ifdef WITHHELP
+	gtk_menu_shell_append(GTK_MENU_SHELL(menu), help);
+#endif
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), about);
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), gtk_separator_menu_item_new());
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), quit);
 	gtk_widget_show_all(menu);
  
-	gtk_menu_popup (GTK_MENU (menu), NULL, NULL,gtk_status_icon_position_menu, status_icon,button, activate_time);
+	gtk_menu_popup (GTK_MENU (menu), NULL, NULL, gtk_status_icon_position_menu, status_icon, button, activate_time);
 }
 
 void trayicon_create(GtkWidget *window, GCallback quit_cb)

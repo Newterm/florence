@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE omf PUBLIC "-//OMF//DTD Scrollkeeper OMF Variant V1.0//EN" "http://scrollkeeper.sourceforge.net/dtds/scrollkeeper-omf-1.0/scrollkeeper-omf.dtd">
+<omf>
+	<resource>
+		<creator>f.agrech@gmail.com (François Agrech)</creator>
+		<maintainer>f.agrech@gmail.com (François Agrech)</maintainer>
+		<title>Manuel de l'utilisateur de Florence</title>
+		<date>2008-05-20</date>
+		<version identifier="0.2.2" date="2008-05-20"/>
+		<subject category="GNOME|Accessibility"/>
+		<description>Documentation pour le clavier virtuel Florence</description>
+		<type>user's guide</type>
+		<format mime="text/xml" dtd="-//OASIS//DTD DocBook XML V4.1.2//EN"/>
+		<identifier url="file://usr/share/doc/florence/florence.xml"/>
+		<language code="fr"/>
+		<relation seriesid="de2bf600-264f-11dd-81e2-d141ac518859"/>
+		<rights type="GNU FDL" license.version="1.2" holder="François Agrech"/>
+	</resource>
+</omf>
+

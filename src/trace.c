@@ -24,6 +24,16 @@
 #include <stdio.h>
 #include <stdarg.h>
 
+/* This is a boolean: if TRUE, the module will print debug information */
+static int trace_debug;
+
+/* initializes the trace module. Must be called before any trace function
+ * debug is a boolean. If it's true, the trace module will print debug informations */
+void trace_init(int debug)
+{
+	trace_debug=debug;
+}
+
 void flo_fatal(char *s, ...)
 {
 	va_list ap;
@@ -33,7 +43,7 @@ void flo_fatal(char *s, ...)
 	fprintf(stderr, "\n");
 	va_end(ap);
 	if (!getenv("FLO_DEBUG") || strcmp(getenv("FLO_DEBUG"), "1")) {
-		fprintf(stderr, _("If you need help, please rerun with FLO_DEBUG environment variable set to '1'\n"));
+		fprintf(stderr, _("If you need help, please rerun with the -d switch (debug)\n"));
 		fprintf(stderr, _("and send the output to f.agrech@gmail.com\n\n"));
 	}
         exit(EXIT_FAILURE);
@@ -70,7 +80,7 @@ void flo_error(char *s, ...)
 
 void flo_debug(char *s, ...)
 {
-	if (getenv("FLO_DEBUG") && !strcmp(getenv("FLO_DEBUG"), "1")) {
+	if (trace_debug) {
 		va_list ap;
 		va_start(ap, s);
         	vprintf(s, ap);

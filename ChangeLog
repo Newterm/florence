@@ -63,3 +63,9 @@
 	* Hack for the Alt key so it doesn't move the window when it is activated.
 	* Code commenting.
 
+2008-05-28 François Agrech <f.agrech@gmail.com>
+	* Version 0.2.2
+	* Change the icon
+	* FLO_DEBUG environment variable replaced with the -d option
+	* Added help menu item and documentation
+

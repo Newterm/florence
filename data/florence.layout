@@ -27,7 +27,7 @@
 	<name>Standard keyboard</name>
 	<author>François Agrech</author>
 	<date>2008-03-28</date>
-	<florence_version>0.2.1</florence_version>
+	<florence_version>0.2.2</florence_version>
 </informations>
 
 <style>
@@ -99,19 +99,19 @@
 	</path></shape>
 	<symbol>
 		<name>Control_[LR]</name>
-		<label>Ctrl</label>
+		<label>ctrl</label>
 	</symbol>
 	<symbol>
 		<name>Super_[LR]</name>
-		<label>Super</label>
+		<label>super</label>
 	</symbol>
 	<symbol>
 		<name>(Alt_[LR]|Meta_L)</name>
-		<label>Alt</label>
+		<label>alt</label>
 	</symbol>
 	<symbol>
 		<name>ISO_Level3_Shift</name>
-		<label>AltGr</label>
+		<label>altGr</label>
 	</symbol>
 	<symbol>
 		<name>BackSpace</name>
@@ -210,11 +210,11 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Delete</name>
-		<label>Del</label>
+		<label>del</label>
 	</symbol>
 	<symbol>
 		<name>(KP_|)End</name>
-		<label>End</label>
+		<label>end</label>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Down</name>
@@ -261,11 +261,11 @@
 	</symbol>
 	<symbol>
 		<name>KP_Enter</name>
-		<label>Ent</label>
+		<label>ent</label>
 	</symbol>
 	<symbol>
 		<name>Num_Lock</name>
-		<label>NL</label>
+		<label>nlk</label>
 	</symbol>
 	<symbol>
 		<name>Escape</name>
@@ -321,15 +321,15 @@
 	</symbol>
 	<symbol>
 		<name>Print</name>
-		<label>Prt</label>
+		<label>psc</label>
 	</symbol>
 	<symbol>
 		<name>Scroll_Lock</name>
-		<label>SL</label>
+		<label>slk</label>
 	</symbol>
 	<symbol>
 		<name>Pause</name>
-		<label>Pse</label>
+		<label>brk</label>
 	</symbol>
 	<symbol>
 		<name>(.*)tilde</name>

@@ -42,6 +42,7 @@ static struct option const long_options[] =
 	{"help", no_argument, 0, 'h'},
 	{"version", no_argument, 0, 'V'},
 	{"config", no_argument, 0, 'c'},
+	{"debug", no_argument, 0, 'd'},
 	{NULL, 0, NULL, 0}
 };
 
@@ -57,6 +58,7 @@ int main (int argc, char **argv)
 
 	program_name = argv[0];
 	config=decode_switches (argc, argv);
+	trace_init(config&2);
 	flo_info(_("Florence version %s"), VERSION);
 
 	gtk_init(&argc, &argv);
@@ -81,7 +83,7 @@ int main (int argc, char **argv)
 			system("gnome-session-save --kill");
 			ret=EXIT_SUCCESS;
 		}
-	} else if (config) {
+	} else if (config&1) {
 		settings_init(TRUE);
 		settings();
 		settings_exit();
@@ -101,7 +103,8 @@ static int decode_switches (int argc, char **argv)
 	while ((c = getopt_long (argc, argv, 
 		"h"  /* help */
 		"V"  /* version */
-		"c", /* configuration */
+		"c"  /* configuration */
+		"d", /* debug */
 		long_options, (int *) 0)) != EOF)
 	{
 		switch (c)
@@ -112,7 +115,9 @@ static int decode_switches (int argc, char **argv)
 			case 'h':
 				usage (0);
 			case 'c':
-				ret=1; break;
+				ret|=1; break;
+			case 'd':
+				ret|=2; break;
 			default:
 				usage (EXIT_FAILURE);
 		}
@@ -130,7 +135,8 @@ Florence is a simple virtual keyboard for Gnome.\n"), program_name);
 Options:\n\
   -h, --help          display this help and exit\n\
   -V, --version	      output version information and exit\n\
-  -c, --config        opens configuration window\n\n\
+  -c, --config        open configuration window\n\
+  -d, --debug         print debug information to stdout\n\n\
 Report bugs to <f.agerch@gmail.com>.\n\
 More informations at <http://florence.sourceforge.net>.\n"));
 	exit (status);

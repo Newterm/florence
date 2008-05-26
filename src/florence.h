@@ -23,7 +23,7 @@
 #include "layoutreader.h"
 
 /* An extension is a set of keys that can be show or hidden together
- * Examples: the numpad or the arrows. The main extension can is the trunk of the keyboard */
+ * Examples: the numpad or the arrows. The main extension is the trunk of the keyboard */
 struct extension {
 	struct keyboard *keyboard; /* Extension data */
 	char *name;    /* NULL for main keyboard, "Arrows" or "Numpad" */

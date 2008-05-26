@@ -19,6 +19,10 @@
 
 */
 
+/* initializes the trace module. Must be called before any trace function
+ * debug is a boolean. If it's true, the trace module will print debug informations */
+void trace_init(int debug);
+
 void flo_fatal (char *s, ...);
 void flo_error (char *s, ...);
 void flo_warn (char *s, ...);
