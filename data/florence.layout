@@ -177,7 +177,7 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Insert</name>
-		<label>Ins</label>
+		<label>ins</label>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Home</name>
@@ -269,7 +269,7 @@
 	</symbol>
 	<symbol>
 		<name>Escape</name>
-		<label>Esc</label>
+		<label>esc</label>
 	</symbol>
 	<symbol>
 		<name>F1</name>

@@ -24,7 +24,7 @@
 #include "settings.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#ifdef WITHHELP
+#ifdef ENABLE_HELP
 	#include <libgnome/gnome-help.h>
 #endif
 
@@ -55,7 +55,7 @@ Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."),
 		NULL);
 }
 
-#ifdef WITHHELP
+#ifdef ENABLE_HELP
 /* Open yelp */
 void trayicon_help(void)
 {
@@ -91,7 +91,7 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 		gtk_image_new_from_stock(GTK_STOCK_QUIT, GTK_ICON_SIZE_MENU));
 	g_signal_connect_swapped(quit, "activate", trayicon_quit, NULL);
 
-#ifdef WITHHELP
+#ifdef ENABLE_HELP
 	help = gtk_image_menu_item_new_with_mnemonic(_("_Help"));
 	gtk_image_menu_item_set_image(GTK_IMAGE_MENU_ITEM(help),
 		gtk_image_new_from_stock(GTK_STOCK_HELP, GTK_ICON_SIZE_MENU));
@@ -109,7 +109,7 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 	g_signal_connect(config, "activate", G_CALLBACK(settings), NULL);
 
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), config);
-#ifdef WITHHELP
+#ifdef ENABLE_HELP
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), help);
 #endif
 	gtk_menu_shell_append(GTK_MENU_SHELL(menu), about);

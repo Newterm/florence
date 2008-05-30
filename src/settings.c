@@ -24,6 +24,10 @@
 #include <glade/glade.h>
 #include "system.h"
 #include "settings.h"
+#ifdef ENABLE_HELP
+#include <libgnome/gnome-help.h>
+#include <gdk/gdkkeysyms.h>
+#endif
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
 
@@ -63,6 +67,17 @@ void settings_color_change(GtkColorButton *button, char *key)
 }
 
 /* callbacks */
+void settings_help(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+{
+#ifdef ENABLE_HELP
+	if (event->keyval==GDK_F1) {
+		if (!gnome_help_display_uri("ghelp:florence?config", NULL)) {
+			flo_error(_("Unable to open %s"), "ghelp:florence?config");
+		}
+	}
+#endif
+}
+
 void settings_keys_color(GtkColorButton *button)
 {
 	settings_color_change(button, "key");

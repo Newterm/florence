@@ -67,5 +67,5 @@
 	* Version 0.2.2
 	* Change the icon
 	* FLO_DEBUG environment variable replaced with the -d option
-	* Added help menu item and documentation
+	* Added help menu item and documentation (--with-docs configure option)
 

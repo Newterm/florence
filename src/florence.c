@@ -54,7 +54,7 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 	long int x, y, w, h;
 	gint screen_width, screen_height;
 
-	if (Accessible_isEditableText(event->source)) {
+	if (Accessible_getRole(event->source)==SPI_ROLE_TERMINAL || Accessible_isEditableText(event->source)) {
 		if (event->detail1) {
 			/* positionnement intelligent */
 			component=Accessible_getComponent(event->source);
@@ -316,6 +316,8 @@ void flo_add_extension(xmlTextReaderPtr reader, char *name, enum layout_placemen
 	struct extension *extension=NULL;
 	GtkContainer *vbox=GTK_CONTAINER(userdata);
 	GtkContainer *hbox=GTK_CONTAINER(gtk_container_children(vbox)->data);
+
+	flo_info(_("Parsing %s."), name?name:_("Core keyboard"));
 
 	extension=(struct extension *)g_malloc(sizeof(struct extension));
 	canvas=gnome_canvas_new_aa();

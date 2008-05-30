@@ -4,11 +4,11 @@
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
 	<!ENTITY date "May 2008">
 ]>
-<article id="index" lang="en">
+<article id="index" lang="fr">
 <articleinfo>
 	<date>2008-05-19</date>
-	<title>Florence documentation</title>
-	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
+	<title>Documentation du clavier virtuel Florence</title>
+	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
 		<author>
 			<firstname>François</firstname>
@@ -16,26 +16,26 @@
 			<email>f.agrech@gmail.com</email>
 		</author>
 	</authorgroup>
-	<copyright><year>2008</year><holder>FrançoisA Agrech</holder></copyright>
-	<legalnotice><para>Copyright (c) 2008 FrançoisA Agrech.
-Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled "GNU Free Documentation License".</para></legalnotice>
+	<copyright><year>2008</year><holder>François Agrech</holder></copyright>
+	<legalnotice><para>Copyright (c) 2008 François Agrech.</para>
+	<para>Cette documentation est mise à disposition sous la license GNU FDL. Seule la version en anglais de cette license existe et a une valeur légale. Une copie de la license est disponible à la fin de ce document en anglais.</para>
+	<para>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled "GNU Free Documentation License".</para></legalnotice>
 </articleinfo>
 <indexterm><primary>florence</primary></indexterm>
 <indexterm><primary>virtual keyboard</primary></indexterm>
-<sect1>
+<sect1 id="intro">
 	<title>Introduction</title>
-	<para>Florence is an extensible scalable virtual keyboard for GNOME. You need it if you can't use a real keyboard, for example because you are disabled, your keyboard is broken or because you use a tablet PC, but you must be able to use a pointing device (as a mouse or a trackball) ; If you can't use a pointing device, there is <ulink url="http://www.gok.ca/gok">gok</ulink>, which can be used with just simple switches.</para>
-	<para>Florence stays out of your way when you don't need it: it appears on the screen only when you need it.
-A timer-based auto-click functionality is available to help disabled people having difficulties to click.</para>
-	<para>Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment (see the section about running Florence without GNOME).</para>
+	<para>Florence est un clavier virtuel pour GNOME extensible et redimensionnable. Vous avez besoin de Florence si vous ne pouvez pas utiliser un vrai clavier matériel, par exemple à cause d'un handicap, parce que votre clavier est cassé ou parce que vous utilisez un PC tablette. Cependant, vous devez être en mesure d'utiliser un périphérique de pointage (comme une souris, un trackball, ou un écran tactile) pour utiliser Florence ; si vous ne pouvez pas utiliser un périphérique de pointage, il y a <ulink url="http://www.gok.ca/gok">gok</ulink>, qui peut être utilisé avec de simples connecteurs.</para>
+	<para>Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le clavier apparaît à l'écran uniquement lorsque vous en avez besoin. Une fonctionnalité de click automatique basée sur un minuteur est disponible pour aider les personnes handicapées qui ont des difficultés à cliquer</para>
+	<para>Florence est principalement conçu pour être utilisé avec le bureau GNOME, mais peut être utilisé avec n'importe quel environnement de bureau (voir la section à propos des autres bureaux)</para>
 </sect1>
-<sect1>
-	<title>Install</title>
-	<para>If it's not installed already, you will need to build florence from the terminal as there is no pre-build package available as of may, 2008. If you can't use a keyboard, you may find yourself in a catch-22 situation where you can't install Florence because you can't use Florence. If you are disabled, you may need to ask someone to install it for you and if you have a tablet PC, you may need to find a creative way to install Florence, such as installing from ssh or temporarily use a real keyboard.</para>
-	<para>Make sure you have the latest version of Florence (0.2.2 as of may, the 20th of 2008). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+<sect1 id="install">
+	<title>Installation</title>
+	<para>Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un terminal car il n'y a pas de paquetage précompilé aujourd'hui (mai 2008). Si vous ne pouvez pas utiliser de clavier, il se peut que vous ne puissiez pas installer Florence parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, vous devriez trouver une façon créative de l'installer, comme ssh ou un autre clavier de manière temporaire.</para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.2.2 au 26 mai 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
-		<title>Preparing the dependancies</title>
-		<para>In order to build Florence, you need a build environment with the following commands: make, sed, scrollkeeper and a C compiler, along with the following package dependancies:</para>
+		<title>Préparation des dépendances</title>
+		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, sed, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
 		<orderedlist>
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libgnomecanvas/">libgnomecanvas</ulink> (version >= 2.0)</para></listitem>
@@ -43,16 +43,16 @@ A timer-based auto-click functionality is available to help disabled people havi
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/GConf/">libgconf</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libglade/">libglage</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
-			<listitem><para>libgnome (version >=2.0)</para></listitem>
+			<listitem><para>(Optionnel: option --with-docs de configure) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
-		<para>How to install those dependancies is dependant on your distribution. Usually, you need to install the devel packages of the dependancies. Below is a list of how to do it via the command line interface on the most common distributions. If your distribution is not listed and you don't know how to install, you may check with your distribution support.</para>
+		<para>La manière d'installer ces dépendances dépendant de la distribution utilisée. D'habitude, vous devez installer les paquetages de développement de ces dépendances. Ci-dessous se trouve une liste d'instructions pour les installer depuis la ligne de commande pour les distributions les plus communes. Si votre distribution n'est pas listée et que vous ne savez pas comment installer les dépendances, vous devriez vous adresser au support de votre distribution.</para>
 		<orderedlist>
 			<listitem>
 				<para><ulink url="http://www.mandriva.com/">Mandriva</ulink>
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel\</userinput>
-<prompt>></prompt> <userinput>at-spi-devel libgnomecanvas2-devel</userinput>
+<prompt>></prompt> <userinput>at-spi-devel libgnomecanvas2-devel libgnome2-devel</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>
@@ -65,8 +65,8 @@ A timer-based auto-click functionality is available to help disabled people havi
 		</orderedlist>
 	</sect2>
 	<sect2>
-		<title>Installing</title>
-		<para>Installing Florence is like installing any program that uses the GNU autotools. Open a terminal and type the following commands:</para>
+		<title>Installation</title>
+		<para>L'installation de Florence se déroule comme l'installation de n'importe quel programme qui utilise les GNU autotools. Ouvrez un terminal et lancez les commandes suivantes:</para>
 		<screen>
 <prompt>$</prompt> <userinput>tar -xjvf florence-0.2.2.tar.bz2</userinput>
 <prompt>$</prompt> <userinput>cd florence-0.2.2</userinput>
@@ -74,89 +74,90 @@ A timer-based auto-click functionality is available to help disabled people havi
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
 		</screen>
-		<para>For Ubuntu, replace the last command with:</para><screen><prompt>$</prompt> <userinput>sudo make install</userinput></screen>
-		<para>If you don't want to install in /usr (configure prefix), don't forget to add the path to /etc/scrollkeeper.conf file, so yelp can find Florence documentation.</para>
-		<para>Check the list of other configure options available with:</para>
+		<para>Pour Ubuntu, remplacez la dernière commande par: </para><screen><prompt>$</prompt> <userinput>sudo make install</userinput></screen>
+		<para>Si vous ne voulez pas installer dans /usr (option prefix de configure), n'oubliez pas d'ajouter le chemin au fichier /etc/scrollkeeper.conf, pour que yelp retrouve la documentation de Florence.</para>
+		<para>Vous trouverez la liste complète des options de configure avec la commande:</para>
+		<screen>
 <prompt>$</prompt> <userinput>./configure --help</userinput>
+		</screen>
 	</sect2>
 	<sect2>
-		<title>Uninstalling</title>
-		<para>Uninstalling is as easy as installing.</para>
+		<title>Désinstallation</title>
+		<para>Désinstaller est aussi facile qu'installer.</para>
 		<screen>
 <prompt>$</prompt> <userinput>cd florence-0.2.2</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
-		<para>For Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
+		<para>Pour Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
 	</sect2>
 </sect1>
-<sect1>
-	<title>Usage</title>
-	<para>Florence aims at being easy. To launch Florence from the command line, type:</para>
+<sect1 id="usage">
+	<title>Utilisation</title>
+	<para>Le but de Florence est d'être facile. Pour lancer Florence depuis la ligne de commande, tapez:</para>
 		<screen>
 <prompt>$</prompt> <userinput>florence</userinput>
 		</screen>
-	<para>Or, from GNOME desktop, click <guimenu>Applications</guimenu><guisubmenu>Accessibility</guisubmenu><guimenuitem>Florence Virtual keyboard</guimenuitem>.
-If you prefer that Florence is launched at GNOME startup, chosse the menu item <guimenu>Desktop</guimenu><guisubmenu>preferences</guisubmenu><guimenuitem>sessions</guimenuitem>, click on the startup programs tab, then click <guibutton>Add</guibutton> and enter /usr/bin/florence so Florence is launched with GNOME at next boot.
-	</para>
-	<para>Florence requires that GNOME accessibility is activated (it means that the at-spi daemon is running). If it is not activated, Florence will not start, but it will suggest you activate accessibility and restart GNOME instead. When GNOME is restarted and accessibility is activated, Florence will run as normal.</para>
-	<para>When Florence is running, an icon should appear in your notification area, usually at the top right corner of the screen. Clicking of the icon makes Florence appear or disappear from the screen. Left clicking on it makes a menu appear. On this menu, you can use the <guimenuitem>quit</guimenuitem> item to stop Florence.</para>
+	<para>Ou, depuis le bureau GNOME, cliquez <guimenu>Applications</guimenu>-><guisubmenu>Accessibilité</guisubmenu>-><guimenuitem>Clavier virtuel Florence</guimenuitem>.
+Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez le menu <guimenu>Système</guimenu>-><guisubmenu>Préférences</guisubmenu>-><guimenuitem>Sessions</guimenuitem>, cliquez sur l'onglet <guibutton>Programmes au démarrage</guibutton>, puis cliquez <guibutton>Ajouter</guibutton> et entrez <command>/usr/bin/florence</command> pour que Florence soit lancé avec GNOME au prochain démarrage.</para>
+	<para>Il est nécessaire d'activer l'accessibilité de GNOME pour utiliser Florence (cela veut dire que le daemon at-spi est lancé) ; si cela n'est pas activé, Florence ne se lancera pas mais suggèrera plutôt d'activer l'accessibilité et de relancer GNOME. Lorsque GNOME sera relancé et l'accessibilité activée, alors Florence se lancera normalement.</para>
+	<para>Lorsque florence est en cours de fonctionnement, une icône devrait être visible dans la zone de notification du bureau, habituellement dans l'angle en haut à droite de l'écran. Cliquez sur l'icône pour cacher et montrer le clavier Florence. Un click gauche fait apparaître un menu. Dans ce menu, vous pouvez utiliser le choix <guimenuitem>quit</guimenuitem> pour arrêter Florence.</para>
 	<sect2>
-		<title>Florence modes</title>
-		<para>Florence has several states affecting how it functions and how it interacts with the user.</para>
-		<para>In auto-click mode, you don't have to use any mouse button to use the keyboard. You just have to put the pointer over a key and a timer is triggered. If the pointer stays over the key until the timer expires, the key is automatically 'clicked'(pressed). The duration of the timer can be set in the configuration GUI in lilliseconds. When it is set to 0ms, auto-click mode is off: you have to point a key and click to trigger a key press.</para>
-		<para>Another mode is the always-on-screen mode. In this mode, Florence is always visible on the screen. However, when this mode is off, Florence hides itself when it detects you don't need it. There are several rules to detect when Florence is needed and those rules relies heavily on the <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink> framework. For instance, Florence will be shown if you focus an editable widget, as it should probably be edited with a keyboard. Florence will hide itself when the editable widget is unfocused. This does not work if the widget isn't accessible with <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. In particular, QT3 widgets may not work properly with Florence. You should make sure your applications support at-spi if you intend to use Florence in hidden mode.</para>
+		<title>Les modes de Florence</title>
+		<para>Florence a différents états qui affectent sa façon d'interagir avec l'utilisateur.</para>
+		<para>Dans le mode auto-click, vous n'avez pas besoin d'utiliser les boutons de la souris pour taper sur le clavier. Vous n'avez qu'à mettre le pointeur sur une touche et le minuteur est déclenché. Si le pointer reste sur la touche jusqu'à que le minuteur expire, la touche est automatiquement 'cliquée' (pressée). La durée du minuteur peut être réglée dans l'interface de configuration en millisecondes. Lorsqu'il est réglé à 0ms, le mode auto-click est désactivé: vous devez pointer une touche et cliquer pour déclencher une pression de la touche.</para>
+		<para>Un autre mode est le mode toujours-à-l'écran (always-on-screen). Dans ce mode, Florence reste toujours visible à l'écran. Par contre, quand ce mode est désactivé, Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché.</para>
 		<figure id="extensions">
-			<title>Florence extensions</title>
+			<title>Extensions de Florence</title>
 			<screenshot>
 				<mediaobject>
 					<imageobject><imagedata fileref="figures/florence.png" format="PNG"/></imageobject>
-					<textobject><phrase>Shows the extensions available.</phrase></textobject>
+					<textobject><phrase>Montre les extensions disponibles.</phrase></textobject>
 				</mediaobject>
 			</screenshot>
 		</figure>
-		<para>Also, the keyboard layout can be extended with 3 extensions to the core kaybords. The arrows keypad is an extension added to the right of the core keyboard and contains the arrow keys along with navigation keys. The numpad extension contains the numeric keys and the function keys extension contains the function keys. Each extension can be activated and deactivated.</para>
+		<para>De plus, l'arrangement du clavier peut être étendu avec 3 extensions au clavier principal. Le pavé des flèches (arrows keypad) est une extension à droite du clavier principal qui contient les flèches et les touches de navigation. Le pavé numérique (numpad) contient les touches numériques et l'extension des touches de fonction (function keys) contient les touches de fonction. Chaque extension est activable et désactivable.</para>
 	</sect2>
-	<sect2>
-		<title>Configuring</title>
+	<sect2 id="config">
+		<title>Configuration</title>
 			<figure id="settings">
-				<title>Preferences dialog</title>
+				<title>Dialogue des préférences</title>
 				<screenshot>
 					<mediaobject>
 						<imageobject><imagedata fileref="figures/settings.png" format="PNG"/></imageobject>
-						<textobject><phrase>Shows the preferences dialog.</phrase></textobject>
+						<textobject><phrase>Montre le dialogue des préférences.</phrase></textobject>
 					</mediaobject>
 				</screenshot>
 			</figure>
-	<para>The configuration dialog is accessible via the systray icon (left click on it and select <guimenuitem>Preferences</guimenuitem>) or via the command line with the -c or --config switch: <command>florence --config</command>. Hacking configuration is possible via gconf (see the hacking section)</para>
-		<para>The following options are configurable:</para>
+	<para>La fenêtre de configuration est accessible par l'icône de la zone de notification (cliquez gauche sur celle-ci et sélectionnez <guimenuitem>Preferences</guimenuitem>) ou depuis la ligne de commande avec l'option -c ou --config: <command>florence --config</command>. Il est possible de bidouiller la configuration par gconf (voir la section bidouillage)</para>
+		<para>Les options suivantes sont configurables:</para>
 		<orderedlist>
-			<listitem><para>Key color: set the background color of normal keys.</para></listitem>
-			<listitem><para>Activated color: set the background color of the keys which are pressed or locked.</para></listitem>
-			<listitem><para>Labels color: set the color of the symbol or text printed on keys.</para></listitem>
-			<listitem><para>Mouse over color: set the background color of the key which is under the pointer.</para></listitem>
-			<listitem><para>Arrows keypad: activate/deactivate tje arrows keypad.</para></listitem>
-			<listitem><para>Numpad: activate/deactivate the numpad extension.</para></listitem>
-			<listitem><para>Function keys: activate/deactivate the function keys extensions.</para></listitem>
-			<listitem><para>Always on screen: switch always-on-screen mode on and off.</para></listitem>
-			<listitem><para>Zoom: set the visual scale of the keyboard.</para></listitem>
-			<listitem><para>Auto-click: set the auto-click timer duration (0 deactivates the timer).</para></listitem>
+			<listitem><para>couleur Keys: change la couleur de fond des touches normales.</para></listitem>
+			<listitem><para>couleur Activated: change la couleur de fond des touches pressées ou bloquées.</para></listitem>
+			<listitem><para>couleur Labels: change la couleur du symbole affiché sur les touches.</para></listitem>
+			<listitem><para>couleur Mouse over: change la couleur de la touche qui se trouve sous le pointeur.</para></listitem>
+			<listitem><para>Arrows keypad: active/désactive le pavé des flèches.</para></listitem>
+			<listitem><para>Numpad: active/désactive le pavé numérique.</para></listitem>
+			<listitem><para>Function keys: active/désactive les touches de fonction.</para></listitem>
+			<listitem><para>Always on screen: bascule entre les modes toujours-à-l'écran et caché.</para></listitem>
+			<listitem><para>Zoom: change la dimension visuelle du clavier.</para></listitem>
+			<listitem><para>Auto-click: change la durée du minuteur du mode click automatique (0 désactive le mode click automatique).</para></listitem>
 		</orderedlist>
 	</sect2>
 	<sect2>
-		<title>Command line options</title>
-		<para>Florence accepts the following command line options:</para>
+		<title>Options de la ligne de commande</title>
+		<para>Florence accepte les options de ligne de commande suivantes:</para>
 		<orderedlist>
-			<listitem><para>-h (--help): print help message and exit.</para></listitem>
-			<listitem><para>-V (--version): print Florence version and exit.</para></listitem>
-			<listitem><para>-c (--config): open configuration dialog.</para></listitem>
-			<listitem><para>-d (--debug): Launch Florence in verbose mode.</para></listitem>
+			<listitem><para>-h (--help): affiche un message d'aide et quitte.</para></listitem>
+			<listitem><para>-V (--version): affiche la version de Florence et quitte.</para></listitem>
+			<listitem><para>-c (--config): ouvre la fenêtre de dialogue de configuration.</para></listitem>
+			<listitem><para>-d (--debug): lance Florence en mode bavard.</para></listitem>
 		</orderedlist>
 	</sect2>
 </sect1>
-<sect1>
-	<title>Using Florence without GNOME</title>
-	<para>Florence is primarily intended to be used with the GNOME desktop. It makes use of the libraries which are commonly installed with a GNOME desktop. However, you can install those libraries on any desktop in order to run Florence. The packages necessary to have all the libraries are listed in the install section.</para>
-	<para>For Florence to function, you need to start the at-spi redistry daemon at session startup: Start at-spi registry daemon before Florence (at session startup):</para>
+<sect1 id="tips">
+	<title>Utilisation de Florence sans GOME</title>
+	<para>Florence est principalement conçu pour être utilisé avec un bureau GNOME. Le clavier Florence utilise les bibliothèques communément installées avec un bureau GNOME. Cependant, vous pouvez installer ces bibliothèques avec n'importe quel bureau pour utiliser Florence. Les paquetages nécessaires pour avoir toutes les bibliothèques sont listées dans la section installation.</para>
+	<para>Pour que Florence fonctionne, il faut démarrer le daemon d'enregistrement de at-spi au démarrage de la session: Pour démarrer le daemon d'enregistrement de at-spi (au démarrage de la session):</para>
 	<orderedlist>
 		<listitem><para>Gentoo:</para>
 		<screen>
@@ -167,25 +168,29 @@ If you prefer that Florence is launched at GNOME startup, chosse the menu item <
 <prompt>$</prompt> <userinput>/usr/lib/at-spi-registryd &amp;</userinput>
 		</screen></listitem>
 	</orderedlist>
-	<para>Some distro may put the at-spi-registryd command elsewhere. Use the find command to find out where your distro put at-spi-registryd:</para>
+	<para>Certaines distributions pourraient mettre la commande at-spi-registryd ailleurs. Utilisez la commande find pour trouver où votre distribution a mis at-spi-registryd:</para>
 	<screen>
 <prompt>$</prompt> <userinput>find /usr -name at-spi-registryd</userinput>
 	</screen>
-	<para>Adapt according to the result.</para>
-	<para>GNOME does start the daemon automatically if it is configured with the gnome-at-property dialog.</para>
-	<para>If your DE is XDG compliant (like XFCE), Florence should be accessible via the menu. Anyway, starting florence from the command line will always work. If you don't have a systray, you can install <ulink url="http://peksystray.sourceforge.net/">peksystray</ulink>. You can also access the preferences dialog with:</para>
+	<para>Adaptez la commande à lancer au démarrage en fonction du résultat.</para>
+	<para>GNOME démarre le daemon automatiquement si il est configuré avec le dialogue <command>gnome-at-property</command></para>
+	<para>Si votre environnement de bureau est compatible XDG (comme XFCE par exemple), Florence devrais être accessible depuis le menu. De toute façon, le lancement de Florence par la ligne de commande marchera toujours. Si vous n'avez pas de zone de notification, vous pouvez installer <ulink url="http://peksystray.sourceforge.net/">peksystray</ulink>. Vous pouvez aussi accéder au dialogue de préférences avec la commande:</para>
 	<screen>
 <prompt>$</prompt> <userinput>florence --config</userinput>
 	</screen>
-	<para>Note that QT3 applications don't support at-spi. Therefore you should not deactivate always-on-screen mode on KDE3.</para>
+	<para>Notez que les applications QT3 ne sont pas compatibles avec at-spi. En conséquence, vous ne devriez pas utiliser le mode caché avec KDE3.</para>
 </sect1>
-<sect1>
-	<title>Hacking</title>
-	<para>Some extra configuration options are available in GConf (under apps/florence).</para>
+<sect1 id="hacking">
+	<title>Bidouillage</title>
+	<para>Certaines options de configuration supplémentaires sont disponibles dans GConf (sous apps/florence).</para>
 </sect1>
-<sect1>
-	<title>Helping</title>
-	<para>If you want to help the Florence project, please send an email to f.agrech@gmail.com</para>
+<sect1 id="gethelp">
+	<title>Se faire aider</title>
+	<para>Vous pouvez obtenir de l'aide sur le <ulink url="https://sourceforge.net/forum/forum.php?forum_id=784280">forum</ulink> ou demander de l'aide par email à f.agrech@gmail.com</para>
+</sect1>
+<sect1 id="help">
+	<title>Aider</title>
+	<para>Si vous désirez aider le projet Florence, s'il vous plaît, veuillez envoyer un email à f.agrech@gmail.com</para>
 </sect1>
 &gfdl;
 </article>

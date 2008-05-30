@@ -20,6 +20,7 @@ DEPENDANCIES
       * libgconf >= 2.0
       * libglade >= 2.0
       * libxml >= 2.0
+      * (optional) libgnome >=2.0
 
 QUICK INSTALL
 *************
@@ -30,12 +31,12 @@ QUICK INSTALL
 
             $ su
 	    # urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel at-spi-devel \
-	      libgnomecanvas2-devel
+	      libgnomecanvas2-devel libgnome2-devel
 
         Ubuntu/debian:
 
             $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
-              libatspi-dev libgnomecanvas2-dev
+              libatspi-dev libgnomecanvas2-dev libgnome2-dev
             
       * Open a terminal and type (don't type the $ or #):
 
@@ -73,8 +74,10 @@ Set auto-click to 0 to deactivate it.
 GET HELP
 ********
 
-Use the sourceforge forum at https://sourceforge.net/forum/forum.php?forum_id=784280,
-or email me at f.agrech@gmail.com
+Please read Florence manual with yelp:
+	$ yelp "ghelp:florence"
+If you still need help, use the sourceforge forum at
+https://sourceforge.net/forum/forum.php?forum_id=784280, or email me at f.agrech@gmail.com
 
 CONTRIBUTE
 **********

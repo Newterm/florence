@@ -1,2 +1,7 @@
-SUBDIRS = src data docs
+SUBDIRS = src data
+if WITH_DOCS
+   SUBDIRS += docs
+endif
+
 EXTRA_DIST = AUTHORS ChangeLog NEWS README COPYING COPYING-DOCS
+
