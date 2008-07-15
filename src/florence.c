@@ -32,6 +32,7 @@
 
 /* Time in ms between checks for SPI events */
 #define FLO_SPI_TIME_INTERVAL 100
+#define FLO_DEFAULT_LAYOUT DATADIR "/florence/florence.layout"
 
 GSList *extensions=NULL; /* Main list of keyboard extensions */
 struct key **keys=NULL; /* key map indexed by key codes. Note: key[0] doesn't exist. */
@@ -428,6 +429,7 @@ int florence (void)
 	GtkWidget *vbox;
 	GtkWidget *hbox;
 	xmlTextReaderPtr layout;
+	gchar *layoutfile=NULL;
 
 	window=gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_signal_connect(GTK_OBJECT(window), "destroy", GTK_SIGNAL_FUNC(flo_destroy), NULL);
@@ -441,7 +443,9 @@ int florence (void)
 
 	if (!(keys=g_malloc(256*sizeof(struct key *)))) flo_fatal(_("Unable to allocate memory for keys"));
 	memset(keys, 0, 256*sizeof(struct key *));
-	layout=layoutreader_new(settings_get_string("layout/file"));
+	layoutfile=settings_get_string("layout/file");
+	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=FLO_DEFAULT_LAYOUT;
+	layout=layoutreader_new(layoutfile);
 	layoutreader_readinfos(layout, flo_layout_infos);
 	key_init(layout);
 	vbox=gtk_vbox_new(FALSE, 0);

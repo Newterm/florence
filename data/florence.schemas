@@ -159,7 +159,7 @@
 			<applyto>/apps/florence/layout/file</applyto>
 			<owner>florence</owner>
 			<type>string</type>
-			<default>@LAYOUTDIR@/florence.layout</default>
+			<default></default>
 			<locale name="C">
 				<short>Path of the layout file</short>
 				<long>The layout file contains the layout of the keys on the keyboard</long>
