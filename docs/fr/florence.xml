@@ -32,7 +32,7 @@
 <sect1 id="install">
 	<title>Installation</title>
 	<para>Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un terminal car il n'y a pas de paquetage précompilé aujourd'hui (mai 2008). Si vous ne pouvez pas utiliser de clavier, il se peut que vous ne puissiez pas installer Florence parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, vous devriez trouver une façon créative de l'installer, comme ssh ou un autre clavier de manière temporaire.</para>
-	<para>Soyez sûr que vous avez la dernière version de Florence (0.2.2 au 26 mai 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.2.3 au 28 juillet 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Préparation des dépendances</title>
 		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, sed, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
@@ -68,8 +68,8 @@
 		<title>Installation</title>
 		<para>L'installation de Florence se déroule comme l'installation de n'importe quel programme qui utilise les GNU autotools. Ouvrez un terminal et lancez les commandes suivantes:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.2.2.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.2.2</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.2.3.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.2.3</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -85,7 +85,7 @@
 		<title>Désinstallation</title>
 		<para>Désinstaller est aussi facile qu'installer.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.2.2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.2.3</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>Pour Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>

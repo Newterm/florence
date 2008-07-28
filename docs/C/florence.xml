@@ -32,7 +32,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 <sect1 id="install">
 	<title>Install</title>
 	<para>If it's not installed already, you will need to build Florence from the terminal, as there is no pre-built package available as of may, 2008. If you can't use a keyboard, you may find yourself in a catch-22 situation where you can't install Florence because you can't use Florence. If you are disabled, you may need to ask someone to install it for you and if you have a tablet PC, you may need to find a creative way to install Florence, such as installing from ssh or temporarily use a real keyboard.</para>
-	<para>Make sure you have the latest version of Florence (0.2.2 as of may, the 20th of 2008). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Make sure you have the latest version of Florence (0.2.3 as of july, the 28th of 2008). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Preparing the dependencies</title>
 		<para>In order to build Florence, you need a build environment with the following commands: make, sed, scrollkeeper and a C compiler, along with the following package dependencies:</para>
@@ -68,8 +68,8 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Installing</title>
 		<para>Installing Florence is like installing any program that uses the GNU autotools. Open a terminal and type the following commands:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.2.2.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.2.2</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.2.3.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.2.3</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -85,7 +85,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Uninstalling</title>
 		<para>Uninstalling is as easy as installing.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.2.2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.2.3</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>For Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
