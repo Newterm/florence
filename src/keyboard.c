@@ -24,6 +24,7 @@
 #include <X11/XKBlib.h>
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 #include <cspi/spi.h>
 #include <gconf/gconf-client.h>
 #include "system.h"
@@ -31,6 +32,7 @@
 #include "keyboard.h"
 #include "key.h"
 #include "settings.h"
+#include "layoutreader.h"
 
 /* Determines the frame/sec used to animate click timer */
 /* 20 ms means 1/0.02=50 fps */
@@ -237,7 +239,6 @@ struct key *keyboard_insertkey (struct keyboard *keyboard, char *shape,
 	GnomeCanvasClipgroup *group;
 	GdkModifierType mod;
 	XkbStateRec rec;
-	XkbDescPtr xkb;
 	gboolean locker;
 
 	flo_debug("[new key] code=%d x=%f y=%f w=%f h=%f shape=%s", code, x, y, w, h, shape);
@@ -360,7 +361,6 @@ struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextRe
 {
 	struct keyboard *keyboard=NULL;
 	gdouble click_time;
-	guint i;
 	int maj = XkbMajorVersion;
 	int min = XkbMinorVersion;
 	int opcode_rtrn, event_rtrn, error_rtrn;

@@ -27,6 +27,8 @@
 #include <string.h>
 #include <libart_lgpl/art_bpath.h>
 #include <libart_lgpl/art_vpath.h>
+#include <libart_lgpl/art_vpath_bpath.h>
+#include <libart_lgpl/art_svp_vpath.h>
 #include <libart_lgpl/art_svp_render_aa.h>
 
 #define PI 3.1415926535897931
@@ -164,7 +166,6 @@ guint key_getKeyval(struct key *key, GdkModifierType mod)
 void key_draw(struct key *key, double w, double h, GdkModifierType mod)
 {
 	double matrix[6]; /* affine matrix */
-	GnomeCanvasItem **br=NULL;
 
 	key->width=w;
 	key->height=h;

@@ -21,10 +21,11 @@
 
 #include "system.h"
 #include "layoutreader.h"
+#include "trace.h"
 #include <glib.h>
 
 #ifndef LIBXML_READER_ENABLED
-#error "Xinclude support not compiled in."));
+#error "Xinclude support not compiled in."
 #endif
 
 #define BUFFER_SIZE 32
@@ -266,7 +267,6 @@ void layoutreader_readsymbol(xmlTextReaderPtr reader, layoutreader_symprocess sy
 {
 	xmlChar *name=NULL;
 	xmlChar *label=NULL;
-	xmlChar *nodename=NULL;
 	name=layoutreader_readstring(reader, "name", 3);
 	label=layoutreader_readstring(reader, "label", 3);
 	symfunc(reader, name, label, userdata);
@@ -321,7 +321,6 @@ int layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_extprocess 
 {
 	xmlChar *name, *buffer;
 	enum layout_placement placement;
-	int order;
 	int ret=FALSE;
 
 	if (layoutreader_goto(reader, "extension", XML_READER_TYPE_ELEMENT, 1))

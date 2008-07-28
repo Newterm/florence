@@ -23,6 +23,7 @@
 
 #include <glade/glade.h>
 #include "system.h"
+#include "trace.h"
 #include "settings.h"
 #ifdef ENABLE_HELP
 #include <libgnome/gnome-help.h>
@@ -30,6 +31,11 @@
 #endif
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
+#if GTK_CHECK_VERSION(2,12,0)
+#define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_DISCARD
+#else
+#define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_CANCEL
+#endif
 
 GConfClient *gconfclient=NULL;
 GConfChangeSet *gconfchangeset=NULL;
@@ -189,7 +195,7 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 	if (gconf_change_set_size(gconfchangeset)) {
 		dialog=gtk_dialog_new_with_buttons("Corfirm", GTK_WINDOW(window),
 			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_APPLY,
-			GTK_RESPONSE_ACCEPT, GTK_STOCK_DISCARD, GTK_RESPONSE_REJECT, NULL);
+			GTK_RESPONSE_ACCEPT, FLO_SETTINGS_ICON_CANCEL, GTK_RESPONSE_REJECT, NULL);
 		label=gtk_label_new(_("Discard changes?"));
 		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 		gtk_widget_show_all(dialog);

@@ -32,7 +32,7 @@
 
 /* Time in ms between checks for SPI events */
 #define FLO_SPI_TIME_INTERVAL 100
-#define FLO_DEFAULT_LAYOUT DATADIR "/florence/florence.layout"
+#define FLO_DEFAULT_LAYOUT DATADIR "/florence.layout"
 
 GSList *extensions=NULL; /* Main list of keyboard extensions */
 struct key **keys=NULL; /* key map indexed by key codes. Note: key[0] doesn't exist. */
@@ -146,12 +146,10 @@ void flo_set_mask(GdkWindow *window, gboolean shape)
 {
 	GSList *list;
 	struct extension *extension;
-	struct keyboard *keyboard;
 	guint y, xoffset=0, yoffset=0;
 	GdkBitmap *mask=NULL;
 	guint width;
 	guchar *data=NULL;
-	guchar byte;
 
 	if (shape) {
 		width=(flo_width&0xFFFFFFF8)+(flo_width&0x7?8:0);
@@ -236,6 +234,7 @@ void flo_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 /* Triggered by gconf when the "always_on_screen" parameter is changed. */
 void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	gtk_widget_hide(GTK_WIDGET(user_data));
 	flo_switch_mode(GTK_WIDGET(user_data), gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 

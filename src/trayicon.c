@@ -22,10 +22,11 @@
 #include "system.h"
 #include "config.h"
 #include "settings.h"
+#include "trace.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #ifdef ENABLE_HELP
-	#include <libgnome/gnome-help.h>
+#include <libgnome/gnome-help.h>
 #endif
 
 GCallback trayicon_quit;

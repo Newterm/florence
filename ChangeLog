@@ -69,3 +69,8 @@
 	* FLO_DEBUG environment variable replaced with the -d option
 	* Added help menu item and documentation (--with-docs configure option)
 
+2008-07-28 François Agrech <f.agrech@gmail.com>
+	* Version 0.2.3
+	* Change hackish gconf schema installation procedure
+	* Use GTK_STOCK_CANCEL instead of GTK_STOCK_DISCARD when GTK version is < 2.12
+	* Fix compilation warnings

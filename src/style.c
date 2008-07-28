@@ -22,6 +22,7 @@
 #include <system.h>
 #include "style.h"
 #include "settings.h"
+#include "trace.h"
 #include "layoutreader.h"
 
 /* simplified GnomeCanvasLine */
