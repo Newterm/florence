@@ -1,0 +1,88 @@
+﻿#  Florence - Florence is a simple virtual keyboard for Gnome.
+#
+#  Copyright (C) 2008 François Agrech
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2, or (at your option)
+#  any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software Foundation,
+#  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+
+default namespace = "http://florence.sourceforge.net"
+namespace xsd='http://www.w3.org/2001/XMLSchema-datatypes'
+namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace svg = "http://www.w3.org/2000/svg"
+namespace xlink = "http://www.w3.org/1999/xlink"
+
+[ xml:lang = "en" ]
+
+grammar {
+
+start = layout-element
+ 
+layout-element = element layout {
+	informations-element,
+	style-element,
+	keyboard-element,
+	extension-element*
+}
+
+informations-element = element informations {
+	element name { xsd:string },
+	element author { xsd:string },
+	element date { xsd:date },
+	element florence_version { xsd:string }
+}
+
+style-element = element style {
+	shape-element*,
+	symbol-element+
+}
+
+shape-element = element shape {
+	element name { xsd:string },
+	external "svg11/svg11.rnc"
+}
+
+symbol-element = element symbol {
+	element name { xsd:string },
+	( external "svg11/svg11.rnc" | element label { xsd:string } )
+}
+
+keyboard-element = element keyboard {
+	element width { xsd:decimal },
+	element height { xsd:decimal },
+	key-element*
+}
+
+key-element = element key {
+	code-element?,
+	element shape { xsd:string }?,
+	element xpos { xsd:decimal }?,
+	element ypos { xsd:decimal }?,
+	element width { xsd:decimal }?,
+	element height { xsd:decimal }?
+}
+
+code-element = element code { xsd:integer { minInclusive = "0" maxInclusive = "255" } }
+
+extension-element = element extension {
+	element name { xsd:string },
+	placement-element,
+	keyboard-element
+}
+
+placement-element = element placement {
+	"right" | "left" | "top" | "bottom"
+}
+
+}
+

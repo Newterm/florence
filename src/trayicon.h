@@ -19,5 +19,7 @@
 
 */
 
+#include <gtk/gtk.h>
+
 void trayicon_create(GtkWidget *window, GCallback quit_cb);
 

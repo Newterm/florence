@@ -23,29 +23,51 @@
 #define FLO_STYLE
 
 #include <glib.h>
-#include <libgnomecanvas/libgnomecanvas.h>
 #include <libxml/xmlreader.h>
+#include <cairo.h>
+#include <librsvg/rsvg.h>
 
-struct style {
-        GSList *symbols;
-        GSList *shapes;
+/* a shape is the background of a key */
+struct shape {
+	gchar *name;
+	RsvgHandle *svg;
+	cairo_surface_t *mask; /* mask of the shape (alpha channel) */
+	guint maskw, maskh; /* size of the mask */
 };
 
+/* There are 6 classes of color for the style */
+/* TODO: We will replace that by css */
 enum style_colours {
-        STYLE_KEY_COLOR,
-        STYLE_OUTLINE_COLOR,
-        STYLE_ACTIVATED_COLOR,
+        STYLE_KEY_COLOR, /* color of the background of the key */
+        STYLE_OUTLINE_COLOR, /* color of the outline of the key */
+        STYLE_ACTIVATED_COLOR, 
         STYLE_TEXT_COLOR,
         STYLE_MOUSE_OVER_COLOR,
         STYLE_NUM_COLOURS
 };
 
+/* A style is a list of symbols and shapes.
+ * A shape is the background of a key, and the symbol is the foreground of the key */
+struct style {
+	gchar *colours[STYLE_NUM_COLOURS];
+        GSList *symbols;
+        GSList *shapes;
+	struct shape *default_shape;
+};
+
 struct style *style_new(xmlTextReaderPtr reader);
 void style_free(struct style *style);
-gchar *style_get_color(enum style_colours c);
-void style_set_color(enum style_colours c, gchar *color);
-GnomeCanvasItem *style_shape_draw(struct style *style, GnomeCanvasGroup *group, gchar *name);
-GnomeCanvasItem **style_symbol_draw(struct style *style, GnomeCanvasGroup *group, guint keyval);
+
+gchar *style_get_color(struct style *style, enum style_colours c);
+void style_set_color(struct style *style, enum style_colours c, gchar *color);
+/* set cairo color to one of the style colors */
+void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c);
+
+struct shape *style_shape_get(struct style *style, gchar *name);
+void style_shape_draw(struct shape *shape, cairo_t *cairoctx, gdouble w, gdouble h);
+/* create a mask surface for the shape, if it doesn't already exist */
+cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h);
+void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdouble w, gdouble h);
 
 #endif
 

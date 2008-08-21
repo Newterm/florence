@@ -23,4 +23,8 @@ aclocal
 autoheader
 automake
 autoconf
+cd data/
+java -classpath /usr/share/trang/lib/trang.jar com.thaiopensource.relaxng.translate.Driver\
+	-I rnc -O rng florence.rnc relaxng/florence.rng
+cd -
 

@@ -21,10 +21,11 @@
 
 /* Note : this is both the viewer and the controller */
 
-#include <glade/glade.h>
 #include "system.h"
-#include "trace.h"
 #include "settings.h"
+#include "trace.h"
+#include <glade/glade.h>
+#include <glib/gprintf.h>
 #ifdef ENABLE_HELP
 #include <libgnome/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
@@ -54,7 +55,10 @@ char *settings_get_full_path(const char *path)
 GdkColor *settings_convert_color(gchar *strcolor)
 {
 	static GdkColor ret;
-	sscanf(strcolor, "#%02x%02x%02x", &ret.red, &ret.green, &ret.blue);
+	sscanf(strcolor, "#%02x%02x%02x",
+		(unsigned int *)&ret.red,
+		(unsigned int *)&ret.green,
+		(unsigned int *)&ret.blue);
 	ret.red<<=8; ret.green<<=8; ret.blue<<=8;
 	return &ret;
 }
@@ -68,7 +72,7 @@ void settings_color_change(GtkColorButton *button, char *key)
 	strcpy(string_buffer, "colours/");
 	strcat(string_buffer, key);
 	gtk_color_button_get_color(button, &color);
-	sprintf(strcolor, "#%02X%02X%02X", (color.red)>>8, (color.green)>>8, (color.blue)>>8);
+	g_sprintf(strcolor, "#%02X%02X%02X", (color.red)>>8, (color.green)>>8, (color.blue)>>8);
 	gconf_change_set_set_string(gconfchangeset, settings_get_full_path(string_buffer), strcolor);
 }
 

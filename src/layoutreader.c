@@ -19,40 +19,49 @@
 
 */
 
+#include <glib.h>
 #include "system.h"
 #include "layoutreader.h"
 #include "trace.h"
-#include <glib.h>
+#include "settings.h"
 
 #ifndef LIBXML_READER_ENABLED
 #error "Xinclude support not compiled in."
 #endif
 
 #define BUFFER_SIZE 32
+#define FLO_DEFAULT_LAYOUT DATADIR "/florence.layout"
 
+/* Move to the first occurence of the named element which is at the specified level
+ * return false if no element were found */
 int layoutreader_goto(xmlTextReaderPtr reader, xmlChar *name, xmlReaderTypes type, int level)
 {
 	int ret;
 	if (!(xmlTextReaderDepth(reader)==level && xmlTextReaderNodeType(reader)==type &&
-		!strcmp(xmlTextReaderConstName(reader), name)) ) {
+		!xmlStrcmp(xmlTextReaderConstName(reader), name)) ) {
 		while ((ret=xmlTextReaderRead(reader))==1 && !(xmlTextReaderDepth(reader)==level && 
-			xmlTextReaderNodeType(reader)==type && !strcmp(xmlTextReaderConstName(reader), name))) {
+			xmlTextReaderNodeType(reader)==type && !xmlStrcmp(xmlTextReaderConstName(reader), name))) {
 			switch(type) {
 				case XML_READER_TYPE_ELEMENT:
 					if (xmlTextReaderDepth(reader)!=level || (xmlTextReaderNodeType(reader)==type &&
-						strcmp(xmlTextReaderConstName(reader), name))) { return FALSE; }
+						xmlStrcmp(xmlTextReaderConstName(reader), name))) { return FALSE; }
 					break;
 				case XML_READER_TYPE_END_ELEMENT:
 					if (xmlTextReaderDepth(reader)<level) { return FALSE; }
+					break;
+				default:
+					break;
 			}
 		}
 	} else { ret=1; }
 	return ret==1;
 }
 
+/* Read the value of the current node and put the name of the node in name
+ * return the value of the node */
 xmlChar *layoutreader_readnode(xmlTextReaderPtr reader, int level, xmlChar **name)
 {
-	static char buffer[BUFFER_SIZE];
+	static xmlChar buffer[BUFFER_SIZE];
 	xmlChar *value=NULL;
 	int ret=0;
 
@@ -62,7 +71,7 @@ xmlChar *layoutreader_readnode(xmlTextReaderPtr reader, int level, xmlChar **nam
 	} else *name=NULL;
 	if (ret==1 && (ret=xmlTextReaderRead(reader))==1 && xmlTextReaderDepth(reader)==(level+1) &&
                 xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
-                strncpy(buffer, (char *)xmlTextReaderConstValue(reader), BUFFER_SIZE); value=(xmlChar *) buffer;
+                strncpy((char *)buffer, (char *)xmlTextReaderConstValue(reader), BUFFER_SIZE); value=(xmlChar *) buffer;
 		if (ret!=1 || ((ret=xmlTextReaderRead(reader))!=1) || !(xmlTextReaderDepth(reader)==level &&
 			xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT)) value=NULL;
 	}
@@ -70,33 +79,36 @@ xmlChar *layoutreader_readnode(xmlTextReaderPtr reader, int level, xmlChar **nam
 	return value;
 }
 
+/* translate xml placement name to placement enumeration */
 enum layout_placement layoutreader_getplacement(xmlChar *placement)
 {
 	enum layout_placement ret=LAYOUT_VOID;
-	if (!strcmp(placement, "left")) ret=LAYOUT_LEFT;
-	else if (!strcmp(placement, "right")) ret=LAYOUT_RIGHT;
-	else if (!strcmp(placement, "top")) ret=LAYOUT_TOP;
-	else if (!strcmp(placement, "bottom")) ret=LAYOUT_BOTTOM;
+	if (!xmlStrcmp(placement, (xmlChar *)"left")) ret=LAYOUT_LEFT;
+	else if (!xmlStrcmp(placement, (xmlChar *)"right")) ret=LAYOUT_RIGHT;
+	else if (!xmlStrcmp(placement, (xmlChar *)"top")) ret=LAYOUT_TOP;
+	else if (!xmlStrcmp(placement, (xmlChar *)"bottom")) ret=LAYOUT_BOTTOM;
 	else flo_fatal(_("Unknown placement %s"), placement);
 	return ret;
 }
 
+/* look for the named xml element and returns its value as double 
+ * fatals if not found */
 double layoutreader_readdouble(xmlTextReaderPtr reader, xmlChar *name, int level)
 {
 	int ret;
 	double val;
 
 	if (!(xmlTextReaderDepth(reader)==level && xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT &&
-		!strcmp(xmlTextReaderConstName(reader), name))) {
+		!xmlStrcmp(xmlTextReaderConstName(reader), name))) {
 		while ( ((ret=xmlTextReaderRead(reader))==1) && !(xmlTextReaderDepth(reader)==level &&
 			xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT &&
-			!strcmp(xmlTextReaderConstName(reader), name)) ) {
+			!xmlStrcmp(xmlTextReaderConstName(reader), name)) ) {
 			if (xmlTextReaderDepth(reader)<level) { flo_warn(_("Out of element")); ret=-1; break; }
 		}
 	} else { ret=1; }
 	if (ret==1 && ((ret=xmlTextReaderRead(reader))==1) && xmlTextReaderDepth(reader)==(level+1) &&
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
-		val=g_ascii_strtod(xmlTextReaderConstValue(reader), NULL);
+		val=g_ascii_strtod((gchar *)xmlTextReaderConstValue(reader), NULL);
 		if (ret!=1 || ((ret=xmlTextReaderRead(reader))!=1) || !(xmlTextReaderDepth(reader)==level &&
 			xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT)) {
 			flo_fatal(_("layout parse error"));
@@ -106,6 +118,8 @@ double layoutreader_readdouble(xmlTextReaderPtr reader, xmlChar *name, int level
 	return val;
 }
 
+/* look for the named xml element and returns the value as a string
+ * fatals if not found */
 xmlChar *layoutreader_readstring(xmlTextReaderPtr reader, xmlChar *name, int level)
 {
 	int ret;
@@ -115,11 +129,11 @@ xmlChar *layoutreader_readstring(xmlTextReaderPtr reader, xmlChar *name, int lev
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT) ) {
 		if (xmlTextReaderDepth(reader)<level) { flo_warn(_("%s not found"), name); ret=-1; break; }
 	}
-	if (strcmp(xmlTextReaderConstName(reader), name)) { ret=-1; }
+	if (xmlStrcmp(xmlTextReaderConstName(reader), name)) { ret=-1; }
 	if (ret==1 && ((ret=xmlTextReaderRead(reader))==1) && xmlTextReaderDepth(reader)==(level+1) &&
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_TEXT && xmlTextReaderHasValue(reader)) {
-		val=g_malloc(sizeof(xmlChar)*(strlen(xmlTextReaderConstValue(reader))+1));
-		strcpy(val, xmlTextReaderConstValue(reader));
+		val=g_malloc(sizeof(xmlChar)*(xmlStrlen(xmlTextReaderConstValue(reader))+1));
+		val[0]=(xmlChar)'\0'; xmlStrcat(val, xmlTextReaderConstValue(reader));
 		if (ret!=1 || ((ret=xmlTextReaderRead(reader))!=1) || !(xmlTextReaderDepth(reader)==level &&
 			xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT)) {
 			flo_fatal(_("layout parse error"));
@@ -129,7 +143,8 @@ xmlChar *layoutreader_readstring(xmlTextReaderPtr reader, xmlChar *name, int lev
 	return val;
 }
 
-void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, void *userdata, int level)
+/* Read a key definition in the xml file and calls the keyfunc callback with the specification of the key as arguments */
+void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, void *userdata1, void *userdata2, int level)
 {
 	xmlChar *nodename, *nodevalue;
 	double xpos, ypos;
@@ -137,229 +152,162 @@ void layoutreader_readkey (xmlTextReaderPtr reader, layoutreader_keyprocess keyf
 	unsigned char code;
 	char *shape=NULL;
 
-	while ( xmlTextReaderRead(reader)==1 && !(!strcmp(xmlTextReaderConstName(reader), "key") &&
+	while ( xmlTextReaderRead(reader)==1 && !(!xmlStrcmp(xmlTextReaderConstName(reader), (xmlChar *)"key") &&
 		xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT) ) {
 		if (xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT) {
 			nodevalue=(xmlChar *)layoutreader_readnode(reader, level+1, &nodename);
 			if (!nodename) {
 				flo_fatal(_("Layout parse error: null node name"));
-			} else if (!strcmp(nodename, "code")) {
-				code=atoi(nodevalue);
-			} else if (!strcmp(nodename, "xpos")) {
-				xpos=g_ascii_strtod(nodevalue, NULL);
-			} else if (!strcmp(nodename, "ypos")) {
-				ypos=g_ascii_strtod(nodevalue, NULL);
-			} else if (!strcmp(nodename, "width")) {
-				width=g_ascii_strtod(nodevalue, NULL);
-			} else if (!strcmp(nodename, "height")) {
-				height=g_ascii_strtod(nodevalue, NULL);
-			} else if (!strcmp(nodename, "shape")) {
-				shape=g_malloc(sizeof(gchar)*(1+strlen(nodevalue)));
-				strcpy(shape, nodevalue);
+			} else if (!xmlStrcmp(nodename, (xmlChar *)"code")) {
+				code=atoi((char *)nodevalue);
+			} else if (!xmlStrcmp(nodename, (xmlChar *)"xpos")) {
+				xpos=g_ascii_strtod((gchar *)nodevalue, NULL);
+			} else if (!xmlStrcmp(nodename, (xmlChar *)"ypos")) {
+				ypos=g_ascii_strtod((gchar *)nodevalue, NULL);
+			} else if (!xmlStrcmp(nodename, (xmlChar *)"width")) {
+				width=g_ascii_strtod((gchar *)nodevalue, NULL);
+			} else if (!xmlStrcmp(nodename, (xmlChar *)"height")) {
+				height=g_ascii_strtod((gchar *)nodevalue, NULL);
+			} else if (!xmlStrcmp(nodename, (xmlChar *)"shape")) {
+				shape=g_malloc(sizeof(gchar)*(1+xmlStrlen(nodevalue)));
+				shape[0]='\0'; xmlStrcat((xmlChar *)shape, nodevalue);
 			} else { flo_fatal(_("Unknown element: %s"), nodename); }
 		}
 	}
 	
-	keyfunc(userdata, shape, code, xpos, ypos, width, height);
+	keyfunc(userdata1, shape, code, xpos, ypos, width, height, userdata2);
 	if (shape) g_free(shape);
 }
 
+/* Read an info node from the xml file and calls the infosprocess callback with the informations read as argument */
 void layoutreader_readinfos(xmlTextReaderPtr reader, layoutreader_infosprocess infosfunc)
 {
 	xmlChar *version, *name;
-	if (!layoutreader_goto(reader, "informations", XML_READER_TYPE_ELEMENT, 1))
+	if (!layoutreader_goto(reader, (xmlChar *)"informations", XML_READER_TYPE_ELEMENT, 1))
 		flo_fatal(_("No informations element in layout"));
-	name=layoutreader_readstring(reader, "name", 2);
-	version=layoutreader_readstring(reader, "author", 2); g_free(version);
-	version=layoutreader_readstring(reader, "date", 2); g_free(version);
-	version=layoutreader_readstring(reader, "florence_version", 2);
-	infosfunc(name, version);
+	name=layoutreader_readstring(reader, (xmlChar *)"name", 2);
+	version=layoutreader_readstring(reader, (xmlChar *)"author", 2); g_free(version); /* not used */
+	version=layoutreader_readstring(reader, (xmlChar *)"date", 2); g_free(version); /* not used */
+	version=layoutreader_readstring(reader, (xmlChar *)"florence_version", 2);
+	if (infosfunc) infosfunc((char *)name, (char *)version);
 	g_free(name);
 	g_free(version);
-	if (!layoutreader_goto(reader, "informations", XML_READER_TYPE_END_ELEMENT, 1))
+	if (!layoutreader_goto(reader, (xmlChar *)"informations", XML_READER_TYPE_END_ELEMENT, 1))
 		flo_fatal(_("informations element not closed in layout"));
-}
-
-void layoutreader_readcoords (xmlTextReaderPtr reader, double *x, double *y, int level) {
-	*x=layoutreader_readdouble(reader, "x", level);
-	*y=layoutreader_readdouble(reader, "y", level);
-}
-
-GnomeCanvasPathDef *layoutreader_readpath(xmlTextReaderPtr reader, int level) {
-	GnomeCanvasPathDef *path;
-	double p1x, p1y, p2x, p2y, p3x, p3y;
-	xmlChar *nodename, *nodevalue;
-
-	if (!layoutreader_goto(reader, "moveto", XML_READER_TYPE_ELEMENT, level+1))
-		flo_fatal(_("Path does not start with moveto"));
-	path=gnome_canvas_path_def_new();
-	layoutreader_readcoords(reader, &p1x, &p1y, level+2);
-	gnome_canvas_path_def_moveto(path, p1x, p1y);
-	while ( xmlTextReaderRead(reader)==1 && !(!strcmp(xmlTextReaderConstName(reader), "path") &&
-		xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT) ) {
-		if (xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT) {
-			nodevalue=(xmlChar *)layoutreader_readnode(reader, level+1, &nodename);
-			if (!nodename) {
-				flo_fatal(_("Layout parse error: null node name"));
-			} else if (!strcmp(nodename, "lineto")) {
-				layoutreader_readcoords(reader, &p1x, &p1y, level+2);
-				gnome_canvas_path_def_lineto(path, p1x, p1y);
-			} else if (!strcmp(nodename, "curveto")) {
-				layoutreader_readpt2(reader, &p1x, &p1y, "p1", level+2);
-				layoutreader_readpt2(reader, &p2x, &p2y, "p2", level+2);
-				layoutreader_readpt2(reader, &p3x, &p3y, "p3", level+2);
-				gnome_canvas_path_def_curveto(path, p1x, p1y, p2x, p2y, p3x, p3y);
-			} else { flo_fatal(_("Unknown element: %s"), nodename); }
-		}
-	}
-	gnome_canvas_path_def_closepath(path);
-
-	return path;
-}
-
-gboolean layoutreader_readpt(xmlTextReaderPtr reader, void *userdata, layoutreader_pointfunc ptfunc) {
-	gdouble x, y;
-	gboolean ret=FALSE;
-	if (layoutreader_goto(reader, "p", XML_READER_TYPE_ELEMENT, 5)) {
-		layoutreader_readcoords(reader, &x, &y, 6);
-		if (!layoutreader_goto(reader, "p", XML_READER_TYPE_END_ELEMENT, 5))
-			flo_fatal(_("Unclosed p element"));
-		ptfunc(userdata, x, y);
-		ret=TRUE;
-	}
-	return ret;
-}
-
-void layoutreader_readpt2(xmlTextReaderPtr reader, double *x, double *y, char *name, int level) {
-	if (!layoutreader_goto(reader, name, XML_READER_TYPE_ELEMENT, level))
-		flo_fatal("Found %s: %s expected.", xmlTextReaderConstName(reader), name);
-	layoutreader_readcoords(reader, x, y, level+1);
-	if (!layoutreader_goto(reader, name, XML_READER_TYPE_END_ELEMENT, level))
-		flo_fatal("%s not closed", name);
-}
-
-void layoutreader_readdraw(xmlTextReaderPtr reader, void *userdata, layoutreader_itemfunc arrowfunc,
-	layoutreader_itemfunc linefunc, layoutreader_itemfunc rectfunc, layoutreader_shapeprocess pathfunc) {
-	xmlChar *nodename, *nodevalue;
-
-	if (!layoutreader_goto(reader, "draw", XML_READER_TYPE_ELEMENT, 3))
-		flo_fatal(_("Expected draw or label element but %s found"), xmlTextReaderConstName(reader));
-	while ( xmlTextReaderRead(reader)==1 && !(!strcmp(xmlTextReaderConstName(reader), "draw") &&
-		xmlTextReaderNodeType(reader)==XML_READER_TYPE_END_ELEMENT) ) {
-		if (xmlTextReaderNodeType(reader)==XML_READER_TYPE_ELEMENT) {
-			nodevalue=(xmlChar *)layoutreader_readnode(reader, 4, &nodename);
-			if (!nodename) {
-				flo_fatal(_("Layout parse error: depth is %d (expected 4)"), xmlTextReaderDepth(reader));
-			} else if (!strcmp(nodename, "arrow")) {
-				arrowfunc(reader, userdata);
-			} else if (!strcmp(nodename, "line")) {
-				linefunc(reader, userdata);
-			} else if (!strcmp(nodename, "rect")) {
-				rectfunc(reader, userdata);
-			} else if (!strcmp(nodename, "path")) {
-				pathfunc(NULL, layoutreader_readpath(reader, 4), userdata);
-			} else { flo_fatal(_("Unexpected element: %s (primitive expected)"), nodename); }
-		}
-	}
 }
 
 void layoutreader_readsymbol(xmlTextReaderPtr reader, layoutreader_symprocess symfunc, void *userdata)
 {
 	xmlChar *name=NULL;
 	xmlChar *label=NULL;
-	name=layoutreader_readstring(reader, "name", 3);
-	label=layoutreader_readstring(reader, "label", 3);
-	symfunc(reader, name, label, userdata);
-	if (!layoutreader_goto(reader, "symbol", XML_READER_TYPE_END_ELEMENT, 2))
-		flo_fatal("Unclosed symbol element :%s", name);
+	xmlChar *svg=NULL;
+	name=layoutreader_readstring(reader, (xmlChar *)"name", 3);
+	label=layoutreader_readstring(reader, (xmlChar *)"label", 3);
+	if (layoutreader_goto(reader, (xmlChar *)"svg", XML_READER_TYPE_ELEMENT, 3))
+		svg=xmlTextReaderReadOuterXml(reader);
+	symfunc((char *)name, (char *)svg, (char *)label, userdata);
+	if (!layoutreader_goto(reader, (xmlChar *)"symbol", XML_READER_TYPE_END_ELEMENT, 2))
+		flo_fatal(_("Unclosed symbol element: %s"), name);
 	if (name) g_free(name);
 	if (label) g_free(label);
+	if (svg) xmlFree(svg);
 }
 
+/* Read a shape node see style.c */
 void layoutreader_readshape(xmlTextReaderPtr reader, layoutreader_shapeprocess shapefunc, void *userdata)
 {
-	xmlChar *name;
-	GnomeCanvasPathDef *path;
-	name=layoutreader_readstring(reader, "name", 3);
-	if (!layoutreader_goto(reader, "path", XML_READER_TYPE_ELEMENT, 3))
-		flo_fatal(_("Read shape: expected path element found %s"), xmlTextReaderConstName(reader));
-	path=layoutreader_readpath(reader, 3);
-	shapefunc(name, path, userdata);
-	if (!layoutreader_goto(reader, "shape", XML_READER_TYPE_END_ELEMENT, 2))
-		flo_fatal("Unclosed shape element :%s", name);
+	xmlChar *name=NULL;
+	xmlChar *svg=NULL;
+	name=layoutreader_readstring(reader, (xmlChar *)"name", 3);
+	if (!layoutreader_goto(reader, (xmlChar *)"svg", XML_READER_TYPE_ELEMENT, 3))
+		flo_fatal(_("Read shape: 'svg' expected: '%s' found "), xmlTextReaderConstName(reader));
+	svg=xmlTextReaderReadOuterXml(reader);
+	shapefunc((char *)name, (char *)svg, userdata);
+	if (!layoutreader_goto(reader, (xmlChar *)"shape", XML_READER_TYPE_END_ELEMENT, 2))
+		flo_fatal(_("Unclosed shape element: %s %s"), name, xmlTextReaderConstName(reader));
+	if (svg) xmlFree(svg);
 	if (name) g_free(name);
 }
 
+/* read a style: see style.c */
 void layoutreader_readstyle(xmlTextReaderPtr reader, layoutreader_shapeprocess shapefunc,
         layoutreader_symprocess symfunc, void *userdata) {
-	if (!layoutreader_goto(reader, "style", XML_READER_TYPE_ELEMENT, 1))
+	if (!layoutreader_goto(reader, (xmlChar *)"style", XML_READER_TYPE_ELEMENT, 1))
 		flo_fatal(_("No style element in layout"));
-	while(layoutreader_goto(reader, "shape", XML_READER_TYPE_ELEMENT, 2))
+	while(layoutreader_goto(reader, (xmlChar *)"shape", XML_READER_TYPE_ELEMENT, 2))
 		layoutreader_readshape(reader, shapefunc, userdata);
-	while(layoutreader_goto(reader, "symbol", XML_READER_TYPE_ELEMENT, 2))
+	while(layoutreader_goto(reader, (xmlChar *)"symbol", XML_READER_TYPE_ELEMENT, 2))
 		layoutreader_readsymbol(reader, symfunc, userdata);
 }
 
 
+/* read a keyboard: see keyboard.c */
 void layoutreader_readkeyboard(xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc, layoutreader_sizeprocess sizefunc,
-	void *userdata, int level)
+	void *userdata1, void *userdata2, int level)
 {
 	double w, h;
-	if (!layoutreader_goto(reader, "keyboard", XML_READER_TYPE_ELEMENT, level))
+	if (!layoutreader_goto(reader, (xmlChar *)"keyboard", XML_READER_TYPE_ELEMENT, level))
 		flo_fatal(_("No keyboard element in layout"));
-	w=layoutreader_readdouble(reader, "width", level+1);
-	h=layoutreader_readdouble(reader, "height", level+1);
-	sizefunc(userdata, w, h);
-	while(layoutreader_goto(reader, "key", XML_READER_TYPE_ELEMENT, level+1))
-		layoutreader_readkey(reader, keyfunc, userdata, level+1);
-	if (strcmp(xmlTextReaderConstName(reader), "keyboard") &&
-		!layoutreader_goto(reader, "keyboard", XML_READER_TYPE_END_ELEMENT, level))
+	w=layoutreader_readdouble(reader, (xmlChar *)"width", level+1);
+	h=layoutreader_readdouble(reader, (xmlChar *)"height", level+1);
+	sizefunc(userdata1, w, h);
+	while(layoutreader_goto(reader, (xmlChar *)"key", XML_READER_TYPE_ELEMENT, level+1))
+		layoutreader_readkey(reader, keyfunc, userdata1, userdata2, level+1);
+	if (xmlStrcmp(xmlTextReaderConstName(reader), (xmlChar *)"keyboard") &&
+		!layoutreader_goto(reader, (xmlChar *)"keyboard", XML_READER_TYPE_END_ELEMENT, level))
 		flo_fatal(_("keyboard element not closed in layout"));
 }
 
-int layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_extprocess extfunc, void *userdata)
+/* Read an extension and returns the keyboard generated by the callback function or NULL when there is no more extension. */
+void *layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_keyboardprocess keyboardfunc, void *userdata)
 {
 	xmlChar *name, *buffer;
 	enum layout_placement placement;
-	int ret=FALSE;
+	void *ret=NULL;
 
-	if (layoutreader_goto(reader, "extension", XML_READER_TYPE_ELEMENT, 1))
+	if (layoutreader_goto(reader, (xmlChar *)"extension", XML_READER_TYPE_ELEMENT, 1))
 	{
-		name=layoutreader_readstring(reader, "name", 2);
-		buffer=layoutreader_readstring(reader, "placement", 2);
+		name=layoutreader_readstring(reader, (xmlChar *)"name", 2);
+		buffer=layoutreader_readstring(reader, (xmlChar *)"placement", 2);
 		placement=layoutreader_getplacement(buffer);
 		g_free(buffer);
-		extfunc(reader, name, placement, userdata);
+		ret=keyboardfunc(reader, 2, (gchar *)name, placement, userdata);
 		g_free(name);
-		if (!layoutreader_goto(reader, "extension", XML_READER_TYPE_END_ELEMENT, 1))
+		if (!layoutreader_goto(reader, (xmlChar *)"extension", XML_READER_TYPE_END_ELEMENT, 1))
 			flo_fatal(_("Unclosed informations element in layout"));
-		ret=TRUE;
 	}
 
 	return ret;
 }
 
-xmlTextReaderPtr layoutreader_new(char *layout)
+/* instanciates a new layout reader. Called in florence.c
+ * return the layoutreader handle */
+xmlTextReaderPtr layoutreader_new(void)
 {
 	xmlTextReaderPtr reader;
+	char *layoutfile=NULL;
+	static char *defaultlayout=FLO_DEFAULT_LAYOUT;
 
 	LIBXML_TEST_VERSION
 
-	reader=xmlReaderForFile(layout, NULL, XML_PARSE_NOENT); 
-	if (!reader) flo_fatal (_("Unable to open file %s"), layout);
-	flo_info(_("Using layout file %s"), layout);
-	if (xmlTextReaderSchemaValidate(reader, DATADIR "/florence.xsd"))
-		flo_fatal(_("Unable to activate schema validation from %s."), DATADIR "/florence.xsd");
-	if (!layoutreader_goto(reader, "layout", XML_READER_TYPE_ELEMENT, 0))
+        layoutfile=settings_get_string("layout/file");
+	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=defaultlayout;
+	reader=xmlReaderForFile(layoutfile, NULL, XML_PARSE_NOENT); 
+	if (!reader) flo_fatal (_("Unable to open file %s"), layoutfile);
+	flo_info(_("Using layout file %s"), layoutfile);
+	if (xmlTextReaderRelaxNGValidate(reader, DATADIR "/relaxng/florence.rng"))
+		flo_fatal(_("Unable to activate schema validation from %s."), DATADIR "/florence.rng");
+	if (!layoutreader_goto(reader, (xmlChar *)"layout", XML_READER_TYPE_ELEMENT, 0))
 		flo_fatal(_("No layout element in layout"));
 
 	return reader;
 }
 
+/* free the memory used by layout reader */
 void layoutreader_free(xmlTextReaderPtr reader)
 {
 	if (xmlTextReaderIsValid(reader) != 1)
-		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.xsd");
+		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.rnc");
 	xmlFreeTextReader(reader);
 
 	xmlCleanupParser();

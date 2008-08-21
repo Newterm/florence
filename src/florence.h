@@ -19,19 +19,40 @@
 
 */
 
-#include "keyboard.h"
-#include "layoutreader.h"
+#ifndef FLORENCE
+#define FLORENCE
 
-/* An extension is a set of keys that can be show or hidden together
- * Examples: the numpad or the arrows. The main extension is the trunk of the keyboard */
-struct extension {
-	struct keyboard *keyboard; /* Extension data */
-	char *name;    /* NULL for main keyboard, "Arrows" or "Numpad" */
-	int is_active; /* TRUE if the extension is visible ; ignored for main */
-	enum layout_placement placement; /* Position of the extension relative to main */
+#include <X11/XKBlib.h>
+#include <gtk/gtk.h>
+#include "style.h"
+#include "key.h"
+#include "keyboard.h"
+
+/* There is one florence structure which contains all global data in florence.c */
+struct florence {
+	GtkWindow *window; /* GTK window of florence */
+	guint width, height; /* dimensions of florence, in pixels */
+	gdouble zoom; /* scaling factor of florence window */
+	struct key *keys[256]; /* Florence keys sorted by keycode */
+	struct key *current; /* focus key (key located under the pointer) or NULL */
+	struct key *pressed; /* key currently being pressed or NULL */
+	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
+	GSList *dirtykeys; /* list of keys that need to be redrawn */
+	GdkModifierType globalmod; /* global modifier mask */
+	GList *pressedmodkeys; /* list of modifier keys that are pressed not including locker keys */
+	GSList *keyboards; /* Main list of keyboard extensions */
+	gdouble xoffset, yoffset; /* offset of the main keyboard */
+	guchar *hitmap; /* bitmap of key codes: used to know on which key the mouse is over */
+	struct style *style; /* Do it with style */
+	gboolean composite; /* true if the screen has composite extension */
+	/* Xkd data: only used at startup */
+	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
+	XkbStateRec state; /* current state of the hard keyboard */
 };
 
-/* Launches the virtual keyboard.
+/* Launch the virtual keyboard.
  * Returns: 0 on normal exit. */
 int florence (void);
+
+#endif
 

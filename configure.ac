@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.2.3], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.3.0], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -8,6 +8,7 @@ AM_CONDITIONAL([WITH_DOCS], [test "x$with_docs" != "xno"])
 # Checks for programs.
 AC_PROG_CC
 AM_PROG_CC_C_O
+AC_PROG_GREP
 AC_PROG_SED
 AM_GCONF_SOURCE_2
 
@@ -21,7 +22,7 @@ if test "x$with_docs" != "xno"; then
 fi
 
 # Checks for libraries.
-DEP_MODULES="libxml-2.0 gconf-2.0 gmodule-2.0 libglade-2.0 cspi-1.0 libgnomecanvas-2.0 gtk+-2.0 >= 2.10.0"
+DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 libglade-2.0 cspi-1.0 gtk+-2.0 >= 2.10.0"
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 
 if test "x$with_docs" != "xno"; then
@@ -39,7 +40,7 @@ AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_MAJOR
-AC_CHECK_HEADERS([fcntl.h libintl.h locale.h memory.h stdlib.h string.h strings.h sys/file.h sys/param.h sys/time.h unistd.h utime.h])
+AC_CHECK_HEADERS([math.h fcntl.h libintl.h locale.h memory.h stdlib.h string.h strings.h sys/param.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STAT
@@ -47,8 +48,8 @@ AC_C_CONST
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memchr memset])
+AC_CHECK_FUNCS([memset sscanf strncpy atoi flour ceil getenv putenv])
 
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/relaxng/Makefile data/svg11/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
 AC_OUTPUT
 

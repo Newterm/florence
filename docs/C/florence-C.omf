@@ -5,8 +5,8 @@
 		<creator>f.agrech@gmail.com (François Agrech)</creator>
 		<maintainer>f.agrech@gmail.com (François Agrech)</maintainer>
 		<title>Florence Manual</title>
-		<date>2008-07-28</date>
-		<version identifier="0.2.3" date="2008-05-20"/>
+		<date>2008-05-20</date>
+		<version identifier="0.2.2" date="2008-05-20"/>
 		<subject category="GNOME|Accessibility"/>
 		<description>Documentation for the Florence Virtual Keyboard</description>
 		<type>user's guide</type>

@@ -19,9 +19,13 @@
 
 */
 
+#ifndef FLO_LAYOUTREADER
+#define FLO_LAYOUTREADER
+
 #include "key.h"
 #include <libxml/xmlreader.h>
 
+/* This is used for placing extensions around the keyboard. The main extension's placement is void */
 enum layout_placement {
 	LAYOUT_VOID,
 	LAYOUT_LEFT,
@@ -32,27 +36,26 @@ enum layout_placement {
 
 /* callbacks */
 typedef void (*layoutreader_infosprocess) (char *name, char *version);
-typedef void (*layoutreader_keyprocess) (void *userdata, char *shape, unsigned char code,
-	double xpos, double ypos, double width, double height);
+typedef void (*layoutreader_keyprocess) (void *userdata1, char *shape, unsigned char code,
+	double xpos, double ypos, double width, double height, void *userdata2);
 typedef void (*layoutreader_sizeprocess) (void *userdata, double width, double height);
-typedef void (*layoutreader_extprocess) (xmlTextReaderPtr reader, char *name, enum layout_placement placement,
-	void *userdata);
-typedef void (*layoutreader_symprocess) (xmlTextReaderPtr reader, char *name, char *label, void *userdata);
-typedef void (*layoutreader_shapeprocess) (char *name, GnomeCanvasPathDef *path, void *userdata);
-typedef void (*layoutreader_itemfunc) (xmlTextReaderPtr reader, void *userdata);
+typedef void *(*layoutreader_keyboardprocess) (xmlTextReaderPtr reader, int level, gchar *name,
+	enum layout_placement placement, void *userdata);
+typedef void (*layoutreader_symprocess) (char *name, char *svg, char *label, void *userdata);
+typedef void (*layoutreader_shapeprocess) (char *name, char *svg, void *userdata);
 typedef void (*layoutreader_pointfunc) (void *userdata, double x, double y);
 
-xmlTextReaderPtr layoutreader_new(char *layout);
+/* Create a reader for the filename provided */
+xmlTextReaderPtr layoutreader_new(void);
+/* liberate memory for the reader */
 void layoutreader_free(xmlTextReaderPtr reader);
 double layoutreader_readdouble(xmlTextReaderPtr reader, xmlChar *name, int level);
 void layoutreader_readinfos(xmlTextReaderPtr reader, layoutreader_infosprocess infosfunc);
 void layoutreader_readkeyboard(xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc,
-	layoutreader_sizeprocess sizefunc, void *userdata, int level);
-int layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_extprocess extfunc, void *userdata);
+	layoutreader_sizeprocess sizefunc, void *userdata1, void *userdata2, int level);
+void *layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_keyboardprocess extfunc, void *userdata);
 void layoutreader_readstyle(xmlTextReaderPtr reader, layoutreader_shapeprocess shapefunc, 
 	layoutreader_symprocess symfunc, void *userdata);
-void layoutreader_readdraw(xmlTextReaderPtr reader, void *userdata, layoutreader_itemfunc arrowfunc,
-	layoutreader_itemfunc linefunc, layoutreader_itemfunc rectfunc, layoutreader_shapeprocess pathfunc);
-gboolean layoutreader_readpt(xmlTextReaderPtr reader, void *userdata, layoutreader_pointfunc ptfunc);
-void layoutreader_readpt2(xmlTextReaderPtr reader, double *x, double *y, char *name, int level);
+
+#endif
 

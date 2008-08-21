@@ -36,7 +36,7 @@ QUICK INSTALL
         Ubuntu/debian:
 
             $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
-              libatspi-dev libgnomecanvas2-dev libgnome2-dev
+              libatspi-dev librsvg2-dev libgnome2-dev
             
       * Open a terminal and type (don't type the $ or #):
 

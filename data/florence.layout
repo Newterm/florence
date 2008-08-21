@@ -18,85 +18,27 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 -->
-<layout
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xmlns="florence"
-  xmlns:flo="florence"
-  xsi:schemaLocation="florence florence.xsd">
+<layout xmlns="http://florence.sourceforge.net">
 <informations>
 	<name>Standard keyboard</name>
 	<author>François Agrech</author>
 	<date>2008-03-28</date>
-	<florence_version>0.2.3</florence_version>
+	<florence_version>0.3.0</florence_version>
 </informations>
 
 <style>
-	<shape><name>default</name><path>
-		<moveto><x>-1</x><y>-2</y></moveto>
-		<lineto><x>1</x><y>-2</y></lineto>
-		<curveto>
-			<p1><x>1.5</x><y>-2</y></p1>
-			<p2><x>2</x><y>-1.5</y></p2>
-			<p3><x>2</x><y>-1</y></p3>
-		</curveto>
-		<lineto><x>2</x><y>1</y></lineto>
-		<curveto>
-			<p1><x>2</x><y>1.5</y></p1>
-			<p2><x>1.5</x><y>2</y></p2>
-			<p3><x>1</x><y>2</y></p3>
-		</curveto>
-		<lineto><x>-1</x><y>2</y></lineto>
-		<curveto>
-			<p1><x>-1.5</x><y>2</y></p1>
-			<p2><x>-2</x><y>1.5</y></p2>
-			<p3><x>-2</x><y>1</y></p3>
-		</curveto>
-		<lineto><x>-2</x><y>-1</y></lineto>
-		<curveto>
-			<p1><x>-2</x><y>-1.5</y></p1>
-			<p2><x>-1.5</x><y>-2</y></p2>
-			<p3><x>-1</x><y>-2</y></p3>
-		</curveto>
-	</path></shape>
-	<shape><name>Return</name><path>
-		<moveto><x>-2</x><y>-0.5</y></moveto>
-		<lineto><x>-2</x><y>-1.5</y></lineto>
-		<curveto>
-			<p1><x>-2</x><y>-1.75</y></p1>
-			<p2><x>-1.5</x><y>-2</y></p2>
-			<p3><x>-1</x><y>-2</y></p3>
-		</curveto>
-		<lineto><x>1</x><y>-2</y></lineto>
-		<curveto>
-			<p1><x>1.5</x><y>-2</y></p1>
-			<p2><x>2</x><y>-1.5</y></p2>
-			<p3><x>2</x><y>-1</y></p3>
-		</curveto>
-		<lineto><x>2</x><y>1</y></lineto>
-		<curveto>
-			<p1><x>2</x><y>1.5</y></p1>
-			<p2><x>1.5</x><y>2</y></p2>
-			<p3><x>1</x><y>2</y></p3>
-		</curveto>
-		<lineto><x>0</x><y>2</y></lineto>
-		<curveto>
-			<p1><x>-0.333</x><y>2</y></p1>
-			<p2><x>-0.667</x><y>1.5</y></p2>
-			<p3><x>-0.667</x><y>1</y></p3>
-		</curveto>
-		<lineto><x>-0.667</x><y>0.5</y></lineto>
-		<curveto>
-			<p1><x>-0.667</x><y>0.25</y></p1>
-			<p2><x>-0.75</x><y>0</y></p2>
-			<p3><x>-1</x><y>0</y></p3>
-		</curveto>
-		<lineto><x>-1.5</x><y>0</y></lineto>
-		<curveto>
-			<p1><x>-1.75</x><y>0</y></p1>
-			<p2><x>-2</x><y>-0.25</y></p2>
-			<p3><x>-2</x><y>-0.5</y></p3>
-		</curveto>
-	</path></shape>
+	<shape>
+		<name>default</name>
+		<svg version="1.1" viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg">
+			<path id="default_s" class="shape" stroke="gray" stroke-opacity="0.5" stroke-width="3%" d="M34 2 L98 2 C114 2 130 18 130 34 L130 98 C130 114 114 130 98 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>Return</name>
+		<svg version="1.1" viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg">
+			<path id="Return_s" class="shape" stroke="gray" stroke-opacity="0.5" stroke-width="3%" d="M1 10 L1 7 C1 4 7 1 13 1 L37 1 C43 1 49 7 49 13 L49 37 C49 43 43 49 37 49 L25 49 C21 49 17 43 17 37 L17 31 C17 28 16 25 13 25 L7 25 C4 25 1 22 1 19"/>
+		</svg>
+	</shape>
 	<symbol>
 		<name>Control_[LR]</name>
 		<label>ctrl</label>
@@ -115,65 +57,47 @@
 	</symbol>
 	<symbol>
 		<name>BackSpace</name>
-		<draw><arrow>
-			<p><x>1</x><y>0</y></p>
-			<p><x>-1</x><y>0</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="75" y1="50" x2="35" y2="50" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="25,50 35,40 35,60"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>Tab</name>
-		<draw>
-			<arrow><p><x>-0.75</x><y>0</y></p>
-			<p><x>0.5</x><y>0</y></p></arrow>
-			<line><p><x>0.75</x><y>-0.5</y></p>
-			<p><x>0.75</x><y>0.5</y></p></line>
-		</draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="31.375" y1="50" x2="52.5" y2="50" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="62.5.,50 52.5,40 52.5,60"/>
+			<line class="symbol" x1="68.625" y1="37.5" x2="68.625" y2="62.5" stroke="white" stroke-width="5"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>ISO_Left_Tab</name>
-		<draw>
-			<arrow><p><x>0.75</x><y>0</y></p>
-			<p><x>-0.5</x><y>0</y></p></arrow>
-			<line><p><x>-0.75</x><y>-0.5</y></p>
-			<p><x>-0.75</x><y>0.5</y></p></line>
-		</draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="68.625" y1="50" x2="47.5" y2="50" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="37.5,50 47.5,40 47.5,60"/>
+			<line class="symbol" x1="31.375" y1="37.5" x2="31.375" y2="62.5" stroke="white" stroke-width="5"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>Return</name>
-		<draw><arrow>
-			<p><x>1.333</x><y>-2.125</y></p>
-			<p><x>1.333</x><y>-1.625</y></p>
-			<p><x>-1.333</x><y>-1.625</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 144 192" xmlns="http://www.w3.org/2000/svg">
+			<path class="symbol" fill="none" stroke="white" stroke-width="5" d="M110 35 C118 35 126 40 126 45 C126 50 118 57 110 57 L33 57"/>
+			<polygon class="symbol" fill="white" points="18,57 33,47 33,67"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>Caps_Lock</name>
-		<draw>
-			<rect><p1><x>-0.5</x><y>-0.25</y></p1>
-			<p2><x>0.5</x><y>0.75</y></p2></rect>
-			<path>
-				<moveto><x>-0.25</x><y>-0.25</y></moveto>
-				<lineto><x>-0.25</x><y>-0.5</y></lineto>
-				<curveto>
-					<p1><x>-0.25</x><y>-0.625</y></p1>
-					<p2><x>-0.125</x><y>-0.75</y></p2>
-					<p3><x>0</x><y>-0.75</y></p3>
-				</curveto>
-				<curveto>
-					<p1><x>0.125</x><y>-0.75</y></p1>
-					<p2><x>0.25</x><y>-0.625</y></p2>
-					<p3><x>0.25</x><y>-0.5</y></p3>
-				</curveto>
-				<lineto><x>0.25</x><y>-0.25</y></lineto>
-			</path>
-		</draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<rect class="symbol" fill="white" x="37.5" y="43.75" width="25" height="25"/>
+			<path class="symbol" fill="none" stroke="white" stroke-width="3" d="M43.75 43.75 L43.75 37.5 C43.75 34.375 46.875 31.25 50 31.25 C53.125 31.25 56.25 34.375 56.25 37.5 L56.25 43.75"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(Shift_[LR]|(KP_|)Up)</name>
-		<draw><arrow>
-			<p><x>0</x><y>0.5</y></p>
-			<p><x>0</x><y>-0.5</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="50" y1="62.5" x2="50" y2="47.5" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="50,37.5 40,47.5 60,47.5"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Insert</name>
@@ -181,32 +105,20 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Home</name>
-		<draw><arrow>
-			<p><x>0</x><y>0</y></p>
-			<p><x>-1</x><y>-1</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="50" y1="50" x2="32" y2="32" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="25,25 39.1421,25 25,39.1421"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Up</name>
-		<draw><arrow>
-			<p><x>0</x><y>0.6</y></p>
-			<p><x>0</x><y>-1</y></p>
-		</arrow>
-		<line>
-			<p><x>-0.5</x><y>0</y></p>
-			<p><x>0.5</x><y>0</y></p>
-			<width>0.1</width>
-		</line>
-		<line>
-			<p><x>-0.5</x><y>0.3</y></p>
-			<p><x>0.5</x><y>0.3</y></p>
-			<width>0.1</width>
-		</line>
-		<line>
-			<p><x>-0.5</x><y>-0.3</y></p>
-			<p><x>0.5</x><y>-0.3</y></p>
-			<width>0.1</width>
-		</line></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="50" y1="65" x2="50" y2="35" stroke="white" stroke-width="8"/>
+			<polygon class="symbol" fill="white" points="50,22.5 37.5,35 62.5,35"/>
+			<line class="symbol" x1="37.5" y1="50" x2="62.5" y2="50" stroke="white" stroke-width="3"/>
+			<line class="symbol" x1="37.5" y1="57.5" x2="62.5" y2="57.5" stroke="white" stroke-width="3"/>
+			<line class="symbol" x1="37.5" y1="42.5" x2="62.5" y2="42.5" stroke="white" stroke-width="3"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Delete</name>
@@ -218,46 +130,34 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Down</name>
-		<draw><arrow>
-			<p><x>0</x><y>-0.6</y></p>
-			<p><x>0</x><y>1</y></p>
-		</arrow>
-		<line>
-			<p><x>-0.5</x><y>0</y></p>
-			<p><x>0.5</x><y>0</y></p>
-			<width>0.1</width>
-		</line>
-		<line>
-			<p><x>-0.5</x><y>0.3</y></p>
-			<p><x>0.5</x><y>0.3</y></p>
-			<width>0.1</width>
-		</line>
-		<line>
-			<p><x>-0.5</x><y>-0.3</y></p>
-			<p><x>0.5</x><y>-0.3</y></p>
-			<width>0.1</width>
-		</line></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="50" y1="35" x2="50" y2="65" stroke="white" stroke-width="8"/>
+			<polygon class="symbol" fill="white" points="50,77.5 37.5,65 62.5,65"/>
+			<line class="symbol" x1="37.5" y1="50" x2="62.5" y2="50" stroke="white" stroke-width="3"/>
+			<line class="symbol" x1="37.5" y1="57.5" x2="62.5" y2="57.5" stroke="white" stroke-width="3"/>
+			<line class="symbol" x1="37.5" y1="42.5" x2="62.5" y2="42.5" stroke="white" stroke-width="3"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Down</name>
-		<draw><arrow>
-			<p><x>0</x><y>-0.5</y></p>
-			<p><x>0</x><y>0.5</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="50" y1="37.5" x2="50" y2="52.5" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="50,62.5 40,52.5 60,52.5"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Left</name>
-		<draw><arrow>
-			<p><x>0.5</x><y>0</y></p>
-			<p><x>-0.5</x><y>0</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="67.5" y1="50" x2="50" y2="50" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="40,50 50,40 50,60"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Right</name>
-		<draw><arrow>
-			<p><x>-0.5</x><y>0</y></p>
-			<p><x>0.5</x><y>0</y></p>
-		</arrow></draw>
+		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<line class="symbol" x1="32.5" y1="50" x2="50" y2="50" stroke="white" stroke-width="5"/>
+			<polygon class="symbol" fill="white" points="60,50 50,40 50,60"/>
+		</svg>
 	</symbol>
 	<symbol>
 		<name>KP_Enter</name>

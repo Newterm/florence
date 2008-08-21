@@ -20,235 +20,171 @@
 */
 
 #include <system.h>
+#include <glib.h>
+#include <glib/gprintf.h>
+#include <librsvg/rsvg.h>
+#include <librsvg/rsvg-cairo.h>
+#include "trace.h"
 #include "style.h"
 #include "settings.h"
-#include "trace.h"
 #include "layoutreader.h"
 
-/* simplified GnomeCanvasLine */
-struct symbol_line {
-	GnomeCanvasPoints *points;
-	gdouble width;
-	gboolean arrow;
-};
+/* Constants */
+static gchar *style_css="<?xml-stylesheet type=\"text/css\" href=\"" DATADIR "/florence.css\"?>";
 
-/* simplified GnomeCanvasRect */
-struct symbol_rect {
-	gdouble x1;
-	gdouble y1;
-	gdouble x2;
-	gdouble y2;
-};
-
-/* simplified GnomeCanvasItem */
-struct symbol_item {
-	GType type;
-	union {
-		struct symbol_line *line;
-		struct symbol_rect *rect;
-		GnomeCanvasPathDef *path;
-	} element;
-};
-
+/* a symbol is drawn over the shape to identify the effect of key.
+ * the symbol is either text (label) or svg. Either one is NULL */
 struct symbol {
 	GRegex *name;
 	gchar *label;
-	GSList *items; /* symbol_item */
+	RsvgHandle *svg;
 };
 
-struct shape {
-	gchar *name;
-	GnomeCanvasPathDef *path;
-};
-
-gchar *style_colours[STYLE_NUM_COLOURS];
-
-gchar *style_get_color(enum style_colours c)
+/* color functions */
+gchar *style_get_color(struct style *style, enum style_colours c)
 {
-	return style_colours[c];
+	return style->colours[c];
 }
 
-void style_set_color(enum style_colours c, gchar *color)
+void style_set_color(struct style *style, enum style_colours c, gchar *color)
 {
-	if (style_colours[c]) g_free(style_colours[c]);
-	style_colours[c]=g_malloc(sizeof(gchar)*(1+strlen(color)));
-	strcpy(style_colours[c], color);
+	if (style->colours[c]) g_free(style->colours[c]);
+	style->colours[c]=g_malloc(sizeof(gchar)*(1+strlen(color)));
+	strcpy(style->colours[c], color);
 }
 
-void style_readpoint(void *userdata, double x, double y)
+/* set cairo color to one of the style colors */
+void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c)
 {
-	GSList **ptlist=(GSList **)userdata;
-	gdouble *px, *py;
-	px=g_malloc(sizeof(gdouble));
-	py=g_malloc(sizeof(gdouble));
-	*px=x; *py=y;
-	*ptlist=g_slist_append(*ptlist, px);
-	*ptlist=g_slist_append(*ptlist, py);
+	guint r, g, b;
+	if (3!=sscanf(style->colours[c], "#%02x%02x%02x", &r, &g, &b)) {
+		flo_warn(_("can't parse color %s"), style->colours[c]);
+		cairo_set_source_rgb(cairoctx, 0.0, 0.0, 0.0);
+	} else cairo_set_source_rgb(cairoctx, (gdouble)r/255.0, (gdouble)g/255.0, (gdouble)b/255.0);
 }
 
-void style_addpoint(gpointer data, gpointer userdata)
+/* Renders a svg handle to a cairo surface at dimensions */
+void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub)
 {
-	gdouble *coord=(gdouble *)data;
-	GnomeCanvasPoints *pts=(GnomeCanvasPoints *)userdata;
-	pts->coords[(pts->num_points)++]=*coord;
-	g_free(coord);
+	gdouble xscale, yscale;
+	gdouble xoffset=0., yoffset=0.;
+	RsvgDimensionData dimensions;
+	rsvg_handle_get_dimensions(handle, &dimensions);
+	cairo_save(cairoctx);
+	if (keep_ratio) {
+		if ((dimensions.width/dimensions.height)<(w/h)) {
+			yscale=h/dimensions.height;
+			xscale=yscale*dimensions.width/dimensions.height;
+			xoffset=(w-(dimensions.width*xscale))/2.;
+		} else {
+			xscale=w/dimensions.width;
+			yscale=xscale*dimensions.height/dimensions.width;
+			yoffset=(h-(dimensions.height*yscale))/2.;
+		}
+	} else {
+		xscale=w/dimensions.width;
+		yscale=h/dimensions.height;
+	}
+	cairo_translate(cairoctx, xoffset, yoffset);
+	cairo_scale(cairoctx, xscale, yscale);
+	rsvg_handle_render_cairo_sub(handle, cairoctx, sub);
+	cairo_restore(cairoctx);
 }
 
-void style_symbol_additem(xmlTextReaderPtr reader, void *userdata, gboolean arrow)
+/* create a new symbol */
+void style_symbol_new(char *name, char *svg, char *label, void *userdata)
 {
-	GSList **items=(GSList **)userdata;
-	GSList *ptlist=NULL;
-	GnomeCanvasPoints *pts=NULL;
-	struct symbol_item *item=NULL;
-
-	while (layoutreader_readpt(reader, &ptlist, style_readpoint));
-	pts=gnome_canvas_points_new(g_slist_length(ptlist)>>1);
-	pts->num_points=0;
-	g_slist_foreach(ptlist, style_addpoint, pts);
-	pts->num_points>>=1;
-	g_slist_free(ptlist);
-	item=g_malloc(sizeof(struct symbol_item));
-	item->type=GNOME_TYPE_CANVAS_LINE;
-	item->element.line=g_malloc(sizeof(struct symbol_line));
-	item->element.line->points=pts;
-	item->element.line->arrow=arrow;
-	if (xmlTextReaderDepth(reader)==5) {
-		item->element.line->width=layoutreader_readdouble(reader, "width", 5);
-	} else { item->element.line->width=0.3; }
-	*items=g_slist_append(*items, item);
-}
-
-void style_symbol_addline(xmlTextReaderPtr reader, void *userdata)
-{
-	style_symbol_additem(reader, userdata, FALSE);
-}
-
-void style_symbol_addarrow(xmlTextReaderPtr reader, void *userdata)
-{
-	style_symbol_additem(reader, userdata, TRUE);
-}
-
-void style_symbol_addrect(xmlTextReaderPtr reader, void *userdata)
-{
-	GSList **items=(GSList **)userdata;
-	struct symbol_item *item=g_malloc(sizeof(struct symbol_item));
-	struct symbol_rect *rect=g_malloc(sizeof(struct symbol_rect));
-	layoutreader_readpt2(reader, &(rect->x1), &(rect->y1), "p1", 5);
-	layoutreader_readpt2(reader, &(rect->x2), &(rect->y2), "p2", 5);
-	item->type=GNOME_TYPE_CANVAS_RECT;
-	item->element.rect=rect;
-	*items=g_slist_append(*items, item);
-}
-
-void style_symbol_addpath(char *name, GnomeCanvasPathDef *path, void *userdata)
-{
-	GSList **items=(GSList **)userdata;
-	struct symbol_item *item=g_malloc(sizeof(struct symbol_item));
-	item->type=GNOME_TYPE_CANVAS_BPATH;
-	item->element.path=path;
-	*items=g_slist_append(*items, item);
-}
-
-void style_symbol_new(xmlTextReaderPtr reader, char *name, char *label, void *userdata)
-{
-	gchar *regex;
+	GError *error=NULL;
+	gchar *regex=NULL;
 	struct style *style=(struct style *)userdata;
 	struct symbol *symbol=g_malloc(sizeof(struct symbol));
 	memset(symbol, 0, sizeof(struct symbol));
 	if (name) {
 		regex=g_malloc((strlen(name)+3)*sizeof(gchar));
-		sprintf(regex, "^%s$", name);
+		g_sprintf(regex, "^%s$", name);
 		symbol->name=g_regex_new(regex, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
 		g_free(regex);
 	}
 	if (label) {
 		symbol->label=g_malloc(sizeof(char)*(strlen(label)+1));
 		strcpy(symbol->label, label);
-	} else {
-		layoutreader_readdraw(reader, &(symbol->items), style_symbol_addarrow, style_symbol_addline,
-			style_symbol_addrect, style_symbol_addpath);
-	}
+	} else if (svg) {
+		symbol->svg=rsvg_handle_new_from_data((guint8 *)svg, (gsize)strlen(svg), &error);
+		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), svg);
+	} else { flo_fatal(_("Bad symbol: should have either svg or label :%s"), name); }
 	style->symbols=g_slist_append(style->symbols, (gpointer)symbol);
 	flo_debug("[new symbol] name=%s label=%s", name, symbol->label);
 }
 
-void style_symbol_freeitem(gpointer data, gpointer userdata)
-{
-	struct symbol_item *item=(struct symbol_item *)data;
-	if (item) {
-		if (item->type==GNOME_TYPE_CANVAS_LINE) {
-			gnome_canvas_points_unref(item->element.line->points);
-			g_free(item->element.line);
-		} else if (item->type==GNOME_TYPE_CANVAS_RECT) {
-			g_free(item->element.rect);
-		} else if (item->type==GNOME_TYPE_CANVAS_BPATH) {
-			gnome_canvas_path_def_unref(item->element.path);
-		} else { flo_error(_("Freeing unknown item type")); }
-		g_free(item);
-	}
-	/*gtk_object_destroy(GTK_OBJECT(group));*/
-}
-
+/* free up memory used by the symbol */
 void style_symbol_free(gpointer data, gpointer userdata)
 {
 	struct symbol *symbol=(struct symbol *)data;
 	if (symbol) {
 		if (symbol->name) g_regex_unref(symbol->name);
 		if (symbol->label) g_free(symbol->label);
-		g_slist_foreach(symbol->items, style_symbol_freeitem, NULL);
-		g_slist_free(symbol->items);
+		if (symbol->svg) rsvg_handle_free(symbol->svg);
 		g_free(symbol);
 	}
 }
 
+/* return TRUE if the name matches the symbol regexp */
 gboolean style_symbol_matches(struct symbol *symbol, gchar *name)
 {
 	if (!name) return FALSE;
 	return g_regex_match(symbol->name, name, G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
 }
 
-GnomeCanvasItem *style_symbol_bpath_draw(GnomeCanvasGroup *group, GnomeCanvasPathDef *path)
+/* Draws text with cairo */
+void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdouble w, gdouble h)
 {
-	return gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_BPATH, "width_units", 0.1, "outline-color",
-		style_colours[STYLE_TEXT_COLOR], "bpath", path, NULL);
-}
+	cairo_font_extents_t fe;
+	cairo_text_extents_t te;
+	PangoFontDescription *fontdesc;
+	gchar *fontname;
+	const gchar *fontfamilly;
+	GtkSettings *settings=gtk_settings_get_default();
+	cairo_font_slant_t slant;
 
-GnomeCanvasItem *style_symbol_rect_draw(GnomeCanvasGroup *group, struct symbol_rect *rect)
-{
-	return gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_RECT, "x1", rect->x1, "y1", rect->y1, "x2",
-		rect->x2, "y2", rect->y2, "fill_color", style_colours[STYLE_TEXT_COLOR], "width_units", 0.2, NULL);
-}
-
-GnomeCanvasItem *style_symbol_line_draw(GnomeCanvasGroup *group, struct symbol_line *line)
-{
-	GnomeCanvasItem *ret=NULL;
-	if (line->arrow) {
-		ret=gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_LINE,
-			"points", line->points, "fill_color", style_colours[STYLE_TEXT_COLOR], "last_arrowhead", TRUE,
-			"arrow_shape_b", -0.4, "arrow_shape_a", -0.4, "arrow_shape_c", 0.4, "width_units",
-			line->width, NULL);
-	} else {
-		ret=gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_LINE,
-			"points", line->points, "fill_color", style_colours[STYLE_TEXT_COLOR], "width_units",
-			line->width, NULL);
+	g_object_get(settings, "gtk-font-name", &fontname, NULL);
+	fontdesc=pango_font_description_from_string(fontname?fontname:"sans 10");
+	g_free(fontname);
+	fontfamilly=pango_font_description_get_family(fontdesc);
+	switch(pango_font_description_get_style(fontdesc)) {
+		case PANGO_STYLE_NORMAL: slant=CAIRO_FONT_SLANT_NORMAL; break;
+		case PANGO_STYLE_OBLIQUE: slant=CAIRO_FONT_SLANT_OBLIQUE; break;
+		case PANGO_STYLE_ITALIC: slant=CAIRO_FONT_SLANT_ITALIC; break;
+		default: flo_warn(_("unknown slant for font %s: %d"), fontfamilly, pango_font_description_get_style(fontdesc));
+			slant=CAIRO_FONT_SLANT_NORMAL; break;
 	}
-	return ret;
+
+	cairo_save(cairoctx);
+	style_cairo_set_color(style, cairoctx, STYLE_TEXT_COLOR);
+	cairo_select_font_face(cairoctx, fontfamilly, slant, 
+		pango_font_description_get_weight(fontdesc)<=500?CAIRO_FONT_WEIGHT_NORMAL:CAIRO_FONT_WEIGHT_BOLD);
+	cairo_set_font_size(cairoctx, 0.8);
+	cairo_text_extents(cairoctx, text, &te);
+	cairo_font_extents(cairoctx, &fe);
+	cairo_move_to(cairoctx, (w - te.width) / 2 - te.x_bearing, (h - fe.descent + fe.height) / 2);
+	cairo_show_text(cairoctx, text);
+	cairo_restore(cairoctx);
+
+	pango_font_description_free(fontdesc);
 }
 
-GnomeCanvasItem **style_symbol_draw(struct style *style, GnomeCanvasGroup *group, guint keyval)
+/* Draw the symbol represented by keyval */
+void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdouble w, gdouble h)
 {
-	GnomeCanvasItem **ret=NULL;
-	GnomeCanvasItem **br=NULL;
 	GSList *item=style->symbols;
-	struct symbol *symbol;
-	struct symbol_item *symbolItem;
 	gchar name[7];
 	guint keyval2=keyval;
 
 	while (item && !style_symbol_matches((struct symbol *)item->data, gdk_keyval_name(keyval))) {
 		item=g_slist_next(item);
 	}
+	/* No predifined symbol => get the label according to keyval */
 	if (!item) {
+		/* find the string representation of keyval */
 		name[0]='\0';
 		if (gdk_keyval_name(keyval) && !strncmp(gdk_keyval_name(keyval), "dead_", 5)) {
 			if (!strcmp(gdk_keyval_name(keyval), "dead_circumflex")) { strcpy(name,"^"); }
@@ -256,91 +192,100 @@ GnomeCanvasItem **style_symbol_draw(struct style *style, GnomeCanvasGroup *group
 		}
 		if (!name[0]) name[g_unichar_to_utf8(gdk_keyval_to_unicode(keyval2), name)]='\0';
 		/* if (!name[0] && gdk_keyval_name(keyval)) { strncpy(name, gdk_keyval_name(keyval), 3); name[3]='\0'; } */
-		ret=g_malloc(2*sizeof(GnomeCanvasItem *));
-		*ret=gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_TEXT, "x", 0.0, "y", 0.0, "text", name,
-			"fill_color", style_colours[STYLE_TEXT_COLOR], "size-set", TRUE, "size-points", 12.0, NULL);
-		*(ret+1)=NULL;
+		style_draw_text(style, cairoctx, name, w, h);
+	/* the symbol has a label ==> let's draw it */
 	} else if (((struct symbol *)item->data)->label) {
-		ret=g_malloc(2*sizeof(GnomeCanvasItem *));
-		*ret=gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_TEXT, "x", 0.0, "y", 0.0, "text",
-			((struct symbol *)item->data)->label, "fill_color", style_colours[STYLE_TEXT_COLOR],
-			"size-set", TRUE, "size-points", 12.0, NULL);
-		*(ret+1)=NULL;
+		style_draw_text(style, cairoctx, ((struct symbol *)item->data)->label, w, h);
+	/* the symbol must have a svg => draw it */
 	} else {
-		symbol=(struct symbol *)item->data;
-		ret=g_malloc(sizeof(GnomeCanvasItem *)*(1+g_slist_length(symbol->items)));
-		br=ret;
-		item=symbol->items;
-		while (item!=NULL)
-		{
-			symbolItem=(struct symbol_item *)item->data;
-			if (symbolItem->type==GNOME_TYPE_CANVAS_LINE) {
-				*(br++)=style_symbol_line_draw(group, symbolItem->element.line);
-			} else if (symbolItem->type==GNOME_TYPE_CANVAS_RECT) {
-				*(br++)=style_symbol_rect_draw(group, symbolItem->element.rect);
-			} else if (symbolItem->type==GNOME_TYPE_CANVAS_BPATH) {
-				*(br++)=style_symbol_bpath_draw(group, symbolItem->element.path);
-			}
-			item=g_slist_next(item);
-		}
-		*(br)=NULL;
+		style_render_svg(cairoctx, ((struct symbol *)item->data)->svg, w, h, TRUE, NULL);
 	}
-
-	return ret;
 }
 
-void style_shape_new(char *name, GnomeCanvasPathDef *path, void *userdata)
+/* callback for layoutreader for shape */
+void style_shape_new(char *name, char *svg, void *userdata)
 {
 	struct style *style=(struct style *)userdata;
 	struct shape *shape=g_malloc(sizeof(struct shape));
+	GError *error=NULL;
+	gchar *source;
 	memset(shape, 0, sizeof(struct shape));
 	if (name) {
 		shape->name=g_malloc(sizeof(gchar)*strlen(name)+1);
 		strcpy(shape->name, name);
 	}
-	shape->path=path;
+	if (svg) {
+		source=g_malloc(sizeof(gchar)*(strlen(svg)+strlen(style_css)+1));
+		strcpy(source, style_css);
+		strcat(source, svg);
+	}
+	shape->svg=rsvg_handle_new_from_data((guint8 *)source, (gsize)strlen(source), &error);
+	if (error) flo_fatal(_("Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""),
+		source, error->message);
+	g_free(source);
 	style->shapes=g_slist_append(style->shapes, (gpointer)shape);
-	flo_debug("[new shape] name=%s path=%p", shape->name, shape->path);
+	if (!strcmp(name, "default")) style->default_shape=shape;
+	flo_debug(_("[new shape] name=%s svg=%p"), shape->name, shape->svg);
 }
 
+/* liberate memory used for shape */
 void style_shape_free(gpointer data, gpointer userdata)
 {
 	struct shape *shape=(struct shape *)data;
 	if (shape) {
 		if (shape->name) g_free(shape->name);
-		if (shape->path) gnome_canvas_path_def_unref(shape->path);
+		if (shape->svg) rsvg_handle_free(shape->svg);
+		if (shape->mask) cairo_surface_destroy(shape->mask);
 		g_free(shape);
 	}
 }
 
-GnomeCanvasItem *style_shape_draw(struct style *style, GnomeCanvasGroup *group, gchar *name)
-{
-	GnomeCanvasItem *ret;
+/* get the shape by its name */
+struct shape *style_shape_get (struct style *style, gchar *name) {
 	GSList *item=style->shapes;
-
+	if (!name) return style->default_shape;
 	while (item && strcmp(((struct shape *)item->data)->name, name)) item=g_slist_next(item);
 	if (!item) flo_fatal(_("Shape doesn't exist: %s"), name);
-	ret=gnome_canvas_item_new(group, GNOME_TYPE_CANVAS_BPATH, "bpath", ((struct shape *)item->data)->path,
-		"fill_color", style_colours[STYLE_KEY_COLOR], "outline_color",
-		style_colours[STYLE_OUTLINE_COLOR], "width_units", 0.1, NULL);
-	gnome_canvas_item_set(GNOME_CANVAS_ITEM(group), "path", ((struct shape *)item->data)->path, NULL);
-	return ret;
+	return (struct shape *)item->data;
 }
 
+/* draw the shape to the cairo context. */
+void style_shape_draw(struct shape *shape, cairo_t *cairoctx, gdouble w, gdouble h)
+{
+	style_render_svg(cairoctx, shape->svg, w, h, FALSE, NULL);
+}
+
+/* create a mask surface for the shape, if it doesn't already exist */
+cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h)
+{
+	cairo_t *maskctx;
+	if ((!shape->mask)||(w!=shape->maskw)||(h!=shape->maskh)) {
+		if (shape->mask) cairo_surface_destroy(shape->mask);
+		shape->maskw=w; shape->maskh=h;
+		shape->mask=cairo_image_surface_create(CAIRO_FORMAT_A8, w, h);
+		maskctx=cairo_create(shape->mask);
+		style_shape_draw(shape, maskctx, w, h);
+		cairo_destroy(maskctx);
+	}
+	return shape->mask;
+}
+
+/* create a new style from the layout file */
 struct style *style_new(xmlTextReaderPtr reader)
 {
 	struct style *style=g_malloc(sizeof(struct style));
 	memset(style, 0, sizeof(struct style));
-	memset(style_colours, 0, sizeof(style_colours));
-	style_set_color(STYLE_KEY_COLOR, (gchar *)settings_get_string("colours/key"));
-	style_set_color(STYLE_OUTLINE_COLOR, (gchar *)settings_get_string("colours/outline"));
-	style_set_color(STYLE_TEXT_COLOR, (gchar *)settings_get_string("colours/label"));
-	style_set_color(STYLE_ACTIVATED_COLOR, (gchar *)settings_get_string("colours/activated"));
-	style_set_color(STYLE_MOUSE_OVER_COLOR, (gchar *)settings_get_string("colours/mouseover"));
+	memset(style->colours, 0, sizeof(style->colours));
+	style_set_color(style, STYLE_KEY_COLOR, (gchar *)settings_get_string("colours/key"));
+	style_set_color(style, STYLE_OUTLINE_COLOR, (gchar *)settings_get_string("colours/outline"));
+	style_set_color(style, STYLE_TEXT_COLOR, (gchar *)settings_get_string("colours/label"));
+	style_set_color(style, STYLE_ACTIVATED_COLOR, (gchar *)settings_get_string("colours/activated"));
+	style_set_color(style, STYLE_MOUSE_OVER_COLOR, (gchar *)settings_get_string("colours/mouseover"));
 	layoutreader_readstyle(reader, style_shape_new, style_symbol_new, style);
 	return style;
 }
 
+/* free style */
 void style_free(struct style *style)
 {
 	if (style) {

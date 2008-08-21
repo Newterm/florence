@@ -21,6 +21,7 @@
 
 #include "trace.h"
 #include "system.h"
+#include <glib/gprintf.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -37,14 +38,14 @@ void trace_init(int debug)
 void flo_fatal(char *s, ...)
 {
 	va_list ap;
-        fprintf(stderr, _("FATAL ERROR: "));
+        g_fprintf(stderr, _("FATAL ERROR: "));
 	va_start(ap, s);
-        vfprintf(stderr, s, ap);
-	fprintf(stderr, "\n");
+        g_vfprintf(stderr, s, ap);
+	g_fprintf(stderr, "\n");
 	va_end(ap);
 	if (!getenv("FLO_DEBUG") || strcmp(getenv("FLO_DEBUG"), "1")) {
-		fprintf(stderr, _("If you need help, please rerun with the -d switch (debug)\n"));
-		fprintf(stderr, _("and send the output to f.agrech@gmail.com\n\n"));
+		g_fprintf(stderr, _("If you need help, please rerun with the -d switch (debug)\n"));
+		g_fprintf(stderr, _("and send the output to f.agrech@gmail.com\n\n"));
 	}
         exit(EXIT_FAILURE);
 }
@@ -53,28 +54,28 @@ void flo_info(char *s, ...)
 {
 	va_list ap;
 	va_start(ap, s);
-        vprintf(s, ap);
-        printf("\n");
+        g_vprintf(s, ap);
+        g_printf("\n");
 	va_end(ap);
 }
 
 void flo_warn(char *s, ...)
 {
 	va_list ap;
-	fprintf(stderr, _("WARNING: "));
+	g_fprintf(stderr, _("WARNING: "));
 	va_start(ap, s);
-        vfprintf(stderr, s, ap);
-        fprintf(stderr, "\n");
+        g_vfprintf(stderr, s, ap);
+        g_fprintf(stderr, "\n");
 	va_end(ap);
 }
 
 void flo_error(char *s, ...)
 {
 	va_list ap;
-        fprintf(stderr, _("ERROR: "));
+        g_fprintf(stderr, _("ERROR: "));
 	va_start(ap, s);
-        vfprintf(stderr, s, ap);
-	fprintf(stderr, "\n");
+        g_vfprintf(stderr, s, ap);
+	g_fprintf(stderr, "\n");
 	va_end(ap);
 }
 
@@ -83,8 +84,8 @@ void flo_debug(char *s, ...)
 	if (trace_debug) {
 		va_list ap;
 		va_start(ap, s);
-        	vprintf(s, ap);
-		printf("\n");
+        	g_vprintf(s, ap);
+		g_printf("\n");
 		va_end(ap);
 	}
 }

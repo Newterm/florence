@@ -22,9 +22,7 @@
 
 #include <stdio.h>
 #include <X11/XKBlib.h>
-#include <glib.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkx.h>
 #include <cspi/spi.h>
 #include <gconf/gconf-client.h>
 #include "system.h"
@@ -32,240 +30,42 @@
 #include "keyboard.h"
 #include "key.h"
 #include "settings.h"
-#include "layoutreader.h"
 
-/* Determines the frame/sec used to animate click timer */
-/* 20 ms means 1/0.02=50 fps */
-#define FLO_ANIMATION_PERIOD 20
-
-/* XKB data */
-XkbDescPtr keyboard_xkb=NULL;
-/* This is a hack for the alt key.
- * Usually, <Alt>+<left mouse button> is bound to the move window WM action
- * This makes it impossible to click <Alt> and any other key in Florence because it moves the virtual
- * keyboard instead of clicking on the key.
- * With this hack, the Alt key is not actually pressed when you click on it, but alt_pressed is set to
- * The Alt key code instead. The key is pressed when you click another key. */
-guint keyboard_alt_pressed=0;
-
-/* Returns Keyboard canvas */
-GnomeCanvas *keyboard_get_canvas(struct keyboard *keyboard)
+/* Add a key to the keyboard: Called by layoutparser when a key has been parsed in the layout 
+ * userdata1 is the keyboard
+ * userdata2 is the global key table */
+void keyboard_insertkey (void *userdata1, char *shape,
+	unsigned char code, double x, double y, double w, double h, void *userdata2)
 {
-	return keyboard->canvas;
-}
-
-/* Returns Keyboard width in pixels */
-guint keyboard_get_width(struct keyboard *keyboard)
-{
-	return keyboard->width;
-}
-
-/* Returns Keyboard height in pixels */
-guint keyboard_get_height(struct keyboard *keyboard)
-{
-	return keyboard->height;
-}
-
-/* Returns the keyboard byte map (one byte=one pixel=one keycode) */
-guchar *keyboard_get_map(struct keyboard *keyboard)
-{
-	return keyboard->map;
-}
-
-/* Returns the zoom factor (1/2 of a pixel per unit) of the keyboard 
- * A zoom of 10 means 20 pixels per unit */
-gdouble keyboard_get_zoom(struct keyboard *keyboard)
-{
-	return keyboard->zoom;
-}
-
-/* Resize the keyboard according to the new scaling factor */
-void keyboard_resize(struct keyboard *keyboard, gdouble zoom)
-{
-	gint i;
-	keyboard->zoom=zoom;
-	gnome_canvas_set_pixels_per_unit(keyboard->canvas, zoom);
-	gnome_canvas_w2c(keyboard->canvas, keyboard->dwidth, keyboard->dheight , &(keyboard->width), &(keyboard->height));
-	gtk_widget_set_size_request(GTK_WIDGET(keyboard_get_canvas(keyboard)),
-		keyboard_get_width(keyboard), keyboard_get_height(keyboard));
-	if (keyboard->map) g_free(keyboard->map);
-	keyboard->map=g_malloc(sizeof(guchar)*keyboard->width*keyboard->height);
-	if (!keyboard->map) flo_fatal(_("Out of memory"));
-	memset(keyboard->map, 0, sizeof(guchar)*keyboard->width*keyboard->height);
-        for(i=0;i<256;i++) {
-                if (keyboard->keys[i]) {
-			key_resize(keyboard->keys[i], zoom);
-		}
-	}
-}
-
-/* Changes the mofifiers status of the keyboard and update the key labels according to it */
-void keyboard_switch_mode(struct keyboard *keyboard)
-{
-	int i;
-	XkbStateRec rec;
-
-	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()), XkbUseCoreKbd, &rec);
-	for (i=0;i<256;i++) {
-		if (keyboard->keys[i]) key_switch_mode(keyboard->keys[i], rec.mods);
-	}
-}
-
-/* Send a kay press event */
-void keyboard_key_press(struct key *key)
-{
-	key_set_color(key, STYLE_ACTIVATED_COLOR);
-	/* Alt hack (see comments on keyboard_alt_pressed line 41) */
-	if (key->modifier&GDK_MOD1_MASK) keyboard_alt_pressed=key->code;
-	else {
-		if (keyboard_alt_pressed)  SPI_generateKeyboardEvent(keyboard_alt_pressed, NULL, SPI_KEY_PRESS);
-		SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
-		if (keyboard_alt_pressed)  SPI_generateKeyboardEvent(keyboard_alt_pressed, NULL, SPI_KEY_RELEASE);
-	}
-	if (key->locker) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
-	key->pressed=TRUE;
-	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key));
-}
-
-/* Send a kay release event */
-void keyboard_key_release(struct key *key)
-{
-	if (key->locker) SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
-	/* Alt hack (see comments on keyboard_alt_pressed line 41) */
-	if (key->modifier&GDK_MOD1_MASK) keyboard_alt_pressed=0;
-	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
-	key->pressed=FALSE;
-	key_set_color(key, STYLE_KEY_COLOR);
-	if (key->modifier) keyboard_switch_mode(key_get_keyboard(key));
-}
-
-/* Callback called when the mouse leaves a key (the current key) */
-gboolean keyboard_leave_event (GtkWidget *item, GdkEvent *event, gpointer user_data)
-{
-	struct keyboard *keyboard=(struct keyboard *)user_data;
-	if (keyboard->pressed && keyboard->pressed->pressed && !keyboard->pressed->modifier)
-		keyboard_key_release(keyboard->pressed);
-	if (keyboard->current) key_set_color(keyboard->current,
-		keyboard->current->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
-	keyboard->current=NULL;
-	return FALSE;
-}
-
-/* callback called every FLO_ANIMATION_PERIOD to update the auto click timer 
- * if the timer reaches 1, the key is pressed. If the mouse has left the key,
- * the timer is ended (by returning FALSE) */
-gboolean keyboard_press_timeout (gpointer data)
-{
-	struct key *key=(struct key *)data;
-	struct keyboard *keyboard=key_get_keyboard(key);
-	gboolean ret=TRUE;
-	if (keyboard->timer>=1.0) {
-		gboolean pressed=key->pressed;
-		if (!key->modifier || !pressed) keyboard_key_press(key);
-		if (!key->modifier || (key->modifier && pressed)) keyboard_key_release(key);
-		ret=FALSE;
-	}
-	if ((keyboard->timer==0.0) || (!ret) || (keyboard->current!=key)) {
-		key_update_timer(key, 0.0); ret=FALSE;
-	}
-	else { key_update_timer(key, keyboard->timer); keyboard->timer+=keyboard->timer_step; }
-	return ret;
-}
-
-/* Handle all canvas events: mouse movements and button press/release */
-gboolean keyboard_handle_event (GtkWidget *item, GdkEvent *event, gpointer user_data)
-{
-	guchar code;
-	struct key *key=NULL;
-	struct key *data=(struct key *)user_data;
-	struct keyboard *keyboard=key_get_keyboard(data);
-	guint x, y;
-
-	switch (event->type) {
-		case GDK_MOTION_NOTIFY:
-			gnome_canvas_w2c(keyboard->canvas, ((GdkEventMotion*)event)->x, 
-				((GdkEventMotion*)event)->y, &x, &y);
-			break;
-		case GDK_ENTER_NOTIFY:
-		case GDK_LEAVE_NOTIFY:
-			gnome_canvas_w2c(keyboard->canvas, ((GdkEventCrossing*)event)->x, 
-				((GdkEventCrossing*)event)->y, &x, &y);
-			break;
-		case GDK_BUTTON_PRESS:
-		case GDK_BUTTON_RELEASE:
-			gnome_canvas_w2c(keyboard->canvas, ((GdkEventButton*)event)->x, 
-				((GdkEventButton*)event)->y, &x, &y);
-			break;
-		default:
-			return FALSE;
-	}
-	if (x<0 || y<0 || x>=keyboard->width || y>=keyboard->height) return FALSE;
-	code=keyboard->map[x+(keyboard->width*y)];
-	if (code) key=keyboard->keys[code];
-
-	if (keyboard->current!=key && (event->type==GDK_ENTER_NOTIFY || event->type==GDK_LEAVE_NOTIFY ||
-		event->type==GDK_MOTION_NOTIFY)) {
-		if (keyboard->timer_step==0.0) {
-			if (key) {
-				key_set_color(key, STYLE_MOUSE_OVER_COLOR);
-			}
-			if (keyboard->current && keyboard->current!=key) { 
-				key_set_color(keyboard->current,
-					keyboard->current->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
-				keyboard->current=NULL;
-			}
-		} else {
-			if (key) {keyboard->timer=keyboard->timer_step;
-			g_timeout_add(FLO_ANIMATION_PERIOD, keyboard_press_timeout, key);}
-			else { keyboard->current=NULL; }
-		}
-		keyboard->current=key;
-	} else if (event->type==GDK_BUTTON_PRESS && (!data->modifier || !data->pressed)) {
-		keyboard->timer=0.0; keyboard->pressed=data;
-		keyboard_key_press(data);
-	} else if ((event->type==GDK_BUTTON_RELEASE && !data->modifier) || 
-		(event->type==GDK_BUTTON_PRESS && key->modifier && data->pressed)) {
-		keyboard->timer=0.0;
-		keyboard_key_release(data);
-	}
-
-	return FALSE;
-}
-
-/* Add a key to the keyboard: Called by layoutparser when a key has been parsed in the layout */
-struct key *keyboard_insertkey (struct keyboard *keyboard, char *shape,
-	unsigned char code, double x, double y, double w, double h)
-{
-	GnomeCanvasClipgroup *group;
+	struct keyboard *keyboard=(struct keyboard *)userdata1;
+	struct keyboard_globaldata *global=(struct keyboard_globaldata *)userdata2;
+	struct key **key_table=global->key_table;
+	struct style *style=global->style;
+	XkbDescPtr xkb=global->xkb_desc;
+	XkbStateRec rec=global->xkb_state;
+	struct key *key;
 	GdkModifierType mod;
-	XkbStateRec rec;
 	gboolean locker;
 
-	flo_debug("[new key] code=%d x=%f y=%f w=%f h=%f shape=%s", code, x, y, w, h, shape);
-        group=(GnomeCanvasClipgroup *)gnome_canvas_item_new(keyboard->canvas_group, GNOME_TYPE_CANVAS_CLIPGROUP, 
-		"x", x*2.0, "y", y*2.0, NULL);
+	flo_debug(_("[new key] code=%d x=%f y=%f w=%f h=%f shape=%s"), code, x, y, w, h, shape);
 
-	locker=XkbKeyAction(keyboard_xkb, code, 0)?XkbKeyAction(keyboard_xkb, code, 0)->type==XkbSA_LockMods:FALSE;
-	mod=keyboard_xkb->map->modmap[code];
-	keyboard->keys[code]=key_new(keyboard, code, group, mod, locker, shape);
-	key_draw(keyboard->keys[code], w, h, 0);
-	key_resize(keyboard->keys[code], keyboard->zoom);
+	locker=XkbKeyAction(xkb, code, 0)?XkbKeyAction(xkb, code, 0)->type==XkbSA_LockMods:FALSE;
+	mod=xkb->map->modmap[code];
 
-	/* Highlight the caps lock or num lock key if caps lock or num lock is activated */
+	key=key_new((void *)keyboard, code, mod, locker, x, y, w, h, style_shape_get(style, shape));
+	keyboard->keys=g_slist_append(keyboard->keys, key);
+	if (key_table) key_table[code]=key;
+
+	/* Press the activated locker key if the hardware key is activated */
 	if (mod) {
-		XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()), XkbUseCoreKbd, &rec);
 		if (mod&rec.locked_mods) {
-			key_set_color(keyboard->keys[code], STYLE_ACTIVATED_COLOR);
-			keyboard->keys[code]->pressed=TRUE;
+			key_set_pressed(key, TRUE);
 		}
 	}
-
-	gtk_signal_connect(GTK_OBJECT(group), "event", GTK_SIGNAL_FUNC(keyboard_handle_event), keyboard->keys[code]);
-	return keyboard->keys[code];
 }
 
 /* GConf callback called when a color has changed: update the keyboard color accordingly */
-void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum style_colours colclass)
+/*void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum style_colours colclass)
 {
 	guint i;
 	gchar *color=(gchar *)gconf_value_get_string(gconf_entry_get_value(entry));
@@ -282,7 +82,7 @@ void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum s
 				case STYLE_ACTIVATED_COLOR:
 					if (keyboard->keys[i]->pressed) key_set_color(keyboard->keys[i], colclass);
 				case STYLE_MOUSE_OVER_COLOR:
-					/* unlikely and if that ever happen, just move to another key */
+					*//* unlikely and if that ever happen, just move to another key *//*
 					break;
 				default:
 					flo_error(_("Should never happen: unknown color class updated"));
@@ -290,37 +90,42 @@ void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum s
 			}
 		}
 	}
-}
+}*/
 
 /* Callback for GConf color change */
+/*
 void keyboard_change_key_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
 	keyboard_change_color(keyboard, entry, STYLE_KEY_COLOR);
-}
+}*/
 
 /* Callback for GConf color change */
+/*
 void keyboard_change_text_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
 	keyboard_change_color(keyboard, entry, STYLE_TEXT_COLOR);
-}
+}*/
 
 /* Callback for GConf color change */
+/*
 void keyboard_change_activated_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
 	keyboard_change_color(keyboard, entry, STYLE_ACTIVATED_COLOR);
-}
+}*/
 
 /* Callback for GConf color change */
+/*
 void keyboard_change_mouseover_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
 	keyboard_change_color(keyboard, entry, STYLE_MOUSE_OVER_COLOR);
-}
+}*/
 
 /* Callback for GConf autoclick timer change */
+/*
 void keyboard_change_auto_click(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct keyboard *keyboard=(struct keyboard *)user_data;
@@ -329,9 +134,10 @@ void keyboard_change_auto_click(GConfClient *client, guint xnxn_id, GConfEntry *
 		keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;
 	else
 		keyboard->timer_step=0.0;
-}
+}*/
 
 /* Register GConf callbacks */
+/*
 void keyboard_settings_connect(struct keyboard *keyboard)
 {
 	settings_changecb_register("colours/key", keyboard_change_key_color, (gpointer)keyboard);
@@ -339,72 +145,126 @@ void keyboard_settings_connect(struct keyboard *keyboard)
 	settings_changecb_register("colours/activated", keyboard_change_activated_color, (gpointer)keyboard);
 	settings_changecb_register("colours/mouseover", keyboard_change_mouseover_color, (gpointer)keyboard);
 	settings_changecb_register("behaviour/auto_click", keyboard_change_auto_click, (gpointer)keyboard);
-}
+}*/
 
-/* Set the initial size of the keyboard */
+/* Set the logical size of the keyboard
+ * Called while parsing xml layout file */
 void keyboard_setsize(void *userdata, double width, double height)
 {
 	struct keyboard *keyboard=(struct keyboard *)userdata;
-	keyboard->dwidth=2.0*width;
-	keyboard->dheight=2.0*height;
-	gnome_canvas_set_scroll_region(keyboard->canvas, 0.0, 0.0, keyboard->dwidth, keyboard->dheight);
-        gnome_canvas_set_pixels_per_unit(keyboard->canvas, keyboard->zoom);
-	gnome_canvas_w2c(keyboard->canvas, keyboard->dwidth, keyboard->dheight, &(keyboard->width), &(keyboard->height));
-	keyboard->map=g_malloc(sizeof(guchar)*keyboard->width*keyboard->height);
-	if (!keyboard->map) flo_fatal(_("Unable to allocate memory for map."));
-	memset(keyboard->map, 0, sizeof(guchar)*keyboard->width*keyboard->height);
+
+	keyboard->width=width;
+	keyboard->height=height;
 }
 
-/* Create a keyboard: the layout is passed as a text reader
- * Draw the keyboard into the canvas and register callbacks */
-struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextReaderPtr reader, int level)
+/* Checks a colon separated list of strings for the presence of a particular string.
+ * This is useful to check the "extensions" gconf parameter which is a list of colon separated strings */
+gboolean keyboard_activated(struct keyboard *keyboard)
 {
-	struct keyboard *keyboard=NULL;
-	gdouble click_time;
-	int maj = XkbMajorVersion;
-	int min = XkbMinorVersion;
-	int opcode_rtrn, event_rtrn, error_rtrn;
-
-	/* Check XKB Version */
-	if (!XkbLibraryVersion(&maj, &min) ||
-		!XkbQueryExtension((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
-		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min)) {
-		flo_fatal(_("XKB version mismatch"));
+	gboolean ret=FALSE;
+	gchar *allextstr=NULL;
+	gchar **extstrs=NULL;
+	gchar **extstr=NULL;
+	if (!keyboard->name) return TRUE;
+	/* TODO: cache this and register callback for change */
+	if ((allextstr=settings_get_string("layout/extensions"))) {
+		extstrs=g_strsplit(allextstr, ":", -1);
+		extstr=extstrs;
+		while (extstr && *extstr) {
+			if (!strcmp(keyboard->name, *(extstr++))) { ret=TRUE; break; }
+		}
+		g_strfreev(extstrs);
 	}
-	/* get the modifier map from xkb */
-	keyboard_xkb=XkbGetMap((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
-		XkbKeyActionsMask|XkbModifierMapMask, XkbUseCoreKbd);
+	return ret;
+}
 
+/* Create a keyboard: the layout is passed as a text reader */
+struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name, enum layout_placement placement, void *data)
+{
+	struct keyboard_globaldata *global=(struct keyboard_globaldata *)data;
+	struct keyboard *keyboard=NULL;
+
+	flo_debug(_("[new keyboard] name=%s"), name);
+
+	/* allocate memory for keyboard */
 	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
-	keyboard->keys=keys;
 
-	click_time=settings_get_double("behaviour/auto_click");
-	if (click_time<=0.0) keyboard->timer_step=0.0; else keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;
+	/*click_time=settings_get_double("behaviour/auto_click");
+	if (click_time<=0.0) keyboard->timer_step=0.0; else keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;*/
 
-	keyboard->canvas=canvas;
-	keyboard->zoom=settings_get_double("window/zoom");
-	keyboard->canvas_group=gnome_canvas_root(canvas);
-	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, level);
-	XkbFreeClientMap(keyboard_xkb, XkbKeyActionsMask|XkbModifierMapMask, True);
+	if (name) {
+		keyboard->name=g_malloc(sizeof(gchar)*(strlen(name)+1));
+		strcpy(keyboard->name, name);
+	}
+	keyboard->placement=placement;
+	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, global, level);
 
-	/* Update the keyboard according to the status */
-	keyboard_switch_mode(keyboard);
 
-	gtk_signal_connect(GTK_OBJECT(canvas), "leave-notify-event", GTK_SIGNAL_FUNC(keyboard_leave_event), keyboard);
-	keyboard_settings_connect(keyboard);
-	gtk_widget_set_size_request(GTK_WIDGET(canvas), keyboard_get_width(keyboard), keyboard_get_height(keyboard));
+/*	keyboard_settings_connect(keyboard);*/
 	return keyboard;
 }
 
 /* delete a keyboard */
 void keyboard_free (struct keyboard *keyboard)
 {
-	int i;
-	for (i=0;i<256;i++) if (keyboard->keys[i]) key_free(keyboard->keys[i]);
-	key_exit();
-	g_free(keyboard->keys);
-	g_free(keyboard->map);
+	if (keyboard->name) g_free(keyboard->name);
 	g_free(keyboard);
 }
+
+/* fill the hitmap with key data */
+void keyboard_hitmap_draw(struct keyboard *keyboard, guchar *hitmap, guint w, guint h, gdouble x, gdouble y, gdouble z)
+{
+	GSList *list=keyboard->keys;
+	keyboard->xpos=x; keyboard->ypos=y;
+	while (list)
+	{
+		key_hitmap_draw((struct key *)list->data, hitmap, w, h,
+			keyboard->xpos, keyboard->ypos, z);
+		list = list->next;
+	}
+}
+
+/* draw the keyboard to cairo surface */
+void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+	struct style *style, GdkModifierType mod)
+{
+	GSList *list=keyboard->keys;
+	cairo_save(cairoctx);
+	cairo_scale(cairoctx, z, z);
+	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
+	while (list)
+	{
+		key_draw((struct key *)list->data, style, cairoctx, z, mod, 0.0, FALSE);
+		list = list->next;
+	}
+	cairo_restore(cairoctx);
+}
+
+/* redraw a single key of the keyboard (keyboard_draw must have been called first 
+ * if activated, the key is drawn with the activated color. */
+void keyboard_key_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, struct style *style,
+	struct key *key, GdkModifierType mod, gboolean activated, gdouble timer)
+{
+	cairo_save(cairoctx);
+	cairo_scale(cairoctx, z, z);
+	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
+	key_draw(key, style, cairoctx, z, mod, timer, activated);
+	cairo_restore(cairoctx);
+}
+
+/* returns a rectangle containing the key */
+void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
+        gdouble *x, gdouble *y, gdouble *w, gdouble *h)
+{
+	*x=keyboard->xpos+(key->x-(key->w/2.0));
+	*y=keyboard->ypos+(key->y-(key->h/2.0));
+	*w=key->w;
+	*h=key->h;
+}
+
+/* getters */
+gdouble keyboard_get_width(struct keyboard *keyboard) { return keyboard->width; }
+gdouble keyboard_get_height(struct keyboard *keyboard) { return keyboard->height; }
+enum layout_placement keyboard_get_placement(struct keyboard *keyboard) { return keyboard->placement; }
 

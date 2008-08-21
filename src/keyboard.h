@@ -19,40 +19,61 @@
 
 */
 
+#ifndef FLO_KEYBOARD
+#define FLO_KEYBOARD
+
+#include <glib.h>
+#include <X11/XKBlib.h>
 #include "key.h"
-#include <libgnomecanvas/libgnomecanvas.h>
-#include <libxml/xmlreader.h>
+#include "layoutreader.h"
 
 /* A keyboard is a set of keys logically grouped together */
 /* Examples: the main keyboard, the numpad or the function keys */
 struct keyboard {
-	struct key **keys; /* key code indexed list of keys */
-	GnomeCanvasGroup *canvas_group; /* GnomeCanvasGroup used for drowing the keyboard */
-	GnomeCanvas *canvas; /* Canvas of the keyboard (parent of the canvas group) */
-	guchar *map; /* byte map representing the keyboard. the byte value is equal to the keycode. */
-	gdouble dwidth, dheight, zoom; /* logical with and height and pixels per unit */
-	guint width, height; /* width and height in pixels (width=dwidth*zoom) */
-	struct key *current; /* key under the mouse (NULL if the mouse is not over a key) */
-	struct key *pressed; /* key currently being pressed */
-	gdouble timer; /* counts the number of ms the mouse is over a key (for autoclickr) */
-	gdouble timer_step; /* number of ms to add to timer at each period */
+	gchar *name; /* name of the kayboard: NULL for main keyboard */
+	gdouble xpos, ypos; /* logical position of the keyboard (may change according to which keyboards are activated) */
+	gdouble width, height; /* logical width and height of the keyboard */
+	enum layout_placement placement; /* position of the kekboard relative to main (VOID placement) */
+	GSList *keys; /* list of the keys of the keyboard */
+};
+
+/* This structure contains data from hardware keyboard as well as global florence data
+ * Used to initialize the keyboard */
+struct keyboard_globaldata {
+	struct key **key_table; /* table of keys */
+	struct style *style; /* style of florence  */
+	XkbDescPtr xkb_desc; /* Keyboard description from XKB */
+	XkbStateRec xkb_state; /* Keyboard Status (get from XKB) */
 };
 
 /* create a keyboard: the layout is passed as a text reader */
-struct keyboard *keyboard_new (GnomeCanvas *canvas, struct key **keys, xmlTextReaderPtr reader, int level);
+struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name,
+	enum layout_placement placement, void *data);
 /* delete a keyboard */
 void keyboard_free (struct keyboard *keyboard);
-/* Returns Keyboard canvas */
-GnomeCanvas *keyboard_get_canvas(struct keyboard *keyboard);
+
 /* Returns Keyboard width in pixels */
-guint keyboard_get_width(struct keyboard *keyboard);
+gdouble keyboard_get_width(struct keyboard *keyboard);
 /* Returns Keyboard height in pixels */
-guint keyboard_get_height(struct keyboard *keyboard);
-/* Returns the keyboard byte map (one byte=one pixel=one keycode) */
-guchar *keyboard_get_map(struct keyboard *keyboard);
-/* Returns the zoom factor (1/2 of a pixel per unit) of the keyboard
- * A zoom of 10 means 20 pixels per unit */
-gdouble keyboard_get_zoom(struct keyboard *keyboard);
-/* Resize the keyboard according to the new scaling factor */
-void keyboard_resize(struct keyboard *keyboard, gdouble zoom);
+gdouble keyboard_get_height(struct keyboard *keyboard);
+/* Returns Keyboard position relative to the main keybord, as defined in the layout file */
+enum layout_placement keyboard_get_placement(struct keyboard *keyboard);
+/* Checks gconf for the activation of the keyboard. */
+gboolean keyboard_activated(struct keyboard *keyboard);
+
+/* draw the keyboard to cairo surface */
+void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+	struct style *style, GdkModifierType mod);
+/* fill the hitmap with key data */
+void keyboard_hitmap_draw(struct keyboard *keyboard, guchar *hitmap, guint w, guint h,
+	gdouble x, gdouble y, gdouble z);
+/* redraw a single key of the keyboard (keyboard_draw must have been called first 
+ * if activated, the key is drawn with the activated color. */
+void keyboard_key_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, struct style *style,
+	struct key *key, GdkModifierType mod, gboolean activated, gdouble timer);
+/* returns a rectangle containing the key */
+void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
+	gdouble *x, gdouble *y, gdouble *w, gdouble *h);
+
+#endif
 

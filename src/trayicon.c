@@ -20,20 +20,19 @@
 */
 
 #include "system.h"
+#include "trace.h"
 #include "config.h"
 #include "settings.h"
-#include "trace.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #ifdef ENABLE_HELP
-#include <libgnome/gnome-help.h>
+	#include <libgnome/gnome-help.h>
 #endif
 
 GCallback trayicon_quit;
 
 void trayicon_about(void)
 {
-	GtkAboutDialog *about=GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
 		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
 		"logo", gdk_pixbuf_new_from_file(ICONDIR "/florence.svg", NULL),

@@ -1,0 +1,5 @@
+use gconf colors
+register gconf callbacks
+valgrind florence
+fix drawing bug (use backdrop?)
+put trang command in autogen.sh
