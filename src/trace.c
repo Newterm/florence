@@ -22,6 +22,7 @@
 #include "trace.h"
 #include "system.h"
 #include <glib/gprintf.h>
+#include <glib/gutils.h>
 #include <stdio.h>
 #include <stdarg.h>
 
@@ -43,7 +44,7 @@ void flo_fatal(char *s, ...)
         g_vfprintf(stderr, s, ap);
 	g_fprintf(stderr, "\n");
 	va_end(ap);
-	if (!getenv("FLO_DEBUG") || strcmp(getenv("FLO_DEBUG"), "1")) {
+	if (!g_getenv("FLO_DEBUG") || strcmp(g_getenv("FLO_DEBUG"), "1")) {
 		g_fprintf(stderr, _("If you need help, please rerun with the -d switch (debug)\n"));
 		g_fprintf(stderr, _("and send the output to f.agrech@gmail.com\n\n"));
 	}

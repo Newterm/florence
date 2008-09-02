@@ -46,6 +46,9 @@ gboolean settings_gtk_exit=FALSE;
 char *settings_get_full_path(const char *path)
 {
 	static char string_buffer[64];
+	if ((strlen(FLO_SETTINGS_ROOT)+strlen(path)+2)>64) {
+		flo_fatal(_("Settings/get_full_path: buffer overflow : %s/%s"), FLO_SETTINGS_ROOT, path);
+	}
 	strcpy(string_buffer, FLO_SETTINGS_ROOT);
 	strcat(string_buffer, "/");
 	strcat(string_buffer, path);

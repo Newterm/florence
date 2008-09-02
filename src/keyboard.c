@@ -64,89 +64,6 @@ void keyboard_insertkey (void *userdata1, char *shape,
 	}
 }
 
-/* GConf callback called when a color has changed: update the keyboard color accordingly */
-/*void keyboard_change_color (struct keyboard *keyboard, GConfEntry *entry, enum style_colours colclass)
-{
-	guint i;
-	gchar *color=(gchar *)gconf_value_get_string(gconf_entry_get_value(entry));
-	key_update_color(colclass, color);
-	for(i=0;i<256;i++) {
-		if (keyboard->keys[i]) {
-			switch(colclass) {
-				case STYLE_KEY_COLOR: 
-					if (!keyboard->keys[i]->pressed) key_set_color(keyboard->keys[i], colclass);
-					break;
-				case STYLE_TEXT_COLOR:
-					key_update_text_color(keyboard->keys[i]);
-					break;
-				case STYLE_ACTIVATED_COLOR:
-					if (keyboard->keys[i]->pressed) key_set_color(keyboard->keys[i], colclass);
-				case STYLE_MOUSE_OVER_COLOR:
-					*//* unlikely and if that ever happen, just move to another key *//*
-					break;
-				default:
-					flo_error(_("Should never happen: unknown color class updated"));
-					break;
-			}
-		}
-	}
-}*/
-
-/* Callback for GConf color change */
-/*
-void keyboard_change_key_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, STYLE_KEY_COLOR);
-}*/
-
-/* Callback for GConf color change */
-/*
-void keyboard_change_text_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, STYLE_TEXT_COLOR);
-}*/
-
-/* Callback for GConf color change */
-/*
-void keyboard_change_activated_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, STYLE_ACTIVATED_COLOR);
-}*/
-
-/* Callback for GConf color change */
-/*
-void keyboard_change_mouseover_color (GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	struct keyboard *keyboard=(struct keyboard *)user_data;
-	keyboard_change_color(keyboard, entry, STYLE_MOUSE_OVER_COLOR);
-}*/
-
-/* Callback for GConf autoclick timer change */
-/*
-void keyboard_change_auto_click(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	struct keyboard *keyboard=(struct keyboard *)user_data;
-	gdouble click_time=gconf_value_get_float(gconf_entry_get_value(entry));
-	if (click_time>=0.01)
-		keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;
-	else
-		keyboard->timer_step=0.0;
-}*/
-
-/* Register GConf callbacks */
-/*
-void keyboard_settings_connect(struct keyboard *keyboard)
-{
-	settings_changecb_register("colours/key", keyboard_change_key_color, (gpointer)keyboard);
-	settings_changecb_register("colours/label", keyboard_change_text_color, (gpointer)keyboard);
-	settings_changecb_register("colours/activated", keyboard_change_activated_color, (gpointer)keyboard);
-	settings_changecb_register("colours/mouseover", keyboard_change_mouseover_color, (gpointer)keyboard);
-	settings_changecb_register("behaviour/auto_click", keyboard_change_auto_click, (gpointer)keyboard);
-}*/
-
 /* Set the logical size of the keyboard
  * Called while parsing xml layout file */
 void keyboard_setsize(void *userdata, double width, double height)
@@ -194,14 +111,11 @@ struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name, 
 	if (click_time<=0.0) keyboard->timer_step=0.0; else keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;*/
 
 	if (name) {
-		keyboard->name=g_malloc(sizeof(gchar)*(strlen(name)+1));
-		strcpy(keyboard->name, name);
+		keyboard->name=g_strdup(name);
 	}
 	keyboard->placement=placement;
 	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, global, level);
 
-
-/*	keyboard_settings_connect(keyboard);*/
 	return keyboard;
 }
 

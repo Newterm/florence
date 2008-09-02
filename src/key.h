@@ -40,7 +40,6 @@ struct key {
 	gboolean locker; /* TRUE if the key is either the caps lock or num lock key. */
 	gboolean pressed; /* TRUE when the key is activated */
 	void *userdata; /* custom data attached to the key (used to attach to a keyboard) */
-	GSList *overlaps; /* keys that overlap this key */
 };
 
 /* Create a key */
@@ -63,8 +62,6 @@ void key_hitmap_draw(struct key *key, guchar *hitmap, guint w, guint h, gdouble 
 void key_set_pressed(struct key *key, gboolean pressed);
 gboolean key_is_pressed(struct key *key);
 gboolean key_is_locker(struct key *key);
-void key_add_overlap(struct key *key, struct key *overlap);
-GSList *key_get_overlaps(struct key *key);
 void *key_get_userdata(struct key *key);
 GdkModifierType key_get_modifier(struct key *key);
 

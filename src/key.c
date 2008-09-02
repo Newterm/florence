@@ -48,7 +48,6 @@ struct key *key_new(void *userdata, guint code, GdkModifierType mod, gboolean lo
 /* liberate memory used by the key */
 void key_free(struct key *key)
 {
-	if (key->overlaps) g_slist_free(key->overlaps);
 	g_free(key);
 }
 
@@ -115,14 +114,14 @@ void key_hitmap_draw(struct key *key, guchar *hitmap, guint w, guint h, gdouble 
 	int mstride;
 	gint kx=(gint)(z*(x+key->x-(key->w/2.0))), ky=(gint)(z*(y+key->y-(key->h/2.0)));
 	gint kw=(gint)(z*key->w), kh=(gint)(z*key->h);
-	guint i, j;
+	gint i, j;
 
 	surface=style_shape_get_mask(key->shape, (guint)(z*key->w), (guint)(z*key->h));
 	mask=cairo_image_surface_get_data(surface);
 	mstride=cairo_image_surface_get_stride(surface);
 
-	for (i=(kx<0?kw-kx:0);i<((kx+kw)>w?w-kx:kw);i++) {
-		for (j=(ky<0?kh-ky:0);j<((ky+kh)>h?h-ky:kh);j++) {
+	for (i=(kx<0?kw-kx:0);i<((kx+kw)>(gint)w?(gint)w-kx:kw);i++) {
+		for (j=(ky<0?kh-ky:0);j<((ky+kh)>(gint)h?(gint)h-ky:kh);j++) {
 			if (mask[i+(j*mstride)]>128) {
 				hitmap[kx+i+(w*(ky+j))]=key->code;
 			}
@@ -159,7 +158,7 @@ void key_color_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdo
 	cairo_save(cairoctx);
 	style_cairo_set_color(style, cairoctx, c);
 	cairo_scale(cairoctx, 1.0/z, 1.0/z);
-	cairo_mask_surface(cairoctx, style_shape_get_mask(key->shape, (guint)(z*key->w), (guint)(z*key->h)), 0.0, 0.0);
+	cairo_mask_surface(cairoctx, style_shape_get_mask(key->shape, (guint)ceil(z*key->w), (guint)ceil(z*key->h)), 0.0, 0.0);
 	cairo_restore(cairoctx);
 }
 
@@ -182,8 +181,6 @@ void key_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z
 void key_set_pressed(struct key *key, gboolean pressed) { key->pressed=pressed; }
 gboolean key_is_pressed(struct key *key) { return key->pressed; }
 gboolean key_is_locker(struct key *key) { return key->locker; }
-void key_add_overlap(struct key *key, struct key *overlap) { key->overlaps=g_slist_append(key->overlaps, overlap); }
-GSList *key_get_overlaps(struct key *key) { return key->overlaps; }
 void *key_get_userdata(struct key *key) { return key->userdata; }
 GdkModifierType key_get_modifier(struct key *key) { return key->modifier; }
 

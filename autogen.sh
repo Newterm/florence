@@ -19,12 +19,48 @@
 #  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 #
 
-aclocal
-autoheader
-automake
-autoconf
-cd data/
-java -classpath /usr/share/trang/lib/trang.jar com.thaiopensource.relaxng.translate.Driver\
-	-I rnc -O rng florence.rnc relaxng/florence.rng
-cd -
+export COMMAND="$0"
+
+# exit on missing command
+function fatal {
+	echo "You need the $1 command to execute $COMMAND. Please install $1 and rerun $COMMAND"
+	exit 1
+}
+
+# check for the presence of a command
+function check {
+	which $1 >/dev/null 2>&1
+	if [ $? -ne 0 ]
+	then
+		fatal $1
+	fi
+}
+
+# execute action and print a message
+function run {
+	check $1
+	echo "executing \"$*\""
+	eval $*
+}
+
+# go to project directory
+OLD_PWD=$PWD
+cd ${0%%/*}
+
+# check for which
+which which >/dev/null 2>&1
+if [ $? -ne 0 ]
+then
+	fatal which
+fi
+
+run aclocal
+run autoheader
+run automake
+run autoconf
+cd data
+run trang -I rnc -O rng florence.rnc relaxng/florence.rng
+
+# go back
+cd $OLD_PWD
 

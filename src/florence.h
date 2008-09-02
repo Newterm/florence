@@ -45,6 +45,7 @@ struct florence {
 	guchar *hitmap; /* bitmap of key codes: used to know on which key the mouse is over */
 	struct style *style; /* Do it with style */
 	gboolean composite; /* true if the screen has composite extension */
+	cairo_surface_t *offscreen; /* contains the offscreen image of florence */
 	/* Xkd data: only used at startup */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */

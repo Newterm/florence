@@ -62,7 +62,7 @@ void flo_show(struct florence *florence, Accessible *object)
 	gtk_window_set_keep_above(florence->window, TRUE);
 }
 
-/* Called when always_on_screen is FALSE when a widget is focused.
+/* Called when a widget is focused.
  * Check if the widget is editable and show the keyboard or hide if not. */
 void flo_focus_event (const AccessibleEvent *event, void *user_data)
 {
@@ -79,18 +79,19 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 }
 
 /* Shouldn't be used but it seems like we need to traverse accessible widgets when a new window is open to trigger
- * focus events. This is at least the case for gedit. Will need to check how this all work. */
+ * focus events. This is at least the case for gedit. Will need to check how this all work.
+ * Can't we get a focus event when the widget is greated focussed? */
 void flo_traverse (struct florence *florence, Accessible *obj)
 {
 	int n_children, i;
 	Accessible *child;
 
-	n_children = Accessible_getChildCount (obj);
-	if (!Accessible_isTable (obj))
+	n_children=Accessible_getChildCount (obj);
+	if (!Accessible_isTable(obj))
 	{
-		for (i = 0; i < n_children; ++i)
+		for (i=0;i<n_children;++i)
 		{
-			child=Accessible_getChildAtIndex (obj, i);
+			child=Accessible_getChildAtIndex(obj, i);
 			if (Accessible_isEditableText(child) &&
 				AccessibleStateSet_contains(child, SPI_STATE_FOCUSED))
 				flo_show(florence, child);
@@ -190,6 +191,7 @@ void flo_draw (struct florence *florence, cairo_t *cairoctx)
 {
 	GSList *list=florence->keyboards;
 	struct keyboard *keyboard;
+	cairo_t *offscreen;
 
 	/* browse the keyboards */
 	while (list)
@@ -201,6 +203,15 @@ void flo_draw (struct florence *florence, cairo_t *cairoctx)
 		}
 		list = list->next;
 	}
+	if (!florence->offscreen) florence->offscreen=cairo_surface_create_similar(cairo_get_target(cairoctx),
+		CAIRO_CONTENT_COLOR_ALPHA, florence->width, florence->height);
+	offscreen=cairo_create(florence->offscreen);
+	cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.0);
+	cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+	cairo_paint(offscreen);
+	cairo_set_source_surface(offscreen, cairo_get_target(cairoctx), 0, 0);
+	cairo_paint(offscreen);
+	cairo_destroy(offscreen);
 }
 
 /* set global modifiers status (executed at startup) */
@@ -354,6 +365,8 @@ void flo_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry
 	flo_set_dimensions(florence);
 	if (florence->hitmap) g_free(florence->hitmap);
 	flo_hitmap_create(florence);
+	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
+	florence->offscreen=NULL;
 	gtk_widget_set_size_request(GTK_WIDGET(florence->window), florence->width, florence->height);
 	gtk_widget_show(GTK_WIDGET(florence->window));
 	flo_create_window_mask(florence);
@@ -365,7 +378,19 @@ void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointe
 {
 	struct florence *florence=(struct florence *)user_data;
 	florence->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
+	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
+	florence->offscreen=NULL;
 	flo_update_extensions(client, xnxn_id, entry, user_data);
+}
+
+/* Triggered by gconf when the "zoom" parameter is changed. */
+void flo_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct florence *florence=(struct florence *)user_data;
+	style_update_colors(florence->style);
+	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
+	florence->offscreen=NULL;
+	gtk_widget_queue_draw(GTK_WIDGET(florence->window));
 }
 
 /* Registers callbacks to gconf changes */
@@ -376,32 +401,10 @@ void flo_register_settings_cb(struct florence *florence)
 	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, florence);
 	settings_changecb_register("window/zoom", flo_set_zoom, florence);
 	settings_changecb_register("layout/extensions", flo_update_extensions, florence);
-}
-
-/* link keys that overlap each over.
- * The purpose is not to redraw all the keyboard when a key changes, but just the overlap keys */
-void flo_link_key_overlaps(struct florence *florence)
-{
-	/* for overlaps */
-	gdouble x, y, w, h;
-	gdouble x2, y2, w2, h2;
-	guint i, j;
-	for (j=0;j<256;j++) {
-		if (florence->keys[j]) {
-			keyboard_key_getrect((struct keyboard *)key_get_userdata(florence->keys[j]),
-				florence->keys[j], &x, &y, &w, &h);
-			for (i=0;i<256;i++) {
-				if (florence->keys[i] && florence->keys[i]!=florence->keys[j]) {
-					keyboard_key_getrect((struct keyboard *)key_get_userdata(florence->keys[i]),
-						florence->keys[i], &x2, &y2, &w2, &h2);
-					if ( ((x>x2 && x<(x2+w2)) || (x<x2 && (x+w)>x2)) &&
-						((y>y2 && y<(y2+h2)) || (y<y2 && (y+h)>y2)) ) {
-						key_add_overlap(florence->keys[j], florence->keys[i]);
-					}
-				}
-			}
-		}
-	}
+	settings_changecb_register("colours/key", flo_redraw, florence);
+	settings_changecb_register("colours/outline", flo_redraw, florence);
+	settings_changecb_register("colours/label", flo_redraw, florence);
+	settings_changecb_register("colours/activated", flo_redraw, florence);
 }
 
 /* Redraw the key to the window */
@@ -409,7 +412,6 @@ void flo_update_key(struct florence *florence, GtkWidget *window, struct key *ke
 {
 	GdkRectangle rect;
 	gdouble x, y, w, h;
-	GSList *list=NULL;
 
 	if (key) {
 		if (statechange) {
@@ -420,15 +422,9 @@ void flo_update_key(struct florence *florence, GtkWidget *window, struct key *ke
 		} else if (florence->dirtykeys!=(GSList *)&(florence->dirtykeys) && (!g_slist_find(florence->dirtykeys, key))) {
 			florence->dirtykeys=g_slist_append(florence->dirtykeys, key);
 			keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
-			/* generate the update region and make sure we update the border and overlap keys */
-			rect.x=x*florence->zoom; rect.y=y*florence->zoom;
-			rect.width=w*florence->zoom; rect.height=h*florence->zoom;
+			rect.x=x*florence->zoom-2.0; rect.y=y*florence->zoom-2.0;
+			rect.width=w*florence->zoom+4.0; rect.height=h*florence->zoom+4.0;
 			gdk_window_invalidate_rect(window->window, &rect, TRUE);
-			list=key_get_overlaps(key);
-			while (list) {
-				flo_update_key(florence, window, list->data, FALSE);
-				list=list->next;
-			}
 		}
 	}
 }
@@ -560,6 +556,10 @@ void flo_expose (GtkWidget *window, GdkEventExpose* pExpose, struct florence *fl
 
 	/* drawing */
 	if (list && list!=(GSList *)&(florence->dirtykeys)) {
+		if (florence->offscreen) {
+			cairo_set_source_surface (context, florence->offscreen, 0, 0);
+			cairo_paint (context);
+		}
 		while (list) {
 			key=(struct key *)list->data;
 			keyboard=(struct keyboard *)key_get_userdata(key);
@@ -605,6 +605,7 @@ void flo_free(struct florence *florence)
 	}
 	if (florence->hitmap) g_free(florence->hitmap);
 	if (florence->style) style_free(florence->style);
+	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
 	g_free(florence);
 }
 
@@ -634,7 +635,6 @@ int florence (void)
 
 	flo_set_modifiers(florence);
 	flo_set_dimensions(florence);
-	flo_link_key_overlaps(florence);
 	flo_hitmap_create(florence);
 
 	florence->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -643,6 +643,7 @@ int florence (void)
 	gtk_window_set_skip_taskbar_hint(florence->window, TRUE);
 	gtk_window_set_resizable(florence->window, FALSE);
 	gtk_widget_set_size_request(GTK_WIDGET(florence->window), florence->width, florence->height);
+	gtk_container_set_border_width(GTK_CONTAINER(florence->window), 0);
 	gtk_widget_set_events(GTK_WIDGET(florence->window),
 		GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK);
 	/*gtk_widget_realize(window);
@@ -652,14 +653,15 @@ int florence (void)
 
 	g_signal_connect(G_OBJECT(florence->window), "destroy", G_CALLBACK(flo_destroy), NULL);
 	g_signal_connect(G_OBJECT(florence->window), "screen-changed", G_CALLBACK(flo_screen_changed), florence);
-	g_signal_connect(G_OBJECT(florence->window), "motion-notify-event", G_CALLBACK(flo_mouse_move_event), florence);
-	g_signal_connect(G_OBJECT(florence->window), "leave-notify-event", G_CALLBACK(flo_mouse_leave_event), florence);
-	g_signal_connect(G_OBJECT(florence->window), "button-press-event", G_CALLBACK(flo_button_press_event), florence);
-	g_signal_connect(G_OBJECT(florence->window), "button-release-event", G_CALLBACK(flo_button_release_event), florence);
 	g_signal_connect(G_OBJECT(florence->window), "expose-event", G_CALLBACK(flo_expose), florence);
 	flo_screen_changed(GTK_WIDGET(florence->window), NULL, florence);
 	gtk_widget_show(GTK_WIDGET(florence->window));
 	flo_create_window_mask(florence);
+
+	g_signal_connect(G_OBJECT(florence->window), "motion-notify-event", G_CALLBACK(flo_mouse_move_event), florence);
+	g_signal_connect(G_OBJECT(florence->window), "leave-notify-event", G_CALLBACK(flo_mouse_leave_event), florence);
+	g_signal_connect(G_OBJECT(florence->window), "button-press-event", G_CALLBACK(flo_button_press_event), florence);
+	g_signal_connect(G_OBJECT(florence->window), "button-release-event", G_CALLBACK(flo_button_release_event), florence);
 
         modules = g_getenv("GTK_MODULES");
 	if (!modules||modules[0]=='\0')
