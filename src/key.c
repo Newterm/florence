@@ -52,38 +52,42 @@ void key_free(struct key *key)
 }
 
 /* Send a key press event */
-void key_press(struct key *key, GList **pressedmodkeys, GdkModifierType *globalmod)
+void key_press(struct key *key, GList **pressedkeys, GdkModifierType *globalmod)
 {
-	GList *list=*pressedmodkeys;
+	GList *list=*pressedkeys;
+	GList *tmp;
+	struct key *pressed;
 	while (list) {
-		SPI_generateKeyboardEvent(((struct key *)list->data)->code, NULL, SPI_KEY_PRESS);
+		pressed=((struct key *)list->data);
+		if (key_get_modifier(pressed) && !key_is_locker(pressed))
+			SPI_generateKeyboardEvent(pressed->code, NULL, SPI_KEY_PRESS);
 		list=list->next;
 	}
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
-	list=*pressedmodkeys;
+	list=*pressedkeys;
 	while (list) {
-		SPI_generateKeyboardEvent(((struct key *)list->data)->code, NULL, SPI_KEY_RELEASE);
+		pressed=((struct key *)list->data);
+		if (key_get_modifier(pressed) && !key_is_locker(pressed))
+			SPI_generateKeyboardEvent(pressed->code, NULL, SPI_KEY_RELEASE);
 		list=list->next;
 	}
-	if (key->locker) key->pressed=!key->pressed; else { 
-		if (key_get_modifier(key)) {
-			key->pressed=!key->pressed;
-			if (key->pressed) *pressedmodkeys=g_list_prepend(*pressedmodkeys, key);
-			else *pressedmodkeys=g_list_remove(*pressedmodkeys, key);
-		} else {
-			key->pressed=TRUE;
-			list=*pressedmodkeys;
-			while (list) {
-				((struct key *)list->data)->pressed=FALSE;
-				*globalmod&=~key_get_modifier((struct key *)list->data);
-				list=g_list_delete_link(list, list);
-			}
-			*pressedmodkeys=NULL;
-		}
-	}
 	if (key_get_modifier(key)) {
+		key->pressed=!key->pressed;
 		if (key_is_pressed(key)) *globalmod|=key_get_modifier(key);
 		else *globalmod&=~key_get_modifier(key);
+	} else { 
+		key->pressed=TRUE;
+		list=*pressedkeys;
+		while (list) {
+			pressed=((struct key *)list->data);
+			if (key_get_modifier(pressed) && !key_is_locker(pressed)) {
+				pressed->pressed=FALSE;
+				*globalmod&=~key_get_modifier(pressed);
+				tmp=list->next;
+				*pressedkeys=g_list_delete_link(*pressedkeys, list);
+				list=tmp;
+			} else list=list->next;
+		}
 	}
 }
 
@@ -158,23 +162,47 @@ void key_color_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdo
 	cairo_save(cairoctx);
 	style_cairo_set_color(style, cairoctx, c);
 	cairo_scale(cairoctx, 1.0/z, 1.0/z);
-	cairo_mask_surface(cairoctx, style_shape_get_mask(key->shape, (guint)ceil(z*key->w), (guint)ceil(z*key->h)), 0.0, 0.0);
+	cairo_mask_surface(cairoctx, style_shape_get_mask(key->shape, (guint)(z*key->w), (guint)(z*key->h)), 0.0, 0.0);
 	cairo_restore(cairoctx);
 }
 
-/* Draw the key with the cairo context of the keyboard 
- * the global modifier mod determines the symbol to draw on the key */
-void key_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, GdkModifierType mod,
-	gdouble timer, gboolean activated)
+/* Draw the shape of the key to the cairo surface. */
+void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx)
 {
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	style_shape_draw(key->shape, cairoctx, key->w, key->h);
-	if (key->pressed) key_color_draw(key, style, cairoctx, z, STYLE_ACTIVATED_COLOR);
-	if (activated) key_color_draw(key, style, cairoctx, z, STYLE_MOUSE_OVER_COLOR);
-	if (timer>0.0) key_timer_draw(key, style, cairoctx, z, timer);
+	cairo_restore(cairoctx);
+}
+
+/* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
+void key_symbol_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod)
+{
+	cairo_save(cairoctx);
+	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	style_symbol_draw(style, cairoctx, key_getKeyval(key, mod), key->w, key->h);
 	cairo_restore(cairoctx);
+}
+
+/* Draw the focus notifier to the cairo surface. */
+void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, gdouble timer)
+{
+	cairo_save(cairoctx);
+	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
+	if (timer>0.0) key_timer_draw(key, style, cairoctx, z, timer);
+	else key_color_draw(key, style, cairoctx, z, STYLE_MOUSE_OVER_COLOR);
+	cairo_restore(cairoctx);
+}
+
+/* Draw the key press notifier to the cairo surface. */
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z)
+{
+	if (key->pressed) {
+		cairo_save(cairoctx);
+		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
+		key_color_draw(key, style, cairoctx, z, STYLE_ACTIVATED_COLOR);
+		cairo_restore(cairoctx);
+	}
 }
 
 /* getters and setters */

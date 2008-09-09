@@ -1,4 +1,0 @@
-valgrind florence
-fix drawing bugs:
-	* rounding error for key mask
-	* offscreen should be update with pressed keys

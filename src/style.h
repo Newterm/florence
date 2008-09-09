@@ -47,6 +47,12 @@ enum style_colours {
 	STYLE_NUM_COLOURS
 };
 
+/* class of style */
+enum style_class {
+	STYLE_SHAPE,
+	STYLE_SYMBOL
+};
+
 /* A style is a list of symbols and shapes.
  * A shape is the background of a key, and the symbol is the foreground of the key */
 struct style {

@@ -37,15 +37,16 @@ struct florence {
 	struct key *current; /* focus key (key located under the pointer) or NULL */
 	struct key *pressed; /* key currently being pressed or NULL */
 	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
-	GSList *dirtykeys; /* list of keys that need to be redrawn */
+	gboolean redrawsymbols; /* TRUE when symbols need to be redrawn */
 	GdkModifierType globalmod; /* global modifier mask */
-	GList *pressedmodkeys; /* list of modifier keys that are pressed not including locker keys */
+	GList *pressedkeys; /* list of all pressed keys */
 	GSList *keyboards; /* Main list of keyboard extensions */
 	gdouble xoffset, yoffset; /* offset of the main keyboard */
 	guchar *hitmap; /* bitmap of key codes: used to know on which key the mouse is over */
 	struct style *style; /* Do it with style */
 	gboolean composite; /* true if the screen has composite extension */
-	cairo_surface_t *offscreen; /* contains the offscreen image of florence */
+	cairo_surface_t *background; /* contains the background image of florence */
+	cairo_surface_t *symbols; /* contains the symbols image of florence */
 	/* Xkd data: only used at startup */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */

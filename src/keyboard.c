@@ -43,6 +43,7 @@ void keyboard_insertkey (void *userdata1, char *shape,
 	struct style *style=global->style;
 	XkbDescPtr xkb=global->xkb_desc;
 	XkbStateRec rec=global->xkb_state;
+	GList **pressedkeys=global->pressedkeys;
 	struct key *key;
 	GdkModifierType mod;
 	gboolean locker;
@@ -60,6 +61,7 @@ void keyboard_insertkey (void *userdata1, char *shape,
 	if (mod) {
 		if (mod&rec.locked_mods) {
 			key_set_pressed(key, TRUE);
+			*pressedkeys=g_list_prepend(*pressedkeys, key);
 		}
 	}
 }
@@ -107,9 +109,6 @@ struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name, 
 	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
 
-	/*click_time=settings_get_double("behaviour/auto_click");
-	if (click_time<=0.0) keyboard->timer_step=0.0; else keyboard->timer_step=FLO_ANIMATION_PERIOD/click_time;*/
-
 	if (name) {
 		keyboard->name=g_strdup(name);
 	}
@@ -140,41 +139,57 @@ void keyboard_hitmap_draw(struct keyboard *keyboard, guchar *hitmap, guint w, gu
 }
 
 /* draw the keyboard to cairo surface */
-void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
-	struct style *style, GdkModifierType mod)
+void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
+	struct style *style, GdkModifierType mod, enum style_class class)
 {
 	GSList *list=keyboard->keys;
 	cairo_save(cairoctx);
-	cairo_scale(cairoctx, z, z);
 	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
 	while (list)
 	{
-		key_draw((struct key *)list->data, style, cairoctx, z, mod, 0.0, FALSE);
+		switch(class) {
+			case STYLE_SHAPE:
+				key_shape_draw((struct key *)list->data, style, cairoctx);
+				break;
+			case STYLE_SYMBOL:
+				key_symbol_draw((struct key *)list->data, style, cairoctx, mod);
+				break;
+		}
 		list = list->next;
 	}
 	cairo_restore(cairoctx);
 }
 
-/* redraw a single key of the keyboard (keyboard_draw must have been called first 
- * if activated, the key is drawn with the activated color. */
-void keyboard_key_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, struct style *style,
-	struct key *key, GdkModifierType mod, gboolean activated, gdouble timer)
+/* draw the keyboard background to cairo surface */
+void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style)
+{
+	keyboard_draw(keyboard, cairoctx, style, 0, STYLE_SHAPE);
+}
+
+/* draw the keyboard symbols  to cairo surface */
+void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style, GdkModifierType mod)
+{
+	keyboard_draw(keyboard, cairoctx, style, mod, STYLE_SYMBOL);
+}
+
+/* draw the focus indicator on a key */
+void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+	struct style *style, struct key *key, gdouble timer)
 {
 	cairo_save(cairoctx);
-	cairo_scale(cairoctx, z, z);
 	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-	key_draw(key, style, cairoctx, z, mod, timer, activated);
+	key_focus_draw(key, style, cairoctx, z, timer);
 	cairo_restore(cairoctx);
 }
 
-/* returns a rectangle containing the key */
-void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
-        gdouble *x, gdouble *y, gdouble *w, gdouble *h)
+/* draw the pressed indicator on a key */
+void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+	struct style *style, struct key *key)
 {
-	*x=keyboard->xpos+(key->x-(key->w/2.0));
-	*y=keyboard->ypos+(key->y-(key->h/2.0));
-	*w=key->w;
-	*h=key->h;
+	cairo_save(cairoctx);
+	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
+	key_press_draw(key, style, cairoctx, z);
+	cairo_restore(cairoctx);
 }
 
 /* getters */

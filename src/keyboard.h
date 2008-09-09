@@ -44,6 +44,7 @@ struct keyboard_globaldata {
 	struct style *style; /* style of florence  */
 	XkbDescPtr xkb_desc; /* Keyboard description from XKB */
 	XkbStateRec xkb_state; /* Keyboard Status (get from XKB) */
+	GList **pressedkeys; /* reference to the list of pressed keys to update */
 };
 
 /* create a keyboard: the layout is passed as a text reader */
@@ -61,19 +62,20 @@ enum layout_placement keyboard_get_placement(struct keyboard *keyboard);
 /* Checks gconf for the activation of the keyboard. */
 gboolean keyboard_activated(struct keyboard *keyboard);
 
-/* draw the keyboard to cairo surface */
-void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
-	struct style *style, GdkModifierType mod);
 /* fill the hitmap with key data */
 void keyboard_hitmap_draw(struct keyboard *keyboard, guchar *hitmap, guint w, guint h,
 	gdouble x, gdouble y, gdouble z);
-/* redraw a single key of the keyboard (keyboard_draw must have been called first 
- * if activated, the key is drawn with the activated color. */
-void keyboard_key_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, struct style *style,
-	struct key *key, GdkModifierType mod, gboolean activated, gdouble timer);
-/* returns a rectangle containing the key */
-void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
-	gdouble *x, gdouble *y, gdouble *w, gdouble *h);
+/* draw the keyboard background to cairo surface */
+void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style);
+/* draw the keyboard symbols  to cairo surface */
+void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx,
+	struct style *style, GdkModifierType mod);
+/* draw the focus indicator on a key */
+void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+	struct style *style, struct key *key, gdouble timer);
+/* draw the pressed indicator on a key */
+void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+	struct style *style, struct key *key);
 
 #endif
 

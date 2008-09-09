@@ -49,14 +49,19 @@ struct key *key_new(void *userdata, guint code, GdkModifierType mod, gboolean lo
 void key_free(struct key *key);
 
 /* Send SPI events coresponding to the key */
-void key_press(struct key *key, GList **pressedmodkeys, GdkModifierType *globalmod);
+void key_press(struct key *key, GList **pressedkeys, GdkModifierType *globalmod);
 void key_release(struct key *key);
 
-/* Draw the key to the cairo surface. The symbol drawn on the key depends on the modifier */
-void key_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, GdkModifierType mod,
-	gdouble timer, gboolean activated);
 /* draw the key on the hitmap */
 void key_hitmap_draw(struct key *key, guchar *hitmap, guint w, guint h, gdouble x, gdouble y, gdouble z);
+/* Draw the shape of the key to the cairo surface. */
+void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
+/* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
+void key_symbol_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod);
+/* Draw the focus notifier to the cairo surface. */
+void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, gdouble timer);
+/* Draw the key press notifier to the cairo surface. */
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z);
 
 /* setters and getters */
 void key_set_pressed(struct key *key, gboolean pressed);

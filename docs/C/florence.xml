@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="en">
 <articleinfo>
-	<date>2008-05-19</date>
+	<date>2008-09-10</date>
 	<title>Florence documentation</title>
 	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
 	<authorgroup>
@@ -31,18 +31,19 @@ A Timer-based auto-click functionality is available to help disabled people havi
 </sect1>
 <sect1 id="install">
 	<title>Install</title>
-	<para>If it's not installed already, you will need to build Florence from the terminal, as there is no pre-built package available as of may, 2008. If you can't use a keyboard, you may find yourself in a catch-22 situation where you can't install Florence because you can't use Florence. If you are disabled, you may need to ask someone to install it for you and if you have a tablet PC, you may need to find a creative way to install Florence, such as installing from ssh or temporarily use a real keyboard.</para>
-	<para>Make sure you have the latest version of Florence (0.2.2 as of may, the 20th of 2008). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>If it's not installed already, you will need to build Florence from the terminal, unless you are on Fedora 9 or later (Thanks to Simon Wesp), as it is the only distribution to include Florence as a package, as of September, the 10th of 2008. If you can't use a keyboard, you may find yourself in a catch-22 situation where you can't install Florence because you can't use Florence. If you are disabled, you may need to ask someone to install it for you and if you have a tablet PC, you may need to find a creative way to install Florence, such as installing from ssh or temporarily use a real keyboard.</para>
+	<para>Make sure you have the latest version of Florence (0.3.0 as of September, the 10th of 2008). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Preparing the dependencies</title>
 		<para>In order to build Florence, you need a build environment with the following commands: make, sed, scrollkeeper and a C compiler, along with the following package dependencies:</para>
 		<orderedlist>
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
-			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libgnomecanvas/">libgnomecanvas</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/GConf/">libgconf</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libglade/">libglage</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
+			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
+			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
 			<listitem><para>(Optional: --with-docs configure option) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
 		<para>How to install those dependencies is dependant on your distribution. Usually, you need to install the devel packages of the dependencies. Below is a list of how to do it via the command line interface on the most common distributions. If your distribution is not listed and you don't know how to install, you may check with your distribution support.</para>
@@ -52,14 +53,14 @@ A Timer-based auto-click functionality is available to help disabled people havi
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel \</userinput>
-<prompt>></prompt> <userinput>at-spi-devel libgnomecanvas2-devel libgnome2-devel</userinput>
+<prompt>></prompt> <userinput>at-spi-devel libcairo2-devel libgnome2-devel librsvg-devel</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>
 				<para><ulink url="http://www.ubuntu.com/">Ubuntu</ulink>
 				<screen>
 <prompt>$</prompt> <userinput>sudo apt-get install build-essential libxml2-dev libgconf2-dev \</userinput>
-<prompt>></prompt> <userinput>libglade2-dev libatspi-dev libgnomecanvas2-dev libgnome2-dev</userinput>
+<prompt>></prompt> <userinput>libglade2-dev libatspi-dev libcairo2-dev libgnome2-dev librsvg-dev</userinput>
 				</screen></para>
 			</listitem>
 		</orderedlist>
@@ -101,7 +102,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 If you prefer that Florence is launched at GNOME startup, choose the menu item <guimenu>System</guimenu>-><guisubmenu>Preferences</guisubmenu>-><guimenuitem>Sessions</guimenuitem>, click on the <guibutton>Startup programs</guibutton> tab, then click <guibutton>Add</guibutton> and enter <command>/usr/bin/florence</command> so Florence is launched with GNOME at next boot.
 	</para>
 	<para>Florence requires that GNOME accessibility be activated (it means that the at-spi daemon is running). If it is not activated, Florence will not start, but it will suggest you activate accessibility and restart GNOME instead. When GNOME is restarted and accessibility is activated, Florence will run as normal.</para>
-	<para>When Florence is running, an icon should appear in your notification area, usually at the top right corner of the screen. Clicking of the icon makes Florence appear or disappear from the screen. Left clicking on it makes a menu appear. On this menu, you can use the <guimenuitem>quit</guimenuitem> item to stop Florence.</para>
+	<para>When Florence is running, an icon should appear in your notification area, usually at the top right corner of the screen. Clicking of the icon makes Florence appear or disappear from the screen. Right clicking on it makes a menu appear. On this menu, you can use the <guimenuitem>quit</guimenuitem> item to stop Florence.</para>
 	<sect2>
 		<title>Florence modes</title>
 		<para>Florence has several states affecting how it functions and how it interacts with the user.</para>
@@ -129,7 +130,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 					</mediaobject>
 				</screenshot>
 			</figure>
-	<para>The configuration dialog is accessible via the systray icon (left click on it and select <guimenuitem>Preferences</guimenuitem>) or via the command line with the -c or --config switch: <command>florence --config</command>. Hacking configuration is possible via gconf (see the hacking section)</para>
+	<para>The configuration dialog is accessible via the systray icon (right click on it and select <guimenuitem>Preferences</guimenuitem>) or via the command line with the -c or --config switch: <command>florence --config</command>. Hacking configuration is possible via gconf (see the hacking section)</para>
 		<para>The following options are configurable:</para>
 		<orderedlist>
 			<listitem><para>Keys colour: set the background colour of normal keys.</para></listitem>

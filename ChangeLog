@@ -75,10 +75,9 @@
 	* Use GTK_STOCK_CANCEL instead of GTK_STOCK_DISCARD when GTK version is < 2.12
 	* Fix compilation warnings
 
-2008-07-29 François Agrech <f.agrech@gmail.com>
+2008-09-10 François Agrech <f.agrech@gmail.com>
 	* Version 0.3.0
 	* layout file now validated with relax-ng instead of xmls schema (to work better with svg)
 	* move libgnomecanvas and artlib to cairo and librsvg
 	* complete redesign of the drawing system for startup performance: remove some bloat and use less memory
-	* add a testsuite for unit testings with dejagnu
 

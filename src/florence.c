@@ -168,6 +168,7 @@ void flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 	XkbKeyActionsMask|XkbModifierMapMask, XkbUseCoreKbd);
 	/* get global modifiers state */
 	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()), XkbUseCoreKbd, &(global.xkb_state));
+	global.pressedkeys=&(florence->pressedkeys);
 
 	/* initialize global data */
 	global.key_table=(struct key **)&(florence->keys);
@@ -186,32 +187,54 @@ void flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 	XkbFreeClientMap(global.xkb_desc, XkbKeyActionsMask|XkbModifierMapMask, True);
 }
 
-/* draws the keyboards to cairo surface */
-void flo_draw (struct florence *florence, cairo_t *cairoctx)
+/* draws the background of florence */
+void flo_draw (struct florence *florence, cairo_t *cairoctx,
+	cairo_surface_t **surface, enum style_class class)
 {
 	GSList *list=florence->keyboards;
 	struct keyboard *keyboard;
 	cairo_t *offscreen;
 
+	/* create the surface */
+	if (!*surface) *surface=cairo_surface_create_similar(cairo_get_target(cairoctx),
+		CAIRO_CONTENT_COLOR_ALPHA, florence->width, florence->height);
+	offscreen=cairo_create(*surface);
+	cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.0);
+	cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+	cairo_paint(offscreen);
+
 	/* browse the keyboards */
+	cairo_save(offscreen);
+	cairo_scale(offscreen, florence->zoom, florence->zoom);
 	while (list)
 	{
 		keyboard=(struct keyboard *)list->data;
 		if (keyboard_activated(keyboard)) {
 			/* actual draw */
-			keyboard_draw(keyboard, cairoctx, florence->zoom, florence->style, florence->globalmod);
+			switch(class) {
+				case STYLE_SHAPE:
+					keyboard_background_draw(keyboard, offscreen, florence->style);
+					break;
+				case STYLE_SYMBOL:
+					keyboard_symbols_draw(keyboard, offscreen, florence->style,
+						florence->globalmod);
+					break;
+			}
 		}
-		list = list->next;
+		list=list->next;
 	}
-	if (!florence->offscreen) florence->offscreen=cairo_surface_create_similar(cairo_get_target(cairoctx),
-		CAIRO_CONTENT_COLOR_ALPHA, florence->width, florence->height);
-	offscreen=cairo_create(florence->offscreen);
-	cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
-	cairo_paint(offscreen);
-	cairo_set_source_surface(offscreen, cairo_get_target(cairoctx), 0, 0);
-	cairo_paint(offscreen);
 	cairo_destroy(offscreen);
+}
+
+/* draws the background of florence */
+void flo_background_draw (struct florence *florence, cairo_t *cairoctx)
+{
+	flo_draw(florence, cairoctx, &(florence->background), STYLE_SHAPE);
+}
+
+/* draws the symbols */
+void flo_symbols_draw (struct florence *florence, cairo_t *cairoctx) {
+	flo_draw(florence, cairoctx, &(florence->symbols), STYLE_SYMBOL);
 }
 
 /* set global modifiers status (executed at startup) */
@@ -324,9 +347,16 @@ void flo_create_window_mask(struct florence *florence)
 		cairo_set_source_rgba(cairoctx, 0.0, 0.0, 0.0, 0.0);
 		cairo_set_operator(cairoctx, CAIRO_OPERATOR_SOURCE);
 		cairo_paint(cairoctx);
-		flo_draw(florence, cairoctx);
+		flo_background_draw(florence, cairoctx);
+		cairo_set_source_rgba(cairoctx, 1.0, 1.0, 1.0, 0.0);
+		cairo_set_operator(cairoctx, CAIRO_OPERATOR_SOURCE);
+		cairo_paint(cairoctx);
+		cairo_set_source_surface(cairoctx, florence->background, 0, 0);
+		cairo_paint(cairoctx);
 		gdk_window_shape_combine_mask(GTK_WIDGET(florence->window)->window, mask, 0, 0);
 		cairo_destroy(cairoctx);
+		cairo_surface_destroy(florence->background);
+		florence->background=NULL;
 		g_object_unref(G_OBJECT(mask));
 	} else {
 		gdk_window_shape_combine_mask(GTK_WIDGET(florence->window)->window, NULL, 0, 0);
@@ -365,8 +395,10 @@ void flo_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry
 	flo_set_dimensions(florence);
 	if (florence->hitmap) g_free(florence->hitmap);
 	flo_hitmap_create(florence);
-	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
-	florence->offscreen=NULL;
+	if (florence->background) cairo_surface_destroy(florence->background);
+	florence->background=NULL;
+	if (florence->symbols) cairo_surface_destroy(florence->symbols);
+	florence->symbols=NULL;
 	gtk_widget_set_size_request(GTK_WIDGET(florence->window), florence->width, florence->height);
 	gtk_widget_show(GTK_WIDGET(florence->window));
 	flo_create_window_mask(florence);
@@ -378,8 +410,6 @@ void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointe
 {
 	struct florence *florence=(struct florence *)user_data;
 	florence->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
-	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
-	florence->offscreen=NULL;
 	flo_update_extensions(client, xnxn_id, entry, user_data);
 }
 
@@ -387,9 +417,17 @@ void flo_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointe
 void flo_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
+	char *key;
+	key=strrchr(entry->key, '/');
+	key+=1;
 	style_update_colors(florence->style);
-	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
-	florence->offscreen=NULL;
+	if ((!strcmp(key, "key")) || (!strcmp(key, "outline"))) {
+		if (florence->background) cairo_surface_destroy(florence->background);
+		florence->background=NULL;
+	} else if (!strcmp(key, "label")) {
+		if (florence->symbols) cairo_surface_destroy(florence->symbols);
+		florence->symbols=NULL;
+	}
 	gtk_widget_queue_draw(GTK_WIDGET(florence->window));
 }
 
@@ -408,24 +446,22 @@ void flo_register_settings_cb(struct florence *florence)
 }
 
 /* Redraw the key to the window */
-void flo_update_key(struct florence *florence, GtkWidget *window, struct key *key, gboolean statechange)
+void flo_update_keys(struct florence *florence, GtkWidget *window, struct key *key, gboolean statechange)
 {
-	GdkRectangle rect;
-	gdouble x, y, w, h;
+	GList *found;
 
 	if (key) {
-		if (statechange) {
-			g_slist_free(florence->dirtykeys);
-			/* Tell not to add any more dirtykey as we will redraw everything anyway */
-			florence->dirtykeys=(GSList *)&(florence->dirtykeys);
-			gtk_widget_queue_draw(window);
-		} else if (florence->dirtykeys!=(GSList *)&(florence->dirtykeys) && (!g_slist_find(florence->dirtykeys, key))) {
-			florence->dirtykeys=g_slist_append(florence->dirtykeys, key);
-			keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
-			rect.x=x*florence->zoom-2.0; rect.y=y*florence->zoom-2.0;
-			rect.width=w*florence->zoom+4.0; rect.height=h*florence->zoom+4.0;
-			gdk_window_invalidate_rect(window->window, &rect, TRUE);
+		if (key_is_pressed(key)) {
+			if (!g_list_find(florence->pressedkeys, key))
+				florence->pressedkeys=g_list_prepend(florence->pressedkeys, key);
+		} else {
+			if ((found=g_list_find(florence->pressedkeys, key)))
+				florence->pressedkeys=g_list_delete_link(florence->pressedkeys, found);
 		}
+		if (statechange) {
+			florence->redrawsymbols=TRUE;
+		}
+		gtk_widget_queue_draw(window);
 	}
 }
 
@@ -449,9 +485,9 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 			g_timer_destroy(florence->timer);
 			florence->timer=NULL;
 		}
-		flo_update_key(florence, window, florence->current, FALSE);
+		flo_update_keys(florence, window, florence->current, FALSE);
 		florence->current=florence->keys[code];
-		flo_update_key(florence, window, florence->current, FALSE);
+		flo_update_keys(florence, window, florence->current, FALSE);
 	}
 	return FALSE;
 }
@@ -460,17 +496,17 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
-	flo_update_key(florence, window, florence->current, FALSE);
+	flo_update_keys(florence, window, florence->current, FALSE);
 	florence->current=NULL;
 	if (florence->timer) {
 		g_timer_destroy(florence->timer);
 		florence->timer=NULL;
 	}
-	/* As we don't support multitouch yet, and we no longer get button evetns when the mouse is outside,
+	/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
 	 * we just release any pressed key when the mouse leaves. */
 	if (florence->pressed) {
 		key_release(florence->pressed);
-		flo_update_key(florence, window, florence->pressed , FALSE);
+		flo_update_keys(florence, window, florence->pressed , FALSE);
 	}
 	florence->pressed=NULL;
 	return FALSE;
@@ -485,12 +521,12 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEvent *event, gpointer us
 	/* so we just release any pressed key */
 	if (florence->pressed) {
 		key_release(florence->pressed);
-		flo_update_key(florence, window, florence->pressed, FALSE);
+		flo_update_keys(florence, window, florence->pressed, FALSE);
 	}
 	if (florence->current) {
 		redrawall=key_get_modifier(florence->current) || florence->globalmod;
-		key_press(florence->current, &(florence->pressedmodkeys), &(florence->globalmod));
-		flo_update_key(florence, window, florence->current, redrawall);
+		key_press(florence->current, &(florence->pressedkeys), &(florence->globalmod));
+		flo_update_keys(florence, window, florence->current, redrawall);
 	}
 	florence->pressed=florence->current;
 	if (florence->timer) {
@@ -506,7 +542,7 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->pressed) {
 		key_release(florence->pressed);
-		flo_update_key(florence, window, florence->pressed, FALSE);
+		flo_update_keys(florence, window, florence->pressed, FALSE);
 	}
 	florence->pressed=NULL;
 	if (florence->timer) {
@@ -538,53 +574,60 @@ void flo_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct floren
 void flo_expose (GtkWidget *window, GdkEventExpose* pExpose, struct florence *florence)
 {
 	cairo_t *context;
-	GSList *list=florence->dirtykeys;
+	GList *list=florence->pressedkeys;
 	struct keyboard *keyboard;
 	struct key *key;
-	gboolean activated;
 	gdouble timer=0.0;
 
 	/* create the context */
 	context=gdk_cairo_create(window->window);
 
-	/* if the screen has composite extension, use alpha */
-	if (florence->composite && settings_get_bool("window/shaped")) {
-		cairo_set_source_rgba(context, 1.0, 1.0, 1.0, 0.0);
-		cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
-		cairo_paint(context);
+	/* prepare the background */
+	if (!florence->background) {
+		flo_background_draw(florence, context);
 	}
+	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
+	cairo_set_source_surface(context, florence->background, 0, 0);
+	cairo_paint(context);
 
-	/* drawing */
-	if (list && list!=(GSList *)&(florence->dirtykeys)) {
-		if (florence->offscreen) {
-			cairo_set_source_surface (context, florence->offscreen, 0, 0);
-			cairo_paint (context);
-		}
+	/* draw highlights (pressed keys) */
+	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
+	cairo_save(context);
+	cairo_scale(context, florence->zoom, florence->zoom);
+	if (list) {
 		while (list) {
 			key=(struct key *)list->data;
 			keyboard=(struct keyboard *)key_get_userdata(key);
-			activated=key==florence->current;
-			if (florence->timer && key==florence->current && settings_get_double("behaviour/auto_click")>0.0) {
-				timer=g_timer_elapsed(florence->timer, NULL)*1000./
-					settings_get_double("behaviour/auto_click");
-				activated=FALSE;
-			} 
-			keyboard_key_draw(keyboard, context, florence->zoom, florence->style, key,
-				florence->globalmod, activated, key==florence->current?timer:0.0);
-			list=g_slist_delete_link(list, list);
+			keyboard_press_draw(keyboard, context, florence->zoom, florence->style, key);
+			list=list->next;
 		}
-		florence->dirtykeys=NULL;
-		if (florence->current && settings_get_double("behaviour/auto_click")>0.0) {
-			if (timer<1.0) flo_update_key(florence, window, florence->current, FALSE);
+	}
+
+	/* focused key */
+	if (florence->current) {
+		key=florence->current;
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		if (florence->timer) {
+			timer=g_timer_elapsed(florence->timer, NULL)*1000./
+				settings_get_double("behaviour/auto_click");
+			keyboard_focus_draw(keyboard, context, florence->zoom, florence->style, key, timer);
+			if (timer<1.0) flo_update_keys(florence, window, key, FALSE);
 			else {
 				flo_button_press_event(window, NULL, (void *)florence);
 				flo_button_release_event(window, NULL, (void *)florence);
 			}
-		}
-	} else {
-		flo_draw(florence, context);
-		florence->dirtykeys=NULL;
+		} else keyboard_focus_draw(keyboard, context, florence->zoom, florence->style, key, 0.0);
 	}
+	cairo_restore(context);
+
+	/* draw the symbols */
+	if (florence->redrawsymbols || (!florence->symbols)) {
+		flo_symbols_draw(florence, context);
+		florence->redrawsymbols=FALSE;
+	}
+	cairo_set_source_surface(context, florence->symbols, 0, 0);
+	cairo_paint(context);
+
 	/* and free up drawing memory */
 	cairo_destroy(context);
 }
@@ -603,9 +646,11 @@ void flo_free(struct florence *florence)
 	for (i=0;i<256;i++) {
 		if (florence->keys[i]) key_free(florence->keys[i]);
 	}
+	if (florence->pressedkeys) g_list_free(florence->pressedkeys);
 	if (florence->hitmap) g_free(florence->hitmap);
 	if (florence->style) style_free(florence->style);
-	if (florence->offscreen) cairo_surface_destroy(florence->offscreen);
+	if (florence->background) cairo_surface_destroy(florence->background);
+	if (florence->symbols) cairo_surface_destroy(florence->symbols);
 	g_free(florence);
 }
 
@@ -654,14 +699,13 @@ int florence (void)
 	g_signal_connect(G_OBJECT(florence->window), "destroy", G_CALLBACK(flo_destroy), NULL);
 	g_signal_connect(G_OBJECT(florence->window), "screen-changed", G_CALLBACK(flo_screen_changed), florence);
 	g_signal_connect(G_OBJECT(florence->window), "expose-event", G_CALLBACK(flo_expose), florence);
-	flo_screen_changed(GTK_WIDGET(florence->window), NULL, florence);
-	gtk_widget_show(GTK_WIDGET(florence->window));
-	flo_create_window_mask(florence);
-
 	g_signal_connect(G_OBJECT(florence->window), "motion-notify-event", G_CALLBACK(flo_mouse_move_event), florence);
 	g_signal_connect(G_OBJECT(florence->window), "leave-notify-event", G_CALLBACK(flo_mouse_leave_event), florence);
 	g_signal_connect(G_OBJECT(florence->window), "button-press-event", G_CALLBACK(flo_button_press_event), florence);
 	g_signal_connect(G_OBJECT(florence->window), "button-release-event", G_CALLBACK(flo_button_release_event), florence);
+	flo_screen_changed(GTK_WIDGET(florence->window), NULL, florence);
+	gtk_widget_show(GTK_WIDGET(florence->window));
+	flo_create_window_mask(florence);
 
         modules = g_getenv("GTK_MODULES");
 	if (!modules||modules[0]=='\0')

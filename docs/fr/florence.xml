@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="fr">
 <articleinfo>
-	<date>2008-05-19</date>
+	<date>2008-09-10</date>
 	<title>Documentation du clavier virtuel Florence</title>
 	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
@@ -31,35 +31,36 @@
 </sect1>
 <sect1 id="install">
 	<title>Installation</title>
-	<para>Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un terminal car il n'y a pas de paquetage précompilé aujourd'hui (mai 2008). Si vous ne pouvez pas utiliser de clavier, il se peut que vous ne puissiez pas installer Florence parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, vous devriez trouver une façon créative de l'installer, comme ssh ou un autre clavier de manière temporaire.</para>
-	<para>Soyez sûr que vous avez la dernière version de Florence (0.2.2 au 26 mai 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un terminal sauf si vous utilisez Fedora 9 ou supérieur, car il y a un packetage pour Fedora (grâce à Simon Wesp) au 10 septembre 2008. Si vous ne pouvez pas utiliser de clavier, il se peut que vous ne puissiez pas installer Florence parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, vous devriez trouver une façon créative de l'installer, comme ssh ou un autre clavier de manière temporaire.</para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.0 au 10 septembre 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Préparation des dépendances</title>
 		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, sed, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
 		<orderedlist>
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
-			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libgnomecanvas/">libgnomecanvas</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/GConf/">libgconf</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libglade/">libglage</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
+			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
+			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
 			<listitem><para>(Optionnel: option --with-docs de configure) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
-		<para>La manière d'installer ces dépendances dépendant de la distribution utilisée. D'habitude, vous devez installer les paquetages de développement de ces dépendances. Ci-dessous se trouve une liste d'instructions pour les installer depuis la ligne de commande pour les distributions les plus communes. Si votre distribution n'est pas listée et que vous ne savez pas comment installer les dépendances, vous devriez vous adresser au support de votre distribution.</para>
+		<para>La manière d'installer ces dépendances dépend de la distribution utilisée. D'habitude, vous devez installer les paquetages de développement de ces dépendances. Ci-dessous se trouve une liste d'instructions pour les installer depuis la ligne de commande pour les distributions les plus communes. Si votre distribution n'est pas listée et que vous ne savez pas comment installer les dépendances, vous devriez vous adresser au support de votre distribution.</para>
 		<orderedlist>
 			<listitem>
 				<para><ulink url="http://www.mandriva.com/">Mandriva</ulink>
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel \</userinput>
-<prompt>></prompt> <userinput>at-spi-devel libgnomecanvas2-devel libgnome2-devel</userinput>
+<prompt>></prompt> <userinput>at-spi-devel libcairo2-devel libgnome2-devel librsvg2-devel</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>
 				<para><ulink url="http://www.ubuntu.com/">Ubuntu</ulink>
 				<screen>
 <prompt>$</prompt> <userinput>sudo apt-get install build-essential libxml2-dev libgconf2-dev \</userinput>
-<prompt>></prompt> <userinput>libglade2-dev libatspi-dev libgnomecanvas2-dev libgnome2-dev</userinput>
+<prompt>></prompt> <userinput>libglade2-dev libatspi-dev libcairo2-dev libgnome2-dev librsvg2-dev</userinput>
 				</screen></para>
 			</listitem>
 		</orderedlist>
@@ -100,7 +101,7 @@
 	<para>Ou, depuis le bureau GNOME, cliquez <guimenu>Applications</guimenu>-><guisubmenu>Accessibilité</guisubmenu>-><guimenuitem>Clavier virtuel Florence</guimenuitem>.
 Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez le menu <guimenu>Système</guimenu>-><guisubmenu>Préférences</guisubmenu>-><guimenuitem>Sessions</guimenuitem>, cliquez sur l'onglet <guibutton>Programmes au démarrage</guibutton>, puis cliquez <guibutton>Ajouter</guibutton> et entrez <command>/usr/bin/florence</command> pour que Florence soit lancé avec GNOME au prochain démarrage.</para>
 	<para>Il est nécessaire d'activer l'accessibilité de GNOME pour utiliser Florence (cela veut dire que le daemon at-spi est lancé) ; si cela n'est pas activé, Florence ne se lancera pas mais suggèrera plutôt d'activer l'accessibilité et de relancer GNOME. Lorsque GNOME sera relancé et l'accessibilité activée, alors Florence se lancera normalement.</para>
-	<para>Lorsque florence est en cours de fonctionnement, une icône devrait être visible dans la zone de notification du bureau, habituellement dans l'angle en haut à droite de l'écran. Cliquez sur l'icône pour cacher et montrer le clavier Florence. Un click gauche fait apparaître un menu. Dans ce menu, vous pouvez utiliser le choix <guimenuitem>quit</guimenuitem> pour arrêter Florence.</para>
+	<para>Lorsque florence est en cours de fonctionnement, une icône devrait être visible dans la zone de notification du bureau, habituellement dans l'angle en haut à droite de l'écran. Cliquez sur l'icône pour cacher et montrer le clavier Florence. Un click droit fait apparaître un menu. Dans ce menu, vous pouvez utiliser le choix <guimenuitem>quit</guimenuitem> pour arrêter Florence.</para>
 	<sect2>
 		<title>Les modes de Florence</title>
 		<para>Florence a différents états qui affectent sa façon d'interagir avec l'utilisateur.</para>
@@ -128,7 +129,7 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 					</mediaobject>
 				</screenshot>
 			</figure>
-	<para>La fenêtre de configuration est accessible par l'icône de la zone de notification (cliquez gauche sur celle-ci et sélectionnez <guimenuitem>Preferences</guimenuitem>) ou depuis la ligne de commande avec l'option -c ou --config: <command>florence --config</command>. Il est possible de bidouiller la configuration par gconf (voir la section bidouillage)</para>
+	<para>La fenêtre de configuration est accessible par l'icône de la zone de notification (cliquez droit sur celle-ci et sélectionnez <guimenuitem>Preferences</guimenuitem>) ou depuis la ligne de commande avec l'option -c ou --config: <command>florence --config</command>. Il est possible de bidouiller la configuration par gconf (voir la section bidouillage)</para>
 		<para>Les options suivantes sont configurables:</para>
 		<orderedlist>
 			<listitem><para>couleur Keys: change la couleur de fond des touches normales.</para></listitem>
