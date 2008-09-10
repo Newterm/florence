@@ -76,6 +76,9 @@ void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble 
 /* draw the pressed indicator on a key */
 void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
 	struct style *style, struct key *key);
+/* returns a rectangle containing the key */
+void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
+	gdouble *x, gdouble *y, gdouble *w, gdouble *h);
 
 #endif
 

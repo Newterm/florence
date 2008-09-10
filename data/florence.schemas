@@ -37,7 +37,7 @@
 			<applyto>/apps/florence/window/zoom</applyto>
 			<owner>florence</owner>
 			<type>float</type>
-			<default>10</default>
+			<default>20</default>
 			<locale name="C">
 				<short>Scaling factor of the window</short>
 				<long>Sets the size of the window and of the keys</long>
@@ -174,7 +174,7 @@
 			<applyto>/apps/florence/layout/extensions</applyto>
 			<owner>florence</owner>
 			<type>string</type>
-			<default></default>
+			<default>Numpad:Arrows:Function keys</default>
 			<locale name="C">
 				<short>List of colon-separated (:) extension names</short>
 				<long>List of keyboard extensions names (colon-separated). extension names must be found in layout file</long>

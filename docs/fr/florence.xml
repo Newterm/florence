@@ -156,7 +156,7 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 	</sect2>
 </sect1>
 <sect1 id="tips">
-	<title>Utilisation de Florence sans GOME</title>
+	<title>Utilisation de Florence sans GNOME</title>
 	<para>Florence est principalement conçu pour être utilisé avec un bureau GNOME. Le clavier Florence utilise les bibliothèques communément installées avec un bureau GNOME. Cependant, vous pouvez installer ces bibliothèques avec n'importe quel bureau pour utiliser Florence. Les paquetages nécessaires pour avoir toutes les bibliothèques sont listées dans la section installation.</para>
 	<para>Pour que Florence fonctionne, il faut démarrer le daemon d'enregistrement de at-spi au démarrage de la session: Pour démarrer le daemon d'enregistrement de at-spi (au démarrage de la session):</para>
 	<orderedlist>

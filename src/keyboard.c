@@ -197,3 +197,13 @@ gdouble keyboard_get_width(struct keyboard *keyboard) { return keyboard->width; 
 gdouble keyboard_get_height(struct keyboard *keyboard) { return keyboard->height; }
 enum layout_placement keyboard_get_placement(struct keyboard *keyboard) { return keyboard->placement; }
 
+/* returns a rectangle containing the key */
+void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
+	gdouble *x, gdouble *y, gdouble *w, gdouble *h)
+{
+	*x=keyboard->xpos+(key->x-(key->w/2.0));
+	*y=keyboard->ypos+(key->y-(key->h/2.0));
+	*w=key->w;
+	*h=key->h;
+}
+

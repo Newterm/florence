@@ -29,9 +29,6 @@
 #include <gdk/gdkx.h>
 #include <cspi/spi.h>
 
-/* Time in ms between checks for SPI events */
-#define FLO_SPI_TIME_INTERVAL 100
-
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
@@ -344,11 +341,8 @@ void flo_create_window_mask(struct florence *florence)
 		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, florence->width, florence->height, 1)))
 			flo_fatal(_("Unable to create mask"));
 		cairoctx=gdk_cairo_create(mask);
-		cairo_set_source_rgba(cairoctx, 0.0, 0.0, 0.0, 0.0);
-		cairo_set_operator(cairoctx, CAIRO_OPERATOR_SOURCE);
-		cairo_paint(cairoctx);
 		flo_background_draw(florence, cairoctx);
-		cairo_set_source_rgba(cairoctx, 1.0, 1.0, 1.0, 0.0);
+		cairo_set_source_rgba(cairoctx, 0.0, 0.0, 0.0, 0.0);
 		cairo_set_operator(cairoctx, CAIRO_OPERATOR_SOURCE);
 		cairo_paint(cairoctx);
 		cairo_set_source_surface(cairoctx, florence->background, 0, 0);
@@ -391,7 +385,6 @@ void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry
 void flo_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
-	gboolean shown=GTK_WIDGET_VISIBLE(GTK_WINDOW(florence->window));
 	flo_set_dimensions(florence);
 	if (florence->hitmap) g_free(florence->hitmap);
 	flo_hitmap_create(florence);
@@ -400,9 +393,8 @@ void flo_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry
 	if (florence->symbols) cairo_surface_destroy(florence->symbols);
 	florence->symbols=NULL;
 	gtk_widget_set_size_request(GTK_WIDGET(florence->window), florence->width, florence->height);
-	gtk_widget_show(GTK_WIDGET(florence->window));
 	flo_create_window_mask(florence);
-	if (!shown) gtk_widget_hide(GTK_WIDGET(florence->window));
+	gtk_widget_queue_draw(GTK_WIDGET(florence->window));
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
@@ -448,6 +440,8 @@ void flo_register_settings_cb(struct florence *florence)
 /* Redraw the key to the window */
 void flo_update_keys(struct florence *florence, GtkWidget *window, struct key *key, gboolean statechange)
 {
+	GdkRectangle rect;
+	gdouble x, y, w, h;
 	GList *found;
 
 	if (key) {
@@ -460,8 +454,13 @@ void flo_update_keys(struct florence *florence, GtkWidget *window, struct key *k
 		}
 		if (statechange) {
 			florence->redrawsymbols=TRUE;
+			gtk_widget_queue_draw(GTK_WIDGET(florence->window));
+		} else {
+			keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
+			rect.x=x*florence->zoom-5.0; rect.y=y*florence->zoom-5.0;
+			rect.width=w*florence->zoom+10.0; rect.height=h*florence->zoom+10.0;
+			gdk_window_invalidate_rect(window->window, &rect, TRUE);
 		}
-		gtk_widget_queue_draw(window);
 	}
 }
 
@@ -470,6 +469,7 @@ void flo_update_keys(struct florence *florence, GtkWidget *window, struct key *k
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
+	struct key *current;
 	guint code;
 	gint x, y;
 	y=(gint)((GdkEventMotion*)event)->y;
@@ -485,8 +485,9 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 			g_timer_destroy(florence->timer);
 			florence->timer=NULL;
 		}
-		flo_update_keys(florence, window, florence->current, FALSE);
+		current=florence->current;
 		florence->current=florence->keys[code];
+		flo_update_keys(florence, window, current, FALSE);
 		flo_update_keys(florence, window, florence->current, FALSE);
 	}
 	return FALSE;
@@ -579,6 +580,9 @@ void flo_expose (GtkWidget *window, GdkEventExpose* pExpose, struct florence *fl
 	struct key *key;
 	gdouble timer=0.0;
 
+	/* Don't need to redraw several times in one chunk */
+	if (pExpose->count>0) return;
+
 	/* create the context */
 	context=gdk_cairo_create(window->window);
 
@@ -611,7 +615,9 @@ void flo_expose (GtkWidget *window, GdkEventExpose* pExpose, struct florence *fl
 			timer=g_timer_elapsed(florence->timer, NULL)*1000./
 				settings_get_double("behaviour/auto_click");
 			keyboard_focus_draw(keyboard, context, florence->zoom, florence->style, key, timer);
-			if (timer<1.0) flo_update_keys(florence, window, key, FALSE);
+			if (timer<1.0) {
+				flo_update_keys(florence, window, florence->current, FALSE);
+			}
 			else {
 				flo_button_press_event(window, NULL, (void *)florence);
 				flo_button_release_event(window, NULL, (void *)florence);
