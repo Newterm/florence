@@ -90,7 +90,7 @@ void flo_traverse (struct florence *florence, Accessible *obj)
 		{
 			child=Accessible_getChildAtIndex(obj, i);
 			if (Accessible_isEditableText(child) &&
-				AccessibleStateSet_contains(child, SPI_STATE_FOCUSED))
+				AccessibleStateSet_contains(Accessible_getStateSet(child), SPI_STATE_FOCUSED))
 				flo_show(florence, child);
 			else flo_traverse(florence, child);
 			Accessible_unref(child);
@@ -464,6 +464,17 @@ void flo_update_keys(struct florence *florence, GtkWidget *window, struct key *k
 	}
 }
 
+/* update the timer representation: to be called when idle */
+gboolean flo_timer_update(gpointer data)
+{
+	struct florence *florence=(struct florence *)data;
+	if (florence->timer && florence->current) {
+		flo_update_keys(florence, GTK_WIDGET(florence->window), florence->current, FALSE);
+		return TRUE;
+	} else return FALSE;
+}
+
+
 /* handles mouse motion events 
  * update the keyboard key under the mouse */
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
@@ -480,7 +491,10 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 	if (florence->current!=florence->keys[code]) {
 		if (florence->keys[code] && settings_get_double("behaviour/auto_click")>0.0) {
 			if (florence->timer) g_timer_start(florence->timer);
-			else florence->timer=g_timer_new();
+			else {
+				florence->timer=g_timer_new();
+				g_idle_add(flo_timer_update, (gpointer)florence);
+			}
 		} else if (florence->timer) {
 			g_timer_destroy(florence->timer);
 			florence->timer=NULL;
@@ -514,10 +528,14 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 }
 
 /* handles button press events */
-gboolean flo_button_press_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
+gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
 	gboolean redrawall=FALSE;
+
+	/* we don't want double and triple click events */
+	if (event && ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS))) return FALSE;
+
 	/* means 2 consecutive button press and no release, but we don't support multi-touch, yet. */
 	/* so we just release any pressed key */
 	if (florence->pressed) {
@@ -590,12 +608,11 @@ void flo_expose (GtkWidget *window, GdkEventExpose* pExpose, struct florence *fl
 	if (!florence->background) {
 		flo_background_draw(florence, context);
 	}
-	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
+	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	cairo_set_source_surface(context, florence->background, 0, 0);
 	cairo_paint(context);
 
 	/* draw highlights (pressed keys) */
-	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	cairo_save(context);
 	cairo_scale(context, florence->zoom, florence->zoom);
 	if (list) {
@@ -615,10 +632,7 @@ void flo_expose (GtkWidget *window, GdkEventExpose* pExpose, struct florence *fl
 			timer=g_timer_elapsed(florence->timer, NULL)*1000./
 				settings_get_double("behaviour/auto_click");
 			keyboard_focus_draw(keyboard, context, florence->zoom, florence->style, key, timer);
-			if (timer<1.0) {
-				flo_update_keys(florence, window, florence->current, FALSE);
-			}
-			else {
+			if (timer>=1.0) {
 				flo_button_press_event(window, NULL, (void *)florence);
 				flo_button_release_event(window, NULL, (void *)florence);
 			}

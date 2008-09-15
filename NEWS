@@ -1,4 +1,5 @@
-The most visible change of this version is its speed. It starts more quickly and is more responsive.
+The most visible change of this version is its speed. It starts more quickly and is more responsive. Animation is also smoother.
+The non-locking modifiers keys don't behave exactly like previous versions of florence. All modifiers are released when a non-modifier key is pressed.
 Under the hood, I have redesigned all the drawing system to use less memory with cairo and librsvg instead of libgnomecanvas and libart.
 I have also swaped xml schema validation for relax-ng (compact syntax) validation of the layout file. This is much more readable and maintainable.
 Also on the news is that florence is now on Fedora 9 official repository, thanks to Simon Wesp.
@@ -7,7 +8,7 @@ Changelog:
 
 2008-09-10 François Agrech <f.agrech@gmail.com>
         * Version 0.3.0
-	* layout file now validated with relax-ng instead of xmls schema (to work better with svg)
+	* layout file now validated with relax-ng instead of xml schema (to work better with svg)
 	* move libgnomecanvas and artlib to cairo and librsvg
 	* complete redesign of the drawing system for startup performance: remove some bloat and use less memory
 

@@ -77,7 +77,7 @@
 
 2008-09-10 François Agrech <f.agrech@gmail.com>
 	* Version 0.3.0
-	* layout file now validated with relax-ng instead of xmls schema (to work better with svg)
+	* layout file now validated with relax-ng instead of xml schema (to work better with svg)
 	* move libgnomecanvas and artlib to cairo and librsvg
 	* complete redesign of the drawing system for startup performance: remove some bloat and use less memory
 
