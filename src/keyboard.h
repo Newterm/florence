@@ -1,4 +1,5 @@
 /* 
+
    Florence - Florence is a simple virtual keyboard for Gnome.
 
    Copyright (C) 2008 François Agrech
@@ -26,6 +27,7 @@
 #include <X11/XKBlib.h>
 #include "key.h"
 #include "layoutreader.h"
+#include "status.h"
 
 /* A keyboard is a set of keys logically grouped together */
 /* Examples: the main keyboard, the numpad or the function keys */
@@ -44,7 +46,7 @@ struct keyboard_globaldata {
 	struct style *style; /* style of florence  */
 	XkbDescPtr xkb_desc; /* Keyboard description from XKB */
 	XkbStateRec xkb_state; /* Keyboard Status (get from XKB) */
-	GList **pressedkeys; /* reference to the list of pressed keys to update */
+	struct status *status; /* status of the keybaord to update */
 };
 
 /* create a keyboard: the layout is passed as a text reader */

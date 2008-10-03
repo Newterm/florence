@@ -170,6 +170,21 @@
 			</locale>
 		</schema>
 		<schema>
+			<key>/schemas/apps/florence/layout/style</key>
+			<applyto>/apps/florence/layout/style</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>Path of the layout style file</short>
+				<long>The layout style file contains the style to draw the keys of the keyboard</long>
+			</locale>
+			<locale name="fr">
+				<short>Chemin vers le fichier de style du layout</short>
+				<long>Le fichier de style du layout contient le style pour dessiner les touches sur le clavier</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/layout/extensions</key>
 			<applyto>/apps/florence/layout/extensions</applyto>
 			<owner>florence</owner>

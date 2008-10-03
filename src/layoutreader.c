@@ -19,6 +19,7 @@
 
 */
 
+#include <unistd.h>
 #include <glib.h>
 #include "system.h"
 #include "layoutreader.h"
@@ -31,6 +32,8 @@
 
 #define BUFFER_SIZE 32
 #define FLO_DEFAULT_LAYOUT DATADIR "/florence.layout"
+static gchar *layoutreader_link="%s/.florence/florence.layout";
+static gchar *layoutreader_style_link="%s/.florence/florence.style";
 
 /* Move to the first occurence of the named element which is at the specified level
  * return false if no element were found */
@@ -280,21 +283,41 @@ void *layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_keyboardp
 	return ret;
 }
 
+/* create symlinks in $HOME for layout */
+void layoutreader_symlink_create(gchar **file)
+{
+	gchar *style;
+	static char *defaultlayout=FLO_DEFAULT_LAYOUT;
+        gchar *layoutfile=settings_get_string("layout/file");
+	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=defaultlayout;
+	*file=g_strdup_printf(layoutreader_link, g_getenv("HOME"));
+	if (0!=symlink(layoutfile, *file)) {
+		flo_warn(_("Unable to create symlink %s to %s"), *file, layoutfile);
+		g_free(*file);
+		*file=g_strdup(layoutfile);
+	} else {
+        	layoutfile=settings_get_string("layout/style");
+		style=g_strdup_printf(layoutreader_style_link, g_getenv("HOME"));
+		if (0!=symlink(layoutfile, style))
+			flo_warn(_("Unable to create symlink %s to %s"), style, layoutfile);
+	}
+}
+
 /* instanciates a new layout reader. Called in florence.c
  * return the layoutreader handle */
 xmlTextReaderPtr layoutreader_new(void)
 {
 	xmlTextReaderPtr reader;
-	char *layoutfile=NULL;
+	char *file=NULL;
 	static char *defaultlayout=FLO_DEFAULT_LAYOUT;
 
 	LIBXML_TEST_VERSION
 
-        layoutfile=settings_get_string("layout/file");
-	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=defaultlayout;
-	reader=xmlReaderForFile(layoutfile, NULL, XML_PARSE_NOENT); 
-	if (!reader) flo_fatal (_("Unable to open file %s"), layoutfile);
-	flo_info(_("Using layout file %s"), layoutfile);
+	layoutreader_symlink_create(&file);
+	reader=xmlReaderForFile(file, NULL, XML_PARSE_NOENT|XML_PARSE_XINCLUDE); 
+	if (!reader) flo_fatal (_("Unable to open file %s"), file);
+	flo_info(_("Using layout file %s"), file);
+	g_free(file);
 	if (xmlTextReaderRelaxNGValidate(reader, DATADIR "/relaxng/florence.rng"))
 		flo_fatal(_("Unable to activate schema validation from %s."), DATADIR "/florence.rng");
 	if (!layoutreader_goto(reader, (xmlChar *)"layout", XML_READER_TYPE_ELEMENT, 0))

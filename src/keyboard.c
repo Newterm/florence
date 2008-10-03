@@ -43,7 +43,6 @@ void keyboard_insertkey (void *userdata1, char *shape,
 	struct style *style=global->style;
 	XkbDescPtr xkb=global->xkb_desc;
 	XkbStateRec rec=global->xkb_state;
-	GList **pressedkeys=global->pressedkeys;
 	struct key *key;
 	GdkModifierType mod;
 	gboolean locker;
@@ -58,11 +57,9 @@ void keyboard_insertkey (void *userdata1, char *shape,
 	if (key_table) key_table[code]=key;
 
 	/* Press the activated locker key if the hardware key is activated */
-	if (mod) {
-		if (mod&rec.locked_mods) {
-			key_set_pressed(key, TRUE);
-			*pressedkeys=g_list_prepend(*pressedkeys, key);
-		}
+	if (mod && (mod&rec.locked_mods)) {
+		key_set_pressed(key, TRUE);
+		status_press(global->status, key);
 	}
 }
 

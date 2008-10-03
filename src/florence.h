@@ -24,29 +24,13 @@
 
 #include <X11/XKBlib.h>
 #include <gtk/gtk.h>
-#include "style.h"
 #include "key.h"
-#include "keyboard.h"
+#include "status.h"
 
 /* There is one florence structure which contains all global data in florence.c */
 struct florence {
-	GtkWindow *window; /* GTK window of florence */
-	guint width, height; /* dimensions of florence, in pixels */
-	gdouble zoom; /* scaling factor of florence window */
+	struct status *status; /* the status of florence */	
 	struct key *keys[256]; /* Florence keys sorted by keycode */
-	struct key *current; /* focus key (key located under the pointer) or NULL */
-	struct key *pressed; /* key currently being pressed or NULL */
-	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
-	gboolean redrawsymbols; /* TRUE when symbols need to be redrawn */
-	GdkModifierType globalmod; /* global modifier mask */
-	GList *pressedkeys; /* list of all pressed keys */
-	GSList *keyboards; /* Main list of keyboard extensions */
-	gdouble xoffset, yoffset; /* offset of the main keyboard */
-	guchar *hitmap; /* bitmap of key codes: used to know on which key the mouse is over */
-	struct style *style; /* Do it with style */
-	gboolean composite; /* true if the screen has composite extension */
-	cairo_surface_t *background; /* contains the background image of florence */
-	cairo_surface_t *symbols; /* contains the symbols image of florence */
 	/* Xkd data: only used at startup */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */

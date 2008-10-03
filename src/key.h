@@ -26,6 +26,9 @@
 #include <gdk/gdk.h>
 #include <glib.h>
 #include "style.h"
+#include "status.h"
+
+struct status;
 
 /* A key is an item of the keyboard. It represents a real keyboard key.
  * A key is replesented on the screen with a background (shape) and a foreground (symbol)
@@ -49,7 +52,7 @@ struct key *key_new(void *userdata, guint code, GdkModifierType mod, gboolean lo
 void key_free(struct key *key);
 
 /* Send SPI events coresponding to the key */
-void key_press(struct key *key, GList **pressedkeys, GdkModifierType *globalmod);
+void key_press(struct key *key, struct status *status);
 void key_release(struct key *key);
 
 /* draw the key on the hitmap */

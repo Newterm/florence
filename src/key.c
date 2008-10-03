@@ -52,10 +52,9 @@ void key_free(struct key *key)
 }
 
 /* Send a key press event */
-void key_press(struct key *key, GList **pressedkeys, GdkModifierType *globalmod)
+void key_press(struct key *key, struct status *status)
 {
-	GList *list=*pressedkeys;
-	GList *tmp;
+	GList *list=status_pressedkeys_get(status);
 	struct key *pressed;
 	while (list) {
 		pressed=((struct key *)list->data);
@@ -64,7 +63,7 @@ void key_press(struct key *key, GList **pressedkeys, GdkModifierType *globalmod)
 		list=list->next;
 	}
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_PRESS);
-	list=*pressedkeys;
+	list=status_pressedkeys_get(status);
 	while (list) {
 		pressed=((struct key *)list->data);
 		if (key_get_modifier(pressed) && !key_is_locker(pressed))
@@ -73,22 +72,20 @@ void key_press(struct key *key, GList **pressedkeys, GdkModifierType *globalmod)
 	}
 	if (key_get_modifier(key)) {
 		key->pressed=!key->pressed;
-		if (key_is_pressed(key)) *globalmod|=key_get_modifier(key);
-		else *globalmod&=~key_get_modifier(key);
 	} else { 
 		key->pressed=TRUE;
-		list=*pressedkeys;
+		list=status_pressedkeys_get(status);
 		while (list) {
 			pressed=((struct key *)list->data);
+			list=list->next;
 			if (key_get_modifier(pressed) && !key_is_locker(pressed)) {
 				pressed->pressed=FALSE;
-				*globalmod&=~key_get_modifier(pressed);
-				tmp=list->next;
-				*pressedkeys=g_list_delete_link(*pressedkeys, list);
-				list=tmp;
-			} else list=list->next;
+				status_release(status, pressed);
+			}
 		}
 	}
+	if (key->pressed) status_press(status, key);
+	else status_release(status, key);
 }
 
 /* Send a key release event */
