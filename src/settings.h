@@ -30,3 +30,6 @@ gdouble settings_get_double(const gchar *name);
 gchar *settings_get_string(const gchar *name);
 gboolean settings_get_bool(const gchar *name);
 
+/* Create the $HOME/.florence directory */
+gboolean settings_mkhomedir();
+

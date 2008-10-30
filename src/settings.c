@@ -22,6 +22,8 @@
 /* Note : this is both the viewer and the controller */
 
 #include "system.h"
+#include <stdio.h>
+#include <sys/stat.h>
 #include "settings.h"
 #include "trace.h"
 #include <glade/glade.h>
@@ -265,6 +267,30 @@ gboolean settings_get_bool(const gchar *name)
 	gboolean ret=gconf_client_get_bool(gconfclient, fullpath, &err);
 	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
 	flo_debug("GCONF:%s=<%s>", fullpath, ret?"TRUE":"FALSE");
+	return ret;
+}
+
+/* Create the $HOME/.florence directory */
+gboolean settings_mkhomedir()
+{ 
+	gchar *filename=g_strdup_printf("%s/.florence", g_getenv("HOME"));
+	struct stat stat;
+	gboolean ret=TRUE;
+
+	/* create the directory if it doesn't exist already */
+	if (lstat(filename, &stat)==0) {
+		if (!S_ISDIR(stat.st_mode)) {
+			flo_warn(_("%s is not a directory"), filename);
+			ret=FALSE;
+		}
+	} else {
+		if (0!=mkdir(filename, S_IRUSR|S_IWUSR|S_IXUSR)) {
+			flo_warn(_("Unable to create directory %s"), filename);
+			ret=FALSE;
+		}
+	}
+	g_free(filename);
+
 	return ret;
 }
 

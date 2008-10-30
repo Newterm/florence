@@ -71,7 +71,7 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 		CAIRO_CONTENT_COLOR_ALPHA, view->width, view->height);
 	offscreen=cairo_create(*surface);
 	cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+	cairo_set_operator(offscreen, CAIRO_OPERATOR_OVER);
 	cairo_paint(offscreen);
 
 	/* browse the keyboards */

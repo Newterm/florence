@@ -20,6 +20,7 @@
 */
 
 #include <unistd.h>
+#include <sys/stat.h>
 #include <glib.h>
 #include "system.h"
 #include "layoutreader.h"
@@ -32,8 +33,9 @@
 
 #define BUFFER_SIZE 32
 #define FLO_DEFAULT_LAYOUT DATADIR "/florence.layout"
+#define FLO_DEFAULT_STYLE DATADIR "/styles/default"
 static gchar *layoutreader_link="%s/.florence/florence.layout";
-static gchar *layoutreader_style_link="%s/.florence/florence.style";
+static gchar *layoutreader_style_link="%s/.florence/style";
 
 /* Move to the first occurence of the named element which is at the specified level
  * return false if no element were found */
@@ -284,22 +286,35 @@ void *layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_keyboardp
 }
 
 /* create symlinks in $HOME for layout */
-void layoutreader_symlink_create(gchar **file)
+void layoutreader_symlink_create(gchar *source, gchar **file)
 {
-	gchar *style;
-	static char *defaultlayout=FLO_DEFAULT_LAYOUT;
-        gchar *layoutfile=settings_get_string("layout/file");
-	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=defaultlayout;
-	*file=g_strdup_printf(layoutreader_link, g_getenv("HOME"));
-	if (0!=symlink(layoutfile, *file)) {
-		flo_warn(_("Unable to create symlink %s to %s"), *file, layoutfile);
+	struct stat stat;
+
+	/* First check that we can create the symlink */
+	if (!settings_mkhomedir()) {
+		flo_warn(_("Unable to create %s because $HOME/.florence does not exist"), *file);
 		g_free(*file);
-		*file=g_strdup(layoutfile);
-	} else {
-        	layoutfile=settings_get_string("layout/style");
-		style=g_strdup_printf(layoutreader_style_link, g_getenv("HOME"));
-		if (0!=symlink(layoutfile, style))
-			flo_warn(_("Unable to create symlink %s to %s"), style, layoutfile);
+		*file=source;
+		return;
+	} else if (lstat(*file, &stat)==0) {
+		if (!S_ISLNK(stat.st_mode)) {
+			flo_warn(_("%s already exists but it is not a symbolic link"), *file);
+			g_free(*file);
+			*file=source;
+			return;
+		} else if (0!=unlink(*file)) {
+			flo_warn(_("%s already exists and remove failed"), *file);
+			g_free(*file);
+			*file=source;
+			return;
+		}
+	}
+
+	/* then create it */
+	if (0!=symlink(source, *file)) {
+		flo_warn(_("Unable to create symlink %s to %s"), *file, source);
+		g_free(*file);
+		*file=source;
 	}
 }
 
@@ -308,12 +323,30 @@ void layoutreader_symlink_create(gchar **file)
 xmlTextReaderPtr layoutreader_new(void)
 {
 	xmlTextReaderPtr reader;
-	char *file=NULL;
+        gchar *layoutfile=settings_get_string("layout/file");
 	static char *defaultlayout=FLO_DEFAULT_LAYOUT;
+        gchar *stylefile=settings_get_string("layout/style");
+	static char *defaultstyle=FLO_DEFAULT_STYLE;
+	char *file=NULL;
+	char *style=NULL;
 
 	LIBXML_TEST_VERSION
 
-	layoutreader_symlink_create(&file);
+	/* create symlinks */
+	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=defaultlayout;
+	file=g_strdup_printf(layoutreader_link, g_getenv("HOME"));
+	layoutreader_symlink_create(layoutfile, &file);
+	if (stylefile==NULL || stylefile[0]=='\0') stylefile=defaultstyle;
+	style=g_strdup_printf(layoutreader_style_link, g_getenv("HOME"));
+	layoutreader_symlink_create(stylefile, &style);
+	flo_debug(_("style file is %s"), style);
+	g_free(style);
+
+	/* positionnement dans le répertoire de base */
+	style=g_strdup_printf("%s/.florence", g_getenv("HOME"));
+	chdir(style);
+	g_free(style);
+
 	reader=xmlReaderForFile(file, NULL, XML_PARSE_NOENT|XML_PARSE_XINCLUDE); 
 	if (!reader) flo_fatal (_("Unable to open file %s"), file);
 	flo_info(_("Using layout file %s"), file);
@@ -329,8 +362,8 @@ xmlTextReaderPtr layoutreader_new(void)
 /* free the memory used by layout reader */
 void layoutreader_free(xmlTextReaderPtr reader)
 {
-	if (xmlTextReaderIsValid(reader) != 1)
-		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.rnc");
+/*	if (xmlTextReaderIsValid(reader) != 1)
+		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.rnc");*/
 	xmlFreeTextReader(reader);
 
 	xmlCleanupParser();

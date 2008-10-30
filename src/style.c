@@ -20,7 +20,6 @@
 */
 
 #include <stdio.h>
-#include <sys/stat.h>
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <librsvg/rsvg.h>
@@ -283,23 +282,14 @@ void style_create_css(struct style *style)
 	gchar *filename=g_strdup_printf(style_css_file, g_getenv("HOME"));
 	FILE *in;
 	FILE *out;
-	struct stat stat;
 	gchar *tmp1, *tmp2, *line;
-	int i;
 
 	/* create the directory if it doesn't exist already */
-	for(i=strlen(filename);filename[i]!='/' && i>0;i--);
-	if (i!=0) {
-		filename[i]='\0';
-		if (lstat(filename, &stat)==0) {
-			if (!S_ISDIR(stat.st_mode)) flo_warn(_("%s is not a directory"), filename);
-		} else {
-			if (0!=mkdir(filename, S_IRUSR|S_IWUSR|S_IXUSR))
-				flo_warn(_("Unable to create directory %s"), filename);
-		}
-		filename[i]='/';
+	if (!settings_mkhomedir()) {
+		flo_warn(_("Unable to create %s because $HOME/.florence does not exist"), filename);
+		return;
 	}
-	
+
 	/* open the files */
 	in=fopen(style_css_file_source, "r");
 	out=fopen(filename, "w");
