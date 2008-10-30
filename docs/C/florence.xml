@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="en">
 <articleinfo>
-	<date>2008-09-10</date>
+	<date>2008-10-16</date>
 	<title>Florence documentation</title>
 	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
 	<authorgroup>
@@ -182,9 +182,34 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 	</screen>
 	<para>Note that QT3 applications don't support at-spi. Therefore you should not deactivate always-on-screen mode on KDE3.</para>
 </sect1>
+<sect1 id="faq">
+	<title>FAQ (Frequently Asked Questions)</title>
+	<qandaset defaultlabel='qanda'>
+		<qandaentry>
+			<question>
+				<para>Does Florence support internationnal keyboards with non-european characters (such as arab, chenese, punjabe, etc...)</para>
+			</question>
+			<answer>
+				<para>Yes. Florence does support all the keyboards supported by X. In order to use a different keyboard, you have to use the setxkbmap command before launching Florence. For instance, to use an arabic keyboard, use the following command:</para>
+		<screen>
+<prompt>$</prompt> <userinput>setxkbmap ar &amp;&amp; florence</userinput>
+		</screen>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>Florence launches successfully but the keyboard does not input key strokes.</para>
+			</question>
+			<answer>
+				<para>Most probably, the at-spi-registryd daemon is not running. You should start the at-spi-registryd daemon at session startup on your Desktop environment. If you are using GNOME, use the gnome-at-properties dialog for that.</para>
+			</answer>
+		</qandaentry>
+	</qandaset>
+</sect1>
 <sect1 id="hacking">
 	<title>Hacking</title>
-	<para>Some extra configuration options are available in GConf (under apps/florence).</para>
+	<para>Some extra configuration options are available in GConf (under apps/florence). You can modify configuration parameters from the configuration menu as well as from gconftool-2 or gconf-editor.</para>
+	<para>The gconf key apps/florence/layout/file contains the path to the keyboard layout file. It is an XML file that you can copy and modify.</para>
 </sect1>
 <sect1 id="gethelp">
         <title>Getting help</title>

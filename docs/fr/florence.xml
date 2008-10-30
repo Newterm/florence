@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="fr">
 <articleinfo>
-	<date>2008-09-10</date>
+	<date>2008-10-16</date>
 	<title>Documentation du clavier virtuel Florence</title>
 	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
@@ -181,9 +181,34 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 	</screen>
 	<para>Notez que les applications QT3 ne sont pas compatibles avec at-spi. En conséquence, vous ne devriez pas utiliser le mode caché avec KDE3.</para>
 </sect1>
+<sect1 id="faq">
+	<title>FAQ (Questions Fréquemment Posées)</title>
+	<qandaset defaultlabel='qanda'>
+		<qandaentry>
+			<question>
+				<para>Est-ce que Florence supporte les claviers internationnaux avec des caractères non-européens (arabe, chinois, etc)?</para>
+			</question>
+			<answer>
+				<para>Oui. Florence supporte tous les claviers et caractères supportés pas X. Pour utiliser un clavier différent, il suffit d'utiliser la commande setxkbmap avant de lancer florence. Par example, pour utiliser un clavier arabe dans Florence, utilisez la commande suivante:</para>
+		<screen>
+<prompt>$</prompt> <userinput>setxkbmap ar &amp;&amp; florence</userinput>
+		</screen>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>Florence se lance mais les touches du clavier n'ont aucun effet.</para>
+			</question>
+			<answer>
+				<para>Il est fort probable que le daemon at-spi-registryd n'est pas lancé. Vérifiez que le daemon at-spi-requstryd soit lancé au démarrage de votre environement de bureau. Si vous utilisez GNOME, utilisez le dialogue gnome-at-properties pour cela.</para>
+			</answer>
+		</qandaentry>
+	</qandaset>
+</sect1>
 <sect1 id="hacking">
 	<title>Bidouillage</title>
-	<para>Certaines options de configuration supplémentaires sont disponibles dans GConf (sous apps/florence).</para>
+	<para>Certaines options de configuration supplémentaires sont disponibles dans GConf (sous apps/florence). Vous pouvez modifier la configuration aussi bien avec le menu de configuration de florence qu'avec gconftool-2 ou gconf-editor.</para>
+	<para>La clé apps/florence/layout/file de gconf indique le chemin vers le fichier d'agencement des touches du clavier. Il s'agît d'un fichier XML que vous pouvez copier et modifier.</para>
 </sect1>
 <sect1 id="gethelp">
 	<title>Se faire aider</title>
