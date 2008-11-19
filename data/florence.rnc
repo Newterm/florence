@@ -27,8 +27,11 @@ namespace xlink = "http://www.w3.org/1999/xlink"
 grammar {
 
 start = layout-element
+xmllang = attribute xml:lang { text }
+xmlbase = attribute xml:base { text }
  
 layout-element = element layout {
+	xmllang?, xmlbase?,
 	informations-element,
 	style-element,
 	keyboard-element,
@@ -36,6 +39,7 @@ layout-element = element layout {
 }
 
 informations-element = element informations {
+	xmllang?, xmlbase?,
 	element name { xsd:string },
 	element author { xsd:string },
 	element date { xsd:date },
@@ -43,27 +47,32 @@ informations-element = element informations {
 }
 
 style-element = element style {
+	xmllang?, xmlbase?,
 	shape-element*,
 	symbol-element+
 }
 
 shape-element = element shape {
+	xmllang?, xmlbase?,
 	element name { xsd:string },
 	external "svg11/svg11.rnc"
 }
 
 symbol-element = element symbol {
+	xmllang?, xmlbase?,
 	element name { xsd:string },
 	( external "svg11/svg11.rnc" | element label { xsd:string } )
 }
 
 keyboard-element = element keyboard {
+	xmllang?, xmlbase?,
 	element width { xsd:decimal },
 	element height { xsd:decimal },
 	key-element*
 }
 
 key-element = element key {
+	xmllang?, xmlbase?,
 	code-element?,
 	element shape { xsd:string }?,
 	element xpos { xsd:decimal }?,
@@ -72,9 +81,10 @@ key-element = element key {
 	element height { xsd:decimal }?
 }
 
-code-element = element code { xsd:integer { minInclusive = "0" maxInclusive = "255" } }
+code-element = element code { xmllang?, xmlbase?, xsd:integer { minInclusive = "0" maxInclusive = "255" } }
 
 extension-element = element extension {
+	xmllang?, xmlbase?,
 	element name { xsd:string },
 	placement-element,
 	keyboard-element

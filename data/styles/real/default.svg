@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 100">
+  <rect x="0" y="0" width="100" height="100" rx="10" style="fill:url(florence.defs#gradient1)" stroke="black" stroke-width="2px"/>
+  <rect x="5" y="5" width="90" height="80" rx="10" style="fill:url(florence.defs#gradient2)" stroke="black" stroke-width="1px" stroke-opacity="0.5"/>
+</svg>

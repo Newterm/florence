@@ -29,3 +29,11 @@ void flo_warn (char *s, ...);
 void flo_info (char *s, ...);
 void flo_debug (char *s, ...);
 
+#if __GNUC__ >= 2
+#define FLO_FUNC __PRETTY_FUNCTION__
+#else
+#define FLO_FUNC "<unknown>"
+#endif
+
+#define flo_start_func() (g_printf("%d: %s\n", (__LINE__), (FLO_FUNC)))
+

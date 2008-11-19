@@ -48,8 +48,8 @@ AC_C_CONST
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat mkdir symlink])
+AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat chdir mkdir symlink])
 
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/relaxng/Makefile data/svg11/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/pearl/Makefile data/styles/real/Makefile data/relaxng/Makefile data/svg11/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
 AC_OUTPUT
 

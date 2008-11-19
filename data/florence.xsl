@@ -23,12 +23,13 @@
 	<xsl:template match="svg:svg">
 		<symbol>
 			<xsl:copy-of select="attribute::viewBox"/>
-			<xsl:attribute name="preserveAspectRatio">xMidYMid</xsl:attribute>
 			<xsl:choose>
 				<xsl:when test="name(..)='shape'">
+					<xsl:attribute name="preserveAspectRatio">none</xsl:attribute>
 					<xsl:attribute name="id">s_<xsl:value-of select="../flo:name"/></xsl:attribute>
 				</xsl:when>
 				<xsl:otherwise>
+					<xsl:attribute name="preserveAspectRatio">xMidYMid</xsl:attribute>
 					<xsl:attribute name="id"><xsl:value-of select="translate(../flo:name, '()[]|','')"/></xsl:attribute>
 					<xsl:attribute name="fill">white</xsl:attribute>
 					<xsl:attribute name="stroke">white</xsl:attribute>
@@ -52,15 +53,6 @@
 		</defs>
 	</xsl:template>
 
-	<xsl:template name="text">
-		<xsl:param name="text" select="'?'"/>
-		<text fill="white" transform="scale(20)" font-size="1" text-anchor="middle" dominant-baseline="central">
-			<xsl:attribute name="x"><xsl:value-of select="flo:xpos"/></xsl:attribute>
-			<xsl:attribute name="y"><xsl:value-of select="flo:ypos"/></xsl:attribute>
-			<xsl:value-of select="$text"/>
-		</text>
-	</xsl:template>
-
 	<xsl:template name="coords">
 		<xsl:choose>
 			<xsl:when test="string(flo:width)">
@@ -82,6 +74,15 @@
 		</xsl:choose>
 	</xsl:template>
 
+	<xsl:template name="text">
+		<xsl:param name="text" select="'?'"/>
+		<text fill="white" text-anchor="middle" font-family="Arial" font-size="20">
+			<xsl:attribute name="x"><xsl:value-of select="flo:xpos * 20"/></xsl:attribute>
+			<xsl:attribute name="y"><xsl:value-of select="( flo:ypos * 20 ) + 10"/></xsl:attribute>
+			<xsl:value-of select="$text"/>
+		</text>
+	</xsl:template>
+
 	<xsl:template name="symbol">
 		<xsl:choose>
 			<xsl:when test="document('keymap.xml')">
@@ -94,7 +95,7 @@
 						</xsl:call-template>
 					</xsl:when>
 					<xsl:when test="/flo:layout/flo:style/flo:symbol[flo:name=$val]/svg:svg">
-						<use transform="scale(20)" width="2" height="2" dominant-baseline="central">
+						<use transform="scale(20)" width="2" height="2">
 							<xsl:call-template name="coords"/>
 							<xsl:attribute name="xlink:href">#<xsl:value-of select="translate($val, '()[]|','')"/></xsl:attribute>
 						</use>

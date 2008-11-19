@@ -172,7 +172,7 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	cairo_set_font_size(cairoctx, 0.8);
 	cairo_text_extents(cairoctx, text, &te);
 	cairo_font_extents(cairoctx, &fe);
-	cairo_move_to(cairoctx, (w - te.width) / 2 - te.x_bearing, (h - fe.descent + fe.height) / 2);
+	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);
 	cairo_show_text(cairoctx, text);
 	cairo_restore(cairoctx);
 

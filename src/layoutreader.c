@@ -340,11 +340,9 @@ xmlTextReaderPtr layoutreader_new(void)
 	style=g_strdup_printf(layoutreader_style_link, g_getenv("HOME"));
 	layoutreader_symlink_create(stylefile, &style);
 	flo_debug(_("style file is %s"), style);
-	g_free(style);
 
-	/* positionnement dans le répertoire de base */
-	style=g_strdup_printf("%s/.florence", g_getenv("HOME"));
-	chdir(style);
+	/* cd to the right directory */
+	if (0!=chdir(style)) flo_warn(_("Unable to cd to %s"), style);
 	g_free(style);
 
 	reader=xmlReaderForFile(file, NULL, XML_PARSE_NOENT|XML_PARSE_XINCLUDE); 
@@ -362,8 +360,8 @@ xmlTextReaderPtr layoutreader_new(void)
 /* free the memory used by layout reader */
 void layoutreader_free(xmlTextReaderPtr reader)
 {
-/*	if (xmlTextReaderIsValid(reader) != 1)
-		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.rnc");*/
+	if (xmlTextReaderIsValid(reader) != 1)
+		flo_fatal(_("Invalid layout: check %s"), DATADIR "/florence.rnc");
 	xmlFreeTextReader(reader);
 
 	xmlCleanupParser();
