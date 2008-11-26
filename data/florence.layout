@@ -29,13 +29,7 @@
 	<florence_version>0.3.0</florence_version>
 </informations>
 
-<xi:include href="style/florence.style">
-	<xi:fallback>
-		<xi:include href="/usr/share/florence/styles/default/florence.style">
-			<xi:fallback href="/usr/local/share/florence/styles/default/florence.style"/>
-		</xi:include>
-	</xi:fallback>
-</xi:include>
+<xi:include href="style/florence.style"/>
 
 <keyboard>
 	<width>30</width>

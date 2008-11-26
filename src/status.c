@@ -135,18 +135,11 @@ GdkModifierType status_globalmod_get(struct status *status)
 }
 
 /* allocate memory for status */
-struct status *status_new(struct key *keys[])
+struct status *status_new()
 {
-	guint i;
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
 	memset(status, 0, sizeof(struct status));
-	for (i=0;i<256;i++) {
-		if(keys[i]) {
-			if (key_is_pressed(keys[i]))
-				status_globalmod_set(status, key_get_modifier(keys[i]));
-		}
-	}
 	return status;
 }
 
@@ -156,6 +149,18 @@ void status_free(struct status *status)
 	if (status->timer) g_timer_destroy(status->timer);
 	if (status->pressedkeys) g_list_free(status->pressedkeys);
 	if (status) g_free(status);
+}
+
+/* reset the status to its original state */
+void status_reset(struct status *status)
+{
+	status->focus=NULL;
+	status->pressed=NULL;
+	if (status->timer) g_timer_destroy(status->timer);
+	status->timer=NULL;
+	if (status->pressedkeys) g_list_free(status->pressedkeys);
+	status->pressedkeys=NULL;
+	status->globalmod=0;
 }
 
 /* sets the view to update on status change */

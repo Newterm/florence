@@ -26,7 +26,7 @@
 			<g class="shape">
 				<path id="default_s" d="M34 2 L98 2 C114 2 130 18 130 34 L130 98 C130 114 114 130 98 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
-			<use xlink:href="#default_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#default_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<shape>
@@ -35,7 +35,7 @@
 			<g class="shape">
 				<path id="Wide_s" d="M34 2 L164 2 C180 2 196 18 196 34 L196 98 C196 114 180 130 164 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
-			<use xlink:href="#Wide_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#Wide_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<shape>
@@ -44,7 +44,7 @@
 			<g class="shape">
 				<path id="XL_s" d="M34 2 L230 2 C246 2 262 18 262 34 L262 98 C262 114 246 130 230 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
-			<use xlink:href="#XL_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#XL_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<shape>
@@ -53,7 +53,7 @@
 			<g class="shape">
 				<path id="XXL_s" d="M34 2 L286 2 C302 2 318 18 318 34 L318 98 C317 114 302 130 286 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
-			<use xlink:href="#XXL_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#XXL_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<shape>
@@ -62,7 +62,7 @@
 			<g class="shape">
 				<path id="High_s" d="M34 2 L98 2 C114 2 130 18 130 34 L130 230 C130 246 114 262 98 262 L34 262 C18 262 2 246 2 230 L2 34 C2 18 18 2 34 2"/>
 			</g>
-			<use xlink:href="#High_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#High_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<shape>
@@ -71,7 +71,7 @@
 			<g class="shape">
 				<path id="Space_s" d="M34 2 L758 2 C774 2 790 18 790 34 L790 98 C790 114 774 130 758 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
-			<use xlink:href="#Space_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#Space_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<shape>
@@ -80,7 +80,7 @@
 			<g class="shape">
 				<path id="Return_s" d="M2 34 C2 18 18 2 34 2 L164 2 C180 2 196 18 196 34 L196 230 C196 246 180 262 164 262 L100 262 C84 262 68 246 68 230 L68 166 C68 135 63 130 36 130 L34 130 C18 130 2 114 2 98 L2 34"/>
 			</g>
-			<use xlink:href="#Return_s" style="fill:url(style/florence.defs#gradient)"/>
+			<use xlink:href="#Return_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
 	<symbol>

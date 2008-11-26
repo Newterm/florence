@@ -1,3 +1,3 @@
 
-SUBDIRS=default pearl
+SUBDIRS=default bright hard
 

@@ -22,7 +22,6 @@
 #include "system.h"
 #include "florence.h"
 #include "trace.h"
-#include "trayicon.h"
 #include "settings.h"
 #include "layoutreader.h"
 #include "keyboard.h"
@@ -123,7 +122,7 @@ void flo_layout_infos(char *name, char *version)
 }
 
 /* load the keyboards from the layout file into the keyboards member of florence */
-GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout, struct style *style)
+GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 {
 	int maj = XkbMajorVersion;
 	int min = XkbMinorVersion;
@@ -147,7 +146,7 @@ GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout, s
 
 	/* initialize global data */
 	global.key_table=(struct key **)&(florence->keys);
-	global.style=style;
+	global.style=florence->style;
 
 	/* read the layout file and create the extensions */
 	keyboards=g_slist_append(keyboards, (gpointer)keyboard_new(layout, 1, NULL, LAYOUT_VOID, &global));
@@ -236,73 +235,87 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 	return FALSE;
 }
 
-/* liberate all the memory used by florence */
-void flo_free(struct florence *florence)
+/* liberate memory used by the objects of the layout.
+ * Those objects are the style object, the keyboards and the keys */
+void flo_layout_unload(struct florence *florence)
 {
 	int i;
+	struct keyboard *keyboard;
+	while (florence->keyboards) {
+		keyboard=(struct keyboard *)florence->keyboards->data;
+		keyboard_free(keyboard);
+		florence->keyboards=g_slist_delete_link(florence->keyboards, florence->keyboards);
+	}
+	if (florence->style) style_free(florence->style);
 	for (i=0;i<256;i++) {
 		if (florence->keys[i]) key_free(florence->keys[i]);
 	}
-	if (florence->status) status_free(florence->status);
-	g_free(florence);
 }
 
-/* This is the main function.
- * Creates the hitmap, the window, combine the mask and draw the keyboard
- * Registers the event callbacks.
- * Call the event loop.
- * Cleans up at exit. */
-int florence (void)
+/* loads the layout file
+ * create the layour objects: the style, the keyboards and the keys */
+void flo_layout_load(struct florence *florence)
 {
 	xmlTextReaderPtr layout;
-	struct florence *florence;
-	struct style *style;
-	struct view *view;
-	GSList *keyboards;
-	struct keyboard *keyboard;
-	const char *modules;
+	layout=layoutreader_new(NULL);
+	layoutreader_readinfos(layout, flo_layout_infos);
+	florence->style=style_new(layout, NULL);
+	florence->keyboards=flo_keyboards_load(florence, layout);
+}
 
-	settings_init(FALSE);
+/* reloads the layout file */
+void flo_layout_reload(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct florence *florence=(struct florence *)user_data;
+	status_reset(florence->status);
+	flo_layout_unload(florence);
+	flo_layout_load(florence);
+	view_update_layout(florence->view, florence->style, florence->keyboards);
+}
+
+/* create a new instance of florence. */
+struct florence *flo_new(void)
+{
+	struct florence *florence;
 
 	florence=g_malloc(sizeof(struct florence));
 	if (!florence) flo_fatal(_("Unable to allocate memory for florence"));
 	memset(florence, 0, sizeof(struct florence));
 
-	layout=layoutreader_new();
-	layoutreader_readinfos(layout, flo_layout_infos);
-	style=style_new(layout);
-	florence->status=status_new(florence->keys);
-	keyboards=flo_keyboards_load(florence, layout, style);
+	florence->status=status_new();
+	flo_layout_load(florence);
+	florence->view=view_new(florence->style, florence->keyboards);
+	status_view_set(florence->status, florence->view);
 
-	view=view_new(style, keyboards);
-	status_view_set(florence->status, view);
-	g_signal_connect(G_OBJECT(view_window_get(view)), "destroy", G_CALLBACK(flo_destroy), NULL);
-	g_signal_connect(G_OBJECT(view_window_get(view)), "motion-notify-event", G_CALLBACK(flo_mouse_move_event), florence);
-	g_signal_connect(G_OBJECT(view_window_get(view)), "leave-notify-event", G_CALLBACK(flo_mouse_leave_event), florence);
-	g_signal_connect(G_OBJECT(view_window_get(view)), "button-press-event", G_CALLBACK(flo_button_press_event), florence);
-	g_signal_connect(G_OBJECT(view_window_get(view)), "button-release-event", G_CALLBACK(flo_button_release_event), florence);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "destroy", G_CALLBACK(flo_destroy), NULL);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "motion-notify-event",
+		G_CALLBACK(flo_mouse_move_event), florence);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "leave-notify-event",
+		G_CALLBACK(flo_mouse_leave_event), florence);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-press-event",
+		G_CALLBACK(flo_button_press_event), florence);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
+		G_CALLBACK(flo_button_release_event), florence);
 
-        modules = g_getenv("GTK_MODULES");
-	if (!modules||modules[0]=='\0')
-		putenv("GTK_MODULES=gail:atk-bridge");
+	flo_switch_mode(florence->view, settings_get_bool("behaviour/always_on_screen"));
+	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
+
+	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, florence->view);
+	settings_changecb_register("layout/style", flo_layout_reload, florence);
+
 	SPI_init();
-	flo_switch_mode(view, settings_get_bool("behaviour/always_on_screen"));
 
-	trayicon_create(GTK_WIDGET(view_window_get(view)), G_CALLBACK(flo_destroy));
-	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, view);
-	gtk_main();
+	return florence;
+}
 
-	settings_exit();
-
-	while (keyboards) {
-		keyboard=(struct keyboard *)keyboards->data;
-		keyboard_free(keyboard);
-		keyboards=g_slist_delete_link(keyboards, keyboards);
-	}
-	if (view) view_free(view);
-	flo_free(florence);
+/* liberate all the memory used by florence */
+void flo_free(struct florence *florence)
+{
 	SPI_exit();
-	putenv("AT_BRIDGE_SHUTDOWN=1");
-	return 0;
+	trayicon_free(florence->trayicon);
+	flo_layout_unload(florence);
+	if (florence->view) view_free(florence->view);
+	if (florence->status) status_free(florence->status);
+	g_free(florence);
 }
 

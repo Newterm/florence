@@ -50,13 +50,15 @@ static int decode_switches (int argc, char **argv);
 
 int main (int argc, char **argv)
 {
+	struct florence *florence;
 	GConfClient *gconfclient;
 	GtkWidget *dialog, *label;
 	int result;
 	int ret=EXIT_FAILURE;
 	int config;
+	const char *modules;
 
-	program_name = argv[0];
+	program_name=argv[0];
 	config=decode_switches (argc, argv);
 	trace_init(config&2);
 	flo_info(_("Florence version %s"), VERSION);
@@ -88,7 +90,19 @@ int main (int argc, char **argv)
 		settings();
 		settings_exit();
 		gtk_main();
-	} else { ret=florence(); }
+	} else {
+		settings_init(FALSE);
+	        modules = g_getenv("GTK_MODULES");
+		if (!modules||modules[0]=='\0') putenv("GTK_MODULES=gail:atk-bridge");
+		florence=flo_new();
+
+		gtk_main();
+
+		settings_exit();
+		flo_free(florence);
+		putenv("AT_BRIDGE_SHUTDOWN=1");
+		ret=EXIT_SUCCESS;
+	}
 
 	return ret;
 }
@@ -126,6 +140,7 @@ static int decode_switches (int argc, char **argv)
 	return ret;
 }
 
+/* Print usage message and exit */
 static void usage (int status)
 {
 	printf (_("%s - \

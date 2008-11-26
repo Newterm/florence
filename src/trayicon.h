@@ -21,5 +21,17 @@
 
 #include <gtk/gtk.h>
 
-void trayicon_create(GtkWidget *window, GCallback quit_cb);
+/* A trayicon object is holding the informations about the tray icon */
+struct trayicon {
+	GtkStatusIcon *tray_icon; /* GTK representation of the tray icon */
+	GCallback trayicon_quit; /* Callback called to quit the applications (when the Quit menu is selected) */
+	GtkWidget *window; /* Window shown or hidden on left click on the tray icon */
+	gint x; /* recorded x position of the window on the screen before hiding */
+	gint y; /* recorded y position od the window on the screen before hiding */
+};
+
+/* Creates a new trayicon instance */
+struct trayicon *trayicon_new(GtkWidget *window, GCallback quit_cb);
+/* Deallocate all the memory used bu the trayicon. */
+void trayicon_free(struct trayicon *trayicon);
 

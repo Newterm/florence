@@ -40,7 +40,7 @@ AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_MAJOR
-AC_CHECK_HEADERS([math.h fcntl.h libintl.h locale.h memory.h stdio.h stdlib.h string.h strings.h sys/param.h sys/stat.h unistd.h])
+AC_CHECK_HEADERS([math.h fcntl.h libintl.h locale.h memory.h stdio.h stdlib.h string.h strings.h sys/param.h sys/stat.h sys/types.h dirent.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STAT
@@ -48,8 +48,8 @@ AC_C_CONST
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat chdir mkdir symlink])
+AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/pearl/Makefile data/styles/real/Makefile data/relaxng/Makefile data/svg11/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
 AC_OUTPUT
 

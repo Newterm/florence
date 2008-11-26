@@ -65,9 +65,11 @@ GList *status_pressedkeys_get(struct status *status);
 GdkModifierType status_globalmod_get(struct status *status);
 
 /* allocate memory for status */
-struct status *status_new(struct key *keys[]);
+struct status *status_new();
 /* liberate status memory */
 void status_free(struct status *status);
+/* reset the status to its original state */
+void status_reset(struct status *status);
 
 /* sets the view to update on status change */
 void status_view_set(struct status *status, struct view *view);

@@ -58,6 +58,8 @@ void view_show (struct view *view, Accessible *object);
 void view_hide (struct view *view);
 /* Redraw the key to the window */
 void view_update (struct view *view, struct key *key, gboolean statechange);
+/* Change the layout and style of the view and redraw */
+void view_update_layout(struct view *view, struct style *style, GSList *keyboards);
 
 /* get the keycode at position according to hitmap */
 guint view_keycode_get (struct view *view, gint x, gint y);

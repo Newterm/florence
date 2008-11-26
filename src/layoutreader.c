@@ -32,10 +32,10 @@
 #endif
 
 #define BUFFER_SIZE 32
-#define FLO_DEFAULT_LAYOUT DATADIR "/florence.layout"
-#define FLO_DEFAULT_STYLE DATADIR "/styles/default"
-static gchar *layoutreader_link="%s/.florence/florence.layout";
-static gchar *layoutreader_style_link="%s/.florence/style";
+static const char *FLO_DEFAULT_LAYOUT=DATADIR "/florence.layout";
+static const char *FLO_DEFAULT_STYLE=DATADIR "/styles/default";
+xmlExternalEntityLoader layoutreader_default_loader=NULL;
+char *layoutreader_style=NULL;
 
 /* Move to the first occurence of the named element which is at the specified level
  * return false if no element were found */
@@ -285,70 +285,48 @@ void *layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_keyboardp
 	return ret;
 }
 
-/* create symlinks in $HOME for layout */
-void layoutreader_symlink_create(gchar *source, gchar **file)
+/* overwrite default entity loader for style */
+xmlParserInputPtr layoutreader_entity_loader(const char *URL, const char *ID, xmlParserCtxtPtr ctxt)
 {
 	struct stat stat;
+	gchar *stylepath, *stylefile, *stylefull;
+	xmlParserInputPtr out=NULL;
 
-	/* First check that we can create the symlink */
-	if (!settings_mkhomedir()) {
-		flo_warn(_("Unable to create %s because $HOME/.florence does not exist"), *file);
-		g_free(*file);
-		*file=source;
-		return;
-	} else if (lstat(*file, &stat)==0) {
-		if (!S_ISLNK(stat.st_mode)) {
-			flo_warn(_("%s already exists but it is not a symbolic link"), *file);
-			g_free(*file);
-			*file=source;
-			return;
-		} else if (0!=unlink(*file)) {
-			flo_warn(_("%s already exists and remove failed"), *file);
-			g_free(*file);
-			*file=source;
-			return;
+	if ((stylefile=g_strrstr(URL, "style/"))) {
+		if (layoutreader_style) stylepath=layoutreader_style;
+        	else stylepath=settings_get_string("layout/style");
+		if ((!stylepath) || (stylepath[0]=='\0') || (lstat(stylepath, &stat)!=0)) {
+			stylepath=(gchar *)FLO_DEFAULT_STYLE;
 		}
-	}
-
-	/* then create it */
-	if (0!=symlink(source, *file)) {
-		flo_warn(_("Unable to create symlink %s to %s"), *file, source);
-		g_free(*file);
-		*file=source;
-	}
+		stylefull=g_strconcat(stylepath, stylefile+5, NULL);
+		out=layoutreader_default_loader(stylefull, ID, ctxt);
+		if ((stylepath!=FLO_DEFAULT_STYLE) && (stylepath!=layoutreader_style)) g_free(stylepath);
+		g_free(stylefull);
+	} else out=layoutreader_default_loader(URL, ID, ctxt);
+	return out;
 }
 
 /* instanciates a new layout reader. Called in florence.c
  * return the layoutreader handle */
-xmlTextReaderPtr layoutreader_new(void)
+xmlTextReaderPtr layoutreader_new(char *style)
 {
 	xmlTextReaderPtr reader;
         gchar *layoutfile=settings_get_string("layout/file");
-	static char *defaultlayout=FLO_DEFAULT_LAYOUT;
-        gchar *stylefile=settings_get_string("layout/style");
-	static char *defaultstyle=FLO_DEFAULT_STYLE;
-	char *file=NULL;
-	char *style=NULL;
+	struct stat stat;
 
 	LIBXML_TEST_VERSION
 
-	/* create symlinks */
-	if (layoutfile==NULL || layoutfile[0]=='\0') layoutfile=defaultlayout;
-	file=g_strdup_printf(layoutreader_link, g_getenv("HOME"));
-	layoutreader_symlink_create(layoutfile, &file);
-	if (stylefile==NULL || stylefile[0]=='\0') stylefile=defaultstyle;
-	style=g_strdup_printf(layoutreader_style_link, g_getenv("HOME"));
-	layoutreader_symlink_create(stylefile, &style);
-	flo_debug(_("style file is %s"), style);
+	layoutreader_style=style;
+	if (!layoutreader_default_loader) layoutreader_default_loader=xmlGetExternalEntityLoader();
+	xmlSetExternalEntityLoader(layoutreader_entity_loader);
+	if ((!layoutfile) || (layoutfile[0]=='\0') || (lstat(layoutfile, &stat)!=0)) {
+		layoutfile=(gchar *)FLO_DEFAULT_LAYOUT;
+	}
 
-	/* cd to the right directory */
-	if (0!=chdir(style)) flo_warn(_("Unable to cd to %s"), style);
-	g_free(style);
-
-	reader=xmlReaderForFile(file, NULL, XML_PARSE_NOENT|XML_PARSE_XINCLUDE); 
-	if (!reader) flo_fatal (_("Unable to open file %s"), file);
-	flo_info(_("Using layout file %s"), file);
-	g_free(file);
+	reader=xmlReaderForFile(layoutfile, NULL, XML_PARSE_NOENT|XML_PARSE_XINCLUDE); 
+	if (!reader) flo_fatal (_("Unable to open file %s"), layoutfile);
+	flo_debug(_("Using layout file %s"), layoutfile);
+	if (layoutfile!=FLO_DEFAULT_LAYOUT) g_free(layoutfile);
 	if (xmlTextReaderRelaxNGValidate(reader, DATADIR "/relaxng/florence.rng"))
 		flo_fatal(_("Unable to activate schema validation from %s."), DATADIR "/florence.rng");
 	if (!layoutreader_goto(reader, (xmlChar *)"layout", XML_READER_TYPE_ELEMENT, 0))

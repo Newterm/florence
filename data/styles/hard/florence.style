@@ -24,31 +24,31 @@
 	xmlns:xi="http://www.w3.org/2001/XInclude">
 	<shape>
 		<name>default</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/default.svg"/>
 	</shape>
 	<shape>
 		<name>Wide</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/default.svg"/>
 	</shape>
 	<shape>
 		<name>XL</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/default.svg"/>
 	</shape>
 	<shape>
 		<name>XXL</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/default.svg"/>
 	</shape>
 	<shape>
 		<name>High</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/default.svg"/>
 	</shape>
 	<shape>
 		<name>Space</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/default.svg"/>
 	</shape>
 	<shape>
 		<name>Return</name>
-		<xi:include href="default.svg"/>
+		<xi:include href="style/return.svg"/>
 	</shape>
 	<symbol>
 		<name>Control_[LR]</name>

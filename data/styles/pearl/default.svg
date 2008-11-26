@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg viewBox="0 0 2 2" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <ellipse class="shape" cx="1" cy="1" rx="1" ry="1" style="fill: white;"/>
-  <ellipse class="shape" cx="1" cy="1" rx="1" ry="1" style="fill: url(#radialGradient1);"/>
-  <ellipse class="shape" cx="1" cy="1" rx="1" ry="1" style="fill: url(#radialGradient2);"/>
-  <ellipse class="shape" cx="1" cy="1" rx="0.8" ry="0.95" style="fill: url(#linearGradient);"/>
-</svg>

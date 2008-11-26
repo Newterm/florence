@@ -220,9 +220,12 @@ void style_shape_new(char *name, char *svg, void *userdata)
 		shape->name=g_strdup(name);
 	}
 	if (svg) {
-		shape->source=g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
+		shape->source=(guchar *)g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
 	}
-	shape->svg=rsvg_handle_new_from_data((guint8 *)shape->source, (gsize)strlen(shape->source), &error);
+	shape->svg=rsvg_handle_new();
+	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:settings_get_string("layout/style"));
+	rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
+	rsvg_handle_close(shape->svg, &error);
 	if (error) flo_fatal(_("Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""),
 		shape->source, error->message);
 	style->shapes=g_slist_append(style->shapes, (gpointer)shape);
@@ -343,17 +346,32 @@ void style_update_colors (struct style *style)
 	while (list) {
 		shape=(struct shape *)list->data;
 		if (shape->svg) rsvg_handle_free(shape->svg);
-		shape->svg=rsvg_handle_new_from_data((guint8 *)shape->source, (gsize)strlen(shape->source), &error);
+		shape->svg=rsvg_handle_new();
+		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:settings_get_string("layout/style"));
+		rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
+		rsvg_handle_close(shape->svg, &error);
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), shape->source);
 		list=g_slist_next(list);
 	}
 }
 
+/* draw a style preview to a 32x32 gdk pixbuf 
+ * this function is called by the settings dialog */
+GdkPixbuf *style_pixbuf_draw(struct style *style)
+{
+	struct shape *shape=style_shape_get(style, NULL);
+	GdkPixbuf *temp=rsvg_handle_get_pixbuf(shape->svg);
+	GdkPixbuf *ret=gdk_pixbuf_scale_simple(temp, 32, 32, GDK_INTERP_HYPER);
+	gdk_pixbuf_unref(temp);
+	return ret;
+}
+
 /* create a new style from the layout file */
-struct style *style_new(xmlTextReaderPtr reader)
+struct style *style_new(xmlTextReaderPtr reader, gchar *base_uri)
 {
 	struct style *style=g_malloc(sizeof(struct style));
 	memset(style, 0, sizeof(struct style));
+	style->base_uri=base_uri;
 	style_create_css(style);
 	layoutreader_readstyle(reader, style_shape_new, style_symbol_new, style);
 	return style;

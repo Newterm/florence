@@ -46,7 +46,7 @@ typedef void (*layoutreader_shapeprocess) (char *name, char *svg, void *userdata
 typedef void (*layoutreader_pointfunc) (void *userdata, double x, double y);
 
 /* Create a reader for the filename provided */
-xmlTextReaderPtr layoutreader_new(void);
+xmlTextReaderPtr layoutreader_new(char *style);
 /* liberate memory for the reader */
 void layoutreader_free(xmlTextReaderPtr reader);
 double layoutreader_readdouble(xmlTextReaderPtr reader, xmlChar *name, int level);

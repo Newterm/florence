@@ -291,8 +291,8 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 /* Redraw the key to the window */
 void view_update(struct view *view, struct key *key, gboolean statechange)
 {
-	GdkRectangle rect;
-	gdouble x, y, w, h;
+/*	GdkRectangle rect;
+	gdouble x, y, w, h;*/
 
 	if (key) {
 		if (statechange) {
@@ -396,7 +396,6 @@ void view_status_set (struct view *view, struct status *status)
 void view_free(struct view *view)
 {
 	if (view->hitmap) g_free(view->hitmap);
-	if (view->style) style_free(view->style);
 	if (view->background) cairo_surface_destroy(view->background);
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	g_free(view);
@@ -444,5 +443,13 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	settings_changecb_register("colours/activated", view_redraw, view);
 
 	return view;
+}
+
+/* Change the layout and style of the view and redraw */
+void view_update_layout(struct view *view, struct style *style, GSList *keyboards)
+{
+	view->style=style;
+	view->keyboards=keyboards;
+	view_update_extensions(NULL, 0, NULL, (gpointer)view);
 }
 

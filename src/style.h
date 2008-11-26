@@ -26,12 +26,13 @@
 #include <libxml/xmlreader.h>
 #include <cairo.h>
 #include <librsvg/rsvg.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
 
 /* a shape is the background of a key */
 struct shape {
 	gchar *name;
 	RsvgHandle *svg;
-	gchar *source;
+	guchar *source;
 	cairo_surface_t *mask; /* mask of the shape (alpha channel) */
 	guint maskw, maskh; /* size of the mask */
 };
@@ -56,13 +57,17 @@ enum style_class {
 /* A style is a list of symbols and shapes.
  * A shape is the background of a key, and the symbol is the foreground of the key */
 struct style {
+	gchar *base_uri;
 	GSList *symbols;
 	GSList *shapes;
 	struct shape *default_shape;
 };
 
-struct style *style_new(xmlTextReaderPtr reader);
+struct style *style_new(xmlTextReaderPtr reader, gchar *base_uri);
 void style_free(struct style *style);
+/* draw a style preview to 32x32 gdk pixbuf 
+ * this function is called by the settings dialog */
+GdkPixbuf *style_pixbuf_draw(struct style *style);
 
 /* set cairo color to one of the style colors */
 void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c);

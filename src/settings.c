@@ -24,14 +24,18 @@
 #include "system.h"
 #include <stdio.h>
 #include <sys/stat.h>
-#include "settings.h"
-#include "trace.h"
+#include <sys/types.h>
+#include <dirent.h>
 #include <glade/glade.h>
 #include <glib/gprintf.h>
 #ifdef ENABLE_HELP
 #include <libgnome/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
 #endif
+#include "settings.h"
+#include "trace.h"
+#include "layoutreader.h"
+#include "style.h"
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
 #if GTK_CHECK_VERSION(2,12,0)
@@ -40,11 +44,27 @@
 #define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_CANCEL
 #endif
 
-GConfClient *gconfclient=NULL;
-GConfChangeSet *gconfchangeset=NULL;
-gboolean settings_gtk_exit=FALSE;
+static GladeXML *gladexml;
+static GConfClient *gconfclient=NULL;
+static GConfChangeSet *gconfchangeset=NULL;
+static GConfChangeSet *rollback=NULL;
+static gboolean settings_gtk_exit=FALSE;
 
+/*********************/
 /* private functions */
+/*********************/
+
+/* update rollback changeset */
+void settings_save(const char *path)
+{
+	GConfValue *value;
+	if (!gconf_change_set_check_value(rollback, path, &value)) {
+		value=gconf_client_get(gconfclient, path, NULL);
+		gconf_change_set_set(rollback, path, value);
+	}
+}
+
+/* Returns the absolute gconf path from a path relative to florence root */
 char *settings_get_full_path(const char *path)
 {
 	static char string_buffer[64];
@@ -55,6 +75,45 @@ char *settings_get_full_path(const char *path)
 	strcat(string_buffer, "/");
 	strcat(string_buffer, path);
 	return string_buffer;
+}
+
+/* Fills the preview icon view with icons representing the themes */
+void settings_preview_build(GtkIconView *preview)
+{
+	GtkListStore *list=gtk_list_store_new(2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+	static GtkTreeIter iter;
+	GdkPixbuf *pixbuf;
+	xmlTextReaderPtr layout;
+	struct style *style;
+	DIR *dp=opendir(DATADIR "/styles");
+	struct dirent *ep;
+	gchar *name;
+
+	if (dp!=NULL) {
+		while ((ep=readdir(dp))) {
+			if (ep->d_name[0]!='.') {
+				name=g_strdup_printf(DATADIR "/styles/%s", ep->d_name);
+		        	layout=layoutreader_new(name);
+				layoutreader_readinfos(layout, NULL);
+				style=style_new(layout, name);
+				pixbuf=style_pixbuf_draw(style);
+				if (!pixbuf) flo_error(_("Unable to create preview for style %s"), name);
+				else {
+					gtk_list_store_append(list, &iter);
+					gtk_list_store_set(list, &iter, 0, pixbuf, 1, ep->d_name, -1);
+				}
+				if (layout) layoutreader_free(layout);
+				if (style) style_free(style);
+				g_free(name);
+				gdk_pixbuf_unref(pixbuf); 
+			}
+		}
+		closedir (dp);
+	} else flo_error(_("Couldn't open directory %s"), DATADIR "/styles");
+
+	gtk_icon_view_set_model(preview, GTK_TREE_MODEL(list));
+	g_object_unref(G_OBJECT(list)); 
+	gtk_widget_set_size_request(GTK_WIDGET(preview), 120, 64);
 }
 
 GdkColor *settings_convert_color(gchar *strcolor)
@@ -73,15 +132,21 @@ void settings_color_change(GtkColorButton *button, char *key)
 	GdkColor color;
 	gchar strcolor[8];
 	static char string_buffer[32];
+	char *fullpath;
 
 	strcpy(string_buffer, "colours/");
 	strcat(string_buffer, key);
 	gtk_color_button_get_color(button, &color);
 	g_sprintf(strcolor, "#%02X%02X%02X", (color.red)>>8, (color.green)>>8, (color.blue)>>8);
-	gconf_change_set_set_string(gconfchangeset, settings_get_full_path(string_buffer), strcolor);
+	fullpath=settings_get_full_path(string_buffer);
+	settings_save(fullpath);
+	gconf_client_set_string(gconfclient, fullpath, strcolor, NULL);
 }
 
+/*************/
 /* callbacks */
+/*************/
+
 void settings_help(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 #ifdef ENABLE_HELP
@@ -93,9 +158,27 @@ void settings_help(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 #endif
 }
 
+/* Called when a new style is selected */
+void settings_style_change (GtkIconView *iconview, gpointer user_data) 
+{
+	gchar *path;
+	gchar *name;
+	GtkTreeIter iter;
+	GList *list=gtk_icon_view_get_selected_items(iconview);
+	gtk_tree_model_get_iter(gtk_icon_view_get_model(iconview), &iter, (GtkTreePath *)list->data);
+	gtk_tree_model_get(gtk_icon_view_get_model(iconview), &iter, 1, &name, -1);
+	path=g_strdup_printf(DATADIR "/styles/%s", name);
+	gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/style"), path);
+	g_list_foreach(list, (GFunc)(gtk_tree_path_free), NULL);
+	g_list_free(list);
+	g_free(path);
+}
+
 void settings_keys_color(GtkColorButton *button)
 {
 	settings_color_change(button, "key");
+	/* update style preview */
+	settings_preview_build(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")));
 }
 
 void settings_mouseover_color(GtkColorButton *button)
@@ -185,23 +268,32 @@ void settings_auto_click(GtkHScale *scale)
 void settings_commit(GtkWidget *window, GtkWidget *button)
 {
 	gconf_client_commit_change_set(gconfclient, gconfchangeset, TRUE, NULL);
+	if (rollback) gconf_change_set_clear(rollback);
 }
 
 void settings_rollback(GtkWidget *window, GtkWidget *button)
 {
+	GConfValue *value;
+	gboolean color_changed=gconf_change_set_check_value(rollback,
+		settings_get_full_path("colours/key"), &value);
 	if (gconfchangeset) {
+		if (rollback) gconf_client_commit_change_set(gconfclient, rollback, TRUE, NULL);
 		gconf_change_set_clear(gconfchangeset);
-		gconf_change_set_unref(gconfchangeset);
 	}
-	if (window) gtk_object_destroy(GTK_OBJECT(window));
-	if (settings_gtk_exit) gtk_exit(0);
+	if (color_changed) {
+		settings_preview_build(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")));
+	}
 }
 
 void settings_close(GtkWidget *window, GtkWidget *button)
 {
 	GtkWidget *dialog, *label;
 	gint result;
-	if (gconf_change_set_size(gconfchangeset)) {
+	static gboolean closed=FALSE;
+	if (closed) return;
+
+	if ((gconfchangeset && gconf_change_set_size(gconfchangeset)>0)||
+		(rollback && gconf_change_set_size(rollback)>0)) {
 		dialog=gtk_dialog_new_with_buttons("Corfirm", GTK_WINDOW(window),
 			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_APPLY,
 			GTK_RESPONSE_ACCEPT, FLO_SETTINGS_ICON_CANCEL, GTK_RESPONSE_REJECT, NULL);
@@ -213,7 +305,12 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 			settings_commit(window, button);
 		}
 	}
-	settings_rollback(window, button);
+
+	closed=TRUE;
+	if (gconfchangeset) gconf_change_set_unref(gconfchangeset);
+	if (rollback) gconf_change_set_unref(rollback);
+	if (window) gtk_object_destroy(GTK_OBJECT(window));
+	if (settings_gtk_exit) gtk_exit(0);
 }
 
 void settings_destroy(GtkWidget *window)
@@ -221,7 +318,10 @@ void settings_destroy(GtkWidget *window)
 	if (settings_gtk_exit) gtk_exit(0);
 }
 
+/********************/
 /* public functions */
+/********************/
+
 void settings_init(gboolean exit)
 {
 	settings_gtk_exit=exit;
@@ -294,10 +394,11 @@ gboolean settings_mkhomedir()
 	return ret;
 }
 
+/* Displays the settings dialog box on the screen and register events */
 void settings(void)
 {
-	GladeXML *gladexml;
 	gconfchangeset=gconf_change_set_new();
+	rollback=gconf_change_set_new();
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
 	gchar **extstrs, **extstr;
 	gboolean arrows=FALSE, numpad=FALSE, function_keys=FALSE;
@@ -316,6 +417,7 @@ void settings(void)
 		settings_get_double("window/zoom"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
 		settings_get_double("behaviour/auto_click"));
+	settings_preview_build(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")));
 
 	extstrs=extstr=g_strsplit(settings_get_string("layout/extensions"), ":", -1);
 	while (extstr && *extstr) {

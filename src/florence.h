@@ -26,19 +26,25 @@
 #include <gtk/gtk.h>
 #include "key.h"
 #include "status.h"
+#include "trayicon.h"
 
 /* There is one florence structure which contains all global data in florence.c */
 struct florence {
+	struct style *style; /* the style of florence */
+	struct view *view; /* the graphical representation of florence on screen */
+	GSList *keyboards; /* the keyboard extensions (including main) of florence */
 	struct status *status; /* the status of florence */	
 	struct key *keys[256]; /* Florence keys sorted by keycode */
+	struct trayicon *trayicon; /* tray icon object */
 	/* Xkd data: only used at startup */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */
 };
 
-/* Launch the virtual keyboard.
- * Returns: 0 on normal exit. */
-int florence (void);
+/* create a new instance of florence. */
+struct florence *flo_new(void);
+/* liberate all the memory used by florence */
+void flo_free(struct florence *florence);
 
 #endif
 
