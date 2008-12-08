@@ -1,21 +1,21 @@
 <?xml-stylesheet type="text/css" href="/home/test/.florence/florence.css"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="linearGradient" x1="50%" x2="50%" y1="40%" y2="0%">
-      <stop offset="0%" style="stop-color: white; stop-opacity: 0;"/>
-      <stop offset="100%" style="stop-color: white; stop-opacity: 0.75;"/>
-    </linearGradient>
-    <radialGradient id="radialGradient1" cx="50%" cy="50%" r="75%" fx="50%" fy="0%">
-      <stop offset="0%" style="stop-color: white; stop-opacity: 0.75;"/>
-      <stop offset="50%" style="stop-color: rgb(218, 218, 218); stop-opacity: 0.75;"/>
-      <stop offset="51%" style="stop-color: rgb(189, 189, 189); stop-opacity: 0.75;"/>
-      <stop offset="65%" style="stop-color: rgb(222, 222, 222); stop-opacity: 0.75;"/>
-      <stop offset="100%" style="stop-color: white; stop-opacity: 0.75;"/>
-    </radialGradient>
-    <radialGradient id="radialGradient2" cx="50%" cy="50%" r="75%" fx="50%" fy="75%">
-      <stop offset="0%" style="stop-color: black; stop-opacity: 0;"/>
-      <stop offset="50%" style="stop-color: black; stop-opacity: 0;"/>
-      <stop offset="100%" style="stop-color: black; stop-opacity: 0.75;"/>
-    </radialGradient>
-  </defs>
+	<defs>
+		<linearGradient id="linearGradient" x1="50%" x2="50%" y1="40%" y2="0%">
+			<stop offset="0%" style="stop-color: white; stop-opacity: 0;"/>
+			<stop offset="100%" style="stop-color: white; stop-opacity: 0.75;"/>
+		</linearGradient>
+		<radialGradient id="radialGradient1" cx="50%" cy="50%" r="75%" fx="50%" fy="0%">
+			<stop offset="0%" style="stop-color: white; stop-opacity: 0.75;"/>
+			<stop offset="50%" style="stop-color: rgb(218, 218, 218); stop-opacity: 0.5;"/>
+			<stop offset="51%" style="stop-color: rgb(189, 189, 189); stop-opacity: 0.5;"/>
+			<stop offset="65%" style="stop-color: rgb(222, 222, 222); stop-opacity: 0.5;"/>
+			<stop offset="100%" style="stop-color: white; stop-opacity: 0.75;"/>
+		</radialGradient>
+		<radialGradient id="radialGradient2" cx="50%" cy="50%" r="75%" fx="50%" fy="75%">
+			<stop offset="0%" style="stop-color: black; stop-opacity: 0;"/>
+			<stop offset="50%" style="stop-color: black; stop-opacity: 0;"/>
+			<stop offset="100%" style="stop-color: black; stop-opacity: 0.5;"/>
+		</radialGradient>
+	</defs>
 </svg>

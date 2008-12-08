@@ -1,16 +1,26 @@
 <?xml-stylesheet type="text/css" href="/home/test/.florence/florence.css"?>
 <svg version="1.1" xmlns="http://www.w3.org/2000/svg">
-<defs>
-<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-<stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:1"/>
-<stop offset="10%" style="stop-color:rgb(200,200,200); stop-opacity:1"/>
-<stop offset="45%" style="stop-color:rgb(200,200,200); stop-opacity:1"/>
-<stop offset="55%" style="stop-color:rgb(50,50,50); stop-opacity:1"/>
-<stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:1"/>
-</linearGradient>
-<linearGradient id="gradient2" x1="100%" y1="0%" x2="0%" y2="0%">
-<stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:1"/>
-<stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:1"/>
-</linearGradient>
-</defs>
+	<defs>
+		<linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+			<stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:0.5"/>
+			<stop offset="10%" style="stop-color:rgb(200,200,200); stop-opacity:0.5"/>
+			<stop offset="45%" style="stop-color:rgb(200,200,200); stop-opacity:0.5"/>
+			<stop offset="55%" style="stop-color:rgb(50,50,50); stop-opacity:0.5"/>
+			<stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:0.5"/>
+		</linearGradient>
+		<linearGradient id="gradient2" x1="100%" y1="0%" x2="0%" y2="0%">
+			<stop offset="0%" style="stop-color:rgb(255,255,255); stop-opacity:0.5"/>
+			<stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:0.5"/>
+		</linearGradient>
+		<linearGradient id="gradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+			<stop offset="0%" style="stop-color:rgb(200,200,200); stop-opacity:0.5"/>
+			<stop offset="5%" style="stop-color:rgb(200,200,200); stop-opacity:0.5"/>
+			<stop offset="11%" style="stop-color:rgb(50,50,50); stop-opacity:0.5"/>
+			<stop offset="23%" style="stop-color:rgb(50,50,50); stop-opacity:0.5"/>
+			<stop offset="33%" style="stop-color:rgb(200,200,200); stop-opacity:0.5"/>
+			<stop offset="60%" style="stop-color:rgb(200,200,200); stop-opacity:0.5"/>
+			<stop offset="70%" style="stop-color:rgb(50,50,50); stop-opacity:0.5"/>
+			<stop offset="100%" style="stop-color:rgb(0,0,0); stop-opacity:0.5"/>
+		</linearGradient>
+	</defs>
 </svg>

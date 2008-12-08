@@ -1,5 +1,9 @@
 <?xml version="1.0"?>
-<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 198 264">
-	<path id="Return_s" d="M0 13.2 C0 6.6 6.6 0 13.2 0 L184.8 0 C191.4 0 198 6.6 198 13.2 L198 250.8 C198 257.4 191.4 264 184.8 264 L79.2 264 C72.6 264 66 257.4 66 250.8 L66 145.2 C66 132 66 132 13.2 132 L13.2 132 C6.6 132 0 125.4 0 118.8 L0 13.2" style="fill:url(florence.defs#gradient1)" class="shape" stroke="black" stroke-width="1px" stroke-opacity="0.5"/>
-	<path d="M9.9 26.4 C9.9 19.8 16.5 13.2 23.1 13.2 L174.9 13.2 C181.5 13.2 188.1 18.8 188.1 26.4 L188.1 211.2 C188.1 217.8 181.5 224.4 174.9 224.4 L89.1 224.4 C82.5 224.4 75.9 217.8 75.9 211.2 L75.9 105.6 C75.9 92.4 75.9 92.4 23.1 92.4 L23.1 92.4 C16.5 92.4 9.9 85.8 9.9 79.2 L9.9 26.4" style="fill:url(florence.defs#gradient2)" stroke="black" stroke-width="1px" stroke-opacity="0.5"/>
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 198 264">
+	<path class="shape" d="M0 13.2 C0 6.6 6.6 0 13.2 0 L184.8 0 C191.4 0 198 6.6 198 13.2 L198 250.8 C198 257.4 191.4 264 184.8 264 L79.2 264 C72.6 264 66 257.4 66 250.8 L66 132 L13.2 132 C6.6 132 0 125.4 0 118.8 L0 13.2"/>
+	<path d="M10 108.8 L10 23.2 C10 10 10 10 23.2 10 L174.8 10 C188 10 188 10 188 23.2 L188 240.8" style="stroke:url(florence.defs#gradient1);" stroke-width="20" fill="none" stroke-linecap="butt"/>
+	<path d="M188 240.8 C188 254 188 254 174.8 254 L109.2 254 C76 254 76 254 76 240.8 L76 122 L23.2 122 C10 122 10 122 10 108.8" style="stroke:url(florence.defs#gradient3);" stroke-width="20" fill="none" stroke-linecap="butt"/>
+	<path class="shape" d="M9.9 19.8 C9.9 13.2 16.5 6.6 23.1 6.6 L174.9 6.6 C181.5 6.6 188.1 13.2 188.1 19.8 L188.1 231 C188.1 237.6 181.5 244.2 174.9 244.2 L89.1 244.2 C82.5 244.2 75.9 237.6 75.9 231 L75.9 125.4 C75.9 113.2 75.9 113.2 23.1 113.2 L23.1 113.2 C16.5 113.2 9.9 105.6 9.9 99 L9.9 19.8"/>
+	<path d="M9.9 19.8 C9.9 13.2 16.5 6.6 23.1 6.6 L174.9 6.6 C181.5 6.6 188.1 13.2 188.1 19.8 L188.1 231 C188.1 237.6 181.5 244.2 174.9 244.2 L89.1 244.2 C82.5 244.2 75.9 237.6 75.9 231 L75.9 125.4 C75.9 113.2 75.9 113.2 23.1 113.2 L23.1 113.2 C16.5 113.2 9.9 105.6 9.9 99 L9.9 19.8" style="fill:url(florence.defs#gradient2)" stroke="black" stroke-width="1" stroke-opacity="0.5"/>
+	<path d="M0 13.2 C0 6.6 6.6 0 13.2 0 L184.8 0 C191.4 0 198 6.6 198 13.2 L198 250.8 C198 257.4 191.4 264 184.8 264 L79.2 264 C72.6 264 66 257.4 66 250.8 L66 132 L13.2 132 C6.6 132 0 125.4 0 118.8 L0 13.2" fill="none" stroke="black" stroke-width="3"/>
 </svg>

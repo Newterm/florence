@@ -6,6 +6,7 @@
     <property name="visible">True</property>
     <property name="title" translatable="yes" context="yes">Florence Settings</property>
     <property name="window_position">GTK_WIN_POS_MOUSE</property>
+    <property name="default_width">271</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="key_press_event" handler="settings_help"/>
     <signal name="destroy" handler="settings_close" object="flo_config_window"/>
@@ -29,17 +30,25 @@
                     <property name="visible">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkIconView" id="flo_preview">
+                      <widget class="GtkScrolledWindow" id="scrolledwindow1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes" context="yes">Style preview</property>
-                        <property name="pixbuf_column">0</property>
-                        <property name="markup_column">1</property>
-                        <property name="selection_mode">GTK_SELECTION_BROWSE</property>
-                        <property name="columns">4</property>
-                        <property name="item_width">48</property>
-                        <property name="spacing">6</property>
-                        <signal name="selection_changed" handler="settings_style_change"/>
+                        <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                        <child>
+                          <widget class="GtkIconView" id="flo_preview">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip" translatable="yes" context="yes">Style preview</property>
+                            <property name="pixbuf_column">0</property>
+                            <property name="markup_column">1</property>
+                            <property name="selection_mode">GTK_SELECTION_BROWSE</property>
+                            <property name="columns">4</property>
+                            <property name="item_width">48</property>
+                            <property name="spacing">6</property>
+                            <signal name="selection_changed" handler="settings_style_change"/>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
@@ -191,7 +200,7 @@ Uncheck and it will only be shown when an editable widget is selected.</property
                   <widget class="GtkHScale" id="flo_zoom">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">10 5 50 1 10 10</property>
+                    <property name="adjustment">20 5 50 1 10 10</property>
                     <signal name="value_changed" handler="settings_zoom"/>
                   </widget>
                 </child>

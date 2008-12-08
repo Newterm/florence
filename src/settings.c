@@ -49,6 +49,8 @@ static GConfClient *gconfclient=NULL;
 static GConfChangeSet *gconfchangeset=NULL;
 static GConfChangeSet *rollback=NULL;
 static gboolean settings_gtk_exit=FALSE;
+static GtkListStore *settings_style_list=NULL;
+static guint settings_notify_id=0;
 
 /*********************/
 /* private functions */
@@ -78,10 +80,9 @@ char *settings_get_full_path(const char *path)
 }
 
 /* Fills the preview icon view with icons representing the themes */
-void settings_preview_build(GtkIconView *preview)
+void settings_preview_build()
 {
-	GtkListStore *list=gtk_list_store_new(2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
-	static GtkTreeIter iter;
+	GtkTreeIter iter;
 	GdkPixbuf *pixbuf;
 	xmlTextReaderPtr layout;
 	struct style *style;
@@ -90,6 +91,13 @@ void settings_preview_build(GtkIconView *preview)
 	gchar *name;
 
 	if (dp!=NULL) {
+		if (settings_style_list) {
+			gtk_list_store_clear(settings_style_list);
+			g_object_unref(G_OBJECT(settings_style_list)); 
+		}
+		settings_style_list=gtk_list_store_new(2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
+		gtk_icon_view_set_model(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")),
+			GTK_TREE_MODEL(settings_style_list));
 		while ((ep=readdir(dp))) {
 			if (ep->d_name[0]!='.') {
 				name=g_strdup_printf(DATADIR "/styles/%s", ep->d_name);
@@ -99,8 +107,8 @@ void settings_preview_build(GtkIconView *preview)
 				pixbuf=style_pixbuf_draw(style);
 				if (!pixbuf) flo_error(_("Unable to create preview for style %s"), name);
 				else {
-					gtk_list_store_append(list, &iter);
-					gtk_list_store_set(list, &iter, 0, pixbuf, 1, ep->d_name, -1);
+					gtk_list_store_append(settings_style_list, &iter);
+					gtk_list_store_set(settings_style_list, &iter, 0, pixbuf, 1, ep->d_name, -1);
 				}
 				if (layout) layoutreader_free(layout);
 				if (style) style_free(style);
@@ -110,10 +118,6 @@ void settings_preview_build(GtkIconView *preview)
 		}
 		closedir (dp);
 	} else flo_error(_("Couldn't open directory %s"), DATADIR "/styles");
-
-	gtk_icon_view_set_model(preview, GTK_TREE_MODEL(list));
-	g_object_unref(G_OBJECT(list)); 
-	gtk_widget_set_size_request(GTK_WIDGET(preview), 120, 64);
 }
 
 GdkColor *settings_convert_color(gchar *strcolor)
@@ -143,6 +147,56 @@ void settings_color_change(GtkColorButton *button, char *key)
 	gconf_client_set_string(gconfclient, fullpath, strcolor, NULL);
 }
 
+/* update the window accordint to gconf */
+void settings_update()
+{
+	gchar **extstrs, **extstr;
+	gboolean arrows=FALSE, numpad=FALSE, function_keys=FALSE;
+	gchar *color;
+
+	color=settings_get_string("colours/key");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
+		settings_convert_color(color));
+	if (color) g_free(color);
+	color=settings_get_string("colours/label");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_labels")),
+		settings_convert_color(color));
+	if (color) g_free(color);
+	color=settings_get_string("colours/activated");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_activated")),
+		settings_convert_color(color));
+	if (color) g_free(color);
+	color=settings_get_string("colours/mouseover");
+	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_mouseover")),
+		settings_convert_color(color));
+	if (color) g_free(color);
+	color=settings_get_string("colours/key");
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_always_on")),
+		settings_get_bool("behaviour/always_on_screen"));
+	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_zoom")),
+		settings_get_double("window/zoom"));
+	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
+		settings_get_double("behaviour/auto_click"));
+
+	color=settings_get_string("layout/extensions");
+	extstrs=extstr=g_strsplit(color, ":", -1);
+	while (extstr && *extstr) {
+		if (!strcmp(*extstr, "Arrows")) arrows=TRUE;
+		if (!strcmp(*extstr, "Numpad")) numpad=TRUE;
+		if (!strcmp(*extstr, "Function keys")) function_keys=TRUE;
+		extstr++;
+	}
+	g_strfreev(extstrs);
+	if (color) g_free(color);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows"))) != arrows)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad"))) != numpad)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
+	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys"))) != function_keys)
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys")),
+			function_keys);
+}
+
 /*************/
 /* callbacks */
 /*************/
@@ -165,20 +219,22 @@ void settings_style_change (GtkIconView *iconview, gpointer user_data)
 	gchar *name;
 	GtkTreeIter iter;
 	GList *list=gtk_icon_view_get_selected_items(iconview);
-	gtk_tree_model_get_iter(gtk_icon_view_get_model(iconview), &iter, (GtkTreePath *)list->data);
-	gtk_tree_model_get(gtk_icon_view_get_model(iconview), &iter, 1, &name, -1);
-	path=g_strdup_printf(DATADIR "/styles/%s", name);
-	gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/style"), path);
-	g_list_foreach(list, (GFunc)(gtk_tree_path_free), NULL);
-	g_list_free(list);
-	g_free(path);
+	if (list) {
+		gtk_tree_model_get_iter(gtk_icon_view_get_model(iconview), &iter, (GtkTreePath *)list->data);
+		gtk_tree_model_get(gtk_icon_view_get_model(iconview), &iter, 1, &name, -1);
+		path=g_strdup_printf(DATADIR "/styles/%s", name);
+		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/style"), path);
+		g_list_foreach(list, (GFunc)(gtk_tree_path_free), NULL);
+		g_list_free(list);
+		g_free(path);
+	}
 }
 
 void settings_keys_color(GtkColorButton *button)
 {
 	settings_color_change(button, "key");
 	/* update style preview */
-	settings_preview_build(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")));
+	settings_preview_build();
 }
 
 void settings_mouseover_color(GtkColorButton *button)
@@ -219,9 +275,9 @@ void settings_extension(GtkToggleButton *button, gchar *name)
 	/* Get this from change set in case it's not commited */
 	if (gconf_change_set_check_value(gconfchangeset, settings_get_full_path("layout/extensions"), &value)) {
 		allextstr=(gchar *)gconf_value_get_string(value);
-	} else value=NULL;
+	} else allextstr=settings_get_string("layout/extensions");
 	
-	if (value || (allextstr=settings_get_string("layout/extensions"))) {
+	if (allextstr) {
                 extstrs=g_strsplit(allextstr, ":", -1);
                 extstr=extstrs;
 		newextstrs=g_malloc(sizeof(gchar *)*(2+g_strv_length(extstrs)));
@@ -235,6 +291,7 @@ void settings_extension(GtkToggleButton *button, gchar *name)
 			g_strjoinv(":", newextstrs));
                 g_strfreev(extstrs);
                 g_free(newextstrs);
+		if (!value) g_free(allextstr);
         } else { flo_fatal(_("Can't get gconf value %"), settings_get_full_path("layout/extensions")); }
 }
 
@@ -267,6 +324,7 @@ void settings_auto_click(GtkHScale *scale)
 
 void settings_commit(GtkWidget *window, GtkWidget *button)
 {
+	settings_notify_id=0;
 	gconf_client_commit_change_set(gconfclient, gconfchangeset, TRUE, NULL);
 	if (rollback) gconf_change_set_clear(rollback);
 }
@@ -281,7 +339,7 @@ void settings_rollback(GtkWidget *window, GtkWidget *button)
 		gconf_change_set_clear(gconfchangeset);
 	}
 	if (color_changed) {
-		settings_preview_build(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")));
+		if (window) settings_preview_build();
 	}
 }
 
@@ -292,6 +350,8 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 	static gboolean closed=FALSE;
 	if (closed) return;
 
+	if (settings_notify_id>0) gconf_client_notify_remove(gconfclient, settings_notify_id);
+	settings_notify_id=0;
 	if ((gconfchangeset && gconf_change_set_size(gconfchangeset)>0)||
 		(rollback && gconf_change_set_size(rollback)>0)) {
 		dialog=gtk_dialog_new_with_buttons("Corfirm", GTK_WINDOW(window),
@@ -303,13 +363,15 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 		result=gtk_dialog_run(GTK_DIALOG(dialog));
 		if (result==GTK_RESPONSE_ACCEPT) {
 			settings_commit(window, button);
-		}
+		} else settings_rollback(NULL, NULL);
 	}
 
 	closed=TRUE;
 	if (gconfchangeset) gconf_change_set_unref(gconfchangeset);
 	if (rollback) gconf_change_set_unref(rollback);
 	if (window) gtk_object_destroy(GTK_OBJECT(window));
+	if (settings_style_list) g_object_unref(G_OBJECT(settings_style_list)); 
+	settings_style_list=NULL;
 	if (settings_gtk_exit) gtk_exit(0);
 }
 
@@ -332,7 +394,7 @@ void settings_init(gboolean exit)
 
 void settings_exit(void)
 {
-	g_object_unref(gconfclient);
+	g_object_unref(G_OBJECT(gconfclient));
 }
 
 void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data)
@@ -400,38 +462,10 @@ void settings(void)
 	gconfchangeset=gconf_change_set_new();
 	rollback=gconf_change_set_new();
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
-	gchar **extstrs, **extstr;
-	gboolean arrows=FALSE, numpad=FALSE, function_keys=FALSE;
-
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
-		settings_convert_color(settings_get_string("colours/key")));
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_labels")),
-		settings_convert_color(settings_get_string("colours/label")));
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_activated")),
-		settings_convert_color(settings_get_string("colours/activated")));
-	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_mouseover")),
-		settings_convert_color(settings_get_string("colours/mouseover")));
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_always_on")),
-		settings_get_bool("behaviour/always_on_screen"));
-	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_zoom")),
-		settings_get_double("window/zoom"));
-	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
-		settings_get_double("behaviour/auto_click"));
-	settings_preview_build(GTK_ICON_VIEW(glade_xml_get_widget(gladexml, "flo_preview")));
-
-	extstrs=extstr=g_strsplit(settings_get_string("layout/extensions"), ":", -1);
-	while (extstr && *extstr) {
-		if (!strcmp(*extstr, "Arrows")) arrows=TRUE;
-		if (!strcmp(*extstr, "Numpad")) numpad=TRUE;
-		if (!strcmp(*extstr, "Function keys")) function_keys=TRUE;
-		extstr++;
-	}
-	g_strfreev(extstrs);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys")),
-		function_keys);
-
+	settings_update();
+	settings_preview_build();
+	settings_notify_id=gconf_client_notify_add(gconfclient, FLO_SETTINGS_ROOT,
+		(GConfClientNotifyFunc)settings_update, NULL, NULL, NULL);
 	glade_xml_signal_autoconnect(gladexml);
 }
 

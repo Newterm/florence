@@ -1,7 +1,10 @@
 Changelog:
 
-2008-10-03 François Agrech <f.agrech@gmail.com>
+2008-12-08 François Agrech <f.agrech@gmail.com>
         * Version 0.3.1
 	* Add an xsl for converting florence layout file to XHTML
 	* Add style gconf parameter for theming
+	* Add GUI for configuring style
+	* Preferences GUI now listens to gconf events
+	* Add 2 styles
 

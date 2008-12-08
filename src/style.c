@@ -64,10 +64,12 @@ gchar *style_get_color(enum style_colours c)
 void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c)
 {
 	guint r, g, b;
-	if (3!=sscanf(style_get_color(c), "#%02x%02x%02x", &r, &g, &b)) {
-		flo_warn(_("can't parse color %s"), style_get_color(c));
+	gchar *color=style_get_color(c);
+	if (3!=sscanf(color, "#%02x%02x%02x", &r, &g, &b)) {
+		flo_warn(_("can't parse color %s"), color);
 		cairo_set_source_rgb(cairoctx, 0.0, 0.0, 0.0);
 	} else cairo_set_source_rgb(cairoctx, (gdouble)r/255.0, (gdouble)g/255.0, (gdouble)b/255.0);
+	if (color) g_free(color);
 }
 
 /* Renders a svg handle to a cairo surface at dimensions */
@@ -215,6 +217,7 @@ void style_shape_new(char *name, char *svg, void *userdata)
 	struct style *style=(struct style *)userdata;
 	struct shape *shape=g_malloc(sizeof(struct shape));
 	GError *error=NULL;
+	gchar *color;
 	memset(shape, 0, sizeof(struct shape));
 	if (name) {
 		shape->name=g_strdup(name);
@@ -223,7 +226,9 @@ void style_shape_new(char *name, char *svg, void *userdata)
 		shape->source=(guchar *)g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
 	}
 	shape->svg=rsvg_handle_new();
-	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:settings_get_string("layout/style"));
+	color=settings_get_string("layout/style");
+	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:color);
+	if (color) g_free(color);
 	rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
 	rsvg_handle_close(shape->svg, &error);
 	if (error) flo_fatal(_("Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""),
@@ -285,7 +290,7 @@ void style_create_css(struct style *style)
 	gchar *filename=g_strdup_printf(style_css_file, g_getenv("HOME"));
 	FILE *in;
 	FILE *out;
-	gchar *tmp1, *tmp2, *line;
+	gchar *tmp1, *tmp2, *line, *color;
 
 	/* create the directory if it doesn't exist already */
 	if (!settings_mkhomedir()) {
@@ -304,10 +309,14 @@ void style_create_css(struct style *style)
 	line=g_malloc(1024);
 	if (!line) flo_warn(_("Unable to allocate memory for css read buffer"));
 	if (line && in && out ) while (fgets(line, 1024, in)) {
-		tmp1=g_regex_replace_literal(shapecolor, line, -1, 0, style_get_color(STYLE_KEY_COLOR), 0, NULL);
-		tmp2=g_regex_replace_literal(symcolor, tmp1, -1, 0, style_get_color(STYLE_TEXT_COLOR), 0, NULL);
+		color=style_get_color(STYLE_KEY_COLOR);
+		tmp1=g_regex_replace_literal(shapecolor, line, -1, 0, color, 0, NULL);
+		if (color) g_free(color); color=style_get_color(STYLE_TEXT_COLOR);
+		tmp2=g_regex_replace_literal(symcolor, tmp1, -1, 0, color, 0, NULL);
 		g_free(tmp1);
-		tmp1=g_regex_replace_literal(bordercolor, tmp2, -1, 0, style_get_color(STYLE_OUTLINE_COLOR), 0, NULL);
+		if (color) g_free(color); color=style_get_color(STYLE_OUTLINE_COLOR);
+		tmp1=g_regex_replace_literal(bordercolor, tmp2, -1, 0, color, 0, NULL);
+		if (color) g_free(color);
 		g_free(tmp2);
 		fputs(tmp1, out);
 		g_free(tmp1);
@@ -317,6 +326,7 @@ void style_create_css(struct style *style)
 	/* release memory */
 	g_regex_unref(shapecolor);
 	g_regex_unref(symcolor);
+	g_regex_unref(bordercolor);
 	if (out) fclose(out);
 	if (in) fclose(in);
 }
@@ -328,6 +338,7 @@ void style_update_colors (struct style *style)
 	GSList *list;
 	struct symbol *symbol;
 	struct shape *shape;
+	gchar *color;
 
 	style_create_css(style);
 
@@ -347,7 +358,9 @@ void style_update_colors (struct style *style)
 		shape=(struct shape *)list->data;
 		if (shape->svg) rsvg_handle_free(shape->svg);
 		shape->svg=rsvg_handle_new();
-		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:settings_get_string("layout/style"));
+		color=settings_get_string("layout/style");
+		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:color);
+		if (color) g_free(color);
 		rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
 		rsvg_handle_close(shape->svg, &error);
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), shape->source);

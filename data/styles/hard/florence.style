@@ -44,7 +44,7 @@
 	</shape>
 	<shape>
 		<name>Space</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="style/space.svg"/>
 	</shape>
 	<shape>
 		<name>Return</name>

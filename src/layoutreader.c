@@ -296,6 +296,7 @@ xmlParserInputPtr layoutreader_entity_loader(const char *URL, const char *ID, xm
 		if (layoutreader_style) stylepath=layoutreader_style;
         	else stylepath=settings_get_string("layout/style");
 		if ((!stylepath) || (stylepath[0]=='\0') || (lstat(stylepath, &stat)!=0)) {
+			if (stylepath) g_free(stylepath);
 			stylepath=(gchar *)FLO_DEFAULT_STYLE;
 		}
 		stylefull=g_strconcat(stylepath, stylefile+5, NULL);
@@ -320,6 +321,7 @@ xmlTextReaderPtr layoutreader_new(char *style)
 	if (!layoutreader_default_loader) layoutreader_default_loader=xmlGetExternalEntityLoader();
 	xmlSetExternalEntityLoader(layoutreader_entity_loader);
 	if ((!layoutfile) || (layoutfile[0]=='\0') || (lstat(layoutfile, &stat)!=0)) {
+		if (layoutfile) g_free(layoutfile);
 		layoutfile=(gchar *)FLO_DEFAULT_LAYOUT;
 	}
 

@@ -90,6 +90,7 @@ gboolean keyboard_activated(struct keyboard *keyboard)
 			if (!strcmp(keyboard->name, *(extstr++))) { ret=TRUE; break; }
 		}
 		g_strfreev(extstrs);
+		g_free(allextstr);
 	}
 	return ret;
 }
@@ -183,10 +184,12 @@ void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble 
 void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
 	struct style *style, struct key *key)
 {
-	cairo_save(cairoctx);
-	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-	key_press_draw(key, style, cairoctx, z);
-	cairo_restore(cairoctx);
+	if (keyboard_activated(keyboard)) {
+		cairo_save(cairoctx);
+		cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
+		key_press_draw(key, style, cairoctx, z);
+		cairo_restore(cairoctx);
+	}
 }
 
 /* getters */
