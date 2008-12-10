@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="en">
 <articleinfo>
-	<date>2008-10-16</date>
+	<date>2008-12-08</date>
 	<title>Florence documentation</title>
 	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
 	<authorgroup>
@@ -31,11 +31,14 @@ A Timer-based auto-click functionality is available to help disabled people havi
 </sect1>
 <sect1 id="install">
 	<title>Install</title>
-	<para>If it's not installed already, you will need to build Florence from the terminal, unless you are on Fedora 9 or later (Thanks to Simon Wesp), as it is the only distribution to include Florence as a package, as of September, the 10th of 2008. If you can't use a keyboard, you may find yourself in a catch-22 situation where you can't install Florence because you can't use Florence. If you are disabled, you may need to ask someone to install it for you and if you have a tablet PC, you may need to find a creative way to install Florence, such as installing from ssh or temporarily use a real keyboard.</para>
+	<para>If it's not installed already, you will need to build Florence from the terminal, unless you are on <ulink url="http://fedoraproject.org">Fedora</ulink> 9 or later (Thanks to Simon Wesp), as it is the only distribution to include Florence as a package, as of December, the 8th of 2008. If you can't use a keyboard, you may find yourself in a catch-22 situation where you can't install Florence because you can't use Florence. If you are disabled, you may need to ask someone to install it for you and if you have a tablet PC, you may need to find a creative way to install Florence, such as installing from ssh or temporarily use a real keyboard.</para>
+	<para>On Fedora, just use the package manager. From the command line, you can type:
+<prompt>#</prompt> <userinput>yum install florence</userinput>
+	</para>
 	<para>Make sure you have the latest version of Florence (0.3.0 as of September, the 10th of 2008). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Preparing the dependencies</title>
-		<para>In order to build Florence, you need a build environment with the following commands: make, sed, scrollkeeper and a C compiler, along with the following package dependencies:</para>
+		<para>In order to build Florence, you need a build environment with the following commands: make, scrollkeeper and a C compiler, along with the following package dependencies:</para>
 		<orderedlist>
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
@@ -69,8 +72,8 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Installing</title>
 		<para>Installing Florence is like installing any program that uses the GNU autotools. Open a terminal and type the following commands:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.0.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.3.0</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.1.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.1</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -86,7 +89,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Uninstalling</title>
 		<para>Uninstalling is as easy as installing.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.3.0</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.1</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>For Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
@@ -107,7 +110,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 		<title>Florence modes</title>
 		<para>Florence has several states affecting how it functions and how it interacts with the user.</para>
 		<para>In auto-click mode, you don't have to use any mouse button to use the keyboard. You just have to put the pointer over a key and a timer is triggered. If the pointer stays over the key until the timer expires, the key is automatically 'clicked' (pressed). The duration of the timer can be set in the configuration GUI in milliseconds. When it is set to 0ms, auto-click mode is off: you have to point a key and click to trigger a key press.</para>
-		<para>Another mode is the always-on-screen mode. In this mode, Florence is always visible on the screen. However, when this mode is off, Florence hides itself when it detects you don't need it. There are several rules to detect when Florence is needed and those rules rely heavily on the <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink> framework. For instance, Florence will be shown if you focus an editable widget, as it should probably be edited with a keyboard. Florence will hide itself when the editable widget is unfocused. This does not work if the widget isn't accessible with <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. In particular, QT3 widgets may not work properly with Florence. You should make sure your applications support at-spi if you intend to use Florence in hidden mode.</para>
+		<para>Another mode is the always-on-screen mode. In this mode, Florence is always visible on the screen. However, when this mode is off (hidden mode), Florence hides itself when it detects you don't need it. There are several rules to detect when Florence is needed and those rules rely heavily on the <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink> framework. For instance, Florence will be shown if you focus an editable widget, as it should probably be edited with a keyboard. Florence will hide itself when the editable widget is unfocused. This does not work if the widget isn't accessible with <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. In particular, QT3 widgets may not work properly with Florence. You should make sure your applications support at-spi if you intend to use Florence in hidden mode.</para>
 		<figure id="extensions">
 			<title>Florence extensions</title>
 			<screenshot>
@@ -133,10 +136,11 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 	<para>The configuration dialog is accessible via the systray icon (right click on it and select <guimenuitem>Preferences</guimenuitem>) or via the command line with the -c or --config switch: <command>florence --config</command>. Hacking configuration is possible via gconf (see the hacking section)</para>
 		<para>The following options are configurable:</para>
 		<orderedlist>
+			<listitem><para>Style: select your style by clicking on the style icon.</para></listitem>
 			<listitem><para>Keys colour: set the background colour of normal keys.</para></listitem>
 			<listitem><para>Activated colour: set the background colour of the keys that are pressed or locked.</para></listitem>
-			<listitem><para>Labels colour: set the colour of the symbol or text printed on keys.</para></listitem>
 			<listitem><para>Mouse over colour: set the background colour of the key that is under the pointer.</para></listitem>
+			<listitem><para>Labels colour: set the colour of the symbol or text printed on keys.</para></listitem>
 			<listitem><para>Arrows keypad: activate/deactivate the arrows keypad.</para></listitem>
 			<listitem><para>Numpad: activate/deactivate the numpad extension.</para></listitem>
 			<listitem><para>Function keys: activate/deactivate the function keys extensions.</para></listitem>
@@ -216,7 +220,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
         <para>You can get help on the <ulink url="https://sourceforge.net/forum/forum.php?forum_id=784280">forum</ulink>, or you can ask for help by email at f.agrech@gmail.com</para>
 </sect1>
 <sect1 id="help">
-	<title>Helping</title>
+	<title>Contribute</title>
 	<para>If you want to help the Florence project, please send an email to f.agrech@gmail.com</para>
 </sect1>
 &gfdl;

@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="fr">
 <articleinfo>
-	<date>2008-10-16</date>
+	<date>2008-12-08</date>
 	<title>Documentation du clavier virtuel Florence</title>
 	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
@@ -31,11 +31,14 @@
 </sect1>
 <sect1 id="install">
 	<title>Installation</title>
-	<para>Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un terminal sauf si vous utilisez Fedora 9 ou supérieur, car il y a un packetage pour Fedora (grâce à Simon Wesp) au 10 septembre 2008. Si vous ne pouvez pas utiliser de clavier, il se peut que vous ne puissiez pas installer Florence parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, vous devriez trouver une façon créative de l'installer, comme ssh ou un autre clavier de manière temporaire.</para>
-	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.0 au 10 septembre 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un terminal sauf si vous utilisez <ulink url="http://fedoraproject.org">Fedora</ulink> 9 ou supérieur, car il y a un packetage pour Fedora (grâce à Simon Wesp) au 8 décembre 2008. Si vous ne pouvez pas utiliser de clavier, il se peut que vous ne puissiez pas installer Florence parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, vous devriez trouver une façon créative de l'installer, comme ssh ou un autre clavier de manière temporaire.</para>
+	<para>Sur <ulink url="http://fedoraproject.org">Fedora</ulink>, vous pouvez simplement utiliser le gestionnaire de paquetages. En la ligne de commande, tapez:
+		<prompt>#</prompt> <userinput>yum install florence</userinput>
+	</para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.1 au 8 décembre 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Préparation des dépendances</title>
-		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, sed, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
+		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
 		<orderedlist>
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
@@ -69,8 +72,8 @@
 		<title>Installation</title>
 		<para>L'installation de Florence se déroule comme l'installation de n'importe quel programme qui utilise les GNU autotools. Ouvrez un terminal et lancez les commandes suivantes:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.0.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.3.0</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.1.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.1</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -86,7 +89,7 @@
 		<title>Désinstallation</title>
 		<para>Désinstaller est aussi facile qu'installer.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.3.0</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.1</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>Pour Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
@@ -106,7 +109,7 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 		<title>Les modes de Florence</title>
 		<para>Florence a différents états qui affectent sa façon d'interagir avec l'utilisateur.</para>
 		<para>Dans le mode auto-click, vous n'avez pas besoin d'utiliser les boutons de la souris pour taper sur le clavier. Vous n'avez qu'à mettre le pointeur sur une touche et le minuteur est déclenché. Si le pointer reste sur la touche jusqu'à que le minuteur expire, la touche est automatiquement 'cliquée' (pressée). La durée du minuteur peut être réglée dans l'interface de configuration en millisecondes. Lorsqu'il est réglé à 0ms, le mode auto-click est désactivé: vous devez pointer une touche et cliquer pour déclencher une pression de la touche.</para>
-		<para>Un autre mode est le mode toujours-à-l'écran (always-on-screen). Dans ce mode, Florence reste toujours visible à l'écran. Par contre, quand ce mode est désactivé, Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché.</para>
+		<para>Un autre mode est le mode toujours-à-l'écran (always-on-screen). Dans ce mode, Florence reste toujours visible à l'écran. Par contre, quand ce mode est désactivé (mode caché), Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché.</para>
 		<figure id="extensions">
 			<title>Extensions de Florence</title>
 			<screenshot>
@@ -132,10 +135,11 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 	<para>La fenêtre de configuration est accessible par l'icône de la zone de notification (cliquez droit sur celle-ci et sélectionnez <guimenuitem>Preferences</guimenuitem>) ou depuis la ligne de commande avec l'option -c ou --config: <command>florence --config</command>. Il est possible de bidouiller la configuration par gconf (voir la section bidouillage)</para>
 		<para>Les options suivantes sont configurables:</para>
 		<orderedlist>
+			<listitem><para>Style: sélectionnez votre style en cliquant sur son icone.</para></listitem>
 			<listitem><para>couleur Keys: change la couleur de fond des touches normales.</para></listitem>
 			<listitem><para>couleur Activated: change la couleur de fond des touches pressées ou bloquées.</para></listitem>
-			<listitem><para>couleur Labels: change la couleur du symbole affiché sur les touches.</para></listitem>
 			<listitem><para>couleur Mouse over: change la couleur de la touche qui se trouve sous le pointeur.</para></listitem>
+			<listitem><para>couleur Labels: change la couleur du symbole affiché sur les touches.</para></listitem>
 			<listitem><para>Arrows keypad: active/désactive le pavé des flèches.</para></listitem>
 			<listitem><para>Numpad: active/désactive le pavé numérique.</para></listitem>
 			<listitem><para>Function keys: active/désactive les touches de fonction.</para></listitem>
@@ -215,7 +219,7 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 	<para>Vous pouvez obtenir de l'aide sur le <ulink url="https://sourceforge.net/forum/forum.php?forum_id=784280">forum</ulink> ou demander de l'aide par email à f.agrech@gmail.com</para>
 </sect1>
 <sect1 id="help">
-	<title>Aider</title>
+	<title>Contribuer</title>
 	<para>Si vous désirez aider le projet Florence, s'il vous plaît, veuillez envoyer un email à f.agrech@gmail.com</para>
 </sect1>
 &gfdl;

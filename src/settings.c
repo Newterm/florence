@@ -147,7 +147,7 @@ void settings_color_change(GtkColorButton *button, char *key)
 	gconf_client_set_string(gconfclient, fullpath, strcolor, NULL);
 }
 
-/* update the window accordint to gconf */
+/* update the window according to gconf */
 void settings_update()
 {
 	gchar **extstrs, **extstr;

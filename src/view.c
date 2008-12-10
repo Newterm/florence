@@ -291,8 +291,8 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 /* Redraw the key to the window */
 void view_update(struct view *view, struct key *key, gboolean statechange)
 {
-/*	GdkRectangle rect;
-	gdouble x, y, w, h;*/
+	GdkRectangle rect;
+	gdouble x, y, w, h;
 
 	if (key) {
 		if (statechange) {
@@ -300,11 +300,11 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			view->symbols=NULL;
 			gtk_widget_queue_draw(GTK_WIDGET(view->window));
 		} else {
-			/*keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
+			keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
 			rect.x=x*view->zoom-5.0; rect.y=y*view->zoom-5.0;
 			rect.width=w*view->zoom+10.0; rect.height=h*view->zoom+10.0;
-			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);*/
-			gtk_widget_queue_draw(GTK_WIDGET(view->window));
+			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+			/*gtk_widget_queue_draw(GTK_WIDGET(view->window));*/
 		}
 	}
 }
@@ -340,6 +340,8 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 
 	/* create the context */
 	context=gdk_cairo_create(window->window);
+	gdk_cairo_region(context, pExpose->region);
+	cairo_clip(context); 
 
 	/* prepare the background */
 	if (!view->background) {

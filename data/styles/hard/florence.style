@@ -28,19 +28,19 @@
 	</shape>
 	<shape>
 		<name>Wide</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="style/wide.svg"/>
 	</shape>
 	<shape>
 		<name>XL</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="style/xl.svg"/>
 	</shape>
 	<shape>
 		<name>XXL</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="style/xxl.svg"/>
 	</shape>
 	<shape>
 		<name>High</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="style/high.svg"/>
 	</shape>
 	<shape>
 		<name>Space</name>
