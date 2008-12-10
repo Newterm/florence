@@ -56,7 +56,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel \</userinput>
-<prompt>></prompt> <userinput>at-spi-devel libcairo2-devel libgnome2-devel librsvg-devel</userinput>
+<prompt>></prompt> <userinput>at-spi-devel libcairo-devel libgnome2-devel librsvg-devel</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>

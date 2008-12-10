@@ -32,7 +32,7 @@ QUICK INSTALL
 
             $ su
 	    # urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel at-spi-devel \
-	      libcairo2-devel libgnome2-devel librsvg2-devel
+	      libcairo-devel libgnome2-devel librsvg2-devel
 
         Ubuntu/debian:
 
