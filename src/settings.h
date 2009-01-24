@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008 François Agrech
+   Copyright (C) 2008, 2009 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,7 @@ void settings_exit(void);
 void settings(void);
 void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data);
 gdouble settings_get_double(const gchar *name);
+void settings_set_double(const gchar *name, gdouble value);
 gchar *settings_get_string(const gchar *name);
 gboolean settings_get_bool(const gchar *name);
 

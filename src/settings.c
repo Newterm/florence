@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008 François Agrech
+   Copyright (C) 2008, 2009 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -44,6 +44,16 @@
 #define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_CANCEL
 #endif
 
+static gchar *settings_nametable[][2] = {
+	{ "flo_resizable", "window/resizable" },
+	{ "flo_keep_ratio", "window/keep_ratio" },
+	{ "flo_decorated", "window/decorated" },
+	{ "flo_auto_hide", "behaviour/auto_hide" },
+	{ "flo_transparent", "window/transparent" },
+	{ "flo_task_bar", "window/task_bar" },
+	{ "flo_always_on_top", "window/always_on_top" },
+	{ NULL, NULL } };
+
 static GladeXML *gladexml;
 static GConfClient *gconfclient=NULL;
 static GConfChangeSet *gconfchangeset=NULL;
@@ -77,6 +87,18 @@ char *settings_get_full_path(const char *path)
 	strcat(string_buffer, "/");
 	strcat(string_buffer, path);
 	return string_buffer;
+}
+
+/* Returns the gconf name of a glade object option according to the name table */
+char *settings_get_gconf_name(GtkWidget *widget)
+{
+	guint searchidx=0;
+	while (strcmp(glade_get_widget_name(widget),
+		settings_nametable[searchidx][0]) &&
+		settings_nametable[searchidx][0]) {
+		searchidx++;
+	}
+	return settings_nametable[searchidx][1];
 }
 
 /* Fills the preview icon view with icons representing the themes */
@@ -153,6 +175,15 @@ void settings_update()
 	gchar **extstrs, **extstr;
 	gboolean arrows=FALSE, numpad=FALSE, function_keys=FALSE;
 	gchar *color;
+	guint searchidx=0;
+
+	while (settings_nametable[searchidx][0]) {
+		gtk_toggle_button_set_active(
+			GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml,
+				settings_nametable[searchidx][0])),
+			settings_get_bool(settings_nametable[searchidx][1]));
+			searchidx++;
+	}
 
 	color=settings_get_string("colours/key");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
@@ -171,10 +202,6 @@ void settings_update()
 		settings_convert_color(color));
 	if (color) g_free(color);
 	color=settings_get_string("colours/key");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_always_on")),
-		settings_get_bool("behaviour/always_on_screen"));
-	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_zoom")),
-		settings_get_double("window/zoom"));
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
 		settings_get_double("behaviour/auto_click"));
 
@@ -188,12 +215,9 @@ void settings_update()
 	}
 	g_strfreev(extstrs);
 	if (color) g_free(color);
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows"))) != arrows)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad"))) != numpad)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
-	if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys"))) != function_keys)
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys")),
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
+	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys")),
 			function_keys);
 }
 
@@ -252,17 +276,6 @@ void settings_labels_color(GtkColorButton *button)
 	settings_color_change(button, "label");
 }
 
-void settings_always_on(GtkToggleButton *button)
-{
-	gboolean always_on_screen=gtk_toggle_button_get_active(button);
-	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/decorated"),
-		always_on_screen);
-	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("window/shaped"),
-		!always_on_screen);
-	gconf_change_set_set_bool(gconfchangeset, settings_get_full_path("behaviour/always_on_screen"),
-		always_on_screen);
-}
-
 void settings_extension(GtkToggleButton *button, gchar *name)
 {
         gchar *allextstr=NULL;
@@ -270,7 +283,7 @@ void settings_extension(GtkToggleButton *button, gchar *name)
         gchar **extstr=NULL;
         gchar **newextstrs=NULL;
         gchar **newextstr=NULL;
-	GConfValue *value;
+	GConfValue *value=NULL;
 
 	/* Get this from change set in case it's not commited */
 	if (gconf_change_set_check_value(gconfchangeset, settings_get_full_path("layout/extensions"), &value)) {
@@ -310,21 +323,24 @@ void settings_function_keys(GtkToggleButton *button)
 	settings_extension(button, "Function keys");
 }
 
-void settings_zoom(GtkHScale *scale)
-{
-	gconf_change_set_set_float(gconfchangeset, settings_get_full_path("window/zoom"),
-		gtk_range_get_value(GTK_RANGE(scale)));
-}
-
 void settings_auto_click(GtkHScale *scale)
 {
 	gconf_change_set_set_float(gconfchangeset, settings_get_full_path("behaviour/auto_click"),
 		gtk_range_get_value(GTK_RANGE(scale)));
 }
 
+/* Set a gconf boolean according to the state of the toggle button.
+ * Look for the gconf parameter name in the name table */
+void settings_set_bool (GtkToggleButton *button)
+{
+	gconf_change_set_set_bool(gconfchangeset,
+		settings_get_full_path(settings_get_gconf_name(
+			GTK_WIDGET(button))),
+		gtk_toggle_button_get_active(button));
+}
+
 void settings_commit(GtkWidget *window, GtkWidget *button)
 {
-	settings_notify_id=0;
 	gconf_client_commit_change_set(gconfclient, gconfchangeset, TRUE, NULL);
 	if (rollback) gconf_change_set_clear(rollback);
 }
@@ -350,6 +366,7 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 	static gboolean closed=FALSE;
 	if (closed) return;
 
+	gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
 	if (settings_notify_id>0) gconf_client_notify_remove(gconfclient, settings_notify_id);
 	settings_notify_id=0;
 	if ((gconfchangeset && gconf_change_set_size(gconfchangeset)>0)||
@@ -373,6 +390,8 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 	if (settings_style_list) g_object_unref(G_OBJECT(settings_style_list)); 
 	settings_style_list=NULL;
 	if (settings_gtk_exit) gtk_exit(0);
+	closed=FALSE;
+	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 }
 
 void settings_destroy(GtkWidget *window)
@@ -410,6 +429,13 @@ gdouble settings_get_double(const gchar *name)
 	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
 	flo_debug("GCONF:%s=<%f>", fullpath, ret);
 	return ret;
+}
+
+void settings_set_double(const gchar *name, gdouble value)
+{
+	gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
+	gconf_client_set_float(gconfclient, settings_get_full_path(name), value, NULL);
+	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 }
 
 gchar *settings_get_string(const gchar *name)
@@ -459,6 +485,15 @@ gboolean settings_mkhomedir()
 /* Displays the settings dialog box on the screen and register events */
 void settings(void)
 {
+	GtkWidget *dialog;
+	if (settings_notify_id>0) {
+		dialog=gtk_message_dialog_new(NULL,
+			GTK_DIALOG_DESTROY_WITH_PARENT,	GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+			_("Another instance of Florence settings dialog is already running"));
+		gtk_dialog_run(GTK_DIALOG (dialog));
+		gtk_widget_destroy(dialog);
+		return;
+	}
 	gconfchangeset=gconf_change_set_new();
 	rollback=gconf_change_set_new();
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);

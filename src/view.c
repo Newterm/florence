@@ -1,7 +1,7 @@
 /* 
  * florence - Florence is a simple virtual keyboard for Gnome.
 
- * Copyright (C) 2008 François Agrech
+ * Copyright (C) 2008, 2009 François Agrech
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -59,6 +59,25 @@ void view_hide (struct view *view)
 	gtk_widget_hide(GTK_WIDGET(view->window));
 }
 
+/* resize the window */
+void view_resize (struct view *view)
+{
+	GdkGeometry hints;
+	if (settings_get_bool("window/resizable")) {
+		hints.min_aspect=view->vwidth/view->vheight;
+		hints.max_aspect=view->vwidth/view->vheight;
+		gtk_window_set_resizable(view->window, TRUE);
+		gtk_window_set_geometry_hints(view->window, NULL, &hints,
+			GDK_HINT_ASPECT);
+		gtk_window_resize(view->window, view->width, view->height);
+	} else {
+		gtk_window_set_geometry_hints(view->window, NULL, &hints, 0);
+		gtk_window_set_resizable(view->window, FALSE);
+		gtk_widget_set_size_request(GTK_WIDGET(view->window),
+			view->width, view->height);
+	}
+}
+
 /* draws the background of florence */
 void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface, enum style_class class)
 {
@@ -113,7 +132,6 @@ void view_set_dimensions(struct view *view)
 {
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
-	gdouble w, h;
 
 	while (list)
 	{
@@ -121,28 +139,28 @@ void view_set_dimensions(struct view *view)
 		if (keyboard_activated(keyboard)) {
 			switch (keyboard_get_placement(keyboard)) {
 				case LAYOUT_VOID:
-					w=keyboard_get_width(keyboard);
-					h=keyboard_get_height(keyboard);
+					view->vwidth=keyboard_get_width(keyboard);
+					view->vheight=keyboard_get_height(keyboard);
 					view->xoffset=view->yoffset=0;
 					break;
 				case LAYOUT_TOP:
-					h+=(view->yoffset+=keyboard_get_height(keyboard));
+					view->vheight+=(view->yoffset+=keyboard_get_height(keyboard));
 					break;
 				case LAYOUT_BOTTOM:
-					h+=keyboard_get_height(keyboard);
+					view->vheight+=keyboard_get_height(keyboard);
 					break;
 				case LAYOUT_LEFT:
-					w+=(view->xoffset+=keyboard_get_width(keyboard));
+					view->vwidth+=(view->xoffset+=keyboard_get_width(keyboard));
 					break;
 				case LAYOUT_RIGHT:
-					w+=keyboard_get_width(keyboard);
+					view->vwidth+=keyboard_get_width(keyboard);
 					break;
 			}
 		}
 		list = list->next;
 	}
-	view->width=(guint)(w*view->zoom);
-	view->height=(guint)(h*view->zoom);
+	view->width=(guint)(view->vwidth*view->zoom);
+	view->height=(guint)(view->vheight*view->zoom);
 }
 
 /* Create a hitmap for the view */
@@ -202,14 +220,14 @@ guint view_keycode_get (struct view *view, gint x, gint y)
 	return code;
 }
 
-/* Create a window mask for stransparent window in shaped mode for non-composited screen */
+/* Create a window mask for transparent window for non-composited screen */
 /* For composited screen, this function is useless, use alpha channel instead. */
 void view_create_window_mask(struct view *view)
 {
 	GdkBitmap *mask=NULL;
 	cairo_t *cairoctx=NULL;
 
-	if (!view->composite && settings_get_bool("window/shaped")) {
+	if (!view->composite && settings_get_bool("window/transparent")) {
 		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, view->width, view->height, 1)))
 			flo_fatal(_("Unable to create mask"));
 		cairoctx=gdk_cairo_create(mask);
@@ -229,8 +247,8 @@ void view_create_window_mask(struct view *view)
 	}
 }
 
-/* Triggered by gconf when the "shaped" parameter is changed. Calls view_create_window_mask */
-void view_set_shaped(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+/* Triggered by gconf when the "transparent" parameter is changed. Calls view_create_window_mask */
+void view_set_transparent(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
 	gboolean shown=GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window));
@@ -246,28 +264,28 @@ void view_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, g
 	gtk_window_set_decorated(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
-/* Triggered by gconf when the "extensions" parameter is changed. */
-void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+/* Triggered by gconf when the "always_on_top" parameter is changed. 
+   Change the window property to be always on top or not to be. */
+void view_set_always_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
-	view_set_dimensions(view);
-	if (view->hitmap) g_free(view->hitmap);
-	view_hitmap_create(view);
-	if (view->background) cairo_surface_destroy(view->background);
-	view->background=NULL;
-	if (view->symbols) cairo_surface_destroy(view->symbols);
-	view->symbols=NULL;
-	gtk_widget_set_size_request(GTK_WIDGET(view->window), view->width, view->height);
-	view_create_window_mask(view);
-	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+	gtk_window_set_keep_above(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
-/* Triggered by gconf when the "zoom" parameter is changed. */
-void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+/* Triggered by gconf when the "task_bar" parameter is changed. 
+   Change the window hint to appear in the task bar or not. */
+void view_set_task_bar(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
-	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
-	view_update_extensions(client, xnxn_id, entry, user_data);
+	gtk_window_set_skip_taskbar_hint(view->window, !gconf_value_get_bool(gconf_entry_get_value(entry)));
+}
+
+/* Triggered by gconf when the "resizable" parameter is changed.
+   makes the window (not)resizable the window. */
+void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct view *view=(struct view *)user_data;
+	view_resize(view);
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
@@ -293,6 +311,7 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 {
 	GdkRectangle rect;
 	gdouble x, y, w, h;
+	GdkCursor *cursor;
 
 	if (key) {
 		if (statechange) {
@@ -304,9 +323,12 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			rect.x=x*view->zoom-5.0; rect.y=y*view->zoom-5.0;
 			rect.width=w*view->zoom+10.0; rect.height=h*view->zoom+10.0;
 			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
-			/*gtk_widget_queue_draw(GTK_WIDGET(view->window));*/
 		}
 	}
+	if (status_focus_get(view->status)) {
+		cursor=gdk_cursor_new(GDK_HAND2);
+		gdk_window_set_cursor(GTK_WIDGET(view->window)->window, cursor);
+	} else gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
 }
 
 /* on screen change event: check for composite extension */
@@ -334,14 +356,36 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	GList *list=status_pressedkeys_get(view->status);
 	struct keyboard *keyboard;
 	struct key *key;
+	gint w, h;
+
+	/* handle resize events here */
+	gtk_window_get_size(view->window, &w, &h);
+	if ((w!=view->width) || (h!=view->height)) {
+		view->zoom=(gdouble)w/view->vwidth;
+		settings_set_double("window/zoom", view->zoom);
+		view->width=w; view->height=h;
+		if (view->hitmap) g_free(view->hitmap);
+		view_hitmap_create(view);
+		if (view->background) cairo_surface_destroy(view->background);
+		view->background=NULL;
+		if (view->symbols) cairo_surface_destroy(view->symbols);
+		view->symbols=NULL;
+		view_create_window_mask(view);
+		gtk_widget_queue_draw(GTK_WIDGET(view->window));
+		return;
+	}
 
 	/* Don't need to redraw several times in one chunk */
+	if (!view->redraw) view->redraw=gdk_region_new();
+	gdk_region_union(view->redraw, pExpose->region);
 	if (pExpose->count>0) return;
 
 	/* create the context */
 	context=gdk_cairo_create(window->window);
-	gdk_cairo_region(context, pExpose->region);
+	gdk_cairo_region(context, view->redraw);
 	cairo_clip(context); 
+	gdk_region_destroy(view->redraw);
+	view->redraw=NULL;
 
 	/* prepare the background */
 	if (!view->background) {
@@ -382,6 +426,30 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	cairo_destroy(context);
 }
 
+/* Triggered by gconf when the "extensions" parameter is changed. */
+void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct view *view=(struct view *)user_data;
+	view_set_dimensions(view);
+	view_resize(view);
+	if (view->hitmap) g_free(view->hitmap);
+	view_hitmap_create(view);
+	if (view->background) cairo_surface_destroy(view->background);
+	view->background=NULL;
+	if (view->symbols) cairo_surface_destroy(view->symbols);
+	view->symbols=NULL;
+	view_create_window_mask(view);
+	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+}
+
+/* Triggered by gconf when the "zoom" parameter is changed. */
+void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct view *view=(struct view *)user_data;
+	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
+	view_update_extensions(client, xnxn_id, entry, user_data);
+}
+
 /* get gtk window of the view */
 GtkWindow *view_window_get (struct view *view)
 {
@@ -417,14 +485,12 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	view_hitmap_create(view);
 
 	view->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-	gtk_window_set_keep_above(view->window, TRUE);
+	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));
 	gtk_window_set_accept_focus(view->window, FALSE);
-	gtk_window_set_skip_taskbar_hint(view->window, TRUE);
-	gtk_window_set_resizable(view->window, FALSE);
-	gtk_widget_set_size_request(GTK_WIDGET(view->window), view->width, view->height);
+	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool("window/task_bar"));
+	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);
-	gtk_widget_set_events(GTK_WIDGET(view->window),
-		GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|GDK_POINTER_MOTION_MASK|GDK_POINTER_MOTION_HINT_MASK);
+	gtk_widget_set_events(GTK_WIDGET(view->window), GDK_ALL_EVENTS_MASK);
 	gtk_widget_set_app_paintable (GTK_WIDGET(view->window), TRUE);
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
 
@@ -435,8 +501,11 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	view_create_window_mask(view);
 
 	/* register settings callbacks */
-	settings_changecb_register("window/shaped", view_set_shaped, view);
+	settings_changecb_register("window/transparent", view_set_transparent, view);
 	settings_changecb_register("window/decorated", view_set_decorated, view);
+	settings_changecb_register("window/resizable", view_set_resizable, view);
+	settings_changecb_register("window/always_on_top", view_set_always_on_top, view);
+	settings_changecb_register("window/task_bar", view_set_task_bar, view);
 	settings_changecb_register("window/zoom", view_set_zoom, view);
 	settings_changecb_register("layout/extensions", view_update_extensions, view);
 	settings_changecb_register("colours/key", view_redraw, view);

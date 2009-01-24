@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008 François Agrech
+   Copyright (C) 2008, 2009 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,10 +34,10 @@
 void trayicon_about(void)
 {
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
-		"version", VERSION, "copyright", _("Copyright (C) 2008 François Agrech"),
+		"version", VERSION, "copyright", _("Copyright (C) 2008, 2009 François Agrech"),
 		"logo", gdk_pixbuf_new_from_file(ICONDIR "/florence.svg", NULL),
 		"website", "http://florence.sourceforge.net",
-		"license", _("Copyright (C) 2008 François Agrech\n\
+		"license", _("Copyright (C) 2008, 2009 François Agrech\n\
 \n\
 This program is free software; you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\

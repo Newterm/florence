@@ -1,10 +1,15 @@
+This release focuses on usability.
+The settings dialog has changed to allow more control on visual settings.
+The zoom scrollbar has been replaced with the ability to resize the window
+more naturally from the window manager.
+
 Changelog:
 
-2008-12-08 François Agrech <f.agrech@gmail.com>
-        * Version 0.3.1
-	* Add an xsl for converting florence layout file to XHTML
-	* Add style gconf parameter for theming
-	* Add GUI for configuring style
-	* Preferences GUI now listens to gconf events
-	* Add 2 styles
+2009-01-24 François Agrech <f.agrech@gmail.com>
+        * Version 0.3.2
+	* Bug fix: closing the config dialog several times now works
+	* Make the keyboard resizable from the window manager
+	* New gconf options: task_bar, resizable, always_on_top
+	* Rename some options
+	* Change the settings dialog according to gconf changes
 

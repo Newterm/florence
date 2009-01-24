@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--*- mode: xml -*-->
+<!--Generated with glade3 3.4.5 on Sat Jan 24 17:26:52 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="flo_config_window">
     <property name="visible">True</property>
     <property name="title" translatable="yes" context="yes">Florence Settings</property>
     <property name="window_position">GTK_WIN_POS_MOUSE</property>
-    <property name="default_width">271</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <signal name="key_press_event" handler="settings_help"/>
     <signal name="destroy" handler="settings_close" object="flo_config_window"/>
@@ -55,6 +54,7 @@
                       <widget class="GtkHBox" id="hbox1">
                         <property name="visible">True</property>
                         <property name="spacing">6</property>
+                        <property name="homogeneous">True</property>
                         <child>
                           <widget class="GtkColorButton" id="flo_keys">
                             <property name="visible">True</property>
@@ -64,6 +64,10 @@
                             <property name="title" translatable="yes" context="yes">Key background color</property>
                             <signal name="color_set" handler="settings_keys_color"/>
                           </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
                         </child>
                         <child>
                           <widget class="GtkColorButton" id="flo_activated">
@@ -75,6 +79,8 @@
                             <signal name="color_set" handler="settings_activated_color"/>
                           </widget>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
@@ -88,6 +94,8 @@
                             <signal name="color_set" handler="settings_mouseover_color"/>
                           </widget>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
@@ -101,11 +109,15 @@
                             <signal name="color_set" handler="settings_labels_color"/>
                           </widget>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
                       </widget>
                       <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">False</property>
                         <property name="position">1</property>
                       </packing>
                     </child>
@@ -125,91 +137,72 @@
             </child>
           </widget>
           <packing>
-            <property name="padding">8</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">4</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkCheckButton" id="flo_arrows">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes" context="yes">Show the arrow keys</property>
-            <property name="label" translatable="yes" context="yes">Arrows keypad</property>
-            <property name="use_underline">True</property>
-            <property name="response_id">0</property>
-            <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="settings_arrows"/>
-          </widget>
-          <packing>
-            <property name="position">1</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkCheckButton" id="flo_numpad">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes" context="yes">Show the numpad</property>
-            <property name="label" translatable="yes" context="yes">Numpad</property>
-            <property name="use_underline">True</property>
-            <property name="response_id">0</property>
-            <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="settings_numpad"/>
-          </widget>
-          <packing>
-            <property name="position">2</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkCheckButton" id="flo_function_keys">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="tooltip" translatable="yes" context="yes">Show function keys</property>
-            <property name="label" translatable="yes" context="yes">Function keys</property>
-            <property name="use_underline">True</property>
-            <property name="response_id">0</property>
-            <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="settings_function_keys"/>
-          </widget>
-          <packing>
-            <property name="position">3</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkCheckButton" id="flo_always_on">
-            <property name="visible">True</property>
-            <property name="tooltip" translatable="yes" context="yes">Check to make Florence always on screen.
-Uncheck and it will only be shown when an editable widget is selected.</property>
-            <property name="label" translatable="yes" context="yes">Always on screen</property>
-            <property name="use_underline">True</property>
-            <property name="response_id">0</property>
-            <property name="draw_indicator">True</property>
-            <signal name="toggled" handler="settings_always_on"/>
-          </widget>
-          <packing>
-            <property name="position">4</property>
-          </packing>
-        </child>
-        <child>
-          <widget class="GtkFrame" id="frame1">
+          <widget class="GtkFrame" id="extensions">
             <property name="visible">True</property>
             <property name="label_xalign">0</property>
             <child>
-              <widget class="GtkAlignment" id="alignment2">
+              <widget class="GtkAlignment" id="alignment4">
                 <property name="visible">True</property>
                 <property name="left_padding">12</property>
                 <child>
-                  <widget class="GtkHScale" id="flo_zoom">
+                  <widget class="GtkVBox" id="vbox2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="adjustment">20 5 50 1 10 10</property>
-                    <signal name="value_changed" handler="settings_zoom"/>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_arrows">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Show the arrow keys</property>
+                        <property name="label" translatable="yes" context="yes">Navigation keys</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_arrows"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_numpad">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Show the numpad</property>
+                        <property name="label" translatable="yes" context="yes">Numeric keys</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_numpad"/>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_function_keys">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Show function keys</property>
+                        <property name="label" translatable="yes" context="yes">Function keys</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_function_keys"/>
+                      </widget>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
                   </widget>
                 </child>
               </widget>
             </child>
             <child>
-              <widget class="GtkLabel" id="zoom_label">
+              <widget class="GtkLabel" id="label3">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes" context="yes">Zoom</property>
+                <property name="label" translatable="yes" context="yes">Extensions</property>
                 <property name="use_markup">True</property>
               </widget>
               <packing>
@@ -218,13 +211,143 @@ Uncheck and it will only be shown when an editable widget is selected.</property
             </child>
           </widget>
           <packing>
-            <property name="padding">8</property>
-            <property name="position">5</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">4</property>
+            <property name="position">1</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkFrame" id="frame2">
+          <widget class="GtkFrame" id="window">
             <property name="visible">True</property>
+            <property name="label_xalign">0</property>
+            <child>
+              <widget class="GtkAlignment" id="alignment5">
+                <property name="visible">True</property>
+                <property name="left_padding">12</property>
+                <child>
+                  <widget class="GtkVBox" id="vbox3">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_auto_hide">
+                        <property name="visible">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Auto hide (only show when an editable widget is selected).</property>
+                        <property name="label" translatable="yes" context="yes">Auto hide	</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_decorated">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Decorate window</property>
+                        <property name="label" translatable="yes" context="yes">Decorated</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_transparent">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Transparent mode</property>
+                        <property name="label" translatable="yes" context="yes">Transparent</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                      <packing>
+                        <property name="position">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_resizable">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Allow to resize window.</property>
+                        <property name="label" translatable="yes" context="yes">Resizable</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                      <packing>
+                        <property name="position">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_keep_ratio">
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Keep window ratio when resizing window.</property>
+                        <property name="label" translatable="yes" context="yes">Keep ratio</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                      <packing>
+                        <property name="position">4</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_task_bar">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Apparaître dans la barre des tâches.</property>
+                        <property name="label" translatable="yes" context="yes">Task bar</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                      <packing>
+                        <property name="position">5</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkCheckButton" id="flo_always_on_top">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Keep the keyboard on top.</property>
+                        <property name="label" translatable="yes" context="yes">Always on top	</property>
+                        <property name="response_id">0</property>
+                        <property name="draw_indicator">True</property>
+                        <signal name="toggled" handler="settings_set_bool"/>
+                      </widget>
+                      <packing>
+                        <property name="position">6</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes" context="yes">Window</property>
+                <property name="use_markup">True</property>
+              </widget>
+              <packing>
+                <property name="type">label_item</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">4</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkFrame" id="auto-click">
+            <property name="visible">True</property>
+            <property name="tooltip" translatable="yes" context="yes">Auto click timeout</property>
             <property name="label_xalign">0</property>
             <child>
               <widget class="GtkAlignment" id="alignment1">
@@ -234,6 +357,7 @@ Uncheck and it will only be shown when an editable widget is selected.</property
                   <widget class="GtkHScale" id="flo_auto_click">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
+                    <property name="tooltip" translatable="yes" context="yes">Auto click timeout</property>
                     <property name="adjustment">1300 0 5000 100 1000 1000</property>
                     <signal name="value_changed" handler="settings_auto_click"/>
                   </widget>
@@ -252,12 +376,14 @@ Uncheck and it will only be shown when an editable widget is selected.</property
             </child>
           </widget>
           <packing>
-            <property name="padding">8</property>
-            <property name="position">6</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">4</property>
+            <property name="position">3</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkHBox" id="hbox7">
+          <widget class="GtkHBox" id="buttons">
             <property name="visible">True</property>
             <child>
               <widget class="GtkButton" id="flo_close">
@@ -304,7 +430,10 @@ Uncheck and it will only be shown when an editable widget is selected.</property
             </child>
           </widget>
           <packing>
-            <property name="position">7</property>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="padding">4</property>
+            <property name="position">4</property>
           </packing>
         </child>
       </widget>

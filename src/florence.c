@@ -1,7 +1,7 @@
 /* 
  * florence - Florence is a simple virtual keyboard for Gnome.
 
- * Copyright (C) 2008 François Agrech
+ * Copyright (C) 2008, 2009 François Agrech
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -86,12 +86,12 @@ void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
 /* Switches between always on screen mode and hidden mode.
  * When in hidden mode, the spi events are registered to monitor focus and show on editable widgets.
  * the events are deregistered when always on screen mode is activated */
-void flo_switch_mode (struct view *view, gboolean on_screen)
+void flo_switch_mode (struct view *view, gboolean auto_hide)
 {
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
 
-	if (!on_screen) {
+	if (auto_hide) {
 		view_hide(view);
 		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)view);
 		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
@@ -162,8 +162,8 @@ GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 	return keyboards;
 }
 
-/* Triggered by gconf when the "always_on_screen" parameter is changed. */
-void flo_set_show_on_focus(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+/* Triggered by gconf when the "auto_hide" parameter is changed. */
+void flo_set_auto_hide(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
 	flo_switch_mode(view, gconf_value_get_bool(gconf_entry_get_value(entry)));
@@ -297,10 +297,10 @@ struct florence *flo_new(void)
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 
-	flo_switch_mode(florence->view, settings_get_bool("behaviour/always_on_screen"));
+	flo_switch_mode(florence->view, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
 
-	settings_changecb_register("behaviour/always_on_screen", flo_set_show_on_focus, florence->view);
+	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence->view);
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 
 	SPI_init();

@@ -83,9 +83,17 @@
 
 2008-12-08 François Agrech <f.agrech@gmail.com>
         * Version 0.3.1
-	* Add an xsl for converting florence layout file to XHTML
+	* Add an xsl for converting florence layout file to SVG
 	* Add style gconf parameter for theming
 	* Add GUI for configuring style
 	* Preferences GUI now listens to gconf events
-	* Add 2 styles
+	* Add 2 new styles
+
+2009-01-24 François Agrech <f.agrech@gmail.com>
+        * Version 0.3.2
+	* Bug fix: closing the config dialog several times now works
+	* Make the keyboard resizable from the window manager
+	* New gconf options: task_bar, resizable, always_on_top
+	* Rename some options
+	* Change the settings dialog according to gconf changes
 

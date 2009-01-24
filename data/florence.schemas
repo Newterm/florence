@@ -2,18 +2,18 @@
 	<schemalist>
 
 		<schema>
-			<key>/schemas/apps/florence/behaviour/always_on_screen</key>
-			<applyto>/apps/florence/behaviour/always_on_screen</applyto>
+			<key>/schemas/apps/florence/behaviour/auto_hide</key>
+			<applyto>/apps/florence/behaviour/auto_hide</applyto>
 			<owner>florence</owner>
 			<type>bool</type>
-			<default>true</default>
+			<default>false</default>
 			<locale name="C">
-				<short>Always on screen/only show on editable</short>
-				<long>Set to true, Florence will be always shown. To false, it will be shown when an editable widget is selected</long>
+				<short>Hide the keyboard automatically when not needed</short>
+				<long>Florence will hide automatically when no editable widget is selected.</long>
 			</locale>
 			<locale name="fr">
-				<short>Toujours à l'écran/seulement sur les éditables</short>
-				<long>Positionné à vrai, Florence sera toujours à l'écran. À faux, Florence ne sera affiché que lorsqu'un objet éditable est sélectionné</long>
+				<short>Cache le clavier lorsqu'il n'est pas nécessaire</short>
+				<long>Florence sera automatiquement caché lorsqu'aucun objet éditable n'est sélectionné</long>
 			</locale>
 		</schema>
 		<schema>
@@ -48,18 +48,18 @@
 			</locale>
 		</schema>
 		<schema>
-			<key>/schemas/apps/florence/window/shaped</key>
-			<applyto>/apps/florence/window/shaped</applyto>
+			<key>/schemas/apps/florence/window/transparent</key>
+			<applyto>/apps/florence/window/transparent</applyto>
 			<owner>florence</owner>
 			<type>bool</type>
 			<default>false</default>
 			<locale name="C">
-				<short>Shape mode</short>
-				<long>Set to true to have Florence appear in shape mode. Set to false to have Florence appear in rectangular mode.</long>
+				<short>Transparent mode</short>
+				<long>To see the windows behind the keyboard.</long>
 			</locale>
 			<locale name="fr">
-				<short>Mode forme</short>
-				<long>Mettre à vrai pour que Florence s'affiche en mode forme. Mettre à faux pour avoir Florence en mode rectangulaire.</long>
+				<short>Mode transparent</short>
+				<long>Pout voir les fenêtres derrière le clavier.</long>
 			</locale>
 		</schema>
 		<schema>
@@ -75,6 +75,66 @@
 			<locale name="fr">
 				<short>Fenêtre décorée</short>
 				<long>La fenêtre a une barre de titre et des boutons.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/resizable</key>
+			<applyto>/apps/florence/window/resizable</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Allow to resize window.</short>
+				<long>The keyboard window can be resized with the mouse.</long>
+			</locale>
+			<locale name="fr">
+				<short>Autoriser le redimensionement de la fenêtre.</short>
+				<long>La fenêtre du clavier peut être redimensionée avec la souris.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/keep_ratio</key>
+			<applyto>/apps/florence/window/keep_ratio</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Keep window ratio when resizing window.</short>
+				<long>The window proportions are kept intact while resizing the window.</long>
+			</locale>
+			<locale name="fr">
+				<short>Conserver les proportions en redimensionant la fenêtre.</short>
+				<long>Les proportions sont conservées intactes pendant le redimensionement de la fenêtre.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/task_bar</key>
+			<applyto>/apps/florence/window/task_bar</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>false</default>
+			<locale name="C">
+				<short>Appear in the task bar</short>
+				<long>Make Florence appear in the task bar.</long>
+			</locale>
+			<locale name="fr">
+				<short>Apparaître dans la barre des tâches.</short>
+				<long>Fait apparaître Florence dans la barre des tâches.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/always_on_top</key>
+			<applyto>/apps/florence/window/always_on_top</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Keep the keyboard on top.</short>
+				<long>Keep the keyboard window on top of other windows.</long>
+			</locale>
+			<locale name="fr">
+				<short>Conserve le clavier au dessus.</short>
+				<long>Conserve la fenêtre du clavier au dessus des autres fenêtres.</long>
 			</locale>
 		</schema>
 

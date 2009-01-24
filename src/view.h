@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008 François Agrech
+   Copyright (C) 2008, 2009 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,7 @@ struct view {
 	GtkWindow *window; /* GTK window of the view */
 	gboolean composite; /* true if the screen has composite extension */
 	guint width, height; /* dimensions of the view, in pixels */
+	gdouble vwidth, vheight; /* virtual dimensions of the view */
 	gdouble zoom; /* scaling factor of the window */
 	GSList *keyboards; /* Main list of keyboard extensions */
 	gdouble xoffset, yoffset; /* offset of the main keyboard */
@@ -45,6 +46,7 @@ struct view {
 	guchar *hitmap; /* bitmap of key codes: used to know on which key the mouse is over */
 	cairo_surface_t *background; /* contains the background image of florence */
 	cairo_surface_t *symbols; /* contains the symbols image of florence */
+	GdkRegion *redraw; /* region that needs to be redrawn */
 };
 
 /* create a view of florence */

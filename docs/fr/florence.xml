@@ -2,11 +2,11 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "May 2008">
+	<!ENTITY date "Janvier 2009">
 ]>
 <article id="index" lang="fr">
 <articleinfo>
-	<date>2008-12-08</date>
+	<date>2009-01-24</date>
 	<title>Documentation du clavier virtuel Florence</title>
 	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
@@ -16,8 +16,8 @@
 			<email>f.agrech@gmail.com</email>
 		</author>
 	</authorgroup>
-	<copyright><year>2008</year><holder>François Agrech</holder></copyright>
-	<legalnotice><para>Copyright (c) 2008 François Agrech.</para>
+	<copyright><year>2008, 2009</year><holder>François Agrech</holder></copyright>
+	<legalnotice><para>Copyright (c) 2008, 2009 François Agrech.</para>
 	<para>Cette documentation est mise à disposition sous la license GNU FDL. Seule la version en anglais de cette license existe et a une valeur légale. Une copie de la license est disponible à la fin de ce document en anglais.</para>
 	<para>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled "GNU Free Documentation License".</para></legalnotice>
 </articleinfo>
@@ -35,7 +35,7 @@
 	<para>Sur <ulink url="http://fedoraproject.org">Fedora</ulink>, vous pouvez simplement utiliser le gestionnaire de paquetages. En la ligne de commande, tapez:
 		<prompt>#</prompt> <userinput>yum install florence</userinput>
 	</para>
-	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.1 au 8 décembre 2008). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.2 au 24 janvier 2009). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Préparation des dépendances</title>
 		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
@@ -72,8 +72,8 @@
 		<title>Installation</title>
 		<para>L'installation de Florence se déroule comme l'installation de n'importe quel programme qui utilise les GNU autotools. Ouvrez un terminal et lancez les commandes suivantes:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.1.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.3.1</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.2.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.2</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -89,7 +89,7 @@
 		<title>Désinstallation</title>
 		<para>Désinstaller est aussi facile qu'installer.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.3.1</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.2</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>Pour Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
@@ -109,7 +109,7 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 		<title>Les modes de Florence</title>
 		<para>Florence a différents états qui affectent sa façon d'interagir avec l'utilisateur.</para>
 		<para>Dans le mode auto-click, vous n'avez pas besoin d'utiliser les boutons de la souris pour taper sur le clavier. Vous n'avez qu'à mettre le pointeur sur une touche et le minuteur est déclenché. Si le pointer reste sur la touche jusqu'à que le minuteur expire, la touche est automatiquement 'cliquée' (pressée). La durée du minuteur peut être réglée dans l'interface de configuration en millisecondes. Lorsqu'il est réglé à 0ms, le mode auto-click est désactivé: vous devez pointer une touche et cliquer pour déclencher une pression de la touche.</para>
-		<para>Un autre mode est le mode toujours-à-l'écran (always-on-screen). Dans ce mode, Florence reste toujours visible à l'écran. Par contre, quand ce mode est désactivé (mode caché), Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché.</para>
+		<para>Un autre mode est le mode auto-hide. Dans ce mode, Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché. Quand ce mode est désactivé, Florence reste toujours visible à l'écran.</para>
 		<figure id="extensions">
 			<title>Extensions de Florence</title>
 			<screenshot>
@@ -140,11 +140,15 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 			<listitem><para>couleur Activated: change la couleur de fond des touches pressées ou bloquées.</para></listitem>
 			<listitem><para>couleur Mouse over: change la couleur de la touche qui se trouve sous le pointeur.</para></listitem>
 			<listitem><para>couleur Labels: change la couleur du symbole affiché sur les touches.</para></listitem>
-			<listitem><para>Arrows keypad: active/désactive le pavé des flèches.</para></listitem>
-			<listitem><para>Numpad: active/désactive le pavé numérique.</para></listitem>
+			<listitem><para>Navigation keys: active/désactive le pavé des flèches.</para></listitem>
+			<listitem><para>Numeric keys: active/désactive le pavé numérique.</para></listitem>
 			<listitem><para>Function keys: active/désactive les touches de fonction.</para></listitem>
-			<listitem><para>Always on screen: bascule entre les modes toujours-à-l'écran et caché.</para></listitem>
-			<listitem><para>Zoom: change la dimension visuelle du clavier.</para></listitem>
+			<listitem><para>Auto-hide: bascule entre les modes auto-hide et toujours visible.</para></listitem>
+			<listitem><para>Decorated: décore la fenêtre avec une barre de titre.</para></listitem>
+			<listitem><para>Transparent: permet de voir les fenêtres derrière le clavier entre les touches.</para></listitem>
+			<listitem><para>Resizable: permet de changer la dimension visuelle du clavier par le gestionaire de fenêtre.</para></listitem>
+			<listitem><para>Task bar: fait apparaître Florence dans la barre des taches du bureau.</para></listitem>
+			<listitem><para>Always on top: demande au gestionnaire de fenêtre de toujours garder le clavier au dessus des autres fenêtres.</para></listitem>
 			<listitem><para>Auto-click: change la durée du minuteur du mode click automatique (0 désactive le mode click automatique).</para></listitem>
 		</orderedlist>
 	</sect2>
