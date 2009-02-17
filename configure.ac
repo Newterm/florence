@@ -1,9 +1,19 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.3.2], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.3.3], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
 AC_ARG_WITH([docs], AS_HELP_STRING([--without-docs], [Build without docs (default: enabled)]))
 AM_CONDITIONAL([WITH_DOCS], [test "x$with_docs" != "xno"])
+
+# Internationalization
+AC_PROG_INTLTOOL([0.23])
+GETTEXT_PACKAGE=florence
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE(GETTEXT_PACKAGE, ["florence"], [Package name for gettext])
+ALL_LINGUAS="fr"
+AM_GLIB_GNU_GETTEXT
+florencelocaledir='${prefix}/${DATADIRNAME}/locale'
+AC_SUBST(florencelocaledir)
 
 # Checks for programs.
 AC_PROG_CC
@@ -50,6 +60,7 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 # Checks for library functions.
 AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile docs/Makefile docs/C/Makefile docs/fr/Makefile])
+# Files generated
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/florence.layout docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
 AC_OUTPUT
 

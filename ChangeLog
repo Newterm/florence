@@ -82,7 +82,7 @@
 	* complete redesign of the drawing system for startup performance: remove some bloat and use less memory
 
 2008-12-08 François Agrech <f.agrech@gmail.com>
-        * Version 0.3.1
+	* Version 0.3.1
 	* Add an xsl for converting florence layout file to SVG
 	* Add style gconf parameter for theming
 	* Add GUI for configuring style
@@ -90,10 +90,16 @@
 	* Add 2 new styles
 
 2009-01-24 François Agrech <f.agrech@gmail.com>
-        * Version 0.3.2
+	* Version 0.3.2
 	* Bug fix: closing the config dialog several times now works
 	* Make the keyboard resizable from the window manager
 	* New gconf options: task_bar, resizable, always_on_top
 	* Rename some options
 	* Change the settings dialog according to gconf changes
+
+2009-02-16 François Agrech <f.agrech@gmail.com>
+	* Version 0.3.3
+	* I18n
+	* L10n en français
+	* Add icon to main window and preferences dialog
 

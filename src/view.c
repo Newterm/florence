@@ -24,6 +24,7 @@
 #include "trace.h"
 #include "settings.h"
 #include "keyboard.h"
+#include "tools.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
@@ -325,10 +326,15 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
 		}
 	}
-	if (status_focus_get(view->status)) {
-		cursor=gdk_cursor_new(GDK_HAND2);
-		gdk_window_set_cursor(GTK_WIDGET(view->window)->window, cursor);
-	} else gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
+	if (status_focus_get(view->status)) { if (!view->hand_cursor) {
+			cursor=gdk_cursor_new(GDK_HAND2);
+			gdk_window_set_cursor(GTK_WIDGET(view->window)->window, cursor);
+			view->hand_cursor=TRUE;
+		}
+	} else if (view->hand_cursor) {
+			gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
+			view->hand_cursor=FALSE;
+		}
 }
 
 /* on screen change event: check for composite extension */
@@ -512,6 +518,9 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	settings_changecb_register("colours/outline", view_redraw, view);
 	settings_changecb_register("colours/label", view_redraw, view);
 	settings_changecb_register("colours/activated", view_redraw, view);
+
+	/* set the window icon */
+	tools_set_icon(view->window);
 
 	return view;
 }

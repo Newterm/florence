@@ -372,6 +372,7 @@ char *alloca ();
 #else
 # undef bindtextdomain
 # define bindtextdomain(Domain, Directory) /* empty */
+# define bind_textdomain_codeset(Domain,Codeset) (Codeset) 
 # undef textdomain
 # define textdomain(Domain) /* empty */
 # define _(Text) Text

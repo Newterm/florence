@@ -1,15 +1,12 @@
-This release focuses on usability.
-The settings dialog has changed to allow more control on visual settings.
-The zoom scrollbar has been replaced with the ability to resize the window
-more naturally from the window manager.
+The big change in this release is internationalization.
+The project has been internationalized with gettext and localized in french.
+In addition to that, some minor bugs have been fixed.
 
 Changelog:
 
-2009-01-24 François Agrech <f.agrech@gmail.com>
-        * Version 0.3.2
-	* Bug fix: closing the config dialog several times now works
-	* Make the keyboard resizable from the window manager
-	* New gconf options: task_bar, resizable, always_on_top
-	* Rename some options
-	* Change the settings dialog according to gconf changes
+2009-02-16 François Agrech <f.agrech@gmail.com>
+	* Version 0.3.3
+	* i18n
+	* l10n en français
+	* add icon to main window and preferences dialog
 

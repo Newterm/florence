@@ -36,6 +36,7 @@
 #include "trace.h"
 #include "layoutreader.h"
 #include "style.h"
+#include "tools.h"
 
 #define FLO_SETTINGS_ROOT "/apps/florence"
 #if GTK_CHECK_VERSION(2,12,0)
@@ -361,8 +362,6 @@ void settings_rollback(GtkWidget *window, GtkWidget *button)
 
 void settings_close(GtkWidget *window, GtkWidget *button)
 {
-	GtkWidget *dialog, *label;
-	gint result;
 	static gboolean closed=FALSE;
 	if (closed) return;
 
@@ -371,14 +370,8 @@ void settings_close(GtkWidget *window, GtkWidget *button)
 	settings_notify_id=0;
 	if ((gconfchangeset && gconf_change_set_size(gconfchangeset)>0)||
 		(rollback && gconf_change_set_size(rollback)>0)) {
-		dialog=gtk_dialog_new_with_buttons("Corfirm", GTK_WINDOW(window),
-			GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT, GTK_STOCK_APPLY,
-			GTK_RESPONSE_ACCEPT, FLO_SETTINGS_ICON_CANCEL, GTK_RESPONSE_REJECT, NULL);
-		label=gtk_label_new(_("Discard changes?"));
-		gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
-		gtk_widget_show_all(dialog);
-		result=gtk_dialog_run(GTK_DIALOG(dialog));
-		if (result==GTK_RESPONSE_ACCEPT) {
+		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Corfirm"), GTK_WINDOW(window),
+			GTK_STOCK_APPLY, FLO_SETTINGS_ICON_CANCEL, _("Discard changes?"))) {
 			settings_commit(window, button);
 		} else settings_rollback(NULL, NULL);
 	}
@@ -502,5 +495,8 @@ void settings(void)
 	settings_notify_id=gconf_client_notify_add(gconfclient, FLO_SETTINGS_ROOT,
 		(GConfClientNotifyFunc)settings_update, NULL, NULL, NULL);
 	glade_xml_signal_autoconnect(gladexml);
+
+	/* set window icon */
+	tools_set_icon(GTK_WINDOW(glade_xml_get_widget(gladexml, "flo_config_window")));
 }
 

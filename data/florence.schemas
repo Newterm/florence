@@ -33,6 +33,36 @@
 		</schema>
 
 		<schema>
+			<key>/schemas/apps/florence/window/xpos</key>
+			<applyto>/apps/florence/window/xpos</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>0</default>
+			<locale name="C">
+				<short>Position along the X axis</short>
+				<long>Horizontal position of the keyboard window on the screen (in pixel).</long>
+			</locale>
+			<locale name="fr">
+				<short>Position sur l'axe x</short>
+				<long>Position horizontale de la fenêtre du clavier à l'écran (en pixel).</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/ypos</key>
+			<applyto>/apps/florence/window/ypos</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>0</default>
+			<locale name="C">
+				<short>Position along the Y axis</short>
+				<long>Vertical position of the keyboard window on the screen (in pixel).</long>
+			</locale>
+			<locale name="fr">
+				<short>Position sur l'axe x</short>
+				<long>Position verticale de la fenêtre du clavier à l'écran (en pixel).</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/window/zoom</key>
 			<applyto>/apps/florence/window/zoom</applyto>
 			<owner>florence</owner>

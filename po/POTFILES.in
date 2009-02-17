@@ -1,0 +1,14 @@
+data/florence.desktop.in
+data/florence.glade
+src/florence.c
+src/keyboard.c
+src/layoutreader.c
+src/main.c
+src/settings.c
+src/status.c
+src/style.c
+src/trace.c
+src/trayicon.c
+src/view.c
+src/tools.c
+

@@ -2,11 +2,11 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "Janvier 2009">
+	<!ENTITY date "Fevrier 2009">
 ]>
 <article id="index" lang="fr">
 <articleinfo>
-	<date>2009-01-24</date>
+	<date>2009-02-16</date>
 	<title>Documentation du clavier virtuel Florence</title>
 	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
@@ -35,7 +35,7 @@
 	<para>Sur <ulink url="http://fedoraproject.org">Fedora</ulink>, vous pouvez simplement utiliser le gestionnaire de paquetages. En la ligne de commande, tapez:
 		<prompt>#</prompt> <userinput>yum install florence</userinput>
 	</para>
-	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.2 au 24 janvier 2009). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.3.3 au 16 février 2009). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Préparation des dépendances</title>
 		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
@@ -72,8 +72,8 @@
 		<title>Installation</title>
 		<para>L'installation de Florence se déroule comme l'installation de n'importe quel programme qui utilise les GNU autotools. Ouvrez un terminal et lancez les commandes suivantes:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.2.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.3.2</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.3.3.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.3</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -89,7 +89,7 @@
 		<title>Désinstallation</title>
 		<para>Désinstaller est aussi facile qu'installer.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.3.2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.3.3</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>Pour Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>

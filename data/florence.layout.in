@@ -26,7 +26,7 @@
 	<name>Standard keyboard</name>
 	<author>François Agrech</author>
 	<date>2009-01-24</date>
-	<florence_version>0.3.2</florence_version>
+	<florence_version>@VERSION@</florence_version>
 </informations>
 
 <xi:include href="style/florence.style"/>

@@ -40,7 +40,7 @@ function check {
 function run {
 	check $1
 	echo "executing \"$*\""
-	eval $*
+	eval $* >/dev/null
 }
 
 # go to project directory
@@ -55,6 +55,9 @@ then
 fi
 
 run aclocal
+CURR_PWD=$PWD
+run glib-gettextize --force --copy
+run intltoolize --copy --force --automake
 run autoheader
 run automake
 run autoconf

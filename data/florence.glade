@@ -298,7 +298,7 @@
                       <widget class="GtkCheckButton" id="flo_task_bar">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes" context="yes">Apparaître dans la barre des tâches.</property>
+                        <property name="tooltip" translatable="yes" context="yes">Appear in task bar.</property>
                         <property name="label" translatable="yes" context="yes">Task bar</property>
                         <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>

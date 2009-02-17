@@ -115,7 +115,7 @@ void flo_switch_mode (struct view *view, gboolean auto_hide)
 /* Callback called by the layour reader while parsing the layout file. Provides informations about the layout */
 void flo_layout_infos(char *name, char *version)
 {
-	flo_info("Layout name: \"%s\"", name);
+	flo_info(_("Layout name: \"%s\""), name);
 	if (strcmp(version, VERSION)) {
 		flo_warn(_("Layout version %s is different from program version %s"), version, VERSION);
 	}

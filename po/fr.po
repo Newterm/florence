@@ -1,0 +1,556 @@
+# French translations for Florence Gnome virtual keyboard package
+# Traductions françaises du paquet Florence Gnome virtual keyboard.
+# Copyright (C) 2009 François Agrech
+# This file is distributed under the same license as the Florence Gnome virtual keyboard package.
+# François Agrech <f.agrech@gmail.com>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Florence Gnome virtual keyboard 0.3.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-02-13 18:35+0100\n"
+"PO-Revision-Date: 2009-02-11 11:08+0100\n"
+"Last-Translator: François Agrech <f.agrech@gmail.com>\n"
+"Language-Team: French <traduc@traduc.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../data/florence.desktop.in.h:1 ../src/trayicon.c:36 ../src/trayicon.c:150
+msgid "Florence Virtual Keyboard"
+msgstr "Clavier virtuel Florence"
+
+#: ../data/florence.glade.h:1
+msgid "Activated key background color"
+msgstr "Couleur de fond de la touche activée"
+
+#: ../data/florence.glade.h:2
+msgid "Allow to resize window."
+msgstr "Autoriser le redimensionnement de la fenêtre."
+
+#: ../data/florence.glade.h:3
+msgid "Always on top\t"
+msgstr "Toujours au dessus"
+
+#: ../data/florence.glade.h:4
+msgid "Appear in task bar."
+msgstr "Apparaître dans la barre des tâches."
+
+#: ../data/florence.glade.h:5
+msgid "Apply changes"
+msgstr "Appliquer les changements"
+
+#: ../data/florence.glade.h:6
+msgid "Auto click"
+msgstr "Click automatique"
+
+#: ../data/florence.glade.h:7
+msgid "Auto click timeout"
+msgstr "Temporisation du click automatique"
+
+#: ../data/florence.glade.h:8
+msgid "Auto hide\t"
+msgstr "Disparition automatique"
+
+#: ../data/florence.glade.h:9
+msgid "Auto hide (only show when an editable widget is selected)."
+msgstr ""
+"Disparition automatique (n'apparaître que lorsqu'un objet éditable est "
+"sélectionné)"
+
+#: ../data/florence.glade.h:10
+msgid "Cancel"
+msgstr "Abandonner"
+
+#: ../data/florence.glade.h:11
+msgid "Decorate window"
+msgstr "Décorer la fenêtre"
+
+#: ../data/florence.glade.h:12
+msgid "Decorated"
+msgstr "Décorée"
+
+#: ../data/florence.glade.h:13
+msgid "Extensions"
+msgstr "Extensions"
+
+#: ../data/florence.glade.h:14
+msgid "Florence Settings"
+msgstr "Paramètres de Florence"
+
+#: ../data/florence.glade.h:15
+msgid "Function keys"
+msgstr "Touches de fonction"
+
+#: ../data/florence.glade.h:16
+msgid "Keep ratio"
+msgstr "Garder les proportions"
+
+#: ../data/florence.glade.h:17
+msgid "Keep the keyboard on top."
+msgstr "Garder le clavier au dessus."
+
+#: ../data/florence.glade.h:18
+msgid "Keep window ratio when resizing window."
+msgstr "Garder les proportions de la fenêtre lors du redimenssionement"
+
+#: ../data/florence.glade.h:19
+msgid "Key background color"
+msgstr "Couleur de fond des touches"
+
+#: ../data/florence.glade.h:20
+msgid "Key background color when the mouse is over"
+msgstr "Couleur de fond de la touche sous le pointeur"
+
+#: ../data/florence.glade.h:21
+msgid "Key with mouve over background color"
+msgstr "Couleur de fond de la touche pointée"
+
+#: ../data/florence.glade.h:22
+msgid "Labels and symbols color"
+msgstr "Couleur du symbole des touches"
+
+#: ../data/florence.glade.h:23
+msgid "Navigation keys"
+msgstr "Touches de navigation"
+
+#: ../data/florence.glade.h:24
+msgid "Normal key background color"
+msgstr "Couleur de fond des touches normales"
+
+#: ../data/florence.glade.h:25
+msgid "Numeric keys"
+msgstr "Touches numériques"
+
+#: ../data/florence.glade.h:26
+msgid "Quit preferences"
+msgstr "Quitter les préférences"
+
+#: ../data/florence.glade.h:27
+msgid "Resizable"
+msgstr "Redimenssionable"
+
+#: ../data/florence.glade.h:28
+msgid "Show function keys"
+msgstr "Affiche les touches de fonction"
+
+#: ../data/florence.glade.h:29
+msgid "Show the arrow keys"
+msgstr "Affiche les touches de navigation (flèches)"
+
+#: ../data/florence.glade.h:30
+msgid "Show the numpad"
+msgstr "Affiche le pavé numérique"
+
+#: ../data/florence.glade.h:31
+msgid "Style"
+msgstr "Style"
+
+#: ../data/florence.glade.h:32
+msgid "Style preview"
+msgstr "Aperçu du style"
+
+#: ../data/florence.glade.h:33
+msgid "Task bar"
+msgstr "Barre des tâches"
+
+#: ../data/florence.glade.h:34
+msgid "Transparent"
+msgstr "Transparent"
+
+#: ../data/florence.glade.h:35
+msgid "Transparent mode"
+msgstr "Mode transparent"
+
+#: ../data/florence.glade.h:36
+msgid "Window"
+msgstr "Fenêtre"
+
+#: ../src/florence.c:118
+#, c-format
+msgid "Layout name: \"%s\""
+msgstr "Nom de l'agencement du clavier: \"%s\""
+
+#: ../src/florence.c:120
+#, c-format
+msgid "Layout version %s is different from program version %s"
+msgstr ""
+"La version de l'agencement %s est différente de la version du programme %s"
+
+#: ../src/florence.c:138
+msgid "XKB version mismatch"
+msgstr "Version de XKB incompatble avec le serveur"
+
+#: ../src/florence.c:282
+msgid "Unable to allocate memory for florence"
+msgstr "Echec d'allocation de mémoire pour florence"
+
+#: ../src/keyboard.c:48
+#, c-format
+msgid "[new key] code=%d x=%f y=%f w=%f h=%f shape=%s"
+msgstr "[nouvelle touche] code=%d x=%f y=%f l=%f h=%f forme=%s"
+
+#: ../src/keyboard.c:102
+#, c-format
+msgid "[new keyboard] name=%s"
+msgstr "[nouveau clavier] nom=%s"
+
+#. allocate memory for keyboard
+#: ../src/keyboard.c:105
+msgid "Unable to allocate memory for keyboard"
+msgstr "Echec d'allocation de mémoire pour le clavier"
+
+#: ../src/layoutreader.c:95
+#, c-format
+msgid "Unknown placement %s"
+msgstr "Placement inconnu %s"
+
+#: ../src/layoutreader.c:111
+msgid "Out of element"
+msgstr "Sortie de l'élement"
+
+#: ../src/layoutreader.c:119 ../src/layoutreader.c:144
+msgid "layout parse error"
+msgstr "Erreur d'analyse du fichier d'agencement"
+
+#: ../src/layoutreader.c:121
+#, c-format
+msgid "layout parse error: %s not found"
+msgstr "Erreur d'analyse du fichier d'agencement: %s non trouvé"
+
+#: ../src/layoutreader.c:135
+#, c-format
+msgid "%s not found"
+msgstr "%s non trouvé"
+
+#: ../src/layoutreader.c:165
+msgid "Layout parse error: null node name"
+msgstr "Erreur d'analyse du fichier d'agencement: nom de noeud vide"
+
+#: ../src/layoutreader.c:179
+#, c-format
+msgid "Unknown element: %s"
+msgstr "Element inconnu: %s"
+
+#: ../src/layoutreader.c:192
+msgid "No informations element in layout"
+msgstr "Pas d'élément informations dans le fichier d'agencement"
+
+#: ../src/layoutreader.c:201
+msgid "informations element not closed in layout"
+msgstr "L'élement informations n'est pas fermé dans le fichier d'agencement"
+
+#: ../src/layoutreader.c:215
+#, c-format
+msgid "Unclosed symbol element: %s"
+msgstr "L'élement symbol n'est pas fermé"
+
+#: ../src/layoutreader.c:228
+#, c-format
+msgid "Read shape: 'svg' expected: '%s' found "
+msgstr "Lectude de la forme: 'svg' attendu: %s trouvé"
+
+#: ../src/layoutreader.c:232
+#, c-format
+msgid "Unclosed shape element: %s %s"
+msgstr "L'élement shape n'est pas fermé"
+
+#: ../src/layoutreader.c:241
+msgid "No style element in layout"
+msgstr "Pas d'élément style dans l'agencement"
+
+#: ../src/layoutreader.c:255
+msgid "No keyboard element in layout"
+msgstr "Pas d'élément keyboard dans l'agencement"
+
+#: ../src/layoutreader.c:263
+msgid "keyboard element not closed in layout"
+msgstr "L'élement keyboard n'est pas fermé dans le fichier d'agencement"
+
+#: ../src/layoutreader.c:282
+msgid "Unclosed informations element in layout"
+msgstr "L'élément informations n'est pas fermé dans le fichier d'agencement"
+
+#: ../src/layoutreader.c:329
+#, c-format
+msgid "Unable to open file %s"
+msgstr "Echec d'ouverture du fichier %s"
+
+#: ../src/layoutreader.c:330
+#, c-format
+msgid "Using layout file %s"
+msgstr "Utilisation du fichier d'agencement %s"
+
+#: ../src/layoutreader.c:333
+#, c-format
+msgid "Unable to activate schema validation from %s."
+msgstr "Echec de l'activation de la validation du schema depuis %s"
+
+#: ../src/layoutreader.c:335
+msgid "No layout element in layout"
+msgstr "Pas d'alement layour dans le fichier d'agencement"
+
+#: ../src/layoutreader.c:344
+#, c-format
+msgid "Invalid layout: check %s"
+msgstr "Agencement invalide: vérifiez %s"
+
+#: ../src/main.c:68
+#, c-format
+msgid "Florence version %s"
+msgstr "Florence version %s"
+
+#: ../src/main.c:77
+msgid "Enable accessibility"
+msgstr "Activer l'accéssebilité"
+
+#: ../src/main.c:80
+msgid ""
+"Accessibility is disabled.\n"
+"Florence requires that accessibility is enabled to function.\n"
+"Click OK to enable accessibility and restart GNOME.\n"
+"Alternatively, you may enable accessibility with gnome-at-properties."
+msgstr ""
+"L'accessibilité est désactivée.\n"
+"Florence nécessite que l'accessibilité soit activée pour fonctionner.\n"
+"Cliquez sur le bouton OK pour activer l'accessibilité et redémarrer GNOME.\n"
+"Alternativement, vous pouvez aussi activer l'accessibilité avec gnome-at-"
+"properties."
+
+#: ../src/main.c:150
+#, c-format
+msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
+msgstr "%s - Florence est un clavier virtuel simple pour Gnome.\n"
+
+#: ../src/main.c:152
+#, c-format
+msgid "Usage: %s [OPTION]...\n"
+msgstr "Utilisation: %s [OPTION|...\n"
+
+#: ../src/main.c:153
+#, c-format
+msgid ""
+"Options:\n"
+"  -h, --help          display this help and exit\n"
+"  -V, --version\t      output version information and exit\n"
+"  -c, --config        open configuration window\n"
+"  -d, --debug         print debug information to stdout\n"
+"\n"
+"Report bugs to <f.agerch@gmail.com>.\n"
+"More informations at <http://florence.sourceforge.net>.\n"
+msgstr ""
+"Options:\n"
+"  -h, --help          afficher cette aide et quitter\n"
+"  -V, --version       afficher la version et quitter\n"
+"  -c, --config        ouvrir la fenêtre de configuration\n"
+"  -d, --debug         donner des informations pour le déboggage dans stdout\n"
+"\n"
+
+#: ../src/settings.c:84
+#, c-format
+msgid "Settings/get_full_path: buffer overflow : %s/%s"
+msgstr "Settings/get_full_path: dépassement de buffer: %s/%s"
+
+#: ../src/settings.c:130
+#, c-format
+msgid "Unable to create preview for style %s"
+msgstr "Impossible de créer un aperçu pour le style %s"
+
+#: ../src/settings.c:142
+#, c-format
+msgid "Couldn't open directory %s"
+msgstr "Impossible d'ouvrir le répertoire %s"
+
+#: ../src/settings.c:233 ../src/trayicon.c:63
+#, c-format
+msgid "Unable to open %s"
+msgstr "Impossible d'ouvrir %s"
+
+#: ../src/settings.c:308
+msgid "Can't get gconf value %"
+msgstr "Echec de récupération de la valeur gconf %s"
+
+#: ../src/settings.c:377
+msgid "Discard changes?"
+msgstr "Abandonner les changements?"
+
+#: ../src/settings.c:429 ../src/settings.c:446 ../src/settings.c:456
+#, c-format
+msgid "Incorrect gconf value for %s"
+msgstr "Valeur gconf incorrecte pour %s"
+
+#: ../src/settings.c:471
+#, c-format
+msgid "%s is not a directory"
+msgstr "%s n'est pas un répertoire"
+
+#: ../src/settings.c:476
+#, c-format
+msgid "Unable to create directory %s"
+msgstr "Impossible de créer le répertoire %s"
+
+#: ../src/settings.c:492
+msgid "Another instance of Florence settings dialog is already running"
+msgstr "Une autre instance des paramètres de Florence est déjà lancée"
+
+#: ../src/status.c:141
+msgid "Unable to allocate memory for status"
+msgstr "Impossible d'allouer de la mémoire pour le status"
+
+#: ../src/style.c:59
+#, c-format
+msgid "Unknown style color: %d"
+msgstr "Couleur de style inconnue: %d"
+
+#: ../src/style.c:69
+#, c-format
+msgid "can't parse color %s"
+msgstr "Echec d'analyse de la couleur %s"
+
+#: ../src/style.c:121 ../src/style.c:351 ../src/style.c:366
+#, c-format
+msgid "Unable to parse svg from layout file: %s"
+msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
+
+#: ../src/style.c:122
+#, c-format
+msgid "Bad symbol: should have either svg or label :%s"
+msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
+
+#: ../src/style.c:166
+#, c-format
+msgid "unknown slant for font %s: %d"
+msgstr "dérivation de la police %s inconnu: %d"
+
+#: ../src/style.c:234
+#, c-format
+msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
+msgstr ""
+"Echec de l'analyse du svg depuis le ficher d'agencement: svg=\"%s\" erreur="
+"\"%s\""
+
+#: ../src/style.c:238
+#, c-format
+msgid "[new shape] name=%s svg=\"%s\""
+msgstr "[nouvelle forme] nom=%s svg=\"%s\""
+
+#: ../src/style.c:259
+#, c-format
+msgid "Shape doesn't exist: %s"
+msgstr "La forme n'existe pas: %s"
+
+#: ../src/style.c:297
+#, c-format
+msgid "Unable to create %s because $HOME/.florence does not exist"
+msgstr "Impossible de créer %s car $HOME/.florence n'existe pas"
+
+#: ../src/style.c:304
+#, c-format
+msgid "Unable to open file %s for read"
+msgstr "Impossible d'ouvrir le fichier %s en lecture"
+
+#: ../src/style.c:305
+#, c-format
+msgid "Unable to open file %s for write"
+msgstr "Impossible d'ouvrir le fichier %s en écriture"
+
+#: ../src/style.c:310
+msgid "Unable to allocate memory for css read buffer"
+msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
+
+#: ../src/trace.c:42
+#, c-format
+msgid "FATAL ERROR: "
+msgstr "ERREUR FATALE: "
+
+#: ../src/trace.c:48
+#, c-format
+msgid "If you need help, please rerun with the -d switch (debug)\n"
+msgstr ""
+"Si vous avez besoin d'aide, veuillez relancer avec l'option -d (debug) SVP\n"
+
+#: ../src/trace.c:49
+#, c-format
+msgid ""
+"and send the output to f.agrech@gmail.com\n"
+"\n"
+msgstr ""
+"et envoyez le résultat à f.agrech@gmail.com\n"
+"\n"
+
+#: ../src/trace.c:66
+#, c-format
+msgid "WARNING: "
+msgstr "ATTENTION: "
+
+#: ../src/trace.c:76
+#, c-format
+msgid "ERROR: "
+msgstr "ERREUR: "
+
+#: ../src/trayicon.c:37
+msgid "Copyright (C) 2008, 2009 François Agrech"
+msgstr "Copyright (C) 2008, 2009 François Agrech"
+
+#: ../src/trayicon.c:40
+msgid ""
+"Copyright (C) 2008, 2009 François Agrech\n"
+"\n"
+"This program is free software; you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation; either version 2, or (at your option)\n"
+"any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software Foundation,\n"
+"Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."
+msgstr ""
+"Copyright (C) 2008, 2009 François Agrech\n"
+"\n"
+"Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou\n"
+"le modifier dans les conditions de la Licence Générale Publique GNU,\n"
+"comme publiée par la Free Software Foundation; soit en version 2, ou\n"
+"(selon votre choix) n'importe quelle version ultérieure.\n"
+"\n"
+"Ce programme est distribué dans l'espoir qu'il sera utile, mais\n"
+"SANS AUCUNE GUARANTIE; même pas la guarantie implicite de\n"
+"CONVENIR A UNE UTILISATION QUELCONQUE. Consultez la Licence Publique\n"
+"Générale GNU (en anglais) pour plus de détails.\n"
+"\n"
+"Vous devriez avoir reçu une copie de la Licence Publique Générale GNU\n"
+"(en anglais) avec ce programme; sinon, écrivez à la Free Software\n"
+"Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111 1307, USA.\n"
+"\n"
+"Seule la version complète en anglais de la Licence Publique Générale GNU\n"
+"(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
+"programme a une valeur légale et s'applique à ce programme."
+
+#: ../src/trayicon.c:92
+msgid "_Quit"
+msgstr "_Quitter"
+
+#: ../src/trayicon.c:98
+msgid "_Help"
+msgstr "_Aide"
+
+#: ../src/trayicon.c:104
+msgid "_About"
+msgstr "A p_ropos"
+
+#: ../src/trayicon.c:109
+msgid "_Preferences"
+msgstr "_Préférences"
+
+#: ../src/view.c:232
+msgid "Unable to create mask"
+msgstr "Echec de création du masque"
+
+#: ../src/view.c:478
+msgid "Unable to allocate memory for view"
+msgstr "Echec d'allocation de la mémoire pour la vue"

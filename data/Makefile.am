@@ -8,7 +8,9 @@ schemadir=@GCONF_SCHEMA_FILE_DIR@
 schema_DATA=florence.schemas
 
 desktopdir=$(datadir)/applications
-desktop_DATA=florence.desktop
+desktop_in_files=florence.desktop.in
+desktop_DATA=$(desktop_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
 
 iconsdir=$(datadir)/icons
 icons_DATA=florence.svg
