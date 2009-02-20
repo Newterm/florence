@@ -286,6 +286,9 @@ void view_set_task_bar(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
+	if (settings_get_bool("window/resizable")) {
+		gtk_widget_set_size_request(GTK_WIDGET(view->window), view->vwidth, view->vheight);
+	}
 	view_resize(view);
 }
 
@@ -368,7 +371,8 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	gtk_window_get_size(view->window, &w, &h);
 	if ((w!=view->width) || (h!=view->height)) {
 		view->zoom=(gdouble)w/view->vwidth;
-		settings_set_double("window/zoom", view->zoom);
+		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
+		else settings_set_double("window/zoom", view->zoom);
 		view->width=w; view->height=h;
 		if (view->hitmap) g_free(view->hitmap);
 		view_hitmap_create(view);
