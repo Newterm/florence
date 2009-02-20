@@ -21,6 +21,7 @@ DEPENDANCIES
       * libxml >= 2.0
       * cairo
       * librsvg
+      * gettext
       * (optional) libgnome >=2.0
 
 QUICK INSTALL
@@ -32,12 +33,12 @@ QUICK INSTALL
 
             $ su
 	    # urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel at-spi-devel \
-	      libcairo-devel libgnome2-devel librsvg2-devel
+	      libcairo-devel libgnome2-devel librsvg2-devel gettext
 
         Ubuntu/debian:
 
             $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
-              libatspi-dev librsvg2-dev libgnome2-dev libcairo2-dev
+              libatspi-dev librsvg2-dev libgnome2-dev libcairo2-dev gettext
             
       * Open a terminal and type (don't type the $ or #):
 
