@@ -61,6 +61,6 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
 # Files generated
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/florence.layout docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/florence.xml.in docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
 AC_OUTPUT
 

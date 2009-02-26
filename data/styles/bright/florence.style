@@ -22,34 +22,37 @@
 <style xmlns="http://florence.sourceforge.net"
 	xmlns:xlink="http://www.w3.org/1999/xlink"
 	xmlns:xi="http://www.w3.org/2001/XInclude">
+	<shapes>
 	<shape>
 		<name>default</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
 		<name>Wide</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
 		<name>XL</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
 		<name>XXL</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
 		<name>High</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
 		<name>Space</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
 		<name>Return</name>
-		<xi:include href="style/default.svg"/>
+		<xi:include href="default.svg"/>
 	</shape>
+	</shapes>
+	<symbols>
 	<symbol>
 		<name>Control_[LR]</name>
 		<label>ctrl</label>
@@ -246,4 +249,5 @@
 		<name>(.*)tilde</name>
 		<label>~</label>
 	</symbol>
+	</symbols>
 </style>

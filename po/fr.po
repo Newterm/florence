@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-19 11:15+0100\n"
+"POT-Creation-Date: 2009-02-23 22:35+0100\n"
 "PO-Revision-Date: 2009-02-11 11:08+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -79,7 +79,7 @@ msgstr "Extensions"
 msgid "Florence Settings"
 msgstr "Paramètres de Florence"
 
-#: ../data/florence.glade.h:15
+#: ../data/florence.glade.h:15 ../data/florence.xml.in.in.h:1
 msgid "Function keys"
 msgstr "Touches de fonction"
 
@@ -111,7 +111,7 @@ msgstr "Couleur de fond de la touche pointée"
 msgid "Labels and symbols color"
 msgstr "Couleur du symbole des touches"
 
-#: ../data/florence.glade.h:23
+#: ../data/florence.glade.h:23 ../data/florence.xml.in.in.h:2
 msgid "Navigation keys"
 msgstr "Touches de navigation"
 
@@ -119,7 +119,7 @@ msgstr "Touches de navigation"
 msgid "Normal key background color"
 msgstr "Couleur de fond des touches normales"
 
-#: ../data/florence.glade.h:25
+#: ../data/florence.glade.h:25 ../data/florence.xml.in.in.h:3
 msgid "Numeric keys"
 msgstr "Touches numériques"
 
@@ -167,134 +167,85 @@ msgstr "Mode transparent"
 msgid "Window"
 msgstr "Fenêtre"
 
-#: ../src/florence.c:118
+#: ../data/florence.xml.in.in.h:4
+msgid "Standard keyboard"
+msgstr "Clavier standard"
+
+#: ../src/florence.c:130
+msgid "XKB version mismatch"
+msgstr "Version de XKB incompatble avec le serveur"
+
+#: ../src/florence.c:148
+#, c-format
+msgid "[new extension] name=%s id=%s"
+msgstr "[nouvelle extension] nom=%s id=\"%s\""
+
+#: ../src/florence.c:264
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:120
+#: ../src/florence.c:266
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:138
-msgid "XKB version mismatch"
-msgstr "Version de XKB incompatble avec le serveur"
-
-#: ../src/florence.c:282
+#: ../src/florence.c:294
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
-#: ../src/keyboard.c:48
+#: ../src/keyboard.c:63
 #, c-format
-msgid "[new key] code=%d x=%f y=%f w=%f h=%f shape=%s"
-msgstr "[nouvelle touche] code=%d x=%f y=%f l=%f h=%f forme=%s"
-
-#: ../src/keyboard.c:102
-#, c-format
-msgid "[new keyboard] name=%s"
-msgstr "[nouveau clavier] nom=%s"
+msgid "[new keyboard] name=%s id=%s"
+msgstr "[nouveau clavier] nom=%s id=%s"
 
 #. allocate memory for keyboard
-#: ../src/keyboard.c:105
+#: ../src/keyboard.c:66
 msgid "Unable to allocate memory for keyboard"
 msgstr "Echec d'allocation de mémoire pour le clavier"
 
-#: ../src/layoutreader.c:95
+#: ../src/keyboard.c:73
+msgid "Unreachable code in keyboard_new"
+msgstr "Code impossible à atteindre dans keyboard_new"
+
+#: ../src/layoutreader.c:85
 #, c-format
 msgid "Unknown placement %s"
 msgstr "Placement inconnu %s"
 
-#: ../src/layoutreader.c:111
-msgid "Out of element"
-msgstr "Sortie de l'élement"
-
-#: ../src/layoutreader.c:119 ../src/layoutreader.c:144
-msgid "layout parse error"
-msgstr "Erreur d'analyse du fichier d'agencement"
-
-#: ../src/layoutreader.c:121
+#: ../src/layoutreader.c:315
 #, c-format
-msgid "layout parse error: %s not found"
-msgstr "Erreur d'analyse du fichier d'agencement: %s non trouvé"
+msgid "Unable to open file %s, using default %s"
+msgstr ""
+"Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
+"défaut %s"
 
-#: ../src/layoutreader.c:135
+#: ../src/layoutreader.c:325
 #, c-format
-msgid "%s not found"
-msgstr "%s non trouvé"
+msgid "%s is a directory and no matching file has been found inside"
+msgstr ""
+"%s est in répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
-#: ../src/layoutreader.c:165
-msgid "Layout parse error: null node name"
-msgstr "Erreur d'analyse du fichier d'agencement: nom de noeud vide"
-
-#: ../src/layoutreader.c:179
+#: ../src/layoutreader.c:332
 #, c-format
-msgid "Unknown element: %s"
-msgstr "Element inconnu: %s"
+msgid "Unable to open file %s."
+msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/layoutreader.c:192
-msgid "No informations element in layout"
-msgstr "Pas d'élément informations dans le fichier d'agencement"
-
-#: ../src/layoutreader.c:201
-msgid "informations element not closed in layout"
-msgstr "L'élement informations n'est pas fermé dans le fichier d'agencement"
-
-#: ../src/layoutreader.c:215
+#: ../src/layoutreader.c:339
 #, c-format
-msgid "Unclosed symbol element: %s"
-msgstr "L'élement symbol n'est pas fermé"
+msgid "%s does not valdate against %s"
+msgstr "%s n'est pas validé par %s"
 
-#: ../src/layoutreader.c:228
+#: ../src/layoutreader.c:340
 #, c-format
-msgid "Read shape: 'svg' expected: '%s' found "
-msgstr "Lectude de la forme: 'svg' attendu: %s trouvé"
+msgid "Using file %s"
+msgstr "Utilisation du fichier %s"
 
-#: ../src/layoutreader.c:232
+#: ../src/layoutreader.c:348
 #, c-format
-msgid "Unclosed shape element: %s %s"
-msgstr "L'élement shape n'est pas fermé"
-
-#: ../src/layoutreader.c:241
-msgid "No style element in layout"
-msgstr "Pas d'élément style dans l'agencement"
-
-#: ../src/layoutreader.c:255
-msgid "No keyboard element in layout"
-msgstr "Pas d'élément keyboard dans l'agencement"
-
-#: ../src/layoutreader.c:263
-msgid "keyboard element not closed in layout"
-msgstr "L'élement keyboard n'est pas fermé dans le fichier d'agencement"
-
-#: ../src/layoutreader.c:282
-msgid "Unclosed informations element in layout"
-msgstr "L'élément informations n'est pas fermé dans le fichier d'agencement"
-
-#: ../src/layoutreader.c:329
-#, c-format
-msgid "Unable to open file %s"
-msgstr "Echec d'ouverture du fichier %s"
-
-#: ../src/layoutreader.c:330
-#, c-format
-msgid "Using layout file %s"
-msgstr "Utilisation du fichier d'agencement %s"
-
-#: ../src/layoutreader.c:333
-#, c-format
-msgid "Unable to activate schema validation from %s."
-msgstr "Echec de l'activation de la validation du schema depuis %s"
-
-#: ../src/layoutreader.c:335
-msgid "No layout element in layout"
-msgstr "Pas d'alement layour dans le fichier d'agencement"
-
-#: ../src/layoutreader.c:344
-#, c-format
-msgid "Invalid layout: check %s"
-msgstr "Agencement invalide: vérifiez %s"
+msgid "File %s does not contain xml data"
+msgstr "Le fichier %s ne contient pas de donnée xml"
 
 #: ../src/main.c:67
 #, c-format
@@ -339,49 +290,49 @@ msgstr ""
 msgid "Settings/get_full_path: buffer overflow : %s/%s"
 msgstr "Settings/get_full_path: dépassement de buffer: %s/%s"
 
-#: ../src/settings.c:131
+#: ../src/settings.c:128
 #, c-format
 msgid "Unable to create preview for style %s"
 msgstr "Impossible de créer un aperçu pour le style %s"
 
-#: ../src/settings.c:143
+#: ../src/settings.c:139
 #, c-format
 msgid "Couldn't open directory %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
 
-#: ../src/settings.c:234 ../src/trayicon.c:63
+#: ../src/settings.c:230 ../src/trayicon.c:63
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: ../src/settings.c:309
+#: ../src/settings.c:305
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings.c:373
+#: ../src/settings.c:369
 msgid "Corfirm"
 msgstr "Confirmation"
 
-#: ../src/settings.c:374
+#: ../src/settings.c:370
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
-#: ../src/settings.c:422 ../src/settings.c:439 ../src/settings.c:449
+#: ../src/settings.c:418 ../src/settings.c:435 ../src/settings.c:445
 #, c-format
 msgid "Incorrect gconf value for %s"
 msgstr "Valeur gconf incorrecte pour %s"
 
-#: ../src/settings.c:464
+#: ../src/settings.c:460
 #, c-format
 msgid "%s is not a directory"
 msgstr "%s n'est pas un répertoire"
 
-#: ../src/settings.c:469
+#: ../src/settings.c:465
 #, c-format
 msgid "Unable to create directory %s"
 msgstr "Impossible de créer le répertoire %s"
 
-#: ../src/settings.c:485
+#: ../src/settings.c:481
 msgid "Another instance of Florence settings dialog is already running"
 msgstr "Une autre instance des paramètres de Florence est déjà lancée"
 
@@ -399,54 +350,54 @@ msgstr "Couleur de style inconnue: %d"
 msgid "can't parse color %s"
 msgstr "Echec d'analyse de la couleur %s"
 
-#: ../src/style.c:121 ../src/style.c:351 ../src/style.c:366
+#: ../src/style.c:120 ../src/style.c:346 ../src/style.c:361
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
 
-#: ../src/style.c:122
+#: ../src/style.c:121
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
 
-#: ../src/style.c:166
+#: ../src/style.c:165
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "dérivation de la police %s inconnu: %d"
 
-#: ../src/style.c:234
+#: ../src/style.c:229
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Echec de l'analyse du svg depuis le ficher d'agencement: svg=\"%s\" erreur="
 "\"%s\""
 
-#: ../src/style.c:238
+#: ../src/style.c:233
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nouvelle forme] nom=%s svg=\"%s\""
 
-#: ../src/style.c:259
+#: ../src/style.c:254
 #, c-format
 msgid "Shape doesn't exist: %s"
 msgstr "La forme n'existe pas: %s"
 
-#: ../src/style.c:297
+#: ../src/style.c:292
 #, c-format
 msgid "Unable to create %s because $HOME/.florence does not exist"
 msgstr "Impossible de créer %s car $HOME/.florence n'existe pas"
 
-#: ../src/style.c:304
+#: ../src/style.c:299
 #, c-format
 msgid "Unable to open file %s for read"
 msgstr "Impossible d'ouvrir le fichier %s en lecture"
 
-#: ../src/style.c:305
+#: ../src/style.c:300
 #, c-format
 msgid "Unable to open file %s for write"
 msgstr "Impossible d'ouvrir le fichier %s en écriture"
 
-#: ../src/style.c:310
+#: ../src/style.c:305
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
@@ -555,6 +506,66 @@ msgstr "Echec d'allocation de la mémoire pour la vue"
 #, c-format
 msgid "Error loading icon file: %s (%s)"
 msgstr "Erreur de chargement du fichier icone: %s (%s)"
+
+#~ msgid "2009-01-24"
+#~ msgstr "24/01/2009"
+
+#~ msgid "[new key] code=%d x=%f y=%f w=%f h=%f shape=%s"
+#~ msgstr "[nouvelle touche] code=%d x=%f y=%f l=%f h=%f forme=%s"
+
+#~ msgid "Out of element"
+#~ msgstr "Sortie de l'élement"
+
+#~ msgid "layout parse error"
+#~ msgstr "Erreur d'analyse du fichier d'agencement"
+
+#~ msgid "layout parse error: %s not found"
+#~ msgstr "Erreur d'analyse du fichier d'agencement: %s non trouvé"
+
+#~ msgid "%s not found"
+#~ msgstr "%s non trouvé"
+
+#~ msgid "Layout parse error: null node name"
+#~ msgstr "Erreur d'analyse du fichier d'agencement: nom de noeud vide"
+
+#~ msgid "Unknown element: %s"
+#~ msgstr "Element inconnu: %s"
+
+#~ msgid "No informations element in layout"
+#~ msgstr "Pas d'élément informations dans le fichier d'agencement"
+
+#~ msgid "informations element not closed in layout"
+#~ msgstr "L'élement informations n'est pas fermé dans le fichier d'agencement"
+
+#~ msgid "Unclosed symbol element: %s"
+#~ msgstr "L'élement symbol n'est pas fermé"
+
+#~ msgid "Read shape: 'svg' expected: '%s' found "
+#~ msgstr "Lectude de la forme: 'svg' attendu: %s trouvé"
+
+#~ msgid "Unclosed shape element: %s %s"
+#~ msgstr "L'élement shape n'est pas fermé"
+
+#~ msgid "No style element in layout"
+#~ msgstr "Pas d'élément style dans l'agencement"
+
+#~ msgid "No keyboard element in layout"
+#~ msgstr "Pas d'élément keyboard dans l'agencement"
+
+#~ msgid "keyboard element not closed in layout"
+#~ msgstr "L'élement keyboard n'est pas fermé dans le fichier d'agencement"
+
+#~ msgid "Unclosed informations element in layout"
+#~ msgstr "L'élément informations n'est pas fermé dans le fichier d'agencement"
+
+#~ msgid "Unable to activate schema validation from %s."
+#~ msgstr "Echec de l'activation de la validation du schema depuis %s"
+
+#~ msgid "No layout element in layout"
+#~ msgstr "Pas d'alement layour dans le fichier d'agencement"
+
+#~ msgid "Invalid layout: check %s"
+#~ msgstr "Agencement invalide: vérifiez %s"
 
 #~ msgid ""
 #~ "Accessibility is disabled.\n"

@@ -23,7 +23,6 @@
 #define FLO_STYLE
 
 #include <glib.h>
-#include <libxml/xmlreader.h>
 #include <cairo.h>
 #include <librsvg/rsvg.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -63,7 +62,7 @@ struct style {
 	struct shape *default_shape;
 };
 
-struct style *style_new(xmlTextReaderPtr reader, gchar *base_uri);
+struct style *style_new(gchar *base_uri);
 void style_free(struct style *style);
 /* draw a style preview to 32x32 gdk pixbuf 
  * this function is called by the settings dialog */

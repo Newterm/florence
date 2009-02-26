@@ -47,7 +47,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
-			<listitem><para><ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
+			<listitem><para>(Optional: --disable-nls configure option to disable)<ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
 			<listitem><para>(Optional: --with-docs configure option) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
 		<para>How to install those dependencies is dependant on your distribution. Usually, you need to install the devel packages of the dependencies. Below is a list of how to do it via the command line interface on the most common distributions. If your distribution is not listed and you don't know how to install, you may check with your distribution support.</para>

@@ -23,13 +23,11 @@
 <layout xmlns="http://florence.sourceforge.net"
 	xmlns:xi="http://www.w3.org/2001/XInclude">
 <informations>
-	<name>Standard keyboard</name>
+	<_name>Standard keyboard</_name>
 	<author>François Agrech</author>
 	<date>2009-01-24</date>
 	<florence_version>@VERSION@</florence_version>
 </informations>
-
-<xi:include href="style/florence.style"/>
 
 <keyboard>
 	<width>30</width>
@@ -369,7 +367,8 @@
 </keyboard>
 
 <extension>
-	<name>Arrows</name>
+	<_name>Navigation keys</_name>
+	<identifiant>ext1</identifiant>
 	<placement>right</placement>
 	<keyboard>
 	<width>6</width>
@@ -428,7 +427,8 @@
 </extension>
 
 <extension>
-	<name>Numpad</name>
+	<_name>Numeric keys</_name>
+	<identifiant>ext2</identifiant>
 	<placement>right</placement>
 	<keyboard>
 	<width>8</width>
@@ -528,7 +528,8 @@
 </extension>
 
 <extension>
-	<name>Function keys</name>
+	<_name>Function keys</_name>
+	<identifiant>ext3</identifiant>
 	<placement>top</placement>
 	<keyboard>
 	<width>44</width>

@@ -362,9 +362,6 @@ char *alloca ();
 #if HAVE_LOCALE_H
 # include <locale.h>
 #endif
-#if !HAVE_SETLOCALE
-# define setlocale(Category, Locale) /* empty */
-#endif
 
 #if ENABLE_NLS
 # include <libintl.h>

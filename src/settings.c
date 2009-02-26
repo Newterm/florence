@@ -107,7 +107,6 @@ void settings_preview_build()
 {
 	GtkTreeIter iter;
 	GdkPixbuf *pixbuf;
-	xmlTextReaderPtr layout;
 	struct style *style;
 	DIR *dp=opendir(DATADIR "/styles");
 	struct dirent *ep;
@@ -124,16 +123,13 @@ void settings_preview_build()
 		while ((ep=readdir(dp))) {
 			if (ep->d_name[0]!='.') {
 				name=g_strdup_printf(DATADIR "/styles/%s", ep->d_name);
-		        	layout=layoutreader_new(name);
-				layoutreader_readinfos(layout, NULL);
-				style=style_new(layout, name);
+				style=style_new(name);
 				pixbuf=style_pixbuf_draw(style);
 				if (!pixbuf) flo_error(_("Unable to create preview for style %s"), name);
 				else {
 					gtk_list_store_append(settings_style_list, &iter);
 					gtk_list_store_set(settings_style_list, &iter, 0, pixbuf, 1, ep->d_name, -1);
 				}
-				if (layout) layoutreader_free(layout);
 				if (style) style_free(style);
 				g_free(name);
 				gdk_pixbuf_unref(pixbuf); 
@@ -209,9 +205,9 @@ void settings_update()
 	color=settings_get_string("layout/extensions");
 	extstrs=extstr=g_strsplit(color, ":", -1);
 	while (extstr && *extstr) {
-		if (!strcmp(*extstr, "Arrows")) arrows=TRUE;
-		if (!strcmp(*extstr, "Numpad")) numpad=TRUE;
-		if (!strcmp(*extstr, "Function keys")) function_keys=TRUE;
+		if (!strcmp(*extstr, "ext1")) arrows=TRUE;
+		if (!strcmp(*extstr, "ext2")) numpad=TRUE;
+		if (!strcmp(*extstr, "ext3")) function_keys=TRUE;
 		extstr++;
 	}
 	g_strfreev(extstrs);
@@ -311,17 +307,17 @@ void settings_extension(GtkToggleButton *button, gchar *name)
 
 void settings_arrows(GtkToggleButton *button)
 {
-	settings_extension(button, "Arrows");
+	settings_extension(button, "ext1");
 }
 
 void settings_numpad(GtkToggleButton *button)
 {
-	settings_extension(button, "Numpad");
+	settings_extension(button, "ext2");
 }
 
 void settings_function_keys(GtkToggleButton *button)
 {
-	settings_extension(button, "Function keys");
+	settings_extension(button, "ext3");
 }
 
 void settings_auto_click(GtkHScale *scale)

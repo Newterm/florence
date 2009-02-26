@@ -101,11 +101,10 @@ void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble 
 }
 
 /* create a new symbol */
-void style_symbol_new(char *name, char *svg, char *label, void *userdata)
+void style_symbol_new(struct style *style, char *name, char *svg, char *label)
 {
 	GError *error=NULL;
 	gchar *regex=NULL;
-	struct style *style=(struct style *)userdata;
 	struct symbol *symbol=g_malloc(sizeof(struct symbol));
 	memset(symbol, 0, sizeof(struct symbol));
 	if (name) {
@@ -212,23 +211,19 @@ void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdo
 }
 
 /* callback for layoutreader for shape */
-void style_shape_new(char *name, char *svg, void *userdata)
+void style_shape_new(struct style *style, char *name, char *svg)
 {
-	struct style *style=(struct style *)userdata;
 	struct shape *shape=g_malloc(sizeof(struct shape));
 	GError *error=NULL;
-	gchar *color;
+	gchar *default_uri;
 	memset(shape, 0, sizeof(struct shape));
-	if (name) {
-		shape->name=g_strdup(name);
-	}
-	if (svg) {
+	if (name) shape->name=g_strdup(name);
+	if (svg)
 		shape->source=(guchar *)g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
-	}
 	shape->svg=rsvg_handle_new();
-	color=settings_get_string("layout/style");
-	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:color);
-	if (color) g_free(color);
+	default_uri=settings_get_string("layout/style");
+	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
+	if (default_uri) g_free(default_uri);
 	rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
 	rsvg_handle_close(shape->svg, &error);
 	if (error) flo_fatal(_("Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""),
@@ -338,7 +333,7 @@ void style_update_colors (struct style *style)
 	GSList *list;
 	struct symbol *symbol;
 	struct shape *shape;
-	gchar *color;
+	gchar *default_uri;
 
 	style_create_css(style);
 
@@ -358,9 +353,9 @@ void style_update_colors (struct style *style)
 		shape=(struct shape *)list->data;
 		if (shape->svg) rsvg_handle_free(shape->svg);
 		shape->svg=rsvg_handle_new();
-		color=settings_get_string("layout/style");
-		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:color);
-		if (color) g_free(color);
+		default_uri=settings_get_string("layout/style");
+		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
+		if (default_uri) g_free(default_uri);
 		rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
 		rsvg_handle_close(shape->svg, &error);
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), shape->source);
@@ -380,13 +375,38 @@ GdkPixbuf *style_pixbuf_draw(struct style *style)
 }
 
 /* create a new style from the layout file */
-struct style *style_new(xmlTextReaderPtr reader, gchar *base_uri)
+struct style *style_new(gchar *base_uri)
 {
+	struct layout *layout=NULL;
+	struct layout_shape *shape=NULL;
+	struct layout_symbol *symbol=NULL;
 	struct style *style=g_malloc(sizeof(struct style));
+
 	memset(style, 0, sizeof(struct style));
 	style->base_uri=base_uri;
 	style_create_css(style);
-	layoutreader_readstyle(reader, style_shape_new, style_symbol_new, style);
+	layout=layoutreader_new(base_uri?base_uri:settings_get_string("layout/style"),
+		DATADIR "/styles/default/florence.style",
+		DATADIR "/relaxng/style.rng");
+
+	layoutreader_element_open(layout, "style");
+	if (layoutreader_element_open(layout, "shapes")) {
+		while ((shape=layoutreader_shape_new(layout))) {
+			style_shape_new(style, shape->name, shape->svg);
+			layoutreader_shape_free(shape);
+		}
+	}
+
+	layoutreader_reset(layout);
+	layoutreader_element_open(layout, "style");
+	if (layoutreader_element_open(layout, "symbols")) {
+		while ((symbol=layoutreader_symbol_new(layout))) {
+			style_symbol_new(style, symbol->name, symbol->svg, symbol->label);
+			layoutreader_symbol_free(symbol);
+		}
+	}
+
+	layoutreader_free(layout);
 	return style;
 }
 

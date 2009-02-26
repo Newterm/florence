@@ -279,7 +279,7 @@
 			<applyto>/apps/florence/layout/extensions</applyto>
 			<owner>florence</owner>
 			<type>string</type>
-			<default>Numpad:Arrows:Function keys</default>
+			<default>ext1:ext2:ext3</default>
 			<locale name="C">
 				<short>List of colon-separated (:) extension names</short>
 				<long>List of keyboard extensions names (colon-separated). extension names must be found in layout file</long>

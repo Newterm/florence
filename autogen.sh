@@ -63,6 +63,7 @@ run automake
 run autoconf
 cd data
 run trang -I rnc -O rng florence.rnc relaxng/florence.rng
+run trang -I rnc -O rng style.rnc relaxng/style.rng
 
 # go back
 cd $OLD_PWD

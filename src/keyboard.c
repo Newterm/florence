@@ -29,48 +29,6 @@
 #include "key.h"
 #include "settings.h"
 
-/* Add a key to the keyboard: Called by layoutparser when a key has been parsed in the layout 
- * userdata1 is the keyboard
- * userdata2 is the global key table */
-void keyboard_insertkey (void *userdata1, char *shape,
-	unsigned char code, double x, double y, double w, double h, void *userdata2)
-{
-	struct keyboard *keyboard=(struct keyboard *)userdata1;
-	struct keyboard_globaldata *global=(struct keyboard_globaldata *)userdata2;
-	struct key **key_table=global->key_table;
-	struct style *style=global->style;
-	XkbDescPtr xkb=global->xkb_desc;
-	XkbStateRec rec=global->xkb_state;
-	struct key *key;
-	GdkModifierType mod;
-	gboolean locker;
-
-	flo_debug(_("[new key] code=%d x=%f y=%f w=%f h=%f shape=%s"), code, x, y, w, h, shape);
-
-	locker=XkbKeyAction(xkb, code, 0)?XkbKeyAction(xkb, code, 0)->type==XkbSA_LockMods:FALSE;
-	mod=xkb->map->modmap[code];
-
-	key=key_new((void *)keyboard, code, mod, locker, x, y, w, h, style_shape_get(style, shape));
-	keyboard->keys=g_slist_append(keyboard->keys, key);
-	if (key_table) key_table[code]=key;
-
-	/* Press the activated locker key if the hardware key is activated */
-	if (mod && (mod&rec.locked_mods)) {
-		key_set_pressed(key, TRUE);
-		status_press(global->status, key);
-	}
-}
-
-/* Set the logical size of the keyboard
- * Called while parsing xml layout file */
-void keyboard_setsize(void *userdata, double width, double height)
-{
-	struct keyboard *keyboard=(struct keyboard *)userdata;
-
-	keyboard->width=width;
-	keyboard->height=height;
-}
-
 /* Checks a colon separated list of strings for the presence of a particular string.
  * This is useful to check the "extensions" gconf parameter which is a list of colon separated strings */
 gboolean keyboard_activated(struct keyboard *keyboard)
@@ -79,13 +37,14 @@ gboolean keyboard_activated(struct keyboard *keyboard)
 	gchar *allextstr=NULL;
 	gchar **extstrs=NULL;
 	gchar **extstr=NULL;
-	if (!keyboard->name) return TRUE;
+	if (!keyboard->id) return TRUE;
 	/* TODO: cache this and register callback for change */
+	/* check race condition with view.c */
 	if ((allextstr=settings_get_string("layout/extensions"))) {
 		extstrs=g_strsplit(allextstr, ":", -1);
 		extstr=extstrs;
 		while (extstr && *extstr) {
-			if (!strcmp(keyboard->name, *(extstr++))) { ret=TRUE; break; }
+			if (!strcmp(keyboard->id, *(extstr++))) { ret=TRUE; break; }
 		}
 		g_strfreev(extstrs);
 		g_free(allextstr);
@@ -94,23 +53,34 @@ gboolean keyboard_activated(struct keyboard *keyboard)
 }
 
 /* Create a keyboard: the layout is passed as a text reader */
-struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name, enum layout_placement placement, void *data)
+struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar *id, gchar *name,
+	enum layout_placement placement, struct keyboard_globaldata *data)
 {
-	struct keyboard_globaldata *global=(struct keyboard_globaldata *)data;
 	struct keyboard *keyboard=NULL;
+	struct layout_size *size=NULL;
+	struct key *key=NULL;
 
-	flo_debug(_("[new keyboard] name=%s"), name);
+	flo_debug(_("[new keyboard] name=%s id=%s"), name, id);
 
 	/* allocate memory for keyboard */
 	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
 
-	if (name) {
-		keyboard->name=g_strdup(name);
-	}
+	if (name) keyboard->name=g_strdup(name);
+	if (id) keyboard->id=g_strdup(id);
 	keyboard->placement=placement;
-	layoutreader_readkeyboard(reader, keyboard_insertkey, keyboard_setsize, keyboard, global, level);
+	size=layoutreader_keyboard_new(layout);
+	if (!size) flo_fatal(_("Unreachable code in keyboard_new"));
+	keyboard->width=size->w;
+	keyboard->height=size->h;
 
+	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state, (void *)keyboard))) {
+		keyboard->keys=g_slist_append(keyboard->keys, key);
+		if (data->key_table) data->key_table[key->code]=key;
+		if (key_is_pressed(key)) status_press(data->status, key);
+	}
+
+	layoutreader_keyboard_free(layout, size);
 	return keyboard;
 }
 
@@ -118,6 +88,7 @@ struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name, 
 void keyboard_free (struct keyboard *keyboard)
 {
 	if (keyboard->name) g_free(keyboard->name);
+	if (keyboard->id) g_free(keyboard->id);
 	g_free(keyboard);
 }
 

@@ -47,7 +47,7 @@
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
-			<listitem><para><ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
+			<listitem><para>(Optionnel: option --disable-nls de configure pour désactiver)<ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
 			<listitem><para>(Optionnel: option --with-docs de configure) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
 		<para>La manière d'installer ces dépendances dépend de la distribution utilisée. D'habitude, vous devez installer les paquetages de développement de ces dépendances. Ci-dessous se trouve une liste d'instructions pour les installer depuis la ligne de commande pour les distributions les plus communes. Si votre distribution n'est pas listée et que vous ne savez pas comment installer les dépendances, vous devriez vous adresser au support de votre distribution.</para>

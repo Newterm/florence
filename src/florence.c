@@ -112,17 +112,8 @@ void flo_switch_mode (struct view *view, gboolean auto_hide)
 	}
 }
 
-/* Callback called by the layour reader while parsing the layout file. Provides informations about the layout */
-void flo_layout_infos(char *name, char *version)
-{
-	flo_info(_("Layout name: \"%s\""), name);
-	if (strcmp(version, VERSION)) {
-		flo_warn(_("Layout version %s is different from program version %s"), version, VERSION);
-	}
-}
-
 /* load the keyboards from the layout file into the keyboards member of florence */
-GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
+GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 {
 	int maj = XkbMajorVersion;
 	int min = XkbMinorVersion;
@@ -130,6 +121,7 @@ GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 	GSList *keyboards=NULL;;
 	struct keyboard *keyboard=NULL;
 	struct keyboard_globaldata global;
+	struct layout_extension *extension=NULL;
 
 	/* Check XKB Version */
 	if (!XkbLibraryVersion(&maj, &min) ||
@@ -141,7 +133,8 @@ GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 	global.xkb_desc=XkbGetMap((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
 	XkbKeyActionsMask|XkbModifierMapMask, XkbUseCoreKbd);
 	/* get global modifiers state */
-	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()), XkbUseCoreKbd, &(global.xkb_state));
+	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		XkbUseCoreKbd, &(global.xkb_state));
 	global.status=florence->status;
 
 	/* initialize global data */
@@ -149,12 +142,15 @@ GSList *flo_keyboards_load(struct florence *florence, xmlTextReaderPtr layout)
 	global.style=florence->style;
 
 	/* read the layout file and create the extensions */
-	keyboards=g_slist_append(keyboards, (gpointer)keyboard_new(layout, 1, NULL, LAYOUT_VOID, &global));
-	while ((keyboard=(struct keyboard *)layoutreader_readextension(layout,
-		(layoutreader_keyboardprocess)keyboard_new, (void *)&global))) {
+	keyboards=g_slist_append(keyboards,
+		       keyboard_new(layout, florence->style, NULL, NULL, LAYOUT_VOID, &global));
+	while ((extension=layoutreader_extension_new(layout))) {
+		flo_debug(_("[new extension] name=%s id=%s"), extension->name, extension->identifiant);
+		keyboard=keyboard_new(layout, florence->style, extension->identifiant, extension->name,
+			extension->placement, &global);
 		keyboards=g_slist_append(keyboards, keyboard);
+		layoutreader_extension_free(layout, extension);
 	}
-	layoutreader_free(layout);
 
 	/* Free the modifiers map */
 	XkbFreeClientMap(global.xkb_desc, XkbKeyActionsMask|XkbModifierMapMask, True);
@@ -256,11 +252,27 @@ void flo_layout_unload(struct florence *florence)
  * create the layour objects: the style, the keyboards and the keys */
 void flo_layout_load(struct florence *florence)
 {
-	xmlTextReaderPtr layout;
-	layout=layoutreader_new(NULL);
-	layoutreader_readinfos(layout, flo_layout_infos);
-	florence->style=style_new(layout, NULL);
+	struct layout *layout;
+	struct layout_infos *infos;
+
+	/* get the informations about the layout */
+	layout=layoutreader_new(settings_get_string("layout/file"),
+		DATADIR "/florence.xml",
+		DATADIR "/relaxng/florence.rng");
+	layoutreader_element_open(layout, "layout");
+	infos=layoutreader_infos_new(layout);
+	flo_info(_("Layout name: \"%s\""), infos->name);
+	if (!infos->version || strcmp(infos->version, VERSION))
+		flo_warn(_("Layout version %s is different from program version %s"),
+			infos->version, VERSION);
+	layoutreader_infos_free(infos);
+
+	/* create the style object */
+	florence->style=style_new(NULL);
+
+	/* create the keyboard objects */
 	florence->keyboards=flo_keyboards_load(florence, layout);
+	layoutreader_free(layout);
 }
 
 /* reloads the layout file */
@@ -301,6 +313,7 @@ struct florence *flo_new(void)
 	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
 
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence->view);
+	/* TODO: just reload the style, no need to reload the whole layout */
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 
 	SPI_init();

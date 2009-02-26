@@ -21,7 +21,7 @@ DEPENDANCIES
       * libxml >= 2.0
       * cairo
       * librsvg
-      * gettext
+      * (optional) gettext
       * (optional) libgnome >=2.0
 
 QUICK INSTALL

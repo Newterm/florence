@@ -23,9 +23,18 @@
 #define FLO_LAYOUTREADER
 
 #include "key.h"
-#include <libxml/xmlreader.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
 
-/* This is used for placing extensions around the keyboard. The main extension's placement is void */
+/* The layout structure contains a pointer to the document
+ * and a layout file cursor. */
+struct layout {
+	xmlDocPtr doc;
+	xmlNodePtr cur;
+};
+
+/* This is used for placing extensions around the keyboard.
+ * The main extension's placement is void. */
 enum layout_placement {
 	LAYOUT_VOID,
 	LAYOUT_LEFT,
@@ -34,28 +43,91 @@ enum layout_placement {
 	LAYOUT_BOTTOM
 };
 
-/* callbacks */
-typedef void (*layoutreader_infosprocess) (char *name, char *version);
-typedef void (*layoutreader_keyprocess) (void *userdata1, char *shape, unsigned char code,
-	double xpos, double ypos, double width, double height, void *userdata2);
-typedef void (*layoutreader_sizeprocess) (void *userdata, double width, double height);
-typedef void *(*layoutreader_keyboardprocess) (xmlTextReaderPtr reader, int level, gchar *name,
-	enum layout_placement placement, void *userdata);
-typedef void (*layoutreader_symprocess) (char *name, char *svg, char *label, void *userdata);
-typedef void (*layoutreader_shapeprocess) (char *name, char *svg, void *userdata);
-typedef void (*layoutreader_pointfunc) (void *userdata, double x, double y);
+/* Data contained in the 'informations' element */
+struct layout_infos {
+	char *name;
+	char *version;
+};
+
+/* Size of an element */
+struct layout_size {
+	double w, h;
+};
+
+/* Position of an element */
+struct layout_pos {
+	double x, y;
+};
+
+/* Data contained in 'key' elements */
+struct layout_key {
+	char *shape;
+	unsigned char code;
+	struct layout_pos pos;
+	struct layout_size size;
+};
+
+/* Data contained in 'extension' elemens */
+struct layout_extension {
+	char *name;
+	char *identifiant;
+	enum layout_placement placement;
+};
+
+/* Data contained in 'shape' elemens */
+struct layout_shape {
+	char *name;
+	char *svg;
+};
+
+/* Data contained in 'symbol' elemens */
+struct layout_symbol {
+	char *name;
+	char *svg;
+	char *label;
+};
 
 /* Create a reader for the filename provided */
-xmlTextReaderPtr layoutreader_new(char *style);
+struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relaxng);
 /* liberate memory for the reader */
-void layoutreader_free(xmlTextReaderPtr reader);
-double layoutreader_readdouble(xmlTextReaderPtr reader, xmlChar *name, int level);
-void layoutreader_readinfos(xmlTextReaderPtr reader, layoutreader_infosprocess infosfunc);
-void layoutreader_readkeyboard(xmlTextReaderPtr reader, layoutreader_keyprocess keyfunc,
-	layoutreader_sizeprocess sizefunc, void *userdata1, void *userdata2, int level);
-void *layoutreader_readextension(xmlTextReaderPtr reader, layoutreader_keyboardprocess extfunc, void *userdata);
-void layoutreader_readstyle(xmlTextReaderPtr reader, layoutreader_shapeprocess shapefunc, 
-	layoutreader_symprocess symfunc, void *userdata);
+void layoutreader_free(struct layout *layout);
+
+/* Get the 'informatons' element data (see florence.c) */
+struct layout_infos *layoutreader_infos_new(struct layout *layout);
+/* Free the 'informations' element data */
+void layoutreader_infos_free(struct layout_infos *infos);
+
+/* Get the 'keyboard' element data (see keyboard.c) */
+struct layout_size *layoutreader_keyboard_new(struct layout *layout);
+/* Free the 'keyboard' element data and close the element */
+void layoutreader_keyboard_free(struct layout *layout, struct layout_size *size);
+
+/* Get the 'key' element data (see key.c) */
+struct layout_key *layoutreader_key_new(struct layout *layout);
+/* Free the 'key' element data */
+void layoutreader_key_free(struct layout_key *key);
+
+/* Get the 'extension' element data (see florence.c) */
+struct layout_extension *layoutreader_extension_new(struct layout *layout);
+/* Free the 'extension' element data and close the element */
+void layoutreader_extension_free(struct layout *layout, struct layout_extension *extension);
+
+/* Get the 'shape' element data (see style.c) */
+struct layout_shape *layoutreader_shape_new(struct layout *layout);
+/* Free the 'shape' element data */
+void layoutreader_shape_free(struct layout_shape *shape);
+
+/* Get the 'symbol' element data (see style.c) */
+struct layout_symbol *layoutreader_symbol_new(struct layout *layout);
+/* Free the 'symbol' element data */
+void layoutreader_symbol_free(struct layout_symbol *symbol);
+
+/* Open a layout element */
+gboolean layoutreader_element_open(struct layout *layout, char *name);
+/* Close a layout element */
+void layoutreader_element_close(struct layout *layout);
+/* Reset layout cursor */
+void layoutreader_reset(struct layout *layout);
 
 #endif
 

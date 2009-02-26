@@ -19,63 +19,43 @@
 default namespace = "http://florence.sourceforge.net"
 namespace xsd='http://www.w3.org/2001/XMLSchema-datatypes'
 namespace a = "http://relaxng.org/ns/compatibility/annotations/1.0"
+namespace svg = "http://www.w3.org/2000/svg"
 namespace xlink = "http://www.w3.org/1999/xlink"
 
 [ xml:lang = "en" ]
 
 grammar {
 
-start = layout-element
+start = style-element
 xmllang = attribute xml:lang { xsd:language }
 xmlbase = attribute xml:base { text }
- 
-layout-element = element layout {
+
+style-element = element style {
 	xmllang?, xmlbase?,
-	informations-element,
-	keyboard-element,
-	extension-element*
+	shapes-element+,
+	symbols-element
 }
 
-informations-element = element informations {
+shapes-element = element shapes {
 	xmllang?, xmlbase?,
-	element name { xsd:string },
-	element name { xmllang, xsd:string }*,
-	element author { xsd:string },
-	element date { xsd:date },
-	element date { xmllang }*,
-	element florence_version { xsd:string }
+	shape-element+
 }
 
-keyboard-element = element keyboard {
+symbols-element = element symbols {
 	xmllang?, xmlbase?,
-	element width { xsd:decimal },
-	element height { xsd:decimal },
-	key-element*
+	symbol-element+
 }
 
-key-element = element key {
-	xmllang?, xmlbase?,
-	code-element?,
-	element shape { xsd:string }?,
-	element xpos { xsd:decimal }?,
-	element ypos { xsd:decimal }?,
-	element width { xsd:decimal }?,
-	element height { xsd:decimal }?
-}
-
-code-element = element code { xmllang?, xmlbase?, xsd:integer { minInclusive = "0" maxInclusive = "255" } }
-
-extension-element = element extension {
+shape-element = element shape {
 	xmllang?, xmlbase?,
 	element name { xsd:string },
-	element name { xmllang, xsd:string }*,
-	element identifiant { xsd:string },
-	placement-element,
-	keyboard-element
+	external "svg11/svg11.rnc"
 }
 
-placement-element = element placement {
-	"right" | "left" | "top" | "bottom"
+symbol-element = element symbol {
+	xmllang?, xmlbase?,
+	element name { xsd:string },
+	( external "svg11/svg11.rnc" | element label { xsd:string } )
 }
 
 }

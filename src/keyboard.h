@@ -31,7 +31,8 @@
 /* A keyboard is a set of keys logically grouped together */
 /* Examples: the main keyboard, the numpad or the function keys */
 struct keyboard {
-	gchar *name; /* name of the kayboard: NULL for main keyboard */
+	gchar *id; /* identification of the keyboard: NULL for main keyboard */
+	gchar *name; /* name of the keyboard: NULL for main keyboard */
 	gdouble xpos, ypos; /* logical position of the keyboard (may change according to which keyboards are activated) */
 	gdouble width, height; /* logical width and height of the keyboard */
 	enum layout_placement placement; /* position of the kekboard relative to main (VOID placement) */
@@ -49,8 +50,8 @@ struct keyboard_globaldata {
 };
 
 /* create a keyboard: the layout is passed as a text reader */
-struct keyboard *keyboard_new (xmlTextReaderPtr reader, int level, gchar *name,
-	enum layout_placement placement, void *data);
+struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar *id, gchar *name,
+	enum layout_placement placement, struct keyboard_globaldata *data);
 /* delete a keyboard */
 void keyboard_free (struct keyboard *keyboard);
 

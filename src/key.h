@@ -22,13 +22,15 @@
 #ifndef FLO_KEY
 #define FLO_KEY
 
-#include <libxml/xmlreader.h>
+#include <X11/XKBlib.h>
 #include <gdk/gdk.h>
 #include <glib.h>
 #include "style.h"
 #include "status.h"
+#include "layoutreader.h"
 
 struct status;
+struct layout;
 
 /* A key is an item of the keyboard. It represents a real keyboard key.
  * A key is replesented on the screen with a background (shape) and a foreground (symbol)
@@ -45,9 +47,10 @@ struct key {
 	void *userdata; /* custom data attached to the key (used to attach to a keyboard) */
 };
 
-/* Create a key */
-struct key *key_new(void *userdata, guint code, GdkModifierType mod, gboolean lock, gdouble x,
-	gdouble y, gdouble w, gdouble h, struct shape *shape);
+/* Instanciate a key
+ * the key may have a static label which will be always drawn in place of the symbol */
+struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
+	XkbStateRec rec, void *userdata);
 /* deallocate memory used by the key */
 void key_free(struct key *key);
 

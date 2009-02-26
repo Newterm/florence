@@ -1,5 +1,6 @@
 data/florence.desktop.in
 data/florence.glade
+data/florence.xml.in.in
 src/florence.c
 src/keyboard.c
 src/layoutreader.c

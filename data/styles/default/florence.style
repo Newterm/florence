@@ -20,6 +20,7 @@
 -->
 
 <style xmlns="http://florence.sourceforge.net" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<shapes>
 	<shape>
 		<name>default</name>
 		<svg version="1.1" viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg">
@@ -83,6 +84,8 @@
 			<use xlink:href="#Return_s" style="fill:url(florence.defs#gradient)"/>
 		</svg>
 	</shape>
+	</shapes>
+	<symbols>
 	<symbol>
 		<name>Control_[LR]</name>
 		<label>ctrl</label>
@@ -279,5 +282,6 @@
 		<name>(.*)tilde</name>
 		<label>~</label>
 	</symbol>
+	</symbols>
 </style>
 

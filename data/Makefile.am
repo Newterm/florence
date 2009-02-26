@@ -19,7 +19,9 @@ gladedir=$(datadir)/florence
 glade_DATA=florence.glade 
 
 layoutdir=$(datadir)/florence
-layout_DATA=florence.layout florence.rnc florence.css
+layout_in_files=florence.xml.in
+layout_DATA=$(layout_in_files:.xml.in=.xml) florence.rnc florence.css
+@INTLTOOL_XML_RULE@
 
 install-data-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)

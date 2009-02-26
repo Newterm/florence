@@ -28,20 +28,33 @@
 
 #define PI M_PI
 
-/* instanciates a key
+/* Instanciates a key
  * the key may have a static label which will be always drawn in place of the symbol */
-struct key *key_new(void *userdata, guint code, GdkModifierType mod, gboolean lock, gdouble x,
-	gdouble y, gdouble w, gdouble h, struct shape *shape)
+struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
+	XkbStateRec rec, void *userdata)
 {
-	struct key *key=g_malloc(sizeof(struct key));
-	memset(key, 0, sizeof(struct key));
-	key->userdata=userdata;
-	key->code=code;
-	key->pressed=FALSE;
-	key->modifier=mod;
-	key->locker=lock;
-	key->shape=shape;
-	key->x=x;key->y=y;key->w=w;key->h=h;
+	struct layout_key *lkey=layoutreader_key_new(layout);
+	struct key *key=NULL;
+	
+	if (lkey) {
+		key=g_malloc(sizeof(struct key));
+		memset(key, 0, sizeof(struct key));
+		key->code=lkey->code;
+		key->locker=XkbKeyAction(xkb, key->code, 0)?
+			XkbKeyAction(xkb, key->code, 0)->type==XkbSA_LockMods:FALSE;
+		key->modifier=xkb->map->modmap[key->code];
+		key->pressed=(key->modifier && (key->modifier&rec.locked_mods));
+		key->shape=style_shape_get(style, lkey->shape);
+		key->x=lkey->pos.x;
+		key->y=lkey->pos.y;
+		key->w=lkey->size.w==0.0?2.0:lkey->size.w;
+		key->h=lkey->size.h==0.0?2.0:lkey->size.h;
+		key->userdata=userdata;
+		layoutreader_key_free(lkey);
+		flo_debug(_("[new key] code=%d x=%f y=%f w=%f h=%f"),
+			key->code, key->x, key->y, key->w, key->h);
+	}
+
 	return key;
 }
 
