@@ -26,9 +26,18 @@ void settings_init(gboolean exit);
 void settings_exit(void);
 void settings(void);
 void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data);
+
+/* get a gconf double */
 gdouble settings_get_double(const gchar *name);
+/* set a gconf double */
 void settings_set_double(const gchar *name, gdouble value);
+/* get an integer from gconf */
+gint settings_get_int(const gchar *name);
+/* set a gconf integer */
+void settings_set_int(const gchar *name, gint value);
+/* get a gconf string */
 gchar *settings_get_string(const gchar *name);
+/* get a gconf boolean */
 gboolean settings_get_bool(const gchar *name);
 
 /* Create the $HOME/.florence directory */

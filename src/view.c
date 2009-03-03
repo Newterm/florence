@@ -374,6 +374,36 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 	gtk_widget_set_colormap (widget, colormap);
 }
 
+/* on configure events: record window position */
+void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view *view)
+{
+	GdkRectangle rect;
+
+	/* record window position */
+	if (settings_get_int("window/xpos")!=pConfig->x)
+		settings_set_int("window/xpos", pConfig->x);
+	if (settings_get_int("window/ypos")!=pConfig->y)
+		settings_set_int("window/ypos", pConfig->y);
+
+	/* handle resize events */
+	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
+		view->zoom=(gdouble)pConfig->width/view->vwidth;
+		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
+		else settings_set_double("window/zoom", view->zoom);
+		view->width=pConfig->width; view->height=pConfig->height;
+		if (view->background) cairo_surface_destroy(view->background);
+		view->background=NULL;
+		if (view->symbols) cairo_surface_destroy(view->symbols);
+		view->symbols=NULL;
+		view_create_window_mask(view);
+		rect.x=0; rect.y=0;
+		rect.width=pConfig->width; rect.height=pConfig->height;
+		gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+	}
+
+	gdk_window_configure_finished (GTK_WIDGET(view->window)->window);
+}
+
 /* on expose event: draws the keyboards to the window */
 void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 {
@@ -381,23 +411,6 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	GList *list=status_pressedkeys_get(view->status);
 	struct keyboard *keyboard;
 	struct key *key;
-	gint w, h;
-
-	/* handle resize events here */
-	gtk_window_get_size(view->window, &w, &h);
-	if ((w!=view->width) || (h!=view->height)) {
-		view->zoom=(gdouble)w/view->vwidth;
-		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
-		else settings_set_double("window/zoom", view->zoom);
-		view->width=w; view->height=h;
-		if (view->background) cairo_surface_destroy(view->background);
-		view->background=NULL;
-		if (view->symbols) cairo_surface_destroy(view->symbols);
-		view->symbols=NULL;
-		view_create_window_mask(view);
-		gtk_widget_queue_draw(GTK_WIDGET(view->window));
-		return;
-	}
 
 	/* Don't need to redraw several times in one chunk */
 	if (!view->redraw) view->redraw=gdk_region_new();
@@ -513,8 +526,10 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	gtk_widget_set_events(GTK_WIDGET(view->window), GDK_ALL_EVENTS_MASK);
 	gtk_widget_set_app_paintable (GTK_WIDGET(view->window), TRUE);
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
+	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 
 	g_signal_connect(G_OBJECT(view->window), "screen-changed", G_CALLBACK(view_screen_changed), view);
+	g_signal_connect(G_OBJECT(view->window), "configure-event", G_CALLBACK(view_configure), view);
 	g_signal_connect(G_OBJECT(view->window), "expose-event", G_CALLBACK(view_expose), view);
 	view_screen_changed(GTK_WIDGET(view->window), NULL, view);
 	gtk_widget_show(GTK_WIDGET(view->window));

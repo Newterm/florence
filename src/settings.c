@@ -205,9 +205,10 @@ void settings_update()
 	color=settings_get_string("layout/extensions");
 	extstrs=extstr=g_strsplit(color, ":", -1);
 	while (extstr && *extstr) {
+		/* TODO: delete unknown extensions */
 		if (!strcmp(*extstr, "ext1")) arrows=TRUE;
-		if (!strcmp(*extstr, "ext2")) numpad=TRUE;
-		if (!strcmp(*extstr, "ext3")) function_keys=TRUE;
+		else if (!strcmp(*extstr, "ext2")) numpad=TRUE;
+		else if (!strcmp(*extstr, "ext3")) function_keys=TRUE;
 		extstr++;
 	}
 	g_strfreev(extstrs);
@@ -287,6 +288,7 @@ void settings_extension(GtkToggleButton *button, gchar *name)
 		allextstr=(gchar *)gconf_value_get_string(value);
 	} else allextstr=settings_get_string("layout/extensions");
 	
+	/* TODO: delete unknown extensions */
 	if (allextstr) {
                 extstrs=g_strsplit(allextstr, ":", -1);
                 extstr=extstrs;
@@ -410,6 +412,26 @@ void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer 
 	gconf_client_notify_add(gconfclient, settings_get_full_path(name), cb, user_data, NULL, NULL);
 }
 
+/* get an integer from gconf */
+gint settings_get_int(const gchar *name)
+{
+	GError *err=NULL;
+	char *fullpath=settings_get_full_path(name);
+	gint ret=gconf_client_get_int(gconfclient, fullpath, &err);
+	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
+	flo_debug("GCONF:%s=<%d>", fullpath, ret);
+	return ret;
+}
+
+/* set a gconf integer */
+void settings_set_int(const gchar *name, gint value)
+{
+	gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
+	gconf_client_set_int(gconfclient, settings_get_full_path(name), value, NULL);
+	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
+}
+
+/* get a double from gconf */
 gdouble settings_get_double(const gchar *name)
 {
 	GError *err=NULL;
@@ -420,6 +442,7 @@ gdouble settings_get_double(const gchar *name)
 	return ret;
 }
 
+/* set a gconf double */
 void settings_set_double(const gchar *name, gdouble value)
 {
 	gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
@@ -427,6 +450,7 @@ void settings_set_double(const gchar *name, gdouble value)
 	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 }
 
+/* get a gconf string */
 gchar *settings_get_string(const gchar *name)
 {
 	GError *err=NULL;
@@ -437,6 +461,7 @@ gchar *settings_get_string(const gchar *name)
 	return ret;
 }
 
+/* get a gconf boolean */
 gboolean settings_get_bool(const gchar *name)
 {
 	GError *err=NULL;
