@@ -221,12 +221,13 @@ gboolean flo_timer_update(gpointer data)
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
-	guint code=status_keycode_get(florence->status, (gint)((GdkEventMotion*)event)->x, (gint)((GdkEventMotion*)event)->y);
-	if (status_focus_get(florence->status)!=florence->keys[code]) {
-		if (florence->keys[code] && settings_get_double("behaviour/auto_click")>0.0) {
+	struct key *key=status_hit_get(florence->status, (gint)((GdkEventMotion*)event)->x,
+		(gint)((GdkEventMotion*)event)->y);
+	if (status_focus_get(florence->status)!=key) {
+		if (key && settings_get_double("behaviour/auto_click")>0.0) {
 			status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
 		} else status_timer_stop(florence->status);
-		status_focus_set(florence->status, florence->keys[code]);
+		status_focus_set(florence->status, key);
 	}
 	return FALSE;
 }

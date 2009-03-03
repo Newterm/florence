@@ -77,6 +77,8 @@ struct shape *style_shape_get(struct style *style, gchar *name);
 void style_shape_draw(struct shape *shape, cairo_t *cairoctx, gdouble w, gdouble h);
 /* create a mask surface for the shape, if it doesn't already exist */
 cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h);
+/* test if point is inside the mask */
+gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h);
 void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdouble w, gdouble h);
 
 #endif

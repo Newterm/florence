@@ -63,10 +63,14 @@ gdouble keyboard_get_height(struct keyboard *keyboard);
 enum layout_placement keyboard_get_placement(struct keyboard *keyboard);
 /* Checks gconf for the activation of the keyboard. */
 gboolean keyboard_activated(struct keyboard *keyboard);
+/* Get the key at position (x,y) */
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z);
+/* returns a rectangle containing the key */
+void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
+	gdouble *x, gdouble *y, gdouble *w, gdouble *h);
 
-/* fill the hitmap with key data */
-void keyboard_hitmap_draw(struct keyboard *keyboard, guchar *hitmap, guint w, guint h,
-	gdouble x, gdouble y, gdouble z);
+/* update the relative position of the keyboard to the view */
+void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y);
 /* draw the keyboard background to cairo surface */
 void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style);
 /* draw the keyboard symbols  to cairo surface */
@@ -78,9 +82,6 @@ void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble 
 /* draw the pressed indicator on a key */
 void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
 	struct style *style, struct key *key);
-/* returns a rectangle containing the key */
-void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
-	gdouble *x, gdouble *y, gdouble *w, gdouble *h);
 
 #endif
 

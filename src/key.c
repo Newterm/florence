@@ -120,29 +120,6 @@ guint key_getKeyval(struct key *key, GdkModifierType mod)
 	return keyval;
 }
 
-/* draw the key to the hitmap of florence */
-void key_hitmap_draw(struct key *key, guchar *hitmap, guint w, guint h, gdouble x, gdouble y, gdouble z)
-{
-	unsigned char *mask;
-	cairo_surface_t *surface;
-	int mstride;
-	gint kx=(gint)(z*(x+key->x-(key->w/2.0))), ky=(gint)(z*(y+key->y-(key->h/2.0)));
-	gint kw=(gint)(z*key->w), kh=(gint)(z*key->h);
-	gint i, j;
-
-	surface=style_shape_get_mask(key->shape, (guint)(z*key->w), (guint)(z*key->h));
-	mask=cairo_image_surface_get_data(surface);
-	mstride=cairo_image_surface_get_stride(surface);
-
-	for (i=(kx<0?kw-kx:0);i<((kx+kw)>(gint)w?(gint)w-kx:kw);i++) {
-		for (j=(ky<0?kh-ky:0);j<((ky+kh)>(gint)h?(gint)h-ky:kh);j++) {
-			if (mask[i+(j*mstride)]>128) {
-				hitmap[kx+i+(w*(ky+j))]=key->code;
-			}
-		}
-	}
-}
-
 /* Draw the representation of the auto-click timer on the key
  * value is between 0 and 1 */
 void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, double value)
@@ -222,3 +199,16 @@ gboolean key_is_locker(struct key *key) { return key->locker; }
 void *key_get_userdata(struct key *key) { return key->userdata; }
 GdkModifierType key_get_modifier(struct key *key) { return key->modifier; }
 
+/* return if key is it at position */
+gboolean key_hit(struct key *key, gint x, gint y, gdouble z)
+{
+	gint x1=z*(key->x-(key->w/2.0));
+	gint y1=z*(key->y-(key->h/2.0));
+	gint x2=x1+(z*key->w);
+	gint y2=y1+(z*key->h);
+	gboolean ret=FALSE;
+	if ((x>=x1) && (x<=x2) && (y>=y1) && (y<=y2)) {
+		ret=style_shape_test(key->shape, x-x1, y-y1, key->w*z, key->h*z);
+	}
+	return ret;
+}

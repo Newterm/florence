@@ -276,6 +276,15 @@ cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h)
 	return shape->mask;
 }
 
+/* test if point is inside the mask */
+gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h)
+{
+	cairo_surface_t *mask=style_shape_get_mask(shape, w, h);
+	unsigned char *data=cairo_image_surface_get_data(mask);
+	int stride=cairo_image_surface_get_stride(mask);
+	return data[(y*stride)+x]>127;
+}
+
 /* Create a css file called $HOME/.florence/florence.css */
 void style_create_css(struct style *style)
 { 

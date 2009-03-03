@@ -74,6 +74,7 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 	keyboard->width=size->w;
 	keyboard->height=size->h;
 
+	/* insert all keyboard keys */
 	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state, (void *)keyboard))) {
 		keyboard->keys=g_slist_append(keyboard->keys, key);
 		if (data->key_table) data->key_table[key->code]=key;
@@ -87,22 +88,16 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 /* delete a keyboard */
 void keyboard_free (struct keyboard *keyboard)
 {
+	/* TODO: liberate list memory */
 	if (keyboard->name) g_free(keyboard->name);
 	if (keyboard->id) g_free(keyboard->id);
 	g_free(keyboard);
 }
 
-/* fill the hitmap with key data */
-void keyboard_hitmap_draw(struct keyboard *keyboard, guchar *hitmap, guint w, guint h, gdouble x, gdouble y, gdouble z)
+/* update the relative position of the keyboard to the view */
+void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y)
 {
-	GSList *list=keyboard->keys;
 	keyboard->xpos=x; keyboard->ypos=y;
-	while (list)
-	{
-		key_hitmap_draw((struct key *)list->data, hitmap, w, h,
-			keyboard->xpos, keyboard->ypos, z);
-		list = list->next;
-	}
 }
 
 /* draw the keyboard to cairo surface */
@@ -174,5 +169,15 @@ void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
 	*y=keyboard->ypos+(key->y-(key->h/2.0));
 	*w=key->w;
 	*h=key->h;
+}
+
+/* Get the key at position (x,y) */
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z)
+{
+	GSList *list=keyboard->keys;
+	while (list &&
+		(!key_hit((struct key *)list->data, x, y, z)))
+		list=list->next;
+	return list?(struct key *)list->data:NULL;
 }
 

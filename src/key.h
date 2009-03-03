@@ -58,8 +58,6 @@ void key_free(struct key *key);
 void key_press(struct key *key, struct status *status);
 void key_release(struct key *key);
 
-/* draw the key on the hitmap */
-void key_hitmap_draw(struct key *key, guchar *hitmap, guint w, guint h, gdouble x, gdouble y, gdouble z);
 /* Draw the shape of the key to the cairo surface. */
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
@@ -75,6 +73,9 @@ gboolean key_is_pressed(struct key *key);
 gboolean key_is_locker(struct key *key);
 void *key_get_userdata(struct key *key);
 GdkModifierType key_get_modifier(struct key *key);
+
+/* return if key is it at position */
+gboolean key_hit(struct key *key, gint x, gint y, gdouble z);
 
 #endif
 

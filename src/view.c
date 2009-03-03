@@ -128,6 +128,50 @@ void view_symbols_draw (struct view *view, cairo_t *cairoctx) {
 	view_draw(view, cairoctx, &(view->symbols), STYLE_SYMBOL);
 }
 
+/* update the keyboard positions */
+void view_keyboards_set_pos(struct view *view)
+{
+	GSList *list=view->keyboards;
+	struct keyboard *keyboard;
+	gdouble width, height, xoffset, yoffset;
+	gdouble x, y;
+
+	/* browse the keyboards */
+	while (list)
+	{
+		keyboard=(struct keyboard *)list->data;
+		if (keyboard_activated(keyboard)) {
+			/* get the position to draw the keyboard */
+			switch (keyboard_get_placement(keyboard)) {
+				case LAYOUT_VOID:
+					width=keyboard_get_width(keyboard);
+					height=keyboard_get_height(keyboard);
+					xoffset=yoffset=0;
+					x=y=0.0;
+					break;
+				case LAYOUT_TOP:
+					yoffset+=keyboard_get_height(keyboard);
+					x=0.0; y=-yoffset;
+					break;
+				case LAYOUT_BOTTOM:
+					x=0.0; y=height;
+					height+=keyboard_get_height(keyboard);
+					break;
+				case LAYOUT_LEFT:
+					xoffset+=keyboard_get_width(keyboard);
+					x=-xoffset; y=0.0;
+					break;
+				case LAYOUT_RIGHT:
+					x=width; y=0.0;
+					width+=keyboard_get_width(keyboard);
+					break;
+			}
+			keyboard_set_pos(keyboard, x+view->xoffset, y+view->yoffset);
+		}
+		list = list->next;
+	}
+}
+
 /* calculate the dimensions of Florence */
 void view_set_dimensions(struct view *view)
 {
@@ -162,63 +206,35 @@ void view_set_dimensions(struct view *view)
 	}
 	view->width=(guint)(view->vwidth*view->zoom);
 	view->height=(guint)(view->vheight*view->zoom);
+	view_keyboards_set_pos(view);
 }
 
-/* Create a hitmap for the view */
-void view_hitmap_create(struct view *view)
+/* get the key at position */
+struct key *view_hit_get (struct view *view, gint x, gint y)
 {
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
-	gdouble width, height, xoffset, yoffset;
-	gdouble x, y;
+	struct key *key;
+	gint kx, ky, kw, kh;
 
-	view->hitmap=g_malloc(view->width*view->height);
-	memset(view->hitmap, 0, view->width*view->height);
-	/* browse the keyboards */
+	/* find the hit keyboard */
 	while (list)
 	{
 		keyboard=(struct keyboard *)list->data;
-		if (keyboard_activated(keyboard)) {
-			/* get the position to draw the keyboard */
-			switch (keyboard_get_placement(keyboard)) {
-				case LAYOUT_VOID:
-					width=keyboard_get_width(keyboard);
-					height=keyboard_get_height(keyboard);
-					xoffset=yoffset=0;
-					x=y=0.0;
-					break;
-				case LAYOUT_TOP:
-					yoffset+=keyboard_get_height(keyboard);
-					x=0.0; y=-yoffset;
-					break;
-				case LAYOUT_BOTTOM:
-					x=0.0; y=height;
-					height+=keyboard_get_height(keyboard);
-					break;
-				case LAYOUT_LEFT:
-					xoffset+=keyboard_get_width(keyboard);
-					x=-xoffset; y=0.0;
-					break;
-				case LAYOUT_RIGHT:
-					x=width; y=0.0;
-					width+=keyboard_get_width(keyboard);
-					break;
-			}
-			keyboard_hitmap_draw(keyboard, view->hitmap, view->width, view->height,
-				x+view->xoffset, y+view->yoffset, view->zoom);
+		/* TODO: record in pixel
+		 * and move that to keyboard_test */
+		kx=keyboard->xpos*view->zoom;
+		ky=keyboard->ypos*view->zoom;
+		kw=keyboard->width*view->zoom;
+		kh=keyboard->height*view->zoom;
+		if ((x>=kx) && (x<=(kx+kw)) && (y>=ky) && y<=(ky+kh)) {
+			list=NULL;
 		}
-		list = list->next;
+		else list = list->next;
 	}
-}
+	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->zoom);
 
-/* get the keycode at position according to hitmap */
-guint view_keycode_get (struct view *view, gint x, gint y)
-{
-	guint code;
-	if (x>=0 && x<view->width && y>=0 && y<view->height)
-		code=view->hitmap[(y*view->width)+x];
-	else code=0;
-	return code;
+	return key;
 }
 
 /* Create a window mask for transparent window for non-composited screen */
@@ -374,8 +390,6 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
 		else settings_set_double("window/zoom", view->zoom);
 		view->width=w; view->height=h;
-		if (view->hitmap) g_free(view->hitmap);
-		view_hitmap_create(view);
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
 		if (view->symbols) cairo_surface_destroy(view->symbols);
@@ -442,8 +456,6 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 	struct view *view=(struct view *)user_data;
 	view_set_dimensions(view);
 	view_resize(view);
-	if (view->hitmap) g_free(view->hitmap);
-	view_hitmap_create(view);
 	if (view->background) cairo_surface_destroy(view->background);
 	view->background=NULL;
 	if (view->symbols) cairo_surface_destroy(view->symbols);
@@ -475,7 +487,6 @@ void view_status_set (struct view *view, struct status *status)
 /* liberate all the memory used by the view */
 void view_free(struct view *view)
 {
-	if (view->hitmap) g_free(view->hitmap);
 	if (view->background) cairo_surface_destroy(view->background);
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	g_free(view);
@@ -492,7 +503,6 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	view->keyboards=keyboards;
 	view->zoom=settings_get_double("window/zoom");
 	view_set_dimensions(view);
-	view_hitmap_create(view);
 
 	view->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));

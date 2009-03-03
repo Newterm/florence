@@ -43,7 +43,6 @@ struct view {
 	GSList *keyboards; /* Main list of keyboard extensions */
 	gdouble xoffset, yoffset; /* offset of the main keyboard */
 	struct style *style; /* Do it with style */
-	guchar *hitmap; /* bitmap of key codes: used to know on which key the mouse is over */
 	cairo_surface_t *background; /* contains the background image of florence */
 	cairo_surface_t *symbols; /* contains the symbols image of florence */
 	GdkRegion *redraw; /* region that needs to be redrawn */
@@ -64,8 +63,8 @@ void view_update (struct view *view, struct key *key, gboolean statechange);
 /* Change the layout and style of the view and redraw */
 void view_update_layout(struct view *view, struct style *style, GSList *keyboards);
 
-/* get the keycode at position according to hitmap */
-guint view_keycode_get (struct view *view, gint x, gint y);
+/* get the key at position */
+struct key *view_hit_get (struct view *view, gint x, gint y);
 /* get gtk window of the view */
 GtkWindow *view_window_get (struct view *view);
 /* get gtk window of the view */

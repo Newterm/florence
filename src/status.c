@@ -59,10 +59,10 @@ void status_pressed_set(struct status *status, gboolean pressed)
 	}
 }
 
-/* returns the keycode currently focussed */
-guint status_keycode_get(struct status *status, gint x, gint y)
+/* returns the key currently focussed */
+struct key *status_hit_get(struct status *status, gint x, gint y)
 {
-	return view_keycode_get(status->view, x, y);
+	return view_hit_get(status->view, x, y);
 }
 
 /* start the timer */

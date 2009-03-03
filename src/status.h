@@ -44,8 +44,8 @@ void status_focus_set(struct status *status, struct key *focus);
 struct key *status_focus_get(struct status *status);
 /* update the pressed key */
 void status_pressed_set(struct status *status, gboolean pressed);
-/* returns the keycode currently focussed */
-guint status_keycode_get(struct status *status, gint x, gint y);
+/* returns the key currently focussed */
+struct key *status_hit_get(struct status *status, gint x, gint y);
 
 /* start the timer */
 void status_timer_start(struct status *status, GSourceFunc update, gpointer data);
