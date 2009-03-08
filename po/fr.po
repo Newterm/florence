@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-23 22:35+0100\n"
+"POT-Creation-Date: 2009-03-08 19:44+0100\n"
 "PO-Revision-Date: 2009-02-11 11:08+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -124,28 +124,28 @@ msgid "Numeric keys"
 msgstr "Touches numériques"
 
 #: ../data/florence.glade.h:26
+msgid "Opacity"
+msgstr "Opacité"
+
+#: ../data/florence.glade.h:27
 msgid "Quit preferences"
 msgstr "Quitter les préférences"
 
-#: ../data/florence.glade.h:27
+#: ../data/florence.glade.h:28
 msgid "Resizable"
 msgstr "Redimenssionable"
 
-#: ../data/florence.glade.h:28
+#: ../data/florence.glade.h:29
 msgid "Show function keys"
 msgstr "Affiche les touches de fonction"
 
-#: ../data/florence.glade.h:29
+#: ../data/florence.glade.h:30
 msgid "Show the arrow keys"
 msgstr "Affiche les touches de navigation (flèches)"
 
-#: ../data/florence.glade.h:30
+#: ../data/florence.glade.h:31
 msgid "Show the numpad"
 msgstr "Affiche le pavé numérique"
-
-#: ../data/florence.glade.h:31
-msgid "Style"
-msgstr "Style"
 
 #: ../data/florence.glade.h:32
 msgid "Style preview"
@@ -157,15 +157,43 @@ msgstr "Barre des tâches"
 
 #: ../data/florence.glade.h:34
 msgid "Transparent"
-msgstr "Transparent"
+msgstr "Transparente"
 
 #: ../data/florence.glade.h:35
 msgid "Transparent mode"
 msgstr "Mode transparent"
 
 #: ../data/florence.glade.h:36
-msgid "Window"
-msgstr "Fenêtre"
+msgid "activated key background color"
+msgstr "Couleur de fond de la touche activée"
+
+#: ../data/florence.glade.h:37
+msgid "behaviour"
+msgstr "comportement"
+
+#: ../data/florence.glade.h:38
+msgid "default key background color"
+msgstr "Couleur de fond des touches normales"
+
+#: ../data/florence.glade.h:39
+msgid "focussed key background color"
+msgstr "Couleur de fond de la touche sélectionnée"
+
+#: ../data/florence.glade.h:40
+msgid "layout"
+msgstr "agencement"
+
+#: ../data/florence.glade.h:41
+msgid "style"
+msgstr "style"
+
+#: ../data/florence.glade.h:42
+msgid "symbol color"
+msgstr "couleur du symbole des touches"
+
+#: ../data/florence.glade.h:43
+msgid "window"
+msgstr "fenêtre"
 
 #: ../data/florence.xml.in.in.h:4
 msgid "Standard keyboard"
@@ -180,18 +208,18 @@ msgstr "Version de XKB incompatble avec le serveur"
 msgid "[new extension] name=%s id=%s"
 msgstr "[nouvelle extension] nom=%s id=\"%s\""
 
-#: ../src/florence.c:264
+#: ../src/florence.c:265
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:266
+#: ../src/florence.c:267
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:294
+#: ../src/florence.c:295
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
@@ -209,40 +237,40 @@ msgstr "Echec d'allocation de mémoire pour le clavier"
 msgid "Unreachable code in keyboard_new"
 msgstr "Code impossible à atteindre dans keyboard_new"
 
-#: ../src/layoutreader.c:85
+#: ../src/layoutreader.c:86
 #, c-format
 msgid "Unknown placement %s"
 msgstr "Placement inconnu %s"
 
-#: ../src/layoutreader.c:315
+#: ../src/layoutreader.c:316
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr ""
 "Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
 "défaut %s"
 
-#: ../src/layoutreader.c:325
+#: ../src/layoutreader.c:326
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 "%s est in répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
-#: ../src/layoutreader.c:332
+#: ../src/layoutreader.c:333
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/layoutreader.c:339
+#: ../src/layoutreader.c:340
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s n'est pas validé par %s"
 
-#: ../src/layoutreader.c:340
+#: ../src/layoutreader.c:341
 #, c-format
 msgid "Using file %s"
 msgstr "Utilisation du fichier %s"
 
-#: ../src/layoutreader.c:348
+#: ../src/layoutreader.c:349
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Le fichier %s ne contient pas de donnée xml"
@@ -300,39 +328,40 @@ msgstr "Impossible de créer un aperçu pour le style %s"
 msgid "Couldn't open directory %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
 
-#: ../src/settings.c:230 ../src/trayicon.c:63
+#: ../src/settings.c:233 ../src/trayicon.c:63
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: ../src/settings.c:305
+#: ../src/settings.c:309
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings.c:369
+#: ../src/settings.c:379
 msgid "Corfirm"
 msgstr "Confirmation"
 
-#: ../src/settings.c:370
+#: ../src/settings.c:380
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
-#: ../src/settings.c:418 ../src/settings.c:435 ../src/settings.c:445
+#: ../src/settings.c:429 ../src/settings.c:448 ../src/settings.c:467
+#: ../src/settings.c:478
 #, c-format
 msgid "Incorrect gconf value for %s"
 msgstr "Valeur gconf incorrecte pour %s"
 
-#: ../src/settings.c:460
+#: ../src/settings.c:493
 #, c-format
 msgid "%s is not a directory"
 msgstr "%s n'est pas un répertoire"
 
-#: ../src/settings.c:465
+#: ../src/settings.c:498
 #, c-format
 msgid "Unable to create directory %s"
 msgstr "Impossible de créer le répertoire %s"
 
-#: ../src/settings.c:481
+#: ../src/settings.c:514
 msgid "Another instance of Florence settings dialog is already running"
 msgstr "Une autre instance des paramètres de Florence est déjà lancée"
 
@@ -350,7 +379,7 @@ msgstr "Couleur de style inconnue: %d"
 msgid "can't parse color %s"
 msgstr "Echec d'analyse de la couleur %s"
 
-#: ../src/style.c:120 ../src/style.c:346 ../src/style.c:361
+#: ../src/style.c:120 ../src/style.c:355 ../src/style.c:370
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
@@ -382,22 +411,22 @@ msgstr "[nouvelle forme] nom=%s svg=\"%s\""
 msgid "Shape doesn't exist: %s"
 msgstr "La forme n'existe pas: %s"
 
-#: ../src/style.c:292
+#: ../src/style.c:301
 #, c-format
 msgid "Unable to create %s because $HOME/.florence does not exist"
 msgstr "Impossible de créer %s car $HOME/.florence n'existe pas"
 
-#: ../src/style.c:299
+#: ../src/style.c:308
 #, c-format
 msgid "Unable to open file %s for read"
 msgstr "Impossible d'ouvrir le fichier %s en lecture"
 
-#: ../src/style.c:300
+#: ../src/style.c:309
 #, c-format
 msgid "Unable to open file %s for write"
 msgstr "Impossible d'ouvrir le fichier %s en écriture"
 
-#: ../src/style.c:305
+#: ../src/style.c:314
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
@@ -489,16 +518,27 @@ msgstr "A p_ropos"
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ../src/view.c:233
+#: ../src/view.c:249
 msgid "Unable to create mask"
 msgstr "Echec de création du masque"
 
-#: ../src/view.c:374
+#: ../src/view.c:367
+msgid ""
+"Your screen does not support alpha channel. Semi-transparency is disabled"
+msgstr ""
+"Votre écran ne supporte pas le cannal alpha. la semi-transparence est "
+"désactivée"
+
+#: ../src/view.c:388
 #, c-format
 msgid "Window size out of range :%d"
 msgstr "Taille de fenêtre en dehors des limites"
 
-#: ../src/view.c:488
+#: ../src/view.c:444
+msgid "Window opacity out of range (1.0 to 100.0): %f"
+msgstr "Opacité de la fenêtre en dehors des limites (1.0 à 100.0): %f"
+
+#: ../src/view.c:538
 msgid "Unable to allocate memory for view"
 msgstr "Echec d'allocation de la mémoire pour la vue"
 
@@ -506,76 +546,3 @@ msgstr "Echec d'allocation de la mémoire pour la vue"
 #, c-format
 msgid "Error loading icon file: %s (%s)"
 msgstr "Erreur de chargement du fichier icone: %s (%s)"
-
-#~ msgid "2009-01-24"
-#~ msgstr "24/01/2009"
-
-#~ msgid "[new key] code=%d x=%f y=%f w=%f h=%f shape=%s"
-#~ msgstr "[nouvelle touche] code=%d x=%f y=%f l=%f h=%f forme=%s"
-
-#~ msgid "Out of element"
-#~ msgstr "Sortie de l'élement"
-
-#~ msgid "layout parse error"
-#~ msgstr "Erreur d'analyse du fichier d'agencement"
-
-#~ msgid "layout parse error: %s not found"
-#~ msgstr "Erreur d'analyse du fichier d'agencement: %s non trouvé"
-
-#~ msgid "%s not found"
-#~ msgstr "%s non trouvé"
-
-#~ msgid "Layout parse error: null node name"
-#~ msgstr "Erreur d'analyse du fichier d'agencement: nom de noeud vide"
-
-#~ msgid "Unknown element: %s"
-#~ msgstr "Element inconnu: %s"
-
-#~ msgid "No informations element in layout"
-#~ msgstr "Pas d'élément informations dans le fichier d'agencement"
-
-#~ msgid "informations element not closed in layout"
-#~ msgstr "L'élement informations n'est pas fermé dans le fichier d'agencement"
-
-#~ msgid "Unclosed symbol element: %s"
-#~ msgstr "L'élement symbol n'est pas fermé"
-
-#~ msgid "Read shape: 'svg' expected: '%s' found "
-#~ msgstr "Lectude de la forme: 'svg' attendu: %s trouvé"
-
-#~ msgid "Unclosed shape element: %s %s"
-#~ msgstr "L'élement shape n'est pas fermé"
-
-#~ msgid "No style element in layout"
-#~ msgstr "Pas d'élément style dans l'agencement"
-
-#~ msgid "No keyboard element in layout"
-#~ msgstr "Pas d'élément keyboard dans l'agencement"
-
-#~ msgid "keyboard element not closed in layout"
-#~ msgstr "L'élement keyboard n'est pas fermé dans le fichier d'agencement"
-
-#~ msgid "Unclosed informations element in layout"
-#~ msgstr "L'élément informations n'est pas fermé dans le fichier d'agencement"
-
-#~ msgid "Unable to activate schema validation from %s."
-#~ msgstr "Echec de l'activation de la validation du schema depuis %s"
-
-#~ msgid "No layout element in layout"
-#~ msgstr "Pas d'alement layour dans le fichier d'agencement"
-
-#~ msgid "Invalid layout: check %s"
-#~ msgstr "Agencement invalide: vérifiez %s"
-
-#~ msgid ""
-#~ "Accessibility is disabled.\n"
-#~ "Florence requires that accessibility is enabled to function.\n"
-#~ "Click OK to enable accessibility and restart GNOME.\n"
-#~ "Alternatively, you may enable accessibility with gnome-at-properties."
-#~ msgstr ""
-#~ "L'accessibilité est désactivée.\n"
-#~ "Florence nécessite que l'accessibilité soit activée pour fonctionner.\n"
-#~ "Cliquez sur le bouton OK pour activer l'accessibilité et redémarrer "
-#~ "GNOME.\n"
-#~ "Alternativement, vous pouvez aussi activer l'accessibilité avec gnome-at-"
-#~ "properties."

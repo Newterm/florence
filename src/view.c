@@ -244,7 +244,7 @@ void view_create_window_mask(struct view *view)
 	GdkBitmap *mask=NULL;
 	cairo_t *cairoctx=NULL;
 
-	if (!view->composite && settings_get_bool("window/transparent")) {
+	if (settings_get_bool("window/transparent")) {
 		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, view->width, view->height, 1)))
 			flo_fatal(_("Unable to create mask"));
 		cairoctx=gdk_cairo_create(mask);
@@ -359,19 +359,16 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 /* on screen change event: check for composite extension */
 void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view *view)
 {
-	GdkScreen *screen = NULL;
-	GdkColormap *colormap = NULL;
-
-	screen = gtk_widget_get_screen (widget);
-	if (colormap == NULL) {
-		view->composite = FALSE;
-		colormap = gdk_screen_get_rgb_colormap(screen);
+	GdkScreen *screen=gtk_widget_get_screen(widget);
+	GdkColormap *colormap=gdk_screen_get_rgba_colormap(screen);
+	if (colormap) {
+		view->composite=TRUE;
 	} else { 
-		view->composite = TRUE;
-		colormap = gdk_screen_get_rgba_colormap (screen);
+		flo_info(_("Your screen does not support alpha channel. Semi-transparency is disabled"));
+		view->composite=FALSE;
+		colormap=gdk_screen_get_rgb_colormap(screen);
 	}
-
-	gtk_widget_set_colormap (widget, colormap);
+	gtk_widget_set_colormap(widget, colormap);
 }
 
 /* on configure events: record window position */
@@ -424,6 +421,13 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	gdk_region_destroy(view->redraw);
 	view->redraw=NULL;
 
+	/* clear the area */
+	if (settings_get_bool("window/transparent")) {
+		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 0.0);
+		cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
+		cairo_paint(context);
+	}
+
 	/* prepare the background */
 	if (!view->background) {
 		view_background_draw(view, context);
@@ -431,6 +435,21 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	cairo_set_source_surface(context, view->background, 0, 0);
 	cairo_paint(context);
+	
+	/* handle composited transparency */
+	/* TODO: check for transparency support in WM */
+	if (view->composite && settings_get_double("window/opacity")!=100.0) {
+		if (settings_get_double("window/opacity")>100.0 ||
+			settings_get_double("window/opacity")<1.0) {
+			flo_error(_("Window opacity out of range (1.0 to 100.0): %f"),
+				settings_get_double("window/opacity"));
+		}
+		cairo_set_source_rgba(context, 0.0, 0.0, 0.0,
+			(100.0-settings_get_double("window/opacity"))/100.0);
+		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(context);
+		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
+	}
 
 	/* draw highlights (pressed keys) */
 	cairo_save(context);
@@ -483,6 +502,13 @@ void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoint
 	struct view *view=(struct view *)user_data;
 	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
 	view_update_extensions(client, xnxn_id, entry, user_data);
+}
+
+/* Triggered by gconf when the "opacity" parameter is changed. */
+void view_set_opacity(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct view *view=(struct view *)user_data;
+	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 }
 
 /* get gtk window of the view */
@@ -542,6 +568,7 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	settings_changecb_register("window/always_on_top", view_set_always_on_top, view);
 	settings_changecb_register("window/task_bar", view_set_task_bar, view);
 	settings_changecb_register("window/zoom", view_set_zoom, view);
+	settings_changecb_register("window/opacity", view_set_opacity, view);
 	settings_changecb_register("layout/extensions", view_update_extensions, view);
 	settings_changecb_register("colours/key", view_redraw, view);
 	settings_changecb_register("colours/outline", view_redraw, view);

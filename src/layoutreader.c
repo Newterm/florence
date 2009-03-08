@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <glib.h>
 #include <libxml/relaxng.h>
+#include <libxml/xinclude.h>
 #include "system.h"
 #include "layoutreader.h"
 #include "trace.h"
@@ -93,7 +94,7 @@ void layoutreader_update_lang(xmlDocPtr doc, xmlNodePtr node, char **update)
 {
 #ifdef HAVE_LOCALE_H
 	if (!xmlNodeGetLang(node) ||
-		!xmlStrncmp(xmlNodeGetLang(node), setlocale(LC_MESSAGES, NULL),
+		!xmlStrncmp(xmlNodeGetLang(node), (xmlChar *)setlocale(LC_MESSAGES, NULL),
 		xmlStrlen(xmlNodeGetLang(node)))) {
 #else
 	if (!xmlNodeGetLang(node)) {

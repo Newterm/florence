@@ -201,6 +201,8 @@ void settings_update()
 	color=settings_get_string("colours/key");
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_auto_click")),
 		settings_get_double("behaviour/auto_click"));
+	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_opacity")),
+		settings_get_double("window/opacity"));
 
 	color=settings_get_string("layout/extensions");
 	extstrs=extstr=g_strsplit(color, ":", -1);
@@ -325,6 +327,12 @@ void settings_function_keys(GtkToggleButton *button)
 void settings_auto_click(GtkHScale *scale)
 {
 	gconf_change_set_set_float(gconfchangeset, settings_get_full_path("behaviour/auto_click"),
+		gtk_range_get_value(GTK_RANGE(scale)));
+}
+
+void settings_opacity(GtkHScale *scale)
+{
+	gconf_change_set_set_float(gconfchangeset, settings_get_full_path("window/opacity"),
 		gtk_range_get_value(GTK_RANGE(scale)));
 }
 

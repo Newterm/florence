@@ -167,6 +167,21 @@
 				<long>Conserve la fenêtre du clavier au dessus des autres fenêtres.</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/window/opacity</key>
+			<applyto>/apps/florence/window/opacity</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>100</default>
+			<locale name="C">
+				<short>Opacity of the keyboard window</short>
+				<long>Sets the opacity of the keyboard window. Requires window manager compositing to work</long>
+			</locale>
+			<locale name="fr">
+				<short>Opacité de la fenêtre</short>
+				<long>Détermine l'opacité de la fenêtre du clavier. Nécessite que gestionnaire de fenêtre support l'effet 'composite'</long>
+			</locale>
+		</schema>
 
 		<schema>
 			<key>/schemas/apps/florence/colours/key</key>
