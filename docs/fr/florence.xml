@@ -47,7 +47,7 @@
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
-			<listitem><para>(Optionnel: option --disable-nls de configure pour désactiver)<ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
+			<listitem><para>(Optionnel: option --disable-nls de configure pour désactive) <ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
 			<listitem><para>(Optionnel: option --with-docs de configure) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
 		<para>La manière d'installer ces dépendances dépend de la distribution utilisée. D'habitude, vous devez installer les paquetages de développement de ces dépendances. Ci-dessous se trouve une liste d'instructions pour les installer depuis la ligne de commande pour les distributions les plus communes. Si votre distribution n'est pas listée et que vous ne savez pas comment installer les dépendances, vous devriez vous adresser au support de votre distribution.</para>
@@ -109,8 +109,8 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 	<sect2>
 		<title>Les modes de Florence</title>
 		<para>Florence a différents états qui affectent sa façon d'interagir avec l'utilisateur.</para>
-		<para>Dans le mode auto-click, vous n'avez pas besoin d'utiliser les boutons de la souris pour taper sur le clavier. Vous n'avez qu'à mettre le pointeur sur une touche et le minuteur est déclenché. Si le pointer reste sur la touche jusqu'à que le minuteur expire, la touche est automatiquement 'cliquée' (pressée). La durée du minuteur peut être réglée dans l'interface de configuration en millisecondes. Lorsqu'il est réglé à 0ms, le mode auto-click est désactivé: vous devez pointer une touche et cliquer pour déclencher une pression de la touche.</para>
-		<para>Un autre mode est le mode auto-hide. Dans ce mode, Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché. Quand ce mode est désactivé, Florence reste toujours visible à l'écran.</para>
+		<para>Dans le mode 'click automatique', vous n'avez pas besoin d'utiliser les boutons de la souris pour taper sur le clavier. Vous n'avez qu'à mettre le pointeur sur une touche et le minuteur est déclenché. Si le pointer reste sur la touche jusqu'à que le minuteur expire, la touche est automatiquement 'cliquée' (pressée). La durée du minuteur peut être réglée dans l'interface de configuration en millisecondes. Lorsqu'il est réglé à 0ms, le mode 'click automatique' est désactivé: vous devez pointer une touche et cliquer pour déclencher une pression de la touche.</para>
+		<para>Un autre mode est le mode 'cacher automatiquement'. Dans ce mode, Florence se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand vous avez besoin de Florence et ces règles utilisent les évènements de <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte éditable est sélectionné, car il est probable que vous avez besoin d'un clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec la technologie <ulink url="http://en.wikipedia.org/wiki/AT-SPI">at-spi</ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner correctement avec Florence. Vous devriez vous assurer que vos applications fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en mode caché. Quand ce mode est désactivé, Florence reste toujours visible à l'écran.</para>
 		<figure id="extensions">
 			<title>Extensions de Florence</title>
 			<screenshot>
@@ -124,34 +124,76 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 	</sect2>
 	<sect2 id="config">
 		<title>Configuration</title>
-			<figure id="settings">
-				<title>Dialogue des préférences</title>
-				<screenshot>
-					<mediaobject>
-						<imageobject><imagedata fileref="figures/settings.png" format="PNG"/></imageobject>
-						<textobject><phrase>Montre le dialogue des préférences.</phrase></textobject>
-					</mediaobject>
-				</screenshot>
-			</figure>
-	<para>La fenêtre de configuration est accessible par l'icône de la zone de notification (cliquez droit sur celle-ci et sélectionnez <guimenuitem>Preferences</guimenuitem>) ou depuis la ligne de commande avec l'option -c ou --config: <command>florence --config</command>. Il est possible de bidouiller la configuration par gconf (voir la section bidouillage)</para>
-		<para>Les options suivantes sont configurables:</para>
+		<para>La fenêtre de configuration est accessible par l'icône de la zone de notification (cliquez droit sur celle-ci et sélectionnez <guimenuitem>Preferences</guimenuitem>) ou depuis la ligne de commande avec l'option -c ou --config: <command>florence --config</command>. Il est possible de bidouiller la configuration par gconf (voir la section bidouillage)</para>
+		<para>Certaines options sélectionnées ne sont prises en compte que lorsque vous cliquez sur le bouton 'appliquer' dans le dialogue des préférences. D'autres options sont appliquées immédiatement et peuvent être annulées avec le bouton 'Annuler' tant qu'elles n'ont pas été appliquées.</para>
+		<para>Les paramètres de configuration ont été divisé en 4 groupes pour faciliter la recherche et la compréhension.</para>
+		<sect3><title>Configuration du style</title>
+		<figure id="style">
+			<title>Dialogue des préférences du style</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/style.png" format="PNG"/></imageobject>
+					<textobject><phrase>Montre le dialogue des préférences du style.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<para>Les options de style suivantes peuvent être configurées:</para>
 		<orderedlist>
-			<listitem><para>Style: sélectionnez votre style en cliquant sur son icone.</para></listitem>
-			<listitem><para>couleur Keys: change la couleur de fond des touches normales.</para></listitem>
-			<listitem><para>couleur Activated: change la couleur de fond des touches pressées ou bloquées.</para></listitem>
-			<listitem><para>couleur Mouse over: change la couleur de la touche qui se trouve sous le pointeur.</para></listitem>
-			<listitem><para>couleur Labels: change la couleur du symbole affiché sur les touches.</para></listitem>
-			<listitem><para>Navigation keys: active/désactive le pavé des flèches.</para></listitem>
-			<listitem><para>Numeric keys: active/désactive le pavé numérique.</para></listitem>
-			<listitem><para>Function keys: active/désactive les touches de fonction.</para></listitem>
-			<listitem><para>Auto-hide: bascule entre les modes auto-hide et toujours visible.</para></listitem>
-			<listitem><para>Decorated: décore la fenêtre avec une barre de titre.</para></listitem>
-			<listitem><para>Transparent: permet de voir les fenêtres derrière le clavier entre les touches.</para></listitem>
-			<listitem><para>Resizable: permet de changer la dimension visuelle du clavier par le gestionaire de fenêtre.</para></listitem>
-			<listitem><para>Task bar: fait apparaître Florence dans la barre des taches du bureau.</para></listitem>
-			<listitem><para>Always on top: demande au gestionnaire de fenêtre de toujours garder le clavier au dessus des autres fenêtres.</para></listitem>
-			<listitem><para>Auto-click: change la durée du minuteur du mode click automatique (0 désactive le mode click automatique).</para></listitem>
+			<listitem><para>Liste des styles: sélectionnez votre style en cliquant sur son icone.</para></listitem>
+			<listitem><para>Couleur des touches normales: change la couleur de fond des touches normales.</para></listitem>
+			<listitem><para>Couleur des touches actives: change la couleur de fond des touches pressées ou bloquées.</para></listitem>
+			<listitem><para>Couleur de la touche sélectionnée: change la couleur de la touche qui se trouve sous le pointeur.</para></listitem>
+			<listitem><para>Couleur des symboles: change la couleur des symboles affichés sur les touches.</para></listitem>
 		</orderedlist>
+		</sect3><sect3><title>Configuration de la fenêtre</title>
+		<figure id="window">
+			<title>Dialogue des préférences de la fenêtre</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/fenetre.png" format="PNG"/></imageobject>
+					<textobject><phrase>Montre le dialogue des préférences de la fenêtre.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<orderedlist>
+			<listitem><para>Decorée: décore la fenêtre avec une barre de titre. Permet de positionner la fenêtre.</para></listitem>
+			<listitem><para>Transparente: permet de voir les fenêtres derrière le clavier entre les touches et de cliquer sur celles-ci.</para></listitem>
+			<listitem><para>Redimensionnable: permet de changer la dimension visuelle du clavier par le gestionaire de fenêtre.Sur certains gestionnaires de fenêtre, il est nécessaire que l'option décorée soit activée pour redimensionner une fenêtre.</para></listitem>
+			<listitem><para>Barre des tâches: fait apparaître Florence dans la barre des taches du bureau.</para></listitem>
+			<listitem><para>Toujours au dessus: demande au gestionnaire de fenêtre de toujours garder le clavier au dessus des autres fenêtres.</para></listitem>
+			<listitem><para>Opacité: règle l'opacité de la fenêtre pour voir les autres fenêtres à travers les touches du clavier. Pour que cela fonctionne, il faut que le gestionnaire de fenêtre supporte l'effet 'composite' et qu'il soit activé. Pour metacity, il faut régler la clé gconf /apps/metacity/general/compositing_manager avec gconf-editor ou gconftool-2.</para></listitem>
+		</orderedlist>
+		</sect3><sect3><title>Configuration du comportement</title>
+		<figure id="behaviour">
+			<title>Dialogue des préférences du comportement</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/comportement.png" format="PNG"/></imageobject>
+					<textobject><phrase>Montre le dialogue des préférences du comportement.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<orderedlist>
+			<listitem><para>Click automatique: change la durée du minuteur du mode click automatique (0 désactive le mode click automatique).</para></listitem>
+			<listitem><para>Disparition automatique: bascule entre les modes 'disparition automatique' et toujours visible.</para></listitem>
+			<listitem><para>Déplacer vers l'objet sélectionné: cette option n'est disponible que lorsque le mode 'disparition automatique' est activé. Lorsqu'elle est activée, le clavier sera repositionné à chaque fois qu'un autre objet éditable est sélectionné pou minimiser les aller-retours de la souris.</para></listitem>
+		</orderedlist>
+		</sect3><sect3><title>Configuration de l'agencement</title>
+		<figure id="layout">
+			<title>Dialogue des préférences de l(agencement</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/agencement.png" format="PNG"/></imageobject>
+					<textobject><phrase>Montre le dialogue des préférences de l'agencement.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<orderedlist>
+			<listitem><para>Touches de navigation: active/désactive le pavé des flèches.</para></listitem>
+			<listitem><para>Touches numériques: active/désactive le pavé numérique.</para></listitem>
+			<listitem><para>Touches de fonction: active/désactive les touches de fonction.</para></listitem>
+		</orderedlist>
+i		</sect3>
 	</sect2>
 	<sect2>
 		<title>Options de la ligne de commande</title>

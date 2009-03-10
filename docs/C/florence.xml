@@ -47,7 +47,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
 			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
-			<listitem><para>(Optional: --disable-nls configure option to disable)<ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
+			<listitem><para>(Optional: --disable-nls configure option to disable) <ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
 			<listitem><para>(Optional: --with-docs configure option) libgnome (version >=2.0)</para></listitem>
 		</orderedlist>
 		<para>How to install those dependencies is dependant on your distribution. Usually, you need to install the devel packages of the dependencies. Below is a list of how to do it via the command line interface on the most common distributions. If your distribution is not listed and you don't know how to install, you may check with your distribution support.</para>
@@ -125,34 +125,76 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 	</sect2>
 	<sect2 id="config">
 		<title>Configuring</title>
-			<figure id="settings">
-				<title>Preferences dialog</title>
-				<screenshot>
-					<mediaobject>
-						<imageobject><imagedata fileref="figures/settings.png" format="PNG"/></imageobject>
-						<textobject><phrase>Shows the preferences dialog.</phrase></textobject>
-					</mediaobject>
-				</screenshot>
-			</figure>
-	<para>The configuration dialog is accessible via the systray icon (right click on it and select <guimenuitem>Preferences</guimenuitem>) or via the command line with the -c or --config switch: <command>florence --config</command>. Hacking configuration is possible via gconf (see the hacking section)</para>
-		<para>The following options are configurable:</para>
+		<para>The configuration dialog is accessible via the systray icon (right click on it and select <guimenuitem>Preferences</guimenuitem>) or via the command line with the -c or --config switch: <command>florence --config</command>. Hacking configuration is possible via gconf (see the hacking section)</para>
+		<para>Some selected options not immediately applied until you click the 'Apply' button. Some other options are taken into account immediately but can be cancelled with the 'Cancel' button while they have not been applied.</para>
+		<para>The settings options have been divided into 4 groups in order to ease searching and understanding them.</para>
+		<sect3><title>Style configuration</title>
+		<figure id="style">
+			<title>Style preferences dialog</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/style.png" format="PNG"/></imageobject>
+					<textobject><phrase>Shows the style preferences dialog.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<para>The following style options are configurable:</para>
 		<orderedlist>
 			<listitem><para>Style: select your style by clicking on the style icon.</para></listitem>
-			<listitem><para>Keys colour: set the background colour of normal keys.</para></listitem>
-			<listitem><para>Activated colour: set the background colour of the keys that are pressed or locked.</para></listitem>
-			<listitem><para>Mouse over colour: set the background colour of the key that is under the pointer.</para></listitem>
-			<listitem><para>Labels colour: set the colour of the symbol or text printed on keys.</para></listitem>
+			<listitem><para>Default keys colour: set the background colour of normal keys.</para></listitem>
+			<listitem><para>Activated keys colour: set the background colour of the keys that are pressed or locked.</para></listitem>
+			<listitem><para>Focussed key colour: set the background colour of the key that is under the pointer.</para></listitem>
+			<listitem><para>Symbol colour: set the colour of the symbol or text printed on keys.</para></listitem>
+		</orderedlist>
+		</sect3><sect3><title>Window configuration</title>
+		<figure id="window">
+			<title>Window preferences dialog</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/window.png" format="PNG"/></imageobject>
+					<textobject><phrase>Shows the window preferences dialog.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<orderedlist>
+			<listitem><para>Decorated: decorates the window with a title bar. Makes it easy to move the window.</para></listitem>
+			<listitem><para>Transparent: allows you to see the windows behind the keyboard between the keys and to click on them.</para></listitem>
+			<listitem><para>Resizable: allow you to set the visual scale of the keyboard with the window manager. Some window managers require the decorated option to be activated in order to resize the window.</para></listitem>
+			<listitem><para>Task bar: make Florence appear on the desktop task bar.</para></listitem>
+			<listitem><para>Always on top: tells to the window manager to always keep the keyboard on top of other windows.</para></listitem>
+			<listitem><para>Opacity: set the window opacity in order to see the other windows through the keys. The window manager must support compositing and it must be activated for this option to work. For metacity, you must set the /apps/metacity/general/compositing_manager gconf key with gconf-editor or gconftool-2</para></listitem>
+		</orderedlist>
+		</sect3><sect3><title>Behaviour configuration</title>
+		<figure id="behaviour">
+			<title>Behaviour preferences dialog</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/behaviour.png" format="PNG"/></imageobject>
+					<textobject><phrase>Shows the behaviour preferences dialog.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<orderedlist>
+			<listitem><para>Auto click: set the auto-click timer duration (0 deactivates the timer).</para></listitem>
+			<listitem><para>Auto hide: switch auto-hide mode on and off.</para></listitem>
+			<listitem><para>Move to near selected widget: this option is only available when auto-hide mode is activated. When activated, the keyboard will be moved to near the last selected editable widget everytime you select a new one in order to minimize pointer distance from the keyboard.</para></listitem>
+		</orderedlist>
+		</sect3><sect3><title>Layout configuration</title>
+		<figure id="layout">
+			<title>Layout preferences dialog</title>
+			<screenshot>
+				<mediaobject>
+					<imageobject><imagedata fileref="figures/layout.png" format="PNG"/></imageobject>
+					<textobject><phrase>Shows the layout preferences dialog.</phrase></textobject>
+				</mediaobject>
+			</screenshot>
+		</figure>
+		<orderedlist>
 			<listitem><para>Navigation keys: activate/deactivate the arrows keypad.</para></listitem>
 			<listitem><para>Numeric keys: activate/deactivate the numpad extension.</para></listitem>
 			<listitem><para>Function keys: activate/deactivate the function keys extensions.</para></listitem>
-			<listitem><para>Auto hide: switch auto-hide mode on and off.</para></listitem>
-			<listitem><para>Decorated: decorates the window with a title bar.</para></listitem>
-			<listitem><para>Transparent: allows you to see the windows behind the keyboard between the keys.</para></listitem>
-			<listitem><para>Resizable: allow you to set the visual scale of the keyboard with the window manager.</para></listitem>
-			<listitem><para>Task bar: make Florence appear in the desktop task bar.</para></listitem>
-			<listitem><para>Always on top: tells to the window manager to always keep the keyboard on top of other windows.</para></listitem>
-			<listitem><para>Auto-click: set the auto-click timer duration (0 deactivates the timer).</para></listitem>
 		</orderedlist>
+		</sect3>
 	</sect2>
 	<sect2>
 		<title>Command line options</title>

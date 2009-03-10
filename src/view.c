@@ -36,7 +36,7 @@ void view_show (struct view *view, Accessible *object)
 	gint screen_width, screen_height;
 
 	/* positionnement intelligent */
-	if (object) {
+	if (settings_get_bool("behaviour/move_to_widget") && object) {
 		component=Accessible_getComponent(object);
 		if (component) {
 			screen_height=gdk_screen_get_height(gdk_screen_get_default());

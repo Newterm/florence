@@ -17,6 +17,21 @@
 			</locale>
 		</schema>
 		<schema>
+			<key>/schemas/apps/florence/behaviour/move_to_widget</key>
+			<applyto>/apps/florence/behaviour/move_to_widget</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>false</default>
+			<locale name="C">
+				<short>Move the keyboard to near the selected widget</short>
+				<long>Move the keyboard to near the selected editable widget in auto-hide mode. Only useful when auto_hide is activated.</long>
+			</locale>
+			<locale name="fr">
+				<short>Déplace the clavier vers les environs de l'objet sélectionné</short>
+				<long>Déplace le clavier vers les environs de l'objet éditable sélectionné en mode auto-hire. Utile seulement lorsque auto_hide est activé.</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/behaviour/auto_click</key>
 			<applyto>/apps/florence/behaviour/auto_click</applyto>
 			<owner>florence</owner>

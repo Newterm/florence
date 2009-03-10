@@ -1,12 +1,11 @@
-The big change in this release is internationalization.
-The project has been internationalized with gettext and localized in french.
-In addition to that, some minor bugs have been fixed.
-
 Changelog:
 
-2009-02-16 François Agrech <f.agrech@gmail.com>
-	* Version 0.3.3
-	* i18n
-	* l10n en français
-	* add icon to main window and preferences dialog
+2009-03-?? François Agrech <f.agrech@gmail.com>
+	* Version 0.4.0
+	* Rebrand super key with florence smile
+	* Change xml parsing method from sequential reader to DOM
+	* Get rid of hitmap
+	* Add window opacity configuration parameter
+	* Implement tabs in settings dialog and add relevant parameters
+	* Add move_to_widget settings option
 
