@@ -34,8 +34,11 @@ struct florence {
 	struct view *view; /* the graphical representation of florence on screen */
 	GSList *keyboards; /* the keyboard extensions (including main) of florence */
 	struct status *status; /* the status of florence */	
+	/* TODO: get rid of this */
 	struct key *keys[256]; /* Florence keys sorted by keycode */
 	struct trayicon *trayicon; /* tray icon object */
+	GtkWindow *icon; /* intermediate icon */
+	Accessible *obj; /* editable object being selected */
 	/* Xkd data: only used at startup */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */

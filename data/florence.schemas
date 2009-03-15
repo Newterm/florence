@@ -28,7 +28,22 @@
 			</locale>
 			<locale name="fr">
 				<short>Déplace the clavier vers les environs de l'objet sélectionné</short>
-				<long>Déplace le clavier vers les environs de l'objet éditable sélectionné en mode auto-hire. Utile seulement lorsque auto_hide est activé.</long>
+				<long>Déplace le clavier vers les environs de l'objet éditable sélectionné en mode auto-hide. Utile seulement lorsque auto_hide est activé.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/intermediate_icon</key>
+			<applyto>/apps/florence/behaviour/intermediate_icon</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Show an intermediate icon before showing the keyboard in auto-hide mode.</short>
+				<long>Show an intermediate icon when you click on an editable widget. Click on the icon to show the actual keyboard.</long>
+			</locale>
+			<locale name="fr">
+				<short>Montre une icône intermédiaire avant d'afficher le clavier en mode disparition automatique</short>
+				<long>Montre une icône intermédiaire lorque vous cliquez sur un objet éditable. Cliquez sur l'icône pour afficher le clavier.</long>
 			</locale>
 		</schema>
 		<schema>

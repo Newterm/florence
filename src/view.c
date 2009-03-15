@@ -31,23 +31,9 @@
 /* Show the view next to the accessible object if specified. */
 void view_show (struct view *view, Accessible *object)
 {
-	AccessibleComponent *component;
-	long int x, y, w, h;
-	gint screen_width, screen_height;
-
 	/* positionnement intelligent */
 	if (settings_get_bool("behaviour/move_to_widget") && object) {
-		component=Accessible_getComponent(object);
-		if (component) {
-			screen_height=gdk_screen_get_height(gdk_screen_get_default());
-			screen_width=gdk_screen_get_width(gdk_screen_get_default());
-			AccessibleComponent_getExtents(component, &x, &y, &w, &h, SPI_COORD_TYPE_SCREEN);
-			if (x<0) x=0;
-			else if (view->width<(screen_width-x-w)) x=screen_width-view->width;
-			if (view->height<(screen_height-y-h)) gtk_window_move(view->window, x, y+h);
-			else if (y>view->height) gtk_window_move(view->window, x, y-view->height);
-			else gtk_window_move(view->window, x, screen_height-view->height);
-		}
+		tools_window_move(view->window, object);
 	}
 	gtk_widget_show(GTK_WIDGET(view->window));
 	/* Some winwow managers forget it */
@@ -550,7 +536,7 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);
 	gtk_widget_set_events(GTK_WIDGET(view->window), GDK_ALL_EVENTS_MASK);
-	gtk_widget_set_app_paintable (GTK_WIDGET(view->window), TRUE);
+	gtk_widget_set_app_paintable(GTK_WIDGET(view->window), TRUE);
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 

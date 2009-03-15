@@ -74,16 +74,16 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="key_hbox">
+                      <widget class="GtkHBox" id="mouseover_hbox">
                         <property name="visible">True</property>
                         <child>
-                          <widget class="GtkColorButton" id="flo_keys">
+                          <widget class="GtkColorButton" id="flo_mouseover">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes" context="yes">Normal key background color</property>
+                            <property name="tooltip" translatable="yes" context="yes">Key with mouve over background color</property>
                             <property name="response_id">0</property>
-                            <property name="title" translatable="yes" context="yes">Key background color</property>
-                            <signal name="color_set" handler="settings_keys_color"/>
+                            <property name="title" translatable="yes" context="yes">Key background color when the mouse is over</property>
+                            <signal name="color_set" handler="settings_mouseover_color"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -91,40 +91,9 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="key_label">
+                          <widget class="GtkLabel" id="mouseover_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">default key background color</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="padding">4</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkHBox" id="activated_hbox">
-                        <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkColorButton" id="flo_activated">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes" context="yes">Activated key background color</property>
-                            <property name="response_id">0</property>
-                            <property name="title" translatable="yes" context="yes">Activated key background color</property>
-                            <signal name="color_set" handler="settings_activated_color"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="activated_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">activated key background color</property>
+                            <property name="label" translatable="yes">focussed key background color</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -135,8 +104,8 @@
                         </child>
                       </widget>
                       <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                       </packing>
                     </child>
                     <child>
@@ -175,16 +144,16 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="mouseover_hbox">
+                      <widget class="GtkHBox" id="activated_hbox">
                         <property name="visible">True</property>
                         <child>
-                          <widget class="GtkColorButton" id="flo_mouseover">
+                          <widget class="GtkColorButton" id="flo_activated">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="tooltip" translatable="yes" context="yes">Key with mouve over background color</property>
+                            <property name="tooltip" translatable="yes" context="yes">Activated key background color</property>
                             <property name="response_id">0</property>
-                            <property name="title" translatable="yes" context="yes">Key background color when the mouse is over</property>
-                            <signal name="color_set" handler="settings_mouseover_color"/>
+                            <property name="title" translatable="yes" context="yes">Activated key background color</property>
+                            <signal name="color_set" handler="settings_activated_color"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -192,9 +161,9 @@
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="mouseover_label">
+                          <widget class="GtkLabel" id="activated_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">focussed key background color</property>
+                            <property name="label" translatable="yes">activated key background color</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -205,9 +174,40 @@
                         </child>
                       </widget>
                       <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                       </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHBox" id="key_hbox">
+                        <property name="visible">True</property>
+                        <child>
+                          <widget class="GtkColorButton" id="flo_keys">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="tooltip" translatable="yes" context="yes">Normal key background color</property>
+                            <property name="response_id">0</property>
+                            <property name="title" translatable="yes" context="yes">Key background color</property>
+                            <signal name="color_set" handler="settings_keys_color"/>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <widget class="GtkLabel" id="key_label">
+                            <property name="visible">True</property>
+                            <property name="label" translatable="yes">default key background color</property>
+                          </widget>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="padding">4</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </widget>
                     </child>
                   </widget>
                   <packing>
@@ -427,7 +427,7 @@
                         <property name="visible">True</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <widget class="GtkVBox" id="vbox1">
+                          <widget class="GtkVBox" id="auto_hide_vbox">
                             <property name="visible">True</property>
                             <child>
                               <widget class="GtkCheckButton" id="flo_auto_hide">
@@ -461,6 +461,22 @@
                                 <property name="position">1</property>
                               </packing>
                             </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_intermediate_icon">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="tooltip" translatable="yes">Put an intermediate icon before showing the actual keyboard</property>
+                                <property name="label" translatable="yes">Intermediate icon</property>
+                                <property name="response_id">0</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
                           </widget>
                         </child>
                       </widget>
@@ -468,6 +484,7 @@
                     <child>
                       <widget class="GtkLabel" id="auto_hide_label">
                         <property name="visible">True</property>
+                        <property name="sensitive">False</property>
                         <property name="label" translatable="yes">Auto hide</property>
                         <property name="use_markup">True</property>
                       </widget>

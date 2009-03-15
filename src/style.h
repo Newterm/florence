@@ -81,5 +81,8 @@ cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h);
 gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h);
 void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdouble w, gdouble h);
 
+/* Renders a svg handle to a cairo surface at dimensions */
+void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub);
+
 #endif
 

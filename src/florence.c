@@ -25,6 +25,7 @@
 #include "settings.h"
 #include "layoutreader.h"
 #include "keyboard.h"
+#include "tools.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <cspi/spi.h>
@@ -35,41 +36,124 @@ void flo_destroy (void)
 	gtk_exit (0);
 }
 
+/* Calles to destroy the icon */
+void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
+{
+	struct florence *florence=(struct florence *)user_data;
+	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+	if (florence->obj) Accessible_unref(florence->obj);
+	florence->icon=NULL;
+}
+
+/* on button-press events: destroy the icon and show the actual keyboard */
+void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_data)
+{
+	struct florence *florence=(struct florence *)user_data;
+	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+	florence->icon=NULL;
+	view_show(florence->view, florence->obj);
+	Accessible_unref(florence->obj);
+	florence->obj=NULL;
+}
+
+/* on expose event: display florence icon */
+void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata)
+{
+	cairo_t *context;
+	RsvgHandle *handle;
+	GError *error=NULL;
+
+	context=gdk_cairo_create(window->window);
+	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
+
+	handle=rsvg_handle_new_from_file(ICONDIR "/florence.svg", &error);
+	if (error) flo_error(_("Error loading florence icon: %s"), error->message);
+	else {
+		style_render_svg(context, handle, settings_get_double("window/zoom")*2,
+			settings_get_double("window/zoom")*2, TRUE, NULL);
+		rsvg_handle_free(handle);
+	}
+
+	cairo_destroy(context);
+}
+
+/* Show an intermediate icon before showing the keyboard (if intermediate_icon is activated) 
+ * otherwise, directly show the keyboard */
+void flo_check_show (struct florence *florence, Accessible *obj)
+{
+	if (GTK_WIDGET_VISIBLE(florence->view->window)) view_hide(florence->view);
+	if (settings_get_bool("behaviour/intermediate_icon")) {
+		if (florence->obj) Accessible_unref(florence->obj);
+		florence->obj=obj;
+		if (!florence->icon) {
+			florence->icon=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
+			gtk_window_set_keep_above(florence->icon, TRUE);
+			gtk_window_set_skip_taskbar_hint(florence->icon, TRUE);
+			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_get_double("window/zoom")*2,
+				settings_get_double("window/zoom")*2);
+			gtk_container_set_border_width(GTK_CONTAINER(florence->icon), 0);
+			gtk_window_set_decorated(florence->icon, FALSE);
+			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);
+			gtk_window_set_accept_focus(florence->icon, FALSE);
+			gtk_widget_set_events(GTK_WIDGET(florence->icon), GDK_ALL_EVENTS_MASK);
+			g_signal_connect(G_OBJECT(florence->icon), "expose-event", G_CALLBACK(flo_icon_expose), NULL);
+			g_signal_connect(G_OBJECT(florence->icon), "button-press-event",
+				G_CALLBACK(flo_icon_press), florence);
+			g_signal_connect(G_OBJECT(florence->view->window), "show",
+				G_CALLBACK(flo_icon_destroy), florence);
+		}
+		tools_window_move(florence->icon, obj);
+		gtk_widget_show(GTK_WIDGET(florence->icon));
+	} else view_show(florence->view, obj);
+}
+
 /* Called when a widget is focused.
  * Check if the widget is editable and show the keyboard or hide if not. */
 void flo_focus_event (const AccessibleEvent *event, void *user_data)
 {
-	struct view *view=(struct view *)user_data;
+	struct florence *florence=(struct florence *)user_data;
+	gboolean hide=FALSE;
 
 	if (Accessible_getRole(event->source)==SPI_ROLE_TERMINAL || Accessible_isEditableText(event->source)) {
 		if (event->detail1) {
-			view_show(view, event->source);
+			flo_check_show(florence, event->source);
+			Accessible_ref(event->source);
+		} else {
+			hide=TRUE;
 		}
-		else {
-			view_hide(view);
-		}
+	} else {
+		hide=TRUE;
+	}
+	if (hide) {
+		view_hide(florence->view);
+		if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+		if (florence->obj) Accessible_unref(florence->obj);
+		florence->icon=NULL;
+		florence->obj=NULL;
 	}
 }
 
 /* Shouldn't be used but it seems like we need to traverse accessible widgets when a new window is open to trigger
  * focus events. This is at least the case for gedit. Will need to check how this all work.
  * Can't we get a focus event when the widget is greated focussed? */
-void flo_traverse (struct view *view, Accessible *obj)
+void flo_traverse (struct florence *florence, Accessible *obj)
 {
 	int n_children, i;
 	Accessible *child;
 
-	n_children=Accessible_getChildCount (obj);
+	n_children=Accessible_getChildCount(obj);
 	if (!Accessible_isTable(obj))
 	{
 		for (i=0;i<n_children;++i)
 		{
 			child=Accessible_getChildAtIndex(obj, i);
 			if (Accessible_isEditableText(child) &&
-				AccessibleStateSet_contains(Accessible_getStateSet(child), SPI_STATE_FOCUSED))
-				view_show(view, child);
-			else flo_traverse(view, child);
-			Accessible_unref(child);
+				AccessibleStateSet_contains(Accessible_getStateSet(child), SPI_STATE_FOCUSED)) {
+				flo_check_show(florence, child);
+			} else {
+				flo_traverse(florence, child);
+				Accessible_unref(child);
+			}
 		}
 	}
 }
@@ -80,23 +164,32 @@ void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
 	/* For some reason, focus state change does happen after traverse 
 	 * ==> did I misunderstand? */
 	/* TODO: remettre le keyboard au front. Attention: always_on_screen désactive cette fonction */
-	flo_traverse((struct view *)user_data, event->source);
+	flo_traverse((struct florence *)user_data, event->source);
 }
 
 /* Switches between always on screen mode and hidden mode.
  * When in hidden mode, the spi events are registered to monitor focus and show on editable widgets.
  * the events are deregistered when always on screen mode is activated */
-void flo_switch_mode (struct view *view, gboolean auto_hide)
+void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 {
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
+	int i;
+	Accessible *obj;
 
 	if (auto_hide) {
-		view_hide(view);
-		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)view);
+		view_hide(florence->view);
+		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)florence);
 		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
-		window_listener=SPI_createAccessibleEventListener (flo_window_create_event, (void*)view);
+		window_listener=SPI_createAccessibleEventListener (flo_window_create_event, (void*)florence);
 		SPI_registerGlobalEventListener(window_listener, "window:activate");
+		for (i=1;i<=SPI_getDesktopCount();i++) {
+			obj=SPI_getDesktop(i);
+			if (obj) {
+				flo_traverse(florence, obj);
+				Accessible_unref(obj);
+			}
+		}
 	} else {
 		if (focus_listener) {
 			SPI_deregisterGlobalEventListenerAll(focus_listener);
@@ -108,7 +201,11 @@ void flo_switch_mode (struct view *view, gboolean auto_hide)
 			AccessibleEventListener_unref(window_listener);
 			window_listener=NULL;
 		}
-		view_show(view, NULL);
+		view_show(florence->view, NULL);
+		if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+		if (florence->obj) Accessible_unref(obj);
+		florence->obj=NULL;
+		florence->icon=NULL;
 	}
 }
 
@@ -161,8 +258,8 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 /* Triggered by gconf when the "auto_hide" parameter is changed. */
 void flo_set_auto_hide(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
-	struct view *view=(struct view *)user_data;
-	flo_switch_mode(view, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	struct florence *florence=(struct florence *)user_data;
+	flo_switch_mode(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
 /* handles mouse leave events */
@@ -310,10 +407,10 @@ struct florence *flo_new(void)
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 
-	flo_switch_mode(florence->view, settings_get_bool("behaviour/auto_hide"));
+	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
 
-	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence->view);
+	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 

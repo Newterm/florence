@@ -51,6 +51,7 @@ static gchar *settings_nametable[][2] = {
 	{ "flo_decorated", "window/decorated" },
 	{ "flo_auto_hide", "behaviour/auto_hide" },
 	{ "flo_move_to_widget", "behaviour/move_to_widget" },
+	{ "flo_intermediate_icon", "behaviour/intermediate_icon" },
 	{ "flo_transparent", "window/transparent" },
 	{ "flo_task_bar", "window/task_bar" },
 	{ "flo_always_on_top", "window/always_on_top" },
@@ -184,6 +185,8 @@ void settings_update()
 	}
 	gtk_widget_set_sensitive(glade_xml_get_widget(gladexml,
 		"flo_move_to_widget"), settings_get_bool("behaviour/auto_hide"));
+	gtk_widget_set_sensitive(glade_xml_get_widget(gladexml,
+		"flo_intermediate_icon"), settings_get_bool("behaviour/auto_hide"));
 
 	color=settings_get_string("colours/key");
 	gtk_color_button_set_color(GTK_COLOR_BUTTON(glade_xml_get_widget(gladexml, "flo_keys")),
@@ -347,9 +350,12 @@ void settings_set_bool (GtkToggleButton *button)
 		settings_get_full_path(settings_get_gconf_name(
 			GTK_WIDGET(button))),
 		gtk_toggle_button_get_active(button));
-	if (!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "flo_auto_hide"))
+	if (!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "flo_auto_hide")) {
 		gtk_widget_set_sensitive(glade_xml_get_widget(gladexml,
 			"flo_move_to_widget"), gtk_toggle_button_get_active(button));
+		gtk_widget_set_sensitive(glade_xml_get_widget(gladexml,
+			"flo_intermediate_icon"), gtk_toggle_button_get_active(button));
+	}
 }
 
 void settings_commit(GtkWidget *window, GtkWidget *button)

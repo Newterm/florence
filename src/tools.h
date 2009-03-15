@@ -20,10 +20,13 @@
 */
 
 #include <gtk/gtk.h>
+#include <cspi/spi.h>
 
 /* sets the window icon to florence.svg */
 void tools_set_icon (GtkWindow *window);
 /* open a YES/NO dialog window and return the user response */
 gint tools_dialog(const gchar *title, GtkWindow *parent,
 	const gchar *accept, const gchar *reject, const gchar *text);
+/* position a window near the specified object */
+void tools_window_move(GtkWindow *window, Accessible *object);
 

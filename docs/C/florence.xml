@@ -6,7 +6,7 @@
 ]>
 <article id="index" lang="en">
 <articleinfo>
-	<date>2009-02-16</date>
+	<date>2009-03-11</date>
 	<title>Florence documentation</title>
 	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
 	<authorgroup>
@@ -35,7 +35,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 	<para>On Fedora, just use the package manager. From the command line, you can type:
 <prompt>#</prompt> <userinput>yum install florence</userinput>
 	</para>
-	<para>Make sure you have the latest version of Florence (0.3.3 as of February, the 16th of 2009). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Make sure you have the latest version of Florence (0.4.0 as of March, the 11th of 2009). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Preparing the dependencies</title>
 		<para>In order to build Florence, you need a build environment with the following commands: make, scrollkeeper and a C compiler, along with the following package dependencies:</para>
@@ -178,6 +178,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 			<listitem><para>Auto click: set the auto-click timer duration (0 deactivates the timer).</para></listitem>
 			<listitem><para>Auto hide: switch auto-hide mode on and off.</para></listitem>
 			<listitem><para>Move to near selected widget: this option is only available when auto-hide mode is activated. When activated, the keyboard will be moved to near the last selected editable widget everytime you select a new one in order to minimize pointer distance from the keyboard.</para></listitem>
+			<listitem><para>Intermediate icon: In auto-hide mode, don't show the keyboard directly on editable widgets, but make an intermediate icon appear instead. Click on the intermediate icon to show the actual keyboard. This option makes Florence less intrusive: for instance, if you want to read a document without editing, the intermediate icon takes less screen space than the keyboard.</para></listitem>
 		</orderedlist>
 		</sect3><sect3><title>Layout configuration</title>
 		<figure id="layout">
