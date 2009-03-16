@@ -1,6 +1,23 @@
+Visible changes:
+The configuration dialog has been revamped with tabs.
+It is cleaner, easier to understand and to find options.
+This allows for adding many future options while keeping it simple.
+One option has been added in the window tab to make the keyboard semi-transparent.
+Two other options have been added to make auto-hide experience better.
+First one is the move_to_widget options which was always on before. You can now disable it and prevent the keyboard from moving to the selected widget (this is now he default).
+Second one is the intermediate icon option which makes Florence less intrusive when you just want to read a document and not edit it with the keyboard. Enable this option and a small icon will appear instead of the keyboard. Just click on that icon to make the actual keyboard appear.
+Many bugs concerning auto-hide mode has also been fixed, so this mode is now fairly usable (still only with at-spi enabled applications, meaning all gtk apps, firefox, openoffice, java apps and some others).
+Last and least, the super key has been rebranded with Florence smile in the hope it will help you keeping your smile.
+
+Infrastructure changes:
+The xml files and implementation method for reading them have been cleaned up.
+It is more easy to extend and take less space on disk.
+The code has also been cleaned up to use less memory, be more robust and more efficient.
+As a result, resizing the window is a little smoother.
+
 Changelog:
 
-2009-03-?? François Agrech <f.agrech@gmail.com>
+2009-03-16 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.0
 	* Rebrand super key with florence smile
 	* Change xml parsing method from sequential reader to DOM
@@ -8,4 +25,6 @@ Changelog:
 	* Add window opacity configuration parameter
 	* Implement tabs in settings dialog and add relevant parameters
 	* Add move_to_widget settings option
+	* Add intermediate icon option
+	* Many bug fixes (mainly concerning auto-hide)
 

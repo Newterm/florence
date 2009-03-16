@@ -103,3 +103,14 @@
 	* L10n en français
 	* Add icon to main window and preferences dialog
 
+2009-03-16 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.0
+	* Rebrand super key with florence smile
+	* Change xml parsing method from sequential reader to DOM
+	* Get rid of hitmap
+	* Add window opacity configuration parameter
+	* Implement tabs in settings dialog and add relevant parameters
+	* Add move_to_widget settings option
+	* Add intermediate icon option
+	* Many bug fixes (mainly concerning auto-hide)
+

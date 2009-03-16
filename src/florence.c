@@ -407,14 +407,13 @@ struct florence *flo_new(void)
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 
+	SPI_init();
 	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
 
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
-
-	SPI_init();
 
 	return florence;
 }
