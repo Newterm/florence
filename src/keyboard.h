@@ -42,7 +42,6 @@ struct keyboard {
 /* This structure contains data from hardware keyboard as well as global florence data
  * Used to initialize the keyboard */
 struct keyboard_globaldata {
-	struct key **key_table; /* table of keys */
 	struct style *style; /* style of florence  */
 	XkbDescPtr xkb_desc; /* Keyboard description from XKB */
 	XkbStateRec xkb_state; /* Keyboard Status (get from XKB) */

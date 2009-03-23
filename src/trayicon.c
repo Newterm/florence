@@ -22,7 +22,6 @@
 #include "trayicon.h"
 #include "system.h"
 #include "trace.h"
-#include "config.h"
 #include "settings.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
@@ -124,9 +123,40 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
 		status_icon, button, activate_time);
 }
 
+#ifdef ENABLE_NOTIFICATION
+/* Called to stop showing startup notification. */
+void trayicon_notification_stop(NotifyNotification *notification, gchar *action, gpointer userdate)
+{
+	if (!strcmp(action, "STOP"))
+		settings_bool_set("behaviour/startup_notification", FALSE);
+}
+
+/* Display startup notification */
+gboolean trayicon_notification_start(gpointer userdata)
+{
+	struct trayicon *trayicon=(struct trayicon *)userdata;
+	if (!notify_init(_("Florence"))) flo_warn(_("libnotify failed to initialize"));
+	trayicon->notification=notify_notification_new_with_status_icon(
+		_("Florence is running"),
+		_("Click on Florence smile to show/hide Florence.\n"
+		"Right click on it to display menu and get help."),
+		GTK_STOCK_INFO, trayicon->tray_icon);
+	notify_notification_add_action(trayicon->notification, "STOP",
+		_("Do not show again"), trayicon_notification_stop, NULL, NULL);
+	notify_notification_set_timeout(trayicon->notification, 5000);
+	if (!notify_notification_show(trayicon->notification, NULL))
+		flo_warn(_("Notification failed"));
+	return FALSE;
+}
+#endif
+
 /* Deallocate all the memory used bu the trayicon. */
 void trayicon_free(struct trayicon *trayicon)
 {
+#ifdef ENABLE_NOTIFICATION
+	g_object_unref(trayicon->notification);
+	notify_uninit();
+#endif
 	g_object_unref(trayicon->tray_icon);
 	g_free(trayicon);
 }
@@ -149,6 +179,11 @@ struct trayicon *trayicon_new(GtkWidget *window, GCallback quit_cb)
 	gtk_status_icon_set_from_icon_name(trayicon->tray_icon, "florence");
 	gtk_status_icon_set_tooltip(trayicon->tray_icon, _("Florence Virtual Keyboard"));
 	gtk_status_icon_set_visible(trayicon->tray_icon, TRUE);
+
+#ifdef ENABLE_NOTIFICATION
+	if (settings_get_bool("behaviour/startup_notification"))
+		g_timeout_add(2000, trayicon_notification_start, (gpointer)trayicon);
+#endif
 
 	return trayicon;
 }

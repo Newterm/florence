@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-03-16 17:38+0100\n"
+"POT-Creation-Date: 2009-03-18 08:44+0100\n"
 "PO-Revision-Date: 2009-02-11 11:08+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../data/florence.desktop.in.h:1 ../src/trayicon.c:36 ../src/trayicon.c:150
+#: ../data/florence.desktop.in.h:1 ../src/trayicon.c:35 ../src/trayicon.c:180
 msgid "Florence Virtual Keyboard"
 msgstr "Clavier virtuel Florence"
 
@@ -223,9 +223,9 @@ msgid "Standard keyboard"
 msgstr "Clavier standard"
 
 #: ../src/florence.c:70
-#, fuzzy, c-format
+#, c-format
 msgid "Error loading florence icon: %s"
-msgstr "Erreur de chargement du fichier icone: %s (%s)"
+msgstr "Erreur de chargement du fichier icone: %s"
 
 #: ../src/florence.c:227
 msgid "XKB version mismatch"
@@ -356,7 +356,7 @@ msgstr "Impossible de créer un aperçu pour le style %s"
 msgid "Couldn't open directory %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
 
-#: ../src/settings.c:239 ../src/trayicon.c:63
+#: ../src/settings.c:239 ../src/trayicon.c:62
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
@@ -379,17 +379,17 @@ msgstr "Abandonner les changements?"
 msgid "Incorrect gconf value for %s"
 msgstr "Valeur gconf incorrecte pour %s"
 
-#: ../src/settings.c:505
+#: ../src/settings.c:511
 #, c-format
 msgid "%s is not a directory"
 msgstr "%s n'est pas un répertoire"
 
-#: ../src/settings.c:510
+#: ../src/settings.c:516
 #, c-format
 msgid "Unable to create directory %s"
 msgstr "Impossible de créer le répertoire %s"
 
-#: ../src/settings.c:526
+#: ../src/settings.c:532
 msgid "Another instance of Florence settings dialog is already running"
 msgstr "Une autre instance des paramètres de Florence est déjà lancée"
 
@@ -488,11 +488,11 @@ msgstr "ATTENTION: "
 msgid "ERROR: "
 msgstr "ERREUR: "
 
-#: ../src/trayicon.c:37
+#: ../src/trayicon.c:36
 msgid "Copyright (C) 2008, 2009 François Agrech"
 msgstr "Copyright (C) 2008, 2009 François Agrech"
 
-#: ../src/trayicon.c:40
+#: ../src/trayicon.c:39
 msgid ""
 "Copyright (C) 2008, 2009 François Agrech\n"
 "\n"
@@ -530,21 +530,49 @@ msgstr ""
 "(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
 "programme a une valeur légale et s'applique à ce programme."
 
-#: ../src/trayicon.c:92
+#: ../src/trayicon.c:91
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: ../src/trayicon.c:98
+#: ../src/trayicon.c:97
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../src/trayicon.c:104
+#: ../src/trayicon.c:103
 msgid "_About"
 msgstr "A p_ropos"
 
-#: ../src/trayicon.c:109
+#: ../src/trayicon.c:108
 msgid "_Preferences"
 msgstr "_Préférences"
+
+#: ../src/trayicon.c:138
+msgid "Florence"
+msgstr "Florence"
+
+#: ../src/trayicon.c:138
+msgid "libnotify failed to initialize"
+msgstr "Echec de l'initialisation de libnotify"
+
+#: ../src/trayicon.c:140
+msgid "Florence is running"
+msgstr "Florence est lancée"
+
+#: ../src/trayicon.c:141
+msgid ""
+"Click on Florence smile to show/hide Florence.\n"
+"Right click on it to display menu and get help."
+msgstr ""
+"Cliquez sur le sourire de Florence pour afficher/cacher Florence.\n"
+"Cliquez droit pour afficher le menu et obtenir de l'aide."
+
+#: ../src/trayicon.c:145
+msgid "Do not show again"
+msgstr "Ne plus afficher"
+
+#: ../src/trayicon.c:148
+msgid "Notification failed"
+msgstr "Echec de notification"
 
 #: ../src/view.c:235
 msgid "Unable to create mask"

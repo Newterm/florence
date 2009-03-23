@@ -424,7 +424,9 @@ void style_free(struct style *style)
 {
 	if (style) {
 		g_slist_foreach(style->shapes, style_shape_free, NULL);
+		g_slist_free(style->shapes);
 		g_slist_foreach(style->symbols, style_symbol_free, NULL);
+		g_slist_free(style->symbols);
 		g_free(style);
 	}
 }

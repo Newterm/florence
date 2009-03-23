@@ -61,6 +61,21 @@
 				<long>Temps, en millisecondes, à attendre lorsque la souris est sur une touche avant que la touche soir automatiquement préssée. Mettre à 0 pour désactiver l'auto click.</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/startup_notification</key>
+			<applyto>/apps/florence/behaviour/startup_notification</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Display a startup notification message.</short>
+				<long>Display a notification message at startup explaining the basics.</long>
+			</locale>
+			<locale name="fr">
+				<short>Affiche un message au démarrage.</short>
+				<long>Affiche un message au démarrage pour expliquer les bases.</long>
+			</locale>
+		</schema>
 
 		<schema>
 			<key>/schemas/apps/florence/window/xpos</key>

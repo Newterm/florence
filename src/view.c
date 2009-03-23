@@ -50,15 +50,17 @@ void view_hide (struct view *view)
 void view_resize (struct view *view)
 {
 	GdkGeometry hints;
+	hints.win_gravity=GDK_GRAVITY_STATIC;
 	if (settings_get_bool("window/resizable")) {
 		hints.min_aspect=view->vwidth/view->vheight;
 		hints.max_aspect=view->vwidth/view->vheight;
 		gtk_window_set_resizable(view->window, TRUE);
 		gtk_window_set_geometry_hints(view->window, NULL, &hints,
-			GDK_HINT_ASPECT);
+			GDK_HINT_ASPECT|GDK_HINT_WIN_GRAVITY);
 		gtk_window_resize(view->window, view->width, view->height);
 	} else {
-		gtk_window_set_geometry_hints(view->window, NULL, &hints, 0);
+		gtk_window_set_geometry_hints(view->window, NULL, &hints,
+			GDK_HINT_WIN_GRAVITY);
 		gtk_window_set_resizable(view->window, FALSE);
 		gtk_widget_set_size_request(GTK_WIDGET(view->window),
 			view->width, view->height);
@@ -265,6 +267,7 @@ void view_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, g
 {
 	struct view *view=(struct view *)user_data;
 	gtk_window_set_decorated(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 }
 
 /* Triggered by gconf when the "always_on_top" parameter is changed. 

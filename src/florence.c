@@ -235,7 +235,6 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 	global.status=florence->status;
 
 	/* initialize global data */
-	global.key_table=(struct key **)&(florence->keys);
 	global.style=florence->style;
 
 	/* read the layout file and create the extensions */
@@ -333,7 +332,6 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
  * Those objects are the style object, the keyboards and the keys */
 void flo_layout_unload(struct florence *florence)
 {
-	int i;
 	struct keyboard *keyboard;
 	while (florence->keyboards) {
 		keyboard=(struct keyboard *)florence->keyboards->data;
@@ -341,9 +339,6 @@ void flo_layout_unload(struct florence *florence)
 		florence->keyboards=g_slist_delete_link(florence->keyboards, florence->keyboards);
 	}
 	if (florence->style) style_free(florence->style);
-	for (i=0;i<256;i++) {
-		if (florence->keys[i]) key_free(florence->keys[i]);
-	}
 }
 
 /* loads the layout file

@@ -92,16 +92,18 @@ enum layout_placement layoutreader_placement_get(struct layout *layout)
 /* Update the string if the node lang matches locale */
 void layoutreader_update_lang(xmlDocPtr doc, xmlNodePtr node, char **update)
 {
+	xmlChar *lang=xmlNodeGetLang(node);
 #ifdef HAVE_LOCALE_H
-	if (!xmlNodeGetLang(node) ||
-		!xmlStrncmp(xmlNodeGetLang(node), (xmlChar *)setlocale(LC_MESSAGES, NULL),
-		xmlStrlen(xmlNodeGetLang(node)))) {
+	if (!lang ||
+		!xmlStrncmp(lang, (xmlChar *)setlocale(LC_MESSAGES, NULL),
+		xmlStrlen(lang))) {
 #else
-	if (!xmlNodeGetLang(node)) {
+	if (!lang) {
 #endif
 		if (*update) xmlFree(*update);
 		*update=(char *)xmlNodeListGetString(doc, node, 1);
 	}
+	xmlFree(lang);
 }
 
 /* dump svg from file */

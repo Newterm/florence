@@ -4,6 +4,8 @@ AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
 AC_ARG_WITH([docs], AS_HELP_STRING([--without-docs], [Build without docs (default: enabled)]))
 AM_CONDITIONAL([WITH_DOCS], [test "x$with_docs" != "xno"])
+AC_ARG_WITH([notification], AS_HELP_STRING([--without-notification], [Build without notification (default: enabled)]))
+AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_notification" != "xno"])
 
 # Internationalization
 AC_PROG_INTLTOOL([0.23])
@@ -39,9 +41,14 @@ if test "x$with_docs" != "xno"; then
 	PKG_CHECK_MODULES([LIBGNOME], [libgnome-2.0], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find libgnome.
 Please either install libgnome package or disable docs: --without-docs configure option))
 fi
+if test "x$with_notification" != "xno"; then
+	PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], AC_DEFINE([ENABLE_NOTIFICATION], [], [Notification enabled.]), AC_MSG_ERROR(Could not configure libnotify. Please either install libnotify or disable notifications: --without-notification configure option))
+fi
 
 AC_SUBST(LIBGNOME_CFLAGS)
 AC_SUBST(LIBGNOME_LIBS)
+AC_SUBST(LIBNOTIFY_CFLAGS)
+AC_SUBST(LIBNOTIFY_LIBS)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
 

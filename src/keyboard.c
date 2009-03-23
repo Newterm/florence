@@ -77,7 +77,6 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 	/* insert all keyboard keys */
 	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state, (void *)keyboard))) {
 		keyboard->keys=g_slist_append(keyboard->keys, key);
-		if (data->key_table) data->key_table[key->code]=key;
 		if (key_is_pressed(key)) status_press(data->status, key);
 	}
 
@@ -85,13 +84,23 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 	return keyboard;
 }
 
+/* delete a key from the keyboard */
+void keyboard_key_free (gpointer data, gpointer userdata)
+{
+	struct key *key=(struct key *)data;
+	key_free(key);
+}
+
 /* delete a keyboard */
 void keyboard_free (struct keyboard *keyboard)
 {
-	/* TODO: liberate list memory */
-	if (keyboard->name) g_free(keyboard->name);
-	if (keyboard->id) g_free(keyboard->id);
-	g_free(keyboard);
+	if (keyboard) {
+		g_slist_foreach(keyboard->keys, keyboard_key_free, NULL);
+		g_slist_free(keyboard->keys);
+		if (keyboard->name) g_free(keyboard->name);
+		if (keyboard->id) g_free(keyboard->id);
+		g_free(keyboard);
+	}
 }
 
 /* update the relative position of the keyboard to the view */

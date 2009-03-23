@@ -20,6 +20,10 @@
 */
 
 #include <gtk/gtk.h>
+#include "config.h"
+#ifdef ENABLE_NOTIFICATION
+	#include <libnotify/notify.h>
+#endif
 
 /* A trayicon object is holding the informations about the tray icon */
 struct trayicon {
@@ -28,6 +32,9 @@ struct trayicon {
 	GtkWidget *window; /* Window shown or hidden on left click on the tray icon */
 	gint x; /* recorded x position of the window on the screen before hiding */
 	gint y; /* recorded y position od the window on the screen before hiding */
+#ifdef ENABLE_NOTIFICATION
+	NotifyNotification *notification; /* startup notification */
+#endif
 };
 
 /* Creates a new trayicon instance */

@@ -39,6 +39,8 @@ void settings_set_int(const gchar *name, gint value);
 gchar *settings_get_string(const gchar *name);
 /* get a gconf boolean */
 gboolean settings_get_bool(const gchar *name);
+/* set a gconf boolean */
+void settings_bool_set(const gchar *name, gboolean value);
 
 /* Create the $HOME/.florence directory */
 gboolean settings_mkhomedir();

@@ -253,7 +253,8 @@ void settings_style_change (GtkIconView *iconview, gpointer user_data)
 		gtk_tree_model_get_iter(gtk_icon_view_get_model(iconview), &iter, (GtkTreePath *)list->data);
 		gtk_tree_model_get(gtk_icon_view_get_model(iconview), &iter, 1, &name, -1);
 		path=g_strdup_printf(DATADIR "/styles/%s", name);
-		gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/style"), path);
+		settings_save(settings_get_full_path("layout/style"));
+		gconf_client_set_string(gconfclient, settings_get_full_path("layout/style"), path, NULL);
 		g_list_foreach(list, (GFunc)(gtk_tree_path_free), NULL);
 		g_list_free(list);
 		g_free(path);
@@ -338,8 +339,9 @@ void settings_auto_click(GtkHScale *scale)
 
 void settings_opacity(GtkHScale *scale)
 {
-	gconf_change_set_set_float(gconfchangeset, settings_get_full_path("window/opacity"),
-		gtk_range_get_value(GTK_RANGE(scale)));
+	settings_save(settings_get_full_path("window/opacity"));
+	gconf_client_set_float(gconfclient, settings_get_full_path("window/opacity"),
+		gtk_range_get_value(GTK_RANGE(scale)), NULL);
 }
 
 /* Set a gconf boolean according to the state of the toggle button.
@@ -490,6 +492,12 @@ gboolean settings_get_bool(const gchar *name)
 	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
 	flo_debug("GCONF:%s=<%s>", fullpath, ret?"TRUE":"FALSE");
 	return ret;
+}
+
+/* set a gconf boolean */
+void settings_bool_set(const gchar *name, gboolean value)
+{
+	gconf_client_set_bool(gconfclient, settings_get_full_path(name), value, NULL);
 }
 
 /* Create the $HOME/.florence directory */
