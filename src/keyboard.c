@@ -75,9 +75,9 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 	keyboard->height=size->h;
 
 	/* insert all keyboard keys */
-	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state, (void *)keyboard))) {
+	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state,
+		(void *)keyboard, data->status))) {
 		keyboard->keys=g_slist_append(keyboard->keys, key);
-		if (key_is_pressed(key)) status_press(data->status, key);
 	}
 
 	layoutreader_keyboard_free(layout, size);

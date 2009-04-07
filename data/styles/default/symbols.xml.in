@@ -22,7 +22,7 @@
 <symbols xmlns="http://florence.sourceforge.net">
 	<symbol>
 		<name>Control_[LR]</name>
-		<label>ctrl</label>
+		<_label>ctrl</_label>
 	</symbol>
 	<symbol>
 		<name>Super_[LR]</name>
@@ -35,11 +35,11 @@
 	</symbol>
 	<symbol>
 		<name>(Alt_[LR]|Meta_L)</name>
-		<label>alt</label>
+		<_label>alt</_label>
 	</symbol>
 	<symbol>
 		<name>ISO_Level3_Shift</name>
-		<label>altGr</label>
+		<_label>altGr</_label>
 	</symbol>
 	<symbol>
 		<name>BackSpace</name>
@@ -87,7 +87,7 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Insert</name>
-		<label>ins</label>
+		<_label>ins</_label>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Home</name>
@@ -108,11 +108,11 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Delete</name>
-		<label>del</label>
+		<_label>del</_label>
 	</symbol>
 	<symbol>
 		<name>(KP_|)End</name>
-		<label>end</label>
+		<_label>end</_label>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Down</name>
@@ -147,79 +147,79 @@
 	</symbol>
 	<symbol>
 		<name>KP_Enter</name>
-		<label>ent</label>
+		<_label>ent</_label>
 	</symbol>
 	<symbol>
 		<name>Num_Lock</name>
-		<label>nlk</label>
+		<_label>nlk</_label>
 	</symbol>
 	<symbol>
 		<name>Escape</name>
-		<label>esc</label>
+		<_label>esc</_label>
 	</symbol>
 	<symbol>
 		<name>F1</name>
-		<label>F1</label>
+		<_label>F1</_label>
 	</symbol>
 	<symbol>
 		<name>F2</name>
-		<label>F2</label>
+		<_label>F2</_label>
 	</symbol>
 	<symbol>
 		<name>F3</name>
-		<label>F3</label>
+		<_label>F3</_label>
 	</symbol>
 	<symbol>
 		<name>F4</name>
-		<label>F4</label>
+		<_label>F4</_label>
 	</symbol>
 	<symbol>
 		<name>F5</name>
-		<label>F5</label>
+		<_label>F5</_label>
 	</symbol>
 	<symbol>
 		<name>F6</name>
-		<label>F6</label>
+		<_label>F6</_label>
 	</symbol>
 	<symbol>
 		<name>F7</name>
-		<label>F7</label>
+		<_label>F7</_label>
 	</symbol>
 	<symbol>
 		<name>F8</name>
-		<label>F8</label>
+		<_label>F8</_label>
 	</symbol>
 	<symbol>
 		<name>F9</name>
-		<label>F9</label>
+		<_label>F9</_label>
 	</symbol>
 	<symbol>
 		<name>F10</name>
-		<label>F10</label>
+		<_label>F10</_label>
 	</symbol>
 	<symbol>
 		<name>F11</name>
-		<label>F11</label>
+		<_label>F11</_label>
 	</symbol>
 	<symbol>
 		<name>F12</name>
-		<label>F12</label>
+		<_label>F12</_label>
 	</symbol>
 	<symbol>
 		<name>Print</name>
-		<label>psc</label>
+		<_label>psc</_label>
 	</symbol>
 	<symbol>
 		<name>Scroll_Lock</name>
-		<label>slk</label>
+		<_label>slk</_label>
 	</symbol>
 	<symbol>
 		<name>Pause</name>
-		<label>brk</label>
+		<_label>brk</_label>
 	</symbol>
 	<symbol>
 		<name>(.*)tilde</name>
-		<label>~</label>
+		<_label>~</_label>
 	</symbol>
 </symbols>
 

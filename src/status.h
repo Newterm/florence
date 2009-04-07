@@ -23,6 +23,10 @@
 #define FLO_STATUS
 
 #include <gtk/gtk.h>
+#ifdef ENABLE_XTST
+#include <X11/Xlib.h>
+#include <X11/extensions/record.h>
+#endif
 #include "key.h"
 #include "view.h"
 
@@ -36,7 +40,17 @@ struct status {
 	GList *pressedkeys; /* the list of all currently pressed keys */
 	GdkModifierType globalmod; /* global modifier mask */
 	struct view *view; /* view to update on status change */
+#ifdef ENABLE_XTST
+	XRecordContext RecordContext; /* Context to record keyboard events */
+	Display *data_disp; /* Data display to record events */
+	struct key *keys[256]; /* keys by keycode. used to look up for key. */
+#endif
 };
+
+#ifdef ENABLE_XTST
+/* Add keys to the keycode indexed keys */
+void status_keys_add(struct status *status, GSList *keys);
+#endif
 
 /* update the focus key */
 void status_focus_set(struct status *status, struct key *focus);

@@ -114,3 +114,11 @@
 	* Add intermediate icon option
 	* Many bug fixes (mainly concerning auto-hide)
 
+2009-04-03 François Agrech <f.agrech@gmail.com>
+	* Add a startup notification message
+	* Apply style and window opacity immediately
+	* Fix minor memory leak
+	* Set static gravity for window
+	* Listen to keyboard device events to update the status
+	* i18n and l10n in french of key labels
+

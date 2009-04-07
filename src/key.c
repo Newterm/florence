@@ -31,7 +31,7 @@
 /* Instanciates a key
  * the key may have a static label which will be always drawn in place of the symbol */
 struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
-	XkbStateRec rec, void *userdata)
+	XkbStateRec rec, void *userdata, struct status *status)
 {
 	struct layout_key *lkey=layoutreader_key_new(layout);
 	struct key *key=NULL;
@@ -43,7 +43,10 @@ struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
 		key->locker=XkbKeyAction(xkb, key->code, 0)?
 			XkbKeyAction(xkb, key->code, 0)->type==XkbSA_LockMods:FALSE;
 		key->modifier=xkb->map->modmap[key->code];
-		key->pressed=(key->modifier && (key->modifier&rec.locked_mods));
+		if (key->modifier&rec.locked_mods) {
+			key_set_pressed(key, TRUE);
+			status_press(status, key);
+		}
 		key->shape=style_shape_get(style, lkey->shape);
 		key->x=lkey->pos.x;
 		key->y=lkey->pos.y;
@@ -83,29 +86,12 @@ void key_press(struct key *key, struct status *status)
 			SPI_generateKeyboardEvent(pressed->code, NULL, SPI_KEY_RELEASE);
 		list=list->next;
 	}
-	if (key_get_modifier(key)) {
-		key->pressed=!key->pressed;
-	} else { 
-		key->pressed=TRUE;
-		list=status_pressedkeys_get(status);
-		while (list) {
-			pressed=((struct key *)list->data);
-			list=list->next;
-			if (key_get_modifier(pressed) && !key_is_locker(pressed)) {
-				pressed->pressed=FALSE;
-				status_release(status, pressed);
-			}
-		}
-	}
-	if (key->pressed) status_press(status, key);
-	else status_release(status, key);
 }
 
 /* Send a key release event */
 void key_release(struct key *key)
 {
 	SPI_generateKeyboardEvent(key->code, NULL, SPI_KEY_RELEASE);
-	if (!key_get_modifier(key)) key->pressed=FALSE;
 }
 
 /* get keyval according to modifier */

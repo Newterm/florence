@@ -5,6 +5,6 @@ _Comment=Florence Virtual Keyboard
 Exec=florence
 Terminal=false
 Type=Application
-Icon=florence.svg
+Icon=@ICONDIR@/florence.svg
 Categories=Application;Accessibility;
 

@@ -277,7 +277,7 @@ struct layout_symbol *layoutreader_symbol_new(struct layout *layout)
 		} else if (!xmlStrcmp(cur->name, (xmlChar *)"svg")) {
 			symbol->svg=layoutreader_svg_get(layout->doc, cur);
 		} else if (!xmlStrcmp(cur->name, (xmlChar *)"label")) {
-			symbol->label=(char *)xmlNodeListGetString(layout->doc, cur->children, 1);
+			layoutreader_update_lang(layout->doc, cur->children, &symbol->label);
 		}
 	}
 	layoutreader_element_close(layout);

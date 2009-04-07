@@ -50,7 +50,7 @@ struct key {
 /* Instanciate a key
  * the key may have a static label which will be always drawn in place of the symbol */
 struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
-	XkbStateRec rec, void *userdata);
+	XkbStateRec rec, void *userdata, struct status *status);
 /* deallocate memory used by the key */
 void key_free(struct key *key);
 

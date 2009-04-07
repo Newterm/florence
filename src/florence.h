@@ -38,6 +38,7 @@ struct florence {
 	GtkWindow *icon; /* intermediate icon */
 	Accessible *obj; /* editable object being selected */
 	/* Xkd data: only used at startup */
+	/* TODO: ==> status.c */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */
 };

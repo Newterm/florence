@@ -1,6 +1,7 @@
 data/florence.desktop.in
 data/florence.glade
 data/florence.xml.in.in
+data/styles/default/symbols.xml.in
 src/florence.c
 src/keyboard.c
 src/layoutreader.c

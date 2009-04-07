@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.4.0], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.4.1], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -6,6 +6,8 @@ AC_ARG_WITH([docs], AS_HELP_STRING([--without-docs], [Build without docs (defaul
 AM_CONDITIONAL([WITH_DOCS], [test "x$with_docs" != "xno"])
 AC_ARG_WITH([notification], AS_HELP_STRING([--without-notification], [Build without notification (default: enabled)]))
 AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_notification" != "xno"])
+AC_ARG_WITH([xtst], AS_HELP_STRING([--without-xtst], [Build without Xtst extension (default: enabled)]))
+AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_xtst" != "xno"])
 
 # Internationalization
 AC_PROG_INTLTOOL([0.23])
@@ -44,11 +46,16 @@ fi
 if test "x$with_notification" != "xno"; then
 	PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], AC_DEFINE([ENABLE_NOTIFICATION], [], [Notification enabled.]), AC_MSG_ERROR(Could not configure libnotify. Please either install libnotify or disable notifications: --without-notification configure option))
 fi
+if test "x$with_xtst" != "xno"; then
+	PKG_CHECK_MODULES([XTST], [xtst], AC_DEFINE([ENABLE_XTST], [], [Xtst extension enabled.]), AC_MSG_ERROR(Could not configure xtst. Please either install xtst or disable it: --without-xtst configure option))
+fi
 
 AC_SUBST(LIBGNOME_CFLAGS)
 AC_SUBST(LIBGNOME_LIBS)
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
+AC_SUBST(XTST_CFLAGS)
+AC_SUBST(XTST_LIBS)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
 
@@ -68,6 +75,8 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
 # Files generated
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/florence.xml.in docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
+ICONDIR=$prefix/$DATADIRNAME/icons
+AC_SUBST(ICONDIR)
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/florence.xml.in data/florence.desktop.in docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
 AC_OUTPUT
 

@@ -340,9 +340,9 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			view->hand_cursor=TRUE;
 		}
 	} else if (view->hand_cursor) {
-			gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
-			view->hand_cursor=FALSE;
-		}
+		gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
+		view->hand_cursor=FALSE;
+	}
 }
 
 /* on screen change event: check for composite extension */
@@ -440,9 +440,17 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	}
 
-	/* draw highlights (pressed keys) */
 	cairo_save(context);
 	cairo_scale(context, view->zoom, view->zoom);
+
+	/* focused key */
+	if (status_focus_get(view->status)) {
+		key=status_focus_get(view->status);
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		keyboard_focus_draw(keyboard, context, view->zoom, view->style, key, status_timer_get(view->status));
+	}
+
+	/* draw highlights (pressed keys) */
 	if (list) {
 		while (list) {
 			key=(struct key *)list->data;
@@ -452,12 +460,6 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		}
 	}
 
-	/* focused key */
-	if (status_focus_get(view->status)) {
-		key=status_focus_get(view->status);
-		keyboard=(struct keyboard *)key_get_userdata(key);
-		keyboard_focus_draw(keyboard, context, view->zoom, view->style, key, status_timer_get(view->status));
-	}
 	cairo_restore(context);
 
 	/* draw the symbols */
