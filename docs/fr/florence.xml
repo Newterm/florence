@@ -43,11 +43,12 @@
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/GConf/">libgconf</ulink> (version >= 2.0)</para></listitem>
-			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libglade/">libglage</ulink> (version >=2.0)</para></listitem>
-			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >=2.0)</para></listitem>
+			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libglade/">libglage</ulink> (version >= 2.0)</para></listitem>
+			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://www.cairographics.org/download/">cairo</ulink></para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
-			<listitem><para>(Optionnel: option --disable-nls de configure pour désactive) <ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
+			<listitem><para><ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
+			<listitem><para>intltool (version >= 0.23)</para></listitem>
 			<listitem><para>(Optionnel: option --with-docs de configure) libgnome (version >=2.0)</para></listitem>
 			<listitem><para>(Optionnel: option --with-libnotify de configure) libnotify</para></listitem>
 			<listitem><para>(Optionnel: option --with-xtst de configure) libxtst</para></listitem>
@@ -60,7 +61,7 @@
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel \</userinput>
 <prompt>></prompt> <userinput>at-spi-devel libcairo-devel libgnome2-devel librsvg2-devel gettext \</userinput>
-<prompt>></prompt> <userinput>libnotify libxtst6-devel</userinput>
+<prompt>></prompt> <userinput>libnotify libxtst6-devel intltool</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>
@@ -68,7 +69,7 @@
 				<screen>
 <prompt>$</prompt> <userinput>sudo apt-get install build-essential libxml2-dev libgconf2-dev \</userinput>
 <prompt>></prompt> <userinput>libglade2-dev libatspi-dev libcairo2-dev libgnome2-dev librsvg2-dev gettext \</userinput>
-<prompt>></prompt> <userinput>libnotify-dev libxtst-dev</userinput>
+<prompt>></prompt> <userinput>libnotify-dev libxtst-dev intltool</userinput>
 				</screen></para>
 			</listitem>
 		</orderedlist>
