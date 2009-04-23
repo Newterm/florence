@@ -40,10 +40,12 @@ struct status {
 	GList *pressedkeys; /* the list of all currently pressed keys */
 	GdkModifierType globalmod; /* global modifier mask */
 	struct view *view; /* view to update on status change */
+	gboolean spi; /* tell if spi events are enabled */
 #ifdef ENABLE_XTST
 	XRecordContext RecordContext; /* Context to record keyboard events */
 	Display *data_disp; /* Data display to record events */
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
+	Display *xtst_disp; /* Xtest display to send events */
 #endif
 };
 
@@ -87,6 +89,14 @@ void status_reset(struct status *status);
 
 /* sets the view to update on status change */
 void status_view_set(struct status *status, struct view *view);
+/* disable sending of spi events: send xtest events instead */
+void status_spi_disable(struct status *status);
+/* tell if spi is enabled */
+gboolean status_spi_is_enabled(struct status *status);
+#ifdef ENABLE_XTST
+/* get display to send XTest events */
+Display *status_display_get(struct status *status);
+#endif
 
 #endif
 

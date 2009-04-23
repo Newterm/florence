@@ -23,7 +23,9 @@
 #define FLO_KEYBOARD
 
 #include <glib.h>
+#ifdef ENABLE_XKB
 #include <X11/XKBlib.h>
+#endif
 #include "key.h"
 #include "layoutreader.h"
 #include "status.h"
@@ -43,8 +45,10 @@ struct keyboard {
  * Used to initialize the keyboard */
 struct keyboard_globaldata {
 	struct style *style; /* style of florence  */
+#ifdef ENABLE_XKB
 	XkbDescPtr xkb_desc; /* Keyboard description from XKB */
 	XkbStateRec xkb_state; /* Keyboard Status (get from XKB) */
+#endif
 	struct status *status; /* status of the keybaord to update */
 };
 

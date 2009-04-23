@@ -28,7 +28,9 @@
 #include "tools.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
+#ifdef ENABLE_AT_SPI
 #include <cspi/spi.h>
+#endif
 
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
@@ -36,7 +38,8 @@ void flo_destroy (void)
 	gtk_exit (0);
 }
 
-/* Calles to destroy the icon */
+#ifdef ENABLE_AT_SPI
+/* Called to destroy the icon */
 void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
@@ -166,18 +169,26 @@ void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
 	/* TODO: remettre le keyboard au front. Attention: always_on_screen désactive cette fonction */
 	flo_traverse((struct florence *)user_data, event->source);
 }
+#endif
 
 /* Switches between always on screen mode and hidden mode.
  * When in hidden mode, the spi events are registered to monitor focus and show on editable widgets.
  * the events are deregistered when always on screen mode is activated */
 void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 {
+#ifdef ENABLE_AT_SPI
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
 	int i;
 	Accessible *obj;
+#endif
 
 	if (auto_hide) {
+		if (!status_spi_is_enabled(florence->status)) {
+			flo_warn(_("SPI is disabled: Unable to switch auto-hide mode on."));
+			return;
+		}
+#ifdef ENABLE_AT_SPI
 		view_hide(florence->view);
 		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)florence);
 		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
@@ -206,25 +217,32 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 		if (florence->obj) Accessible_unref(obj);
 		florence->obj=NULL;
 		florence->icon=NULL;
+#endif
 	}
 }
 
 /* load the keyboards from the layout file into the keyboards member of florence */
 GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 {
-	int maj = XkbMajorVersion;
-	int min = XkbMinorVersion;
+#ifdef ENABLE_XKB
+	int maj=XkbMajorVersion;
+	int min=XkbMinorVersion;
 	int opcode_rtrn=0, event_rtrn=0, error_rtrn=0;
+	int ret=0;
+#endif
 	GSList *keyboards=NULL;;
 	struct keyboard *keyboard=NULL;
 	struct keyboard_globaldata global;
 	struct layout_extension *extension=NULL;
 
+#ifdef ENABLE_XKB
 	/* Check XKB Version */
-	if (!XkbLibraryVersion(&maj, &min) ||
-		!XkbQueryExtension((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
-		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min)) {
-		flo_fatal(_("XKB version mismatch"));
+	if (!(ret=XkbLibraryVersion(&maj, &min))) {
+		flo_fatal(_("Unable to initialize XKB library. version=%d.%d rc=%d"), maj, min, ret);
+	}
+	if (!(ret=XkbQueryExtension((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min))) {
+		flo_fatal(_("Unable to query XKB extension from X server version=%d.%d rc=%d"), maj, min, ret);
 	}
 	/* get the modifier map from xkb */
 	global.xkb_desc=XkbGetMap((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
@@ -232,6 +250,9 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 	/* get global modifiers state */
 	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
 		XkbUseCoreKbd, &(global.xkb_state));
+#else
+	flo_warn(_("XKB not compiled in: startup keyboard sync is disabled. You should make sure all locker keys are released."));
+#endif
 	global.status=florence->status;
 
 	/* initialize global data */
@@ -254,8 +275,10 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 #endif
 	}
 
+#ifdef ENABLE_XKB
 	/* Free the modifiers map */
 	XkbFreeClientMap(global.xkb_desc, XkbKeyActionsMask|XkbModifierMapMask, True);
+#endif
 
 	return keyboards;
 }
@@ -408,7 +431,17 @@ struct florence *flo_new(void)
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 
-	SPI_init();
+#ifdef ENABLE_AT_SPI
+	if (0!=SPI_init()) {
+		flo_error(_("at-spi registry daemon is not running."\
+			"Events will be sent with Xtest instead and several"\
+			"functions are disabled, including auto-hide."));
+		status_spi_disable(florence->status);
+	}
+#else
+	flo_warn(_("AT-SPI not compiled in: auto-hide mode is disabled."));
+	status_spi_disable(florence->status);
+#endif
 	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
 
@@ -422,7 +455,9 @@ struct florence *flo_new(void)
 /* liberate all the memory used by florence */
 void flo_free(struct florence *florence)
 {
+#ifdef ENABLE_AT_SPI
 	SPI_exit();
+#endif
 	trayicon_free(florence->trayicon);
 	flo_layout_unload(florence);
 	if (florence->view) view_free(florence->view);

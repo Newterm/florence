@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.4.1], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.4.2b], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -7,7 +7,17 @@ AM_CONDITIONAL([WITH_DOCS], [test "x$with_docs" != "xno"])
 AC_ARG_WITH([notification], AS_HELP_STRING([--without-notification], [Build without notification (default: enabled)]))
 AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_notification" != "xno"])
 AC_ARG_WITH([xtst], AS_HELP_STRING([--without-xtst], [Build without Xtst extension (default: enabled)]))
-AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_xtst" != "xno"])
+AM_CONDITIONAL([WITH_XTST], [test "x$with_xtst" != "xno"])
+AC_ARG_WITH([at-spi], AS_HELP_STRING([--without-at-spi], [Build without at-spi(default: enabled)]))
+AM_CONDITIONAL([WITH_AT_SPI], [test "x$with_at_spi" != "xno"])
+if test "x$with_xtst" = "xno" -a  "x$with_at_spi" = "xno"; then
+	AC_MSG_ERROR(You can't disable both xtst and at-spi as there is no way Florence can generate keyboard events.)
+fi
+AC_ARG_WITH([xkb], AS_HELP_STRING([--without-xkb], [Build without xkb(default: enabled)]))
+AM_CONDITIONAL([WITH_XKB], [test "x$with_xkb" != "xno"])
+if test "x$with_xkb" != "xno"; then
+	AC_DEFINE(ENABLE_XKB, ["xkb"], [xkb extension is enabled])
+fi
 
 # Internationalization
 AC_PROG_INTLTOOL([0.23])
@@ -36,7 +46,7 @@ if test "x$with_docs" != "xno"; then
 fi
 
 # Checks for libraries.
-DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 libglade-2.0 cspi-1.0 gtk+-2.0 >= 2.10.0"
+DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 libglade-2.0 gtk+-2.0 >= 2.10.0"
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 
 if test "x$with_docs" != "xno"; then
@@ -49,6 +59,9 @@ fi
 if test "x$with_xtst" != "xno"; then
 	PKG_CHECK_MODULES([XTST], [xtst], AC_DEFINE([ENABLE_XTST], [], [Xtst extension enabled.]), AC_MSG_ERROR(Could not configure xtst. Please either install xtst or disable it: --without-xtst configure option))
 fi
+if test "x$with_at_spi" != "xno"; then
+	PKG_CHECK_MODULES([AT_SPI], [cspi-1.0], AC_DEFINE([ENABLE_AT_SPI], [], [at-spi enabled.]), AC_MSG_ERROR(Could not configure at-spi. Please either install at-spi or disable it: --without-at-spi configure option))
+fi
 
 AC_SUBST(LIBGNOME_CFLAGS)
 AC_SUBST(LIBGNOME_LIBS)
@@ -56,6 +69,8 @@ AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
 AC_SUBST(XTST_CFLAGS)
 AC_SUBST(XTST_LIBS)
+AC_SUBST(AT_SPI_CFLAGS)
+AC_SUBST(AT_SPI_LIBS)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
 

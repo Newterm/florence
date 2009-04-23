@@ -24,7 +24,9 @@
 
 #include <X11/XKBlib.h>
 #include <gtk/gtk.h>
+#ifdef ENABLE_AT_SPI
 #include <cspi/spi.h>
+#endif
 #include "key.h"
 #include "style.h"
 #include "status.h"
@@ -54,8 +56,10 @@ struct view *view_new (struct style *style, GSList *keyboards);
 /* liberate all the memory used by the view */
 void view_free (struct view *view);
 
+#ifdef ENABLE_AT_SPI
 /* Show the view next to the accessible object if specified. */
 void view_show (struct view *view, Accessible *object);
+#endif
 /* Hides the view */
 void view_hide (struct view *view);
 /* Redraw the key to the window */

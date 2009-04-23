@@ -19,14 +19,19 @@
 
 */
 
+#include "config.h"
 #include <gtk/gtk.h>
+#ifdef ENABLE_AT_SPI
 #include <cspi/spi.h>
+#endif
 
 /* sets the window icon to florence.svg */
 void tools_set_icon (GtkWindow *window);
 /* open a YES/NO dialog window and return the user response */
 gint tools_dialog(const gchar *title, GtkWindow *parent,
 	const gchar *accept, const gchar *reject, const gchar *text);
+#ifdef ENABLE_AT_SPI
 /* position a window near the specified object */
 void tools_window_move(GtkWindow *window, Accessible *object);
+#endif
 

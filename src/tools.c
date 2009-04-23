@@ -49,6 +49,7 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 	return gtk_dialog_run(GTK_DIALOG(dialog));
 }
 
+#ifdef ENABLE_AT_SPI
 /* position a window near the specified object */
 void tools_window_move(GtkWindow *window, Accessible *object)
 {
@@ -74,4 +75,5 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 		else gtk_window_move(window, x, screen_height-win_height);
 	} else flo_warn(_("Unable to get component from accessible object"));
 }
+#endif
 

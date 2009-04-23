@@ -21,7 +21,9 @@
 #include <stdio.h>
 #include <X11/XKBlib.h>
 #include <gtk/gtk.h>
+#ifdef ENABLE_AT_SPI
 #include <cspi/spi.h>
+#endif
 #include <gconf/gconf-client.h>
 #include "system.h"
 #include "trace.h"
@@ -75,8 +77,12 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 	keyboard->height=size->h;
 
 	/* insert all keyboard keys */
+#ifdef ENABLE_XKB
 	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state,
 		(void *)keyboard, data->status))) {
+#else
+	while ((key=key_new(layout, style, (void *)keyboard, data->status))) {
+#endif
 		keyboard->keys=g_slist_append(keyboard->keys, key);
 	}
 

@@ -28,6 +28,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
+#ifdef ENABLE_AT_SPI
 /* Show the view next to the accessible object if specified. */
 void view_show (struct view *view, Accessible *object)
 {
@@ -39,6 +40,7 @@ void view_show (struct view *view, Accessible *object)
 	/* Some winwow managers forget it */
 	gtk_window_set_keep_above(view->window, TRUE);
 }
+#endif
 
 /* Hides the view */
 void view_hide (struct view *view)

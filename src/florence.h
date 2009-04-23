@@ -22,7 +22,9 @@
 #ifndef FLORENCE
 #define FLORENCE
 
+#ifdef ENABLE_XKB
 #include <X11/XKBlib.h>
+#endif
 #include <gtk/gtk.h>
 #include "key.h"
 #include "status.h"
@@ -36,11 +38,15 @@ struct florence {
 	struct status *status; /* the status of florence */	
 	struct trayicon *trayicon; /* tray icon object */
 	GtkWindow *icon; /* intermediate icon */
+#ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
+#endif
+#ifdef ENABLE_XKB
 	/* Xkd data: only used at startup */
 	/* TODO: ==> status.c */
 	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
 	XkbStateRec state; /* current state of the hard keyboard */
+#endif
 };
 
 /* create a new instance of florence. */

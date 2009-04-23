@@ -26,6 +26,7 @@
 #ifdef ENABLE_XTST
 #include <X11/Xproto.h>
 #include <gdk/gdkx.h>
+#include <X11/extensions/XTest.h>
 #endif
 
 /* Calculate single key status after key is pressed */
@@ -170,11 +171,12 @@ void status_pressed_set(struct status *status, gboolean pressed)
 		status->pressed=status->focus;
 		if (status->pressed) {
 			if (key_is_pressed(status->pressed) && (!key_get_modifier(status->pressed)))
-				key_release(status->pressed);
+				key_release(status->pressed, status);
 			if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
 				key_press(status->pressed, status);
 #ifdef ENABLE_XTST
 			else status_key_press_update(status, status->pressed); 
+			if (!status->RecordContext) status_key_press_update(status, status->pressed);
 #else
 			status_key_press_update(status, status->pressed);
 #endif
@@ -182,9 +184,10 @@ void status_pressed_set(struct status *status, gboolean pressed)
 	} else {
 		if (status->pressed) {
 			if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
-				key_release(status->pressed);
+				key_release(status->pressed, status);
 #ifdef ENABLE_XTST
 			else status_key_release_update(status, status->pressed);
+			if (!status->RecordContext) status_key_release_update(status, status->pressed);
 #else
 			status_key_release_update(status, status->pressed);
 #endif
@@ -278,6 +281,7 @@ struct status *status_new()
 	status_record_start(status);
 	g_idle_add(status_record_process, (gpointer)status);
 #endif
+	status->spi=TRUE;
 	return status;
 }
 
@@ -286,6 +290,7 @@ void status_free(struct status *status)
 {
 #ifdef ENABLE_XTST
 	status_record_stop(status);
+	if (status->xtst_disp) XCloseDisplay(status->xtst_disp);
 #endif
 	if (status->timer) g_timer_destroy(status->timer);
 	if (status->pressedkeys) g_list_free(status->pressedkeys);
@@ -310,4 +315,29 @@ void status_view_set(struct status *status, struct view *view)
 	status->view=view;
 	view_status_set(view, status);
 }
+
+/* disable sending of spi events: send xtest events instead */
+void status_spi_disable(struct status *status)
+{
+#ifdef ENABLE_XTST
+	int event_base, error_base, major, minor;
+	status->xtst_disp=(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window());
+	if (!XTestQueryExtension(status->xtst_disp, &event_base, &error_base, &major, &minor)) {
+		flo_error(_("Neither at-spi nor XTest could be initialized."));
+		flo_fatal(_("There is no way we can send keyboard events."));
+	} else flo_info(_("XTest extension found: version=%d.%d"), major, minor);
+#else
+	flo_error(_("Xtest extension not compiled in and at-spi not working"));
+	flo_fatal(_("There is no way we can send keyboard events."));
+#endif
+	status->spi=FALSE;
+}
+
+/* tell if spi is enabled */
+gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
+
+#ifdef ENABLE_XTST
+/* get display to send XTest events */
+Display *status_display_get(struct status *status) { return status->xtst_disp; }
+#endif
 

@@ -22,7 +22,9 @@
 #ifndef FLO_KEY
 #define FLO_KEY
 
+#ifdef ENABLE_XKB
 #include <X11/XKBlib.h>
+#endif
 #include <gdk/gdk.h>
 #include <glib.h>
 #include "style.h"
@@ -49,14 +51,19 @@ struct key {
 
 /* Instanciate a key
  * the key may have a static label which will be always drawn in place of the symbol */
+#ifdef ENABLE_XKB
 struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
 	XkbStateRec rec, void *userdata, struct status *status);
+#else
+struct key *key_new(struct layout *layout, struct style *style, void *userdata,
+	struct status *status);
+#endif
 /* deallocate memory used by the key */
 void key_free(struct key *key);
 
 /* Send SPI events coresponding to the key */
 void key_press(struct key *key, struct status *status);
-void key_release(struct key *key);
+void key_release(struct key *key, struct status *status);
 
 /* Draw the shape of the key to the cairo surface. */
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
@@ -76,6 +83,8 @@ GdkModifierType key_get_modifier(struct key *key);
 
 /* return if key is it at position */
 gboolean key_hit(struct key *key, gint x, gint y, gdouble z);
+/* get keyval according to modifier */
+guint key_getKeyval(struct key *key, GdkModifierType mod);
 
 #endif
 

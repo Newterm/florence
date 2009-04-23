@@ -47,7 +47,7 @@ struct symbol {
 /* color functions */
 gchar *style_get_color(enum style_colours c)
 {
-	gchar *color;
+	gchar *color=NULL;
 	switch(c) {
 		case STYLE_KEY_COLOR: color=(gchar *)settings_get_string("colours/key"); break;
 		case STYLE_OUTLINE_COLOR: color=(gchar *)settings_get_string("colours/outline"); break;
