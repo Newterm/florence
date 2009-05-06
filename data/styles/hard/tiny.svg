@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 100 50">
+  <rect class="shape" x="0" y="0" width="100" height="50" rx="10"/>
+  <rect x="0" y="0" width="100" height="50" rx="10" style="fill:url(florence.defs#gradient1)" stroke="black" stroke-width="2px"/>
+  <rect class="shape" x="5" y="5" width="90" height="30" rx="10"/>
+  <rect x="5" y="5" width="90" height="30" rx="10" style="fill:url(florence.defs#gradient2)" stroke="black" stroke-width="1px" stroke-opacity="0.5"/>
+</svg>
