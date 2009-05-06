@@ -1,5 +1,5 @@
 
-SUBDIRS=styles
+SUBDIRS=styles layouts relaxng svg11
 
 GCONFTOOL=gconftool-2
 GCONFREFRESH=$(srcdir)/../gconf-refresh
@@ -18,12 +18,11 @@ icons_DATA=florence.svg
 gladedir=$(datadir)/florence
 glade_DATA=florence.glade 
 
-layoutdir=$(datadir)/florence
-layout_in_files=florence.xml.in
-layout_DATA=$(layout_in_files:.xml.in=.xml) florence.rnc florence.css
-@INTLTOOL_XML_RULE@
+metadir=$(datadir)/florence
+meta_DATA=florence.rnc florence.css
 
 install-data-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
-	$(GCONFREFRESH)
 
+uninstall-local:
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-uninstall-rule $(srcdir)/$(schema_DATA)

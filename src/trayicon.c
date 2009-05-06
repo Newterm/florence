@@ -154,7 +154,7 @@ gboolean trayicon_notification_start(gpointer userdata)
 void trayicon_free(struct trayicon *trayicon)
 {
 #ifdef ENABLE_NOTIFICATION
-	g_object_unref(trayicon->notification);
+	if (trayicon->notification) g_object_unref(trayicon->notification);
 	notify_uninit();
 #endif
 	g_object_unref(trayicon->tray_icon);

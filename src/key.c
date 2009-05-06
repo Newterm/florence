@@ -24,6 +24,7 @@
 #include "trace.h"
 #include <math.h>
 #include <string.h>
+#include <gdk/gdkx.h>
 #ifdef ENABLE_AT_SPI
 #include <cspi/spi.h>
 #endif
@@ -124,7 +125,9 @@ void key_simple_press(unsigned int code, struct status *status)
 #else
 		flo_fatal(_("Unreachable code"));
 #endif
-	else XTestFakeKeyEvent(status_display_get(status), code, TRUE, 0);
+	else XTestFakeKeyEvent(
+		(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		code, TRUE, 0);
 #else
 #ifdef ENABLE_AT_SPI
 	SPI_generateKeyboardEvent(code, NULL, SPI_KEY_PRESS);
@@ -144,7 +147,9 @@ void key_simple_release(unsigned int code, struct status *status)
 #else
 		flo_fatal(_("Unreachable code"));
 #endif
-	else XTestFakeKeyEvent(status_display_get(status), code, FALSE, 0);
+	else XTestFakeKeyEvent(
+		(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		code, FALSE, 0);
 #else
 #ifdef ENABLE_AT_SPI
 #else

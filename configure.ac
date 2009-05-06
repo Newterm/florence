@@ -92,6 +92,6 @@ AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fc
 # Files generated
 ICONDIR=$prefix/$DATADIRNAME/icons
 AC_SUBST(ICONDIR)
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/florence.xml.in data/florence.desktop.in docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/layouts/Makefile data/layouts/florence.xml.in data/layouts/compact.xml.in data/florence.desktop.in docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
 AC_OUTPUT
 

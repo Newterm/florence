@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = dejagnu
 
-SUBDIRS = src data data/relaxng data/svg11 po
+SUBDIRS = src data po
 if WITH_DOCS
    SUBDIRS += docs
 endif

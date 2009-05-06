@@ -251,7 +251,10 @@ struct shape *style_shape_get (struct style *style, gchar *name) {
 	GSList *item=style->shapes;
 	if (!name) return style->default_shape;
 	while (item && strcmp(((struct shape *)item->data)->name, name)) item=g_slist_next(item);
-	if (!item) flo_fatal(_("Shape doesn't exist: %s"), name);
+	if (!item) {
+		flo_warn(_("Shape %s doesn't exist for selected style."), name);
+		return style->default_shape;
+	}
 	return (struct shape *)item->data;
 }
 

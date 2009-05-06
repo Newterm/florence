@@ -41,7 +41,7 @@
 		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
 		<orderedlist>
 			<listitem><para><ulink url="http://www.gtk.org/download-linux.html">gtk+</ulink> (version >= 2.10)</para></listitem>
-			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
+			<listitem><para>(Optionnel: option --with-at-spi de configure) <ulink url="http://ftp.gnome.org/pub/gnome/sources/at-spi/">cspi</ulink> (version >= 1.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/GConf/">libgconf</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libglade/">libglage</ulink> (version >= 2.0)</para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/gnome/sources/libxml2/">libxml</ulink> (version >= 2.0)</para></listitem>
@@ -215,7 +215,7 @@ i		</sect3>
 <sect1 id="tips">
 	<title>Utilisation de Florence sans GNOME</title>
 	<para>Florence est principalement conçu pour être utilisé avec un bureau GNOME. Le clavier Florence utilise les bibliothèques communément installées avec un bureau GNOME. Cependant, vous pouvez installer ces bibliothèques avec n'importe quel bureau pour utiliser Florence. Les paquetages nécessaires pour avoir toutes les bibliothèques sont listées dans la section installation.</para>
-	<para>Pour que Florence fonctionne, il faut démarrer le daemon d'enregistrement de at-spi au démarrage de la session: Pour démarrer le daemon d'enregistrement de at-spi (au démarrage de la session):</para>
+	<para>Pour que le mode 'cacher automatiquement' fonctionne, il faut démarrer le daemon d'enregistrement de at-spi au démarrage de la session: Pour démarrer le daemon d'enregistrement de at-spi (au démarrage de la session):</para>
 	<orderedlist>
 		<listitem><para>Gentoo:</para>
 		<screen>
@@ -232,6 +232,7 @@ i		</sect3>
 	</screen>
 	<para>Adaptez la commande à lancer au démarrage en fonction du résultat.</para>
 	<para>GNOME démarre le daemon automatiquement si il est configuré avec le dialogue <command>gnome-at-property</command></para>
+	<para>Si vous n'êtes pas intéressé par le mode 'cacher automatiquement', vous pouvez aussi bien désactiver at-spi au moment de configurer florence avec l'option --without-at-spi et économiser un peu d'espace disque.</para>
 	<para>Si votre environnement de bureau est compatible XDG (comme XFCE par exemple), Florence devrais être accessible depuis le menu. De toute façon, le lancement de Florence par la ligne de commande marchera toujours. Si vous n'avez pas de zone de notification, vous pouvez installer <ulink url="http://peksystray.sourceforge.net/">peksystray</ulink>. Vous pouvez aussi accéder au dialogue de préférences avec la commande:</para>
 	<screen>
 <prompt>$</prompt> <userinput>florence --config</userinput>
@@ -250,14 +251,6 @@ i		</sect3>
 		<screen>
 <prompt>$</prompt> <userinput>setxkbmap ar &amp;&amp; florence</userinput>
 		</screen>
-			</answer>
-		</qandaentry>
-		<qandaentry>
-			<question>
-				<para>Florence se lance mais les touches du clavier n'ont aucun effet.</para>
-			</question>
-			<answer>
-				<para>Il est fort probable que le daemon at-spi-registryd n'est pas lancé. Vérifiez que le daemon at-spi-requstryd soit lancé au démarrage de votre environnement de bureau. Si vous utilisez GNOME, utilisez le dialogue gnome-at-properties pour cela.</para>
 			</answer>
 		</qandaentry>
 	</qandaset>

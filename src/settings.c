@@ -63,7 +63,10 @@ static GConfChangeSet *gconfchangeset=NULL;
 static GConfChangeSet *rollback=NULL;
 static gboolean settings_gtk_exit=FALSE;
 static GtkListStore *settings_style_list=NULL;
+static GtkListStore *settings_layout_list=NULL;
 static guint settings_notify_id=0;
+
+void settings_extension(GtkToggleButton *button, gchar *name);
 
 /*********************/
 /* private functions */
@@ -104,6 +107,49 @@ char *settings_get_gconf_name(GtkWidget *widget)
 	return settings_nametable[searchidx][1];
 }
 
+/* Populate layout combobox with available layouts */
+void settings_layouts_populate()
+{
+	GtkTreeIter iter;
+	GtkCellRenderer *cell;
+	DIR *dp=opendir(DATADIR "/layouts");
+	struct dirent *ep;
+	gchar *name;
+	struct layout *layout;
+	struct layout_infos *infos;
+
+	if (dp!=NULL) {
+		if (settings_layout_list) {
+			gtk_list_store_clear(settings_layout_list);
+			g_object_unref(G_OBJECT(settings_layout_list)); 
+		}
+		settings_layout_list=gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+		cell=gtk_cell_renderer_text_new();
+		gtk_cell_layout_pack_start(
+			GTK_CELL_LAYOUT(glade_xml_get_widget(gladexml, "flo_layouts")),
+			cell, FALSE);
+		gtk_cell_layout_set_attributes(
+			GTK_CELL_LAYOUT(glade_xml_get_widget(gladexml, "flo_layouts")),
+			cell, "text", 0, NULL);
+		while ((ep=readdir(dp))) {
+			if (ep->d_name[0]!='.') {
+				name=g_strdup_printf(DATADIR "/layouts/%s", ep->d_name);
+				layout=layoutreader_new(name, NULL, DATADIR "/relaxng/florence.rng");
+				layoutreader_element_open(layout, "layout");
+				infos=layoutreader_infos_new(layout);
+				gtk_list_store_append(settings_layout_list, &iter);
+				gtk_list_store_set(settings_layout_list, &iter, 0, infos->name, 1, name, -1);
+				layoutreader_infos_free(infos);
+				layoutreader_free(layout);
+				g_free(name);
+			}
+		}
+		closedir(dp);
+		gtk_combo_box_set_model(GTK_COMBO_BOX(glade_xml_get_widget(gladexml, "flo_layouts")),
+			GTK_TREE_MODEL(settings_layout_list));
+	} else flo_error(_("Couldn't open directory %s"), DATADIR "/layouts");
+}
+
 /* Fills the preview icon view with icons representing the themes */
 void settings_preview_build()
 {
@@ -137,7 +183,7 @@ void settings_preview_build()
 				gdk_pixbuf_unref(pixbuf); 
 			}
 		}
-		closedir (dp);
+		closedir(dp);
 	} else flo_error(_("Couldn't open directory %s"), DATADIR "/styles");
 }
 
@@ -168,11 +214,76 @@ void settings_color_change(GtkColorButton *button, char *key)
 	gconf_client_set_string(gconfclient, fullpath, strcolor, NULL);
 }
 
+/* update the extension check box list according to the layout and gconf */
+void settings_extensions_update(gchar *layoutname)
+{
+	GList *extensions;
+	GtkWidget *extension;
+	struct layout *layout;
+	struct layout_extension *ext=NULL;
+	GtkWidget *new;
+	gchar **extstrs, **extstr;
+	gchar *id;
+	gchar *temp;
+
+	extensions=gtk_container_get_children(
+		GTK_CONTAINER(glade_xml_get_widget(gladexml, "flo_extensions")));
+	while (extensions) {
+		extension=(GTK_WIDGET(extensions->data));
+		extensions=extensions->next;
+		/* TODO: g_free(id) */
+		gtk_widget_destroy(extension);
+	}
+	layout=layoutreader_new(layoutname, NULL, DATADIR "/relaxng/florence.rng");
+	layoutreader_element_open(layout, "layout");
+	while ((ext=layoutreader_extension_new(layout))) {
+		new=gtk_check_button_new_with_label(ext->name);
+		id=g_strdup(ext->identifiant);
+		temp=settings_get_string("layout/extensions");
+		extstrs=extstr=g_strsplit(temp, ":", -1);
+		while (extstr && *extstr && strcmp(*extstr, id)) {
+			extstr++;
+		}
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(new), extstr && *extstr);
+		g_strfreev(extstrs);
+		if (temp) g_free(temp);
+		g_signal_connect(G_OBJECT(new), "toggled",
+			G_CALLBACK(settings_extension), id);
+		gtk_box_pack_start(
+			GTK_BOX(glade_xml_get_widget(gladexml, "flo_extensions")),
+			new, FALSE, FALSE, 0);
+		gtk_widget_show(new);
+		layoutreader_extension_free(layout, ext);
+	}
+	layoutreader_free(layout);
+}
+
+/* update the layout settings according to gconf */
+void settings_layout_update()
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gboolean out;
+	gchar *layout;
+
+	/* update the layout combo box */
+	model=gtk_combo_box_get_model(GTK_COMBO_BOX(glade_xml_get_widget(gladexml, "flo_layouts")));
+	if (gtk_tree_model_get_iter_first(model, &iter)) {
+		do {
+			gtk_tree_model_get(model, &iter, 1, &layout, -1);
+			if ((out=(!strcmp(layout, settings_get_string("layout/file")))))
+				gtk_combo_box_set_active_iter(
+					GTK_COMBO_BOX(glade_xml_get_widget(gladexml, "flo_layouts")),
+					&iter);
+				settings_extensions_update(layout);
+			if (layout) g_free(layout);
+		} while ((!out) && gtk_tree_model_iter_next(model, &iter));
+	}
+}
+
 /* update the window according to gconf */
 void settings_update()
 {
-	gchar **extstrs, **extstr;
-	gboolean arrows=FALSE, numpad=FALSE, function_keys=FALSE;
 	gchar *color;
 	guint searchidx=0;
 
@@ -210,21 +321,7 @@ void settings_update()
 	gtk_range_set_value(GTK_RANGE(glade_xml_get_widget(gladexml, "flo_opacity")),
 		settings_get_double("window/opacity"));
 
-	color=settings_get_string("layout/extensions");
-	extstrs=extstr=g_strsplit(color, ":", -1);
-	while (extstr && *extstr) {
-		/* TODO: delete unknown extensions */
-		if (!strcmp(*extstr, "ext1")) arrows=TRUE;
-		else if (!strcmp(*extstr, "ext2")) numpad=TRUE;
-		else if (!strcmp(*extstr, "ext3")) function_keys=TRUE;
-		extstr++;
-	}
-	g_strfreev(extstrs);
-	if (color) g_free(color);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_arrows")), arrows);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_numpad")), numpad);
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml, "flo_function_keys")),
-			function_keys);
+	settings_layout_update();
 }
 
 /*************/
@@ -283,6 +380,22 @@ void settings_labels_color(GtkColorButton *button)
 	settings_color_change(button, "label");
 }
 
+/* called on layout change: set gconf layout entry. */
+void settings_layout(GtkComboBox *combo)
+{
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	gchar *layout;
+
+	gtk_combo_box_get_active_iter(combo, &iter);
+	model=gtk_combo_box_get_model(GTK_COMBO_BOX(glade_xml_get_widget(gladexml, "flo_layouts")));
+	gtk_tree_model_get(model, &iter, 1, &layout, -1);
+	gconf_change_set_set_string(gconfchangeset, settings_get_full_path("layout/file"),
+		layout);
+	settings_extensions_update(layout);
+	g_free(layout);
+}
+
 void settings_extension(GtkToggleButton *button, gchar *name)
 {
         gchar *allextstr=NULL;
@@ -314,21 +427,6 @@ void settings_extension(GtkToggleButton *button, gchar *name)
                 g_free(newextstrs);
 		if (!value) g_free(allextstr);
         } else { flo_fatal(_("Can't get gconf value %"), settings_get_full_path("layout/extensions")); }
-}
-
-void settings_arrows(GtkToggleButton *button)
-{
-	settings_extension(button, "ext1");
-}
-
-void settings_numpad(GtkToggleButton *button)
-{
-	settings_extension(button, "ext2");
-}
-
-void settings_function_keys(GtkToggleButton *button)
-{
-	settings_extension(button, "ext3");
 }
 
 void settings_auto_click(GtkHScale *scale)
@@ -380,31 +478,30 @@ void settings_rollback(GtkWidget *window, GtkWidget *button)
 	}
 }
 
+/* Called when the 'close' button is pressed:
+ * check changes and ask the user if they need commit or discard if any. */
 void settings_close(GtkWidget *window, GtkWidget *button)
 {
 	static gboolean closed=FALSE;
 	if (closed) return;
-
-	gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
-	if (settings_notify_id>0) gconf_client_notify_remove(gconfclient, settings_notify_id);
-	settings_notify_id=0;
 	if ((gconfchangeset && gconf_change_set_size(gconfchangeset)>0)||
 		(rollback && gconf_change_set_size(rollback)>0)) {
 		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Corfirm"), GTK_WINDOW(window),
-			GTK_STOCK_APPLY, FLO_SETTINGS_ICON_CANCEL, _("Discard changes?"))) {
-			settings_commit(window, button);
-		} else settings_rollback(NULL, NULL);
+			GTK_STOCK_APPLY, FLO_SETTINGS_ICON_CANCEL, _("Discard changes?")))
+			settings_commit(NULL, NULL);
+		else settings_rollback(NULL, NULL);
 	}
+	if (settings_notify_id>0) gconf_client_notify_remove(gconfclient, settings_notify_id);
+	settings_notify_id=0;
 
 	closed=TRUE;
-	if (gconfchangeset) gconf_change_set_unref(gconfchangeset);
-	if (rollback) gconf_change_set_unref(rollback);
-	if (window) gtk_object_destroy(GTK_OBJECT(window));
 	if (settings_style_list) g_object_unref(G_OBJECT(settings_style_list)); 
 	settings_style_list=NULL;
+	if (window) gtk_object_destroy(GTK_OBJECT(window));
+	if (gconfchangeset) gconf_change_set_unref(gconfchangeset);
+	if (rollback) gconf_change_set_unref(rollback);
 	if (settings_gtk_exit) gtk_exit(0);
 	closed=FALSE;
-	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 }
 
 void settings_destroy(GtkWidget *window)
@@ -539,8 +636,10 @@ void settings(void)
 	gconfchangeset=gconf_change_set_new();
 	rollback=gconf_change_set_new();
 	gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
-	settings_update();
 	settings_preview_build();
+	/* populate layout combobox */
+	settings_layouts_populate();
+	settings_update();
 	settings_notify_id=gconf_client_notify_add(gconfclient, FLO_SETTINGS_ROOT,
 		(GConfClientNotifyFunc)settings_update, NULL, NULL, NULL);
 	glade_xml_signal_autoconnect(gladexml);

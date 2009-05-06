@@ -74,5 +74,8 @@ GtkWindow *view_window_get (struct view *view);
 /* get gtk window of the view */
 void view_status_set (struct view *view, struct status *status);
 
+/* on screen change event: check for composite extension */
+void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view *view);
+
 #endif
 

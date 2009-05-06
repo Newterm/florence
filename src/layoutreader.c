@@ -295,7 +295,8 @@ void layoutreader_symbol_free(struct layout_symbol *symbol)
 	}
 }
 
-/* instanciates a new layout reader. Called in florence.c
+/* instanciates a new layout reader. Called in florence.c and style.c
+ * can be called either for layout or style files
  * validates the xml layout against the relax-ng validation document
  * return the layoutreader handle */
 struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relaxng)

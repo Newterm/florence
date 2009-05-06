@@ -1,17 +1,11 @@
-Florence now collaborates with the real keyboard, so for example if push the real CAPS_LOCK key Florence knows it and updates itself (requires libxtst).
-There is a new startup notification giving some basic informations on Florence usage. You can disable it permanently by clicking on the 'Do not show again' button and it can be disables at compile time with --without-notify.
-Now style changes are applied immediately so you can see the result directly. You can still cancel them before exiting the settings dialog.
-Windows gravity set to static so it does not move when you switch decorated flag.
-Internationalize key labels and localize in french.
-Some minor bugs have been fixed.
+This release lowers the entry barrier to compile Florence.
+Now the XKB extension is optional: the --without-xkb configure option will disable it. The drawback is that Florence will not read the real keyboard status at startup, so locker keys like CAPS_LOCK will be ignored if they are set when Florence is launched. ake sure all locker keys are released with launching Florence without xkb.
+The aim is to be able to run florence on X servers with the XKB extension like Exceed.
+The at-spi registry daemon has also been made optional because many systems don't have it. You can disable it with the --without-at-spi option at configure time. This will disable auto-hide mode as this mode does not work without the at-spi registry daemon.
 
 Changelog:
 
-2009-04-03 François Agrech <f.agrech@gmail.com>
-	* Add a startup notification message
-	* Apply style and window opacity immediately
-	* Fix minor memory leak
-	* Set static gravity for window
-	* Listen to keyboard device events to update the status
-	* i18n and l10n in french of key labels
+2009-05-?? François Agrech <f.agrech@gmail.com>
+	* Make xkb optional
+	* Make at-spi optional
 

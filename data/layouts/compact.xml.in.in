@@ -23,412 +23,545 @@
 <layout xmlns="http://florence.sourceforge.net"
 	xmlns:xi="http://www.w3.org/2001/XInclude">
 <informations>
-	<_name>Standard keyboard</_name>
+	<_name>Compact keyboard</_name>
 	<author>François Agrech</author>
-	<date>2009-04-03</date>
+	<date>2009-04-24</date>
 	<florence_version>@VERSION@</florence_version>
 </informations>
 
 <keyboard>
-	<width>30</width>
+	<width>29</width>
 	<height>10</height>
 	<key>
 		<code>49</code>
-		<xpos>1</xpos>
+		<shape>small</shape>
+		<xpos>0.5</xpos>
 		<ypos>1</ypos>
+		<width>1</width>
 	</key>
 	<key>
 		<code>10</code>
-		<xpos>3</xpos>
+		<xpos>2</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>11</code>
-		<xpos>5</xpos>
+		<xpos>4</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>12</code>
-		<xpos>7</xpos>
+		<xpos>6</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>13</code>
-		<xpos>9</xpos>
+		<xpos>8</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>14</code>
-		<xpos>11</xpos>
+		<xpos>10</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>15</code>
-		<xpos>13</xpos>
+		<xpos>12</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>16</code>
-		<xpos>15</xpos>
+		<xpos>14</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>17</code>
-		<xpos>17</xpos>
+		<xpos>16</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>18</code>
-		<xpos>19</xpos>
+		<xpos>18</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>19</code>
-		<xpos>21</xpos>
+		<xpos>20</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>20</code>
-		<xpos>23</xpos>
+		<xpos>22</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>21</code>
-		<xpos>25</xpos>
+		<xpos>24</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
 		<code>22</code>
 		<shape>XL</shape>
-		<xpos>28</xpos>
+		<xpos>27</xpos>
 		<ypos>1</ypos>
 		<width>4</width>
 	</key>
 	<key>
 		<code>23</code>
-		<shape>Wide</shape>
-		<xpos>1.5</xpos>
+		<xpos>1</xpos>
 		<ypos>3</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>24</code>
-		<xpos>4</xpos>
+		<xpos>3</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>25</code>
-		<xpos>6</xpos>
+		<xpos>5</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>26</code>
-		<xpos>8</xpos>
+		<xpos>7</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>27</code>
-		<xpos>10</xpos>
+		<xpos>9</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>28</code>
-		<xpos>12</xpos>
+		<xpos>11</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>29</code>
-		<xpos>14</xpos>
+		<xpos>13</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>30</code>
-		<xpos>16</xpos>
+		<xpos>15</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>31</code>
-		<xpos>18</xpos>
+		<xpos>17</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>32</code>
-		<xpos>20</xpos>
+		<xpos>19</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>33</code>
-		<xpos>22</xpos>
+		<xpos>21</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>34</code>
-		<xpos>24</xpos>
+		<xpos>23</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>35</code>
-		<xpos>26</xpos>
+		<xpos>25</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
 		<code>36</code>
 		<shape>Return</shape>
-		<xpos>28.5</xpos>
+		<xpos>27.5</xpos>
 		<ypos>4</ypos>
 		<width>3</width>
 		<height>4</height>
 	</key>
 	<key>
 		<code>66</code>
-		<shape>XL</shape>
-		<xpos>2</xpos>
+		<shape>Wide</shape>
+		<xpos>1.5</xpos>
 		<ypos>5</ypos>
-		<width>4</width>
+		<width>3</width>
 	</key>
 	<key>
 		<code>38</code>
-		<xpos>5</xpos>
+		<xpos>4</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>39</code>
-		<xpos>7</xpos>
+		<xpos>6</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>40</code>
-		<xpos>9</xpos>
+		<xpos>8</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>41</code>
-		<xpos>11</xpos>
+		<xpos>10</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>42</code>
-		<xpos>13</xpos>
+		<xpos>12</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>43</code>
-		<xpos>15</xpos>
+		<xpos>14</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>44</code>
-		<xpos>17</xpos>
+		<xpos>16</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>45</code>
-		<xpos>19</xpos>
+		<xpos>18</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>46</code>
-		<xpos>21</xpos>
+		<xpos>20</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>47</code>
-		<xpos>23</xpos>
+		<xpos>22</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>48</code>
-		<xpos>25</xpos>
+		<xpos>24</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>51</code>
-		<xpos>27</xpos>
+		<xpos>26</xpos>
 		<ypos>5</ypos>
 	</key>
 	<key>
 		<code>50</code>
-		<shape>Wide</shape>
-		<xpos>1.5</xpos>
+		<xpos>1</xpos>
 		<ypos>7</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>94</code>
-		<xpos>4</xpos>
+		<xpos>3</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>52</code>
-		<xpos>6</xpos>
+		<xpos>5</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>53</code>
-		<xpos>8</xpos>
+		<xpos>7</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>54</code>
-		<xpos>10</xpos>
+		<xpos>9</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>55</code>
-		<xpos>12</xpos>
+		<xpos>11</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>56</code>
-		<xpos>14</xpos>
+		<xpos>13</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>57</code>
-		<xpos>16</xpos>
+		<xpos>15</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>58</code>
-		<xpos>18</xpos>
+		<xpos>17</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>59</code>
-		<xpos>20</xpos>
+		<xpos>19</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>60</code>
-		<xpos>22</xpos>
+		<xpos>21</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>61</code>
-		<xpos>24</xpos>
+		<xpos>23</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
 		<code>62</code>
 		<shape>XXL</shape>
-		<xpos>27.5</xpos>
+		<xpos>26.5</xpos>
 		<ypos>7</ypos>
 		<width>5</width>
 	</key>
 	<key>
 		<code>37</code>
-		<shape>Wide</shape>
-		<xpos>1.5</xpos>
+		<xpos>1</xpos>
 		<ypos>9</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>115</code>
-		<shape>Wide</shape>
-		<xpos>4.5</xpos>
+		<xpos>3</xpos>
 		<ypos>9</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>64</code>
-		<shape>Wide</shape>
-		<xpos>7.5</xpos>
+		<xpos>5</xpos>
 		<ypos>9</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>65</code>
 		<shape>Space</shape>
-		<xpos>15</xpos>
+		<xpos>11.5</xpos>
 		<ypos>9</ypos>
-		<width>12</width>
+		<width>11</width>
 	</key>
 	<key>
 		<code>113</code>
-		<shape>Wide</shape>
-		<xpos>22.5</xpos>
+		<xpos>18</xpos>
 		<ypos>9</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>116</code>
-		<shape>Wide</shape>
-		<xpos>25.5</xpos>
+		<xpos>20</xpos>
 		<ypos>9</ypos>
-		<width>3</width>
 	</key>
 	<key>
 		<code>109</code>
-		<shape>Wide</shape>
-		<xpos>28.5</xpos>
+		<xpos>22</xpos>
 		<ypos>9</ypos>
-		<width>3</width>
+	</key>
+	<key>
+		<code>99</code>
+		<shape>tiny</shape>
+		<xpos>24</xpos>
+		<ypos>8.5</ypos>
+		<height>1</height>
+	</key>
+	<key>
+		<code>98</code>
+		<shape>tiny</shape>
+		<xpos>26</xpos>
+		<ypos>8.5</ypos>
+		<height>1</height>
+	</key>
+	<key>
+		<code>105</code>
+		<shape>tiny</shape>
+		<xpos>28</xpos>
+		<ypos>8.5</ypos>
+		<height>1</height>
+	</key>
+	<key>
+		<code>100</code>
+		<shape>tiny</shape>
+		<xpos>24</xpos>
+		<ypos>9.5</ypos>
+		<height>1</height>
+	</key>
+	<key>
+		<code>104</code>
+		<shape>tiny</shape>
+		<xpos>26</xpos>
+		<ypos>9.5</ypos>
+		<height>1</height>
+	</key>
+	<key>
+		<code>102</code>
+		<shape>tiny</shape>
+		<xpos>28</xpos>
+		<ypos>9.5</ypos>
+		<height>1</height>
 	</key>
 </keyboard>
 
 <extension>
-	<_name>Navigation keys</_name>
-	<identifiant>ext1</identifiant>
-	<placement>right</placement>
+	<_name>Function keys</_name>
+	<identifiant>compactfn</identifiant>
+	<placement>top</placement>
 	<keyboard>
-	<width>6</width>
-	<height>10</height>
+	<width>37</width>
+	<height>1</height>
+	<key>
+		<code>9</code>
+		<shape>mini</shape>
+		<xpos>0.90625</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>67</code>
+		<shape>mini</shape>
+		<xpos>2.71875</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>68</code>
+		<shape>mini</shape>
+		<xpos>4.53125</xpos>
+		<ypos>0.5</ypos>
+		<height>1</height>
+	</key>
+	<key>
+		<code>69</code>
+		<shape>mini</shape>
+		<xpos>6.34375</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>70</code>
+		<shape>mini</shape>
+		<xpos>8.15625</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>71</code>
+		<shape>mini</shape>
+		<xpos>9.96875</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>72</code>
+		<shape>mini</shape>
+		<xpos>11.78125</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>73</code>
+		<shape>mini</shape>
+		<xpos>13.59375</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>74</code>
+		<shape>mini</shape>
+		<xpos>15.40625</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>75</code>
+		<shape>mini</shape>
+		<xpos>17.21875</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>76</code>
+		<shape>mini</shape>
+		<xpos>19.03125</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>95</code>
+		<shape>mini</shape>
+		<xpos>20.84375</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>96</code>
+		<shape>mini</shape>
+		<xpos>22.65625</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>110</code>
+		<shape>mini</shape>
+		<xpos>24.46875</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
 	<key>
 		<code>106</code>
-		<xpos>1</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>97</code>
-		<xpos>3</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>99</code>
-		<xpos>5</xpos>
-		<ypos>1</ypos>
+		<shape>mini</shape>
+		<xpos>26.28125</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
 	</key>
 	<key>
 		<code>107</code>
-		<xpos>1</xpos>
-		<ypos>3</ypos>
+		<shape>mini</shape>
+		<xpos>28.09375</xpos>
+		<ypos>0.5</ypos>
+		<width>1.8125</width>
+		<height>1</height>
+	</key>
+	<key>
+		<code>97</code>
+		<shape>tiny</shape>
+		<xpos>30</xpos>
+		<ypos>0.5</ypos>
+		<height>1</height>
 	</key>
 	<key>
 		<code>103</code>
-		<xpos>3</xpos>
-		<ypos>3</ypos>
+		<shape>tiny</shape>
+		<xpos>32</xpos>
+		<ypos>0.5</ypos>
+		<height>1</height>
 	</key>
 	<key>
-		<code>105</code>
-		<xpos>5</xpos>
-		<ypos>3</ypos>
+		<code>111</code>
+		<shape>tiny</shape>
+		<xpos>34</xpos>
+		<ypos>0.5</ypos>
+		<height>1</height>
 	</key>
 	<key>
-		<code>98</code>
-		<xpos>3</xpos>
-		<ypos>7</ypos>
-	</key>
-	<key>
-		<code>100</code>
-		<xpos>1</xpos>
-		<ypos>9</ypos>
-	</key>
-	<key>
-		<code>104</code>
-		<xpos>3</xpos>
-		<ypos>9</ypos>
-	</key>
-	<key>
-		<code>102</code>
-		<xpos>5</xpos>
-		<ypos>9</ypos>
+		<code>78</code>
+		<shape>tiny</shape>
+		<xpos>36</xpos>
+		<ypos>0.5</ypos>
+		<height>1</height>
 	</key>
 	</keyboard>
 </extension>
 
 <extension>
 	<_name>Numeric keys</_name>
-	<identifiant>ext2</identifiant>
+	<identifiant>compactnm</identifiant>
 	<placement>right</placement>
 	<keyboard>
 	<width>8</width>
@@ -523,96 +656,6 @@
 		<code>91</code>
 		<xpos>5</xpos>
 		<ypos>9</ypos>
-	</key>
-	</keyboard>
-</extension>
-
-<extension>
-	<_name>Function keys</_name>
-	<identifiant>ext3</identifiant>
-	<placement>top</placement>
-	<keyboard>
-	<width>44</width>
-	<height>2</height>
-	<key>
-		<code>9</code>
-		<xpos>1</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>67</code>
-		<xpos>5</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>68</code>
-		<xpos>7</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>69</code>
-		<xpos>9</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>70</code>
-		<xpos>11</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>71</code>
-		<xpos>14</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>72</code>
-		<xpos>16</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>73</code>
-		<xpos>18</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>74</code>
-		<xpos>20</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>75</code>
-		<xpos>23</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>76</code>
-		<xpos>25</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>95</code>
-		<xpos>27</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>96</code>
-		<xpos>29</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>111</code>
-		<xpos>39</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>78</code>
-		<xpos>41</xpos>
-		<ypos>1</ypos>
-	</key>
-	<key>
-		<code>110</code>
-		<xpos>43</xpos>
-		<ypos>1</ypos>
 	</key>
 	</keyboard>
 </extension>

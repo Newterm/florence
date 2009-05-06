@@ -15,7 +15,7 @@ DEPENDANCIES
 ************
 
       * gtk >= 2.10
-      * cspi >= 1.0
+      * (optional) cspi >= 1.0
       * libgconf >= 2.0
       * libglade >= 2.0
       * libxml >= 2.0
@@ -122,5 +122,7 @@ You must start the at-spi registry daemon at session startup (at-spi-registryd).
 QT3 applications don't support at-spi yet. You can still use Florence on screen, but the
 keyboard won't detect QT editable widgets. This makes Florence unusable in hidden mode on
 KDE3, unless you don't use QT applications, but that is highly unlikely on KDE.
-Always check the "always on screen" box (in preferences dialog) on KDE3.
+Always uncheck the "auto-hide" box (in preferences dialog) on KDE3.
+If you are not going to use auto-hide mode, you can as well compile florence without
+at-spi and save some disk space: use the --without-at-spi configure option.
 

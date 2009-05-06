@@ -353,10 +353,10 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 	GdkScreen *screen=gtk_widget_get_screen(widget);
 	GdkColormap *colormap=gdk_screen_get_rgba_colormap(screen);
 	if (colormap) {
-		view->composite=TRUE;
+		if (view) view->composite=TRUE;
 	} else { 
 		flo_info(_("Your screen does not support alpha channel. Semi-transparency is disabled"));
-		view->composite=FALSE;
+		if (view) view->composite=FALSE;
 		colormap=gdk_screen_get_rgb_colormap(screen);
 	}
 	gtk_widget_set_colormap(widget, colormap);

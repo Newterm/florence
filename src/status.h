@@ -45,7 +45,6 @@ struct status {
 	XRecordContext RecordContext; /* Context to record keyboard events */
 	Display *data_disp; /* Data display to record events */
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
-	Display *xtst_disp; /* Xtest display to send events */
 #endif
 };
 
@@ -93,10 +92,6 @@ void status_view_set(struct status *status, struct view *view);
 void status_spi_disable(struct status *status);
 /* tell if spi is enabled */
 gboolean status_spi_is_enabled(struct status *status);
-#ifdef ENABLE_XTST
-/* get display to send XTest events */
-Display *status_display_get(struct status *status);
-#endif
 
 #endif
 

@@ -35,7 +35,8 @@
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
-	gtk_exit (0);
+	gtk_main_quit();
+	//gtk_exit (0);
 }
 
 #ifdef ENABLE_AT_SPI
@@ -44,7 +45,10 @@ void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
-	if (florence->obj) Accessible_unref(florence->obj);
+	if (florence->obj) {
+		Accessible_unref(florence->obj);
+		florence->obj=NULL;
+	}
 	florence->icon=NULL;
 }
 
@@ -55,8 +59,10 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
 	florence->icon=NULL;
 	view_show(florence->view, florence->obj);
-	Accessible_unref(florence->obj);
-	florence->obj=NULL;
+	if (florence->obj) {
+		Accessible_unref(florence->obj);
+		florence->obj=NULL;
+	}
 }
 
 /* on expose event: display florence icon */
@@ -104,6 +110,9 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 				G_CALLBACK(flo_icon_press), florence);
 			g_signal_connect(G_OBJECT(florence->view->window), "show",
 				G_CALLBACK(flo_icon_destroy), florence);
+			g_signal_connect(G_OBJECT(florence->icon), "screen-changed",
+				G_CALLBACK(view_screen_changed), NULL);
+			view_screen_changed(GTK_WIDGET(florence->icon), NULL, NULL);
 		}
 		tools_window_move(florence->icon, obj);
 		gtk_widget_show(GTK_WIDGET(florence->icon));
@@ -155,7 +164,7 @@ void flo_traverse (struct florence *florence, Accessible *obj)
 				flo_check_show(florence, child);
 			} else {
 				flo_traverse(florence, child);
-				Accessible_unref(child);
+				if (child) Accessible_unref(child);
 			}
 		}
 	}
@@ -379,11 +388,11 @@ void flo_layout_load(struct florence *florence)
 
 	/* get the informations about the layout */
 	layout=layoutreader_new(settings_get_string("layout/file"),
-		DATADIR "/florence.xml",
+		DATADIR "/layouts/florence.xml",
 		DATADIR "/relaxng/florence.rng");
 	layoutreader_element_open(layout, "layout");
 	infos=layoutreader_infos_new(layout);
-	flo_info(_("Layout name: \"%s\""), infos->name);
+	flo_debug(_("Layout name: \"%s\""), infos->name);
 	if (!infos->version || strcmp(infos->version, VERSION))
 		flo_warn(_("Layout version %s is different from program version %s"),
 			infos->version, VERSION);
@@ -448,6 +457,7 @@ struct florence *flo_new(void)
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
+	settings_changecb_register("layout/file", flo_layout_reload, florence);
 
 	return florence;
 }

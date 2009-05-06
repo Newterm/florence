@@ -28,6 +28,18 @@
 		<xi:include href="default.svg"/>
 	</shape>
 	<shape>
+		<name>mini</name>
+		<xi:include href="default.svg"/>
+	</shape>
+	<shape>
+		<name>tiny</name>
+		<xi:include href="default.svg"/>
+	</shape>
+	<shape>
+		<name>small</name>
+		<xi:include href="default.svg"/>
+	</shape>
+	<shape>
 		<name>Wide</name>
 		<xi:include href="default.svg"/>
 	</shape>

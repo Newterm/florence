@@ -1,5 +1,6 @@
 <?xml version="1.0"?>
 <glade-interface>
+  <requires-version lib="gtk+" version="2.12"/>
   <widget class="GtkWindow" id="flo_config_window">
     <property name="visible">True</property>
     <property name="can_focus">True</property>
@@ -518,6 +519,17 @@
                 <property name="visible">True</property>
                 <property name="border_width">4</property>
                 <child>
+                  <widget class="GtkComboBox" id="flo_layouts">
+                    <property name="visible">True</property>
+                    <property name="tooltip" translatable="yes">Select Florence layout</property>
+                    <signal name="changed" handler="settings_layout"/>
+                  </widget>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+                <child>
                   <widget class="GtkFrame" id="extensions">
                     <property name="visible">True</property>
                     <property name="label_xalign">0</property>
@@ -526,58 +538,8 @@
                         <property name="visible">True</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <widget class="GtkVBox" id="vbox2">
+                          <widget class="GtkVBox" id="flo_extensions">
                             <property name="visible">True</property>
-                            <child>
-                              <widget class="GtkCheckButton" id="flo_arrows">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes" context="yes">Show the arrow keys</property>
-                                <property name="label" translatable="yes" context="yes">Navigation keys</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="settings_arrows"/>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkCheckButton" id="flo_numpad">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes" context="yes">Show the numpad</property>
-                                <property name="label" translatable="yes" context="yes">Numeric keys</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="settings_numpad"/>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">1</property>
-                              </packing>
-                            </child>
-                            <child>
-                              <widget class="GtkCheckButton" id="flo_function_keys">
-                                <property name="visible">True</property>
-                                <property name="can_focus">True</property>
-                                <property name="tooltip" translatable="yes" context="yes">Show function keys</property>
-                                <property name="label" translatable="yes" context="yes">Function keys</property>
-                                <property name="use_underline">True</property>
-                                <property name="response_id">0</property>
-                                <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="settings_function_keys"/>
-                              </widget>
-                              <packing>
-                                <property name="expand">False</property>
-                                <property name="fill">False</property>
-                                <property name="position">2</property>
-                              </packing>
-                            </child>
                           </widget>
                         </child>
                       </widget>
@@ -596,6 +558,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>

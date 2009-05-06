@@ -74,7 +74,7 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 	struct key *key;
 	if (hook->category==XRecordFromServer) {
 		event=(xEvent *)hook->data;
-		if (key=status->keys[event->u.u.detail]) {
+		if ((key=status->keys[event->u.u.detail])) {
 			if (event->u.u.type==KeyPress) {
 				status_key_press_update(status, key);
 			} else if (event->u.u.type==KeyRelease) {
@@ -125,15 +125,15 @@ gpointer status_record_start (gpointer data)
 /* Stop recording keyboard events */
 void status_record_stop (struct status *status)
 {
-	Display *disp=(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window());
-	if (status->data_disp) {
-		XCloseDisplay(status->data_disp);
-		status->data_disp=NULL;
-	}
 	if (status->RecordContext) {
 		XRecordDisableContext(status->data_disp, status->RecordContext);
-		XRecordFreeContext(disp, status->RecordContext);
+		XRecordFreeContext(status->data_disp, status->RecordContext);
 		status->RecordContext=0;
+	}
+	if (status->data_disp) {
+		/* TODO: investigate why this is blocking */
+		//XCloseDisplay(status->data_disp);
+		status->data_disp=NULL;
 	}
 }
 
@@ -290,7 +290,6 @@ void status_free(struct status *status)
 {
 #ifdef ENABLE_XTST
 	status_record_stop(status);
-	if (status->xtst_disp) XCloseDisplay(status->xtst_disp);
 #endif
 	if (status->timer) g_timer_destroy(status->timer);
 	if (status->pressedkeys) g_list_free(status->pressedkeys);
@@ -321,8 +320,9 @@ void status_spi_disable(struct status *status)
 {
 #ifdef ENABLE_XTST
 	int event_base, error_base, major, minor;
-	status->xtst_disp=(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window());
-	if (!XTestQueryExtension(status->xtst_disp, &event_base, &error_base, &major, &minor)) {
+	if (!XTestQueryExtension(
+		(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		&event_base, &error_base, &major, &minor)) {
 		flo_error(_("Neither at-spi nor XTest could be initialized."));
 		flo_fatal(_("There is no way we can send keyboard events."));
 	} else flo_info(_("XTest extension found: version=%d.%d"), major, minor);
@@ -335,9 +335,4 @@ void status_spi_disable(struct status *status)
 
 /* tell if spi is enabled */
 gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
-
-#ifdef ENABLE_XTST
-/* get display to send XTest events */
-Display *status_display_get(struct status *status) { return status->xtst_disp; }
-#endif
 
