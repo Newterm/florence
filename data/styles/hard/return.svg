@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 198 264">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg" version="1.1" width="198" height="264" viewBox="0 0 198 264">
 	<path class="shape" d="M0 13.2 C0 6.6 6.6 0 13.2 0 L184.8 0 C191.4 0 198 6.6 198 13.2 L198 250.8 C198 257.4 191.4 264 184.8 264 L79.2 264 C72.6 264 66 257.4 66 250.8 L66 132 L13.2 132 C6.6 132 0 125.4 0 118.8 L0 13.2"/>
 	<path d="M10 108.8 L10 23.2 C10 10 10 10 23.2 10 L174.8 10 C188 10 188 10 188 23.2 L188 240.8" style="stroke:url(florence.defs#gradient1);" stroke-width="20" fill="none" stroke-linecap="butt"/>
 	<path d="M188 240.8 C188 254 188 254 174.8 254 L109.2 254 C76 254 76 254 76 240.8 L76 122 L23.2 122 C10 122 10 122 10 108.8" style="stroke:url(florence.defs#gradient3);" stroke-width="20" fill="none" stroke-linecap="butt"/>

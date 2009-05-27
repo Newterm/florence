@@ -109,7 +109,7 @@ void layoutreader_update_lang(xmlDocPtr doc, xmlNodePtr node, char **update)
 /* dump svg from file */
 char *layoutreader_svg_get(xmlDocPtr doc, xmlNodePtr cur)
 {
-	char *ret;
+	char *ret=NULL;
 	xmlBufferPtr buf=xmlBufferCreate();
 	xmlOutputBufferPtr outputbuf=xmlOutputBufferCreateBuffer(buf,
 		xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8));

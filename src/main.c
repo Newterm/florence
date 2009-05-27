@@ -70,6 +70,7 @@ int main (int argc, char **argv)
 	gconf_init(argc, argv, NULL);
 	g_type_init();
 
+#ifdef ENABLE_AT_SPI
 	gconfclient=gconf_client_get_default();
 	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface", GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 	if (!gconf_client_get_bool(gconfclient, "/desktop/gnome/interface/accessibility", NULL)) {
@@ -84,6 +85,9 @@ int main (int argc, char **argv)
 			ret=EXIT_SUCCESS;
 		}
 	} else if (config&1) {
+#else
+	if (config&1) {
+#endif
 		settings_init(TRUE);
 		settings();
 		settings_exit();

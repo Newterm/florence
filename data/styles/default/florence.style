@@ -25,7 +25,7 @@
 	<shapes>
 	<shape>
 		<name>default</name>
-		<svg version="1.1" viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="132" height="132" viewBox="0 0 132 132" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="default_s" d="M34 2 L98 2 C114 2 130 18 130 34 L130 98 C130 114 114 130 98 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
@@ -34,7 +34,7 @@
 	</shape>
 	<shape>
 		<name>tiny</name>
-		<svg version="1.1" viewBox="0 0 132 66" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="132" height="66" viewBox="0 0 132 66" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="tiny_s" d="M34 2 L98 2 C114 2 130 18 130 33 C130 49 114 64 98 64 L34 64 C18 64 2 49 2 33 C2 18 18 2 34 2"/>
 			</g>
@@ -43,7 +43,7 @@
 	</shape>
 	<shape>
 		<name>mini</name>
-		<svg version="1.1" viewBox="0 0 119.625 66" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="119.625" height="66" viewBox="0 0 119.625 66" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="mini_s" d="M34 2 L85.625 2 C101.625 2 117.625 18 117.625 33 C117.625 49 101.625 64 85.625 64 L34 64 C18 64 2 49 2 33 C2 18 18 2 34 2"/>
 			</g>
@@ -52,7 +52,7 @@
 	</shape>
 	<shape>
 		<name>small</name>
-		<svg version="1.1" viewBox="0 0 66 132" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="66" height="132" viewBox="0 0 66 132" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="small_s" d="M33 2 C49 2 64 18 64 34 L64 98 C64 114 49 130 33 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 33 2"/>
 			</g>
@@ -61,7 +61,7 @@
 	</shape>
 	<shape>
 		<name>Wide</name>
-		<svg version="1.1" viewBox="0 0 198 132" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="198" height="132" viewBox="0 0 198 132" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="Wide_s" d="M34 2 L164 2 C180 2 196 18 196 34 L196 98 C196 114 180 130 164 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
@@ -70,7 +70,7 @@
 	</shape>
 	<shape>
 		<name>XL</name>
-		<svg version="1.1" viewBox="0 0 264 132" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="264" height="132" viewBox="0 0 264 132" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="XL_s" d="M34 2 L230 2 C246 2 262 18 262 34 L262 98 C262 114 246 130 230 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
@@ -79,7 +79,7 @@
 	</shape>
 	<shape>
 		<name>XXL</name>
-		<svg version="1.1" viewBox="0 0 320 132" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="320" height="132" viewBox="0 0 320 132" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="XXL_s" d="M34 2 L286 2 C302 2 318 18 318 34 L318 98 C317 114 302 130 286 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
@@ -88,7 +88,7 @@
 	</shape>
 	<shape>
 		<name>High</name>
-		<svg version="1.1" viewBox="0 0 132 264" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="132" height="264" viewBox="0 0 132 264" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="High_s" d="M34 2 L98 2 C114 2 130 18 130 34 L130 230 C130 246 114 262 98 262 L34 262 C18 262 2 246 2 230 L2 34 C2 18 18 2 34 2"/>
 			</g>
@@ -97,7 +97,7 @@
 	</shape>
 	<shape>
 		<name>Space</name>
-		<svg version="1.1" viewBox="0 0 792 132" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="792" height="132" viewBox="0 0 792 132" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="Space_s" d="M34 2 L758 2 C774 2 790 18 790 34 L790 98 C790 114 774 130 758 130 L34 130 C18 130 2 114 2 98 L2 34 C2 18 18 2 34 2"/>
 			</g>
@@ -106,7 +106,7 @@
 	</shape>
 	<shape>
 		<name>Return</name>
-		<svg version="1.1" viewBox="0 0 198 264" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="198" height="264" viewBox="0 0 198 264" xmlns="http://www.w3.org/2000/svg">
 			<g class="shape">
 				<path id="Return_s" d="M2 34 C2 18 18 2 34 2 L164 2 C180 2 196 18 196 34 L196 230 C196 246 180 262 164 262 L100 262 C84 262 68 246 68 230 L68 166 C68 135 63 130 36 130 L34 130 C18 130 2 114 2 98 L2 34"/>
 			</g>

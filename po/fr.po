@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.3.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-04-03 17:37+0200\n"
+"POT-Creation-Date: 2009-05-27 17:54+0200\n"
 "PO-Revision-Date: 2009-02-11 11:08+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <traduc@traduc.org>\n"
@@ -83,144 +83,142 @@ msgstr "Extensions"
 msgid "Florence Settings"
 msgstr "Paramètres de Florence"
 
-#: ../data/florence.glade.h:16 ../data/florence.xml.in.in.h:1
-msgid "Function keys"
-msgstr "Touches de fonction"
-
-#: ../data/florence.glade.h:17
+#: ../data/florence.glade.h:16
 msgid "Intermediate icon"
 msgstr "Icône intermédiaire"
 
-#: ../data/florence.glade.h:18
+#: ../data/florence.glade.h:17
 msgid "Keep ratio"
 msgstr "Garder les proportions"
 
-#: ../data/florence.glade.h:19
+#: ../data/florence.glade.h:18
 msgid "Keep the keyboard on top."
 msgstr "Garder le clavier au dessus."
 
-#: ../data/florence.glade.h:20
+#: ../data/florence.glade.h:19
 msgid "Keep window ratio when resizing window."
 msgstr "Garder les proportions de la fenêtre lors du redimenssionement"
 
-#: ../data/florence.glade.h:21
+#: ../data/florence.glade.h:20
 msgid "Key background color"
 msgstr "Couleur de fond des touches"
 
-#: ../data/florence.glade.h:22
+#: ../data/florence.glade.h:21
 msgid "Key background color when the mouse is over"
 msgstr "Couleur de fond de la touche sous le pointeur"
 
-#: ../data/florence.glade.h:23
+#: ../data/florence.glade.h:22
 msgid "Key with mouve over background color"
 msgstr "Couleur de fond de la touche pointée"
 
-#: ../data/florence.glade.h:24
+#: ../data/florence.glade.h:23
 msgid "Labels and symbols color"
 msgstr "Couleur du symbole des touches"
 
-#: ../data/florence.glade.h:25
+#: ../data/florence.glade.h:24
 msgid ""
 "Move the keyboard to near the selected editable widget in auto-hide mode"
 msgstr ""
 "Déplacer le clavier vers les environs de l'objet éditable sélectionné en "
 "mode 'cacher automatiquement'"
 
-#: ../data/florence.glade.h:26
+#: ../data/florence.glade.h:25
 msgid "Move to near selected widget"
 msgstr "Déplacer vers l'objet sélectionné"
 
-#: ../data/florence.glade.h:27 ../data/florence.xml.in.in.h:2
-msgid "Navigation keys"
-msgstr "Touches de navigation"
-
-#: ../data/florence.glade.h:28
+#: ../data/florence.glade.h:26
 msgid "Normal key background color"
 msgstr "Couleur de fond des touches normales"
 
-#: ../data/florence.glade.h:29 ../data/florence.xml.in.in.h:3
-msgid "Numeric keys"
-msgstr "Touches numériques"
-
-#: ../data/florence.glade.h:30
+#: ../data/florence.glade.h:27
 msgid "Opacity"
 msgstr "Opacité"
 
-#: ../data/florence.glade.h:31
+#: ../data/florence.glade.h:28
 msgid "Put an intermediate icon before showing the actual keyboard"
 msgstr "Montre une icône intermédiaire avant de montrer le vrai clavier"
 
-#: ../data/florence.glade.h:32
+#: ../data/florence.glade.h:29
 msgid "Quit preferences"
 msgstr "Quitter les préférences"
 
-#: ../data/florence.glade.h:33
+#: ../data/florence.glade.h:30
 msgid "Resizable"
 msgstr "Redimensionnable"
 
-#: ../data/florence.glade.h:34
-msgid "Show function keys"
-msgstr "Affiche les touches de fonction"
+#: ../data/florence.glade.h:31
+msgid "Select Florence layout"
+msgstr "Sélection de l'agencement du clavier"
 
-#: ../data/florence.glade.h:35
-msgid "Show the arrow keys"
-msgstr "Affiche les touches de navigation (flèches)"
-
-#: ../data/florence.glade.h:36
-msgid "Show the numpad"
-msgstr "Affiche le pavé numérique"
-
-#: ../data/florence.glade.h:37
+#: ../data/florence.glade.h:32
 msgid "Style preview"
 msgstr "Aperçu du style"
 
-#: ../data/florence.glade.h:38
+#: ../data/florence.glade.h:33
 msgid "Task bar"
 msgstr "Barre des tâches"
 
-#: ../data/florence.glade.h:39
+#: ../data/florence.glade.h:34
 msgid "Transparent"
 msgstr "Transparente"
 
-#: ../data/florence.glade.h:40
+#: ../data/florence.glade.h:35
 msgid "Transparent mode"
 msgstr "Mode transparent"
 
-#: ../data/florence.glade.h:41
+#: ../data/florence.glade.h:36
 msgid "activated key background color"
 msgstr "Couleur de fond de la touche activée"
 
-#: ../data/florence.glade.h:42
+#: ../data/florence.glade.h:37
 msgid "behaviour"
 msgstr "comportement"
 
-#: ../data/florence.glade.h:43
+#: ../data/florence.glade.h:38
 msgid "default key background color"
 msgstr "Couleur de fond des touches normales"
 
-#: ../data/florence.glade.h:44
+#: ../data/florence.glade.h:39
 msgid "focussed key background color"
 msgstr "Couleur de fond de la touche sélectionnée"
 
-#: ../data/florence.glade.h:45
+#: ../data/florence.glade.h:40
 msgid "layout"
 msgstr "agencement"
 
-#: ../data/florence.glade.h:46
+#: ../data/florence.glade.h:41
 msgid "style"
 msgstr "style"
 
-#: ../data/florence.glade.h:47
+#: ../data/florence.glade.h:42
 msgid "symbol color"
 msgstr "couleur du symbole des touches"
 
-#: ../data/florence.glade.h:48
+#: ../data/florence.glade.h:43
 msgid "window"
 msgstr "fenêtre"
 
-#: ../data/florence.xml.in.in.h:4
+#: ../data/layouts/florence.xml.in.in.h:1
+#: ../data/layouts/compact.xml.in.in.h:2
+msgid "Function keys"
+msgstr "Touches de fonction"
+
+#: ../data/layouts/florence.xml.in.in.h:2
+msgid "Navigation keys"
+msgstr "Touches de navigation"
+
+#: ../data/layouts/florence.xml.in.in.h:3
+#: ../data/layouts/compact.xml.in.in.h:3
+msgid "Numeric keys"
+msgstr "Touches numériques"
+
+#: ../data/layouts/florence.xml.in.in.h:4
 msgid "Standard keyboard"
 msgstr "Clavier standard"
+
+#: ../data/layouts/compact.xml.in.in.h:1
+msgid "Compact keyboard"
+msgstr "Clavier compact"
 
 #: ../data/styles/default/symbols.xml.in.h:1
 msgid "F1"
@@ -322,46 +320,81 @@ msgstr "arr"
 msgid "~"
 msgstr "~"
 
-#: ../src/florence.c:70
+#: ../src/florence.c:79
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Erreur de chargement du fichier icone: %s"
 
-#: ../src/florence.c:227
-msgid "XKB version mismatch"
-msgstr "Version de XKB incompatble avec le serveur"
+#: ../src/florence.c:197
+msgid "SPI is disabled: Unable to switch auto-hide mode on."
+msgstr ""
+"SPI est désactivé: Impossible d'activer le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:247
+#: ../src/florence.c:250
+#, c-format
+msgid "Unable to initialize XKB library. version=%d.%d rc=%d"
+msgstr "Impossible d'initialiser la bibliothèque XKB"
+
+#: ../src/florence.c:254
+#, c-format
+msgid "Unable to query XKB extension from X server version=%d.%d rc=%d"
+msgstr ""
+"Impossible de demander l'extensio XKB depuis le serveur X version=%d.%d cr=%d"
+
+#: ../src/florence.c:263
+msgid ""
+"XKB not compiled in: startup keyboard sync is disabled. You should make sure "
+"all locker keys are released."
+msgstr ""
+"XKB n'est pas compilé avec le calvier: la synchronization du clavier est "
+"désactivée au démarrage. Vous devriez vous assurer que les touches de "
+"bloquage sont désactivées"
+
+#: ../src/florence.c:277
 #, c-format
 msgid "[new extension] name=%s id=%s"
 msgstr "[nouvelle extension] nom=%s id=\"%s\""
 
-#: ../src/florence.c:363
+#: ../src/florence.c:395
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:365
+#: ../src/florence.c:397
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:393
+#: ../src/florence.c:425
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
-#: ../src/keyboard.c:63
+#: ../src/florence.c:445
+msgid ""
+"at-spi registry daemon is not running.Events will be sent with Xtest instead "
+"and severalfunctions are disabled, including auto-hide."
+msgstr ""
+"le démon d'enregistrement d'at-spi n'est pas lancé. Les évènements seront "
+"envoyés avec Xtest à la place et vertaines fonctions sont désactivées, comme "
+"le mode 'cacher automatiquement'"
+
+#: ../src/florence.c:451
+msgid "AT-SPI not compiled in: auto-hide mode is disabled."
+msgstr ""
+"AT-SPI n'est pas compilé: le mode 'cacher automatiquement est désactivé."
+
+#: ../src/keyboard.c:65
 #, c-format
 msgid "[new keyboard] name=%s id=%s"
 msgstr "[nouveau clavier] nom=%s id=%s"
 
 #. allocate memory for keyboard
-#: ../src/keyboard.c:66
+#: ../src/keyboard.c:68
 msgid "Unable to allocate memory for keyboard"
 msgstr "Echec d'allocation de mémoire pour le clavier"
 
-#: ../src/keyboard.c:73
+#: ../src/keyboard.c:75
 msgid "Unreachable code in keyboard_new"
 msgstr "Code impossible à atteindre dans keyboard_new"
 
@@ -370,35 +403,35 @@ msgstr "Code impossible à atteindre dans keyboard_new"
 msgid "Unknown placement %s"
 msgstr "Placement inconnu %s"
 
-#: ../src/layoutreader.c:318
+#: ../src/layoutreader.c:319
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr ""
 "Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
 "défaut %s"
 
-#: ../src/layoutreader.c:328
+#: ../src/layoutreader.c:329
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 "%s est in répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
-#: ../src/layoutreader.c:335
+#: ../src/layoutreader.c:336
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/layoutreader.c:342
+#: ../src/layoutreader.c:343
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s n'est pas validé par %s"
 
-#: ../src/layoutreader.c:343
+#: ../src/layoutreader.c:344
 #, c-format
 msgid "Using file %s"
 msgstr "Utilisation du fichier %s"
 
-#: ../src/layoutreader.c:351
+#: ../src/layoutreader.c:352
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Le fichier %s ne contient pas de donnée xml"
@@ -408,21 +441,21 @@ msgstr "Le fichier %s ne contient pas de donnée xml"
 msgid "Florence version %s"
 msgstr "Florence version %s"
 
-#: ../src/main.c:76
+#: ../src/main.c:77
 msgid "Enable accessibility"
 msgstr "Activer l'accéssebilité"
 
-#: ../src/main.c:144
+#: ../src/main.c:148
 #, c-format
 msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
 msgstr "%s - Florence est un clavier virtuel simple pour Gnome.\n"
 
-#: ../src/main.c:146
+#: ../src/main.c:150
 #, c-format
 msgid "Usage: %s [OPTION]...\n"
 msgstr "Utilisation: %s [OPTION|...\n"
 
-#: ../src/main.c:147
+#: ../src/main.c:151
 #, c-format
 msgid ""
 "Options:\n"
@@ -441,145 +474,172 @@ msgstr ""
 "  -d, --debug         donner des informations pour le déboggage dans stdout\n"
 "\n"
 
-#: ../src/settings.c:87
+#: ../src/settings.c:90
 #, c-format
 msgid "Settings/get_full_path: buffer overflow : %s/%s"
 msgstr "Settings/get_full_path: dépassement de buffer: %s/%s"
 
-#: ../src/settings.c:130
-#, c-format
-msgid "Unable to create preview for style %s"
-msgstr "Impossible de créer un aperçu pour le style %s"
-
-#: ../src/settings.c:141
+#: ../src/settings.c:150 ../src/settings.c:187
 #, c-format
 msgid "Couldn't open directory %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
 
-#: ../src/settings.c:239 ../src/trayicon.c:62
+#: ../src/settings.c:176
+#, c-format
+msgid "Unable to create preview for style %s"
+msgstr "Impossible de créer un aperçu pour le style %s"
+
+#: ../src/settings.c:336 ../src/trayicon.c:62
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: ../src/settings.c:316
+#: ../src/settings.c:429
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings.c:393
+#: ../src/settings.c:489
 msgid "Corfirm"
 msgstr "Confirmation"
 
-#: ../src/settings.c:394
+#: ../src/settings.c:490
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
-#: ../src/settings.c:443 ../src/settings.c:462 ../src/settings.c:481
-#: ../src/settings.c:492
+#: ../src/settings.c:540 ../src/settings.c:559 ../src/settings.c:578
+#: ../src/settings.c:589
 #, c-format
 msgid "Incorrect gconf value for %s"
 msgstr "Valeur gconf incorrecte pour %s"
 
-#: ../src/settings.c:513
+#: ../src/settings.c:610
 #, c-format
 msgid "%s is not a directory"
 msgstr "%s n'est pas un répertoire"
 
-#: ../src/settings.c:518
+#: ../src/settings.c:615
 #, c-format
 msgid "Unable to create directory %s"
 msgstr "Impossible de créer le répertoire %s"
 
-#: ../src/settings.c:534
+#: ../src/settings.c:631
 msgid "Another instance of Florence settings dialog is already running"
 msgstr "Une autre instance des paramètres de Florence est déjà lancée"
 
-#: ../src/status.c:107
+#: ../src/status.c:108
 #, c-format
 msgid "XRecord extension found version=%d.%d"
 msgstr "Extension XRecord trouvée version=%d.%d"
 
-#: ../src/status.c:108
+#: ../src/status.c:109
 msgid "Unable to allocate memory for record range"
 msgstr "Echec d'allocation de mémoire pour la liste d'enregistrement"
 
-#: ../src/status.c:115
+#: ../src/status.c:116
 msgid "Unable to record events"
 msgstr "Impossible d'enregistrer les évènements %s"
 
-#: ../src/status.c:116
+#: ../src/status.c:117
 msgid "Unable to create xrecord context"
 msgstr "Impossible de créer le contexte pour XRecord%s"
 
-#: ../src/status.c:119
+#: ../src/status.c:120
 msgid "No XRecord extension found"
 msgstr "l'extension XRecord n'a pas été trouvée"
 
-#: ../src/status.c:120
+#: ../src/status.c:121
 msgid "Keyboard synchronization is disabled."
 msgstr "La synchronization avec le clavier est désavtivée"
 
-#: ../src/status.c:275
+#: ../src/status.c:278
 msgid "Unable to allocate memory for status"
 msgstr "Impossible d'allouer de la mémoire pour le status"
 
-#: ../src/style.c:59
+#: ../src/status.c:326
+msgid "Neither at-spi nor XTest could be initialized."
+msgstr "Ni at-spi ni XTest n'ont pu être initialisés."
+
+#: ../src/status.c:327 ../src/status.c:331
+msgid "There is no way we can send keyboard events."
+msgstr "Il n'y a aucune façon d'envoyer des évènements de clavier."
+
+#: ../src/status.c:328
+#, c-format
+msgid "XTest extension found: version=%d.%d"
+msgstr "Extension XTest trouvée version=%d.%d"
+
+#: ../src/status.c:330
+msgid "Xtest extension not compiled in and at-spi not working"
+msgstr "Xtest n'es pas compilé et at-spi ne marchepas"
+
+#: ../src/style.c:60
 #, c-format
 msgid "Unknown style color: %d"
 msgstr "Couleur de style inconnue: %d"
 
-#: ../src/style.c:69
+#: ../src/style.c:61
+msgid ""
+"You probably installed Florence in a location that is not in the gconf path. "
+"Please read the FAQ in Florence documentation to learn more about how to "
+"properly configure gconf."
+msgstr ""
+"Vous avez probablement installé Florence dans un endroit qui n'est pas dans le chemin de recherche de gconf. "
+"Veuillez lire la FAQ dans la documentation de Florence pour apprendre plus sur "
+"la configuration de gconf SVP."
+
+#: ../src/style.c:74
 #, c-format
 msgid "can't parse color %s"
 msgstr "Echec d'analyse de la couleur %s"
 
-#: ../src/style.c:120 ../src/style.c:355 ../src/style.c:370
+#: ../src/style.c:125 ../src/style.c:362 ../src/style.c:377
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
 
-#: ../src/style.c:121
+#: ../src/style.c:126
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
 
-#: ../src/style.c:165
+#: ../src/style.c:170
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "dérivation de la police %s inconnu: %d"
 
-#: ../src/style.c:229
+#: ../src/style.c:233
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Echec de l'analyse du svg depuis le ficher d'agencement: svg=\"%s\" erreur="
 "\"%s\""
 
-#: ../src/style.c:233
+#: ../src/style.c:237
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nouvelle forme] nom=%s svg=\"%s\""
 
-#: ../src/style.c:254
+#: ../src/style.c:259
 #, c-format
-msgid "Shape doesn't exist: %s"
-msgstr "La forme n'existe pas: %s"
+msgid "Shape %s doesn't exist for selected style."
+msgstr "La forme %s n'existe pas pour le style sélectionné."
 
-#: ../src/style.c:301
+#: ../src/style.c:308
 #, c-format
 msgid "Unable to create %s because $HOME/.florence does not exist"
 msgstr "Impossible de créer %s car $HOME/.florence n'existe pas"
 
-#: ../src/style.c:308
+#: ../src/style.c:315
 #, c-format
 msgid "Unable to open file %s for read"
 msgstr "Impossible d'ouvrir le fichier %s en lecture"
 
-#: ../src/style.c:309
+#: ../src/style.c:316
 #, c-format
 msgid "Unable to open file %s for write"
 msgstr "Impossible d'ouvrir le fichier %s en écriture"
 
-#: ../src/style.c:314
+#: ../src/style.c:321
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
@@ -699,28 +759,28 @@ msgstr "Ne plus afficher"
 msgid "Notification failed"
 msgstr "Echec de notification"
 
-#: ../src/view.c:237
+#: ../src/view.c:239
 msgid "Unable to create mask"
 msgstr "Echec de création du masque"
 
-#: ../src/view.c:356
+#: ../src/view.c:358
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr ""
 "Votre écran ne supporte pas le cannal alpha. la semi-transparence est "
 "désactivée"
 
-#: ../src/view.c:377
+#: ../src/view.c:379
 #, c-format
 msgid "Window size out of range :%d"
 msgstr "Taille de fenêtre en dehors des limites"
 
-#: ../src/view.c:433
+#: ../src/view.c:435
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Opacité de la fenêtre en dehors des limites (1.0 à 100.0): %f"
 
-#: ../src/view.c:527
+#: ../src/view.c:531
 msgid "Unable to allocate memory for view"
 msgstr "Echec d'allocation de la mémoire pour la vue"
 
@@ -729,10 +789,22 @@ msgstr "Echec d'allocation de la mémoire pour la vue"
 msgid "Error loading icon file: %s (%s)"
 msgstr "Erreur de chargement du fichier icone: %s (%s)"
 
-#: ../src/tools.c:61
+#: ../src/tools.c:62
 msgid "NULL accessible object, unable to move window"
 msgstr "Objet accessible NULL, impossible de déplacer la fenêtre"
 
-#: ../src/tools.c:75
+#: ../src/tools.c:76
 msgid "Unable to get component from accessible object"
 msgstr "Impossible de créer le composant depuis l'objet accessible"
+
+#~ msgid "Show function keys"
+#~ msgstr "Affiche les touches de fonction"
+
+#~ msgid "Show the arrow keys"
+#~ msgstr "Affiche les touches de navigation (flèches)"
+
+#~ msgid "Show the numpad"
+#~ msgstr "Affiche le pavé numérique"
+
+#~ msgid "XKB version mismatch"
+#~ msgstr "Version de XKB incompatble avec le serveur"

@@ -5,13 +5,13 @@
 		<creator>f.agrech@gmail.com (François Agrech)</creator>
 		<maintainer>f.agrech@gmail.com (François Agrech)</maintainer>
 		<title>Florence Manual</title>
-		<date>2009-04-03</date>
-		<version identifier="0.4.1" date="2009-04-03"/>
+		<date>2009-05-20</date>
+		<version identifier="0.4.2" date="2009-05-20"/>
 		<subject category="GNOME|Accessibility"/>
 		<description>Documentation for the Florence Virtual Keyboard</description>
 		<type>user's guide</type>
 		<format mime="text/xml" dtd="-//OASIS//DTD DocBook XML V4.1.2//EN"/>
-		<identifier url="file://usr/share/doc/florence/florence.xml"/>
+		<identifier url="file:///usr/share/doc/florence/florence.xml"/>
 		<language code="C"/>
 		<relation seriesid="de2bf600-264f-11dd-81e2-d141ac518859"/>
 		<rights type="GNU FDL" license.version="1.2" holder="François Agrech"/>

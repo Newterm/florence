@@ -26,7 +26,7 @@
 	</symbol>
 	<symbol>
 		<name>Super_[LR]</name>
-		<svg viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+		<svg width="100" height="100" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
 		     <ellipse cx="50%" cy="50%" rx="25%" ry="25%" class="symbol" fill="none" stroke-width="4%"/>
 		     <ellipse cx="42%" cy="42%" rx="6%" ry="4%" class="symbol"/>
 		     <ellipse cx="58%" cy="42%" rx="6%" ry="4%" class="symbol"/>
@@ -43,14 +43,14 @@
 	</symbol>
 	<symbol>
 		<name>BackSpace</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="75" y1="50" x2="35" y2="50" stroke-width="5"/>
 			<polygon class="symbol" points="25,50 35,40 35,60"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>Tab</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="31.375" y1="50" x2="52.5" y2="50" stroke-width="5"/>
 			<polygon class="symbol" points="62.5,50 52.5,40 52.5,60"/>
 			<line class="symbol" x1="68.625" y1="37.5" x2="68.625" y2="62.5" stroke-width="5"/>
@@ -58,7 +58,7 @@
 	</symbol>
 	<symbol>
 		<name>ISO_Left_Tab</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="68.625" y1="50" x2="47.5" y2="50" stroke-width="5"/>
 			<polygon class="symbol" points="37.5,50 47.5,40 47.5,60"/>
 			<line class="symbol" x1="31.375" y1="37.5" x2="31.375" y2="62.5" stroke-width="5"/>
@@ -66,21 +66,21 @@
 	</symbol>
 	<symbol>
 		<name>Return</name>
-		<svg version="1.1" viewBox="0 0 144 192" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="144" height="192" viewBox="0 0 144 192" xmlns="http://www.w3.org/2000/svg">
 			<path class="symbol" fill="none" stroke-width="5" d="M110 35 C118 35 126 40 126 45 C126 50 118 57 110 57 L33 57"/>
 			<polygon class="symbol" points="18,57 33,47 33,67"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>Caps_Lock</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<rect class="symbol" x="37.5" y="43.75" width="25" height="25"/>
 			<path class="symbol" fill="none" stroke-width="3" d="M43.75 43.75 L43.75 37.5 C43.75 34.375 46.875 31.25 50 31.25 C53.125 31.25 56.25 34.375 56.25 37.5 L56.25 43.75"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(Shift_[LR]|(KP_|)Up)</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="50" y1="62.5" x2="50" y2="47.5" stroke-width="5"/>
 			<polygon class="symbol" points="50,37.5 40,47.5 60,47.5"/>
 		</svg>
@@ -91,14 +91,14 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Home</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="50" y1="50" x2="32" y2="32" stroke-width="5"/>
 			<polygon class="symbol" points="25,25 39.1421,25 25,39.1421"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Up</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="50" y1="65" x2="50" y2="35" stroke-width="8"/>
 			<polygon class="symbol" points="50,22.5 37.5,35 62.5,35"/>
 			<line class="symbol" x1="37.5" y1="50" x2="62.5" y2="50" stroke-width="3"/>
@@ -116,7 +116,7 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Down</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="50" y1="35" x2="50" y2="65" stroke-width="8"/>
 			<polygon class="symbol" points="50,77.5 37.5,65 62.5,65"/>
 			<line class="symbol" x1="37.5" y1="50" x2="62.5" y2="50" stroke-width="3"/>
@@ -126,21 +126,21 @@
 	</symbol>
 	<symbol>
 		<name>(KP_|)Down</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="50" y1="37.5" x2="50" y2="52.5" stroke-width="5"/>
 			<polygon class="symbol" points="50,62.5 40,52.5 60,52.5"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Left</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="67.5" y1="50" x2="50" y2="50" stroke-width="5"/>
 			<polygon class="symbol" points="40,50 50,40 50,60"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Right</name>
-		<svg version="1.1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<line class="symbol" x1="32.5" y1="50" x2="50" y2="50" stroke-width="5"/>
 			<polygon class="symbol" points="60,50 50,40 50,60"/>
 		</svg>

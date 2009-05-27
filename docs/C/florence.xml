@@ -2,11 +2,11 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "April 2009">
+	<!ENTITY date "May 2009">
 ]>
 <article id="index" lang="en">
 <articleinfo>
-	<date>2009-04-03</date>
+	<date>2009-05-20</date>
 	<title>Florence documentation</title>
 	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
 	<authorgroup>
@@ -35,7 +35,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 	<para>On Fedora, just use the package manager. From the command line, you can type:
 <prompt>#</prompt> <userinput>yum install florence</userinput>
 	</para>
-	<para>Make sure you have the latest version of Florence (0.4.1 as of March, the 3rd of April 2009). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Make sure you have the latest version of Florence (0.4.2 as of March, the 20th of May 2009). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Preparing the dependencies</title>
 		<para>In order to build Florence, you need a build environment with the following commands: make, scrollkeeper and a C compiler, along with the following package dependencies:</para>
@@ -78,8 +78,8 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Installing</title>
 		<para>Installing Florence is like installing any program that uses the GNU autotools. Open a terminal and type the following commands:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.4.1.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.4.1</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.4.2.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.4.2</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -95,7 +95,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Uninstalling</title>
 		<para>Uninstalling is as easy as installing.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.4.1</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.4.2</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>For Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
@@ -126,7 +126,8 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 				</mediaobject>
 			</screenshot>
 		</figure>
-		<para>Also, the keyboard layout can be extended with 3 extensions to the core keyboard. The arrows keypad is an extension added to the right of the core keyboard and contains the arrow keys along with navigation keys. The numpad extension contains the numeric keys and the function keys extension contains the function keys. Each extension can be activated and deactivated.</para>
+		<para>The above figure shows the different parts of the default layout. There are other layouts that can be selected in the settings dialog.</para>
+		<para>The default keyboard layout can be extended with 3 extensions to the core keyboard. The arrows keypad is an extension added to the right of the core keyboard and contains the arrow keys along with navigation keys. The numpad extension contains the numeric keys and the function keys extension contains the function keys. Each extension can be activated and deactivated. The extensions are relative to the selected layout.</para>
 	</sect2>
 	<sect2 id="config">
 		<title>Configuring</title>
@@ -196,6 +197,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 			</screenshot>
 		</figure>
 		<orderedlist>
+			<para>The first combo box allows you to choose your keyboard layout. The extensions are relative to the layout. They can be activated or deactivated independently. For the "Standard layout" layout, there are 3 extensions:</para>
 			<listitem><para>Navigation keys: activate/deactivate the arrows keypad.</para></listitem>
 			<listitem><para>Numeric keys: activate/deactivate the numpad extension.</para></listitem>
 			<listitem><para>Function keys: activate/deactivate the function keys extensions.</para></listitem>
@@ -252,14 +254,34 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 		<screen>
 <prompt>$</prompt> <userinput>setxkbmap ar &amp;&amp; florence</userinput>
 		</screen>
+				<para>This works for any language supported by your X server</para>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>My layout is weird. Is there a way to change it?</para>
+			</question>
+			<answer>
+				<para>Yes. One can change the layout with the settings dialog (layout tab). You can even make your own layout (see the hacking section of this documentation).</para>
 			</answer>
 		</qandaentry>
 	</qandaset>
 </sect1>
 <sect1 id="hacking">
 	<title>Hacking</title>
-	<para>Some extra configuration options are available in GConf (under apps/florence). You can modify configuration parameters from the configuration menu as well as from gconftool-2 or gconf-editor.</para>
-	<para>The gconf key apps/florence/layout/file contains the path to the keyboard layout file. It is an XML file that you can copy and modify.</para>
+	<para>Some extra configuration options are available in GConf (under apps/florence). You can modify configuration parameters from the configuration menu as well as from gconftool-2 or gconf-editor. Each configuration element has a detailed description in Florence gconf schema.</para>
+	<sect2>
+		<title>Create your own layout</title>
+		<para>It is possible to create your own keyboard layout if those available by default are not suitable for your needs</para>
+		<para>The layout files are available in the florence/layouts directory, under the installation data directory that is configured with the --datadir configure option, or the --prefix option if the datadir is not explicitely specified (in this case, it will be $prefix/share, most often this will be /usr/share, so /usr/share/florence/layouts would be the full path).</para>
+		<para>The easiest way to create one's own layout file is to copy an existing one and to adapt it. The existing ones are florence.xml and compact.xml. Those are XML files with several elements. Those files can be validated with the $datadir/florence/florence.rnc file (relaxng compact syntax), or the equivalent $datadir/florence/relaxng/florence.rng (extended XML relaxng syntax). One can use the xmllint program to validate the layout file against the extended relaxng validation file.</para>
+		<para>The root element of the XML layout file is the &lt;layout&gt; element. It contains the elements &lt;informations&gt;, &lt;keyboard&gt; and several &lt;extension&gt; elements. The &lt;informations&gt; element contains important meta-data about the layout file. Inside, one can modify the date, the author name and the most important: the name of the layout with the &lt;name&gt; element. This is the name that will appear in Florence's settings dialog in order to make it selectable.</para>
+		<para>The layout data are contained in the &lt;keyboard&gt; and &lt;extension&gt; elements.</para>
+		<para>The &lt;keyboard&gt; element contains the main data of the layout. The sub-elements &lt;width&gt; and &lt;height&gt; contain respectively the relative width and height of the main keyboard. Every key must be inside the rectangle defined by those dimensions. Then, one can find a list of &lt;key&gt; elements, each corresponding to one key on the keyboard. each key has a &lt;code&gt; element that defines which key it is. The key code is the keycode of the X server. The keycodes of the real keyboard, as configured in the X server can be obtained with the xmodmap -pke command. The &lt;xpos&gt; and &lt;ypos&gt; elements give the position of the key inside the keyboard. This position is the center of the key. By default, a key has a width of 2 and a height of 2. One can change the size of the key with the optional &lt;width&gt; and &lt;height&gt; elements. The shape of the key will be defined by the selected style. By default, it will use the style element named "default". One can assign another shape to the key with the optional &lt;shape&gt; element, that must contain an existing shape name in the selected style.</para>
+		<para>One can then define several &lt;extension&gt; elements. Each extension has a &lt;name&gt; element that will be displayed in the settings dialog to activate or deactivate this extension. The extensions must also define a &lt;identifiant&gt; element in order to identify the extension in a language independant manner. This allow to save the extension preferences in gconf. the &lt;placement&gt; element indicates where the extension must be placed, relatively to the main keyboard. It can take 4 different values: "right", "left", "top" and "bottom". If several extensions have the same placement, they will be ordered by the order in which they appear in the layout file. Then comes the &lt;keyboard&gt; element, that is the same as the keyboard element mentioned above and that defines the keys of the extension.</para>
+		<para>The layout file so created in the $datadir/florence/layouts directory will automatically be selectable from the settings dialog of Florence.</para>
+		<para>If you think that your layout file could be of any use to other people than yourself, please, consider sending it by email to f.agrech@gmail.com for future inclusion in Florence distribution.</para>
+	</sect2>
 </sect1>
 <sect1 id="gethelp">
         <title>Getting help</title>

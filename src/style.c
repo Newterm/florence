@@ -56,7 +56,12 @@ gchar *style_get_color(enum style_colours c)
 		case STYLE_MOUSE_OVER_COLOR: color=(gchar *)settings_get_string("colours/mouseover"); break;
 		default: color=NULL;
 	}
-	if (!color) flo_warn(_("Unknown style color: %d"), c);
+	if (!color) {
+		flo_error(_("Unknown style color: %d"), c);
+		flo_fatal(_("You probably installed Florence in a location that is not in the gconf path."
+			" Please read the FAQ in Florence documentation to learn more about how to"
+			" properly configure gconf."));
+	}
 	return color;
 }
 
@@ -218,8 +223,7 @@ void style_shape_new(struct style *style, char *name, char *svg)
 	gchar *default_uri;
 	memset(shape, 0, sizeof(struct shape));
 	if (name) shape->name=g_strdup(name);
-	if (svg)
-		shape->source=(guchar *)g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
+	if (svg) shape->source=(guchar *)g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
 	shape->svg=rsvg_handle_new();
 	default_uri=settings_get_string("layout/style");
 	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);

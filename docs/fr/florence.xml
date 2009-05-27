@@ -2,11 +2,11 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "Avil 2009">
+	<!ENTITY date "Mai 2009">
 ]>
 <article id="index" lang="fr">
 <articleinfo>
-	<date>2009-04-03</date>
+	<date>2009-05-20</date>
 	<title>Documentation du clavier virtuel Florence</title>
 	<abstract><para>Ce document décrit l'installation, la configuration et l'utilisation du clavier virtuel Florence.</para></abstract>
 	<authorgroup>
@@ -35,7 +35,7 @@
 	<para>Sur <ulink url="http://fedoraproject.org">Fedora</ulink>, vous pouvez simplement utiliser le gestionnaire de paquetages. En la ligne de commande, tapez:
 		<prompt>#</prompt> <userinput>yum install florence</userinput>
 	</para>
-	<para>Soyez sûr que vous avez la dernière version de Florence (0.4.1 au 3 avril 2009). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Soyez sûr que vous avez la dernière version de Florence (0.4.2 au 20 mai 2009). Vous pouvez la télécharger ici: <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Préparation des dépendances</title>
 		<para>Afin de compiler Florence, vous avez besoin d'un environnement de compilation et des commandes suivantes: make, scrollkeeper et un compilateur C, ainsi que les paquetages dépendants suivants:</para>
@@ -78,8 +78,8 @@
 		<title>Installation</title>
 		<para>L'installation de Florence se déroule comme l'installation de n'importe quel programme qui utilise les GNU autotools. Ouvrez un terminal et lancez les commandes suivantes:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.4.1.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.4.1</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-0.4.2.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.4.2</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -95,7 +95,7 @@
 		<title>Désinstallation</title>
 		<para>Désinstaller est aussi facile qu'installer.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.4.1</userinput>
+<prompt>$</prompt> <userinput>cd florence-0.4.2</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>Pour Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>
@@ -125,7 +125,8 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 				</mediaobject>
 			</screenshot>
 		</figure>
-		<para>De plus, l'arrangement du clavier peut être étendu avec 3 extensions au clavier principal. Le pavé des flèches (arrows keypad) est une extension à droite du clavier principal qui contient les flèches et les touches de navigation. Le pavé numérique (numpad) contient les touches numériques et l'extension des touches de fonction (function keys) contient les touches de fonction. Chaque extension est activable et désactivable.</para>
+		<para>La figure ci-dessus montre le découpage par défaut de l'agencement des touches du clavier. Plusieurs agencements différents peuvent être sélectionnés dans le dialogue des préférences.</para>
+		<para>L'arrangement par défaut du clavier peut être étendu avec 3 extensions au clavier principal. Le pavé des touches de navigations est une extension à droite du clavier principal qui contient les flèches et les autres touches de navigation. Le pavé numérique contient les touches numériques et l'extension des touches de fonction contient les touches de fonction. Chaque extension est activable et désactivable. Les extensions sont relatives à l'agencement sélectionné.</para>
 	</sect2>
 	<sect2 id="config">
 		<title>Configuration</title>
@@ -195,6 +196,7 @@ Si vous préférez que Florence soit lancé au démarrage de GNOME, choisissez l
 			</screenshot>
 		</figure>
 		<orderedlist>
+			<para>La combo box permet de sélectionner l'agencement du clavier à utiliser. Les extensions sont relatives à l'agencement et peuvent être activées/désactivées. L'agencement "Clavier Standard" propose 3 extensions:</para>
 			<listitem><para>Touches de navigation: active/désactive le pavé des flèches.</para></listitem>
 			<listitem><para>Touches numériques: active/désactive le pavé numérique.</para></listitem>
 			<listitem><para>Touches de fonction: active/désactive les touches de fonction.</para></listitem>
@@ -251,14 +253,34 @@ i		</sect3>
 		<screen>
 <prompt>$</prompt> <userinput>setxkbmap ar &amp;&amp; florence</userinput>
 		</screen>
+				<para>Cela fonctionne pour n'importe quel language supportépar votre serveur X</para>
+			</answer>
+		</qandaentry>
+		<qandaentry>
+			<question>
+				<para>L'agencement des touches est bizarre. Y a-t-il un moyen de le changer?</para>
+			</question>
+			<answer>
+				<para>Oui. Vous pouvez changer l'agencement des touches depuis le dialogue des préférences (onglet agencement). Vous pouvez même créer votre propre agencement (voir la section bidouille de cette documentation).</para>
 			</answer>
 		</qandaentry>
 	</qandaset>
 </sect1>
 <sect1 id="hacking">
 	<title>Bidouillage</title>
-	<para>Certaines options de configuration supplémentaires sont disponibles dans GConf (sous apps/florence). Vous pouvez modifier la configuration aussi bien avec le menu de configuration de florence qu'avec gconftool-2 ou gconf-editor.</para>
-	<para>La clé apps/florence/layout/file de gconf indique le chemin vers le fichier d'agencement des touches du clavier. Il s'agît d'un fichier XML que vous pouvez copier et modifier.</para>
+	<para>Certaines options de configuration supplémentaires sont disponibles dans GConf (sous apps/florence). Vous pouvez modifier la configuration aussi bien avec le menu de configuration de florence qu'avec gconftool-2 ou gconf-editor. Chaque élément de configuration possède une description détaillée dans le schema gconf de florence.</para>
+	<sect2>
+		<title>Créer son propre agencement</title>
+		<para>Il est possible de créer son propre agencement du clavier si ceux proposés par défaut ne conviennent pas.</para>
+		<para>Les fichiers d'agencement se trouvent dans le répertoire florence/layouts, qui se trouve dans le répertoire d'installation des données configuré avec l'option --datadir de configure ou --prefix si datadir n'est pas spécifié (dans ce cas, le répertoire des données est $prefix/share), le plus souvent dans /usr/share, soit /usr/share/florence/layouts.</para>
+		<para>Le plus simple pour créer son propre fichier d'agencement est de copier un fichier existant et de l'adapter à son besoin. Les fichiers existants sont florence.xml et compact.xml. Il s'agît de fichiers XML contenant plusieurs éléments. Ces fichiers sont validés pas le fichier $datadir/florence/florence.rnc (syntaxe relaxng compacte), ou son équivalent $datadir/florence/relaxng/florence.rng (syntaxe relaxng XML étendu). On peut utiliser le programme xmllint pour valider le fichier d'agencement avec le fichier de validation étendu.</para>
+		<para>L'élément racine du fichier XML d'agencement est l'élément &lt;layout&gt;. Il contient les éléments &lt;informations&gt;, &lt;keyboard&gt; et plusieurs éléments &lt;extension&gt;. L'élément &lt;information&gt; contient les méta-données importantes à propos du fichier d'agencement. On peut entre autre y modifier la date, le nom de l'auteur du fichier et le plus important, le nom du fichier d'agencement dans &lt;name&gt;. Ce nom est le nom qui apparaîtra dans le dialogue de paramètres de florence pour pouvoir le sélectionner.</para>
+		<para>Les données de l'agencement sont contenues dans les éléments &lt;keyboard&gt; et &lt;extension&gt;.</para>
+		<para>L'élément &lt;keyboard&gt; contient les données principales du clavier. Les sous-éléments &lt;width&gt; et &lt;height&gt; contiennent respectivement la largeur et la hauteur relatives du clavier principal. Toutes les touches doivent rentrer dans le rectangle défini par cette largeur et cette hauteur. Ensuite, on trouve une suite d'éléments &lt;key&gt; correspondants chacun à une touche du clavier. Chaque touche a un élément &lt;code&gt; qui défini de quelle touche il s'agît. Le code des touches correspond au keycode du serveur X. Les codes du vrai clavier configuré dans les serveur X peuvent être obtenus avec la commande xmodmap -pke. Les éléments &lt;xpos&gt; et &lt;ypos&lt; donnent la position de la touche dans le clavier (respectivement l'abscisse et l'ordonnée). Cette position est le centre de la touche. Par défaut, une touche a une largeur de 2 et une hauteur de 2. On peut changer la taille par défaut de la touche avec les éléments optionnels &lt;width&gt; (largeur) et &lt;height&gt; (hauteur). La touche aura un aspect défini par le style sélectionné. Par défaut, elle utilisera l'élément de style nommé "default". On peut lui assigner une autre forme avec l'élément &lt;shape&gt;, qui doit contenir le nom d'un élément de style existant dans le style sélectionné.</para>
+		<para>On peut ensuite définir plusieurs éléments &lt;extension&gt;. Chaque extension possède un nom &lt;name&gt;, qui sera affiché dans le dialogue des paramètres de Florence pour activer ou désactiver l'extension. Les extensions doivent aussi définir un élément &lt;identifiant&gt; pour identifier l'extension de manière insensible à la langue. Cela permet d'enregister les préférences de l'extension dans gconf. L'élément &lt;placement&gt; indique où doit se placer l'extension, relativement au clavier principal. Il y a 4 valeurs possibles: "right" (à droite du clavier), "left" (à gauche du clavier), "top" (en haut), et "bottom" (en bas). Si plusieurs extensions ont la même position relative par rapport au clavier principal, elles seront positionnées dans l'ordre dans lequel elles se trouvent dans le fichier d'agencement. Ensuite viens l'élément &lt;keyboard&gt;, qui a la même forme que l'élément sus-cité portant le même nom et qui défini les données sur les touches de l'extension.</para>
+		<para>Le fichier d'agencement ainsi créé dans le répertoire $datadir/florence/layouts sera automatiquement rendu sélectionnable depuis le dialogue des préférences de Florence.</para>
+		<para>Si vous pensez que le fichier d'agencement que vous avez créé pourrait être utilisé par d'autres personnes que vous-même, s'il vous plaît, veuillez considérer la possibilité de l'envoyer par email à f.agrech@gmail.com pour inclusion dans les futures versions de Florence.</para>
+	</sect2>
 </sect1>
 <sect1 id="gethelp">
 	<title>Se faire aider</title>

@@ -1,11 +1,15 @@
 This release lowers the entry barrier to compile Florence.
 Now the XKB extension is optional: the --without-xkb configure option will disable it. The drawback is that Florence will not read the real keyboard status at startup, so locker keys like CAPS_LOCK will be ignored if they are set when Florence is launched. ake sure all locker keys are released with launching Florence without xkb.
-The aim is to be able to run florence on X servers with the XKB extension like Exceed.
+The aim is to be able to run florence on X servers without the XKB extension like Exceed.
 The at-spi registry daemon has also been made optional because many systems don't have it. You can disable it with the --without-at-spi option at configure time. This will disable auto-hide mode as this mode does not work without the at-spi registry daemon.
+A new layout file is now available: compact. You can select it from the settings dialog (layout tab).
+Many bug have been fixed, so this release is more stable that 0.4.1
 
 Changelog:
 
-2009-05-?? François Agrech <f.agrech@gmail.com>
+2009-05-20 François Agrech <f.agrech@gmail.com>
 	* Make xkb optional
 	* Make at-spi optional
+	* Add a new keyboard layout (compact)
+	* Many bug fixes
 

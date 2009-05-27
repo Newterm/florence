@@ -122,3 +122,9 @@
 	* Listen to keyboard device events to update the status
 	* i18n and l10n in french of key labels
 
+2009-05-20 François Agrech <f.agrech@gmail.com>
+	* Make xkb optional
+	* Make at-spi optional
+	* Add a new keyboard layout (compact)
+	* Many bug fixes
+
