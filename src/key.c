@@ -152,9 +152,9 @@ void key_simple_release(unsigned int code, struct status *status)
 		code, FALSE, 0);
 #else
 #ifdef ENABLE_AT_SPI
+	SPI_generateKeyboardEvent(code, NULL, SPI_KEY_RELEASE);
 #else
 #error _("Neither at-spi nor Xtest is compiled. You should compile one.")
-	SPI_generateKeyboardEvent(code, NULL, SPI_KEY_RELEASE);
 #endif
 #endif
 }
