@@ -30,6 +30,10 @@
 #include "settings.h"
 #include "layoutreader.h"
 
+#if !GLIB_CHECK_VERSION(2,14,0)
+#include "tools.h"
+#endif
+
 /* Constants */
 static gchar *style_css_file="%s/.florence/florence.css";
 static gchar *style_css_file_source=DATADIR "/florence.css";
@@ -317,9 +321,10 @@ void style_create_css(struct style *style)
 	g_free(filename);
 
 	/* copy/parse the file */
-	line=g_malloc(1024);
+	line=g_malloc(1024*sizeof(gchar));
 	if (!line) flo_warn(_("Unable to allocate memory for css read buffer"));
-	if (line && in && out ) while (fgets(line, 1024, in)) {
+	if (line && in && out ) while ((line=fgets(line, 1024, in))) {
+		if (!line) flo_fatal("error");
 		color=style_get_color(STYLE_KEY_COLOR);
 		tmp1=g_regex_replace_literal(shapecolor, line, -1, 0, color, 0, NULL);
 		if (color) g_free(color); color=style_get_color(STYLE_TEXT_COLOR);

@@ -425,6 +425,10 @@ struct florence *flo_new(void)
 	if (!florence) flo_fatal(_("Unable to allocate memory for florence"));
 	memset(florence, 0, sizeof(struct florence));
 
+#if !GLIB_CHECK_VERSION(2,14,0)
+	flo_warn(_("Old GLib version detected. Florence style will be working with a hack."));
+#endif
+
 	florence->status=status_new();
 	flo_layout_load(florence);
 	florence->view=view_new(florence->style, florence->keyboards);

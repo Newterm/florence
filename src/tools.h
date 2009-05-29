@@ -35,3 +35,16 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 void tools_window_move(GtkWindow *window, Accessible *object);
 #endif
 
+#if !GLIB_CHECK_VERSION(2,14,0)
+#define GRegex gchar
+#define G_REGEX_OPTIMIZE NULL
+#define G_REGEX_MATCH_ANCHORED NULL
+#define g_regex_new(text, null0, null1, null2) tools_regex_new(text)
+#define g_regex_unref tools_regex_free
+#define g_regex_match(regex, text, null0, null1) tools_regex_match(regex, text)
+#define g_regex_replace_literal(old, source, null0, null1, new, null2, null3) tools_regex_replace_literal(old, source, new)
+gchar *tools_regex_new(gchar *regex);
+void tools_regex_free(gchar *regex);
+gboolean tools_regex_match(gchar *regex, gchar *text);
+gchar *tools_regex_replace_literal(gchar *old, gchar *source, gchar *new);
+#endif

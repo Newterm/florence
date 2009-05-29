@@ -22,6 +22,8 @@
 #include "system.h"
 #include "tools.h"
 #include "trace.h"
+#include <string.h>
+#include <glib.h>
 
 /* sets the window icon to florence.svg */
 void tools_set_icon (GtkWindow *window)
@@ -77,3 +79,79 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 }
 #endif
 
+#if !GLIB_CHECK_VERSION(2,14,0)
+/* replace glib 2.14's g_regex_new */
+gchar *tools_regex_new(gchar *regex)
+{
+	gchar *result=g_malloc(strlen(regex)+1);
+	return strcpy(result, regex);
+}
+
+/* replace glib 2.14's g_regex_unref */
+void tools_regex_free(gchar *regex)
+{
+	g_free(regex);
+}
+
+/* replace glib 2.14's g_regex_match */
+/* WARNING: this is a hack around lack of GRegex from GLib 2.14 */
+/* It is best to have proper GRegex with GLib. */
+gboolean tools_regex_match(gchar *regex, gchar *text)
+{
+	gboolean match=FALSE;
+	if ((!strchr(regex, '(')) && (!strchr(regex, '['))) {
+		match=(!strncmp(regex+1, text, strlen(regex)-2));
+	} else if (!strcmp(regex, "^Control_[LR]$"))
+		match=(!strcmp(text, "Control_L")) || (!strcmp(text, "Control_R"));
+	else if (!strcmp(regex, "^Super_[LR]$"))
+		match=(!strcmp(text, "Super_L")) || (!strcmp(text, "Super_R"));
+	else if (!strcmp(regex, "^(Alt_[LR]|Meta_L)$"))
+		match=(!strcmp(text, "Alt_L")) || (!strcmp(text, "Alt_R")) || (!strcmp(text, "Meta_L"));
+	else if (!strcmp(regex, "^(Shift_[LR]|(KP_|)Up)$"))
+		match=(!strcmp(text, "Shift_L")) || (!strcmp(text, "Shift_R")) ||
+			(!strcmp(text, "KP_Up")) || (!strcmp(text, "Up"));
+	else if (!strcmp(regex, "^(KP_|)Insert$"))
+		match=(!strcmp(text, "Insert")) || (!strcmp(text, "KP_Insert"));
+	else if (!strcmp(regex, "^(KP_|)Home$"))
+		match=(!strcmp(text, "Home")) || (!strcmp(text, "KP_Home"));
+	else if (!strcmp(regex, "^(KP_|)Page_Up$"))
+		match=(!strcmp(text, "Page_Up")) || (!strcmp(text, "KP_Page_Up"));
+	else if (!strcmp(regex, "^(KP_|)Page_Down$"))
+		match=(!strcmp(text, "Page_Down")) || (!strcmp(text, "KP_Page_Down"));
+	else if (!strcmp(regex, "^(KP_|)Delete$"))
+		match=(!strcmp(text, "Delete")) || (!strcmp(text, "KP_Delete"));
+	else if (!strcmp(regex, "^(KP_|)End$"))
+		match=(!strcmp(text, "End")) || (!strcmp(text, "KP_End"));
+	else if (!strcmp(regex, "^(KP_|)Down$"))
+		match=(!strcmp(text, "Down")) || (!strcmp(text, "KP_Down"));
+	else if (!strcmp(regex, "^(KP_|)Left$"))
+		match=(!strcmp(text, "Left")) || (!strcmp(text, "KP_Left"));
+	else if (!strcmp(regex, "^(KP_|)Right$"))
+		match=(!strcmp(text, "Right")) || (!strcmp(text, "KP_Right"));
+	return match;
+}
+
+/* replace glib 2.14's g_regex_replace_literal */
+gchar *tools_regex_replace_literal(gchar *old, gchar *source, gchar *new)
+{
+	gchar *match=NULL;
+	gchar *result=NULL;
+	if ((match=strstr(source, old))) {
+		result=g_malloc(strlen(source)-strlen(old)+strlen(new)+1);
+		if (!result) flo_error(_("unable to allocate memory for string"));
+		result=strncpy(result, source, match-source);
+		result[match-source]='\0';
+		result=strcat(result, new);
+		result=strcat(result, match+strlen(old));
+	} else {
+		result=g_malloc(strlen(source)+1);
+		strcpy(result, source);
+	}
+	if ((match=strstr(result, old))) {
+		match=tools_regex_replace_literal(old, result, new);	
+		g_free(result);
+		result=match;
+	}
+	return result;
+}
+#endif
