@@ -12,7 +12,7 @@ desktop_in_files=florence.desktop.in
 desktop_DATA=$(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
-iconsdir=$(datadir)/icons
+iconsdir=$(datadir)/pixmaps
 icons_DATA=florence.svg
 
 gladedir=$(datadir)/florence

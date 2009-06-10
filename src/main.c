@@ -154,7 +154,7 @@ Options:\n\
   -V, --version	      output version information and exit\n\
   -c, --config        open configuration window\n\
   -d, --debug         print debug information to stdout\n\n\
-Report bugs to <f.agerch@gmail.com>.\n\
+Report bugs to <f.agrech@gmail.com>.\n\
 More informations at <http://florence.sourceforge.net>.\n"));
 	exit (status);
 }
