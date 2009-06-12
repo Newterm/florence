@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
   Florence - Florence is a simple virtual keyboard for Gnome.
 
@@ -23,10 +23,10 @@
 <layout xmlns="http://florence.sourceforge.net"
 	xmlns:xi="http://www.w3.org/2001/XInclude">
 <informations>
-	<_name>Standard keyboard</_name>
+	<_name>Alternative keyboard</_name>
 	<author>François Agrech</author>
 	<date>2009-06-12</date>
-	<florence_version>0.4.2</florence_version>
+	<florence_version>@VERSION@</florence_version>
 </informations>
 
 <keyboard>
@@ -323,7 +323,7 @@
 		<width>3</width>
 	</key>
 	<key>
-		<code>133</code>
+		<code>115</code>
 		<shape>Wide</shape>
 		<xpos>4.5</xpos>
 		<ypos>9</ypos>
@@ -344,21 +344,21 @@
 		<width>12</width>
 	</key>
 	<key>
-		<code>108</code>
+		<code>113</code>
 		<shape>Wide</shape>
 		<xpos>22.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 	<key>
-		<code>134</code>
+		<code>116</code>
 		<shape>Wide</shape>
 		<xpos>25.5</xpos>
 		<ypos>9</ypos>
 		<width>3</width>
 	</key>
 	<key>
-		<code>105</code>
+		<code>109</code>
 		<shape>Wide</shape>
 		<xpos>28.5</xpos>
 		<ypos>9</ypos>
@@ -374,52 +374,52 @@
 	<width>6</width>
 	<height>10</height>
 	<key>
-		<code>118</code>
+		<code>106</code>
 		<xpos>1</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<code>110</code>
+		<code>97</code>
 		<xpos>3</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<code>112</code>
+		<code>99</code>
 		<xpos>5</xpos>
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<code>119</code>
+		<code>107</code>
 		<xpos>1</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
-		<code>115</code>
+		<code>103</code>
 		<xpos>3</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
-		<code>117</code>
+		<code>105</code>
 		<xpos>5</xpos>
 		<ypos>3</ypos>
 	</key>
 	<key>
-		<code>111</code>
+		<code>98</code>
 		<xpos>3</xpos>
 		<ypos>7</ypos>
 	</key>
 	<key>
-		<code>113</code>
+		<code>100</code>
 		<xpos>1</xpos>
 		<ypos>9</ypos>
 	</key>
 	<key>
-		<code>116</code>
+		<code>104</code>
 		<xpos>3</xpos>
 		<ypos>9</ypos>
 	</key>
 	<key>
-		<code>114</code>
+		<code>102</code>
 		<xpos>5</xpos>
 		<ypos>9</ypos>
 	</key>
@@ -439,7 +439,7 @@
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<code>106</code>
+		<code>112</code>
 		<xpos>3</xpos>
 		<ypos>1</ypos>
 	</key>
@@ -506,7 +506,7 @@
 		<ypos>7</ypos>
 	</key>
 	<key>
-		<code>104</code>
+		<code>108</code>
 		<shape>High</shape>
 		<xpos>7</xpos>
 		<ypos>8</ypos>
@@ -600,7 +600,7 @@
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<code>107</code>
+		<code>111</code>
 		<xpos>39</xpos>
 		<ypos>1</ypos>
 	</key>
@@ -610,10 +610,11 @@
 		<ypos>1</ypos>
 	</key>
 	<key>
-		<code>127</code>
+		<code>110</code>
 		<xpos>43</xpos>
 		<ypos>1</ypos>
 	</key>
 	</keyboard>
 </extension>
 </layout>
+
