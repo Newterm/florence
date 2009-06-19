@@ -103,14 +103,17 @@ gpointer status_record_start (gpointer data)
 	Display *ctrl_disp=(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window());
 
 	status->data_disp=XOpenDisplay(NULL);
-	XSynchronize(ctrl_disp, TRUE);
 	if (XRecordQueryVersion(ctrl_disp, &major, &minor)) {
 		flo_info(_("XRecord extension found version=%d.%d"), major, minor);
 		if (!(range=XRecordAllocRange())) flo_fatal(_("Unable to allocate memory for record range"));
-		range->device_events.first=KeyPress;
-		range->device_events.last=KeyRelease;
+		memset(range, 0, sizeof(XRecordRange));
+		/*range->device_events.first=KeyPress;
+		range->device_events.last=KeyRelease;*/
+		range->delivered_events.first=KeyPress;
+		range->delivered_events.last=KeyRelease;
 		client=XRecordAllClients;
 		if ((status->RecordContext=XRecordCreateContext(ctrl_disp, 0, &client, 1, &range, 1))) {
+			XSync(ctrl_disp, TRUE);
 			if (!XRecordEnableContextAsync(status->data_disp, status->RecordContext, status_record_event,
 				(XPointer)status))
 				flo_error(_("Unable to record events"));
@@ -132,7 +135,7 @@ void status_record_stop (struct status *status)
 	}
 	if (status->data_disp) {
 		/* TODO: investigate why this is blocking */
-		//XCloseDisplay(status->data_disp);
+		/* XCloseDisplay(status->data_disp); */
 		status->data_disp=NULL;
 	}
 }

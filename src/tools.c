@@ -33,8 +33,10 @@ void tools_set_icon (GtkWindow *window)
 	icon=gdk_pixbuf_new_from_file_at_size(ICONDIR "/florence.svg", 64, 64, &error);
 	if (error) flo_warn(_("Error loading icon file: %s (%s)"),
 		ICONDIR "/florence.svg", error->message);
-	else gtk_window_set_icon(window, icon);
-	gdk_pixbuf_unref(icon);
+	else {
+		gtk_window_set_icon(window, icon);
+		gdk_pixbuf_unref(icon);
+	}
 }
 
 /* open a YES/NO dialog window and return the user response */

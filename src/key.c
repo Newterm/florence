@@ -67,9 +67,14 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata,
 		memset(key, 0, sizeof(struct key));
 		key->code=lkey->code;
 #ifdef ENABLE_XKB
-		key->locker=XkbKeyAction(xkb, key->code, 0)?
-			XkbKeyAction(xkb, key->code, 0)->type==XkbSA_LockMods:FALSE;
 		key->modifier=xkb->map->modmap[key->code];
+		if (XkbKeyAction(xkb, key->code, 0)) {
+			switch (XkbKeyAction(xkb, key->code, 0)->type) {
+				case XkbSA_LockMods:key->locker=TRUE; break;
+				case XkbSA_SetMods:key->modifier=XkbKeyAction(xkb, key->code, 0)->mods.mask;
+					break;
+			}
+		}
 		if (key->modifier&rec.locked_mods) {
 			key_set_pressed(key, TRUE);
 			status_press(status, key);

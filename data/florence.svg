@@ -1,4 +1,6 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 
+'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
 <!--
   Florence - Florence is a simple virtual keyboard for Gnome.
 
@@ -18,15 +20,12 @@
   along with this program; if not, write to the Free Software Foundation,
   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 -->
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
-  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg width="100%" height="100%" viewBox="0 0 100 100" version="1.1"
-     xmlns="http://www.w3.org/2000/svg">
-     <title>Florence virtual keyboard icon</title>
-     <desc>Florence icon, Copyright (C) 2008, 2009 François Agrech under the terms of GNU General Public License version 2.</desc>
-     <ellipse cx="50%" cy="50%" rx="50%" ry="50%" fill="lightgray"/>
-     <ellipse cx="50%" cy="50%" rx="45%" ry="45%" fill="blue" stroke="white" stroke-width="8%"/>
-     <ellipse cx="35%" cy="35%" rx="8%" ry="8%" fill="white"/>
-     <ellipse cx="65%" cy="35%" rx="8%" ry="8%" fill="white"/>
-     <path d="M30 65 C35 70 45 72 50 72 C55 72 65 70 70 65" stroke="white" stroke-width="8%" stroke-linecap="round" fill-opacity="0%"/>
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100' viewBox='0 0 100 100'>
+	<title>Florence virtual keyboard icon</title>
+	<desc>Florence icon, Copyright (C) 2008, 2009 François Agrech under the terms of GNU General Public License version 2.</desc>
+	<ellipse cx="50%" cy="50%" rx="50%" ry="50%" fill="lightgray"/>
+	<ellipse cx="50%" cy="50%" rx="45%" ry="45%" fill="blue" stroke="white" stroke-width="8%"/>
+	<ellipse cx="35%" cy="35%" rx="8%" ry="8%" fill="white"/>
+	<ellipse cx="65%" cy="35%" rx="8%" ry="8%" fill="white"/>
+	<path d="M30 65 C35 70 45 72 50 72 C55 72 65 70 70 65" stroke="white" stroke-width="8%" stroke-linecap="round" fill-opacity="0%"/>
 </svg>
