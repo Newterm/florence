@@ -307,7 +307,7 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 	status_timer_stop(florence->status);
 	/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
 	 * we just release any pressed key when the mouse leaves. */
-	status_pressed_set(florence->status, FALSE);
+	status_pressed_set(florence->status, NULL);
 	return FALSE;
 }
 
@@ -315,13 +315,15 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
+	struct key *key=status_hit_get(florence->status, (gint)((GdkEventButton*)event)->x,
+		(gint)((GdkEventButton*)event)->y);
 	/* we don't want double and triple click events */
 	if (event && ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS))) return FALSE;
 
 	/* means 2 consecutive button press and no release, but we don't support multi-touch, yet. */
 	/* so we just release any pressed key */
-	status_pressed_set(florence->status, FALSE);
-	status_pressed_set(florence->status, TRUE);
+	status_pressed_set(florence->status, NULL);
+	status_pressed_set(florence->status, key);
 	status_timer_stop(florence->status);
 	return FALSE;
 }
@@ -330,7 +332,7 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
-	status_pressed_set(florence->status, FALSE);
+	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
 	return FALSE;
 }

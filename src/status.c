@@ -107,8 +107,8 @@ gpointer status_record_start (gpointer data)
 		flo_info(_("XRecord extension found version=%d.%d"), major, minor);
 		if (!(range=XRecordAllocRange())) flo_fatal(_("Unable to allocate memory for record range"));
 		memset(range, 0, sizeof(XRecordRange));
-		/*range->device_events.first=KeyPress;
-		range->device_events.last=KeyRelease;*/
+		range->device_events.first=KeyPress;
+		range->device_events.last=KeyRelease;
 		range->delivered_events.first=KeyPress;
 		range->delivered_events.last=KeyRelease;
 		client=XRecordAllClients;
@@ -168,22 +168,20 @@ struct key *status_focus_get(struct status *status)
 }
 
 /* update the pressed key */
-void status_pressed_set(struct status *status, gboolean pressed)
+void status_pressed_set(struct status *status, struct key *pressed)
 {
 	if (pressed) {
-		status->pressed=status->focus;
-		if (status->pressed) {
-			if (key_is_pressed(status->pressed) && (!key_get_modifier(status->pressed)))
-				key_release(status->pressed, status);
-			if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
-				key_press(status->pressed, status);
+		status->pressed=pressed;
+		if (key_is_pressed(status->pressed) && (!key_get_modifier(status->pressed)))
+			key_release(status->pressed, status);
+		if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
+			key_press(status->pressed, status);
 #ifdef ENABLE_XTST
-			else status_key_press_update(status, status->pressed); 
-			if (!status->RecordContext) status_key_press_update(status, status->pressed);
+		else status_key_press_update(status, status->pressed); 
+		if (!status->RecordContext) status_key_press_update(status, status->pressed);
 #else
-			status_key_press_update(status, status->pressed);
+		status_key_press_update(status, status->pressed);
 #endif
-		}
 	} else {
 		if (status->pressed) {
 			if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
