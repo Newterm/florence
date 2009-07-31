@@ -23,9 +23,9 @@
 #include "florence.h"
 #include "trace.h"
 #include "settings.h"
-#include "layoutreader.h"
 #include "keyboard.h"
 #include "tools.h"
+#include "layoutreader.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #ifdef ENABLE_AT_SPI
@@ -78,6 +78,10 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	handle=rsvg_handle_new_from_file(ICONDIR "/florence.svg", &error);
 	if (error) flo_error(_("Error loading florence icon: %s"), error->message);
 	else {
+		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 100.0);
+		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
+		cairo_paint(context);
+		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 		style_render_svg(context, handle, settings_get_double("window/zoom")*2,
 			settings_get_double("window/zoom")*2, TRUE, NULL);
 		rsvg_handle_free(handle);
@@ -105,7 +109,7 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);
 			gtk_window_set_accept_focus(florence->icon, FALSE);
 			gtk_widget_set_events(GTK_WIDGET(florence->icon), GDK_ALL_EVENTS_MASK);
-			g_signal_connect(G_OBJECT(florence->icon), "expose-event", G_CALLBACK(flo_icon_expose), NULL);
+			g_signal_connect(G_OBJECT(florence->icon), "expose-event", G_CALLBACK(flo_icon_expose), florence);
 			g_signal_connect(G_OBJECT(florence->icon), "button-press-event",
 				G_CALLBACK(flo_icon_press), florence);
 			g_signal_connect(G_OBJECT(florence->view->window), "show",
@@ -307,7 +311,10 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 	status_timer_stop(florence->status);
 	/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
 	 * we just release any pressed key when the mouse leaves. */
-	status_pressed_set(florence->status, NULL);
+	if (status_get_moving(florence->status)) {
+		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventCrossing*)event)->x_root-florence->xpos,
+			(gint)((GdkEventCrossing*)event)->y_root-florence->ypos);
+	} else status_pressed_set(florence->status, NULL);
 	return FALSE;
 }
 
@@ -315,10 +322,16 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
-	struct key *key=status_hit_get(florence->status, (gint)((GdkEventButton*)event)->x,
-		(gint)((GdkEventButton*)event)->y);
-	/* we don't want double and triple click events */
-	if (event && ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS))) return FALSE;
+	struct key *key=NULL;
+	
+	if (event) {
+		key=status_hit_get(florence->status, (gint)((GdkEventButton*)event)->x,
+			(gint)((GdkEventButton*)event)->y);
+		/* we don't want double and triple click events */
+		if ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS)) return FALSE;
+	} else {
+		key=status_focus_get(florence->status);
+	}
 
 	/* means 2 consecutive button press and no release, but we don't support multi-touch, yet. */
 	/* so we just release any pressed key */
@@ -357,13 +370,20 @@ gboolean flo_timer_update(gpointer data)
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
-	struct key *key=status_hit_get(florence->status, (gint)((GdkEventMotion*)event)->x,
-		(gint)((GdkEventMotion*)event)->y);
-	if (status_focus_get(florence->status)!=key) {
-		if (key && settings_get_double("behaviour/auto_click")>0.0) {
-			status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
-		} else status_timer_stop(florence->status);
-		status_focus_set(florence->status, key);
+	if (status_get_moving(florence->status)) {
+		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventMotion*)event)->x_root-florence->xpos,
+			(gint)((GdkEventMotion*)event)->y_root-florence->ypos);
+	} else {
+		/* Remember mouse position for moving */
+		florence->xpos=(gint)((GdkEventMotion*)event)->x;
+		florence->ypos=(gint)((GdkEventMotion*)event)->y;
+		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
+		if (status_focus_get(florence->status)!=key) {
+			if (key && settings_get_double("behaviour/auto_click")>0.0) {
+				status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
+			} else status_timer_stop(florence->status);
+			status_focus_set(florence->status, key);
+		}
 	}
 	return FALSE;
 }

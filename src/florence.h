@@ -22,11 +22,11 @@
 #ifndef FLORENCE
 #define FLORENCE
 
+#include "config.h"
 #ifdef ENABLE_XKB
 #include <X11/XKBlib.h>
 #endif
 #include <gtk/gtk.h>
-#include "key.h"
 #include "status.h"
 #include "trayicon.h"
 
@@ -38,6 +38,7 @@ struct florence {
 	struct status *status; /* the status of florence */	
 	struct trayicon *trayicon; /* tray icon object */
 	GtkWindow *icon; /* intermediate icon */
+	gint xpos, ypos; /* remember pointer position */
 #ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
 #endif

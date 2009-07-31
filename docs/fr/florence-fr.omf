@@ -6,7 +6,7 @@
 		<maintainer>f.agrech@gmail.com (François Agrech)</maintainer>
 		<title>Manuel de l'utilisateur de Florence</title>
 		<date>2009-05-20</date>
-		<version identifier="0.4.2" date="2009-05-20"/>
+		<version identifier="0.4.3" date="2009-07-28"/>
 		<subject category="GNOME|Accessibility"/>
 		<description>Documentation pour le clavier virtuel Florence</description>
 		<type>user's guide</type>

@@ -25,8 +25,8 @@
 <informations>
 	<_name>Standard keyboard</_name>
 	<author>François Agrech</author>
-	<date>2009-06-12</date>
-	<florence_version>0.4.2</florence_version>
+	<date>2009-07-28</date>
+	<florence_version>@VERSION@</florence_version>
 </informations>
 
 <keyboard>
@@ -616,4 +616,40 @@
 	</key>
 	</keyboard>
 </extension>
+
+<extension>
+	<_name>Florence keys</_name>
+	<identifiant>actionkys</identifiant>
+	<placement>left</placement>
+	<keyboard>
+	<width>2</width>
+	<height>10</height>
+	<key>
+		<action>close</action>
+		<xpos>1</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<action>config</action>
+		<xpos>1</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<action>move</action>
+		<xpos>1</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<action>bigger</action>
+		<xpos>1</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<action>smaller</action>
+		<xpos>1</xpos>
+		<ypos>9</ypos>
+	</key>
+	</keyboard>
+</extension>
+
 </layout>

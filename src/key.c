@@ -22,6 +22,7 @@
 #include "system.h"
 #include "key.h"
 #include "trace.h"
+#include "settings.h"
 #include <math.h>
 #include <string.h>
 #include <gdk/gdkx.h>
@@ -66,6 +67,7 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata,
 		key=g_malloc(sizeof(struct key));
 		memset(key, 0, sizeof(struct key));
 		key->code=lkey->code;
+		key->type=lkey->type;
 #ifdef ENABLE_XKB
 		key->modifier=xkb->map->modmap[key->code];
 		if (XkbKeyAction(xkb, key->code, 0)) {
@@ -167,28 +169,56 @@ void key_simple_release(unsigned int code, struct status *status)
 /* Send a key press event */
 void key_press(struct key *key, struct status *status)
 {
-	GList *list=status_pressedkeys_get(status);
+	GList *list=NULL;
 	struct key *pressed;
-	while (list) {
-		pressed=((struct key *)list->data);
-		if (key_get_modifier(pressed) && !key_is_locker(pressed))
-			key_simple_press(pressed->code, status);
-		list=list->next;
-	}
-	key_simple_press(key->code, status);
-	list=status_pressedkeys_get(status);
-	while (list) {
-		pressed=((struct key *)list->data);
-		if (key_get_modifier(pressed) && !key_is_locker(pressed))
-			key_simple_release(pressed->code, status);
-		list=list->next;
+	if (key->type) {
+		key->pressed=TRUE;
+		status_key_press_update(status, key);
+		switch (key->type) {
+			case LAYOUT_MOVE: status_set_moving(status, TRUE); break;
+			case LAYOUT_BIGGER:
+			case LAYOUT_SMALLER:
+			case LAYOUT_CONFIG:
+			case LAYOUT_CLOSE: break;
+			default: flo_warn(_("unknown action key type pressed = %d"), key->type);
+		}
+	} else {
+		list=status_pressedkeys_get(status);
+		while (list) {
+			pressed=((struct key *)list->data);
+			if (key_get_modifier(pressed) && !key_is_locker(pressed))
+				key_simple_press(pressed->code, status);
+			list=list->next;
+		}
+		key_simple_press(key->code, status);
+		list=status_pressedkeys_get(status);
+		while (list) {
+			pressed=((struct key *)list->data);
+			if (key_get_modifier(pressed) && !key_is_locker(pressed))
+				key_simple_release(pressed->code, status);
+			list=list->next;
+		}
 	}
 }
 
 /* Send a key release event */
 void key_release(struct key *key, struct status *status)
 {
-	key_simple_release(key->code, status);
+	if (key->type && key->pressed) {
+		switch (key->type) {
+			case LAYOUT_CLOSE: gtk_main_quit(); break;
+			case LAYOUT_CONFIG: settings(); break;
+			case LAYOUT_MOVE: status_set_moving(status, FALSE); break;
+			case LAYOUT_BIGGER: settings_set_double("window/zoom",
+				settings_get_double("window/zoom")*1.05, TRUE); break;
+			case LAYOUT_SMALLER: settings_set_double("window/zoom",
+				settings_get_double("window/zoom")*0.95, TRUE); break;
+			default: flo_warn(_("unknown action key type released = %d"), key->type);
+		}
+		key->pressed=FALSE;
+		status_key_release_update(status, key);
+	}
+	else key_simple_release(key->code, status);
 }
 
 /* Draw the representation of the auto-click timer on the key
@@ -238,7 +268,8 @@ void key_symbol_draw(struct key *key, struct style *style, cairo_t *cairoctx, Gd
 {
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
-	style_symbol_draw(style, cairoctx, key_getKeyval(key, mod), key->w, key->h);
+	if (key->type==LAYOUT_NORMAL) style_symbol_draw(style, cairoctx, key_getKeyval(key, mod), key->w, key->h);
+	else style_symbol_type_draw(style, cairoctx, key->type, key->w, key->h);
 	cairo_restore(cairoctx);
 }
 

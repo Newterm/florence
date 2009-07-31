@@ -25,10 +25,10 @@
 #include <gtk/gtk.h>
 #include <gconf/gconf-client.h>
 #include "system.h"
-#include "florence.h"
 #include "trace.h"
 #include "settings.h"
 #include "tools.h"
+#include "florence.h"
 
 #define EXIT_FAILURE 1
 

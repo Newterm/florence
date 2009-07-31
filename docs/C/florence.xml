@@ -2,11 +2,12 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "May 2009">
+	<!ENTITY date "July, the 28th of 2009">
+	<!ENTITY version "0.4.3">
 ]>
 <article id="index" lang="en">
 <articleinfo>
-	<date>2009-05-20</date>
+	<date>2009-07-28</date>
 	<title>Florence documentation</title>
 	<abstract><para>This document describes how to install, configure and use Florence virtual keyboard.</para></abstract>
 	<authorgroup>
@@ -35,7 +36,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 	<para>On Fedora, just use the package manager. From the command line, you can type:
 <prompt>#</prompt> <userinput>yum install florence</userinput>
 	</para>
-	<para>Make sure you have the latest version of Florence (0.4.2 as of March, the 20th of May 2009). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
+	<para>Make sure you have the latest version of Florence (&version; as of &date;). You can get it at <ulink url="http://sourceforge.net/project/platformdownload.php?group_id=217749">Sourceforge</ulink></para>
 	<sect2>
 		<title>Preparing the dependencies</title>
 		<para>In order to build Florence, you need a build environment with the following commands: make, scrollkeeper and a C compiler, along with the following package dependencies:</para>
@@ -78,8 +79,8 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Installing</title>
 		<para>Installing Florence is like installing any program that uses the GNU autotools. Open a terminal and type the following commands:</para>
 		<screen>
-<prompt>$</prompt> <userinput>tar -xjvf florence-0.4.2.tar.bz2</userinput>
-<prompt>$</prompt> <userinput>cd florence-0.4.2</userinput>
+<prompt>$</prompt> <userinput>tar -xjvf florence-&version;.tar.bz2</userinput>
+<prompt>$</prompt> <userinput>cd florence-&version;</userinput>
 <prompt>$</prompt> <userinput>./configure --prefix=/usr</userinput>
 <prompt>$</prompt> <userinput>make</userinput>
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
@@ -95,7 +96,7 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<title>Uninstalling</title>
 		<para>Uninstalling is as easy as installing.</para>
 		<screen>
-<prompt>$</prompt> <userinput>cd florence-0.4.2</userinput>
+<prompt>$</prompt> <userinput>cd florence-&version;</userinput>
 <prompt>$</prompt> <userinput>su -c "make uninstall"</userinput>
 		</screen>
 		<para>For Ubuntu:</para><screen><prompt>$</prompt> <userinput>sudo make uninstall</userinput></screen>

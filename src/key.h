@@ -22,17 +22,17 @@
 #ifndef FLO_KEY
 #define FLO_KEY
 
+#include "config.h"
 #ifdef ENABLE_XKB
 #include <X11/XKBlib.h>
 #endif
 #include <gdk/gdk.h>
 #include <glib.h>
-#include "style.h"
 #include "status.h"
+#include "style.h"
 #include "layoutreader.h"
 
 struct status;
-struct layout;
 
 /* A key is an item of the keyboard. It represents a real keyboard key.
  * A key is replesented on the screen with a background (shape) and a foreground (symbol)
@@ -40,6 +40,7 @@ struct layout;
  * when the auto-click timer is active, it is drawn between the background and the foreground */
 struct key {
 	guint code; /* hardware key code */
+	enum layout_key_type type; /* action key type */
 	struct shape *shape; /* graphical representation of the background of the key */
 	gdouble x, y; /* position of the key inside the keyboard */
 	gdouble w, h; /* size of the key inside the keyboard */

@@ -88,6 +88,20 @@ enum layout_placement layoutreader_placement_get(struct layout *layout)
 	return ret;
 }
 
+/* Translate xml key type name into layout key type enumeration */
+enum layout_key_type layoutreader_key_type_get(xmlDocPtr doc, xmlNodePtr cur)
+{
+	enum layout_key_type ret=LAYOUT_NORMAL;
+	xmlChar *tmp=xmlNodeListGetString(doc, cur->children, 1);
+	if (!xmlStrcmp(tmp, (xmlChar *)"close")) ret=LAYOUT_CLOSE;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"config")) ret=LAYOUT_CONFIG;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"move")) ret=LAYOUT_MOVE;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"bigger")) ret=LAYOUT_BIGGER;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"smaller")) ret=LAYOUT_SMALLER;
+	else flo_error(_("Unknown action key type %s"), tmp);
+	xmlFree(tmp);
+	return ret;
+}
 
 /* Update the string if the node lang matches locale */
 void layoutreader_update_lang(xmlDocPtr doc, xmlNodePtr node, char **update)
@@ -182,6 +196,8 @@ struct layout_key *layoutreader_key_new(struct layout *layout)
 				tmp=xmlNodeListGetString(layout->doc, cur->children, 1);
 				key->code=atoi((char *)tmp);
 				xmlFree(tmp);
+			} else if (!xmlStrcmp(cur->name, (xmlChar *)"action")) {
+				key->type=layoutreader_key_type_get(layout->doc, cur);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"xpos")) {
 				key->pos.x=layoutreader_double_get(layout->doc, cur);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"ypos")) {
@@ -278,6 +294,8 @@ struct layout_symbol *layoutreader_symbol_new(struct layout *layout)
 			symbol->svg=layoutreader_svg_get(layout->doc, cur);
 		} else if (!xmlStrcmp(cur->name, (xmlChar *)"label")) {
 			layoutreader_update_lang(layout->doc, cur->children, &symbol->label);
+		} else if (!xmlStrcmp(cur->name, (xmlChar *)"type")) {
+			symbol->type=layoutreader_key_type_get(layout->doc, cur);
 		}
 	}
 	layoutreader_element_close(layout);

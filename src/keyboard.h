@@ -22,13 +22,13 @@
 #ifndef FLO_KEYBOARD
 #define FLO_KEYBOARD
 
+#include "status.h"
 #include <glib.h>
 #ifdef ENABLE_XKB
 #include <X11/XKBlib.h>
 #endif
 #include "key.h"
 #include "layoutreader.h"
-#include "status.h"
 
 /* A keyboard is a set of keys logically grouped together */
 /* Examples: the main keyboard, the numpad or the function keys */

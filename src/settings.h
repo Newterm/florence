@@ -30,7 +30,7 @@ void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer 
 /* get a gconf double */
 gdouble settings_get_double(const gchar *name);
 /* set a gconf double */
-void settings_set_double(const gchar *name, gdouble value);
+void settings_set_double(const gchar *name, gdouble value, gboolean notify);
 /* get an integer from gconf */
 gint settings_get_int(const gchar *name);
 /* set a gconf integer */

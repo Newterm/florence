@@ -54,7 +54,10 @@ shape-element = element shape {
 
 symbol-element = element symbol {
 	xmllang?, xmlbase?,
-	element name { xsd:string },
+	( element name { xsd:string } |
+		element type {
+			"close" | "config" | "move" | "bigger" | "smaller"
+		} ),
 	(
 	  external "svg11/svg11.rnc" | (
 		element label { xsd:string },

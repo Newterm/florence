@@ -562,11 +562,11 @@ gdouble settings_get_double(const gchar *name)
 }
 
 /* set a gconf double */
-void settings_set_double(const gchar *name, gdouble value)
+void settings_set_double(const gchar *name, gdouble value, gboolean notify)
 {
-	gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
+	if (!notify) gconf_client_remove_dir(gconfclient, FLO_SETTINGS_ROOT, NULL);
 	gconf_client_set_float(gconfclient, settings_get_full_path(name), value, NULL);
-	gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
+	if (!notify) gconf_client_add_dir(gconfclient, FLO_SETTINGS_ROOT, GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 }
 
 /* get a gconf string */

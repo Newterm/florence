@@ -22,15 +22,15 @@
 #ifndef FLO_STATUS
 #define FLO_STATUS
 
-#include <gtk/gtk.h>
+#include "system.h"
 #ifdef ENABLE_XTST
-#include <X11/Xlib.h>
+#include <X11/extensions/XTest.h>
 #include <X11/extensions/record.h>
+#include <gdk/gdkx.h>
 #endif
+#include <gtk/gtk.h>
 #include "key.h"
 #include "view.h"
-
-struct view;
 
 /* This represents the status of florence */
 struct status {
@@ -41,10 +41,12 @@ struct status {
 	GdkModifierType globalmod; /* global modifier mask */
 	struct view *view; /* view to update on status change */
 	gboolean spi; /* tell if spi events are enabled */
+	gboolean moving; /* true when moving key is pressed */
 #ifdef ENABLE_XTST
 	XRecordContext RecordContext; /* Context to record keyboard events */
 	Display *data_disp; /* Data display to record events */
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
+	XID id_base; /* XRecord client id */
 #endif
 };
 
@@ -61,6 +63,10 @@ struct key *status_focus_get(struct status *status);
 void status_pressed_set(struct status *status, struct key *pressed);
 /* returns the key currently focussed */
 struct key *status_hit_get(struct status *status, gint x, gint y);
+/* Calculate single key status after key is pressed */
+void status_key_press_update(struct status *status, struct key *key);
+/* Calculate single key status after key is released */
+void status_key_release_update(struct status *status, struct key *key);
 
 /* start the timer */
 void status_timer_start(struct status *status, GSourceFunc update, gpointer data);
@@ -88,10 +94,15 @@ void status_reset(struct status *status);
 
 /* sets the view to update on status change */
 void status_view_set(struct status *status, struct view *view);
+
 /* disable sending of spi events: send xtest events instead */
 void status_spi_disable(struct status *status);
 /* tell if spi is enabled */
 gboolean status_spi_is_enabled(struct status *status);
+
+/* set/get moving status */
+void status_set_moving(struct status *status, gboolean moving);
+gboolean status_get_moving(struct status *status);
 
 #endif
 

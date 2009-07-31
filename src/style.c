@@ -28,7 +28,6 @@
 #include "trace.h"
 #include "style.h"
 #include "settings.h"
-#include "layoutreader.h"
 
 #if !GLIB_CHECK_VERSION(2,14,0)
 #include "tools.h"
@@ -42,7 +41,10 @@ static gchar *style_svg_format="<?xml-stylesheet type=\"text/css\" href=\"%s/.fl
 /* a symbol is drawn over the shape to identify the effect of key.
  * the symbol is either text (label) or svg. Either one is NULL */
 struct symbol {
-	GRegex *name;
+	union {
+		GRegex *name;
+		enum layout_key_type type;
+	} id;
 	gchar *label;
 	RsvgHandle *svg;
 	gchar *source;
@@ -110,15 +112,15 @@ void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble 
 }
 
 /* create a new symbol */
-void style_symbol_new(struct style *style, char *name, char *svg, char *label)
+void style_symbol_new(struct style *style, char *name, char *svg, char *label, enum layout_key_type type)
 {
 	GError *error=NULL;
 	gchar *regex=NULL;
 	struct symbol *symbol=g_malloc(sizeof(struct symbol));
 	memset(symbol, 0, sizeof(struct symbol));
-	if (name) {
+	if ((type == LAYOUT_NORMAL) && name) {
 		regex=g_strdup_printf("^%s$", name);
-		symbol->name=g_regex_new(regex, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
+		symbol->id.name=g_regex_new(regex, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
 		g_free(regex);
 	}
 	if (label) {
@@ -128,7 +130,12 @@ void style_symbol_new(struct style *style, char *name, char *svg, char *label)
 		symbol->svg=rsvg_handle_new_from_data((guint8 *)symbol->source, (gsize)strlen(symbol->source), &error);
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), svg);
 	} else { flo_fatal(_("Bad symbol: should have either svg or label :%s"), name); }
-	style->symbols=g_slist_append(style->symbols, (gpointer)symbol);
+	if (type != LAYOUT_NORMAL) {
+		symbol->id.type=type;
+		style->type_symbols=g_slist_append(style->type_symbols, (gpointer)symbol);
+	} else {
+		style->symbols=g_slist_append(style->symbols, (gpointer)symbol);
+	}
 	flo_debug("[new symbol] name=%s label=%s", name, symbol->label);
 }
 
@@ -137,7 +144,7 @@ void style_symbol_free(gpointer data, gpointer userdata)
 {
 	struct symbol *symbol=(struct symbol *)data;
 	if (symbol) {
-		if (symbol->name) g_regex_unref(symbol->name);
+		if (symbol->id.name) g_regex_unref(symbol->id.name);
 		if (symbol->label) g_free(symbol->label);
 		if (symbol->svg) rsvg_handle_free(symbol->svg);
 		if (symbol->source) g_free(symbol->source);
@@ -149,7 +156,7 @@ void style_symbol_free(gpointer data, gpointer userdata)
 gboolean style_symbol_matches(struct symbol *symbol, gchar *name)
 {
 	if (!name) return FALSE;
-	return g_regex_match(symbol->name, name, G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
+	return g_regex_match(symbol->id.name, name, G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
 }
 
 /* Draws text with cairo */
@@ -216,6 +223,22 @@ void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdo
 	/* the symbol must have a svg => draw it */
 	} else {
 		style_render_svg(cairoctx, ((struct symbol *)item->data)->svg, w, h, TRUE, NULL);
+	}
+}
+
+/* Draw the symbol represented by type */
+void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum layout_key_type type, gdouble w, gdouble h)
+{
+	GSList *item=style->type_symbols;
+	while (item && (type!=((struct symbol *)item->data)->id.type)) {
+		item=g_slist_next(item);
+	}
+	if (!item) flo_error(_("No style symbol for action key %d"), type); else {
+		if (((struct symbol *)item->data)->label) {
+			style_draw_text(style, cairoctx, ((struct symbol *)item->data)->label, w, h);
+		} else {
+			style_render_svg(cairoctx, ((struct symbol *)item->data)->svg, w, h, TRUE, NULL);
+		}
 	}
 }
 
@@ -422,7 +445,7 @@ struct style *style_new(gchar *base_uri)
 	layoutreader_element_open(layout, "style");
 	if (layoutreader_element_open(layout, "symbols")) {
 		while ((symbol=layoutreader_symbol_new(layout))) {
-			style_symbol_new(style, symbol->name, symbol->svg, symbol->label);
+			style_symbol_new(style, symbol->name, symbol->svg, symbol->label, symbol->type);
 			layoutreader_symbol_free(symbol);
 		}
 	}

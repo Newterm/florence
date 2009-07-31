@@ -19,15 +19,10 @@
 
 */
 
-#include "system.h"
 #include "trace.h"
 #include "status.h"
 #include "settings.h"
-#ifdef ENABLE_XTST
 #include <X11/Xproto.h>
-#include <gdk/gdkx.h>
-#include <X11/extensions/XTest.h>
-#endif
 
 /* Calculate single key status after key is pressed */
 void status_key_press_update(struct status *status, struct key *key)
@@ -75,9 +70,13 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 	if (hook->category==XRecordFromServer) {
 		event=(xEvent *)hook->data;
 		if ((key=status->keys[event->u.u.detail])) {
-			if (event->u.u.type==KeyPress) {
+			if (status->id_base==0) {
+				if ((event->u.u.type==KeyPress)||(event->u.u.type==KeyRelease))
+					status->id_base=hook->id_base;
+			}
+			if (event->u.u.type==KeyPress && hook->id_base==status->id_base) {
 				status_key_press_update(status, key);
-			} else if (event->u.u.type==KeyRelease) {
+			} else if (event->u.u.type==KeyRelease && hook->id_base==status->id_base) {
 				status_key_release_update(status, key);
 			}
 		}
@@ -147,7 +146,7 @@ void status_keys_add(struct status *status, GSList *keys)
 	struct key *key;
 	while (list) {
 		key=(struct key *)list->data;
-		status->keys[key->code]=key;
+		if (key->type==LAYOUT_NORMAL) status->keys[key->code]=key;
 		list=list->next;
 	}
 }
@@ -172,10 +171,10 @@ void status_pressed_set(struct status *status, struct key *pressed)
 {
 	if (pressed) {
 		status->pressed=pressed;
-		if (key_is_pressed(status->pressed) && (!key_get_modifier(status->pressed)))
-			key_release(status->pressed, status);
-		if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
-			key_press(status->pressed, status);
+		if (key_is_pressed(pressed) && (!key_get_modifier(pressed)))
+			key_release(pressed, status);
+		if ((!key_get_modifier(pressed)) || key_is_locker(pressed))
+			key_press(pressed, status);
 #ifdef ENABLE_XTST
 		else status_key_press_update(status, status->pressed); 
 		if (!status->RecordContext) status_key_press_update(status, status->pressed);
@@ -184,7 +183,8 @@ void status_pressed_set(struct status *status, struct key *pressed)
 #endif
 	} else {
 		if (status->pressed) {
-			if ((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed))
+			if ( status->pressed->type ||
+				((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed)) )
 				key_release(status->pressed, status);
 #ifdef ENABLE_XTST
 			else status_key_release_update(status, status->pressed);
@@ -336,4 +336,8 @@ void status_spi_disable(struct status *status)
 
 /* tell if spi is enabled */
 gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
+
+/* set/get moving status */
+void status_set_moving(struct status *status, gboolean moving) { status->moving=moving; }
+gboolean status_get_moving(struct status *status) { return status->moving; }
 

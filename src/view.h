@@ -22,8 +22,9 @@
 #ifndef FLO_VIEW
 #define FLO_VIEW
 
-#include <X11/XKBlib.h>
+#include "config.h"
 #include <gtk/gtk.h>
+#include <cairo.h>
 #ifdef ENABLE_AT_SPI
 #include <cspi/spi.h>
 #endif
@@ -31,7 +32,6 @@
 #include "style.h"
 #include "status.h"
 
-struct status;
 struct key;
 
 /* This represents a view of florence. */

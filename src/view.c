@@ -217,7 +217,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 		ky=keyboard->ypos*view->zoom;
 		kw=keyboard->width*view->zoom;
 		kh=keyboard->height*view->zoom;
-		if ((x>=kx) && (x<=(kx+kw)) && (y>=ky) && y<=(ky+kh)) {
+		if (keyboard_activated(keyboard) && (x>=kx) && (x<=(kx+kw)) && (y>=ky) && y<=(ky+kh)) {
 			list=NULL;
 		}
 		else list = list->next;
@@ -377,7 +377,7 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
 		view->zoom=(gdouble)pConfig->width/view->vwidth;
 		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
-		else settings_set_double("window/zoom", view->zoom);
+		else settings_set_double("window/zoom", view->zoom, FALSE);
 		view->width=pConfig->width; view->height=pConfig->height;
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
@@ -543,8 +543,8 @@ struct view *view_new (struct style *style, GSList *keyboards)
 	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);
 	gtk_widget_set_events(GTK_WIDGET(view->window),
-		GDK_EXPOSURE_MASK|GDK_POINTER_MOTION_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|
-		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK);
+		GDK_EXPOSURE_MASK|GDK_POINTER_MOTION_HINT_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|
+		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK|GDK_POINTER_MOTION_MASK);
 	gtk_widget_set_app_paintable(GTK_WIDGET(view->window), TRUE);
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));

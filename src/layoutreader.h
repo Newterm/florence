@@ -22,9 +22,9 @@
 #ifndef FLO_LAYOUTREADER
 #define FLO_LAYOUTREADER
 
-#include "key.h"
 #include <libxml/parser.h>
 #include <libxml/tree.h>
+#include "config.h"
 
 /* The layout structure contains a pointer to the document
  * and a layout file cursor. */
@@ -41,6 +41,16 @@ enum layout_placement {
 	LAYOUT_RIGHT,
 	LAYOUT_TOP,
 	LAYOUT_BOTTOM
+};
+
+/* Keys can be of the following types */
+enum layout_key_type {
+	LAYOUT_NORMAL,
+	LAYOUT_CLOSE,
+	LAYOUT_CONFIG,
+	LAYOUT_MOVE,
+	LAYOUT_BIGGER,
+	LAYOUT_SMALLER
 };
 
 /* Data contained in the 'informations' element */
@@ -63,6 +73,7 @@ struct layout_pos {
 struct layout_key {
 	char *shape;
 	unsigned char code;
+	enum layout_key_type type;
 	struct layout_pos pos;
 	struct layout_size size;
 };
@@ -85,6 +96,7 @@ struct layout_symbol {
 	char *name;
 	char *svg;
 	char *label;
+	enum layout_key_type type;
 };
 
 /* Create a reader for the filename provided */
