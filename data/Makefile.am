@@ -5,7 +5,9 @@ GCONFTOOL=gconftool-2
 GCONFREFRESH=$(srcdir)/../gconf-refresh
 
 schemadir=@GCONF_SCHEMA_FILE_DIR@
-schema_DATA=florence.schemas
+schemas_in_files=florence.schemas.in
+schema_DATA=$(schemas_in_files:.schemas.in=.schemas)
+@INTLTOOL_SCHEMAS_RULE@
 
 desktopdir=$(datadir)/applications
 desktop_in_files=florence.desktop.in

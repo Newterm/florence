@@ -1,12 +1,16 @@
-This release implements action keys.
-Those keys are available as a layout extension.
-They allow to access Florence functions without requiring a systray.
+This is mainly a bug fix release.
+The high CPU workload problem has been fixed.
+Documentation has been moved to gnome-doc-utils.
+Florence now listens to keys-changed events. It means that you can switch layout without restarting the program.
+Note that the Xorg RECORD extension is broken since version 1.6. Because of this, Florence does not work correctly when using the Xtest extension. Please compile Florence without xtest if you are using Xorg 1.6: use the --without-xtst configure option.
 
 Changelog:
 
-2009-07-28 François Agrech <f.agrech@gmail.com>
-	* Version 0.4.3
-	* Implement action keys
-	* Make intermediate icon transparent
-	* Bug fixes
+2009-08-07 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.4
+	* Remove dependancy on libgnome (obsolete) ; add gnome-doc-utils instead.
+	* Make intermediate icon transparent.
+	* Remove buggy hacks for XRECORD and add warning for the new Xorg.
+	* Fix high CPU workload problem.
+	* Listen to gdk keys-changed event.
 

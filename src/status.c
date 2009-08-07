@@ -24,6 +24,11 @@
 #include "settings.h"
 #include <X11/Xproto.h>
 
+/* check for record events every 1/10th of a second */
+#define STATUS_EVENTCHECK_INTERVAL 100
+/* animate keyboard every 1/50th of a second */
+#define STATUS_ANIMATION_INTERVAL 20
+
 /* Calculate single key status after key is pressed */
 void status_key_press_update(struct status *status, struct key *key)
 {
@@ -70,13 +75,9 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 	if (hook->category==XRecordFromServer) {
 		event=(xEvent *)hook->data;
 		if ((key=status->keys[event->u.u.detail])) {
-			if (status->id_base==0) {
-				if ((event->u.u.type==KeyPress)||(event->u.u.type==KeyRelease))
-					status->id_base=hook->id_base;
-			}
-			if (event->u.u.type==KeyPress && hook->id_base==status->id_base) {
+			if (event->u.u.type==KeyPress) {
 				status_key_press_update(status, key);
-			} else if (event->u.u.type==KeyRelease && hook->id_base==status->id_base) {
+			} else if (event->u.u.type==KeyRelease) {
 				status_key_release_update(status, key);
 			}
 		}
@@ -84,7 +85,7 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 	if (hook) XRecordFreeData(hook);
 }
 
-/* Process record events when idle */
+/* Process record events (every 1/10th of a second) */
 gboolean status_record_process (gpointer data)
 {
 	struct status *status=(struct status *)data;
@@ -108,8 +109,6 @@ gpointer status_record_start (gpointer data)
 		memset(range, 0, sizeof(XRecordRange));
 		range->device_events.first=KeyPress;
 		range->device_events.last=KeyRelease;
-		range->delivered_events.first=KeyPress;
-		range->delivered_events.last=KeyRelease;
 		client=XRecordAllClients;
 		if ((status->RecordContext=XRecordCreateContext(ctrl_disp, 0, &client, 1, &range, 1))) {
 			XSync(ctrl_disp, TRUE);
@@ -209,7 +208,7 @@ void status_timer_start(struct status *status, GSourceFunc update, gpointer data
 	if (status->timer) g_timer_start(status->timer);
 	else {
 		status->timer=g_timer_new();
-		g_idle_add(update, data);
+		g_timeout_add(STATUS_ANIMATION_INTERVAL, update, data);
 	}
 }
 
@@ -280,7 +279,7 @@ struct status *status_new()
 	memset(status, 0, sizeof(struct status));
 #ifdef ENABLE_XTST
 	status_record_start(status);
-	g_idle_add(status_record_process, (gpointer)status);
+	g_timeout_add(STATUS_EVENTCHECK_INTERVAL, status_record_process, (gpointer)status);
 #endif
 	status->spi=TRUE;
 	return status;

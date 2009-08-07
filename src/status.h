@@ -46,7 +46,6 @@ struct status {
 	XRecordContext RecordContext; /* Context to record keyboard events */
 	Display *data_disp; /* Data display to record events */
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
-	XID id_base; /* XRecord client id */
 #endif
 };
 

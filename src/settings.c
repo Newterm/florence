@@ -29,7 +29,6 @@
 #include <glade/glade.h>
 #include <glib/gprintf.h>
 #ifdef ENABLE_HELP
-#include <libgnome/gnome-help.h>
 #include <gdk/gdkkeysyms.h>
 #endif
 #include "settings.h"
@@ -45,17 +44,24 @@
 #define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_CANCEL
 #endif
 
-static gchar *settings_nametable[][2] = {
-	{ "flo_resizable", "window/resizable" },
-	{ "flo_keep_ratio", "window/keep_ratio" },
-	{ "flo_decorated", "window/decorated" },
-	{ "flo_auto_hide", "behaviour/auto_hide" },
-	{ "flo_move_to_widget", "behaviour/move_to_widget" },
-	{ "flo_intermediate_icon", "behaviour/intermediate_icon" },
-	{ "flo_transparent", "window/transparent" },
-	{ "flo_task_bar", "window/task_bar" },
-	{ "flo_always_on_top", "window/always_on_top" },
-	{ NULL, NULL } };
+struct settings_boolean {
+	gchar *glade_name;
+	gchar *gconf_name;
+	gboolean default_value;
+};
+
+/* settings booleans. { "glade name", "gconf name", "default value" } */
+struct settings_boolean settings_nametable[] = {
+	{ "flo_resizable", "window/resizable", TRUE },
+	{ "flo_keep_ratio", "window/keep_ratio", FALSE },
+	{ "flo_decorated", "window/decorated", TRUE },
+	{ "flo_auto_hide", "behaviour/auto_hide", FALSE },
+	{ "flo_move_to_widget", "behaviour/move_to_widget", TRUE },
+	{ "flo_intermediate_icon", "behaviour/intermediate_icon", TRUE },
+	{ "flo_transparent", "window/transparent", FALSE },
+	{ "flo_task_bar", "window/task_bar", FALSE },
+	{ "flo_always_on_top", "window/always_on_top", TRUE },
+	{ NULL } };
 
 static GladeXML *gladexml;
 static GConfClient *gconfclient=NULL;
@@ -99,12 +105,12 @@ char *settings_get_full_path(const char *path)
 char *settings_get_gconf_name(GtkWidget *widget)
 {
 	guint searchidx=0;
-	while (strcmp(glade_get_widget_name(widget),
-		settings_nametable[searchidx][0]) &&
-		settings_nametable[searchidx][0]) {
+	while (settings_nametable[searchidx].glade_name &&
+		strcmp(glade_get_widget_name(widget),
+		settings_nametable[searchidx].glade_name)) {
 		searchidx++;
 	}
-	return settings_nametable[searchidx][1];
+	return settings_nametable[searchidx].gconf_name;
 }
 
 /* Populate layout combobox with available layouts */
@@ -287,11 +293,11 @@ void settings_update()
 	gchar *color;
 	guint searchidx=0;
 
-	while (settings_nametable[searchidx][0]) {
+	while (settings_nametable[searchidx].glade_name) {
 		gtk_toggle_button_set_active(
 			GTK_TOGGLE_BUTTON(glade_xml_get_widget(gladexml,
-				settings_nametable[searchidx][0])),
-			settings_get_bool(settings_nametable[searchidx][1]));
+				settings_nametable[searchidx].glade_name)),
+			settings_get_bool(settings_nametable[searchidx].gconf_name));
 			searchidx++;
 	}
 	gtk_widget_set_sensitive(glade_xml_get_widget(gladexml,
@@ -331,10 +337,10 @@ void settings_update()
 void settings_help(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 #ifdef ENABLE_HELP
+	GError *error=NULL;
 	if (event->keyval==GDK_F1) {
-		if (!gnome_help_display_uri("ghelp:florence?config", NULL)) {
-			flo_error(_("Unable to open %s"), "ghelp:florence?config");
-		}
+		gtk_show_uri(NULL, "ghelp:florence?config", gtk_get_current_event_time(), &error);
+		if (error) flo_error(_("Unable to open %s"), "ghelp:florence?config");
 	}
 #endif
 }
@@ -585,8 +591,17 @@ gboolean settings_get_bool(const gchar *name)
 {
 	GError *err=NULL;
 	char *fullpath=settings_get_full_path(name);
+	guint searchidx=0;
 	gboolean ret=gconf_client_get_bool(gconfclient, fullpath, &err);
-	if (err) flo_fatal (_("Incorrect gconf value for %s"), fullpath);
+	if (err) {
+		while (settings_nametable[searchidx].glade_name && strcmp(name,
+			settings_nametable[searchidx].gconf_name)) {
+			searchidx++;
+		}
+		ret=settings_nametable[searchidx].default_value;
+		flo_error (_("Incorrect gconf value for %s. Using default value %s"),
+			fullpath, ret?_("TRUE"):_("FALSE"));
+	}
 	flo_debug("GCONF:%s=<%s>", fullpath, ret?"TRUE":"FALSE");
 	return ret;
 }

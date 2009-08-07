@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<omf>
+	<resource>
+		<date>@DATE@</date>
+		<subject category="GNOME|Accessibility"/>
+		<type>user's guide</type>
+		<format mime="text/xml" dtd="-//OASIS//DTD DocBook XML V4.1.2//EN"/>
+		<relation seriesid="de2bf600-264f-11dd-81e2-d141ac518859"/>
+		<rights type="GNU FDL" license.version="1.2" holder="François Agrech"/>
+	</resource>
+</omf>
+

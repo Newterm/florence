@@ -133,5 +133,13 @@
 2009-07-28 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.3
 	* Implement action keys
-	* Make intermediate icon transparent
 	* Bug fixes
+
+2009-08-07 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.4
+	* Make intermediate icon transparent
+	* Remove dependancy on libgnome (obsolete) ; add gnome-doc-utils instead.
+	* Remove buggy hacks for XRECORD and add warning for the new Xorg.
+	* Fix high CPU workload problem.
+	* Listen to gdk keys-changed event.
+

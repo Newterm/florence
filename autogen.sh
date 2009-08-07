@@ -56,10 +56,11 @@ fi
 
 run aclocal
 CURR_PWD=$PWD
+run gnome-doc-prepare --force
 run glib-gettextize --force --copy
 run intltoolize --copy --force --automake
 run autoheader
-run automake
+run automake --foreign
 run autoconf
 cd data
 run trang -I rnc -O rng florence.rnc relaxng/florence.rng

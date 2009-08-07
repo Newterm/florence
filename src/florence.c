@@ -350,7 +350,7 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	return FALSE;
 }
 
-/* update the timer representation: to be called when idle */
+/* update the timer representation: to be called periodically */
 gboolean flo_timer_update(gpointer data)
 {
 	struct florence *florence=(struct florence *)data;

@@ -11,10 +11,6 @@
 				<short>Hide the keyboard automatically when not needed</short>
 				<long>Florence will hide automatically when no editable widget is selected.</long>
 			</locale>
-			<locale name="fr">
-				<short>Cache le clavier lorsqu'il n'est pas nécessaire</short>
-				<long>Florence sera automatiquement caché lorsqu'aucun objet éditable n'est sélectionné</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/behaviour/move_to_widget</key>
@@ -25,10 +21,6 @@
 			<locale name="C">
 				<short>Move the keyboard to near the selected widget</short>
 				<long>Move the keyboard to near the selected editable widget in auto-hide mode. Only useful when auto_hide is activated.</long>
-			</locale>
-			<locale name="fr">
-				<short>Déplace the clavier vers les environs de l'objet sélectionné</short>
-				<long>Déplace le clavier vers les environs de l'objet éditable sélectionné en mode auto-hide. Utile seulement lorsque auto_hide est activé.</long>
 			</locale>
 		</schema>
 		<schema>
@@ -41,10 +33,6 @@
 				<short>Show an intermediate icon before showing the keyboard in auto-hide mode.</short>
 				<long>Show an intermediate icon when you click on an editable widget. Click on the icon to show the actual keyboard.</long>
 			</locale>
-			<locale name="fr">
-				<short>Montre une icône intermédiaire avant d'afficher le clavier en mode disparition automatique</short>
-				<long>Montre une icône intermédiaire lorque vous cliquez sur un objet éditable. Cliquez sur l'icône pour afficher le clavier.</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/behaviour/auto_click</key>
@@ -56,10 +44,6 @@
 				<short>Auto click timeout</short>
 				<long>Time, in milliseconds, to wait when the mouse is over a key before the key is automatically pressed. Set to 0 to disable auto click.</long>
 			</locale>
-			<locale name="fr">
-				<short>Déclencheur d'auto click</short>
-				<long>Temps, en millisecondes, à attendre lorsque la souris est sur une touche avant que la touche soir automatiquement préssée. Mettre à 0 pour désactiver l'auto click.</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/behaviour/startup_notification</key>
@@ -70,10 +54,6 @@
 			<locale name="C">
 				<short>Display a startup notification message.</short>
 				<long>Display a notification message at startup explaining the basics.</long>
-			</locale>
-			<locale name="fr">
-				<short>Affiche un message au démarrage.</short>
-				<long>Affiche un message au démarrage pour expliquer les bases.</long>
 			</locale>
 		</schema>
 
@@ -87,10 +67,6 @@
 				<short>Position along the X axis</short>
 				<long>Horizontal position of the keyboard window on the screen (in pixel).</long>
 			</locale>
-			<locale name="fr">
-				<short>Position sur l'axe x</short>
-				<long>Position horizontale de la fenêtre du clavier à l'écran (en pixel).</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/window/ypos</key>
@@ -101,10 +77,6 @@
 			<locale name="C">
 				<short>Position along the Y axis</short>
 				<long>Vertical position of the keyboard window on the screen (in pixel).</long>
-			</locale>
-			<locale name="fr">
-				<short>Position sur l'axe x</short>
-				<long>Position verticale de la fenêtre du clavier à l'écran (en pixel).</long>
 			</locale>
 		</schema>
 		<schema>
@@ -117,10 +89,6 @@
 				<short>Scaling factor of the window</short>
 				<long>Sets the size of the window and of the keys</long>
 			</locale>
-			<locale name="fr">
-				<short>Taille de la fenêtre</short>
-				<long>Détermine la grosseur des touches et de la fenêtre</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/window/transparent</key>
@@ -131,10 +99,6 @@
 			<locale name="C">
 				<short>Transparent mode</short>
 				<long>To see the windows behind the keyboard.</long>
-			</locale>
-			<locale name="fr">
-				<short>Mode transparent</short>
-				<long>Pout voir les fenêtres derrière le clavier.</long>
 			</locale>
 		</schema>
 		<schema>
@@ -147,10 +111,6 @@
 				<short>Decorate window</short>
 				<long>Window has a title bar and buttons.</long>
 			</locale>
-			<locale name="fr">
-				<short>Fenêtre décorée</short>
-				<long>La fenêtre a une barre de titre et des boutons.</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/window/resizable</key>
@@ -161,10 +121,6 @@
 			<locale name="C">
 				<short>Allow to resize window.</short>
 				<long>The keyboard window can be resized with the mouse.</long>
-			</locale>
-			<locale name="fr">
-				<short>Autoriser le redimensionement de la fenêtre.</short>
-				<long>La fenêtre du clavier peut être redimensionée avec la souris.</long>
 			</locale>
 		</schema>
 		<schema>
@@ -177,10 +133,6 @@
 				<short>Keep window ratio when resizing window.</short>
 				<long>The window proportions are kept intact while resizing the window.</long>
 			</locale>
-			<locale name="fr">
-				<short>Conserver les proportions en redimensionant la fenêtre.</short>
-				<long>Les proportions sont conservées intactes pendant le redimensionement de la fenêtre.</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/window/task_bar</key>
@@ -191,10 +143,6 @@
 			<locale name="C">
 				<short>Appear in the task bar</short>
 				<long>Make Florence appear in the task bar.</long>
-			</locale>
-			<locale name="fr">
-				<short>Apparaître dans la barre des tâches.</short>
-				<long>Fait apparaître Florence dans la barre des tâches.</long>
 			</locale>
 		</schema>
 		<schema>
@@ -207,10 +155,6 @@
 				<short>Keep the keyboard on top.</short>
 				<long>Keep the keyboard window on top of other windows.</long>
 			</locale>
-			<locale name="fr">
-				<short>Conserve le clavier au dessus.</short>
-				<long>Conserve la fenêtre du clavier au dessus des autres fenêtres.</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/window/opacity</key>
@@ -221,10 +165,6 @@
 			<locale name="C">
 				<short>Opacity of the keyboard window</short>
 				<long>Sets the opacity of the keyboard window. Requires window manager compositing to work</long>
-			</locale>
-			<locale name="fr">
-				<short>Opacité de la fenêtre</short>
-				<long>Détermine l'opacité de la fenêtre du clavier. Nécessite que gestionnaire de fenêtre support l'effet 'composite'</long>
 			</locale>
 		</schema>
 
@@ -238,10 +178,6 @@
 				<short>key color</short>
 				<long>Color of the keys</long>
 			</locale>
-			<locale name="fr">
-				<short>Couleur des touches</short>
-				<long>Couleur des touches</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/colours/outline</key>
@@ -252,10 +188,6 @@
 			<locale name="C">
 				<short>Outline color</short>
 				<long>Color of the outline of the keys</long>
-			</locale>
-			<locale name="fr">
-				<short>Couleur des bordures</short>
-				<long>Couleur des bordures des touches</long>
 			</locale>
 		</schema>
 		<schema>
@@ -268,10 +200,6 @@
 				<short>Text color</short>
 				<long>Color of the labels of the keys</long>
 			</locale>
-			<locale name="fr">
-				<short>Couleur du texte</short>
-				<long>Couleur des symboles sur les touches</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/colours/activated</key>
@@ -283,10 +211,6 @@
 				<short>Activated color</short>
 				<long>Color of the pressed keys</long>
 			</locale>
-			<locale name="fr">
-				<short>Couleur d'activation</short>
-				<long>Couleur des touches pressées</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/colours/mouseover</key>
@@ -297,10 +221,6 @@
 			<locale name="C">
 				<short>Mouse over color</short>
 				<long>Color of the key when the mouse is over</long>
-			</locale>
-			<locale name="fr">
-				<short>Couleur des touches sous la souris</short>
-				<long>Couleur de la touche quand la souris passe dessus</long>
 			</locale>
 		</schema>
 
@@ -314,10 +234,6 @@
 				<short>Path of the layout file</short>
 				<long>The layout file contains the layout of the keys on the keyboard</long>
 			</locale>
-			<locale name="fr">
-				<short>Chemin vers le fichier layout</short>
-				<long>Le fichier layout contient l'arrangement des touches sur le clavier</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/layout/style</key>
@@ -329,10 +245,6 @@
 				<short>Path of the layout style file</short>
 				<long>The layout style file contains the style to draw the keys of the keyboard</long>
 			</locale>
-			<locale name="fr">
-				<short>Chemin vers le fichier de style du layout</short>
-				<long>Le fichier de style du layout contient le style pour dessiner les touches sur le clavier</long>
-			</locale>
 		</schema>
 		<schema>
 			<key>/schemas/apps/florence/layout/extensions</key>
@@ -343,10 +255,6 @@
 			<locale name="C">
 				<short>List of colon-separated (:) extension names</short>
 				<long>List of keyboard extensions names (colon-separated). extension names must be found in layout file</long>
-			</locale>
-			<locale name="fr">
-				<short>Liste des noms d'extension (séparés par des deux-points)</short>
-				<long>Liste des noms d'extension du clavier séparés par des deux-points (:). Les noms d'extension doivent se trouver dans le fichier layout</long>
 			</locale>
 		</schema>
 

@@ -25,9 +25,6 @@
 #include "settings.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#ifdef ENABLE_HELP
-	#include <libgnome/gnome-help.h>
-#endif
 
 /* Display the about dialog window */
 void trayicon_about(void)
@@ -58,9 +55,9 @@ Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."),
 /* Open yelp */
 void trayicon_help(void)
 {
-	if (!gnome_help_display_uri("ghelp:florence", NULL)) {
-		flo_error(_("Unable to open %s"), "ghelp:florence");
-	}
+	GError *error=NULL;
+	gtk_show_uri(NULL, "ghelp:florence", gtk_get_current_event_time(), &error);
+	if (error) flo_error(_("Unable to open %s"), "ghelp:florence");
 }
 #endif
 

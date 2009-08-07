@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.4.3], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.4.4], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -43,6 +43,7 @@ if test "x$with_docs" != "xno"; then
 	fi
 	SCROLLKEEPER_BUILD_REQUIRED=0.3.5
 	AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
+	GNOME_DOC_INIT
 fi
 
 # Checks for libraries.
@@ -50,21 +51,23 @@ DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 libglade-2.0 gtk
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 
 if test "x$with_docs" != "xno"; then
-	PKG_CHECK_MODULES([LIBGNOME], [libgnome-2.0], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find libgnome.
-Please either install libgnome package or disable docs: --without-docs configure option))
+	PKG_CHECK_MODULES([GNOME_DOC_UTILS], [gnome-doc-utils], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find gnome-doc-utils.
+Please either install gnome-doc-utils package or disable docs: --without-docs configure option))
 fi
 if test "x$with_notification" != "xno"; then
 	PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], AC_DEFINE([ENABLE_NOTIFICATION], [], [Notification enabled.]), AC_MSG_ERROR(Could not configure libnotify. Please either install libnotify or disable notifications: --without-notification configure option))
 fi
+
 if test "x$with_xtst" != "xno"; then
 	PKG_CHECK_MODULES([XTST], [xtst], AC_DEFINE([ENABLE_XTST], [], [Xtst extension enabled.]), AC_MSG_ERROR(Could not configure xtst. Please either install xtst or disable it: --without-xtst configure option))
+	AC_MSG_WARN([Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xtst if you are planning to use a recent version of Xorg: --without-xtst])
 fi
 if test "x$with_at_spi" != "xno"; then
 	PKG_CHECK_MODULES([AT_SPI], [cspi-1.0], AC_DEFINE([ENABLE_AT_SPI], [], [at-spi enabled.]), AC_MSG_ERROR(Could not configure at-spi. Please either install at-spi or disable it: --without-at-spi configure option))
 fi
 
-AC_SUBST(LIBGNOME_CFLAGS)
-AC_SUBST(LIBGNOME_LIBS)
+AC_SUBST(GNOME_DOCS_UTILS_CFLAGS)
+AC_SUBST(GNOME_DOCS_UTILS_LIBS)
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
 AC_SUBST(XTST_CFLAGS)
@@ -92,6 +95,6 @@ AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fc
 # Files generated
 ICONDIR=$prefix/$DATADIRNAME/pixmaps
 AC_SUBST(ICONDIR)
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/layouts/Makefile data/layouts/florence.xml.in data/layouts/florence-alt.xml.in data/layouts/compact.xml.in data/florence.desktop.in docs/Makefile docs/C/Makefile docs/fr/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/layouts/Makefile data/layouts/florence.xml.in data/layouts/florence-alt.xml.in data/layouts/compact.xml.in data/florence.desktop.in docs/Makefile po/Makefile.in])
 AC_OUTPUT
 
