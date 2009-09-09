@@ -274,7 +274,7 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 	/* read the layout file and create the extensions */
 	keyboards=g_slist_append(keyboards,
 		       keyboard_new(layout, florence->style, NULL, NULL, LAYOUT_VOID, &global));
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 	status_keys_add(florence->status, ((struct keyboard *)keyboards->data)->keys);
 #endif
 	while ((extension=layoutreader_extension_new(layout))) {
@@ -283,7 +283,7 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 			extension->placement, &global);
 		keyboards=g_slist_append(keyboards, keyboard);
 		layoutreader_extension_free(layout, extension);
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 		status_keys_add(florence->status, keyboard->keys);
 #endif
 	}

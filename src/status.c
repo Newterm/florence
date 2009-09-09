@@ -65,7 +65,7 @@ void status_key_release_update(struct status *status, struct key *key)
 	}
 }
 
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 /* Called when a record event is received from XRecord */
 void status_record_event (XPointer priv, XRecordInterceptData *hook)
 {
@@ -174,7 +174,7 @@ void status_pressed_set(struct status *status, struct key *pressed)
 			key_release(pressed, status);
 		if ((!key_get_modifier(pressed)) || key_is_locker(pressed))
 			key_press(pressed, status);
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 		else status_key_press_update(status, status->pressed); 
 		if (!status->RecordContext) status_key_press_update(status, status->pressed);
 #else
@@ -185,7 +185,7 @@ void status_pressed_set(struct status *status, struct key *pressed)
 			if ( status->pressed->type ||
 				((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed)) )
 				key_release(status->pressed, status);
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 			else status_key_release_update(status, status->pressed);
 			if (!status->RecordContext) status_key_release_update(status, status->pressed);
 #else
@@ -277,7 +277,7 @@ struct status *status_new()
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
 	memset(status, 0, sizeof(struct status));
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 	status_record_start(status);
 	g_timeout_add(STATUS_EVENTCHECK_INTERVAL, status_record_process, (gpointer)status);
 #endif
@@ -288,7 +288,7 @@ struct status *status_new()
 /* liberate status memory */
 void status_free(struct status *status)
 {
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 	status_record_stop(status);
 #endif
 	if (status->timer) g_timer_destroy(status->timer);

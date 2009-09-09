@@ -57,6 +57,7 @@ int main (int argc, char **argv)
 	int config;
 	const char *modules;
 
+	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, FLORENCELOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
@@ -65,8 +66,8 @@ int main (int argc, char **argv)
 	config=decode_switches (argc, argv);
 	trace_init(config&2);
 	flo_info(_("Florence version %s"), VERSION);
-#ifdef ENABLE_XTST
-	flo_warn(_("Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xtst if you are using a recent version of Xorg: --without-xtst configure option. Use AT-SPI instead. Since XEVIE was dropped from Xorg some months ago, there is no way to provide the same functionality for now. Sorry for the inconvenience."));
+#ifdef ENABLE_XRECORD
+	flo_warn(_("Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xrecord if you are using a recent version of Xorg: --without-xrecord configure option. Use AT-SPI instead. Since XEVIE was dropped from Xorg some months ago, there is no way to provide the same functionality for now. Sorry for the inconvenience."));
 #endif
 
 	gtk_init(&argc, &argv);

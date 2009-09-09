@@ -135,11 +135,12 @@
 	* Implement action keys
 	* Bug fixes
 
-2009-08-07 François Agrech <f.agrech@gmail.com>
+2009-09-07 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.4
-	* Make intermediate icon transparent
 	* Remove dependancy on libgnome (obsolete) ; add gnome-doc-utils instead.
+	* Make intermediate icon transparent.
 	* Remove buggy hacks for XRECORD and add warning for the new Xorg.
+	* Add --without-xrecord configure option
 	* Fix high CPU workload problem.
 	* Listen to gdk keys-changed event.
 

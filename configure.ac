@@ -8,6 +8,8 @@ AC_ARG_WITH([notification], AS_HELP_STRING([--without-notification], [Build with
 AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_notification" != "xno"])
 AC_ARG_WITH([xtst], AS_HELP_STRING([--without-xtst], [Build without Xtst extension (default: enabled)]))
 AM_CONDITIONAL([WITH_XTST], [test "x$with_xtst" != "xno"])
+AC_ARG_WITH([xrecord], AS_HELP_STRING([--without-xrecord], [Build without XRecord extension (requires the Xtst extension) (default: enabled)]))
+AM_CONDITIONAL([WITH_XRECORD], [test "x$with_xrecord" != "xno" -a "x$with_xtst" != "xno"])
 AC_ARG_WITH([at-spi], AS_HELP_STRING([--without-at-spi], [Build without at-spi(default: enabled)]))
 AM_CONDITIONAL([WITH_AT_SPI], [test "x$with_at_spi" != "xno"])
 if test "x$with_xtst" = "xno" -a  "x$with_at_spi" = "xno"; then
@@ -34,8 +36,10 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_PROG_GREP
 AC_PROG_SED
+PKG_PROG_PKG_CONFIG
 AM_GCONF_SOURCE_2
 
+GNOME_DOC_INIT
 if test "x$with_docs" != "xno"; then
 	AC_PATH_PROG(SK_CONFIG,scrollkeeper-config,no)
 	if test x$SK_CONFIG = xno; then
@@ -43,7 +47,6 @@ if test "x$with_docs" != "xno"; then
 	fi
 	SCROLLKEEPER_BUILD_REQUIRED=0.3.5
 	AC_SUBST(SCROLLKEEPER_BUILD_REQUIRED)
-	GNOME_DOC_INIT
 fi
 
 # Checks for libraries.
@@ -60,7 +63,10 @@ fi
 
 if test "x$with_xtst" != "xno"; then
 	PKG_CHECK_MODULES([XTST], [xtst], AC_DEFINE([ENABLE_XTST], [], [Xtst extension enabled.]), AC_MSG_ERROR(Could not configure xtst. Please either install xtst or disable it: --without-xtst configure option))
-	AC_MSG_WARN([Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xtst if you are planning to use a recent version of Xorg: --without-xtst])
+	if test "x$with_xrecord" != "xno"; then
+		AC_MSG_WARN([Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xrecord if you are planning to use a recent version of Xorg: --without-xrecord])
+		AC_DEFINE(ENABLE_XRECORD, ["xrecord"], [xrecord extension is enabled])
+	fi
 fi
 if test "x$with_at_spi" != "xno"; then
 	PKG_CHECK_MODULES([AT_SPI], [cspi-1.0], AC_DEFINE([ENABLE_AT_SPI], [], [at-spi enabled.]), AC_MSG_ERROR(Could not configure at-spi. Please either install at-spi or disable it: --without-at-spi configure option))

@@ -42,14 +42,14 @@ struct status {
 	struct view *view; /* view to update on status change */
 	gboolean spi; /* tell if spi events are enabled */
 	gboolean moving; /* true when moving key is pressed */
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 	XRecordContext RecordContext; /* Context to record keyboard events */
 	Display *data_disp; /* Data display to record events */
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
 #endif
 };
 
-#ifdef ENABLE_XTST
+#ifdef ENABLE_XRECORD
 /* Add keys to the keycode indexed keys */
 void status_keys_add(struct status *status, GSList *keys);
 #endif

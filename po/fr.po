@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-06 17:49+0200\n"
+"POT-Creation-Date: 2009-09-07 08:16+0200\n"
 "PO-Revision-Date: 2009-07-30 11:08+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -642,43 +642,43 @@ msgstr "Utilisation du fichier %s"
 msgid "File %s does not contain xml data"
 msgstr "Le fichier %s ne contient pas de donnée xml"
 
-#: ../src/main.c:67
+#: ../src/main.c:68
 #, c-format
 msgid "Florence version %s"
 msgstr "Florence version %s"
 
-#: ../src/main.c:69
+#: ../src/main.c:70
 msgid ""
 "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"
 "bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/"
-"show_bug.cgi?id=21971 ; Please disable xtst if you are using a recent "
-"version of Xorg: --without-xtst configure option. Use AT-SPI instead. Since "
-"XEVIE was dropped from Xorg some months ago, there is no way to provide the "
-"same functionality for now. Sorry for the inconvenience."
+"show_bug.cgi?id=21971 ; Please disable xrecord if you are using a recent "
+"version of Xorg: --without-xrecord configure option. Use AT-SPI instead. "
+"Since XEVIE was dropped from Xorg some months ago, there is no way to "
+"provide the same functionality for now. Sorry for the inconvenience."
 msgstr ""
 "L'extension RECORD de Xorg n'est plus fonctionnelle depuis Xorg 1.6: voir "
 "les bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 et http://bugs."
-"freedesktop.org/show_bug.cgi?id=21971 ; SVP, veuillez désactiver xts si vous "
-"utilisez une version récente de Xorg: option --without-xtst de configure. "
-"Utilisez AT-SPI à la place. Puisque le support de XEVIE a été abandonné dans "
-"Xorg il y a quelques mois, il n'y a aucune possibilité d'obtenir les mêmes "
-"fonctionalités pour le moment. Désolé pour le désagrément"
+"freedesktop.org/show_bug.cgi?id=21971 ; SVP, veuillez désactiver xrecord si "
+"vous utilisez une version récente de Xorg: option --without-xrecord de "
+"configure. Utilisez AT-SPI à la place. Puisque le support de XEVIE a été "
+"abandonné dans Xorg il y a quelques mois, il n'y a aucune possibilité "
+"d'obtenir les mêmes fonctionalités pour le moment. Désolé pour le désagrément"
 
-#: ../src/main.c:80
+#: ../src/main.c:81
 msgid "Enable accessibility"
 msgstr "Activer l'accéssebilité"
 
-#: ../src/main.c:151
+#: ../src/main.c:152
 #, c-format
 msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
 msgstr "%s - Florence est un clavier virtuel simple pour Gnome.\n"
 
-#: ../src/main.c:153
+#: ../src/main.c:154
 #, c-format
 msgid "Usage: %s [OPTION]...\n"
 msgstr "Utilisation: %s [OPTION|...\n"
 
-#: ../src/main.c:154
+#: ../src/main.c:155
 #, c-format
 msgid ""
 "Options:\n"
@@ -806,7 +806,7 @@ msgstr "Extension XTest trouvée version=%d.%d"
 
 #: ../src/status.c:330
 msgid "Xtest extension not compiled in and at-spi not working"
-msgstr "Xtest n'es pas compilé et at-spi ne marchepas"
+msgstr "Xtest n'es pas compilé et at-spi ne marche pas"
 
 #: ../src/style.c:66
 #, c-format

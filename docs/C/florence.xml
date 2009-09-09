@@ -91,6 +91,9 @@ A Timer-based auto-click functionality is available to help disabled people havi
 <prompt>$</prompt> <userinput>su -c "make install"</userinput>
 		</screen>
 		<para>For Ubuntu, replace the last command with:</para><screen><prompt>$</prompt> <userinput>sudo make install</userinput></screen>
+		<para>If you have a recent distro with the new Xorg 1.6 (Mandriva 2009.1, Ubuntu 9.04, Fedora 11 ...), please add the --without-xrecord option to ./configure:</para>
+<prompt>$</prompt> <userinput>./configure --prefix=/usr --without-xrecord</userinput>
+		<para>Indeed, the XRECORD etension is severely broken in Xorg 1.6. See bugs <ulink url="http://bugs.freedesktop.org/show_bug.cgi?id=20500">20500</ulink> and <ulink url="http://bugs.freedesktop.org/show_bug.cgi?id=21971">21971</ulink> for more informations.</para>
 		<para>If you don't want to install in /usr (configure prefix), don't forget to add the path to /etc/scrollkeeper.conf file, so yelp can find Florence documentation.</para>
 		<para>Check the list of other configure options available with:</para>
 		<screen>
