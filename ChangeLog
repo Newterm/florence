@@ -144,3 +144,13 @@
 	* Fix high CPU workload problem.
 	* Listen to gdk keys-changed event.
 
+2009-10-10 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.5
+	* Add hard coded default settings
+	* Add the --no-gnome runtime option
+	* add settings-window source file for better readability
+	* add the --use-config option
+	* restart the auto-click timer after timeout trigger
+	* add the window/keep_on_top parameter
+	* add the --focus option
+

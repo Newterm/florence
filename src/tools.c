@@ -43,6 +43,7 @@ void tools_set_icon (GtkWindow *window)
 gint tools_dialog(const gchar *title, GtkWindow *parent,
 	const gchar *accept, const gchar *reject, const gchar *text)
 {
+	gint ret;
         GtkWidget *dialog, *label;
 	dialog=gtk_dialog_new_with_buttons(title, parent, GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
 		accept, GTK_RESPONSE_ACCEPT, reject, GTK_RESPONSE_REJECT, NULL);
@@ -50,7 +51,9 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 	tools_set_icon(GTK_WINDOW(dialog));
 	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
 	gtk_widget_show_all(dialog);
-	return gtk_dialog_run(GTK_DIALOG(dialog));
+	ret=gtk_dialog_run(GTK_DIALOG(dialog));
+	gtk_object_destroy(GTK_OBJECT(dialog));
+	return ret;
 }
 
 #ifdef ENABLE_AT_SPI

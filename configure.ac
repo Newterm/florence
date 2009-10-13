@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.4.4], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.4.5], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -96,7 +96,7 @@ AC_C_CONST
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memset sscanf strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
+AC_CHECK_FUNCS([memset sscanf strcmp strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
 # Files generated
 ICONDIR=$prefix/$DATADIRNAME/pixmaps

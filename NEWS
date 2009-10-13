@@ -1,17 +1,17 @@
-This is mainly a bug fix release.
-The high CPU workload problem has been fixed.
-Documentation has been moved to gnome-doc-utils.
-Florence now listens to keys-changed events. It means that you can switch layout without restarting the program.
-Note that the Xorg RECORD extension is broken since version 1.6. Because of this, Florence with xrecord does not work correctly with recent distros like Ubuntu 9.04, Mandriva 2009.1 or Fedora 11. Please compile Florence without xrecord if you are using Xorg 1.6: use the --without-xrecord configure option.
+Florence can now be used at gdm login time.
+Read the Tips section of the user manual for more information about that.
+You can now use a configuraion file instead of gconf and you can explicitely specify a window to send input events to.
+Florence should aso work better with unusual window managers.
 
 Changelog:
 
-2009-09-07 François Agrech <f.agrech@gmail.com>
-	* Version 0.4.4
-	* Remove dependancy on libgnome (obsolete) ; add gnome-doc-utils instead.
-	* Make intermediate icon transparent.
-	* Remove buggy hacks for XRECORD and add warning for the new Xorg.
-	* Add --without-xrecord configure option
-	* Fix high CPU workload problem.
-	* Listen to gdk keys-changed event.
+2009-10-10 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.5
+	* Add hard coded default settings
+	* Add the --no-gnome runtime option
+	* add settings-window source file for better readability
+	* add the --use-config option
+	* restart the auto-click timer after timeout trigger
+	* add the window/keep_on_top parameter
+	* add the --focus option
 

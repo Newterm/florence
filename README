@@ -39,7 +39,7 @@ QUICK INSTALL
 	      libcairo-devel gnome-doc-utils librsvg2-devel gettext libnotify libxtst6-devel \
               intltool
 
-        Ubuntu/debian:
+        Debian/Ubuntu:
 
             $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
               libatspi-dev librsvg2-dev gnome-doc-utils libcairo2-dev gettext libnotify-dev \

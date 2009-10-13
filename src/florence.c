@@ -32,6 +32,9 @@
 #include <cspi/spi.h>
 #endif
 
+/* bring the window back to front every seconds */
+#define FLO_TO_TOP_TIMEOUT 1000
+
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
@@ -82,8 +85,8 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
-		style_render_svg(context, handle, settings_get_double("window/zoom")*2,
-			settings_get_double("window/zoom")*2, TRUE, NULL);
+		style_render_svg(context, handle, settings_double_get("window/zoom")*2,
+			settings_double_get("window/zoom")*2, TRUE, NULL);
 		rsvg_handle_free(handle);
 	}
 
@@ -102,8 +105,8 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 			florence->icon=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 			gtk_window_set_keep_above(florence->icon, TRUE);
 			gtk_window_set_skip_taskbar_hint(florence->icon, TRUE);
-			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_get_double("window/zoom")*2,
-				settings_get_double("window/zoom")*2);
+			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_double_get("window/zoom")*2,
+				settings_double_get("window/zoom")*2);
 			gtk_container_set_border_width(GTK_CONTAINER(florence->icon), 0);
 			gtk_window_set_decorated(florence->icon, FALSE);
 			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);
@@ -253,15 +256,15 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 	if (!(ret=XkbLibraryVersion(&maj, &min))) {
 		flo_fatal(_("Unable to initialize XKB library. version=%d.%d rc=%d"), maj, min, ret);
 	}
-	if (!(ret=XkbQueryExtension((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+	if (!(ret=XkbQueryExtension((Display *)gdk_x11_get_default_xdisplay(),
 		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min))) {
 		flo_fatal(_("Unable to query XKB extension from X server version=%d.%d rc=%d"), maj, min, ret);
 	}
 	/* get the modifier map from xkb */
-	global.xkb_desc=XkbGetMap((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+	global.xkb_desc=XkbGetMap((Display *)gdk_x11_get_default_xdisplay(),
 	XkbKeyActionsMask|XkbModifierMapMask, XkbUseCoreKbd);
 	/* get global modifiers state */
-	XkbGetState((Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+	XkbGetState((Display *)gdk_x11_get_default_xdisplay(),
 		XkbUseCoreKbd, &(global.xkb_state));
 #else
 	flo_warn(_("XKB not compiled in: startup keyboard sync is disabled. You should make sure all locker keys are released."));
@@ -354,15 +357,24 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 gboolean flo_timer_update(gpointer data)
 {
 	struct florence *florence=(struct florence *)data;
+	gboolean ret=TRUE;
 	if (status_timer_get(florence->status)>0.0 && status_focus_get(florence->status)) {
 		if (status_timer_get(florence->status)>=1.0) {
 			flo_button_press_event(NULL, NULL, (void *)florence);
 			flo_button_release_event(NULL, NULL, (void *)florence);
+			status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
 		}
 		/* view update */
 		status_focus_set(florence->status, status_focus_get(florence->status));
-		return TRUE;
-	} else return FALSE;
+	} else ret=FALSE;
+	return ret;
+}
+
+/* bring the window back to front: to be calles periodically */
+gboolean flo_to_top(gpointer data)
+{
+	gtk_window_present((GtkWindow *)data);
+	return TRUE;
 }
 
 /* handles mouse motion events 
@@ -379,7 +391,7 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		florence->ypos=(gint)((GdkEventMotion*)event)->y;
 		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 		if (status_focus_get(florence->status)!=key) {
-			if (key && settings_get_double("behaviour/auto_click")>0.0) {
+			if (key && settings_double_get("behaviour/auto_click")>0.0) {
 				status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
 			} else status_timer_stop(florence->status);
 			status_focus_set(florence->status, key);
@@ -438,8 +450,37 @@ void flo_layout_reload(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 	view_update_layout(florence->view, florence->style, florence->keyboards);
 }
 
+#ifdef ENABLE_AT_SPI
+/* check if at-spi is enabled in gnome */
+gboolean flo_check_at_spi(void)
+{
+	gboolean ret=TRUE;
+	GConfClient *gconfclient=gconf_client_get_default();
+	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface",
+		GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
+	if (!gconf_client_get_bool(gconfclient, "/desktop/gnome/interface/accessibility", NULL)) {
+		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Enable accessibility"), NULL, 
+			GTK_STOCK_OK, GTK_STOCK_CANCEL, 
+			"GNOME Accessibility is disabled.\n"
+			"Click OK to enable accessibility and restart GNOME.\n"
+			"If you click CANCEL, auto-hide mode will be disabled.\n"
+			"Alternatively, you may enable accessibility with gnome-at-properties.")) {
+				gconf_client_set_bool(gconfclient,
+					"/desktop/gnome/interface/accessibility", TRUE, NULL);
+				system("gnome-session-save --kill");
+				exit(EXIT_SUCCESS);
+		}
+		flo_error(_("at-spi registry daemon is not running. "\
+		"Events will be sent with Xtest instead and several "\
+		"functions are disabled, including auto-hide."));
+		ret=FALSE;
+	}
+	return ret;
+}
+#endif
+
 /* create a new instance of florence. */
-struct florence *flo_new(void)
+struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 {
 	struct florence *florence;
 
@@ -451,10 +492,22 @@ struct florence *flo_new(void)
 	flo_warn(_("Old GLib version detected. Florence style will be working with a hack."));
 #endif
 
-	florence->status=status_new();
+	florence->status=status_new(focus_back);
+#ifdef ENABLE_AT_SPI
+	if (0!=SPI_init()) {
+		if ((!gnome) || (!flo_check_at_spi())) {
+			status_spi_disable(florence->status);
+		}
+	}
+#else
+	flo_warn(_("AT-SPI has been disabled at compile time: auto-hide mode is disabled."));
+	status_spi_disable(florence->status);
+#endif
+
 	flo_layout_load(florence);
 	florence->view=view_new(florence->style, florence->keyboards);
 	status_view_set(florence->status, florence->view);
+	if (settings_get_bool("window/keep_on_top")) g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, view_window_get(florence->view));
 
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "destroy", G_CALLBACK(flo_destroy), NULL);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "motion-notify-event",
@@ -466,17 +519,6 @@ struct florence *flo_new(void)
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 
-#ifdef ENABLE_AT_SPI
-	if (0!=SPI_init()) {
-		flo_error(_("at-spi registry daemon is not running."\
-			"Events will be sent with Xtest instead and several"\
-			"functions are disabled, including auto-hide."));
-		status_spi_disable(florence->status);
-	}
-#else
-	flo_warn(_("AT-SPI not compiled in: auto-hide mode is disabled."));
-	status_spi_disable(florence->status);
-#endif
 	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(GTK_WIDGET(view_window_get(florence->view)), G_CALLBACK(flo_destroy));
 

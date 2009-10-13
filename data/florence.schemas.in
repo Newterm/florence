@@ -157,6 +157,17 @@
 			</locale>
 		</schema>
 		<schema>
+			<key>/schemas/apps/florence/window/keep_on_top</key>
+			<applyto>/apps/florence/window/keep_on_top</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Bring back the keyboard to top.</short>
+				<long>Periodically (each second) bring back the keyboard to top. This is useful for window managers not supporting the always_on_top hint.</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/window/opacity</key>
 			<applyto>/apps/florence/window/opacity</applyto>
 			<owner>florence</owner>
@@ -251,7 +262,7 @@
 			<applyto>/apps/florence/layout/extensions</applyto>
 			<owner>florence</owner>
 			<type>string</type>
-			<default>ext1:ext2:ext3</default>
+			<default>actionkys</default>
 			<locale name="C">
 				<short>List of colon-separated (:) extension names</short>
 				<long>List of keyboard extensions names (colon-separated). extension names must be found in layout file</long>

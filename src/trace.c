@@ -28,12 +28,51 @@
 
 /* This is a boolean: if TRUE, the module will print debug information */
 static int trace_debug;
+/* the buffer records messages already printed. Used not to print the same message twice */
+/* TODO: use a hash instead of the full string */
+static GSList *trace_buffer=NULL;
+
+/* prints a message to stream f, ignores it if there exists a duplicate in the buffer. */
+/* TODO: make an option to trace multiple duplicate lines when useful. */
+void trace_msg(char *prefix, FILE *f, char *s, va_list args)
+{
+	GSList *list=trace_buffer;
+	gchar *str=g_strdup_vprintf((gchar *)s, args);
+	gboolean ignore=FALSE;
+	while (list) {
+		if (!strcmp(list->data, str)) {
+			ignore=TRUE;
+			break;
+		}
+		list=list->next;
+	}
+	if (!ignore) {
+		trace_buffer=g_slist_append(trace_buffer, str);
+		g_fprintf(f, "%s%s", prefix, str);
+		g_fprintf(f, "\n");
+	}
+}
+
+/********************/
+/* public functions */
+/********************/
 
 /* initializes the trace module. Must be called before any trace function
  * debug is a boolean. If it's true, the trace module will print debug informations */
 void trace_init(int debug)
 {
 	trace_debug=debug;
+}
+
+/* liberate any memory used by the trace module */
+void trace_exit()
+{
+	GSList *list=trace_buffer;
+	while (list) {
+		g_free(list->data);
+		list=list->next;
+	}
+	g_slist_free(trace_buffer);
 }
 
 void flo_fatal(char *s, ...)
@@ -55,28 +94,23 @@ void flo_info(char *s, ...)
 {
 	va_list ap;
 	va_start(ap, s);
-        g_vprintf(s, ap);
-        g_printf("\n");
+	trace_msg("", stdout, s, ap);
 	va_end(ap);
 }
 
 void flo_warn(char *s, ...)
 {
 	va_list ap;
-	g_fprintf(stderr, _("WARNING: "));
 	va_start(ap, s);
-        g_vfprintf(stderr, s, ap);
-        g_fprintf(stderr, "\n");
+	trace_msg("WARNING: ", stderr, s, ap);
 	va_end(ap);
 }
 
 void flo_error(char *s, ...)
 {
 	va_list ap;
-        g_fprintf(stderr, _("ERROR: "));
 	va_start(ap, s);
-        g_vfprintf(stderr, s, ap);
-	g_fprintf(stderr, "\n");
+	trace_msg("ERROR: ", stderr, s, ap);
 	va_end(ap);
 }
 
@@ -85,8 +119,7 @@ void flo_debug(char *s, ...)
 	if (trace_debug) {
 		va_list ap;
 		va_start(ap, s);
-        	g_vprintf(s, ap);
-		g_printf("\n");
+		trace_msg("", stdout, s, ap);
 		va_end(ap);
 	}
 }

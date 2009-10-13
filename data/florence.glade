@@ -10,8 +10,8 @@
     <property name="title" translatable="yes">Florence Settings</property>
     <property name="window_position">mouse</property>
     <property name="type_hint">dialog</property>
-    <signal name="destroy" handler="settings_close" object="flo_config_window"/>
-    <signal name="key_press_event" handler="settings_help"/>
+    <signal name="destroy" handler="settings_window_close" object="flo_config_window"/>
+    <signal name="key_press_event" handler="settings_window_help"/>
     <child>
       <widget class="GtkVBox" id="vbox">
         <property name="visible">True</property>
@@ -40,7 +40,7 @@
                         <property name="item_width">64</property>
 			<property name="pixbuf_column">0</property>
 			<property name="markup_column">1</property>
-                        <signal name="selection_changed" handler="settings_style_change"/>
+                        <signal name="selection_changed" handler="settings_window_style_change"/>
                       </widget>
                     </child>
                   </widget>
@@ -62,7 +62,7 @@
                             <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes" context="yes">Normal key background color</property>
                             <property name="title" translatable="yes" context="yes">Key background color</property>
-                            <signal name="color_set" handler="settings_keys_color"/>
+                            <signal name="color_set" handler="settings_window_change_color"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -94,7 +94,7 @@
                             <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes" context="yes">Activated key background color</property>
                             <property name="title" translatable="yes" context="yes">Activated key background color</property>
-                            <signal name="color_set" handler="settings_activated_color"/>
+                            <signal name="color_set" handler="settings_window_change_color"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -130,7 +130,7 @@
                             <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes" context="yes">Labels and symbols color</property>
                             <property name="title" translatable="yes" context="yes">Labels and symbols color</property>
-                            <signal name="color_set" handler="settings_labels_color"/>
+                            <signal name="color_set" handler="settings_window_change_color"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -166,7 +166,7 @@
                             <property name="receives_default">False</property>
                             <property name="tooltip" translatable="yes" context="yes">Key with mouve over background color</property>
                             <property name="title" translatable="yes" context="yes">Key background color when the mouse is over</property>
-                            <signal name="color_set" handler="settings_mouseover_color"/>
+                            <signal name="color_set" handler="settings_window_change_color"/>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -177,7 +177,7 @@
                         <child>
                           <widget class="GtkLabel" id="mouseover_label">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">focussed key background color</property>
+                            <property name="label" translatable="yes">focused key background color</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>
@@ -223,7 +223,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip" translatable="yes" context="yes">Decorate window</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_set_bool"/>
+                    <signal name="toggled" handler="settings_window_set_bool"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -239,7 +239,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip" translatable="yes" context="yes">Transparent mode</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_set_bool"/>
+                    <signal name="toggled" handler="settings_window_set_bool"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -255,7 +255,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip" translatable="yes" context="yes">Allow to resize window.</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_set_bool"/>
+                    <signal name="toggled" handler="settings_window_set_bool"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -270,7 +270,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip" translatable="yes" context="yes">Keep window ratio when resizing window.</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_set_bool"/>
+                    <signal name="toggled" handler="settings_window_set_bool"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -286,7 +286,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip" translatable="yes" context="yes">Appear in task bar.</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_set_bool"/>
+                    <signal name="toggled" handler="settings_window_set_bool"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -302,7 +302,7 @@
                     <property name="receives_default">False</property>
                     <property name="tooltip" translatable="yes" context="yes">Keep the keyboard on top.</property>
                     <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_set_bool"/>
+                    <signal name="toggled" handler="settings_window_set_bool"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -323,7 +323,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">100 1 110 1 10 10</property>
-                            <signal name="value_changed" handler="settings_opacity"/>
+                            <signal name="value_changed" handler="settings_window_opacity"/>
                           </widget>
                         </child>
                       </widget>
@@ -381,7 +381,7 @@
                             <property name="can_focus">True</property>
                             <property name="tooltip" translatable="yes" context="yes">Auto click timeout</property>
                             <property name="adjustment">1300 0 5000 100 1000 1000</property>
-                            <signal name="value_changed" handler="settings_auto_click"/>
+                            <signal name="value_changed" handler="settings_window_set_double"/>
                           </widget>
                         </child>
                       </widget>
@@ -423,7 +423,7 @@
                                 <property name="tooltip" translatable="yes" context="yes">Auto hide (only show when an editable widget is selected).</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="settings_set_bool"/>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -440,7 +440,7 @@
                                 <property name="receives_default">False</property>
                                 <property name="tooltip" translatable="yes">Move the keyboard to near the selected editable widget in auto-hide mode</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="settings_set_bool"/>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -456,7 +456,7 @@
                                 <property name="receives_default">False</property>
                                 <property name="tooltip" translatable="yes">Put an intermediate icon before showing the actual keyboard</property>
                                 <property name="draw_indicator">True</property>
-                                <signal name="toggled" handler="settings_set_bool"/>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
                               </widget>
                               <packing>
                                 <property name="expand">False</property>
@@ -509,7 +509,7 @@
                   <widget class="GtkComboBox" id="flo_layouts">
                     <property name="visible">True</property>
                     <property name="tooltip" translatable="yes">Select Florence layout</property>
-                    <signal name="changed" handler="settings_layout"/>
+                    <signal name="changed" handler="settings_window_layout"/>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
@@ -581,7 +581,7 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip" translatable="yes" context="yes">Quit preferences</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="settings_close" object="flo_config_window"/>
+                <signal name="clicked" handler="settings_window_close" object="flo_config_window"/>
               </widget>
               <packing>
                 <property name="expand">False</property>
@@ -597,7 +597,7 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip" translatable="yes" context="yes">Cancel</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="settings_rollback" object="flo_config_window"/>
+                <signal name="clicked" handler="settings_window_rollback" object="flo_config_window"/>
               </widget>
               <packing>
                 <property name="fill">False</property>
@@ -612,7 +612,7 @@
                 <property name="receives_default">False</property>
                 <property name="tooltip" translatable="yes" context="yes">Apply changes</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="settings_commit" object="flo_config_window"/>
+                <signal name="clicked" handler="settings_window_commit" object="flo_config_window"/>
               </widget>
               <packing>
                 <property name="expand">False</property>

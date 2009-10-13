@@ -32,10 +32,12 @@
 
 #define EXIT_FAILURE 1
 
-static void usage (int status);
-
 /* The name the program was run with, stripped of any leading path. */
 char *program_name=NULL;
+/* config file, if given as argument, or NULL. */
+char *config_file=NULL;
+/* focus window name, if given as argument, or NULL */
+char *focus=NULL;
 
 /* Option flags and variables */
 static struct option const long_options[] =
@@ -44,15 +46,18 @@ static struct option const long_options[] =
 	{"version", no_argument, 0, 'V'},
 	{"config", no_argument, 0, 'c'},
 	{"debug", no_argument, 0, 'd'},
+	{"no-gnome", no_argument, 0, 'n'},
+	{"focus", optional_argument, 0, 'f'},
+	{"use-config", required_argument, 0, 'u'},
 	{NULL, 0, NULL, 0}
 };
 
+static void usage (int status);
 static int decode_switches (int argc, char **argv);
 
 int main (int argc, char **argv)
 {
 	struct florence *florence;
-	GConfClient *gconfclient;
 	int ret=EXIT_FAILURE;
 	int config;
 	const char *modules;
@@ -68,39 +73,24 @@ int main (int argc, char **argv)
 	flo_info(_("Florence version %s"), VERSION);
 #ifdef ENABLE_XRECORD
 	flo_warn(_("Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xrecord if you are using a recent version of Xorg: --without-xrecord configure option. Use AT-SPI instead. Since XEVIE was dropped from Xorg some months ago, there is no way to provide the same functionality for now. Sorry for the inconvenience."));
+#else
+	flo_info(_("XRECORD has been disabled at compile time."));
 #endif
 
 	gtk_init(&argc, &argv);
 	gconf_init(argc, argv, NULL);
 	g_type_init();
 
-#ifdef ENABLE_AT_SPI
-	gconfclient=gconf_client_get_default();
-	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface", GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
-	if (!gconf_client_get_bool(gconfclient, "/desktop/gnome/interface/accessibility", NULL)) {
-		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Enable accessibility"), NULL, 
-			GTK_STOCK_OK, GTK_STOCK_CANCEL, 
-			"Accessibility is disabled.\n"
-			"Florence requires that accessibility is enabled to function.\n"
-			"Click OK to enable accessibility and restart GNOME.\n"
-			"Alternatively, you may enable accessibility with gnome-at-properties.")) {
-			gconf_client_set_bool(gconfclient, "/desktop/gnome/interface/accessibility", TRUE, NULL);
-			system("gnome-session-save --kill");
-			ret=EXIT_SUCCESS;
-		}
-	} else if (config&1) {
-#else
 	if (config&1) {
-#endif
-		settings_init(TRUE);
+		settings_init(TRUE, config_file);
 		settings();
 		settings_exit();
 		gtk_main();
 	} else {
-		settings_init(FALSE);
+		settings_init(FALSE, config_file);
 	        modules = g_getenv("GTK_MODULES");
 		if (!modules||modules[0]=='\0') putenv("GTK_MODULES=gail:atk-bridge");
-		florence=flo_new();
+		florence=flo_new(!(config&4), focus);
 
 		gtk_main();
 
@@ -109,7 +99,10 @@ int main (int argc, char **argv)
 		putenv("AT_BRIDGE_SHUTDOWN=1");
 		ret=EXIT_SUCCESS;
 	}
+	if (config_file) g_free(config_file);
+	if (focus) g_free(focus);
 
+	trace_exit();
 	return ret;
 }
 
@@ -124,22 +117,27 @@ static int decode_switches (int argc, char **argv)
 		"h"  /* help */
 		"V"  /* version */
 		"c"  /* configuration */
-		"d", /* debug */
+		"d"  /* debug */
+		"n"  /* no gnome */
+		"r"  /* restore focus */
+		"t"  /* keep bringing back to front */
+		"u", /* use config file */
 		long_options, (int *) 0)) != EOF)
 	{
 		switch (c)
 		{
-			case 'V':
-				printf ("Florence (%s) %s\n", argv[0], VERSION);
+			case 'V':printf ("Florence (%s) %s\n", argv[0], VERSION);
 				exit (0);
-			case 'h':
-				usage (0);
-			case 'c':
-				ret|=1; break;
-			case 'd':
-				ret|=2; break;
-			default:
-				usage (EXIT_FAILURE);
+				break;
+			case 'h':usage (0);
+			case 'c':ret|=1; break;
+			case 'd':ret|=2; break;
+			case 'n':ret|=4; break;
+			case 'f':if (g_strdup(optarg)) focus=g_strdup(optarg);
+				else focus=g_strdup("");
+				break;
+			case 'u':config_file=g_strdup(optarg);break;
+			default:usage (EXIT_FAILURE); break;
 		}
 	}
 
@@ -154,10 +152,13 @@ Florence is a simple virtual keyboard for Gnome.\n"), program_name);
 	printf (_("Usage: %s [OPTION]...\n"), program_name);
 	printf (_("\
 Options:\n\
-  -h, --help          display this help and exit\n\
-  -V, --version	      output version information and exit\n\
-  -c, --config        open configuration window\n\
-  -d, --debug         print debug information to stdout\n\n\
+  -h, --help              display this help and exit\n\
+  -V, --version	          output version information and exit\n\
+  -c, --config            open configuration window\n\
+  -d, --debug             print debug information to stdout\n\
+  -n, --no-gnome          use this flag if you are not using GNOME\n\
+  -f, --focus [window]    give the focus to the window\n\
+  -u, --use-config file   use the given config file instead of gconf\n\n\
 Report bugs to <f.agrech@gmail.com>.\n\
 More informations at <http://florence.sourceforge.net>.\n"));
 	exit (status);

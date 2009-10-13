@@ -122,9 +122,25 @@ void key_free(struct key *key)
 	g_free(key);
 }
 
+/* handle X11 errors */
+int key_error_handler(Display *my_dpy, XErrorEvent *event)
+{
+	flo_warn(_("Unable to focus window."));
+	return 0;
+}
+
 /* send a simple key press event */
 void key_simple_press(unsigned int code, struct status *status)
 {
+	struct status_focus *focus;
+	int (*old_handler)(Display *, XErrorEvent *);
+	if ((focus=status_w_focus_get(status))) {
+		old_handler=XSetErrorHandler(key_error_handler);
+		XSetInputFocus(gdk_x11_get_default_xdisplay(), focus->w,
+				focus->revert_to, CurrentTime);
+		XSync(gdk_x11_get_default_xdisplay(), FALSE);
+		XSetErrorHandler(old_handler);
+	}
 #ifdef ENABLE_XTST
 	if (status_spi_is_enabled(status))
 #ifdef ENABLE_AT_SPI
@@ -133,7 +149,7 @@ void key_simple_press(unsigned int code, struct status *status)
 		flo_fatal(_("Unreachable code"));
 #endif
 	else XTestFakeKeyEvent(
-		(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		(Display *)gdk_x11_get_default_xdisplay(),
 		code, TRUE, 0);
 #else
 #ifdef ENABLE_AT_SPI
@@ -155,7 +171,7 @@ void key_simple_release(unsigned int code, struct status *status)
 		flo_fatal(_("Unreachable code"));
 #endif
 	else XTestFakeKeyEvent(
-		(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		(Display *)gdk_x11_get_default_xdisplay(),
 		code, FALSE, 0);
 #else
 #ifdef ENABLE_AT_SPI
@@ -209,10 +225,10 @@ void key_release(struct key *key, struct status *status)
 			case LAYOUT_CLOSE: gtk_main_quit(); break;
 			case LAYOUT_CONFIG: settings(); break;
 			case LAYOUT_MOVE: status_set_moving(status, FALSE); break;
-			case LAYOUT_BIGGER: settings_set_double("window/zoom",
-				settings_get_double("window/zoom")*1.05, TRUE); break;
-			case LAYOUT_SMALLER: settings_set_double("window/zoom",
-				settings_get_double("window/zoom")*0.95, TRUE); break;
+			case LAYOUT_BIGGER: settings_double_set("window/zoom",
+				settings_double_get("window/zoom")*1.05, TRUE); break;
+			case LAYOUT_SMALLER: settings_double_set("window/zoom",
+				settings_double_get("window/zoom")*0.95, TRUE); break;
 			default: flo_warn(_("unknown action key type released = %d"), key->type);
 		}
 		key->pressed=FALSE;

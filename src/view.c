@@ -299,7 +299,7 @@ void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, g
 	view_resize(view);
 }
 
-/* Triggered by gconf when the "zoom" parameter is changed. */
+/* Triggered by gconf when a color parameter is changed. */
 void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
@@ -377,7 +377,7 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
 		view->zoom=(gdouble)pConfig->width/view->vwidth;
 		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
-		else settings_set_double("window/zoom", view->zoom, FALSE);
+		else settings_double_set("window/zoom", view->zoom, FALSE);
 		view->width=pConfig->width; view->height=pConfig->height;
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
@@ -429,14 +429,14 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	
 	/* handle composited transparency */
 	/* TODO: check for transparency support in WM */
-	if (view->composite && settings_get_double("window/opacity")!=100.0) {
-		if (settings_get_double("window/opacity")>100.0 ||
-			settings_get_double("window/opacity")<1.0) {
+	if (view->composite && settings_double_get("window/opacity")!=100.0) {
+		if (settings_double_get("window/opacity")>100.0 ||
+			settings_double_get("window/opacity")<1.0) {
 			flo_error(_("Window opacity out of range (1.0 to 100.0): %f"),
-				settings_get_double("window/opacity"));
+				settings_double_get("window/opacity"));
 		}
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0,
-			(100.0-settings_get_double("window/opacity"))/100.0);
+			(100.0-settings_double_get("window/opacity"))/100.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
@@ -542,7 +542,7 @@ struct view *view_new (struct style *style, GSList *keyboards)
 
 	view->style=style;
 	view->keyboards=keyboards;
-	view->zoom=settings_get_double("window/zoom");
+	view->zoom=settings_double_get("window/zoom");
 	view_set_dimensions(view);
 
 	view->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));

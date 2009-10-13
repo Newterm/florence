@@ -32,6 +32,12 @@
 #include "key.h"
 #include "view.h"
 
+/* describes a window that has the focus */
+struct status_focus {
+	Window w; /* window that has the focus */
+	int revert_to; /* focus state of the focussed window */
+};
+
 /* This represents the status of florence */
 struct status {
 	struct key *focus; /* focus key (key located under the pointer) or NULL */
@@ -42,6 +48,7 @@ struct status {
 	struct view *view; /* view to update on status change */
 	gboolean spi; /* tell if spi events are enabled */
 	gboolean moving; /* true when moving key is pressed */
+	struct status_focus *w_focus; /* window that has the focus, or NULL */
 #ifdef ENABLE_XRECORD
 	XRecordContext RecordContext; /* Context to record keyboard events */
 	Display *data_disp; /* Data display to record events */
@@ -85,7 +92,7 @@ GList *status_pressedkeys_get(struct status *status);
 GdkModifierType status_globalmod_get(struct status *status);
 
 /* allocate memory for status */
-struct status *status_new();
+struct status *status_new(const gchar *focus_back);
 /* liberate status memory */
 void status_free(struct status *status);
 /* reset the status to its original state */
@@ -102,6 +109,9 @@ gboolean status_spi_is_enabled(struct status *status);
 /* set/get moving status */
 void status_set_moving(struct status *status, gboolean moving);
 gboolean status_get_moving(struct status *status);
+
+/* get focussed window */
+struct status_focus *status_w_focus_get(struct status *status);
 
 #endif
 

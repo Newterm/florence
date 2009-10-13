@@ -100,7 +100,7 @@ gpointer status_record_start (gpointer data)
 	int major, minor;
 	XRecordRange *range;
 	XRecordClientSpec client;
-	Display *ctrl_disp=(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window());
+	Display *ctrl_disp=(Display *)gdk_x11_get_default_xdisplay();
 
 	status->data_disp=XOpenDisplay(NULL);
 	if (XRecordQueryVersion(ctrl_disp, &major, &minor)) {
@@ -226,7 +226,7 @@ gdouble status_timer_get(struct status *status)
 {
 	gdouble ret=0.0;
 	if (status->timer)
-		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_get_double("behaviour/auto_click");
+		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_double_get("behaviour/auto_click");
 	return ret;
 }
 
@@ -271,8 +271,66 @@ GdkModifierType status_globalmod_get(struct status *status)
 	return status->globalmod;
 }
 
+/* find a child window of win to focus by its name */
+struct status_focus *status_find_subwin(Window parent, const gchar *win)
+{
+	Window root_return, parent_return;
+	Window *children;
+	guint nchildren, idx;
+	gchar *name;
+	struct status_focus *focus=NULL;
+	XWindowAttributes attrs;
+	if (XQueryTree(gdk_x11_get_default_xdisplay(), parent,
+		&root_return, &parent_return, &children, &nchildren)) {
+		for (idx=0;(idx<nchildren) && (!focus);idx++) {
+			XFetchName(gdk_x11_get_default_xdisplay(), children[idx], &name);
+			XGetWindowAttributes(gdk_x11_get_default_xdisplay(), children[idx], &attrs);
+
+			if (attrs.map_state==IsViewable && name && (!strcmp(name, win))) {
+				focus=g_malloc(sizeof(struct status_focus));
+				if (!focus) flo_fatal(_("Unable to allocate memory for status focus"));
+				focus->w=children[idx];
+				focus->revert_to=RevertToPointerRoot;
+				flo_info(_("Found window %s (ID=%ld)"), win, children[idx]);
+			} else {
+				focus=status_find_subwin(children[idx], win);
+			}
+			if (name) XFree(name);
+		}
+	} else {
+		flo_warn(_("XQueryTree failed."));
+	}
+	return focus;
+}
+
+/* find a window to focus by its name */
+/* TODO: wait for window to exist */
+struct status_focus *status_find_window(const gchar *win)
+{
+	gchar *name;
+	struct status_focus *focus=NULL;
+	if (win && win[0]) {
+		focus=status_find_subwin(gdk_x11_get_default_root_xwindow(), win);
+	}
+	if (!focus) {
+		focus=g_malloc(sizeof(struct status_focus));
+		if (!focus) flo_fatal(_("Unable to allocate memory for status focus"));
+		XGetInputFocus(gdk_x11_get_default_xdisplay(), &(focus->w),
+			&(focus->revert_to));
+		XFetchName(gdk_x11_get_default_xdisplay(), focus->w, &name);
+		if (win[0]) {
+			flo_warn(_("Window not found: %s, using last focused window: %s (ID=%d)"),
+				win, name, focus->w);
+		} else {
+			flo_info(_("Focussing window %s (ID=%d)"), name, focus->w);
+		}
+		if (name) XFree(name);
+	}
+	return focus;
+}
+
 /* allocate memory for status */
-struct status *status_new()
+struct status *status_new(const gchar *focus_back)
 {
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
@@ -282,6 +340,9 @@ struct status *status_new()
 	g_timeout_add(STATUS_EVENTCHECK_INTERVAL, status_record_process, (gpointer)status);
 #endif
 	status->spi=TRUE;
+	if (focus_back) {
+		status->w_focus=status_find_window(focus_back);
+	}
 	return status;
 }
 
@@ -293,6 +354,7 @@ void status_free(struct status *status)
 #endif
 	if (status->timer) g_timer_destroy(status->timer);
 	if (status->pressedkeys) g_list_free(status->pressedkeys);
+	if (status->w_focus) g_free(status->w_focus);
 	if (status) g_free(status);
 }
 
@@ -321,11 +383,15 @@ void status_spi_disable(struct status *status)
 #ifdef ENABLE_XTST
 	int event_base, error_base, major, minor;
 	if (!XTestQueryExtension(
-		(Display *)gdk_x11_drawable_get_xdisplay(gdk_get_default_root_window()),
+		(Display *)gdk_x11_get_default_xdisplay(),
 		&event_base, &error_base, &major, &minor)) {
 		flo_error(_("Neither at-spi nor XTest could be initialized."));
 		flo_fatal(_("There is no way we can send keyboard events."));
-	} else flo_info(_("XTest extension found: version=%d.%d"), major, minor);
+	} else {
+		flo_info(_("At-spi registry daemon is not running. "
+			"XTest extension found: version=%d.%d; "
+			"It will be used instead of at-spi."), major, minor);
+	}
 #else
 	flo_error(_("Xtest extension not compiled in and at-spi not working"));
 	flo_fatal(_("There is no way we can send keyboard events."));
@@ -339,4 +405,7 @@ gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
 /* set/get moving status */
 void status_set_moving(struct status *status, gboolean moving) { status->moving=moving; }
 gboolean status_get_moving(struct status *status) { return status->moving; }
+
+/* get focussed window */
+struct status_focus *status_w_focus_get(struct status *status) { return status->w_focus; }
 

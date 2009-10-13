@@ -23,6 +23,9 @@ glade_DATA=florence.glade
 metadir=$(datadir)/florence
 meta_DATA=florence.rnc florence.css
 
+configdir=$(datadir)/florence
+config_DATA=florence.conf
+
 install-data-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
 

@@ -19,23 +19,24 @@
 
 */
 
-/* initializes the trace module. Must be called before any trace function
- * debug is a boolean. If it's true, the trace module will print debug informations */
-void trace_init(int debug);
-/* liberate any memory used by the trace module */
-void trace_exit();
+/* all the informations related to the settings window */
+struct settings_window {
+	GConfClient *gconfclient;
+	GladeXML *gladexml;
+	GConfChangeSet *gconfchangeset;
+	GConfChangeSet *rollback;
+	gboolean gtk_exit;
+	GtkListStore *style_list;
+	GtkListStore *layout_list;
+	guint notify_id;
+};
 
-void flo_fatal (char *s, ...);
-void flo_error (char *s, ...);
-void flo_warn (char *s, ...);
-void flo_info (char *s, ...);
-void flo_debug (char *s, ...);
-
-#if __GNUC__ >= 2
-#define FLO_FUNC __PRETTY_FUNCTION__
-#else
-#define FLO_FUNC "<unknown>"
-#endif
-
-#define flo_start_func() (g_printf("%d: %s\n", (__LINE__), (FLO_FUNC)))
+/* returns true if settings window is open */
+gboolean settings_window_open(void);
+/* presents the settings window to the user */
+void settings_window_present(void);
+/* opens the settings window */
+void settings_window_new(GConfClient *gconfclient, gboolean exit);
+/* liberate memory used by settings window */
+void settings_window_free();
 
