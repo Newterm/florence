@@ -255,18 +255,7 @@ void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdo
 	else if (value>0.625 && value<0.875) cairo_line_to(cairoctx, 0.0, key->h/2-(key->h/2*tan((value-0.75)*2.0*PI)));
 	cairo_close_path(cairoctx);
 	cairo_clip(cairoctx);
-	cairo_scale(cairoctx, 1.0/z, 1.0/z);
-	cairo_mask_surface(cairoctx, style_shape_get_mask(key->shape, (guint)(z*key->w), (guint)(z*key->h)), 0.0, 0.0);
-	cairo_restore(cairoctx);
-}
-
-/* Draw a colored layer on top of the shape */
-void key_color_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, enum style_colours c)
-{
-	cairo_save(cairoctx);
-	style_cairo_set_color(style, cairoctx, c);
-	cairo_scale(cairoctx, 1.0/z, 1.0/z);
-	cairo_mask_surface(cairoctx, style_shape_get_mask(key->shape, (guint)(z*key->w), (guint)(z*key->h)), 0.0, 0.0);
+	style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_MOUSE_OVER_COLOR);
 	cairo_restore(cairoctx);
 }
 
@@ -275,38 +264,49 @@ void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx)
 {
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
-	style_shape_draw(key->shape, cairoctx, key->w, key->h);
+	style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_KEY_COLOR);
 	cairo_restore(cairoctx);
 }
 
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
-void key_symbol_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod)
+void key_symbol_draw(struct key *key, struct style *style,
+	cairo_t *cairoctx, GdkModifierType mod, gdouble size)
 {
 	cairo_save(cairoctx);
-	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
+	cairo_translate(cairoctx, key->x-(key->w*size/2.0), key->y-(key->h*size/2.0));
+	cairo_scale(cairoctx, size, size);
 	if (key->type==LAYOUT_NORMAL) style_symbol_draw(style, cairoctx, key_getKeyval(key, mod), key->w, key->h);
 	else style_symbol_type_draw(style, cairoctx, key->type, key->w, key->h);
 	cairo_restore(cairoctx);
 }
 
 /* Draw the focus notifier to the cairo surface. */
-void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, gdouble timer)
+void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, struct status *status)
 {
+	gdouble focus_zoom=status_focus_zoom_get(status)?settings_double_get("style/focus_zoom"):1.0;
 	cairo_save(cairoctx);
-	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
-	if (timer>0.0) key_timer_draw(key, style, cairoctx, z, timer);
-	else key_color_draw(key, style, cairoctx, z, STYLE_MOUSE_OVER_COLOR);
+	cairo_translate(cairoctx, key->x-(key->w*focus_zoom/2.0), key->y-(key->h*focus_zoom/2.0));
+	cairo_scale(cairoctx, focus_zoom, focus_zoom);
+	if (status_timer_get(status)>0.0) {
+		style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
+			key->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
+		key_timer_draw(key, style, cairoctx, z*focus_zoom, status_timer_get(status));
+	}
+	else style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
+		key->pressed?STYLE_ACTIVATED_COLOR:STYLE_MOUSE_OVER_COLOR);
 	cairo_restore(cairoctx);
+	key_symbol_draw(key, style, cairoctx, status->globalmod, focus_zoom);
 }
 
 /* Draw the key press notifier to the cairo surface. */
-void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z)
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, struct status *status)
 {
-	if (key->pressed) {
+	if (key->pressed && (key!=status_focus_get(status))) {
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
-		key_color_draw(key, style, cairoctx, z, STYLE_ACTIVATED_COLOR);
+		style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_ACTIVATED_COLOR);
 		cairo_restore(cairoctx);
+		key_symbol_draw(key, style, cairoctx, status->globalmod, 1.0);
 	}
 }
 

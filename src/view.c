@@ -81,8 +81,9 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 		CAIRO_CONTENT_COLOR_ALPHA, view->width, view->height);
 	offscreen=cairo_create(*surface);
 	cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.0);
-	cairo_set_operator(offscreen, CAIRO_OPERATOR_OVER);
+	cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
 	cairo_paint(offscreen);
+	cairo_set_operator(offscreen, CAIRO_OPERATOR_OVER);
 
 	/* browse the keyboards */
 	cairo_save(offscreen);
@@ -234,7 +235,7 @@ void view_create_window_mask(struct view *view)
 	GdkBitmap *mask=NULL;
 	cairo_t *cairoctx=NULL;
 
-	if (settings_get_bool("window/transparent")) {
+	if (settings_get_bool("window/transparent") && (!view->composite)) {
 		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, view->width, view->height, 1)))
 			flo_fatal(_("Unable to create mask"));
 		cairoctx=gdk_cairo_create(mask);
@@ -249,6 +250,7 @@ void view_create_window_mask(struct view *view)
 		cairo_surface_destroy(view->background);
 		view->background=NULL;
 		g_object_unref(G_OBJECT(mask));
+		status_focus_zoom_set(view->status, FALSE);
 	} else {
 		gdk_window_shape_combine_mask(GTK_WIDGET(view->window)->window, NULL, 0, 0);
 	}
@@ -321,7 +323,7 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 void view_update(struct view *view, struct key *key, gboolean statechange)
 {
 	GdkRectangle rect;
-	gdouble x, y, w, h;
+	gdouble x, y, w, h, xmargin, ymargin;
 	GdkCursor *cursor;
 
 	if (key) {
@@ -331,8 +333,15 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			gtk_widget_queue_draw(GTK_WIDGET(view->window));
 		} else {
 			keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
-			rect.x=x*view->zoom-5.0; rect.y=y*view->zoom-5.0;
-			rect.width=w*view->zoom+10.0; rect.height=h*view->zoom+10.0;
+			if (status_focus_zoom_get(view->status)) {
+				xmargin=(w*view->zoom*(settings_double_get("style/focus_zoom")-1.0))+5.0;
+				ymargin=(h*view->zoom*(settings_double_get("style/focus_zoom")-1.0))+5.0;
+			} else {
+				xmargin=5.0;
+				ymargin=5.0;
+			}
+			rect.x=x*view->zoom-xmargin; rect.y=y*view->zoom-ymargin;
+			rect.width=w*view->zoom+(xmargin*2); rect.height=h*view->zoom+(ymargin*2);
 			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
 		}
 	}
@@ -442,34 +451,36 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	}
 
-	cairo_save(context);
-	cairo_scale(context, view->zoom, view->zoom);
-
-	/* focused key */
-	if (status_focus_get(view->status)) {
-		key=status_focus_get(view->status);
-		keyboard=(struct keyboard *)key_get_userdata(key);
-		keyboard_focus_draw(keyboard, context, view->zoom, view->style, key, status_timer_get(view->status));
-	}
-
-	/* draw highlights (pressed keys) */
-	if (list) {
-		while (list) {
-			key=(struct key *)list->data;
-			keyboard=(struct keyboard *)key_get_userdata(key);
-			keyboard_press_draw(keyboard, context, view->zoom, view->style, key);
-			list=list->next;
-		}
-	}
-
-	cairo_restore(context);
-
 	/* draw the symbols */
 	if (!view->symbols) {
 		view_symbols_draw(view, context);
 	}
 	cairo_set_source_surface(context, view->symbols, 0, 0);
 	cairo_paint(context);
+
+	cairo_save(context);
+	cairo_scale(context, view->zoom, view->zoom);
+
+	/* draw highlights (pressed keys) */
+	if (list) {
+		while (list) {
+			key=(struct key *)list->data;
+			keyboard=(struct keyboard *)key_get_userdata(key);
+			keyboard_press_draw(keyboard, context, view->zoom, view->style,
+				key, view->status);
+			list=list->next;
+		}
+	}
+
+	/* focused key */
+	if (status_focus_get(view->status)) {
+		key=status_focus_get(view->status);
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		keyboard_focus_draw(keyboard, context, view->zoom, view->style,
+			key, view->status);
+	}
+
+	cairo_restore(context);
 
 	/* and free up drawing memory */
 	cairo_destroy(context);

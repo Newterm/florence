@@ -153,4 +153,5 @@
 	* restart the auto-click timer after timeout trigger
 	* add the window/keep_on_top parameter
 	* add the --focus option
+	* add the focus_zoom parameter
 

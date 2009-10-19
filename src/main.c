@@ -84,8 +84,8 @@ int main (int argc, char **argv)
 	if (config&1) {
 		settings_init(TRUE, config_file);
 		settings();
-		settings_exit();
 		gtk_main();
+		settings_exit();
 	} else {
 		settings_init(FALSE, config_file);
 	        modules = g_getenv("GTK_MODULES");

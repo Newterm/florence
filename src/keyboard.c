@@ -129,7 +129,7 @@ void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 				key_shape_draw((struct key *)list->data, style, cairoctx);
 				break;
 			case STYLE_SYMBOL:
-				key_symbol_draw((struct key *)list->data, style, cairoctx, mod);
+				key_symbol_draw((struct key *)list->data, style, cairoctx, mod, 1.0);
 				break;
 		}
 		list = list->next;
@@ -151,22 +151,22 @@ void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct
 
 /* draw the focus indicator on a key */
 void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
-	struct style *style, struct key *key, gdouble timer)
+	struct style *style, struct key *key, struct status *status)
 {
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-	key_focus_draw(key, style, cairoctx, z, timer);
+	key_focus_draw(key, style, cairoctx, z, status);
 	cairo_restore(cairoctx);
 }
 
 /* draw the pressed indicator on a key */
 void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
-	struct style *style, struct key *key)
+	struct style *style, struct key *key, struct status *status)
 {
 	if (keyboard_activated(keyboard)) {
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-		key_press_draw(key, style, cairoctx, z);
+		key_press_draw(key, style, cairoctx, z, status);
 		cairo_restore(cairoctx);
 	}
 }

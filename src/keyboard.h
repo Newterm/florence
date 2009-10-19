@@ -81,10 +81,10 @@ void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, GdkModifierType mod);
 /* draw the focus indicator on a key */
 void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
-	struct style *style, struct key *key, gdouble timer);
+	struct style *style, struct key *key, struct status *status);
 /* draw the pressed indicator on a key */
 void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
-	struct style *style, struct key *key);
+	struct style *style, struct key *key, struct status *status);
 
 #endif
 

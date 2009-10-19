@@ -257,6 +257,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 		<para>You should run florence with the --no-gnome option. Modify the desktop file accordingly. not using this option will make florence prompt you with GNOME specific dialogs: not a big deal, but annoying anyway.</para>
 		<para>If your DE is XDG compliant (like XFCE), Florence should be accessible via the menu. Anyway, starting florence from the command line will always work. If you don't have a systray, you can install <ulink url="http://peksystray.sourceforge.net/">peksystray</ulink>. You can also access the preferences dialog with:</para>
 		<para>You can also skip the gconfd process by using a key-value pair file instead. Gconf libraries are still required to compile florence though. Use the --use-config option if you don't want to use gconf (see the configuration section for more information about this option)</para>
+		<para>If your window manager does not support the always_on_top hint, you can use the keep_on_top parameter in gconf (/apps/florence/window/keep_on_top), or in the configuration file in the [window] section. When this parameter is checked, the keyboard will keep bringing itself back to front periodically, so it does not get covered by other windows.</para>
 		<screen>
 <prompt>$</prompt> <userinput>florence --config</userinput>
 		</screen>

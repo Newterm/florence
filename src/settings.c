@@ -49,7 +49,7 @@ struct settings_param settings_defaults[] = {
 	{ "flo_transparent", "window/transparent", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_task_bar", "window/task_bar", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_always_on_top", "window/always_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_keep_on_top", "window/keep_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_NONE, "window/keep_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ SETTINGS_NONE, "behaviour/startup_notification", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_keys", "colours/key", SETTINGS_COLOR, { .vstring = "#000000" } },
 	{ SETTINGS_NONE, "colours/outline", SETTINGS_COLOR, { .vstring = "#808080" } },
@@ -62,6 +62,7 @@ struct settings_param settings_defaults[] = {
 	{ "flo_auto_click", "behaviour/auto_click", SETTINGS_DOUBLE, { .vdouble = 0. } },
 	{ "flo_opacity", "window/opacity", SETTINGS_DOUBLE, { .vdouble = 100. } },
 	{ SETTINGS_NONE, "window/zoom", SETTINGS_DOUBLE, { .vdouble = 20. } },
+	{ "flo_focus_zoom", "style/focus_zoom", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
 	{ SETTINGS_NONE, "window/xpos", SETTINGS_INTEGER, { .vinteger = 0 } },
 	{ SETTINGS_NONE, "window/ypos", SETTINGS_INTEGER, { .vinteger = 0 } },
 	{ NULL } };
@@ -409,30 +410,6 @@ void settings_bool_set(const gchar *name, gboolean value)
 		key=settings_split(name);
 		g_key_file_set_boolean(settings_infos->config, key->group, key->key, value);
 	}
-}
-
-/* Create the $HOME/.florence directory */
-gboolean settings_mkhomedir()
-{ 
-	gchar *filename=g_strdup_printf("%s/.florence", g_getenv("HOME"));
-	struct stat stat;
-	gboolean ret=TRUE;
-
-	/* create the directory if it doesn't exist already */
-	if (lstat(filename, &stat)==0) {
-		if (!S_ISDIR(stat.st_mode)) {
-			flo_warn(_("%s is not a directory"), filename);
-			ret=FALSE;
-		}
-	} else {
-		if (0!=mkdir(filename, S_IRUSR|S_IWUSR|S_IXUSR)) {
-			flo_warn(_("Unable to create directory %s"), filename);
-			ret=FALSE;
-		}
-	}
-	g_free(filename);
-
-	return ret;
 }
 
 /* Displays the settings dialog box on the screen and register events */

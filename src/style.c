@@ -24,6 +24,9 @@
 #include <glib/gprintf.h>
 #include <librsvg/rsvg.h>
 #include <librsvg/rsvg-cairo.h>
+#include <libxml/parser.h>
+#include <libxml/tree.h>
+#include <libxml/xmlsave.h>
 #include "system.h"
 #include "trace.h"
 #include "style.h"
@@ -34,9 +37,7 @@
 #endif
 
 /* Constants */
-static gchar *style_css_file="%s/.florence/florence.css";
 static gchar *style_css_file_source=DATADIR "/florence.css";
-static gchar *style_svg_format="<?xml-stylesheet type=\"text/css\" href=\"%s/.florence/florence.css\"?>%s";
 
 /* a symbol is drawn over the shape to identify the effect of key.
  * the symbol is either text (label) or svg. Either one is NULL */
@@ -83,6 +84,62 @@ void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_co
 	if (color) g_free(color);
 }
 
+/* insert css into an svg string */
+gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
+{
+	xmlSaveCtxtPtr save;
+	xmlBufferPtr buffer=xmlBufferCreate();
+	xmlDocPtr doc=xmlParseDoc((xmlChar *)svg);
+	xmlNodePtr root=xmlDocGetRootElement(doc);
+	FILE *in=fopen(style_css_file_source, "r");
+	xmlNodePtr style=xmlNewNode(NULL, (xmlChar *)"style");
+	gchar *line=g_malloc(1024*sizeof(gchar));
+	gchar *ret=NULL;
+	gchar *cur, *cur2, *color;
+
+	if (!line) flo_warn(_("Unable to allocate memory for css read buffer"));
+	if (line && in) while ((line=fgets(line, 1024, in))) {
+		cur=cur2=line;
+		while ((*(cur++)!='\0') && (cur-line<1023)) {
+			if (!strncmp(cur, "@SHAPE_COLOR@", 13)) {
+				color=style_get_color(c);
+				memcpy((void *)cur, (void *)color, 7);
+				if (color) g_free(color);
+				cur+=7; cur2+=13;
+			} else if (!strncmp(cur, "@BORDER_COLOR@", 14)) {
+				color=style_get_color(STYLE_OUTLINE_COLOR);
+				memcpy((void *)cur, (void *)color, 7);
+				if (color) g_free(color);
+				cur+=7; cur2+=14;
+			} else if (!strncmp(cur, "@SYM_COLOR@", 11)) {
+				color=style_get_color(STYLE_TEXT_COLOR);
+				memcpy((void *)cur, (void *)color, 7);
+				if (color) g_free(color);
+				cur+=7; cur2+=11;
+			}
+			*cur=*(++cur2);
+		}
+		*cur='\0';
+		xmlNodeAddContent(style, (xmlChar *)line);
+	}
+	g_free(line);
+	fclose(in);
+
+	if (strcmp((char *)root->name, "svg"))
+		flo_error("element svg expected, but %s found instead", root->name);
+	xmlAddPrevSibling(xmlFirstElementChild(root), style);
+	save=xmlSaveToBuffer(buffer, NULL, 0);
+	xmlSaveTree(save, root);
+	xmlSaveClose(save);
+	ret=g_strdup((gchar *)xmlBufferContent(buffer));
+
+	xmlFreeDoc(doc);
+	xmlBufferFree(buffer);
+	xmlCleanupParser();
+	xmlMemoryDump();
+	return ret;
+}
+
 /* Renders a svg handle to a cairo surface at dimensions */
 void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub)
 {
@@ -116,6 +173,7 @@ void style_symbol_new(struct style *style, char *name, char *svg, char *label, e
 {
 	GError *error=NULL;
 	gchar *regex=NULL;
+	gchar *source=NULL;
 	struct symbol *symbol=g_malloc(sizeof(struct symbol));
 	memset(symbol, 0, sizeof(struct symbol));
 	if ((type == LAYOUT_NORMAL) && name) {
@@ -126,8 +184,10 @@ void style_symbol_new(struct style *style, char *name, char *svg, char *label, e
 	if (label) {
 		symbol->label=g_strdup(label);
 	} else if (svg) {
-		symbol->source=g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
-		symbol->svg=rsvg_handle_new_from_data((guint8 *)symbol->source, (gsize)strlen(symbol->source), &error);
+		symbol->source=g_strdup(svg);
+		source=style_svg_css_insert(svg, STYLE_KEY_COLOR);
+		symbol->svg=rsvg_handle_new_from_data((guint8 *)source, (gsize)strlen(source), &error);
+		if (source) g_free(source);
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), svg);
 	} else { flo_fatal(_("Bad symbol: should have either svg or label :%s"), name); }
 	if (type != LAYOUT_NORMAL) {
@@ -247,21 +307,25 @@ void style_shape_new(struct style *style, char *name, char *svg)
 {
 	struct shape *shape=g_malloc(sizeof(struct shape));
 	GError *error=NULL;
-	gchar *default_uri;
+	gchar *default_uri, *source;
 	memset(shape, 0, sizeof(struct shape));
 	if (name) shape->name=g_strdup(name);
-	if (svg) shape->source=(guchar *)g_strdup_printf(style_svg_format, g_getenv("HOME"), svg);
+	if (svg) {
+		source=style_svg_css_insert(svg, STYLE_KEY_COLOR);
+		shape->source=(guchar *)g_strdup(svg);
+	}
 	shape->svg=rsvg_handle_new();
 	default_uri=settings_get_string("layout/style");
 	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
 	if (default_uri) g_free(default_uri);
-	rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
+	rsvg_handle_write(shape->svg, (guchar *)source, (gsize)strlen(source), &error);
 	rsvg_handle_close(shape->svg, &error);
 	if (error) flo_fatal(_("Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""),
-		shape->source, error->message);
+		source, error->message);
 	style->shapes=g_slist_append(style->shapes, (gpointer)shape);
 	if (!strcmp(name, "default")) style->default_shape=shape;
-	flo_debug(_("[new shape] name=%s svg=\"%s\""), shape->name, shape->source);
+	flo_debug(_("[new shape] name=%s svg=\"%s\""), shape->name, source);
+	if (source) g_free(source);
 }
 
 /* liberate memory used for shape */
@@ -290,9 +354,29 @@ struct shape *style_shape_get (struct style *style, gchar *name) {
 }
 
 /* draw the shape to the cairo context. */
-void style_shape_draw(struct shape *shape, cairo_t *cairoctx, gdouble w, gdouble h)
+void style_shape_draw(struct style *style, struct shape *shape, cairo_t *cairoctx,
+	gdouble w, gdouble h, enum style_colours c)
 {
-	style_render_svg(cairoctx, shape->svg, w, h, FALSE, NULL);
+	gchar *source, *default_uri;
+	RsvgHandle *svg;
+	GError *error=NULL;
+	if (c==STYLE_KEY_COLOR) {
+		style_render_svg(cairoctx, shape->svg, w, h, FALSE, NULL);
+	} else {
+		svg=rsvg_handle_new();
+		if (style->base_uri) rsvg_handle_set_base_uri(svg, style->base_uri);
+		else {
+			default_uri=settings_get_string("layout/style");
+			rsvg_handle_set_base_uri(svg, default_uri);
+			if (default_uri) g_free(default_uri);
+		}
+		source=style_svg_css_insert((gchar *)shape->source, c);
+		rsvg_handle_write(svg, (guchar *)source, (gsize)strlen(source), &error);
+		rsvg_handle_close(svg, &error);
+		style_render_svg(cairoctx, svg, w, h, FALSE, NULL);
+		if (source) g_free(source);
+		if (svg) rsvg_handle_free(svg);
+	}
 }
 
 /* create a mask surface for the shape, if it doesn't already exist */
@@ -304,7 +388,7 @@ cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h)
 		shape->maskw=w; shape->maskh=h;
 		shape->mask=cairo_image_surface_create(CAIRO_FORMAT_A8, w, h);
 		maskctx=cairo_create(shape->mask);
-		style_shape_draw(shape, maskctx, w, h);
+		style_render_svg(maskctx, shape->svg, w, h, FALSE, NULL);
 		cairo_destroy(maskctx);
 	}
 	return shape->mask;
@@ -319,57 +403,6 @@ gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h)
 	return data[(y*stride)+x]>127;
 }
 
-/* Create a css file called $HOME/.florence/florence.css */
-void style_create_css(struct style *style)
-{ 
- 	GRegex *shapecolor=g_regex_new("@SHAPE_COLOR@", G_REGEX_OPTIMIZE, 0, NULL);
- 	GRegex *symcolor=g_regex_new("@SYM_COLOR@", G_REGEX_OPTIMIZE, 0, NULL);
- 	GRegex *bordercolor=g_regex_new("@BORDER_COLOR@", G_REGEX_OPTIMIZE, 0, NULL);
-	gchar *filename=g_strdup_printf(style_css_file, g_getenv("HOME"));
-	FILE *in;
-	FILE *out;
-	gchar *tmp1, *tmp2, *line, *color;
-
-	/* create the directory if it doesn't exist already */
-	if (!settings_mkhomedir()) {
-		flo_warn(_("Unable to create %s because $HOME/.florence does not exist"), filename);
-		return;
-	}
-
-	/* open the files */
-	in=fopen(style_css_file_source, "r");
-	out=fopen(filename, "w");
-	if (!in) flo_warn(_("Unable to open file %s for read"), style_css_file_source);
-	if (!out) flo_warn(_("Unable to open file %s for write"), filename);
-	g_free(filename);
-
-	/* copy/parse the file */
-	line=g_malloc(1024*sizeof(gchar));
-	if (!line) flo_warn(_("Unable to allocate memory for css read buffer"));
-	if (line && in && out ) while ((line=fgets(line, 1024, in))) {
-		if (!line) flo_fatal("error");
-		color=style_get_color(STYLE_KEY_COLOR);
-		tmp1=g_regex_replace_literal(shapecolor, line, -1, 0, color, 0, NULL);
-		if (color) g_free(color); color=style_get_color(STYLE_TEXT_COLOR);
-		tmp2=g_regex_replace_literal(symcolor, tmp1, -1, 0, color, 0, NULL);
-		g_free(tmp1);
-		if (color) g_free(color); color=style_get_color(STYLE_OUTLINE_COLOR);
-		tmp1=g_regex_replace_literal(bordercolor, tmp2, -1, 0, color, 0, NULL);
-		if (color) g_free(color);
-		g_free(tmp2);
-		fputs(tmp1, out);
-		g_free(tmp1);
-	}
-	if (line) g_free(line);
-
-	/* release memory */
-	g_regex_unref(shapecolor);
-	g_regex_unref(symcolor);
-	g_regex_unref(bordercolor);
-	if (out) fclose(out);
-	if (in) fclose(in);
-}
-
 /* update the colors */
 void style_update_colors (struct style *style)
 {
@@ -378,16 +411,17 @@ void style_update_colors (struct style *style)
 	struct symbol *symbol;
 	struct shape *shape;
 	gchar *default_uri;
-
-	style_create_css(style);
+	gchar *source;
 
 	list=style->symbols;
 	while (list) {
 		symbol=(struct symbol *)list->data;
 		if (symbol->svg) {
 			rsvg_handle_free(symbol->svg);
-			symbol->svg=rsvg_handle_new_from_data((guint8 *)symbol->source, (gsize)strlen(symbol->source), &error);
-			if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), symbol->source);
+			source=style_svg_css_insert(symbol->source, STYLE_KEY_COLOR);
+			symbol->svg=rsvg_handle_new_from_data((guint8 *)source, (gsize)strlen(source), &error);
+			if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), source);
+			if (source) g_free(source);
 		}
 		list=g_slist_next(list);
 	}
@@ -400,9 +434,11 @@ void style_update_colors (struct style *style)
 		default_uri=settings_get_string("layout/style");
 		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
 		if (default_uri) g_free(default_uri);
-		rsvg_handle_write(shape->svg, shape->source, (gsize)strlen((gchar *)shape->source), &error);
+		source=style_svg_css_insert((gchar *)shape->source, STYLE_KEY_COLOR);
+		rsvg_handle_write(shape->svg, (guchar *)source, (gsize)strlen((gchar *)source), &error);
 		rsvg_handle_close(shape->svg, &error);
-		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), shape->source);
+		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), source);
+		if (source) g_free(source);
 		list=g_slist_next(list);
 	}
 }
@@ -428,7 +464,6 @@ struct style *style_new(gchar *base_uri)
 
 	memset(style, 0, sizeof(struct style));
 	style->base_uri=base_uri;
-	style_create_css(style);
 	layout=layoutreader_new(base_uri?base_uri:settings_get_string("layout/style"),
 		DATADIR "/styles/default/florence.style",
 		DATADIR "/relaxng/style.rng");

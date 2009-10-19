@@ -2,7 +2,6 @@
 SUBDIRS=styles layouts relaxng svg11
 
 GCONFTOOL=gconftool-2
-GCONFREFRESH=$(srcdir)/../gconf-refresh
 
 schemadir=@GCONF_SCHEMA_FILE_DIR@
 schemas_in_files=florence.schemas.in

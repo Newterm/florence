@@ -335,6 +335,7 @@ struct status *status_new(const gchar *focus_back)
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
 	memset(status, 0, sizeof(struct status));
+	status_focus_zoom_set(status, TRUE);
 #ifdef ENABLE_XRECORD
 	status_record_start(status);
 	g_timeout_add(STATUS_EVENTCHECK_INTERVAL, status_record_process, (gpointer)status);
@@ -409,3 +410,6 @@ gboolean status_get_moving(struct status *status) { return status->moving; }
 /* get focussed window */
 struct status_focus *status_w_focus_get(struct status *status) { return status->w_focus; }
 
+/* zoom the focused key */
+void status_focus_zoom_set(struct status *status, gboolean focus_zoom) { status->focus_zoom=focus_zoom; }
+gboolean status_focus_zoom_get(struct status *status) { return status->focus_zoom; }

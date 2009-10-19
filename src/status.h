@@ -41,6 +41,7 @@ struct status_focus {
 /* This represents the status of florence */
 struct status {
 	struct key *focus; /* focus key (key located under the pointer) or NULL */
+	gboolean focus_zoom; /* zoom the focused key (if composite screen or mask is disabled) */
 	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
 	struct key *pressed; /* key currently being pressed or NULL */
 	GList *pressedkeys; /* the list of all currently pressed keys */
@@ -112,6 +113,9 @@ gboolean status_get_moving(struct status *status);
 
 /* get focussed window */
 struct status_focus *status_w_focus_get(struct status *status);
+/* zoom the focused key */
+void status_focus_zoom_set(struct status *status, gboolean focus_zoom);
+gboolean status_focus_zoom_get(struct status *status);
 
 #endif
 

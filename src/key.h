@@ -69,11 +69,14 @@ void key_release(struct key *key, struct status *status);
 /* Draw the shape of the key to the cairo surface. */
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
-void key_symbol_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod);
+void key_symbol_draw(struct key *key, struct style *style,
+	cairo_t *cairoctx, GdkModifierType mod, gdouble size);
 /* Draw the focus notifier to the cairo surface. */
-void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, gdouble timer);
+void key_focus_draw(struct key *key, struct style *style,
+	cairo_t *cairoctx, gdouble z, struct status *status);
 /* Draw the key press notifier to the cairo surface. */
-void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z);
+void key_press_draw(struct key *key, struct style *style,
+	cairo_t *cairoctx, gdouble z, struct status *status);
 
 /* setters and getters */
 void key_set_pressed(struct key *key, gboolean pressed);

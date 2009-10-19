@@ -88,8 +88,6 @@ gboolean settings_get_bool(const gchar *name);
 /* set a gconf boolean */
 void settings_bool_set(const gchar *name, gboolean value);
 
-/* Create the $HOME/.florence directory */
-gboolean settings_mkhomedir();
 /* get parameters table */
 struct settings_param *settings_defaults_get(void);
 /* Returns the gconf name of a glade object option according to the name table */
