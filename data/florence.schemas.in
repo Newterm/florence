@@ -95,7 +95,7 @@
 			<applyto>/apps/florence/window/transparent</applyto>
 			<owner>florence</owner>
 			<type>bool</type>
-			<default>false</default>
+			<default>true</default>
 			<locale name="C">
 				<short>Transparent mode</short>
 				<long>To see the windows behind the keyboard.</long>
@@ -106,7 +106,7 @@
 			<applyto>/apps/florence/window/decorated</applyto>
 			<owner>florence</owner>
 			<type>bool</type>
-			<default>true</default>
+			<default>false</default>
 			<locale name="C">
 				<short>Decorate window</short>
 				<long>Window has a title bar and buttons.</long>

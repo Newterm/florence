@@ -42,11 +42,11 @@ struct settings_key {
 struct settings_param settings_defaults[] = {
 	{ "flo_resizable", "window/resizable", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_keep_ratio", "window/keep_ratio", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ "flo_decorated", "window/decorated", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ "flo_decorated", "window/decorated", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_auto_hide", "behaviour/auto_hide", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_move_to_widget", "behaviour/move_to_widget", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_intermediate_icon", "behaviour/intermediate_icon", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_transparent", "window/transparent", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ "flo_transparent", "window/transparent", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_task_bar", "window/task_bar", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_always_on_top", "window/always_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ SETTINGS_NONE, "window/keep_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
