@@ -211,9 +211,6 @@
                         <child>
                           <widget class="GtkHScale" id="flo_focus_zoom">
                             <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="has_default">True</property>
-                            <property name="receives_default">True</property>
                             <property name="adjustment">1.3 1 5 0.10000000000000001 0.5 0.5</property>
                             <signal name="value_changed" handler="settings_window_set_double"/>
                           </widget>
@@ -232,6 +229,8 @@
                     </child>
                   </widget>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
                     <property name="position">2</property>
                   </packing>
                 </child>
