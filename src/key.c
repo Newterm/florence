@@ -271,14 +271,15 @@ void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx)
 
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
 void key_symbol_draw(struct key *key, struct style *style,
-	cairo_t *cairoctx, GdkModifierType mod, gdouble size)
+	cairo_t *cairoctx, GdkModifierType mod, gboolean use_matrix)
 {
-	cairo_save(cairoctx);
-	cairo_translate(cairoctx, key->x-(key->w*size/2.0), key->y-(key->h*size/2.0));
-	cairo_scale(cairoctx, size, size);
+	if (!use_matrix) {
+		cairo_save(cairoctx);
+		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
+	}
 	if (key->type==LAYOUT_NORMAL) style_symbol_draw(style, cairoctx, key_getKeyval(key, mod), key->w, key->h);
 	else style_symbol_type_draw(style, cairoctx, key->type, key->w, key->h);
-	cairo_restore(cairoctx);
+	if (!use_matrix) cairo_restore(cairoctx);
 }
 
 /* Draw the focus notifier to the cairo surface. */
@@ -306,8 +307,8 @@ void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 	}
 	else style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
 		key->pressed?STYLE_ACTIVATED_COLOR:STYLE_MOUSE_OVER_COLOR);
+	key_symbol_draw(key, style, cairoctx, status->globalmod, TRUE);
 	cairo_restore(cairoctx);
-	key_symbol_draw(key, style, cairoctx, status->globalmod, focus_zoom);
 }
 
 /* Draw the key press notifier to the cairo surface. */
@@ -317,8 +318,8 @@ void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdo
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 		style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_ACTIVATED_COLOR);
+		key_symbol_draw(key, style, cairoctx, status->globalmod, TRUE);
 		cairo_restore(cairoctx);
-		key_symbol_draw(key, style, cairoctx, status->globalmod, 1.0);
 	}
 }
 

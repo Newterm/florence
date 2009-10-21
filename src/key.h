@@ -70,7 +70,7 @@ void key_release(struct key *key, struct status *status);
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
 void key_symbol_draw(struct key *key, struct style *style,
-	cairo_t *cairoctx, GdkModifierType mod, gdouble size);
+	cairo_t *cairoctx, GdkModifierType mod, gboolean use_matrix);
 /* Draw the focus notifier to the cairo surface. */
 void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 	gdouble z, gdouble width, gdouble height, struct status *status);

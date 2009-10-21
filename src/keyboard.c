@@ -129,7 +129,7 @@ void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 				key_shape_draw((struct key *)list->data, style, cairoctx);
 				break;
 			case STYLE_SYMBOL:
-				key_symbol_draw((struct key *)list->data, style, cairoctx, mod, 1.0);
+				key_symbol_draw((struct key *)list->data, style, cairoctx, mod, FALSE);
 				break;
 		}
 		list = list->next;
