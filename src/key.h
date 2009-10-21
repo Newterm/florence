@@ -72,8 +72,8 @@ void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
 void key_symbol_draw(struct key *key, struct style *style,
 	cairo_t *cairoctx, GdkModifierType mod, gdouble size);
 /* Draw the focus notifier to the cairo surface. */
-void key_focus_draw(struct key *key, struct style *style,
-	cairo_t *cairoctx, gdouble z, struct status *status);
+void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
+	gdouble z, gdouble width, gdouble height, struct status *status);
 /* Draw the key press notifier to the cairo surface. */
 void key_press_draw(struct key *key, struct style *style,
 	cairo_t *cairoctx, gdouble z, struct status *status);

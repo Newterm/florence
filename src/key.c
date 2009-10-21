@@ -32,6 +32,7 @@
 #ifdef ENABLE_XTST
 #include <X11/extensions/XTest.h>
 #endif
+#include <cairo/cairo-xlib.h>
 
 #define PI M_PI
 
@@ -281,12 +282,23 @@ void key_symbol_draw(struct key *key, struct style *style,
 }
 
 /* Draw the focus notifier to the cairo surface. */
-void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, struct status *status)
+void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
+	gdouble z, gdouble width, gdouble height, struct status *status)
 {
+	cairo_matrix_t matrix;
 	gdouble focus_zoom=status_focus_zoom_get(status)?settings_double_get("style/focus_zoom"):1.0;
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w*focus_zoom/2.0), key->y-(key->h*focus_zoom/2.0));
 	cairo_scale(cairoctx, focus_zoom, focus_zoom);
+
+	/* Make sure all of the key is displayed inside the window */
+	cairo_get_matrix(cairoctx, &matrix);
+	if (((matrix.xx*key->w)+matrix.x0)>width) matrix.x0=width-(matrix.xx*key->w);
+	else if (matrix.x0<0.0) matrix.x0=0.0;
+	if (((matrix.yy*key->h)+matrix.y0)>height) matrix.y0=height-(matrix.yy*key->h);
+	else if (matrix.y0<0.0) matrix.y0=0.0;
+	cairo_set_matrix(cairoctx, &matrix);
+
 	if (status_timer_get(status)>0.0) {
 		style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
 			key->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);

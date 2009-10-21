@@ -69,8 +69,9 @@ gboolean keyboard_activated(struct keyboard *keyboard);
 /* Get the key at position (x,y) */
 struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z);
 /* returns a rectangle containing the key */
-void keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
-	gdouble *x, gdouble *y, gdouble *w, gdouble *h);
+/* WARNING: not thread safe */
+GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
+	gdouble zoom, gboolean focus_zoom);
 
 /* update the relative position of the keyboard to the view */
 void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y);
@@ -79,8 +80,14 @@ void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, str
 /* draw the keyboard symbols  to cairo surface */
 void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, GdkModifierType mod);
+/* clear the focus key from surface */
+void keyboard_shape_clear (struct keyboard *keyboard, cairo_surface_t *surface,
+	struct style *style, struct key *key, gdouble zoom);
+/* add the focus key to surface */
+void keyboard_shape_draw (struct keyboard *keyboard, cairo_surface_t *surface,
+	struct style *style, struct key *key, gdouble zoom);
 /* draw the focus indicator on a key */
-void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, gdouble w, gdouble h,
 	struct style *style, struct key *key, struct status *status);
 /* draw the pressed indicator on a key */
 void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,

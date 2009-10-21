@@ -1,6 +1,7 @@
 Florence can now be used at gdm login time.
 Read the Tips section of the user manual for more information about that.
 You can now use a configuraion file instead of gconf and you can explicitely specify a window to send input events to.
+A new focus zoom parameter hes been added to help visually impaired people (in the style section).
 Florence should aso work better with unusual window managers.
 
 Changelog:

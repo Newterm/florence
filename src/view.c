@@ -27,6 +27,7 @@
 #include "tools.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
+#include <cairo/cairo-xlib.h>
 
 #ifdef ENABLE_AT_SPI
 /* Show the view next to the accessible object if specified. */
@@ -322,8 +323,7 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 /* Redraw the key to the window */
 void view_update(struct view *view, struct key *key, gboolean statechange)
 {
-	GdkRectangle rect;
-	gdouble x, y, w, h, xmargin, ymargin;
+	GdkRectangle *rect;
 	GdkCursor *cursor;
 
 	if (key) {
@@ -332,17 +332,9 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			view->symbols=NULL;
 			gtk_widget_queue_draw(GTK_WIDGET(view->window));
 		} else {
-			keyboard_key_getrect((struct keyboard *)key_get_userdata(key), key, &x, &y, &w, &h);
-			if (status_focus_zoom_get(view->status)) {
-				xmargin=(w*view->zoom*(settings_double_get("style/focus_zoom")-1.0))+5.0;
-				ymargin=(h*view->zoom*(settings_double_get("style/focus_zoom")-1.0))+5.0;
-			} else {
-				xmargin=5.0;
-				ymargin=5.0;
-			}
-			rect.x=x*view->zoom-xmargin; rect.y=y*view->zoom-ymargin;
-			rect.width=w*view->zoom+(xmargin*2); rect.height=h*view->zoom+(ymargin*2);
-			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+			rect=keyboard_key_getrect((struct keyboard *)key_get_userdata(key),
+				key, view->zoom, status_focus_zoom_get(view->status));
+			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, rect, TRUE);
 		}
 	}
 	if (status_focus_get(view->status)) { if (!view->hand_cursor) {
@@ -404,10 +396,12 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 /* on expose event: draws the keyboards to the window */
 void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 {
-	cairo_t *context;
+	cairo_t *context, *offscreen;
+	cairo_surface_t *surface;
 	GList *list=status_pressedkeys_get(view->status);
 	struct keyboard *keyboard;
 	struct key *key;
+	GdkRectangle *rect;
 
 	/* Don't need to redraw several times in one chunk */
 	if (!view->redraw) view->redraw=gdk_region_new();
@@ -432,9 +426,35 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	if (!view->background) {
 		view_background_draw(view, context);
 	}
+	/* remove focused key */
+	if (status_focus_get(view->status)) {
+		key=status_focus_get(view->status);
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		rect=keyboard_key_getrect(keyboard,
+			key, view->zoom, status_focus_zoom_get(view->status));
+		surface=cairo_surface_create_similar(view->background,
+			CAIRO_CONTENT_COLOR_ALPHA, rect->width, rect->height);
+		offscreen=cairo_create(surface);
+		cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+		cairo_set_source_surface(offscreen, view->background, -rect->x, -rect->y);
+		cairo_paint(offscreen);
+		cairo_destroy(offscreen);
+		keyboard_shape_clear(keyboard, view->background, view->style, key, view->zoom);
+	}
 	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	cairo_set_source_surface(context, view->background, 0, 0);
 	cairo_paint(context);
+	/* put the focused key back */
+	if (status_focus_get(view->status)) {
+		offscreen=cairo_create(view->background);
+		cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+		cairo_set_source_surface(offscreen, surface, rect->x, rect->y);
+		cairo_rectangle(offscreen, (gdouble)rect->x, (gdouble)rect->y,
+			(gdouble)rect->width, (gdouble)rect->height);
+		cairo_fill(offscreen);
+		cairo_destroy(offscreen);
+		cairo_surface_destroy(surface);
+	}
 	
 	/* handle composited transparency */
 	/* TODO: check for transparency support in WM */
@@ -476,8 +496,10 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	if (status_focus_get(view->status)) {
 		key=status_focus_get(view->status);
 		keyboard=(struct keyboard *)key_get_userdata(key);
-		keyboard_focus_draw(keyboard, context, view->zoom, view->style,
-			key, view->status);
+		keyboard_focus_draw(keyboard, context, view->zoom,
+			(gdouble)cairo_xlib_surface_get_width(view->background),
+			(gdouble)cairo_xlib_surface_get_height(view->background),
+			view->style, key, view->status);
 	}
 
 	cairo_restore(context);
