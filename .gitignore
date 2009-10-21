@@ -1,0 +1,16 @@
+*~
+Makefile
+Makefile.in
+aclocal.m4
+autom4te.cache/
+config.h
+config.h.in
+config.log
+config.status
+configure
+gnome-doc-utils.make
+intltool-extract.in
+intltool-merge.in
+intltool-update.in
+mkinstalldirs
+stamp-h1
