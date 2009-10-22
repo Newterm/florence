@@ -162,6 +162,7 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 			<listitem><para>Activated keys colour: set the background colour of the keys that are pressed or locked.</para></listitem>
 			<listitem><para>Focused key colour: set the background colour of the key that is under the pointer.</para></listitem>
 			<listitem><para>Symbol colour: set the colour of the symbol or text printed on keys.</para></listitem>
+			<listitem><para>Focus zoom: set the scaling factor of the focused key. Useful for visualy impaired people.</para></listitem>
 		</orderedlist>
 		</sect3><sect3><title>Window configuration</title>
 		<figure id="window">
@@ -281,6 +282,10 @@ GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr
 		</programlisting>
 		<para>You should delete any other line starting with &lt;mouse1&gt;, &lt;mouse2&gt; or &lt;mouse3&gt; in order to prevent any other keyboard from starting instead of florence (like gok).</para>
 		<para>When you have edited those two files, you should be able to start florence at next boot at gdm login. Press any mouse button for more than 2 seconds on the login window to do so.</para>
+		<para>You can modify the keyboard settings for GDM as root with this command:</para>
+		<screen>
+<prompt>#</prompt> <userinput>florence -c --use-config /usr/share/florence/florence.conf</userinput>
+		</screen>
 	</sect2>
 </sect1>
 <sect1 id="faq">
