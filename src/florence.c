@@ -373,7 +373,7 @@ gboolean flo_timer_update(gpointer data)
 /* bring the window back to front: to be calles periodically */
 gboolean flo_to_top(gpointer data)
 {
-	gtk_window_present((GtkWindow *)data);
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(data))) gtk_window_present(GTK_WINDOW(data));
 	return TRUE;
 }
 
