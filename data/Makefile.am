@@ -30,3 +30,8 @@ install-data-local:
 
 uninstall-local:
 	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-uninstall-rule $(srcdir)/$(schema_DATA)
+
+EXTRA_DIST = $(config_DATA) $(desktop_DATA) $(desktop_in_files) $(glade_DATA) $(icons_DATA) $(meta_DATA) $(shema_DATA)\
+             $(schemas_in_files) florence.schemas florence.desktop
+DISTCLEANFILES = $(desktop_DATA) $(shema_DATA) florence.schemas florence.desktop
+

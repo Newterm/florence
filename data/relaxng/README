@@ -3,7 +3,7 @@ WARNING
 
 All the rng files in this directory are generated from rnc files.
 All the source rnc files are located in the upward directory.
-Use Trang to regenerate the rng fioes from the rnc ones:
+Use Trang to regenerate the rng files from the rnc ones:
 http://www.thaiopensource.com/relaxng/trang.html
 
 java -jar trang.jar -I rnc -O rng florence.rnc florence.rng

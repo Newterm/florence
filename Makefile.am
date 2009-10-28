@@ -4,7 +4,8 @@ SUBDIRS = src data po
 
 RUNTESTDEFAULTFLAGS = --tool style --srcdir $srcdir/testsuite
 
-EXTRA_DIST = AUTHORS ChangeLog NEWS README COPYING COPYING-DOCS intltool-extract.in intltool-merge.in intltool-update.in
+EXTRA_DIST = AUTHORS ChangeLog NEWS README COPYING COPYING-DOCS\
+             autogen.sh
 
 if WITH_DOCS
    SUBDIRS += docs
