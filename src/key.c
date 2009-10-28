@@ -110,7 +110,7 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata,
 		key->h=lkey->size.h==0.0?2.0:lkey->size.h;
 		key->userdata=userdata;
 		layoutreader_key_free(lkey);
-		flo_debug(_("[new key] code=%d x=%f y=%f w=%f h=%f"),
+		flo_debug("[new key] code=%d x=%f y=%f w=%f h=%f",
 			key->code, key->x, key->y, key->w, key->h);
 	}
 

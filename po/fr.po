@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-21 18:22+0200\n"
-"PO-Revision-Date: 2009-10-21 18:21+0200\n"
+"POT-Creation-Date: 2009-10-28 15:17+0100\n"
+"PO-Revision-Date: 2009-10-28 15:17+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../data/florence.desktop.in.h:1 ../src/trayicon.c:32 ../src/trayicon.c:177
+#: ../data/florence.desktop.in.in.h:1 ../src/trayicon.c:37
+#: ../src/trayicon.c:188
 msgid "Florence Virtual Keyboard"
 msgstr "Clavier virtuel Florence"
 
@@ -421,15 +422,18 @@ msgstr "Touches de florence"
 
 #: ../data/layouts/florence.xml.in.in.h:2
 #: ../data/layouts/compact.xml.in.in.h:2
+#: ../data/layouts/florence-alt.xml.in.in.h:2
 msgid "Function keys"
 msgstr "Touches de fonction"
 
 #: ../data/layouts/florence.xml.in.in.h:3
+#: ../data/layouts/florence-alt.xml.in.in.h:3
 msgid "Navigation keys"
 msgstr "Touches de navigation"
 
 #: ../data/layouts/florence.xml.in.in.h:4
 #: ../data/layouts/compact.xml.in.in.h:3
+#: ../data/layouts/florence-alt.xml.in.in.h:4
 msgid "Numeric keys"
 msgstr "Touches numériques"
 
@@ -440,6 +444,10 @@ msgstr "Clavier standard"
 #: ../data/layouts/compact.xml.in.in.h:1
 msgid "Compact keyboard"
 msgstr "Clavier compact"
+
+#: ../data/layouts/florence-alt.xml.in.in.h:1
+msgid "Alternative keyboard"
+msgstr "Clavier alternatif"
 
 #: ../data/styles/default/symbols.xml.in.h:1
 msgid "F1"
@@ -939,11 +947,11 @@ msgstr ""
 "et envoyez le résultat à f.agrech@gmail.com\n"
 "\n"
 
-#: ../src/trayicon.c:33
+#: ../src/trayicon.c:38
 msgid "Copyright (C) 2008, 2009 François Agrech"
 msgstr "Copyright (C) 2008, 2009 François Agrech"
 
-#: ../src/trayicon.c:36
+#: ../src/trayicon.c:41
 msgid ""
 "Copyright (C) 2008, 2009 François Agrech\n"
 "\n"
@@ -981,40 +989,40 @@ msgstr ""
 "(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
 "programme a une valeur légale et s'applique à ce programme."
 
-#: ../src/trayicon.c:60
+#: ../src/trayicon.c:66 ../src/trayicon.c:69 ../src/settings-window.c:296
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: ../src/trayicon.c:88
+#: ../src/trayicon.c:99
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: ../src/trayicon.c:94
+#: ../src/trayicon.c:105
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../src/trayicon.c:100
+#: ../src/trayicon.c:111
 msgid "_About"
 msgstr "A p_ropos"
 
-#: ../src/trayicon.c:105
+#: ../src/trayicon.c:116
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ../src/trayicon.c:135
+#: ../src/trayicon.c:146
 msgid "Florence"
 msgstr "Florence"
 
-#: ../src/trayicon.c:135
+#: ../src/trayicon.c:146
 msgid "libnotify failed to initialize"
 msgstr "Echec de l'initialisation de libnotify"
 
-#: ../src/trayicon.c:137
+#: ../src/trayicon.c:148
 msgid "Florence is running"
 msgstr "Florence est lancée"
 
-#: ../src/trayicon.c:138
+#: ../src/trayicon.c:149
 msgid ""
 "Click on Florence smile to show/hide Florence.\n"
 "Right click on it to display menu and get help."
@@ -1022,11 +1030,11 @@ msgstr ""
 "Cliquez sur le sourire de Florence pour afficher/cacher Florence.\n"
 "Cliquez droit pour afficher le menu et obtenir de l'aide."
 
-#: ../src/trayicon.c:142
+#: ../src/trayicon.c:153
 msgid "Do not show again"
 msgstr "Ne plus afficher"
 
-#: ../src/trayicon.c:145
+#: ../src/trayicon.c:156
 msgid "Notification failed"
 msgstr "Echec de notification"
 
@@ -1072,6 +1080,56 @@ msgstr "Impossible de créer le composant depuis l'objet accessible"
 msgid "unable to allocate memory for string"
 msgstr "Impossible d'allouer de la mémoire pour la chaîne de caractère"
 
+#: ../src/key.c:129
+msgid "Unable to focus window."
+msgstr "Impossible de sélectionner la fenêtre."
+
+#: ../src/key.c:150 ../src/key.c:172
+msgid "Unreachable code"
+msgstr "Code impossible à atteindre"
+
+#: ../src/key.c:200
+#, c-format
+msgid "unknown action key type pressed = %d"
+msgstr "Un type de touche action inconnu a été pressé: %s"
+
+#: ../src/key.c:233
+#, c-format
+msgid "unknown action key type released = %d"
+msgstr "Un type de touche action inconnu a été libéré: %s"
+
+#: ../src/settings-window.c:110 ../src/settings-window.c:149
+#, c-format
+msgid "Couldn't open directory %s"
+msgstr "Impossible d'ouvrir le répertoire %s"
+
+#: ../src/settings-window.c:137
+#, c-format
+msgid "Unable to create preview for style %s"
+msgstr "Impossible de créer un aperçu pour le style %s"
+
+#: ../src/settings-window.c:265
+#, c-format
+msgid "unknown setting type: %d"
+msgstr "type de paramètre inconnu: %s"
+
+#: ../src/settings-window.c:292
+#, c-format
+msgid "Unable to open %s: %s"
+msgstr "Impossible d'ouvrir %s: %s"
+
+#: ../src/settings-window.c:385
+msgid "Can't get gconf value %"
+msgstr "Echec de récupération de la valeur gconf %s"
+
+#: ../src/settings-window.c:454
+msgid "Confirm"
+msgstr "Confirmation"
+
+#: ../src/settings-window.c:455
+msgid "Discard changes?"
+msgstr "Abandonner les changements?"
+
 #~ msgid "%s is not a directory"
 #~ msgstr "%s n'est pas un répertoire"
 
@@ -1086,21 +1144,6 @@ msgstr "Impossible d'allouer de la mémoire pour la chaîne de caractère"
 
 #~ msgid "Unable to open file %s for write"
 #~ msgstr "Impossible d'ouvrir le fichier %s en écriture"
-
-#~ msgid "Couldn't open directory %s"
-#~ msgstr "Impossible d'ouvrir le répertoire %s"
-
-#~ msgid "Unable to create preview for style %s"
-#~ msgstr "Impossible de créer un aperçu pour le style %s"
-
-#~ msgid "Can't get gconf value %"
-#~ msgstr "Echec de récupération de la valeur gconf %s"
-
-#~ msgid "Corfirm"
-#~ msgstr "Confirmation"
-
-#~ msgid "Discard changes?"
-#~ msgstr "Abandonner les changements?"
 
 #~ msgid "Incorrect gconf value for %s"
 #~ msgstr "Valeur gconf incorrecte pour %s"
