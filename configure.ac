@@ -56,6 +56,7 @@ PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 if test "x$with_docs" != "xno"; then
 	PKG_CHECK_MODULES([GNOME_DOC_UTILS], [gnome-doc-utils], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find gnome-doc-utils.
 Please either install gnome-doc-utils package or disable docs: --without-docs configure option))
+	AM_PATH_GTK_2_0(2.14.0,,PKG_CHECK_MODULES([LIBGNOME], [libgnome-2.0], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find libgnome. Please either install libgnome package or disable docs: --without-docs configure option)))
 fi
 if test "x$with_notification" != "xno"; then
 	PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], AC_DEFINE([ENABLE_NOTIFICATION], [], [Notification enabled.]), AC_MSG_ERROR(Could not configure libnotify. Please either install libnotify or disable notifications: --without-notification configure option))

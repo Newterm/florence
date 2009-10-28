@@ -29,7 +29,10 @@
 #include <glade/glade.h>
 #include <glib/gprintf.h>
 #ifdef ENABLE_HELP
-#include <gdk/gdkkeysyms.h>
+	#include <gdk/gdkkeysyms.h>
+	#if !GTK_CHECK_VERSION(2,14,0)
+		#include <libgnome/gnome-help.h>
+	#endif
 #endif
 #include "settings.h"
 #include "trace.h"
@@ -284,9 +287,15 @@ void settings_window_help(GtkWidget *widget, GdkEventKey *event, gpointer user_d
 #ifdef ENABLE_HELP
 	GError *error=NULL;
 	if (event->keyval==GDK_F1) {
+#if GTK_CHECK_VERSION(2,14,0)
 		gtk_show_uri(NULL, "ghelp:florence?config", gtk_get_current_event_time(), &error);
 		if (error) flo_error(_("Unable to open %s: %s"), "ghelp:florence?config",
 			error->message);
+#else
+		if (!gnome_help_display_uri("ghelp:florence?config", NULL)) {
+			flo_error(_("Unable to open %s"), "ghelp:florence?config");
+		}
+#endif
 	}
 #endif
 }
