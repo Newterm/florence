@@ -144,7 +144,7 @@
 	* Fix high CPU workload problem.
 	* Listen to gdk keys-changed event.
 
-2009-10-10 François Agrech <f.agrech@gmail.com>
+2009-11-03 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.5
 	* Add hard coded default settings
 	* Add the --no-gnome runtime option
@@ -154,4 +154,5 @@
 	* add the window/keep_on_top parameter
 	* add the --focus option
 	* add the focus_zoom parameter
+	* bug fixes
 
