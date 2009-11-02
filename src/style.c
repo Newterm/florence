@@ -403,44 +403,55 @@ gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h)
 	return data[(y*stride)+x]>127;
 }
 
+/* update the color of one item */
+void style_update_color (gchar *source, RsvgHandle **svg, gchar *default_uri)
+{
+	GError *error=NULL;
+	gchar *source_with_css;
+	if (*svg) {
+		rsvg_handle_free(*svg);
+		source_with_css=style_svg_css_insert(source, STYLE_KEY_COLOR);
+		*svg=rsvg_handle_new();
+		if (default_uri) rsvg_handle_set_base_uri(*svg, default_uri);
+		rsvg_handle_write(*svg, (guchar *)source_with_css,
+			(gsize)strlen((gchar *)source_with_css), &error);
+		rsvg_handle_close(*svg, &error);
+		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), source_with_css);
+		if (source_with_css) g_free(source_with_css);
+	}
+}
+
 /* update the colors */
 void style_update_colors (struct style *style)
 {
-	GError *error=NULL;
 	GSList *list;
 	struct symbol *symbol;
 	struct shape *shape;
 	gchar *default_uri;
-	gchar *source;
 
 	list=style->symbols;
 	while (list) {
 		symbol=(struct symbol *)list->data;
-		if (symbol->svg) {
-			rsvg_handle_free(symbol->svg);
-			source=style_svg_css_insert(symbol->source, STYLE_KEY_COLOR);
-			symbol->svg=rsvg_handle_new_from_data((guint8 *)source, (gsize)strlen(source), &error);
-			if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), source);
-			if (source) g_free(source);
-		}
+		style_update_color(symbol->source, &(symbol->svg), NULL);
+		list=g_slist_next(list);
+	}
+
+	list=style->type_symbols;
+	while (list) {
+		symbol=(struct symbol *)list->data;
+		style_update_color(symbol->source, &(symbol->svg), NULL);
 		list=g_slist_next(list);
 	}
 
 	list=style->shapes;
+	default_uri=settings_get_string("layout/style");
 	while (list) {
 		shape=(struct shape *)list->data;
-		if (shape->svg) rsvg_handle_free(shape->svg);
-		shape->svg=rsvg_handle_new();
-		default_uri=settings_get_string("layout/style");
-		rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
-		if (default_uri) g_free(default_uri);
-		source=style_svg_css_insert((gchar *)shape->source, STYLE_KEY_COLOR);
-		rsvg_handle_write(shape->svg, (guchar *)source, (gsize)strlen((gchar *)source), &error);
-		rsvg_handle_close(shape->svg, &error);
-		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), source);
-		if (source) g_free(source);
+		style_update_color((gchar *)shape->source, &(shape->svg),
+			style->base_uri?style->base_uri:default_uri);
 		list=g_slist_next(list);
 	}
+	if (default_uri) g_free(default_uri);
 }
 
 /* draw a style preview to a 32x32 gdk pixbuf 
