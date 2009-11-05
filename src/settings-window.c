@@ -30,6 +30,7 @@
 #include <glib/gprintf.h>
 #ifdef ENABLE_HELP
 	#include <gdk/gdkkeysyms.h>
+	#include <gtk/gtkversion.h>
 	#if !GTK_CHECK_VERSION(2,14,0)
 		#include <libgnome/gnome-help.h>
 	#endif

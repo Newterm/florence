@@ -127,7 +127,7 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 
 	if (strcmp((char *)root->name, "svg"))
 		flo_error("element svg expected, but %s found instead", root->name);
-	xmlAddPrevSibling(xmlFirstElementChild(root), style);
+	xmlAddPrevSibling(root->children, style);
 	save=xmlSaveToBuffer(buffer, NULL, 0);
 	xmlSaveTree(save, root);
 	xmlSaveClose(save);
@@ -140,12 +140,24 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 	return ret;
 }
 
+/* check for cairo status */
+void style_cairo_status_check(cairo_t *cairoctx)
+{
+	if (cairo_status(cairoctx)) {
+		if (cairo_status(cairoctx)==CAIRO_STATUS_NO_MEMORY)
+			flo_warn(_("Out of memory. Some symbols may not be displayed correctly."));
+		else
+			flo_warn(_("A cairo error occured: %d"), cairo_status(cairoctx));
+	}
+}
+
 /* Renders a svg handle to a cairo surface at dimensions */
 void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub)
 {
 	gdouble xscale, yscale;
 	gdouble xoffset=0., yoffset=0.;
 	RsvgDimensionData dimensions;
+	style_cairo_status_check(cairoctx);
 	rsvg_handle_get_dimensions(handle, &dimensions);
 	cairo_save(cairoctx);
 	if (keep_ratio) {
@@ -230,6 +242,8 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	GtkSettings *settings=gtk_settings_get_default();
 	cairo_font_slant_t slant;
 
+	style_cairo_status_check(cairoctx);
+
 	g_object_get(settings, "gtk-font-name", &fontname, NULL);
 	fontdesc=pango_font_description_from_string(fontname?fontname:"sans 10");
 	g_free(fontname);
@@ -276,7 +290,7 @@ void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdo
 		}
 		if (!name[0]) name[g_unichar_to_utf8(gdk_keyval_to_unicode(keyval2), name)]='\0';
 		/* if (!name[0] && gdk_keyval_name(keyval)) { strncpy(name, gdk_keyval_name(keyval), 3); name[3]='\0'; } */
-		style_draw_text(style, cairoctx, name, w, h);
+		if (*name) style_draw_text(style, cairoctx, name, w, h);
 	/* the symbol has a label ==> let's draw it */
 	} else if (((struct symbol *)item->data)->label) {
 		style_draw_text(style, cairoctx, ((struct symbol *)item->data)->label, w, h);

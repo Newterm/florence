@@ -23,6 +23,8 @@
 #include "system.h"
 #include <glib/gprintf.h>
 #include <glib/gutils.h>
+#include <glib/gslist.h>
+#include <glib/gstrfuncs.h>
 #include <stdio.h>
 #include <stdarg.h>
 

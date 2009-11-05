@@ -105,7 +105,8 @@ gboolean tools_regex_match(gchar *regex, gchar *text)
 {
 	gboolean match=FALSE;
 	if ((!strchr(regex, '(')) && (!strchr(regex, '['))) {
-		match=(!strncmp(regex+1, text, strlen(regex)-2));
+		match=((!strncmp(regex+1, text, strlen(regex)-2))&&
+			(!strncmp(regex+1, text, strlen(text))));
 	} else if (!strcmp(regex, "^Control_[LR]$"))
 		match=(!strcmp(text, "Control_L")) || (!strcmp(text, "Control_R"));
 	else if (!strcmp(regex, "^Super_[LR]$"))

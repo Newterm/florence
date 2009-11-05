@@ -63,6 +63,13 @@ A Timer-based auto-click functionality is available to help disabled people havi
 		<para>How to install those dependencies is dependant on your distribution. Usually, you need to install the devel packages of the dependencies. Below is a list of how to do it via the command line interface on the most common distributions. If your distribution is not listed and you don't know how to install, you may check with your distribution support.</para>
 		<orderedlist>
 			<listitem>
+				<para>Red Hat/CentOS
+				<screen>
+<prompt>$</prompt> <userinput>su</userinput>
+<prompt>#</prompt> <userinput>yum install gcc make libxml2-devel libglade2-devel at-spi-devel \</userinput>
+<prompt>#</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel libXtst-devel gnome-doc-utils \</userinput>
+<prompt>#</prompt> <userinput>gettext intltool</userinput>
+				</screen></para>
 				<para><ulink url="http://www.mandriva.com/">Mandriva</ulink>
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
