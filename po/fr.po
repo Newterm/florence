@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-10-28 15:17+0100\n"
-"PO-Revision-Date: 2009-10-28 15:17+0100\n"
+"POT-Creation-Date: 2009-11-06 08:27+0100\n"
+"PO-Revision-Date: 2009-11-06 08:26+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -890,55 +890,66 @@ msgstr "Echec d'analyse de la couleur %s"
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
-#: ../src/style.c:191 ../src/style.c:423 ../src/style.c:440
+#: ../src/style.c:148
+msgid "Out of memory. Some symbols may not be displayed correctly."
+msgstr ""
+"Manque de mémoire pour afficher les symboles. Certains symboles pourraient "
+"ne pas être affichés correctement"
+
+#: ../src/style.c:150
+#, c-format
+msgid "A cairo error occured: %d"
+msgstr "Une erreur de cairo est survenue: %d"
+
+#: ../src/style.c:203 ../src/style.c:433
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
 
-#: ../src/style.c:192
+#: ../src/style.c:204
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
 
-#: ../src/style.c:241
+#: ../src/style.c:255
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "dérivation de la police %s inconnu: %d"
 
-#: ../src/style.c:296
+#: ../src/style.c:310
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Aucun symbole trouvé pour la touche d'acion %d dans le style"
 
-#: ../src/style.c:323
+#: ../src/style.c:337
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Echec de l'analyse du svg depuis le ficher d'agencement: svg=\"%s\" erreur="
 "\"%s\""
 
-#: ../src/style.c:327
+#: ../src/style.c:341
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nouvelle forme] nom=%s svg=\"%s\""
 
-#: ../src/style.c:350
+#: ../src/style.c:364
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "La forme %s n'existe pas pour le style sélectionné."
 
-#: ../src/trace.c:81
+#: ../src/trace.c:83
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "ERREUR FATALE: "
 
-#: ../src/trace.c:87
+#: ../src/trace.c:89
 #, c-format
 msgid "If you need help, please rerun with the -d switch (debug)\n"
 msgstr ""
 "Si vous avez besoin d'aide, veuillez relancer avec l'option -d (debug) SVP\n"
 
-#: ../src/trace.c:88
+#: ../src/trace.c:90
 #, c-format
 msgid ""
 "and send the output to f.agrech@gmail.com\n"
@@ -989,7 +1000,7 @@ msgstr ""
 "(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
 "programme a une valeur légale et s'applique à ce programme."
 
-#: ../src/trayicon.c:66 ../src/trayicon.c:69 ../src/settings-window.c:296
+#: ../src/trayicon.c:66 ../src/trayicon.c:69 ../src/settings-window.c:297
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
@@ -1076,7 +1087,7 @@ msgstr "Objet accessible NULL, impossible de déplacer la fenêtre"
 msgid "Unable to get component from accessible object"
 msgstr "Impossible de créer le composant depuis l'objet accessible"
 
-#: ../src/tools.c:146
+#: ../src/tools.c:147
 msgid "unable to allocate memory for string"
 msgstr "Impossible d'allouer de la mémoire pour la chaîne de caractère"
 
@@ -1098,35 +1109,35 @@ msgstr "Un type de touche action inconnu a été pressé: %s"
 msgid "unknown action key type released = %d"
 msgstr "Un type de touche action inconnu a été libéré: %s"
 
-#: ../src/settings-window.c:110 ../src/settings-window.c:149
+#: ../src/settings-window.c:111 ../src/settings-window.c:150
 #, c-format
 msgid "Couldn't open directory %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
 
-#: ../src/settings-window.c:137
+#: ../src/settings-window.c:138
 #, c-format
 msgid "Unable to create preview for style %s"
 msgstr "Impossible de créer un aperçu pour le style %s"
 
-#: ../src/settings-window.c:265
+#: ../src/settings-window.c:266
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "type de paramètre inconnu: %s"
 
-#: ../src/settings-window.c:292
+#: ../src/settings-window.c:293
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Impossible d'ouvrir %s: %s"
 
-#: ../src/settings-window.c:385
+#: ../src/settings-window.c:386
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings-window.c:454
+#: ../src/settings-window.c:455
 msgid "Confirm"
 msgstr "Confirmation"
 
-#: ../src/settings-window.c:455
+#: ../src/settings-window.c:456
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
