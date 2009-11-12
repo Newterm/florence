@@ -25,7 +25,7 @@
 <informations>
 	<_name>Alternative keyboard</_name>
 	<author>François Agrech</author>
-	<date>2009-06-12</date>
+	<date>2009-11-12</date>
 	<florence_version>@VERSION@</florence_version>
 </informations>
 
@@ -613,6 +613,41 @@
 		<code>110</code>
 		<xpos>43</xpos>
 		<ypos>1</ypos>
+	</key>
+	</keyboard>
+</extension>
+
+<extension>
+	<_name>Florence keys</_name>
+	<identifiant>actionkys</identifiant>
+	<placement>left</placement>
+	<keyboard>
+	<width>2</width>
+	<height>10</height>
+	<key>
+		<action>close</action>
+		<xpos>1</xpos>
+		<ypos>1</ypos>
+	</key>
+	<key>
+		<action>config</action>
+		<xpos>1</xpos>
+		<ypos>3</ypos>
+	</key>
+	<key>
+		<action>move</action>
+		<xpos>1</xpos>
+		<ypos>5</ypos>
+	</key>
+	<key>
+		<action>bigger</action>
+		<xpos>1</xpos>
+		<ypos>7</ypos>
+	</key>
+	<key>
+		<action>smaller</action>
+		<xpos>1</xpos>
+		<ypos>9</ypos>
 	</key>
 	</keyboard>
 </extension>

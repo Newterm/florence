@@ -25,7 +25,7 @@
 <informations>
 	<_name>Standard keyboard</_name>
 	<author>François Agrech</author>
-	<date>2009-07-28</date>
+	<date>2009-11-12</date>
 	<florence_version>@VERSION@</florence_version>
 </informations>
 
@@ -651,5 +651,5 @@
 	</key>
 	</keyboard>
 </extension>
-
 </layout>
+
