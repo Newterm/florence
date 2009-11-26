@@ -51,11 +51,9 @@ guint key_getKeyval(struct key *key, GdkModifierType mod)
 /* Instanciates a key
  * the key may have a static label which will be always drawn in place of the symbol */
 #ifdef ENABLE_XKB
-struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
-	XkbStateRec rec, void *userdata, struct status *status)
+struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb, void *userdata)
 #else
-struct key *key_new(struct layout *layout, struct style *style, void *userdata,
-	struct status *status)
+struct key *key_new(struct layout *layout, struct style *style, void *userdata)
 #endif
 {
 	struct layout_key *lkey=layoutreader_key_new(layout);
@@ -68,6 +66,7 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata,
 		key=g_malloc(sizeof(struct key));
 		memset(key, 0, sizeof(struct key));
 		key->code=lkey->code;
+		key->state=KEY_RELEASED;
 		key->type=lkey->type;
 #ifdef ENABLE_XKB
 		key->modifier=xkb->map->modmap[key->code];
@@ -77,10 +76,6 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata,
 				case XkbSA_SetMods:key->modifier=XkbKeyAction(xkb, key->code, 0)->mods.mask;
 					break;
 			}
-		}
-		if (key->modifier&rec.locked_mods) {
-			key_set_pressed(key, TRUE);
-			status_press(status, key);
 		}
 #else
 		symbolname=gdk_keyval_name(key_getKeyval(key, 0));
@@ -123,124 +118,70 @@ void key_free(struct key *key)
 	g_free(key);
 }
 
-/* handle X11 errors */
-int key_error_handler(Display *my_dpy, XErrorEvent *event)
+/* send a simple event: press (pressed=TRUE) or release (pressed=FALSE) */
+void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 {
-	flo_warn(_("Unable to focus window."));
-	return 0;
-}
-
-/* send a simple key press event */
-void key_simple_press(unsigned int code, struct status *status)
-{
-	struct status_focus *focus;
-	int (*old_handler)(Display *, XErrorEvent *);
-	if ((focus=status_w_focus_get(status))) {
-		old_handler=XSetErrorHandler(key_error_handler);
-		XSetInputFocus(gdk_x11_get_default_xdisplay(), focus->w,
-				focus->revert_to, CurrentTime);
-		XSync(gdk_x11_get_default_xdisplay(), FALSE);
-		XSetErrorHandler(old_handler);
-	}
 #ifdef ENABLE_XTST
-	if (status_spi_is_enabled(status))
+	if (spi_enabled)
 #ifdef ENABLE_AT_SPI
-		SPI_generateKeyboardEvent(code, NULL, SPI_KEY_PRESS);
+		SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
 #else
 		flo_fatal(_("Unreachable code"));
 #endif
 	else XTestFakeKeyEvent(
 		(Display *)gdk_x11_get_default_xdisplay(),
-		code, TRUE, 0);
+		code, pressed, 0);
 #else
 #ifdef ENABLE_AT_SPI
-	SPI_generateKeyboardEvent(code, NULL, SPI_KEY_PRESS);
+	SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
 #else
 #error _("Neither at-spi nor Xtest is compiled. You should compile one.")
 #endif
 #endif
 }
 
-/* send a simple key release event */
-void key_simple_release(unsigned int code, struct status *status)
+/* Send a key press event.
+ * returns TRUE is the moving key is pressed (must update the status). */
+gboolean key_press(struct key *key, gboolean spi_enabled)
 {
-#ifdef ENABLE_XTST
-	if (status_spi_is_enabled(status))
-#ifdef ENABLE_AT_SPI
-		SPI_generateKeyboardEvent(code, NULL, SPI_KEY_RELEASE);
-#else
-		flo_fatal(_("Unreachable code"));
-#endif
-	else XTestFakeKeyEvent(
-		(Display *)gdk_x11_get_default_xdisplay(),
-		code, FALSE, 0);
-#else
-#ifdef ENABLE_AT_SPI
-	SPI_generateKeyboardEvent(code, NULL, SPI_KEY_RELEASE);
-#else
-#error _("Neither at-spi nor Xtest is compiled. You should compile one.")
-#endif
-#endif
-}
-
-/* Send a key press event */
-void key_press(struct key *key, struct status *status)
-{
-	GList *list=NULL;
-	struct key *pressed;
+	gboolean ret=FALSE;
 	if (key->type) {
-		key->pressed=TRUE;
-		status_key_press_update(status, key);
 		switch (key->type) {
-			case LAYOUT_MOVE: status_set_moving(status, TRUE); break;
+			case LAYOUT_MOVE: ret=TRUE; break;
 			case LAYOUT_BIGGER:
 			case LAYOUT_SMALLER:
 			case LAYOUT_CONFIG:
 			case LAYOUT_CLOSE: break;
 			default: flo_warn(_("unknown action key type pressed = %d"), key->type);
 		}
-	} else {
-		list=status_pressedkeys_get(status);
-		while (list) {
-			pressed=((struct key *)list->data);
-			if (key_get_modifier(pressed) && !key_is_locker(pressed))
-				key_simple_press(pressed->code, status);
-			list=list->next;
-		}
-		key_simple_press(key->code, status);
-		list=status_pressedkeys_get(status);
-		while (list) {
-			pressed=((struct key *)list->data);
-			if (key_get_modifier(pressed) && !key_is_locker(pressed))
-				key_simple_release(pressed->code, status);
-			list=list->next;
-		}
-	}
+	} else key_event(key->code, TRUE, spi_enabled);
+	return ret;
 }
 
-/* Send a key release event */
-void key_release(struct key *key, struct status *status)
+/* Send a key release event.
+ * returns TRUE is the moving key is released (must update the status). */
+gboolean key_release(struct key *key, gboolean spi_enabled)
 {
-	if (key->type && key->pressed) {
+	gboolean ret=FALSE;
+	if (key->type) {
 		switch (key->type) {
 			case LAYOUT_CLOSE: gtk_main_quit(); break;
 			case LAYOUT_CONFIG: settings(); break;
-			case LAYOUT_MOVE: status_set_moving(status, FALSE); break;
+			case LAYOUT_MOVE: ret=TRUE; break;
 			case LAYOUT_BIGGER: settings_double_set("window/zoom",
 				settings_double_get("window/zoom")*1.05, TRUE); break;
 			case LAYOUT_SMALLER: settings_double_set("window/zoom",
 				settings_double_get("window/zoom")*0.95, TRUE); break;
 			default: flo_warn(_("unknown action key type released = %d"), key->type);
 		}
-		key->pressed=FALSE;
-		status_key_release_update(status, key);
 	}
-	else key_simple_release(key->code, status);
+	else key_event(key->code, FALSE, spi_enabled);
+	return ret;
 }
 
 /* Draw the representation of the auto-click timer on the key
  * value is between 0 and 1 */
-void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, double value)
+void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, double value)
 {
 	cairo_save(cairoctx);
 	style_cairo_set_color(style, cairoctx, STYLE_MOUSE_OVER_COLOR);
@@ -284,8 +225,9 @@ void key_symbol_draw(struct key *key, struct style *style,
 
 /* Draw the focus notifier to the cairo surface. */
 void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
-	gdouble z, gdouble width, gdouble height, struct status *status)
+	gdouble width, gdouble height, struct status *status)
 {
+	enum style_colours color;
 	cairo_matrix_t matrix;
 	gdouble focus_zoom=status_focus_zoom_get(status)?settings_double_get("style/focus_zoom"):1.0;
 	cairo_save(cairoctx);
@@ -300,32 +242,38 @@ void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 	else if (matrix.y0<0.0) matrix.y0=0.0;
 	cairo_set_matrix(cairoctx, &matrix);
 
-	if (status_timer_get(status)>0.0) {
-		style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
-			key->pressed?STYLE_ACTIVATED_COLOR:STYLE_KEY_COLOR);
-		key_timer_draw(key, style, cairoctx, z*focus_zoom, status_timer_get(status));
+	/* determine the color of th key */
+	switch (key->state) {
+		case KEY_LOCKED:
+		case KEY_PRESSED: color=STYLE_ACTIVATED_COLOR; break;
+		case KEY_RELEASED: color=STYLE_KEY_COLOR; break;
+		case KEY_LATCHED: color=STYLE_LATCHED_COLOR; break;
+		default: flo_warn(_("unknown key type: %d"), key->state);
+			 color=STYLE_KEY_COLOR; break;
 	}
-	else style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
-		key->pressed?STYLE_ACTIVATED_COLOR:STYLE_MOUSE_OVER_COLOR);
+
+	if (status_timer_get(status)>0.0) {
+		style_shape_draw(style, key->shape, cairoctx, key->w, key->h, color);
+		key_timer_draw(key, style, cairoctx, status_timer_get(status));
+	} else style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
+		key->state==KEY_RELEASED?STYLE_MOUSE_OVER_COLOR:color);
 	key_symbol_draw(key, style, cairoctx, status->globalmod, TRUE);
 	cairo_restore(cairoctx);
 }
 
 /* Draw the key press notifier to the cairo surface. */
-void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, gdouble z, struct status *status)
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod)
 {
-	if (key->pressed && (key!=status_focus_get(status))) {
-		cairo_save(cairoctx);
-		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
-		style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_ACTIVATED_COLOR);
-		key_symbol_draw(key, style, cairoctx, status->globalmod, TRUE);
-		cairo_restore(cairoctx);
-	}
+	cairo_save(cairoctx);
+	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
+	style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
+		key->state==KEY_LATCHED?STYLE_LATCHED_COLOR:STYLE_ACTIVATED_COLOR);
+	key_symbol_draw(key, style, cairoctx, mod, TRUE);
+	cairo_restore(cairoctx);
 }
 
 /* getters and setters */
-void key_set_pressed(struct key *key, gboolean pressed) { key->pressed=pressed; }
-gboolean key_is_pressed(struct key *key) { return key->pressed; }
+void key_state_set(struct key *key, enum key_state state) { key->state=state; }
 gboolean key_is_locker(struct key *key) { return key->locker; }
 void *key_get_userdata(struct key *key) { return key->userdata; }
 GdkModifierType key_get_modifier(struct key *key) { return key->modifier; }

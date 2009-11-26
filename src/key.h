@@ -34,6 +34,15 @@
 
 struct status;
 
+/* the key state, used in the FSM table */
+enum key_state {
+	KEY_PRESSED,
+	KEY_RELEASED,
+	KEY_LOCKED, /* lockers and modifiers */
+	KEY_LATCHED, /* modifiers */
+	KEY_STATE_NUM
+};
+
 /* A key is an item of the keyboard. It represents a real keyboard key.
  * A key is replesented on the screen with a background (shape) and a foreground (symbol)
  * the background is constans, whereas the foreground change according to the global modifiers
@@ -46,7 +55,7 @@ struct key {
 	gdouble w, h; /* size of the key inside the keyboard */
 	GdkModifierType modifier; /* Modifier mask. 0 When the key is not a modifier key. */
 	gboolean locker; /* TRUE if the key is either the caps lock or num lock key. */
-	gboolean pressed; /* TRUE when the key is activated */
+	enum key_state state; /* state of the key (pressed, released, latched or locked) */
 	void *userdata; /* custom data attached to the key (used to attach to a keyboard) */
 };
 
@@ -54,17 +63,16 @@ struct key {
  * the key may have a static label which will be always drawn in place of the symbol */
 #ifdef ENABLE_XKB
 struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
-	XkbStateRec rec, void *userdata, struct status *status);
+	void *userdata);
 #else
-struct key *key_new(struct layout *layout, struct style *style, void *userdata,
-	struct status *status);
+struct key *key_new(struct layout *layout, struct style *style, void *userdata);
 #endif
 /* deallocate memory used by the key */
 void key_free(struct key *key);
 
 /* Send SPI events coresponding to the key */
-void key_press(struct key *key, struct status *status);
-void key_release(struct key *key, struct status *status);
+gboolean key_press(struct key *key, gboolean spi_enabled);
+gboolean key_release(struct key *key, gboolean spi_enabled);
 
 /* Draw the shape of the key to the cairo surface. */
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
@@ -73,14 +81,12 @@ void key_symbol_draw(struct key *key, struct style *style,
 	cairo_t *cairoctx, GdkModifierType mod, gboolean use_matrix);
 /* Draw the focus notifier to the cairo surface. */
 void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
-	gdouble z, gdouble width, gdouble height, struct status *status);
+	gdouble width, gdouble height, struct status *status);
 /* Draw the key press notifier to the cairo surface. */
-void key_press_draw(struct key *key, struct style *style,
-	cairo_t *cairoctx, gdouble z, struct status *status);
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod);
 
 /* setters and getters */
-void key_set_pressed(struct key *key, gboolean pressed);
-gboolean key_is_pressed(struct key *key);
+void key_state_set(struct key *key, enum key_state state);
 gboolean key_is_locker(struct key *key);
 void *key_get_userdata(struct key *key);
 GdkModifierType key_get_modifier(struct key *key);

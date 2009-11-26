@@ -393,15 +393,84 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	gdk_window_configure_finished (GTK_WIDGET(view->window)->window);
 }
 
-/* on expose event: draws the keyboards to the window */
-void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
+/* draw the background of the keyboard */
+void view_draw_background (struct view *view, cairo_t *context)
 {
-	cairo_t *context, *offscreen;
+	cairo_t *offscreen;
 	cairo_surface_t *surface;
-	GList *list=status_pressedkeys_get(view->status);
 	struct keyboard *keyboard;
 	struct key *key;
 	GdkRectangle *rect;
+
+	/* prepare the background */
+	if (!view->background) {
+		view_background_draw(view, context);
+	}
+
+	/* remove focused key */
+	if (status_focus_get(view->status)) {
+		key=status_focus_get(view->status);
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		rect=keyboard_key_getrect(keyboard,
+			key, view->zoom, status_focus_zoom_get(view->status));
+		surface=cairo_surface_create_similar(view->background,
+			CAIRO_CONTENT_COLOR_ALPHA, rect->width, rect->height);
+		offscreen=cairo_create(surface);
+		cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+		cairo_set_source_surface(offscreen, view->background, -rect->x, -rect->y);
+		cairo_paint(offscreen);
+		cairo_destroy(offscreen);
+		keyboard_shape_clear(keyboard, view->background, view->style, key, view->zoom);
+	}
+
+	/* paint the background */
+	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
+	cairo_set_source_surface(context, view->background, 0, 0);
+	cairo_paint(context);
+
+	/* put the focused key back */
+	if (status_focus_get(view->status)) {
+		offscreen=cairo_create(view->background);
+		cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
+		cairo_set_source_surface(offscreen, surface, rect->x, rect->y);
+		cairo_rectangle(offscreen, (gdouble)rect->x, (gdouble)rect->y,
+			(gdouble)rect->width, (gdouble)rect->height);
+		cairo_fill(offscreen);
+		cairo_destroy(offscreen);
+		cairo_surface_destroy(surface);
+	}
+}
+
+/* draw a list of keys (latched or locked keys) */
+void view_draw_list (struct view *view, cairo_t *context, GList *list)
+{
+	struct keyboard *keyboard;
+	struct key *key;
+	while (list) {
+		key=(struct key *)list->data;
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		keyboard_press_draw(keyboard, context, view->style, key, view->status);
+		list=list->next;
+	}
+}
+
+/* draw a single key (pressed or focused) */
+void view_draw_key (struct view *view, cairo_t *context, struct key *key)
+{
+	struct keyboard *keyboard;
+	if (key) {
+		keyboard=(struct keyboard *)key_get_userdata(key);
+		keyboard_focus_draw(keyboard, context,
+			(gdouble)cairo_xlib_surface_get_width(view->background),
+			(gdouble)cairo_xlib_surface_get_height(view->background),
+			view->style, key, view->status);
+	}
+}
+
+/* on expose event: draws the keyboards to the window */
+void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
+{
+	cairo_t *context;
 
 	/* Don't need to redraw several times in one chunk */
 	if (!view->redraw) view->redraw=gdk_region_new();
@@ -422,40 +491,8 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		cairo_paint(context);
 	}
 
-	/* prepare the background */
-	if (!view->background) {
-		view_background_draw(view, context);
-	}
-	/* remove focused key */
-	if (status_focus_get(view->status)) {
-		key=status_focus_get(view->status);
-		keyboard=(struct keyboard *)key_get_userdata(key);
-		rect=keyboard_key_getrect(keyboard,
-			key, view->zoom, status_focus_zoom_get(view->status));
-		surface=cairo_surface_create_similar(view->background,
-			CAIRO_CONTENT_COLOR_ALPHA, rect->width, rect->height);
-		offscreen=cairo_create(surface);
-		cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
-		cairo_set_source_surface(offscreen, view->background, -rect->x, -rect->y);
-		cairo_paint(offscreen);
-		cairo_destroy(offscreen);
-		keyboard_shape_clear(keyboard, view->background, view->style, key, view->zoom);
-	}
-	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
-	cairo_set_source_surface(context, view->background, 0, 0);
-	cairo_paint(context);
-	/* put the focused key back */
-	if (status_focus_get(view->status)) {
-		offscreen=cairo_create(view->background);
-		cairo_set_operator(offscreen, CAIRO_OPERATOR_SOURCE);
-		cairo_set_source_surface(offscreen, surface, rect->x, rect->y);
-		cairo_rectangle(offscreen, (gdouble)rect->x, (gdouble)rect->y,
-			(gdouble)rect->width, (gdouble)rect->height);
-		cairo_fill(offscreen);
-		cairo_destroy(offscreen);
-		cairo_surface_destroy(surface);
-	}
-	
+	view_draw_background(view, context);
+
 	/* handle composited transparency */
 	/* TODO: check for transparency support in WM */
 	if (view->composite && settings_double_get("window/opacity")!=100.0) {
@@ -482,25 +519,12 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	cairo_scale(context, view->zoom, view->zoom);
 
 	/* draw highlights (pressed keys) */
-	if (list) {
-		while (list) {
-			key=(struct key *)list->data;
-			keyboard=(struct keyboard *)key_get_userdata(key);
-			keyboard_press_draw(keyboard, context, view->zoom, view->style,
-				key, view->status);
-			list=list->next;
-		}
-	}
+	view_draw_list(view, context, status_list_latched(view->status));
+	view_draw_list(view, context, status_list_locked(view->status));
 
-	/* focused key */
-	if (status_focus_get(view->status)) {
-		key=status_focus_get(view->status);
-		keyboard=(struct keyboard *)key_get_userdata(key);
-		keyboard_focus_draw(keyboard, context, view->zoom,
-			(gdouble)cairo_xlib_surface_get_width(view->background),
-			(gdouble)cairo_xlib_surface_get_height(view->background),
-			view->style, key, view->status);
-	}
+	/* pressed and focused key */
+	view_draw_key(view, context, status_pressed_get(view->status));
+	view_draw_key(view, context, status_focus_get(view->status));
 
 	cairo_restore(context);
 

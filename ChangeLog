@@ -156,3 +156,6 @@
 	* add the focus_zoom parameter
 	* bug fixes
 
+2009-11-26 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.6
+	* redesign status with a FSM table

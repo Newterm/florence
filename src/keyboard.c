@@ -65,7 +65,8 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 	flo_debug(_("[new keyboard] name=%s id=%s"), name, id);
 
 	/* allocate memory for keyboard */
-	if (!(keyboard=g_malloc(sizeof(struct keyboard)))) flo_fatal(_("Unable to allocate memory for keyboard"));
+	if (!(keyboard=g_malloc(sizeof(struct keyboard))))
+		flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
 
 	if (name) keyboard->name=g_strdup(name);
@@ -78,10 +79,14 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 
 	/* insert all keyboard keys */
 #ifdef ENABLE_XKB
-	while ((key=key_new(layout, style, data->xkb_desc, data->xkb_state,
-		(void *)keyboard, data->status))) {
+	while ((key=key_new(layout, style, data->xkb_desc, (void *)keyboard))) {
+		/* if locker is locked then update the status */
+		if (key_get_modifier(key)&data->xkb_state.locked_mods) {
+			status_globalmod_set(data->status, key_get_modifier(key));
+			status_lock(data->status, key, STATUS_PRESS);
+		}
 #else
-	while ((key=key_new(layout, style, (void *)keyboard, data->status))) {
+	while ((key=key_new(layout, style, (void *)keyboard))) {
 #endif
 		keyboard->keys=g_slist_append(keyboard->keys, key);
 	}
@@ -176,23 +181,24 @@ void keyboard_shape_draw (struct keyboard *keyboard, cairo_surface_t *surface,
 }
 
 /* draw the focus indicator on a key */
-void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, gdouble w, gdouble h,
+void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble w, gdouble h,
 	struct style *style, struct key *key, struct status *status)
 {
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-	key_focus_draw(key, style, cairoctx, z, w, h, status);
+	key_focus_draw(key, style, cairoctx, w, h, status);
 	cairo_restore(cairoctx);
 }
 
 /* draw the pressed indicator on a key */
-void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, struct key *key, struct status *status)
 {
 	if (keyboard_activated(keyboard)) {
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-		key_press_draw(key, style, cairoctx, z, status);
+		if (key!=status_focus_get(status))
+			key_press_draw(key, style, cairoctx, status->globalmod);
 		cairo_restore(cairoctx);
 	}
 }

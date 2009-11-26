@@ -38,11 +38,11 @@ struct shape {
 };
 
 /* There are 6 classes of color for the style */
-/* TODO: We will replace that by css */
 enum style_colours {
 	STYLE_KEY_COLOR, /* color of the background of the key */
 	STYLE_OUTLINE_COLOR, /* color of the outline of the key */
 	STYLE_ACTIVATED_COLOR, 
+	STYLE_LATCHED_COLOR,
 	STYLE_TEXT_COLOR,
 	STYLE_MOUSE_OVER_COLOR,
 	STYLE_NUM_COLOURS

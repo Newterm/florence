@@ -35,8 +35,7 @@ static int trace_debug;
 static GSList *trace_buffer=NULL;
 
 /* prints a message to stream f, ignores it if there exists a duplicate in the buffer. */
-/* TODO: make an option to trace multiple duplicate lines when useful. */
-void trace_msg(char *prefix, FILE *f, char *s, va_list args)
+void trace_distinct_msg(char *prefix, FILE *f, char *s, va_list args)
 {
 	GSList *list=trace_buffer;
 	gchar *str=g_strdup_vprintf((gchar *)s, args);
@@ -53,6 +52,14 @@ void trace_msg(char *prefix, FILE *f, char *s, va_list args)
 		g_fprintf(f, "%s%s", prefix, str);
 		g_fprintf(f, "\n");
 	}
+}
+
+/* prints a message to stream f. */
+void trace_msg(char *prefix, FILE *f, char *s, va_list args)
+{
+	gchar *str=g_strdup_vprintf((gchar *)s, args);
+	g_fprintf(f, "%s%s", prefix, str);
+	g_fprintf(f, "\n");
 }
 
 /********************/
@@ -108,6 +115,14 @@ void flo_warn(char *s, ...)
 	va_end(ap);
 }
 
+void flo_warn_distinct(char *s, ...)
+{
+	va_list ap;
+	va_start(ap, s);
+	trace_distinct_msg("WARNING: ", stderr, s, ap);
+	va_end(ap);
+}
+
 void flo_error(char *s, ...)
 {
 	va_list ap;
@@ -122,6 +137,16 @@ void flo_debug(char *s, ...)
 		va_list ap;
 		va_start(ap, s);
 		trace_msg("", stdout, s, ap);
+		va_end(ap);
+	}
+}
+
+void flo_debug_distinct(char *s, ...)
+{
+	if (trace_debug) {
+		va_list ap;
+		va_start(ap, s);
+		trace_distinct_msg("", stdout, s, ap);
 		va_end(ap);
 	}
 }

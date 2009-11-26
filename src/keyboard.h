@@ -87,10 +87,10 @@ void keyboard_shape_clear (struct keyboard *keyboard, cairo_surface_t *surface,
 void keyboard_shape_draw (struct keyboard *keyboard, cairo_surface_t *surface,
 	struct style *style, struct key *key, gdouble zoom);
 /* draw the focus indicator on a key */
-void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z, gdouble w, gdouble h,
+void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble w, gdouble h,
 	struct style *style, struct key *key, struct status *status);
 /* draw the pressed indicator on a key */
-void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble z,
+void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, struct key *key, struct status *status);
 
 #endif

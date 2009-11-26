@@ -234,6 +234,17 @@
 				<long>Color of the key when the mouse is over</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/colours/latched</key>
+			<applyto>/apps/florence/colours/latched</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#00FF00</default>
+			<locale name="C">
+				<short>latched color</short>
+				<long>Color of the latched keys</long>
+			</locale>
+		</schema>
 
 		<schema>
 			<key>/schemas/apps/florence/layout/file</key>

@@ -331,7 +331,7 @@
                 </child>
                 <child>
                   <widget class="GtkCheckButton" id="flo_always_on_top">
-                    <property name="label" translatable="yes" context="yes">Always on top	</property>
+                    <property name="label" translatable="yes" context="yes">Always on top</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">False</property>
@@ -451,7 +451,7 @@
                             <property name="visible">True</property>
                             <child>
                               <widget class="GtkCheckButton" id="flo_auto_hide">
-                                <property name="label" translatable="yes" context="yes">Auto hide	</property>
+                                <property name="label" translatable="yes" context="yes">Auto hide</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="receives_default">False</property>

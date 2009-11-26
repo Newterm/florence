@@ -61,6 +61,7 @@ gchar *style_get_color(enum style_colours c)
 		case STYLE_TEXT_COLOR: color=(gchar *)settings_get_string("colours/label"); break;
 		case STYLE_ACTIVATED_COLOR: color=(gchar *)settings_get_string("colours/activated"); break;
 		case STYLE_MOUSE_OVER_COLOR: color=(gchar *)settings_get_string("colours/mouseover"); break;
+		case STYLE_LATCHED_COLOR: color=(gchar *)settings_get_string("colours/latched"); break;
 		default: color=NULL;
 	}
 	if (!color) {

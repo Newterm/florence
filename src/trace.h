@@ -28,8 +28,10 @@ void trace_exit();
 void flo_fatal (char *s, ...);
 void flo_error (char *s, ...);
 void flo_warn (char *s, ...);
+void flo_warn_distinct(char *s, ...);
 void flo_info (char *s, ...);
 void flo_debug (char *s, ...);
+void flo_debug_distinct(char *s, ...);
 
 #if __GNUC__ >= 2
 #define FLO_FUNC __PRETTY_FUNCTION__

@@ -32,6 +32,21 @@
 #include "key.h"
 #include "view.h"
 
+/* the type of the key calculated for the fsm table */
+enum status_key_type {
+	STATUS_KEY_NORMAL,
+	STATUS_KEY_MODIFIER,
+	STATUS_KEY_LOCKER,
+	STATUS_KEY_TYPE_NUM
+};
+
+/* the type of event, used as input for the fsm table */
+enum status_event {
+	STATUS_PRESS,
+	STATUS_RELEASE,
+	STATUS_EVENT_NUM
+};
+
 /* describes a window that has the focus */
 struct status_focus {
 	Window w; /* window that has the focus */
@@ -44,7 +59,8 @@ struct status {
 	gboolean focus_zoom; /* zoom the focused key (if composite screen or mask is disabled) */
 	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
 	struct key *pressed; /* key currently being pressed or NULL */
-	GList *pressedkeys; /* the list of all currently pressed keys */
+	GList *latched_keys; /* the list of all currently latched keys */
+	GList *locked_keys; /* the list of all currently locked keys */
 	GdkModifierType globalmod; /* global modifier mask */
 	struct view *view; /* view to update on status change */
 	gboolean spi; /* tell if spi events are enabled */
@@ -66,7 +82,10 @@ void status_keys_add(struct status *status, GSList *keys);
 void status_focus_set(struct status *status, struct key *focus);
 /* return the focus key */
 struct key *status_focus_get(struct status *status);
-/* update the pressed key */
+/* return the currently pressed key */
+struct key *status_pressed_get(struct status *status);
+/* update the pressed key: send the press event and update the view 
+ * if pressed is NULL, then release the last pressed key */
 void status_pressed_set(struct status *status, struct key *pressed);
 /* returns the key currently focussed */
 struct key *status_hit_get(struct status *status, gint x, gint y);
@@ -82,15 +101,14 @@ void status_timer_stop(struct status *status);
 /* get timer value */
 gdouble status_timer_get(struct status *status);
 
-/* add a key pressed to the list of pressed keys */
-void status_press(struct status *status, struct key *key);
-/* remove a key pressed from the list of pressed keys */
-void status_release(struct status *status, struct key *key);
-/* get the list of pressed keys */
-GList *status_pressedkeys_get(struct status *status);
+/* get the list of latched keys */
+GList *status_list_latched(struct status *status);
+/* get the list of locked keys */
+GList *status_list_locked(struct status *status);
 
-/* get the global modifier mask */
+/* get and set the global modifier mask */
 GdkModifierType status_globalmod_get(struct status *status);
+void status_globalmod_set(struct status *status, GdkModifierType mod);
 
 /* allocate memory for status */
 struct status *status_new(const gchar *focus_back);
@@ -116,6 +134,16 @@ struct status_focus *status_w_focus_get(struct status *status);
 /* zoom the focused key */
 void status_focus_zoom_set(struct status *status, gboolean focus_zoom);
 gboolean status_focus_zoom_get(struct status *status);
+
+/* all FSM actions */
+void status_send (struct status *, struct key *, enum status_event);
+void status_send_latched (struct status *, struct key *, enum status_event);
+void status_latch (struct status *, struct key *, enum status_event);
+void status_unlatch (struct status *, struct key *, enum status_event);
+void status_unlatch_all (struct status *, struct key *, enum status_event);
+void status_lock (struct status *, struct key *, enum status_event);
+void status_unlock (struct status *, struct key *, enum status_event);
+void status_error (struct status *, struct key *, enum status_event);
 
 #endif
 

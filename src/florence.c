@@ -336,9 +336,6 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 		key=status_focus_get(florence->status);
 	}
 
-	/* means 2 consecutive button press and no release, but we don't support multi-touch, yet. */
-	/* so we just release any pressed key */
-	status_pressed_set(florence->status, NULL);
 	status_pressed_set(florence->status, key);
 	status_timer_stop(florence->status);
 	return FALSE;

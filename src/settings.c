@@ -39,7 +39,7 @@ struct settings_key {
 
 /* settings defaults. { "glade name", "gconf name", "type", "default value" } */
 /* C99 */
-struct settings_param settings_defaults[] = {
+static struct settings_param settings_defaults[] = {
 	{ "flo_resizable", "window/resizable", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_keep_ratio", "window/keep_ratio", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_decorated", "window/decorated", SETTINGS_BOOL, { .vbool = FALSE } },
@@ -56,6 +56,7 @@ struct settings_param settings_defaults[] = {
 	{ "flo_labels", "colours/label", SETTINGS_COLOR, { .vstring = "#FFFFFF" } },
 	{ "flo_activated", "colours/activated", SETTINGS_COLOR, { .vstring = "#FF0000" } },
 	{ "flo_mouseover", "colours/mouseover", SETTINGS_COLOR, { .vstring = "#0000FF" } },
+	{ "flo_latched", "colours/latched", SETTINGS_COLOR, { .vstring = "#00FF00" } },
 	{ "flo_extensions", "layout/extensions", SETTINGS_STRING, { .vstring = "" } },
 	{ "flo_layouts", "layout/file", SETTINGS_STRING, { .vstring = DATADIR "/layouts/florence.xml" } },
 	{ "flo_preview", "layout/style", SETTINGS_STRING, { .vstring = DATADIR "/styles/default/florence.style" } },
@@ -294,10 +295,10 @@ GConfValue *settings_value_get(const gchar *name)
 	}
 	if (ret) {
 		str=gconf_value_to_string(ret);
-		flo_debug("CONF:%s=<%s>", fullpath, str);
+		flo_debug_distinct("CONF:%s=<%s>", fullpath, str);
 		if (str) g_free(str);
 	} else {
- 		flo_warn(_("No gconf value for %s. Using default."), fullpath);
+ 		flo_warn_distinct(_("No gconf value for %s. Using default."), fullpath);
 	}
 	return ret;
 }

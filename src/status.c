@@ -29,40 +29,63 @@
 /* animate keyboard every 1/50th of a second */
 #define STATUS_ANIMATION_INTERVAL 20
 
-/* Calculate single key status after key is pressed */
-void status_key_press_update(struct status *status, struct key *key)
-{
-	GList *list=status_pressedkeys_get(status);
-	struct key *pressed;
-	gboolean redrawall=FALSE;
-	if (key_get_modifier(key)) {
-		key_set_pressed(key, !key->pressed);
-	} else { 
-		key_set_pressed(key, TRUE);
-		while (list) {
-			pressed=((struct key *)list->data);
-			list=list->next;
-			if (key_get_modifier(pressed) && !key_is_locker(pressed)) {
-				key_set_pressed(pressed, FALSE);
-				status_release(status, pressed);
-				redrawall=TRUE;
-			}
+/* action for the fsm table */
+typedef void (*status_action) (struct status *, struct key *, enum status_event);
+
+/* what to do when state changes */
+struct status_change {
+	enum key_state new_state; /* new state after the change */
+	status_action *actions; /* actions to do to switch state (NULL terminated list) */
+};
+
+static status_action status_action_s[]={ status_send, NULL };
+static status_action status_action_la[]={ status_latch, NULL };
+static status_action status_action_ulalo[]={ status_unlatch, status_lock, NULL };
+static status_action status_action_ul[]={ status_unlock, NULL };
+static status_action status_action_slas[]={ status_send_latched, status_send, NULL };
+static status_action status_action_slo[]={ status_send, status_lock, NULL };
+static status_action status_action_sulo[]={ status_send, status_unlock, NULL };
+static status_action status_action_sslaulaa[]={ status_send, status_send_latched, status_unlatch_all, NULL };
+static status_action status_action_err[]={ status_error, NULL };
+
+/* status FSM - simulate sticky keys
+ * changes by type, event and state */
+static struct status_change status_fsm[STATUS_EVENT_NUM][STATUS_KEY_TYPE_NUM][KEY_STATE_NUM]={
+	{ /* PRESS event */
+		{ /* NORMAL key */
+			{ KEY_PRESSED, status_action_err }, /* PRESSED state */
+			{ KEY_PRESSED, status_action_slas }, /* RELEASED state */
+		}, { /* MODIFIER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_LATCHED, status_action_la }, /* RELEASED state */
+			{ KEY_RELEASED, status_action_ul }, /* LOCKED state */
+			{ KEY_LOCKED, status_action_ulalo } /* LATHCED state */
+		}, { /* LOCKER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_LOCKED, status_action_slo }, /* RELEASED state */
+			{ KEY_RELEASED, status_action_sulo } /* LOCKED state */
+		}
+	}, { /* RELEASE event */
+		{ /* NORMAL key */
+			{ KEY_RELEASED, status_action_sslaulaa }, /* PRESSED state */
+			{ KEY_RELEASED, status_action_err }, /* RELEASED state */
+		}, { /* MODIFIER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, NULL }, /* RELEASED state */
+			{ KEY_LOCKED, NULL }, /* LOCKED state */
+			{ KEY_LATCHED, NULL } /* LATHCED state */
+		}, { /* LOCKER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, NULL }, /* RELEASED state */
+			{ KEY_LOCKED, NULL } /* LOCKED state */
 		}
 	}
-	if (key_is_pressed(key)) status_press(status, key);
-	else status_release(status, key);
-	if (!redrawall) redrawall=key_get_modifier(key) || status->globalmod;
-	view_update(status->view, key, redrawall);
-}
+};
 
-/* Calculate single key status after key is released */
-void status_key_release_update(struct status *status, struct key *key)
+/* update the global modifier mask */
+void status_globalmod_set(struct status *status, GdkModifierType mod)
 {
-	if (!key_get_modifier(key)) {
-		key_set_pressed(key, FALSE);
-		status_release(status, key);
-		view_update(status->view, key, FALSE);
-	}
+	status->globalmod|=mod;
 }
 
 #ifdef ENABLE_XRECORD
@@ -165,36 +188,190 @@ struct key *status_focus_get(struct status *status)
 	return status->focus;
 }
 
-/* update the pressed key */
-void status_pressed_set(struct status *status, struct key *pressed)
+/* handle X11 errors */
+int status_error_handler(Display *my_dpy, XErrorEvent *event)
 {
-	if (pressed) {
-		status->pressed=pressed;
-		if (key_is_pressed(pressed) && (!key_get_modifier(pressed)))
-			key_release(pressed, status);
-		if ((!key_get_modifier(pressed)) || key_is_locker(pressed))
-			key_press(pressed, status);
-#ifdef ENABLE_XRECORD
-		else status_key_press_update(status, status->pressed); 
-		if (!status->RecordContext) status_key_press_update(status, status->pressed);
-#else
-		status_key_press_update(status, status->pressed);
-#endif
-	} else {
-		if (status->pressed) {
-			if ( status->pressed->type ||
-				((!key_get_modifier(status->pressed)) || key_is_locker(status->pressed)) )
-				key_release(status->pressed, status);
-#ifdef ENABLE_XRECORD
-			else status_key_release_update(status, status->pressed);
-			if (!status->RecordContext) status_key_release_update(status, status->pressed);
-#else
-			status_key_release_update(status, status->pressed);
-#endif
-			status->pressed=NULL;
-		}
+	flo_warn(_("Unable to focus window."));
+	return 0;
+}
+
+/* switch focus to focus window */
+void status_focus_window(struct status *status)
+{
+	int (*old_handler)(Display *, XErrorEvent *);
+	if (status->w_focus) {
+		old_handler=XSetErrorHandler(status_error_handler);
+		XSetInputFocus(gdk_x11_get_default_xdisplay(), status->w_focus->w,
+				status->w_focus->revert_to, CurrentTime);
+		XSync(gdk_x11_get_default_xdisplay(), FALSE);
+		XSetErrorHandler(old_handler);
 	}
 }
+
+/* return the currently pressed key */
+struct key *status_pressed_get(struct status *status) { return status->pressed; }
+
+/* update the pressed key: send the press event and update the view 
+ * if pressed is NULL, then release the last pressed key.
+ * WARNING: not multi-touch safe! */
+void status_pressed_set(struct status *status, struct key *pressed)
+{
+	enum status_event event;
+	enum key_state state;
+	enum status_key_type type;
+	guint idx;
+
+	/* find actions in fsm table */
+	if (pressed) {
+		event=STATUS_PRESS;
+		status->pressed=pressed;
+	} else event=STATUS_RELEASE;
+
+	if (status->pressed) {
+		state=status->pressed->state;
+		type=(key_get_modifier(status->pressed)?(key_is_locker(status->pressed)?
+			STATUS_KEY_LOCKER:STATUS_KEY_MODIFIER):STATUS_KEY_NORMAL);
+		/* switch state */
+		key_state_set(status->pressed, status_fsm[event][type][state].new_state);
+		/* execute actions */
+		status_focus_window(status);
+		flo_debug(_("Event %d received for key %d (type %d). Switching from state %d to %d"),
+			event, status->pressed->code, type, state,
+			status_fsm[event][type][state].new_state);
+		if (status_fsm[event][type][state].actions)
+			for (idx=0;status_fsm[event][type][state].actions[idx];idx++) {
+				status_fsm[event][type][state].actions[idx](status,
+					status->pressed, event);
+			}
+	}
+	status->pressed=pressed;
+}
+
+/****************************/
+/* FSM state change actions */
+/****************************/
+
+/* send the event: press or release the key */
+void status_send (struct status *status, struct key *key, enum status_event event)
+{
+	switch(event) {
+		case STATUS_PRESS: if (key_press(key, status->spi)) status->moving=TRUE; break;
+		case STATUS_RELEASE: if (key_release(key, status->spi)) status->moving=FALSE; break;
+		default: flo_warn(_("Unknown event type received: %d"), event); break;
+	}
+	/* update view */
+	view_update(status->view, key, FALSE);
+}
+
+/* press all latched keys */
+void status_send_latched (struct status *status, struct key *key, enum status_event event)
+{
+	struct key *latched;
+	GList *list=status->latched_keys;
+	while (list) {
+		latched=((struct key *)list->data);
+		if (event==STATUS_PRESS) key_press(latched, status->spi);
+		else key_release(latched, status->spi);
+		list=list->next;
+	}
+	/* send "locked" modifier keys that are not lockers */
+	list=status->locked_keys;
+	while (list) {
+		latched=((struct key *)list->data);
+		if (!key_is_locker(latched)) {
+			if (event==STATUS_PRESS) key_press(latched, status->spi);
+			else key_release(latched, status->spi);
+		}
+		list=list->next;
+	}
+}
+
+/* calculate globalmod according to latched and locked list */
+void status_globalmod_calc(struct status *status)
+{
+	GdkModifierType globalmod=0;
+	GList *list=status->latched_keys;
+	while (list) {
+		globalmod|=key_get_modifier((struct key *)list->data);
+		list=list->next;
+	}
+	list=status->locked_keys;
+	while (list) {
+		globalmod|=key_get_modifier((struct key *)list->data);
+		list=list->next;
+	}
+	status->globalmod=globalmod;
+}
+
+/* latch or lock a key (depending on state) */
+void status_latchorlock (struct status *status, struct key *key, enum status_event event,
+	enum key_state state)
+{
+	GList **list=(state==KEY_LATCHED?&(status->latched_keys):&(status->locked_keys));
+	*list=g_list_append(*list, key);
+	/* update globalmod */
+	status_globalmod_set(status, key_get_modifier(key));
+	/* update view */
+	view_update(status->view, key, TRUE);
+}
+
+/* unlatch or unlock a key (depending on state) */
+void status_unlatchorlock (struct status *status, struct key *key,
+	enum status_event event, enum key_state state)
+{
+	GList **list=(state==KEY_LATCHED?&(status->latched_keys):&(status->locked_keys));
+	GList *found;
+	if ((found=g_list_find(*list, key)))
+		*list=g_list_delete_link(*list, found);
+	status_globalmod_calc(status);
+	/* update view */
+	view_update(status->view, key, TRUE);
+}
+
+/* latch a key */
+void status_latch (struct status *status, struct key *key, enum status_event event)
+{
+	status_latchorlock(status, key, event, KEY_LATCHED);
+}
+
+/* unlatch a key */
+void status_unlatch (struct status *status, struct key *key, enum status_event event)
+{
+	status_unlatchorlock(status, key, event, KEY_LATCHED);
+}
+
+/* unlatch all latched keys */
+void status_unlatch_all (struct status *status, struct key *key, enum status_event event)
+{
+	struct key *latched;
+	while(status->latched_keys) {
+		latched=(struct key *)(g_list_first(status->latched_keys)->data);
+		latched->state=KEY_RELEASED;
+		status->latched_keys=g_list_delete_link(status->latched_keys,
+			g_list_first(status->latched_keys));
+	}
+	status_globalmod_calc(status);
+	/* update view */
+	view_update(status->view, key, TRUE);
+}
+
+/* lock a key*/
+void status_lock (struct status *status, struct key *key, enum status_event event)
+{
+	status_latchorlock(status, key, event, KEY_LOCKED);
+}
+
+/* unlock a key */
+void status_unlock (struct status *status, struct key *key, enum status_event event)
+{
+	status_unlatchorlock(status, key, event, KEY_LOCKED);
+}
+
+void status_error (struct status *status, struct key *key, enum status_event event)
+{
+	flo_error(_("FSM state error. key code=%d ; event=%d ; state=%d"), key->code, event, key->state);
+}
+
 
 /* returns the key currently focussed */
 struct key *status_hit_get(struct status *status, gint x, gint y)
@@ -230,46 +407,14 @@ gdouble status_timer_get(struct status *status)
 	return ret;
 }
 
-/* update the global modifier mask */
-void status_globalmod_set(struct status *status, GdkModifierType mod)
-{
-	status->globalmod|=mod;
-}
+/* get the list of latched keys */
+GList *status_list_latched(struct status *status) { return status->latched_keys; }
 
-/* update the global modifier mask */
-void status_globalmod_unset(struct status *status, GdkModifierType mod)
-{
-	status->globalmod&=~mod;
-}
-
-/* add a key pressed to the list of pressed keys */
-void status_press(struct status *status, struct key *key)
-{
-	if (!g_list_find(status->pressedkeys, key))
-		status->pressedkeys=g_list_prepend(status->pressedkeys, key);
-	if (key_get_modifier(key) && key_is_pressed(key)) status_globalmod_set(status, key_get_modifier(key));
-}
-
-/* remove a key pressed from the list of pressed keys */
-void status_release(struct status *status, struct key *key)
-{
-	GList *found;
-	if ((found=g_list_find(status->pressedkeys, key)))
-		status->pressedkeys=g_list_delete_link(status->pressedkeys, found);
-	if (key_get_modifier(key) && (!key_is_pressed(key))) status_globalmod_unset(status, key_get_modifier(key));
-}
-
-/* get the list of pressed keys */
-GList *status_pressedkeys_get(struct status *status)
-{
-	return status->pressedkeys;
-}
+/* get the list of locked keys */
+GList *status_list_locked(struct status *status) { return status->locked_keys; }
 
 /* get the global modifier mask */
-GdkModifierType status_globalmod_get(struct status *status)
-{
-	return status->globalmod;
-}
+GdkModifierType status_globalmod_get(struct status *status) { return status->globalmod; }
 
 /* find a child window of win to focus by its name */
 struct status_focus *status_find_subwin(Window parent, const gchar *win)
@@ -335,7 +480,6 @@ struct status *status_new(const gchar *focus_back)
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
 	memset(status, 0, sizeof(struct status));
-	status_focus_zoom_set(status, TRUE);
 #ifdef ENABLE_XRECORD
 	status_record_start(status);
 	g_timeout_add(STATUS_EVENTCHECK_INTERVAL, status_record_process, (gpointer)status);
@@ -354,7 +498,8 @@ void status_free(struct status *status)
 	status_record_stop(status);
 #endif
 	if (status->timer) g_timer_destroy(status->timer);
-	if (status->pressedkeys) g_list_free(status->pressedkeys);
+	if (status->latched_keys) g_list_free(status->latched_keys);
+	if (status->locked_keys) g_list_free(status->locked_keys);
 	if (status->w_focus) g_free(status->w_focus);
 	if (status) g_free(status);
 }
@@ -366,8 +511,10 @@ void status_reset(struct status *status)
 	status->pressed=NULL;
 	if (status->timer) g_timer_destroy(status->timer);
 	status->timer=NULL;
-	if (status->pressedkeys) g_list_free(status->pressedkeys);
-	status->pressedkeys=NULL;
+	if (status->latched_keys) g_list_free(status->latched_keys);
+	if (status->locked_keys) g_list_free(status->locked_keys);
+	status->latched_keys=NULL;
+	status->locked_keys=NULL;
 	status->globalmod=0;
 }
 
@@ -407,9 +554,7 @@ gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
 void status_set_moving(struct status *status, gboolean moving) { status->moving=moving; }
 gboolean status_get_moving(struct status *status) { return status->moving; }
 
-/* get focussed window */
-struct status_focus *status_w_focus_get(struct status *status) { return status->w_focus; }
-
 /* zoom the focused key */
 void status_focus_zoom_set(struct status *status, gboolean focus_zoom) { status->focus_zoom=focus_zoom; }
 gboolean status_focus_zoom_get(struct status *status) { return status->focus_zoom; }
+
