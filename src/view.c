@@ -254,6 +254,7 @@ void view_create_window_mask(struct view *view)
 		status_focus_zoom_set(view->status, FALSE);
 	} else {
 		gdk_window_shape_combine_mask(GTK_WIDGET(view->window)->window, NULL, 0, 0);
+		status_focus_zoom_set(view->status, TRUE);
 	}
 }
 
@@ -591,12 +592,13 @@ void view_free(struct view *view)
 }
 
 /* create a view of florence */
-struct view *view_new (struct style *style, GSList *keyboards)
+struct view *view_new (struct status *status, struct style *style, GSList *keyboards)
 {
 	struct view *view=g_malloc(sizeof(struct view));
 	if (!view) flo_fatal(_("Unable to allocate memory for view"));
 	memset(view, 0, sizeof(struct view));
 
+	view->status=status;
 	view->style=style;
 	view->keyboards=keyboards;
 	view->zoom=settings_double_get("window/zoom");

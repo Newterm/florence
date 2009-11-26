@@ -502,7 +502,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 #endif
 
 	flo_layout_load(florence);
-	florence->view=view_new(florence->style, florence->keyboards);
+	florence->view=view_new(florence->status, florence->style, florence->keyboards);
 	status_view_set(florence->status, florence->view);
 	if (settings_get_bool("window/keep_on_top")) g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, view_window_get(florence->view));
 

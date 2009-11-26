@@ -52,7 +52,7 @@ struct view {
 };
 
 /* create a view of florence */
-struct view *view_new (struct style *style, GSList *keyboards);
+struct view *view_new (struct status *status, struct style *style, GSList *keyboards);
 /* liberate all the memory used by the view */
 void view_free (struct view *view);
 

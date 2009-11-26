@@ -38,7 +38,6 @@ struct status_change {
 	status_action *actions; /* actions to do to switch state (NULL terminated list) */
 };
 
-static status_action status_action_s[]={ status_send, NULL };
 static status_action status_action_la[]={ status_latch, NULL };
 static status_action status_action_ulalo[]={ status_unlatch, status_lock, NULL };
 static status_action status_action_ul[]={ status_unlock, NULL };
@@ -99,9 +98,11 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 		event=(xEvent *)hook->data;
 		if ((key=status->keys[event->u.u.detail])) {
 			if (event->u.u.type==KeyPress) {
-				status_key_press_update(status, key);
+				flo_info("key pressed");
+				//status_key_press_update(status, key);
 			} else if (event->u.u.type==KeyRelease) {
-				status_key_release_update(status, key);
+				flo_info("key released");
+				//status_key_release_update(status, key);
 			}
 		}
 	}
