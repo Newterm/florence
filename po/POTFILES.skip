@@ -1,4 +1,5 @@
 data/layouts/compact.xml.in
-data/layouts/florence-alt.xml.in
+data/layouts/compact-alt.xml.in
 data/layouts/florence.xml.in
+data/layouts/florence-alt.xml.in
 data/florence.desktop.in

@@ -38,13 +38,26 @@ struct status_change {
 	status_action *actions; /* actions to do to switch state (NULL terminated list) */
 };
 
-static status_action status_action_la[]={ status_latch, NULL };
-static status_action status_action_ulalo[]={ status_unlatch, status_lock, NULL };
-static status_action status_action_ul[]={ status_unlock, NULL };
+/* all FSM actions */
+void status_send (struct status *, struct key *, enum status_event);
+void status_send_latched (struct status *, struct key *, enum status_event);
+void status_latch (struct status *, struct key *, enum status_event);
+void status_unlatch (struct status *, struct key *, enum status_event);
+void status_unlatch_all (struct status *, struct key *, enum status_event);
+void status_lock (struct status *, struct key *, enum status_event);
+void status_unlock (struct status *, struct key *, enum status_event);
+void status_update_view (struct status *, struct key *, enum status_event);
+void status_error (struct status *, struct key *, enum status_event);
+
+/* FSM action groups */
+static status_action status_action_s[]={ status_send, NULL };
+static status_action status_action_la[]={ status_latch, status_update_view, NULL };
+static status_action status_action_ulalo[]={ status_unlatch, status_lock, status_update_view, NULL };
+static status_action status_action_lo[]={ status_lock, status_update_view, NULL };
+static status_action status_action_ul[]={ status_unlock, status_update_view, NULL };
 static status_action status_action_slas[]={ status_send_latched, status_send, NULL };
-static status_action status_action_slo[]={ status_send, status_lock, NULL };
-static status_action status_action_sulo[]={ status_send, status_unlock, NULL };
-static status_action status_action_sslaulaa[]={ status_send, status_send_latched, status_unlatch_all, NULL };
+static status_action status_action_sslaulaa[]={ status_send, status_send_latched, status_unlatch_all, status_update_view, NULL };
+static status_action status_action_uv[]={ status_update_view, NULL };
 static status_action status_action_err[]={ status_error, NULL };
 
 /* status FSM - simulate sticky keys
@@ -52,8 +65,8 @@ static status_action status_action_err[]={ status_error, NULL };
 static struct status_change status_fsm[STATUS_EVENT_NUM][STATUS_KEY_TYPE_NUM][KEY_STATE_NUM]={
 	{ /* PRESS event */
 		{ /* NORMAL key */
-			{ KEY_PRESSED, status_action_err }, /* PRESSED state */
-			{ KEY_PRESSED, status_action_slas }, /* RELEASED state */
+			{ KEY_PRESSED, NULL }, /* PRESSED state */
+			{ KEY_RELEASED, status_action_slas }, /* RELEASED state */
 		}, { /* MODIFIER key */
 			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
 			{ KEY_LATCHED, status_action_la }, /* RELEASED state */
@@ -61,13 +74,41 @@ static struct status_change status_fsm[STATUS_EVENT_NUM][STATUS_KEY_TYPE_NUM][KE
 			{ KEY_LOCKED, status_action_ulalo } /* LATHCED state */
 		}, { /* LOCKER key */
 			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
-			{ KEY_LOCKED, status_action_slo }, /* RELEASED state */
-			{ KEY_RELEASED, status_action_sulo } /* LOCKED state */
+			{ KEY_RELEASED, status_action_s }, /* RELEASED state */
+			{ KEY_LOCKED, status_action_s } /* LOCKED state */
 		}
 	}, { /* RELEASE event */
 		{ /* NORMAL key */
-			{ KEY_RELEASED, status_action_sslaulaa }, /* PRESSED state */
-			{ KEY_RELEASED, status_action_err }, /* RELEASED state */
+			{ KEY_PRESSED, status_action_sslaulaa }, /* PRESSED state */
+			{ KEY_RELEASED, NULL }, /* RELEASED state */
+		}, { /* MODIFIER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, NULL }, /* RELEASED state */
+			{ KEY_LOCKED, NULL }, /* LOCKED state */
+			{ KEY_LATCHED, NULL } /* LATHCED state */
+		}, { /* LOCKER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, status_action_s }, /* RELEASED state */
+			{ KEY_LOCKED, status_action_s } /* LOCKED state */
+		}
+	}, { /* PRESSED event */
+		{ /* NORMAL key */
+			{ KEY_PRESSED, NULL }, /* PRESSED state */
+			{ KEY_PRESSED, status_action_uv } /* RELEASED state */
+		}, { /* MODIFIER key */
+			{ KEY_PRESSED, status_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, NULL }, /* RELEASED state */
+			{ KEY_LOCKED, NULL }, /* LOCKED state */
+			{ KEY_LATCHED, NULL } /* LATHCED state */
+		}, { /* LOCKER key */
+			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
+			{ KEY_LOCKED, status_action_lo }, /* RELEASED state */
+			{ KEY_RELEASED, status_action_ul } /* LOCKED state */
+		}
+	}, { /* RELEASED event */
+		{ /* NORMAL key */
+			{ KEY_RELEASED, status_action_uv }, /* PRESSED state */
+			{ KEY_RELEASED, NULL } /* RELEASED state */
 		}, { /* MODIFIER key */
 			{ KEY_RELEASED, status_action_err }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
@@ -80,6 +121,48 @@ static struct status_change status_fsm[STATUS_EVENT_NUM][STATUS_KEY_TYPE_NUM][KE
 		}
 	}
 };
+
+/* handle X11 errors */
+int status_error_handler(Display *my_dpy, XErrorEvent *event)
+{
+	flo_warn(_("Unable to focus window."));
+	return 0;
+}
+
+/* switch focus to focus window */
+void status_focus_window(struct status *status)
+{
+	int (*old_handler)(Display *, XErrorEvent *);
+	if (status->w_focus) {
+		old_handler=XSetErrorHandler(status_error_handler);
+		XSetInputFocus(gdk_x11_get_default_xdisplay(), status->w_focus->w,
+				status->w_focus->revert_to, CurrentTime);
+		XSync(gdk_x11_get_default_xdisplay(), FALSE);
+		XSetErrorHandler(old_handler);
+	}
+}
+
+/* process the fsm actions and state change */
+void status_fsm_process(struct status *status, struct key *key, enum status_event event)
+{
+	enum key_state state;
+	enum status_key_type type;
+	guint idx;
+	if (key) {
+		state=key->state;
+		type=(key_get_modifier(key)?(key_is_locker(key)?
+			STATUS_KEY_LOCKER:STATUS_KEY_MODIFIER):STATUS_KEY_NORMAL);
+		/* switch state */
+		key_state_set(key, status_fsm[event][type][state].new_state);
+		/* execute actions */
+		status_focus_window(status);
+		flo_debug(_("Event %d received for key %d (type %d). Switching from state %d to %d"),
+			event, key->code, type, state, status_fsm[event][type][state].new_state);
+		if (status_fsm[event][type][state].actions)
+			for (idx=0;status_fsm[event][type][state].actions[idx];idx++)
+				status_fsm[event][type][state].actions[idx](status, key, event);
+	}
+}
 
 /* update the global modifier mask */
 void status_globalmod_set(struct status *status, GdkModifierType mod)
@@ -97,13 +180,10 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 	if (hook->category==XRecordFromServer) {
 		event=(xEvent *)hook->data;
 		if ((key=status->keys[event->u.u.detail])) {
-			if (event->u.u.type==KeyPress) {
-				flo_info("key pressed");
-				//status_key_press_update(status, key);
-			} else if (event->u.u.type==KeyRelease) {
-				flo_info("key released");
-				//status_key_release_update(status, key);
-			}
+			if (event->u.u.type==KeyPress)
+				status_fsm_process(status, key, STATUS_PRESSED);
+			else if (event->u.u.type==KeyRelease)
+				status_fsm_process(status, key, STATUS_RELEASED);
 		}
 	}
 	if (hook) XRecordFreeData(hook);
@@ -189,26 +269,6 @@ struct key *status_focus_get(struct status *status)
 	return status->focus;
 }
 
-/* handle X11 errors */
-int status_error_handler(Display *my_dpy, XErrorEvent *event)
-{
-	flo_warn(_("Unable to focus window."));
-	return 0;
-}
-
-/* switch focus to focus window */
-void status_focus_window(struct status *status)
-{
-	int (*old_handler)(Display *, XErrorEvent *);
-	if (status->w_focus) {
-		old_handler=XSetErrorHandler(status_error_handler);
-		XSetInputFocus(gdk_x11_get_default_xdisplay(), status->w_focus->w,
-				status->w_focus->revert_to, CurrentTime);
-		XSync(gdk_x11_get_default_xdisplay(), FALSE);
-		XSetErrorHandler(old_handler);
-	}
-}
-
 /* return the currently pressed key */
 struct key *status_pressed_get(struct status *status) { return status->pressed; }
 
@@ -218,33 +278,12 @@ struct key *status_pressed_get(struct status *status) { return status->pressed; 
 void status_pressed_set(struct status *status, struct key *pressed)
 {
 	enum status_event event;
-	enum key_state state;
-	enum status_key_type type;
-	guint idx;
-
 	/* find actions in fsm table */
 	if (pressed) {
 		event=STATUS_PRESS;
 		status->pressed=pressed;
 	} else event=STATUS_RELEASE;
-
-	if (status->pressed) {
-		state=status->pressed->state;
-		type=(key_get_modifier(status->pressed)?(key_is_locker(status->pressed)?
-			STATUS_KEY_LOCKER:STATUS_KEY_MODIFIER):STATUS_KEY_NORMAL);
-		/* switch state */
-		key_state_set(status->pressed, status_fsm[event][type][state].new_state);
-		/* execute actions */
-		status_focus_window(status);
-		flo_debug(_("Event %d received for key %d (type %d). Switching from state %d to %d"),
-			event, status->pressed->code, type, state,
-			status_fsm[event][type][state].new_state);
-		if (status_fsm[event][type][state].actions)
-			for (idx=0;status_fsm[event][type][state].actions[idx];idx++) {
-				status_fsm[event][type][state].actions[idx](status,
-					status->pressed, event);
-			}
-	}
+	status_fsm_process(status, status->pressed, event);
 	status->pressed=pressed;
 }
 
@@ -252,16 +291,37 @@ void status_pressed_set(struct status *status, struct key *pressed)
 /* FSM state change actions */
 /****************************/
 
+/* update the view according to the change */
+void status_update_view (struct status *status, struct key *key, enum status_event event)
+{
+	/* update view */
+	if (status->view) view_update(status->view, key, key_get_modifier(key));
+}
+
 /* send the event: press or release the key */
 void status_send (struct status *status, struct key *key, enum status_event event)
 {
+	flo_debug(_("sending event %d for key %d"), event, key->code);
 	switch(event) {
-		case STATUS_PRESS: if (key_press(key, status->spi)) status->moving=TRUE; break;
-		case STATUS_RELEASE: if (key_release(key, status->spi)) status->moving=FALSE; break;
+		case STATUS_PRESS:
+			if (key_press(key, status->spi)) status->moving=TRUE;
+#ifdef ENABLE_XRECORD
+			if (key->type)
+#endif
+			status_fsm_process(status, key, STATUS_PRESSED);
+			break;
+		case STATUS_RELEASE:
+			if (key_release(key, status->spi)) status->moving=FALSE;
+#ifdef ENABLE_XRECORD
+			if (key->type)
+#endif
+			status_fsm_process(status, key, STATUS_RELEASED);
+			break;
 		default: flo_warn(_("Unknown event type received: %d"), event); break;
 	}
-	/* update view */
-	view_update(status->view, key, FALSE);
+#ifdef ENABLE_XRECORD
+	status_record_process(status);
+#endif
 }
 
 /* press all latched keys */
@@ -271,8 +331,7 @@ void status_send_latched (struct status *status, struct key *key, enum status_ev
 	GList *list=status->latched_keys;
 	while (list) {
 		latched=((struct key *)list->data);
-		if (event==STATUS_PRESS) key_press(latched, status->spi);
-		else key_release(latched, status->spi);
+		status_send(status, latched, event);
 		list=list->next;
 	}
 	/* send "locked" modifier keys that are not lockers */
@@ -280,8 +339,7 @@ void status_send_latched (struct status *status, struct key *key, enum status_ev
 	while (list) {
 		latched=((struct key *)list->data);
 		if (!key_is_locker(latched)) {
-			if (event==STATUS_PRESS) key_press(latched, status->spi);
-			else key_release(latched, status->spi);
+			status_send(status, latched, event);
 		}
 		list=list->next;
 	}
@@ -312,8 +370,6 @@ void status_latchorlock (struct status *status, struct key *key, enum status_eve
 	*list=g_list_append(*list, key);
 	/* update globalmod */
 	status_globalmod_set(status, key_get_modifier(key));
-	/* update view */
-	view_update(status->view, key, TRUE);
 }
 
 /* unlatch or unlock a key (depending on state) */
@@ -325,8 +381,6 @@ void status_unlatchorlock (struct status *status, struct key *key,
 	if ((found=g_list_find(*list, key)))
 		*list=g_list_delete_link(*list, found);
 	status_globalmod_calc(status);
-	/* update view */
-	view_update(status->view, key, TRUE);
 }
 
 /* latch a key */
@@ -350,10 +404,9 @@ void status_unlatch_all (struct status *status, struct key *key, enum status_eve
 		latched->state=KEY_RELEASED;
 		status->latched_keys=g_list_delete_link(status->latched_keys,
 			g_list_first(status->latched_keys));
+		if (status->view) view_update(status->view, latched, TRUE);
 	}
 	status_globalmod_calc(status);
-	/* update view */
-	view_update(status->view, key, TRUE);
 }
 
 /* lock a key*/
@@ -368,6 +421,7 @@ void status_unlock (struct status *status, struct key *key, enum status_event ev
 	status_unlatchorlock(status, key, event, KEY_LOCKED);
 }
 
+/* print a status error */
 void status_error (struct status *status, struct key *key, enum status_event event)
 {
 	flo_error(_("FSM state error. key code=%d ; event=%d ; state=%d"), key->code, event, key->state);

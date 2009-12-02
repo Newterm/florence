@@ -51,69 +51,30 @@
                 <child>
                   <widget class="GtkTable" id="colors">
                     <property name="visible">True</property>
-                    <property name="n_rows">4</property>
+                    <property name="n_rows">2</property>
+                    <property name="n_columns">3</property>
                     <child>
-                      <widget class="GtkHBox" id="key_hbox">
+                      <widget class="GtkColorButton" id="flo_keys">
                         <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkColorButton" id="flo_keys">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip" translatable="yes" context="yes">Normal key background color</property>
-                            <property name="title" translatable="yes" context="yes">Key background color</property>
-                            <signal name="color_set" handler="settings_window_change_color"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="key_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">default key background color</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="padding">4</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Normal key background color</property>
+                        <property name="title" translatable="yes" context="yes">Key background color</property>
+                        <property name="color">#000000000000</property>
+                        <signal name="color_set" handler="settings_window_change_color"/>
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="activated_hbox">
+                      <widget class="GtkColorButton" id="flo_activated">
                         <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkColorButton" id="flo_activated">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip" translatable="yes" context="yes">Activated key background color</property>
-                            <property name="title" translatable="yes" context="yes">Activated key background color</property>
-                            <signal name="color_set" handler="settings_window_change_color"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="activated_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">activated key background color</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="padding">4</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Activated key background color</property>
+                        <property name="title" translatable="yes" context="yes">Activated key background color</property>
+                        <property name="color">#000000000000</property>
+                        <signal name="color_set" handler="settings_window_change_color"/>
                       </widget>
                       <packing>
                         <property name="top_attach">1</property>
@@ -121,76 +82,56 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="labels_hbox">
+                      <widget class="GtkColorButton" id="flo_labels">
                         <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkColorButton" id="flo_labels">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip" translatable="yes" context="yes">Labels and symbols color</property>
-                            <property name="title" translatable="yes" context="yes">Labels and symbols color</property>
-                            <signal name="color_set" handler="settings_window_change_color"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="label_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">symbol color</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="padding">4</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Labels and symbols color</property>
+                        <property name="title" translatable="yes" context="yes">Labels and symbols color</property>
+                        <property name="color">#000000000000</property>
+                        <signal name="color_set" handler="settings_window_change_color"/>
                       </widget>
                       <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHBox" id="mouseover_hbox">
+                      <widget class="GtkColorButton" id="flo_mouseover">
                         <property name="visible">True</property>
-                        <child>
-                          <widget class="GtkColorButton" id="flo_mouseover">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">False</property>
-                            <property name="tooltip" translatable="yes" context="yes">Key with mouve over background color</property>
-                            <property name="title" translatable="yes" context="yes">Key background color when the mouse is over</property>
-                            <signal name="color_set" handler="settings_window_change_color"/>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <widget class="GtkLabel" id="mouseover_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">focused key background color</property>
-                          </widget>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">False</property>
-                            <property name="padding">4</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Key with mouve over background color</property>
+                        <property name="title" translatable="yes" context="yes">Key background color when the mouse is over</property>
+                        <property name="color">#000000000000</property>
+                        <signal name="color_set" handler="settings_window_change_color"/>
                       </widget>
                       <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                       </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkColorButton" id="flo_latched">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="has_tooltip">True</property>
+                        <property name="tooltip" translatable="yes" context="yes">Latched keys background color</property>
+                        <property name="title" translatable="yes" context="yes">Latched keys color</property>
+                        <property name="color">#000000000000</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <placeholder/>
                     </child>
                   </widget>
                   <packing>

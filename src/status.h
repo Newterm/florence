@@ -42,8 +42,10 @@ enum status_key_type {
 
 /* the type of event, used as input for the fsm table */
 enum status_event {
-	STATUS_PRESS,
-	STATUS_RELEASE,
+	STATUS_PRESS, /* the press event must be sent */
+	STATUS_RELEASE, /* the release event must be sent */
+	STATUS_PRESSED, /* the press event has been sent */
+	STATUS_RELEASED, /* the release event has been sent */
 	STATUS_EVENT_NUM
 };
 
@@ -135,15 +137,8 @@ struct status_focus *status_w_focus_get(struct status *status);
 void status_focus_zoom_set(struct status *status, gboolean focus_zoom);
 gboolean status_focus_zoom_get(struct status *status);
 
-/* all FSM actions */
-void status_send (struct status *, struct key *, enum status_event);
-void status_send_latched (struct status *, struct key *, enum status_event);
-void status_latch (struct status *, struct key *, enum status_event);
-void status_unlatch (struct status *, struct key *, enum status_event);
-void status_unlatch_all (struct status *, struct key *, enum status_event);
-void status_lock (struct status *, struct key *, enum status_event);
-void status_unlock (struct status *, struct key *, enum status_event);
-void status_error (struct status *, struct key *, enum status_event);
+/* process the fsm actions and state change */
+void status_fsm_process(struct status *status, struct key *key, enum status_event event);
 
 #endif
 

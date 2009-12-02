@@ -1,7 +1,10 @@
+New feature implemented: latch to lock. Press a modifier key 1 time to
+latch it and press it again to lock it.
 
 Changelog:
 
 2009-11-26 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.6
+	* fix layouts
 	* redesign status with a FSM table
 

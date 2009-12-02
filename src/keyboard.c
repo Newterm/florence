@@ -83,7 +83,7 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 		/* if locker is locked then update the status */
 		if (key_get_modifier(key)&data->xkb_state.locked_mods) {
 			status_globalmod_set(data->status, key_get_modifier(key));
-			status_lock(data->status, key, STATUS_PRESS);
+			status_fsm_process(data->status, key, STATUS_PRESSED);
 		}
 #else
 	while ((key=key_new(layout, style, (void *)keyboard))) {
