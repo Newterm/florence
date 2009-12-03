@@ -669,7 +669,7 @@ msgstr ""
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
-"%s est in répertoire et aucun fichier correspondant n'a été trouvé dedans"
+"%s est un répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
 #: ../src/layoutreader.c:354
 #, c-format
