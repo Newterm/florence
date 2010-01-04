@@ -67,6 +67,10 @@ int main (int argc, char **argv)
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
+	gtk_init(&argc, &argv);
+	gconf_init(argc, argv, NULL);
+	g_type_init();
+
 	program_name=argv[0];
 	config=decode_switches (argc, argv);
 	trace_init(config&2);
@@ -76,10 +80,6 @@ int main (int argc, char **argv)
 #else
 	flo_info(_("XRECORD has been disabled at compile time."));
 #endif
-
-	gtk_init(&argc, &argv);
-	gconf_init(argc, argv, NULL);
-	g_type_init();
 
 	if (config&1) {
 		settings_init(TRUE, config_file);

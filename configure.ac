@@ -105,7 +105,7 @@ AC_CHECK_MEMBERS([struct stat.st_blksize])
 AC_CHECK_FUNCS([memset sscanf strcmp strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
 # Files generated
-ICONDIR=$datadir/pixmaps
+ICONDIR=$(datadir)/pixmaps
 AC_SUBST(ICONDIR)
 AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/layouts/Makefile data/layouts/florence.xml.in data/layouts/florence-alt.xml.in data/layouts/compact.xml.in data/layouts/compact-alt.xml.in data/florence.desktop.in docs/Makefile po/Makefile.in])
 AC_OUTPUT

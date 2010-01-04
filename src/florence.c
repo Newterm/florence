@@ -196,7 +196,7 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
 	int i;
-	Accessible *obj;
+	Accessible *obj=NULL;
 #endif
 
 	if (auto_hide) {
