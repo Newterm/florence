@@ -7,4 +7,5 @@ Changelog:
 	* Version 0.4.6
 	* fix layouts
 	* redesign status with a FSM table
+	* add a list of known bugs in the documentation
 
