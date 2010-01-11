@@ -94,7 +94,7 @@ AC_FUNC_ALLOCA
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_MAJOR
-AC_CHECK_HEADERS([math.h fcntl.h libintl.h locale.h memory.h stdio.h stdlib.h string.h strings.h sys/param.h sys/stat.h sys/types.h dirent.h unistd.h])
+AC_CHECK_HEADERS([math.h fcntl.h libintl.h locale.h memory.h stdio.h stdlib.h string.h strings.h sys/param.h sys/stat.h sys/types.h sys/file.h sys/time.h utime.h dirent.h unistd.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
 AC_HEADER_STAT
@@ -102,11 +102,29 @@ AC_C_CONST
 AC_CHECK_MEMBERS([struct stat.st_blksize])
 
 # Checks for library functions.
-AC_CHECK_FUNCS([memset sscanf strcmp strrchr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
+AC_TYPE_SIZE_T
+AC_FUNC_LSTAT_FOLLOWS_SLASHED_SYMLINK
+AC_CHECK_FUNCS([setlocale memset memchr sscanf strcmp strrchr strchr strstr strcpy strncpy strcat atoi putenv fopen fclose fgets fputs lstat opendir readdir closedir])
 
 # Files generated
 ICONDIR=$prefix/share/pixmaps
 AC_SUBST(ICONDIR)
-AC_CONFIG_FILES([Makefile src/Makefile data/Makefile data/styles/Makefile data/styles/default/Makefile data/styles/bright/Makefile data/styles/hard/Makefile data/relaxng/Makefile data/svg11/Makefile data/layouts/Makefile data/layouts/florence.xml.in data/layouts/florence-alt.xml.in data/layouts/compact.xml.in data/layouts/compact-alt.xml.in data/florence.desktop.in docs/Makefile po/Makefile.in])
+AC_CONFIG_FILES([Makefile
+                 data/Makefile
+                 data/layouts/Makefile
+                 data/relaxng/Makefile
+                 data/styles/Makefile
+                 data/styles/bright/Makefile
+                 data/styles/default/Makefile
+                 data/styles/hard/Makefile
+                 data/svg11/Makefile
+                 docs/Makefile
+                 src/Makefile
+		 data/layouts/florence.xml.in
+		 data/layouts/florence-alt.xml.in
+		 data/layouts/compact.xml.in
+		 data/layouts/compact-alt.xml.in
+		 data/florence.desktop.in
+		 po/Makefile.in])
 AC_OUTPUT
 
