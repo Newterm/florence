@@ -35,7 +35,7 @@
 void trayicon_about(void)
 {
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
-		"version", VERSION, "copyright", _("Copyright (C) 2008, 2009 François Agrech"),
+		"version", VERSION, "copyright", _("Copyright (C) 2008, 2009, 2010 François Agrech"),
 		"logo", gdk_pixbuf_new_from_file(ICONDIR "/florence.svg", NULL),
 		"website", "http://florence.sourceforge.net",
 		"license", _("Copyright (C) 2008, 2009 François Agrech\n\
