@@ -3,9 +3,11 @@ latch it and press it again to lock it.
 
 Changelog:
 
-2009-11-26 François Agrech <f.agrech@gmail.com>
+2010-01-12 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.6
 	* fix layouts
 	* redesign status with a FSM table
 	* add a list of known bugs in the documentation
+	* Fix zoom key issue (Florence failed to refresh)
+	* Remove unecessary dependancy on gnome-doc-utils with --without-docs
 

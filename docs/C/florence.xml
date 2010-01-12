@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "January, the 5th of 2010">
+	<!ENTITY date "January, the 12th of 2010">
 	<!ENTITY version "0.4.6">
 ]>
 <article id="index" lang="en">
@@ -326,7 +326,6 @@ GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr
 	<para>Here is a list of known bugs. Those bugs do not have a fix yet. If you know how to fix one of them, please email the author.</para>
 	<orderedlist>
 		<listitem><para>Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971. As a result, Florence does not track hardware keyboard changes as it should and does not work properly with recent Xorg releases. Workaround: please configure Florence without the xrecord extension (--without-xrecord option)</para></listitem>
-		<listitem><para>When the --without-docs configure option is provided, Florence still requires the gnome-docs-utils package when it should not. This is because the GNOME_DOC_INIT macro does not seem to support being invoked conditionnaly.</para></listitem>
 	</orderedlist>
 </sect1>
 <sect1 id="hacking">

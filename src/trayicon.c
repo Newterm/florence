@@ -91,7 +91,10 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
  * Displays the menu. */
 void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)
 {
-	GtkWidget *menu, *about, *help, *config, *quit;
+	GtkWidget *menu, *about, *config, *quit;
+#ifdef ENABLE_HELP
+	GtkWidget *help;
+#endif
  
 	struct trayicon *trayicon=(struct trayicon *)(user_data);
 	menu=gtk_menu_new();

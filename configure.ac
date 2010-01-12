@@ -39,7 +39,10 @@ AC_PROG_SED
 PKG_PROG_PKG_CONFIG
 AM_GCONF_SOURCE_2
 
-GNOME_DOC_INIT
+GNOME_DOC_INIT(,,
+	if test "x$with_docs" != "xno"; then
+		AC_MSG_ERROR([gnome-doc-utils >= $gdu_cv_version_required not found])
+	fi)
 if test "x$with_docs" != "xno"; then
 	AC_PATH_PROG(SK_CONFIG,scrollkeeper-config,no)
 	if test x$SK_CONFIG = xno; then

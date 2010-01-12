@@ -79,7 +79,7 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata)
 		}
 #else
 		symbolname=gdk_keyval_name(key_getKeyval(key, 0));
-		if (!strcmp(symbolname, "Caps_Lock")) {
+		if (symbolname) if (!strcmp(symbolname, "Caps_Lock")) {
 			key->locker=TRUE;
 			key->modifier=2;
 		} else if (!strcmp(symbolname, "Num_Lock")) {

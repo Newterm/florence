@@ -70,9 +70,11 @@ void view_resize (struct view *view)
 			view->width, view->height);
 	}
 	/* refresh the view */
-	rect.x=0; rect.y=0;
-	rect.width=view->width; rect.height=view->height;
-	gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+	if (view->window && GTK_WIDGET(view->window)->window) {
+		rect.x=0; rect.y=0;
+		rect.width=view->width; rect.height=view->height;
+		gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+	}
 }
 
 /* draws the background of florence */

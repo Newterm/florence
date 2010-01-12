@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-12 08:19+0100\n"
+"POT-Creation-Date: 2010-01-12 18:04+0100\n"
 "PO-Revision-Date: 2010-01-05 18:21+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team:  <>\n"
@@ -185,10 +185,10 @@ msgstr ""
 #: C/florence.xml:45(para)
 msgid ""
 "Make sure you have the latest version of Florence (0.4.6 as of January, the "
-"5th of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
+"12th of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
-"Soyez sûr que vous avez la dernière version de Florence (&version; au 5 "
+"Soyez sûr que vous avez la dernière version de Florence (&version; au 12 "
 "janvier 2010). Vous pouvez la télécharger ici: <ulink url=\"http://"
 "sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</"
 "ulink>"
@@ -1294,23 +1294,11 @@ msgstr ""
 "problème, veuillez configurer Florence sans l'extension xrecord (option --"
 "without-xrecord de configure)"
 
-#: C/florence.xml:329(para)
-msgid ""
-"When the --without-docs configure option is provided, Florence still "
-"requires the gnome-docs-utils package when it should not. This is because "
-"the GNOME_DOC_INIT macro does not seem to support being invoked "
-"conditionnaly."
-msgstr ""
-"Florence nécessite le paquetage gnome-docs-utils, même lorsque l'option --"
-"without-docs de configure est utilisée, alors qu'il ne le devrait pas. La "
-"cause est que la macro GNOME_DOC_INIT ne semble pas pouvoir être appelée "
-"conditionnellement."
-
-#: C/florence.xml:333(title)
+#: C/florence.xml:332(title)
 msgid "Hacking"
 msgstr "Bidouillage"
 
-#: C/florence.xml:334(para)
+#: C/florence.xml:333(para)
 msgid ""
 "Some extra configuration options are available in GConf (under apps/"
 "florence). You can modify configuration parameters from the configuration "
@@ -1323,11 +1311,11 @@ msgstr ""
 "editor. Chaque élément de configuration possède une description détaillée "
 "dans le schema gconf de florence."
 
-#: C/florence.xml:336(title)
+#: C/florence.xml:335(title)
 msgid "Create your own layout"
 msgstr "Créer son propre agencement"
 
-#: C/florence.xml:337(para)
+#: C/florence.xml:336(para)
 msgid ""
 "It is possible to create your own keyboard layout if those available by "
 "default are not suitable for your needs"
@@ -1335,7 +1323,7 @@ msgstr ""
 "Il est possible de créer son propre agencement du clavier si ceux proposés "
 "par défaut ne conviennent pas."
 
-#: C/florence.xml:338(para)
+#: C/florence.xml:337(para)
 msgid ""
 "The layout files are available in the florence/layouts directory, under the "
 "installation data directory that is configured with the --datadir configure "
@@ -1349,7 +1337,7 @@ msgstr ""
 "(dans ce cas, le répertoire des données est $prefix/share), le plus souvent "
 "dans /usr/share, soit /usr/share/florence/layouts."
 
-#: C/florence.xml:339(para)
+#: C/florence.xml:338(para)
 msgid ""
 "The easiest way to create one's own layout file is to copy an existing one "
 "and to adapt it. The existing ones are florence.xml and compact.xml. Those "
@@ -1368,7 +1356,7 @@ msgstr ""
 "programme xmllint pour valider le fichier d'agencement avec le fichier de "
 "validation étendu."
 
-#: C/florence.xml:340(para)
+#: C/florence.xml:339(para)
 msgid ""
 "The root element of the XML layout file is the &lt;layout&gt; element. It "
 "contains the elements &lt;informations&gt;, &lt;keyboard&gt; and several &lt;"
@@ -1386,7 +1374,7 @@ msgstr ""
 "du fichier d'agencement dans &lt;name&gt;. Ce nom est le nom qui apparaîtra "
 "dans le dialogue de paramètres de florence pour pouvoir le sélectionner."
 
-#: C/florence.xml:341(para)
+#: C/florence.xml:340(para)
 msgid ""
 "The layout data are contained in the &lt;keyboard&gt; and &lt;extension&gt; "
 "elements."
@@ -1394,7 +1382,7 @@ msgstr ""
 "Les données de l'agencement sont contenues dans les éléments &lt;"
 "keyboard&gt; et &lt;extension&gt;."
 
-#: C/florence.xml:342(para)
+#: C/florence.xml:341(para)
 msgid ""
 "The &lt;keyboard&gt; element contains the main data of the layout. The sub-"
 "elements &lt;width&gt; and &lt;height&gt; contain respectively the relative "
@@ -1432,7 +1420,7 @@ msgstr ""
 "shape&gt;, qui doit contenir le nom d'un élément de style existant dans le "
 "style sélectionné."
 
-#: C/florence.xml:343(para)
+#: C/florence.xml:342(para)
 msgid ""
 "One can then define several &lt;extension&gt; elements. Each extension has a "
 "&lt;name&gt; element that will be displayed in the settings dialog to "
@@ -1462,7 +1450,7 @@ msgstr ""
 "keyboard&gt;, qui a la même forme que l'élément sus-cité portant le même nom "
 "et qui défini les données sur les touches de l'extension."
 
-#: C/florence.xml:344(para)
+#: C/florence.xml:343(para)
 msgid ""
 "The layout file so created in the $datadir/florence/layouts directory will "
 "automatically be selectable from the settings dialog of Florence."
@@ -1471,7 +1459,7 @@ msgstr ""
 "layouts sera automatiquement rendu sélectionnable depuis le dialogue des "
 "préférences de Florence."
 
-#: C/florence.xml:345(para)
+#: C/florence.xml:344(para)
 msgid ""
 "If you think that your layout file could be of any use to other people than "
 "yourself, please, consider sending it by email to f.agrech@gmail.com for "
@@ -1482,11 +1470,11 @@ msgstr ""
 "considérer la possibilité de l'envoyer par email à f.agrech@gmail.com pour "
 "inclusion dans les futures versions de Florence."
 
-#: C/florence.xml:349(title)
+#: C/florence.xml:348(title)
 msgid "Getting help"
 msgstr "Se faire aider"
 
-#: C/florence.xml:350(para)
+#: C/florence.xml:349(para)
 msgid ""
 "You can get help on the <ulink url=\"https://sourceforge.net/forum/forum.php?"
 "forum_id=784280\">forum</ulink>, or you can ask for help by email at f."
@@ -1496,11 +1484,11 @@ msgstr ""
 "forum/forum.php?forum_id=784280\">forum</ulink> ou demander de l'aide par "
 "email à f.agrech@gmail.com"
 
-#: C/florence.xml:353(title)
+#: C/florence.xml:352(title)
 msgid "Contribute"
 msgstr "Contribuer"
 
-#: C/florence.xml:354(para)
+#: C/florence.xml:353(para)
 msgid ""
 "If you want to help the Florence project, please send an email to f."
 "agrech@gmail.com"
@@ -1512,4 +1500,3 @@ msgstr ""
 #: C/florence.xml:0(None)
 msgid "translator-credits"
 msgstr "François Agrech <f.agrech@gmail.com> 2008, 2009, 2010"
-
