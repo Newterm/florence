@@ -49,6 +49,7 @@ struct view {
 	cairo_surface_t *symbols; /* contains the symbols image of florence */
 	GdkRegion *redraw; /* region that needs to be redrawn */
 	gboolean hand_cursor; /* true when the cursor is a hand */
+	gulong configure_handler; /* configure signal handler id */
 };
 
 /* create a view of florence */

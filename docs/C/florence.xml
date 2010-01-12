@@ -326,7 +326,6 @@ GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr
 	<para>Here is a list of known bugs. Those bugs do not have a fix yet. If you know how to fix one of them, please email the author.</para>
 	<orderedlist>
 		<listitem><para>Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971. As a result, Florence does not track hardware keyboard changes as it should and does not work properly with recent Xorg releases. Workaround: please configure Florence without the xrecord extension (--without-xrecord option)</para></listitem>
-		<listitem><para>For some reasons, zooming the keyboard with the zoom keys (+) and (-) makes Florence stop redrawing itself with GTK 2.18. It does not seem to happen with gtk 2.19. Workaround: do not use the zoom keys with GTK 2.18, or restart Florence after using it.</para></listitem>
 		<listitem><para>When the --without-docs configure option is provided, Florence still requires the gnome-docs-utils package when it should not. This is because the GNOME_DOC_INIT macro does not seem to support being invoked conditionnaly.</para></listitem>
 	</orderedlist>
 </sect1>

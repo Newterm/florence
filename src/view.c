@@ -52,6 +52,7 @@ void view_hide (struct view *view)
 /* resize the window */
 void view_resize (struct view *view)
 {
+	GdkRectangle rect;
 	GdkGeometry hints;
 	hints.win_gravity=GDK_GRAVITY_STATIC;
 	if (settings_get_bool("window/resizable")) {
@@ -68,6 +69,10 @@ void view_resize (struct view *view)
 		gtk_widget_set_size_request(GTK_WIDGET(view->window),
 			view->width, view->height);
 	}
+	/* refresh the view */
+	rect.x=0; rect.y=0;
+	rect.width=view->width; rect.height=view->height;
+	gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
 }
 
 /* draws the background of florence */
@@ -531,6 +536,10 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 
 	/* and free up drawing memory */
 	cairo_destroy(context);
+	
+	if (!view->configure_handler) 
+		view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
+			G_CALLBACK(view_configure), view);
 }
 
 /* on keys changed events */
@@ -560,6 +569,9 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
+	/* Do not call configure signal handler */
+	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
+	view->configure_handler=0;
 	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
 	view_update_extensions(client, xnxn_id, entry, user_data);
 }
@@ -625,7 +637,8 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 
 	g_signal_connect(gdk_keymap_get_default(), "keys-changed", G_CALLBACK(view_on_keys_changed), view);
 	g_signal_connect(G_OBJECT(view->window), "screen-changed", G_CALLBACK(view_screen_changed), view);
-	g_signal_connect(G_OBJECT(view->window), "configure-event", G_CALLBACK(view_configure), view);
+	view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
+		G_CALLBACK(view_configure), view);
 	g_signal_connect(G_OBJECT(view->window), "expose-event", G_CALLBACK(view_expose), view);
 	view_screen_changed(GTK_WIDGET(view->window), NULL, view);
 	gtk_widget_show(GTK_WIDGET(view->window));
