@@ -557,6 +557,9 @@ void view_on_keys_changed(GdkKeymap *keymap, gpointer user_data)
 void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
+	/* Do not call configure signal handler */
+	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
+	view->configure_handler=0;
 	view_set_dimensions(view);
 	view_resize(view);
 	if (view->background) cairo_surface_destroy(view->background);
