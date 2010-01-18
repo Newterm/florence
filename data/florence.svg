@@ -1,31 +1,28 @@
-<?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 
-'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
-<!--
-  Florence - Florence is a simple virtual keyboard for Gnome.
-
-  Copyright (C) 2008, 2009, 2010 François Agrech
-
-  This program is free software; you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation; either version 2, or (at your option)
-  any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program; if not, write to the Free Software Foundation,
-  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
--->
-<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='100' height='100' viewBox='0 0 100 100'>
-	<title>Florence virtual keyboard icon</title>
-	<desc>Florence icon, Copyright (C) 2008, 2009 François Agrech under the terms of GNU General Public License version 2.</desc>
-	<ellipse cx="50%" cy="50%" rx="50%" ry="50%" fill="lightgray"/>
-	<ellipse cx="50%" cy="50%" rx="45%" ry="45%" fill="blue" stroke="white" stroke-width="8%"/>
-	<ellipse cx="35%" cy="35%" rx="8%" ry="8%" fill="white"/>
-	<ellipse cx="65%" cy="35%" rx="8%" ry="8%" fill="white"/>
-	<path d="M30 65 C35 70 45 72 50 72 C55 72 65 70 70 65" stroke="white" stroke-width="8%" stroke-linecap="round" fill-opacity="0%"/>
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<style type="text/css">
+		.key {
+			fill:white;
+		}
+		.background {
+			fill:black;
+		}
+	</style>
+	<defs>
+		<rect id="smallkey" width="2" height="2" class="key"/>
+		<rect id="key" width="3" height="2" class="key"/>
+		<rect id="largeKey" width="4" height="2" class="key"/>
+		<rect id="largestKey" width="6" height="2" class="key"/>
+		<path id="returnKey" class="key" d="M1 0 L3 0 L3 5 L0 5 L0 3 L1 3 Z"/>
+		<g id="keyboard" transform="scale(2) translate(0.5,0.5)">
+			<rect x="-0.5" y="-0.5" width="16" height="15" class="background"/>
+			<use xlink:href="#key" x="0" y="0"/><use xlink:href="#key" x="4" y="0"/><use xlink:href="#key" x="8" y="0"/><use xlink:href="#key" x="12" y="0"/>
+			<use xlink:href="#largeKey" x="0" y="3"/><use xlink:href="#key" x="5" y="3"/><use xlink:href="#key" x="9" y="3"/><use xlink:href="#returnKey" x="12" y="3"/>
+			<use xlink:href="#key" x="0" y="6"/><use xlink:href="#key" x="4" y="6"/><use xlink:href="#key" x="8" y="6"/>
+			<use xlink:href="#smallkey" x="0" y="9"/><use xlink:href="#key" x="3" y="9"/><use xlink:href="#key" x="7" y="9"/><use xlink:href="#largeKey" x="11" y="9"/>
+			<use xlink:href="#largeKey" x="0" y="12"/><use xlink:href="#largestKey" x="5" y="12"/><use xlink:href="#key" x="12" y="12"/>
+		</g>
+	</defs>
+	<use xlink:href="#keyboard"/>
 </svg>

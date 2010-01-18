@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-12 18:29+0100\n"
+"POT-Creation-Date: 2010-01-18 17:47+0100\n"
 "PO-Revision-Date: 2010-01-12 18:25+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -1064,10 +1064,10 @@ msgstr "Florence est lancée"
 
 #: ../src/trayicon.c:152
 msgid ""
-"Click on Florence smile to show/hide Florence.\n"
+"Click on Florence icon to show/hide Florence.\n"
 "Right click on it to display menu and get help."
 msgstr ""
-"Cliquez sur le sourire de Florence pour afficher/cacher Florence.\n"
+"Cliquez sur l'icône de Florence pour afficher/cacher Florence.\n"
 "Cliquez droit pour afficher le menu et obtenir de l'aide."
 
 #: ../src/trayicon.c:156

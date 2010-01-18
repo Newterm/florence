@@ -149,7 +149,7 @@ gboolean trayicon_notification_start(gpointer userdata)
 	if (!notify_init(_("Florence"))) flo_warn(_("libnotify failed to initialize"));
 	trayicon->notification=notify_notification_new_with_status_icon(
 		_("Florence is running"),
-		_("Click on Florence smile to show/hide Florence.\n"
+		_("Click on Florence icon to show/hide Florence.\n"
 		"Right click on it to display menu and get help."),
 		GTK_STOCK_INFO, trayicon->tray_icon);
 	notify_notification_add_action(trayicon->notification, "STOP",
