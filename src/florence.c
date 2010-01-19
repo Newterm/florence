@@ -538,5 +538,7 @@ void flo_free(struct florence *florence)
 	if (florence->view) view_free(florence->view);
 	if (florence->status) status_free(florence->status);
 	g_free(florence);
+	xmlCleanupParser();
+	xmlMemoryDump();
 }
 

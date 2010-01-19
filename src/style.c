@@ -136,8 +136,6 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 
 	xmlFreeDoc(doc);
 	xmlBufferFree(buffer);
-	xmlCleanupParser();
-	xmlMemoryDump();
 	return ret;
 }
 

@@ -376,8 +376,6 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 void layoutreader_free(struct layout *layout)
 {
 	xmlFreeDoc(layout->doc);
-	xmlCleanupParser();
-	xmlMemoryDump();
 	g_free(layout);
 }
 
