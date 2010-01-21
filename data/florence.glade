@@ -10,6 +10,8 @@
     <property name="title" translatable="yes">Florence Settings</property>
     <property name="window_position">mouse</property>
     <property name="type_hint">dialog</property>
+    <property name="default-width">350</property>
+    <property name="default-height">250</property>
     <signal name="destroy" handler="settings_window_close" object="flo_config_window"/>
     <signal name="key_press_event" handler="settings_window_help"/>
     <child>
