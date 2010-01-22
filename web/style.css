@@ -1,0 +1,111 @@
+body {
+	font-family: luxi sans, sans-serif;
+}
+
+.screen {
+	font-family: monospace;
+	font-size: 1em;
+	display: block;
+	padding: 10px;
+	border: 1px solid #bbb;
+	background-color: #eee;
+	color: #000;
+	overflow: auto;
+	border-radius: 2.5px;
+	-moz-border-radius: 2.5px;
+	margin: 0.5em 2em;
+}
+
+.programlisting {
+	font-family: monospace;
+	font-size: 1em;
+	display: block;
+	padding: 10px;
+	border: 1px solid #bbb;
+	background-color: #ddd;
+	color: #000;
+	overflow: auto;
+	border-radius: 2.5px;
+	-moz-border-radius: 2.5px;
+	margin: 0.5em 2em;
+}
+
+h1 { 
+	padding: 0px 0px 10px 0px;
+	margin; 0px 0px 10px 0px;
+	display: inline;
+	font-size: 130%;
+}
+
+.navfooter {
+	background-color: #bbb;
+}
+
+.navheader {
+	background-color: #bbb;
+}
+
+.header { 
+	font-size: 24px;
+	padding: 10px;
+	font-weight: bold;
+}
+
+.corps {
+	padding: 20px 50px 20px 50px;
+}
+
+hr {
+	padding: 0px;
+	margin: 0px;
+}
+
+div.mainmenu {
+	background-color: #aaa;
+}
+
+ul.menu {
+	line-height: 3em;
+	font-size: 0.9em;
+	text-align: center;
+	margin: 0px;
+	padding: 0px;
+	display: inline;
+	vertical-align: bottom;
+}
+li.menu {
+	display: inline; margin:2px; padding:0px;
+	vertical-align: bottom;
+}
+li.menu a {
+	background-color: black;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	margin: 0px;
+	padding: 3px;
+	font-size: 80%;
+}
+li.menu:hover a {
+	background-color: blue;
+	color: white;
+}
+li.selected {
+	background-color: white;
+	color: black;
+	font-weight: bold;
+	text-decoration: none;
+	padding: 3px;
+}
+
+/* For keyboard */
+
+.shape {
+	stroke: gray;
+	stroke-width: 4px;
+}
+
+.symbol {
+	stroke: white;
+}
+

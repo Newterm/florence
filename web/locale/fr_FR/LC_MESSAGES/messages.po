@@ -1,0 +1,89 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Florence 0.4.6\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-22 08:50+0100\n"
+"PO-Revision-Date: 2010-01-22 08:51+0100\n"
+"Last-Translator: François Agrech <f.agrech@gmail.com>\n"
+"Language-Team: FranÃ§ois Agrech <f.agrech@gmail.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: French\n"
+"X-Poedit-Country: FRANCE\n"
+"X-Poedit-SourceCharset: iso-8859-1\n"
+
+#: tools.php:16
+#: home.php:9
+#: home.php:20
+msgid "Florence Virtual Keyboard"
+msgstr "Clavier virtuel Florence"
+
+#: tools.php:19
+msgid "francais"
+msgstr "english"
+
+#: tools.php:19
+msgid "En français"
+msgstr "In English"
+
+#: tools.php:26
+#: tools.php:28
+msgid "Home"
+msgstr "Acceuil"
+
+#: tools.php:28
+#: tools.php:34
+msgid "english"
+msgstr "francais"
+
+#: tools.php:30
+msgid "Screenshots"
+msgstr "Copies d'Ã©cran"
+
+#: tools.php:32
+#: tools.php:34
+msgid "Documentation"
+msgstr "Documentation"
+
+#: tools.php:36
+msgid "Download"
+msgstr "TÃ©lÃ©chargement"
+
+#: tools.php:37
+msgid "News"
+msgstr "Nouvelles"
+
+#: home.php:14
+msgid "Florence is an extensible scalable virtual keyboard for GNOME. You need it if you can't use a real hardware keyboard, for example because you are disabled, your keyboard is broken or because you use a tablet PC, but you must be able to use a pointing device (as a mouse, a trackball, or a touchscreen); If you can't use a pointing device, there is gok, which can be used with just simple switches."
+msgstr "Florence est un clavier virtuel pour GNOME extensible et redimensionnable. Vous avez besoin de Florence si vous ne pouvez pas utiliser un vrai clavier matÃ©riel, par exemple Ã  cause d'un handicap, parce que votre clavier est cassÃ© ou parce que vous utilisez un PC tablette. Cependant, vous devez Ãªtre en mesure d'utiliser un pÃ©riphÃ©rique de pointage (comme une souris, un trackball, ou un Ã©cran tactile) pour utiliser Florence ; Si vous ne pouvez pas utiliser un pÃ©riphÃ©rique de pointage, il y a gok, qui peut Ãªtre utilisÃ© avec de simples connecteurs."
+
+#: home.php:16
+msgid "Florence stays out of your way when you don't need it: it appears on the screen only when you need it. A Timer-based auto-click functionality is available to help disabled people having difficulties to click."
+msgstr "Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le clavier apparaÃ®t Ã  l'Ã©cran uniquement lorsque vous en avez besoin. Une fonctionnalitÃ© de click automatique basÃ©e sur un minuteur est disponible pour aider les personnes handicapÃ©es qui ont des difficultÃ©s Ã  cliquer."
+
+#: home.php:18
+msgid "Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment."
+msgstr "Florence est principalement conÃ§u pour Ãªtre utilisÃ© avec le bureau GNOME, mais peut Ãªtre utilisÃ© avec n'importe quel environnement de bureau."
+
+#: home.php:20
+msgid "florence-gb"
+msgstr "florence-fr"
+
+#: home.php:22
+msgid "SourceForge.net Logo"
+msgstr "Logo SourceForge.net"
+
+#: home.php:25
+msgid "Author:"
+msgstr "Auteur:"
+
+#: home.php:26
+msgid "Last update: 1st of November, 2009"
+msgstr "DerniÃ¨re mise Ã  jour: 21 janvier 2010"
+
