@@ -9,18 +9,16 @@ function main_menu($location) {
 if ($location == "Home") { $path=""; } else { $path="../"; }
 ?>
 <div class="mainmenu">
-<table width="100%">
-<tr>
-<td valign="center">
+<div class="maintitle">
 <object type="image/svg+xml" data="<?php echo $path; ?>images/florence.svg" width="32" height="32"></object>
+</div>
+<div class="maintitle">
 <h1><?php echo _("Florence Virtual Keyboard"); ?></h1>
-</td>
-<td align="right">
+</div>
+<div class="language">
 <a href="<?php echo $path._("francais"); ?>.html"><?php echo _("En français"); ?></a>
-</td>
-</tr>
-<tr>
-<td align="right" valign="bottom" colspan="2">
+</div>
+<div class="menu">
 <ul class="menu">
 <?php if ($location == "Home") { ?>
 <li class="menu selected"><?php echo _("Home"); ?></li>
@@ -36,9 +34,7 @@ if ($location == "Home") { $path=""; } else { $path="../"; }
 <li class="menu"><a href="http://sourceforge.net/project/platformdownload.php?group_id=217749"><?php echo _("Download"); ?></a></li>
 <li class="menu"><a href="http://sourceforge.net/news/?group_id=217749"><?php echo _("News"); ?></a></li>
 </ul>
-</td>
-</tr>
-</table>
+</div>
 </div>
 <hr/>
 <?php

@@ -30,13 +30,6 @@ body {
 	margin: 0.5em 2em;
 }
 
-h1 { 
-	padding: 0px 0px 10px 0px;
-	margin; 0px 0px 10px 0px;
-	display: inline;
-	font-size: 130%;
-}
-
 .navfooter {
 	background-color: #bbb;
 }
@@ -55,20 +48,39 @@ h1 {
 	padding: 20px 50px 20px 50px;
 }
 
+h1 { 
+	display: inline;
+	font-size: 150%;
+}
+
 hr {
 	padding: 0px;
 	margin: 0px;
 }
 
 div.mainmenu {
-	background-color: #aaa;
+}
+div.maintitle {
+	margin: 0px 10px 0px 10px;
+	float: left;
+}
+div.language {
+	float: right;
+	text-align: right;
+}
+div.menu {
+	float: right;
+	clear: both;
+	text-align: right;
+	margin: 3px;
+}
+hr {
+	clear: both;
 }
 
 ul.menu {
-	line-height: 3em;
 	font-size: 0.9em;
 	text-align: center;
-	margin: 0px;
 	padding: 0px;
 	display: inline;
 	vertical-align: bottom;
