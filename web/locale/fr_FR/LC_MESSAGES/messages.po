@@ -7,20 +7,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-22 08:50+0100\n"
-"PO-Revision-Date: 2010-01-22 08:51+0100\n"
-"Last-Translator: FranÃ§ois Agrech <f.agrech@gmail.com>\n"
-"Language-Team: FranÃƒÂ§ois Agrech <f.agrech@gmail.com>\n"
+"POT-Creation-Date: 2010-01-26 17:46+0100\n"
+"PO-Revision-Date: 2010-01-25 09:29+0100\n"
+"Last-Translator: François Agrech <f.agrech@gmail.com>\n"
+"Language-Team: François Agrech <f.agrech@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=iso-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-Language: French\n"
-"X-Poedit-Country: FRANCE\n"
-"X-Poedit-SourceCharset: iso-8859-1\n"
 
-#: tools.php:16
-#: home.php:9
-#: home.php:20
+#: tools.php:16 home.php:9 home.php:20
 msgid "Florence Virtual Keyboard"
 msgstr "Clavier virtuel Florence"
 
@@ -29,47 +24,69 @@ msgid "francais"
 msgstr "english"
 
 #: tools.php:19
-msgid "En franÃ§ais"
+msgid "En français"
 msgstr "In English"
 
-#: tools.php:26
-#: tools.php:28
+#: tools.php:24 tools.php:26
 msgid "Home"
 msgstr "Acceuil"
 
-#: tools.php:28
-#: tools.php:34
+#: tools.php:26 tools.php:32
 msgid "english"
 msgstr "francais"
 
-#: tools.php:30
+#: tools.php:28
 msgid "Screenshots"
-msgstr "Copies d'ÃƒÂ©cran"
+msgstr "Copies d'écran"
 
-#: tools.php:32
-#: tools.php:34
+#: tools.php:30 tools.php:32
 msgid "Documentation"
 msgstr "Documentation"
 
-#: tools.php:36
+#: tools.php:34
 msgid "Download"
-msgstr "TÃƒÂ©lÃƒÂ©chargement"
+msgstr "Téléchargement"
 
-#: tools.php:37
+#: tools.php:35
 msgid "News"
 msgstr "Nouvelles"
 
 #: home.php:14
-msgid "Florence is an extensible scalable virtual keyboard for GNOME. You need it if you can't use a real hardware keyboard, for example because you are disabled, your keyboard is broken or because you use a tablet PC, but you must be able to use a pointing device (as a mouse, a trackball, or a touchscreen); If you can't use a pointing device, there is gok, which can be used with just simple switches."
-msgstr "Florence est un clavier virtuel pour GNOME extensible et redimensionnable. Vous avez besoin de Florence si vous ne pouvez pas utiliser un vrai clavier matÃƒÂ©riel, par exemple ÃƒÂ  cause d'un handicap, parce que votre clavier est cassÃƒÂ© ou parce que vous utilisez un PC tablette. Cependant, vous devez ÃƒÂªtre en mesure d'utiliser un pÃƒÂ©riphÃƒÂ©rique de pointage (comme une souris, un trackball, ou un ÃƒÂ©cran tactile) pour utiliser Florence ; Si vous ne pouvez pas utiliser un pÃƒÂ©riphÃƒÂ©rique de pointage, il y a gok, qui peut ÃƒÂªtre utilisÃƒÂ© avec de simples connecteurs."
+msgid ""
+"Florence is an extensible scalable virtual keyboard for GNOME. You need it "
+"if you can't use a real hardware keyboard, for example because you are "
+"disabled, your keyboard is broken or because you use a tablet PC, but you "
+"must be able to use a pointing device (as a mouse, a trackball, or a "
+"touchscreen); If you can't use a pointing device, there is gok, which can be "
+"used with just simple switches."
+msgstr ""
+"Florence est un clavier virtuel pour GNOME extensible et redimensionnable. "
+"Vous avez besoin de Florence si vous ne pouvez pas utiliser un vrai clavier "
+"matériel, par exemple à cause d'un handicap, parce que votre clavier est "
+"cassé ou parce que vous utilisez un PC tablette. Cependant, vous devez être "
+"en mesure d'utiliser un périphérique de pointage (comme une souris, un "
+"trackball, ou un écran tactile) pour utiliser Florence ; Si vous ne pouvez "
+"pas utiliser un périphérique de pointage, il y a gok, qui peut être utilisé "
+"avec de simples connecteurs."
 
 #: home.php:16
-msgid "Florence stays out of your way when you don't need it: it appears on the screen only when you need it. A Timer-based auto-click functionality is available to help disabled people having difficulties to click."
-msgstr "Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le clavier apparaÃƒÂ®t ÃƒÂ  l'ÃƒÂ©cran uniquement lorsque vous en avez besoin. Une fonctionnalitÃƒÂ© de click automatique basÃƒÂ©e sur un minuteur est disponible pour aider les personnes handicapÃƒÂ©es qui ont des difficultÃƒÂ©s ÃƒÂ  cliquer."
+msgid ""
+"Florence stays out of your way when you don't need it: it appears on the "
+"screen only when you need it. A Timer-based auto-click functionality is "
+"available to help disabled people having difficulties to click."
+msgstr ""
+"Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le "
+"clavier apparaît à l'écran uniquement lorsque vous en avez besoin. Une "
+"fonctionnalité de click automatique basée sur un minuteur est disponible "
+"pour aider les personnes handicapées qui ont des difficultés à cliquer."
 
 #: home.php:18
-msgid "Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment."
-msgstr "Florence est principalement conÃƒÂ§u pour ÃƒÂªtre utilisÃƒÂ© avec le bureau GNOME, mais peut ÃƒÂªtre utilisÃƒÂ© avec n'importe quel environnement de bureau."
+msgid ""
+"Florence is primarily intended to be used with the GNOME desktop, although "
+"it can be used on any desktop environment."
+msgstr ""
+"Florence est principalement conçu pour être utilisé avec le bureau GNOME, "
+"mais peut être utilisé avec n'importe quel environnement de bureau."
 
 #: home.php:20
 msgid "florence-gb"
@@ -84,6 +101,5 @@ msgid "Author:"
 msgstr "Auteur:"
 
 #: home.php:26
-msgid "Last update: 1st of November, 2009"
-msgstr "DerniÃƒÂ¨re mise ÃƒÂ  jour: 21 janvier 2010"
-
+msgid "Last update: 25th of January, 2010"
+msgstr "Dernière mise à jour: 25 janvier 2010"

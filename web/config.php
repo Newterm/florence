@@ -1,7 +1,7 @@
 <?php
 require_once("tools.php");
 gettext_init();
-echo "<?xml version='1.0' encoding='UTF-8'?>\n";
+echo "<?xml version='1.0' encoding='iso-8859-15'?>\n";
 ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:param name="use.id.as.filename" select="'1'"/>
@@ -19,4 +19,3 @@ echo "<?xml version='1.0' encoding='UTF-8'?>\n";
 		<xsl:comment> Piwik </xsl:comment>
 	</xsl:template>
 </xsl:stylesheet>
-

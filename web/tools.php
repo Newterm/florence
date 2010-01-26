@@ -16,7 +16,7 @@ if ($location == "Home") { $path=""; } else { $path="../"; }
 <h1><?php echo _("Florence Virtual Keyboard"); ?></h1>
 </div>
 <div class="language">
-<a href="<?php echo $path._("francais"); ?>.html"><?php echo _("En franÃ§ais"); ?></a>
+<a href="<?php echo $path._("francais"); ?>.html"><?php echo _("En français"); ?></a>
 </div>
 <div class="menu">
 <ul class="menu">

@@ -1,12 +1,12 @@
 <?php
 require_once("tools.php");
 gettext_init();
-echo '<?xml version="1.0" encoding="ANSI_X3.4-1968" standalone="no"?>'."\n";
+echo '<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?>'."\n";
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta content="text/html; charset=UTF-8" http-equiv="content-type"><title><?php echo _("Florence Virtual Keyboard"); ?></title></head>
+<meta content="text/html; charset=ISO-8859-15" http-equiv="content-type"><title><?php echo _("Florence Virtual Keyboard"); ?></title></head>
 <link rel="stylesheet" type="text/css" href="style.css">
 <body>
 <?php main_menu("Home"); ?>
@@ -22,8 +22,8 @@ echo '<?xml version="1.0" encoding="ANSI_X3.4-1968" standalone="no"?>'."\n";
 <center><a href="http://sourceforge.net/"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=217749&amp;type=5" alt="<?php echo _("SourceForge.net Logo"); ?>" border="0" height="62" width="210"></a></center><br>
 <hr>
 <center>
-<?php echo _("Author:"); ?> <a href="mailto:f.agrech@gmail.com">FranÃ§ois Agrech</a><br>
-<?php echo _("Last update: 1st of November, 2009"); ?>
+<?php echo _("Author:"); ?> <a href="mailto:f.agrech@gmail.com">François Agrech</a><br>
+<?php echo _("Last update: 25th of January, 2010"); ?>
 </center>
 </body>
 </html>
