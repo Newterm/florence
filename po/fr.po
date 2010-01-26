@@ -6,7 +6,7 @@
 # François Agrech <f.agrech@gmail.com>, 200, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: Florence Gnome virtual keyboard 0.4.5\n"
+"Project-Id-Version: Florence Gnome virtual keyboard 0.4.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-01-18 17:47+0100\n"
 "PO-Revision-Date: 2010-01-12 18:25+0100\n"
