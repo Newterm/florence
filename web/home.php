@@ -6,8 +6,10 @@ echo '<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?>'."\n";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta content="text/html; charset=ISO-8859-15" http-equiv="content-type"><title><?php echo _("Florence Virtual Keyboard"); ?></title></head>
+<meta content="text/html; charset=ISO-8859-15" http-equiv="content-type"><title><?php echo _("Florence Virtual Keyboard"); ?></title>
 <link rel="stylesheet" type="text/css" href="style.css">
+<?php piwik(); ?>
+</head>
 <body>
 <?php main_menu("Home"); ?>
 <div class="corps">

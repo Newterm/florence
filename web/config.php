@@ -17,5 +17,7 @@ echo "<?xml version='1.0' encoding='iso-8859-15'?>\n";
 	</xsl:template>
 	<xsl:template name="user.head.content">
 		<xsl:comment> Piwik </xsl:comment>
+			<?php piwik(); ?>
+		<xsl:comment> End Piwik Tag </xsl:comment>
 	</xsl:template>
 </xsl:stylesheet>
