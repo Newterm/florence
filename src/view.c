@@ -54,7 +54,7 @@ void view_resize (struct view *view)
 {
 	GdkRectangle rect;
 	GdkGeometry hints;
-	hints.win_gravity=GDK_GRAVITY_STATIC;
+	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
 	if (settings_get_bool("window/resizable")) {
 		hints.min_aspect=view->vwidth/view->vheight;
 		hints.max_aspect=view->vwidth/view->vheight;
