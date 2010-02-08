@@ -60,6 +60,7 @@ void trace_msg(char *prefix, FILE *f, char *s, va_list args)
 	gchar *str=g_strdup_vprintf((gchar *)s, args);
 	g_fprintf(f, "%s%s", prefix, str);
 	g_fprintf(f, "\n");
+	g_free(str);
 }
 
 /********************/

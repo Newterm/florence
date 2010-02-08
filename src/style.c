@@ -485,10 +485,12 @@ struct style *style_new(gchar *base_uri)
 	struct layout_shape *shape=NULL;
 	struct layout_symbol *symbol=NULL;
 	struct style *style=g_malloc(sizeof(struct style));
+	char *uri=base_uri;
 
 	memset(style, 0, sizeof(struct style));
 	style->base_uri=base_uri;
-	layout=layoutreader_new(base_uri?base_uri:settings_get_string("layout/style"),
+	if (!uri) uri=settings_get_string("layout/style");
+	layout=layoutreader_new(uri,
 		DATADIR "/styles/default/florence.style",
 		DATADIR "/relaxng/style.rng");
 
@@ -510,6 +512,7 @@ struct style *style_new(gchar *base_uri)
 	}
 
 	layoutreader_free(layout);
+	if (!base_uri) g_free(uri);
 	return style;
 }
 
