@@ -27,10 +27,10 @@
 	<symbol>
 		<name>Super_[LR]</name>
 		<svg width="100" height="100" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
-		     <ellipse cx="50%" cy="50%" rx="25%" ry="25%" class="symbol" fill="none" stroke-width="4%"/>
-		     <ellipse cx="42%" cy="42%" rx="6%" ry="4%" class="symbol"/>
-		     <ellipse cx="58%" cy="42%" rx="6%" ry="4%" class="symbol"/>
-		     <path d="M35 55 C40 60 45 62 50 62 C55 62 60 60 65 55" class="symbol" stroke-width="4%" stroke-linecap="round" fill-opacity="0"/>
+			<path class="symbol" d="M 50,22.5 C 34.841781,22.5 22.5,34.841781 22.5,50 22.5,65.158219 34.841781,77.5 50,77.5 65.158219,77.5 77.5,65.158219 77.5,50 77.5,34.841781 65.158219,22.5 50,22.5 z m 0,5 C 62.456018,27.5 72.5,37.543982 72.5,50 72.5,62.456018 62.456018,72.5 50,72.5 37.543982,72.5 27.5,62.456018 27.5,50 27.5,37.543982 37.543982,27.5 50,27.5 z"/>
+			<ellipse class="symbol" cx="42" cy="42" rx="6" ry="4" transform="matrix(0.83333331,0,0,1,8.0000011,0)"/>
+			<ellipse class="symbol" cx="58" cy="42" rx="6" ry="4" transform="matrix(0.83333334,0,0,1,8.6666665,0)"/>
+			<path class="symbol" d="m 36.96875,55.46875 a 2.50025,2.50025 0 0 0 -1.75,4.3125 C 39.004424,63.566924 44.666667,64.5 50,64.5 c 5.333333,0 10.995576,-0.933076 14.78125,-4.71875 a 2.5190679,2.5190679 0 1 0 -3.5625,-3.5625 C 59.004424,58.433076 54.666667,59.5 50,59.5 c -4.666667,0 -9.004424,-1.066924 -11.21875,-3.28125 a 2.50025,2.50025 0 0 0 -1.8125,-0.75 z"/>
 		</svg>
 	</symbol>
 	<symbol>
@@ -44,45 +44,39 @@
 	<symbol>
 		<name>BackSpace</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="75" y1="50" x2="35" y2="50" stroke-width="5"/>
-			<polygon class="symbol" points="25,50 35,40 35,60"/>
+			<path class="symbol" d="M20 50 L35 35 L35 45 L75 45 L75 55 L35 55 L35 65 Z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>Tab</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="31.375" y1="50" x2="52.5" y2="50" stroke-width="5"/>
-			<polygon class="symbol" points="62.5,50 52.5,40 52.5,60"/>
-			<line class="symbol" x1="68.625" y1="37.5" x2="68.625" y2="62.5" stroke-width="5"/>
+			<path class="symbol" d="M65 35 L75 35 L75 65 L65 65 Z"/>
+			<path class="symbol" d="M62.5 50 L50 35 L50 45 L28.875 45 L28.875 55 L50 55 L50 65 Z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>ISO_Left_Tab</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="68.625" y1="50" x2="47.5" y2="50" stroke-width="5"/>
-			<polygon class="symbol" points="37.5,50 47.5,40 47.5,60"/>
-			<line class="symbol" x1="31.375" y1="37.5" x2="31.375" y2="62.5" stroke-width="5"/>
+			<path class="symbol" d="M25 35 L35 35 L35 65 L25 65 Z"/>
+			<path class="symbol" d="M37.5 50 L50 35 L50 45 L73.625 45 L73.625 55 L50 55 L50 65 Z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>Return</name>
 		<svg version="1.1" width="144" height="192" viewBox="0 0 144 192" xmlns="http://www.w3.org/2000/svg">
-			<path class="symbol" fill="none" stroke-width="5" d="M110 35 C118 35 126 40 126 45 C126 50 118 57 110 57 L33 57"/>
-			<polygon class="symbol" points="18,57 33,47 33,67"/>
+			<path class="symbol" d="M15 57 L33 40 L33 52 L110 52 C120 52 120 40 110 40 L100 40 L100 30 L110 30 C140 30 140 62 110 62 L33 62 L33 74 Z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>Caps_Lock</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<rect class="symbol" x="37.5" y="43.75" width="25" height="25"/>
-			<path class="symbol" fill="none" stroke-width="3" d="M43.75 43.75 L43.75 37.5 C43.75 34.375 46.875 31.25 50 31.25 C53.125 31.25 56.25 34.375 56.25 37.5 L56.25 43.75"/>
+			<path class="symbol" d="m 35,45 0,26 30,0 0,-26 -5,0 0,-9 c 0,-5 -2,-8 -10,-8 -8,0 -10,3 -10,8 l 0,9 -5,0 z m 20,0 -10,0 0,-9 c 0,-2 2,-3 5,-3 3,0 5,1 5,3 l 0,9 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(Shift_[LR]|(KP_|)Up)</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="50" y1="62.5" x2="50" y2="47.5" stroke-width="5"/>
-			<polygon class="symbol" points="50,37.5 40,47.5 60,47.5"/>
+			<path class="symbol" d="M 45,45 35,45 50,30 65,45 55,45 55,70 45,70 45,45 z"/>
 		</svg>
 	</symbol>
 	<symbol>
@@ -92,18 +86,13 @@
 	<symbol>
 		<name>(KP_|)Home</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="50" y1="50" x2="32" y2="32" stroke-width="5"/>
-			<polygon class="symbol" points="25,25 39.1421,25 25,39.1421"/>
+			<path class="symbol" d="m 32.196699,38.232233 -7.071068,7.071068 0,-21.213204 21.213204,1e-6 -7.071068,7.071068 17.677669,17.677669 -7.071067,7.071068 -17.67767,-17.67767 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Page_Up</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="50" y1="65" x2="50" y2="35" stroke-width="8"/>
-			<polygon class="symbol" points="50,22.5 37.5,35 62.5,35"/>
-			<line class="symbol" x1="37.5" y1="50" x2="62.5" y2="50" stroke-width="3"/>
-			<line class="symbol" x1="37.5" y1="57.5" x2="62.5" y2="57.5" stroke-width="3"/>
-			<line class="symbol" x1="37.5" y1="42.5" x2="62.5" y2="42.5" stroke-width="3"/>
+			<path class="symbol" d="m 45,55 -10,0 15,15 15,-15 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 -10,0 0,-1 -10,0 0,1 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 z"/>
 		</svg>
 	</symbol>
 	<symbol>
@@ -117,32 +106,25 @@
 	<symbol>
 		<name>(KP_|)Page_Down</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="50" y1="35" x2="50" y2="65" stroke-width="8"/>
-			<polygon class="symbol" points="50,77.5 37.5,65 62.5,65"/>
-			<line class="symbol" x1="37.5" y1="50" x2="62.5" y2="50" stroke-width="3"/>
-			<line class="symbol" x1="37.5" y1="57.5" x2="62.5" y2="57.5" stroke-width="3"/>
-			<line class="symbol" x1="37.5" y1="42.5" x2="62.5" y2="42.5" stroke-width="3"/>
+			<path class="symbol" d="m 45,45 -10,0 15,-15 15,15 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 -10,0 0,1 -10,0 0,-1 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Down</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="50" y1="37.5" x2="50" y2="52.5" stroke-width="5"/>
-			<polygon class="symbol" points="50,62.5 40,52.5 60,52.5"/>
+			<path class="symbol" d="m 55,55 10,0 -15,15 -15,-15 10,0 0,-25 10,0 0,25 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Left</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="67.5" y1="50" x2="50" y2="50" stroke-width="5"/>
-			<polygon class="symbol" points="40,50 50,40 50,60"/>
+			<path class="symbol" d="m 45,55 0,10 -15,-15 15,-15 0,10 25,0 0,10 -25,0 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<name>(KP_|)Right</name>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="32.5" y1="50" x2="50" y2="50" stroke-width="5"/>
-			<polygon class="symbol" points="60,50 50,40 50,60"/>
+			<path class="symbol" d="M 55,45 55,35 70,50 55,65 55,55 30,55 30,45 55,45 z"/>
 		</svg>
 	</symbol>
 	<symbol>
@@ -224,44 +206,33 @@
 	<symbol>
 		<type>close</type>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="65" y1="65" x2="35" y2="35" stroke-width="8"/>
-			<line class="symbol" x1="35" y1="65" x2="65" y2="35" stroke-width="8"/>
+			<path class="symbol" d="M 20,30 30,20 50,40 70,20 80,30 60,50 80,70 70,80 50,60 30,80 20,70 40,50 20,30 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<type>config</type>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="35" y1="65" x2="55" y2="45" stroke-width="10"/>
-			<polygon class="symbol" points="51,41 51,33 59,25 67,25 59,33 67,41 75,33 75,41 67,49 59,49"/>
-			<ellipse class="symbol" cx="35" cy="65" rx="5" ry="5" />
+			<path class="symbol" d="m 51,41 0,-7 9,-9 6,0 0,2 -8,8 7,8 8,-8 2,0 0,6 -8,9 -7,0 -2,-2 -18,18 c -2,2 -4,3 -6,1 -2,-2 -1,-4 1,-6 L 53,43 51,41 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<type>move</type>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<line class="symbol" x1="50" y1="30" x2="50" y2="70" stroke-width="5"/>
-			<polygon class="symbol" points="50,80 40,70 60,70"/>
-			<polygon class="symbol" points="50,20 40,30 60,30"/>
-			<line class="symbol" x1="30" y1="50" x2="70" y2="50" stroke-width="5"/>
-			<polygon class="symbol" points="80,50 70,40 70,60"/>
-			<polygon class="symbol" points="20,50 30,40 30,60"/>
+			<path class="symbol" d="m 50,20 -10,10 7,0 0,17 -17,0 0,-7 -10,10 10,10 0,-7 17,0 0,17 -7,0 10,10 10,-10 -7,0 0,-17 17,0 0,7 L 80,50 70,40 70,47 53,47 53,30 60,30 50,20 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<type>bigger</type>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<ellipse cx="45" cy="45" rx="20" ry="20" class="symbol" fill="none" stroke-width="4%"/>
-			<line class="symbol" x1="35" y1="45" x2="55" y2="45" stroke-width="5"/>
-			<line class="symbol" x1="45" y1="35" x2="45" y2="55" stroke-width="5"/>
-			<line class="symbol" x1="59.1421" y1="59.1421" x2="75" y2="75" stroke-width="5"/>
+			<path class="symbol" d="m 42.5,35 0,7.5 -7.5,0 0,5 7.5,0 0,7.5 5,0 0,-7.5 7.5,0 0,-5 -7.5,0 0,-7.5 -5,0 z"/>
+			<path class="symbol" d="m 45,22.4375 c -12.42586,0 -22.5625,10.13664 -22.5625,22.5625 0,12.42586 10.13664,22.5625 22.5625,22.5625 5.315839,0 10.230259,-1.841568 14.09375,-4.9375 l 14.125,14.15625 3.5625,-3.5625 L 62.625,59.09375 C 65.720932,55.230259 67.5625,50.315839 67.5625,45 67.5625,32.57414 57.42586,22.4375 45,22.4375 z m 0,5.125 c 9.669626,0 17.4375,7.767874 17.4375,17.4375 0,9.669626 -7.767874,17.4375 -17.4375,17.4375 -9.669626,0 -17.4375,-7.767874 -17.4375,-17.4375 0,-9.669626 7.767874,-17.4375 17.4375,-17.4375 z"/>
 		</svg>
 	</symbol>
 	<symbol>
 		<type>smaller</type>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-			<ellipse cx="45" cy="45" rx="20" ry="20" class="symbol" fill="none" stroke-width="4%"/>
-			<line class="symbol" x1="35" y1="45" x2="55" y2="45" stroke-width="5"/>
-			<line class="symbol" x1="59.1421" y1="59.1421" x2="75" y2="75" stroke-width="5"/>
+			<path class="symbol" d="m 35,42.5 0,5 20,0 0,-5 -20,0 z"/>
+			<path class="symbol" d="m 45,22.4375 c -12.42586,0 -22.5625,10.13664 -22.5625,22.5625 0,12.42586 10.13664,22.5625 22.5625,22.5625 5.315839,0 10.230259,-1.841568 14.09375,-4.9375 l 14.125,14.15625 3.5625,-3.5625 L 62.625,59.09375 C 65.720932,55.230259 67.5625,50.315839 67.5625,45 67.5625,32.57414 57.42586,22.4375 45,22.4375 z m 0,5.125 c 9.669626,0 17.4375,7.767874 17.4375,17.4375 0,9.669626 -7.767874,17.4375 -17.4375,17.4375 -9.669626,0 -17.4375,-7.767874 -17.4375,-17.4375 0,-9.669626 7.767874,-17.4375 17.4375,-17.4375 z"/>
 		</svg>
 	</symbol>
 </symbols>

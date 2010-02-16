@@ -59,6 +59,7 @@ gchar *style_get_color(enum style_colours c)
 		case STYLE_KEY_COLOR: color=(gchar *)settings_get_string("colours/key"); break;
 		case STYLE_OUTLINE_COLOR: color=(gchar *)settings_get_string("colours/outline"); break;
 		case STYLE_TEXT_COLOR: color=(gchar *)settings_get_string("colours/label"); break;
+		case STYLE_TEXT_OUTLINE_COLOR: color=(gchar *)settings_get_string("colours/label_outline"); break;
 		case STYLE_ACTIVATED_COLOR: color=(gchar *)settings_get_string("colours/activated"); break;
 		case STYLE_MOUSE_OVER_COLOR: color=(gchar *)settings_get_string("colours/mouseover"); break;
 		case STYLE_LATCHED_COLOR: color=(gchar *)settings_get_string("colours/latched"); break;
@@ -117,6 +118,11 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 				memcpy((void *)cur, (void *)color, 7);
 				if (color) g_free(color);
 				cur+=7; cur2+=11;
+			} else if (!strncmp(cur, "@SYM_OUTLINE_COLOR@", 19)) {
+				color=style_get_color(STYLE_TEXT_OUTLINE_COLOR);
+				memcpy((void *)cur, (void *)color, 7);
+				if (color) g_free(color);
+				cur+=7; cur2+=19;
 			}
 			*cur=*(++cur2);
 		}
@@ -256,14 +262,21 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	}
 
 	cairo_save(cairoctx);
-	style_cairo_set_color(style, cairoctx, STYLE_TEXT_COLOR);
+	style_cairo_set_color(style, cairoctx, STYLE_TEXT_OUTLINE_COLOR);
 	cairo_select_font_face(cairoctx, fontfamilly, slant, 
 		pango_font_description_get_weight(fontdesc)<=500?CAIRO_FONT_WEIGHT_NORMAL:CAIRO_FONT_WEIGHT_BOLD);
 	cairo_set_font_size(cairoctx, 0.8);
 	cairo_text_extents(cairoctx, text, &te);
 	cairo_font_extents(cairoctx, &fe);
 	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);
-	cairo_show_text(cairoctx, text);
+	/*cairo_show_text(cairoctx, text);*/
+	cairo_set_line_width(cairoctx, 0.1);
+	cairo_text_path(cairoctx, text);
+	cairo_stroke(cairoctx);
+	style_cairo_set_color(style, cairoctx, STYLE_TEXT_COLOR);
+	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);
+	cairo_text_path(cairoctx, text);
+	cairo_fill(cairoctx);
 	cairo_restore(cairoctx);
 
 	pango_font_description_free(fontdesc);

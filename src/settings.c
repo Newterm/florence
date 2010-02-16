@@ -54,6 +54,7 @@ static struct settings_param settings_defaults[] = {
 	{ "flo_keys", "colours/key", SETTINGS_COLOR, { .vstring = "#000000" } },
 	{ SETTINGS_NONE, "colours/outline", SETTINGS_COLOR, { .vstring = "#808080" } },
 	{ "flo_labels", "colours/label", SETTINGS_COLOR, { .vstring = "#FFFFFF" } },
+	{ "flo_label_outline", "colours/label_outline", SETTINGS_COLOR, { .vstring = "#000000" } },
 	{ "flo_activated", "colours/activated", SETTINGS_COLOR, { .vstring = "#FF0000" } },
 	{ "flo_mouseover", "colours/mouseover", SETTINGS_COLOR, { .vstring = "#0000FF" } },
 	{ "flo_latched", "colours/latched", SETTINGS_COLOR, { .vstring = "#00FF00" } },

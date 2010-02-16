@@ -7,6 +7,7 @@
 
 .symbol {
 	fill: @SYM_COLOR@;
-	stroke: @SYM_COLOR@;
+	stroke: @SYM_OUTLINE_COLOR@;
+	stroke-width: 2px;
 }
 

@@ -661,7 +661,9 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	settings_changecb_register("colours/key", view_redraw, view);
 	settings_changecb_register("colours/outline", view_redraw, view);
 	settings_changecb_register("colours/label", view_redraw, view);
+	settings_changecb_register("colours/label_outline", view_redraw, view);
 	settings_changecb_register("colours/activated", view_redraw, view);
+	settings_changecb_register("colours/latched", view_redraw, view);
 
 	/* set the window icon */
 	tools_set_icon(view->window);

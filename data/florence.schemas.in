@@ -213,6 +213,17 @@
 			</locale>
 		</schema>
 		<schema>
+			<key>/schemas/apps/florence/colours/label_outline</key>
+			<applyto>/apps/florence/colours/label_outline</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#000000</default>
+			<locale name="C">
+				<short>Text outline color</short>
+				<long>Color of the ouline of the labels. Must contrast with label color for better visibility.</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/colours/activated</key>
 			<applyto>/apps/florence/colours/activated</applyto>
 			<owner>florence</owner>
