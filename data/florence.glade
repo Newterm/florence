@@ -10,7 +10,7 @@
     <property name="title" translatable="yes">Florence Settings</property>
     <property name="window_position">mouse</property>
     <property name="default_width">350</property>
-    <property name="default_height">250</property>
+    <property name="default_height">300</property>
     <property name="type_hint">dialog</property>
     <signal name="destroy" handler="settings_window_close" object="flo_config_window"/>
     <signal name="key_press_event" handler="settings_window_help"/>
@@ -29,26 +29,25 @@
                 <property name="border_width">4</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <widget class="GtkScrolledWindow" id="preview">
+                  <widget class="GtkFrame" id="shape_cadre">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="hscrollbar_policy">automatic</property>
-                    <property name="vscrollbar_policy">automatic</property>
+                    <property name="label_xalign">0</property>
                     <child>
-                      <widget class="GtkFrame" id="shape_cadre">
+                      <widget class="GtkAlignment" id="alignment6">
                         <property name="visible">True</property>
-                        <property name="label_xalign">0</property>
+                        <property name="left_padding">12</property>
                         <child>
-                          <widget class="GtkAlignment" id="alignment6">
+                          <widget class="GtkScrolledWindow" id="scrolledwindow1">
                             <property name="visible">True</property>
-                            <property name="left_padding">12</property>
+                            <property name="can_focus">True</property>
+                            <property name="hscrollbar_policy">automatic</property>
+                            <property name="vscrollbar_policy">automatic</property>
                             <child>
                               <widget class="GtkIconView" id="flo_preview">
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip" translatable="yes">Style preview</property>
-                                <property name="selection_mode">browse</property>
                                 <property name="columns">4</property>
                                 <property name="item_width">64</property>
 				<property name="pixbuf_column">0</property>
@@ -58,17 +57,17 @@
                             </child>
                           </widget>
                         </child>
-                        <child>
-                          <widget class="GtkLabel" id="shape_label">
-                            <property name="visible">True</property>
-                            <property name="label" translatable="yes">shape</property>
-                            <property name="use_markup">True</property>
-                          </widget>
-                          <packing>
-                            <property name="type">label_item</property>
-                          </packing>
-                        </child>
                       </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="shape_label">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">shape</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
                     </child>
                   </widget>
                   <packing>
@@ -214,6 +213,8 @@
                     </child>
                   </widget>
                   <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
                     <property name="position">1</property>
                   </packing>
                 </child>
@@ -270,98 +271,137 @@
                 <property name="border_width">4</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <widget class="GtkCheckButton" id="flo_decorated">
-                    <property name="label" translatable="yes" context="yes">Decorated</property>
+                  <widget class="GtkFrame" id="frame2">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes" context="yes">Decorate window</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_window_set_bool"/>
+                    <property name="label_xalign">0</property>
+                    <child>
+                      <widget class="GtkAlignment" id="alignment8">
+                        <property name="visible">True</property>
+                        <property name="left_padding">12</property>
+                        <child>
+                          <widget class="GtkVBox" id="vbox1">
+                            <property name="visible">True</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_decorated">
+                                <property name="label" translatable="yes" context="yes">Decorated</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes" context="yes">Decorate window</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">0</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_transparent">
+                                <property name="label" translatable="yes" context="yes">Transparent</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes" context="yes">Transparent mode</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">1</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_resizable">
+                                <property name="label" translatable="yes" context="yes">Resizable</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes" context="yes">Allow to resize window.</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_keep_ratio">
+                                <property name="label" translatable="yes" context="yes">Keep ratio</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes" context="yes">Keep window ratio when resizing window.</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">3</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_task_bar">
+                                <property name="label" translatable="yes" context="yes">Task bar</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes" context="yes">Appear in task bar.</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">4</property>
+                              </packing>
+                            </child>
+                            <child>
+                              <widget class="GtkCheckButton" id="flo_always_on_top">
+                                <property name="label" translatable="yes" context="yes">Always on top</property>
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="receives_default">False</property>
+                                <property name="has_tooltip">True</property>
+                                <property name="tooltip" translatable="yes" context="yes">Keep the keyboard on top.</property>
+                                <property name="draw_indicator">True</property>
+                                <signal name="toggled" handler="settings_window_set_bool"/>
+                              </widget>
+                              <packing>
+                                <property name="expand">False</property>
+                                <property name="fill">False</property>
+                                <property name="position">5</property>
+                              </packing>
+                            </child>
+                          </widget>
+                        </child>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label4">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Features</property>
+                        <property name="use_markup">True</property>
+                      </widget>
+                      <packing>
+                        <property name="type">label_item</property>
+                      </packing>
+                    </child>
                   </widget>
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
                     <property name="position">0</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="flo_transparent">
-                    <property name="label" translatable="yes" context="yes">Transparent</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes" context="yes">Transparent mode</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_window_set_bool"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="flo_resizable">
-                    <property name="label" translatable="yes" context="yes">Resizable</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes" context="yes">Allow to resize window.</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_window_set_bool"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">2</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="flo_keep_ratio">
-                    <property name="label" translatable="yes" context="yes">Keep ratio</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes" context="yes">Keep window ratio when resizing window.</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_window_set_bool"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">3</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="flo_task_bar">
-                    <property name="label" translatable="yes" context="yes">Task bar</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes" context="yes">Appear in task bar.</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_window_set_bool"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">4</property>
-                  </packing>
-                </child>
-                <child>
-                  <widget class="GtkCheckButton" id="flo_always_on_top">
-                    <property name="label" translatable="yes" context="yes">Always on top</property>
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">False</property>
-                    <property name="tooltip" translatable="yes" context="yes">Keep the keyboard on top.</property>
-                    <property name="draw_indicator">True</property>
-                    <signal name="toggled" handler="settings_window_set_bool"/>
-                  </widget>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="fill">False</property>
-                    <property name="position">5</property>
                   </packing>
                 </child>
                 <child>
@@ -396,7 +436,7 @@
                   <packing>
                     <property name="expand">False</property>
                     <property name="fill">False</property>
-                    <property name="position">6</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </widget>
