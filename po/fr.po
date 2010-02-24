@@ -3,13 +3,13 @@
 # Copyright (C) 2009 François Agrech
 # This file is distributed under the same license as the Florence Gnome virtual keyboard package.
 #
-# François Agrech <f.agrech@gmail.com>, 200, 2010.
+# François Agrech <f.agrech@gmail.com>, 2009, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-02-17 09:14+0100\n"
-"PO-Revision-Date: 2010-01-12 18:25+0100\n"
+"POT-Creation-Date: 2010-02-24 09:05+0100\n"
+"PO-Revision-Date: 2010-02-24 09:05+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -78,7 +78,7 @@ msgstr "Extensions"
 
 #: ../data/florence.glade.h:14
 msgid "Features"
-msgstr ""
+msgstr "Propriétés"
 
 #: ../data/florence.glade.h:15
 msgid "Florence Settings"
@@ -117,9 +117,8 @@ msgid "Labels and symbols color"
 msgstr "Couleur du symbole des touches"
 
 #: ../data/florence.glade.h:24
-#, fuzzy
 msgid "Labels and symbols outline color"
-msgstr "Couleur du symbole des touches"
+msgstr "Couleur de la bordure du symbole des touches"
 
 #: ../data/florence.glade.h:25
 msgid "Latched keys background color"
@@ -189,9 +188,8 @@ msgid "behaviour"
 msgstr "comportement"
 
 #: ../data/florence.glade.h:41
-#, fuzzy
 msgid "colors"
-msgstr "Couleur des touches"
+msgstr "Couleurs"
 
 #: ../data/florence.glade.h:42
 msgid "focus zoom"
@@ -203,7 +201,7 @@ msgstr "agencement"
 
 #: ../data/florence.glade.h:44
 msgid "shape"
-msgstr ""
+msgstr "forme"
 
 #: ../data/florence.glade.h:45
 msgid "style"
@@ -246,6 +244,8 @@ msgid ""
 "Color of the ouline of the labels. Must contrast with label color for better "
 "visibility."
 msgstr ""
+"Couleur de la bordure du texte. Doit contraster avec la couleur du texte "
+"pour une meilleure visibilité."
 
 #: ../data/florence.schemas.in.h:11
 msgid "Color of the outline of the keys"
@@ -383,9 +383,8 @@ msgid "Text color"
 msgstr "Couleur du texte"
 
 #: ../data/florence.schemas.in.h:41
-#, fuzzy
 msgid "Text outline color"
-msgstr "Couleur des bordures"
+msgstr "Couleur des bordures du texte"
 
 #: ../data/florence.schemas.in.h:42
 msgid "The keyboard window can be resized with the mouse."
