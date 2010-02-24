@@ -1,16 +1,8 @@
-New feature implemented: latch to lock. Press a modifier key 1 time to
-latch it and press it again to lock it.
-Many bug fixes and code cleanup.
-
 Changelog:
 
-2010-01-26 François Agrech <f.agrech@gmail.com>
-	* Version 0.4.6
-	* fix layouts
-	* redesign status with a FSM table
-	* add a list of known bugs in the documentation
-	* Fix zoom key issue (Florence failed to refresh)
-	* Remove unecessary dependancy on gnome-doc-utils with --without-docs
-	* Change icon
-	* fix crash on fedora 12
+2010-02-17 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.7
+	* The window no longer covers widgets when decorated
+	* Some memory leaks fixed
+	* Add symbol outline for better visibility
 

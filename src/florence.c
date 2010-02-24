@@ -416,9 +416,11 @@ void flo_layout_load(struct florence *florence)
 {
 	struct layout *layout;
 	struct layout_infos *infos;
+	gchar *layoutname;
 
 	/* get the informations about the layout */
-	layout=layoutreader_new(settings_get_string("layout/file"),
+	layoutname=settings_get_string("layout/file");
+	layout=layoutreader_new(layoutname,
 		DATADIR "/layouts/florence.xml",
 		DATADIR "/relaxng/florence.rng");
 	layoutreader_element_open(layout, "layout");
@@ -435,6 +437,7 @@ void flo_layout_load(struct florence *florence)
 	/* create the keyboard objects */
 	florence->keyboards=flo_keyboards_load(florence, layout);
 	layoutreader_free(layout);
+	g_free(layoutname);
 }
 
 /* reloads the layout file */

@@ -23,6 +23,7 @@ function doc {
 	cd ../..
 }
 
+[ ! -d xhtml ] && mkdir xhtml
 rm -rf xhtml/*
 cp style.css xhtml
 cp index.php xhtml
