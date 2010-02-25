@@ -159,13 +159,13 @@ gboolean key_press(struct key *key, gboolean spi_enabled)
 }
 
 /* Send a key release event.
- * returns TRUE is the moving key is released (must update the status). */
+ * returns TRUE is the status must be updated. */
 gboolean key_release(struct key *key, gboolean spi_enabled)
 {
 	gboolean ret=FALSE;
 	if (key->type) {
 		switch (key->type) {
-			case LAYOUT_CLOSE: gtk_main_quit(); break;
+			case LAYOUT_CLOSE: ret=TRUE; break;
 			case LAYOUT_CONFIG: settings(); break;
 			case LAYOUT_MOVE: ret=TRUE; break;
 			case LAYOUT_BIGGER: settings_double_set("window/zoom",

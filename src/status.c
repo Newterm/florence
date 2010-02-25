@@ -311,7 +311,13 @@ void status_send (struct status *status, struct key *key, enum status_event even
 			status_fsm_process(status, key, STATUS_PRESSED);
 			break;
 		case STATUS_RELEASE:
-			if (key_release(key, status->spi)) status->moving=FALSE;
+			if (key_release(key, status->spi)) {
+				switch(key->type) {
+					case LAYOUT_MOVE: status->moving=FALSE; break;
+					case LAYOUT_CLOSE: view_hide(status->view); break;
+					default: flo_warn(_("unknown action key type pressed = %d"), key->type);
+				}
+			}
 #ifdef ENABLE_XRECORD
 			if (key->type)
 #endif

@@ -34,12 +34,15 @@
 void view_show (struct view *view, Accessible *object)
 {
 	/* positionnement intelligent */
-	if (settings_get_bool("behaviour/move_to_widget") && object) {
+	if (settings_get_bool("behaviour/auto_hide") && 
+		settings_get_bool("behaviour/move_to_widget") && object) {
 		tools_window_move(view->window, object);
 	}
 	gtk_widget_show(GTK_WIDGET(view->window));
 	/* Some winwow managers forget it */
 	gtk_window_set_keep_above(view->window, TRUE);
+	/* reposition the window */
+	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 }
 #endif
 

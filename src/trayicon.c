@@ -77,13 +77,10 @@ void trayicon_help(void)
 void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 {
 	struct trayicon *trayicon=(struct trayicon *)(user_data);
-	gtk_window_deiconify(GTK_WINDOW(trayicon->window));
-	if (GTK_WIDGET_VISIBLE(trayicon->window)) {
-		gtk_window_get_position(GTK_WINDOW(trayicon->window), &(trayicon->x), &(trayicon->y));
-		gtk_widget_hide(trayicon->window);
+	if (GTK_WIDGET_VISIBLE(trayicon->view->window)) {
+		view_hide(trayicon->view);
 	} else { 
-		gtk_window_move(GTK_WINDOW(trayicon->window), trayicon->x, trayicon->y);
-		gtk_window_present(GTK_WINDOW(trayicon->window));
+		view_show(trayicon->view, NULL);
 	}
 }
 
@@ -173,7 +170,7 @@ void trayicon_free(struct trayicon *trayicon)
 }
 
 /* Creates a new trayicon instance */
-struct trayicon *trayicon_new(GtkWidget *window, GCallback quit_cb)
+struct trayicon *trayicon_new(struct view *view, GCallback quit_cb)
 {
 	struct trayicon *trayicon;
 
@@ -182,7 +179,7 @@ struct trayicon *trayicon_new(GtkWidget *window, GCallback quit_cb)
 
 	trayicon->trayicon_quit=quit_cb;
 	trayicon->tray_icon=gtk_status_icon_new();
-	trayicon->window=window;
+	trayicon->view=view;
 	g_signal_connect(G_OBJECT(trayicon->tray_icon), "activate",
 		G_CALLBACK(trayicon_on_click), (gpointer)trayicon);
 	g_signal_connect(G_OBJECT(trayicon->tray_icon), "popup-menu",
