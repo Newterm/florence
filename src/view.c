@@ -263,6 +263,7 @@ void view_create_window_mask(struct view *view)
 		gdk_window_shape_combine_mask(GTK_WIDGET(view->window)->window, NULL, 0, 0);
 		status_focus_zoom_set(view->status, TRUE);
 	}
+	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 }
 
 /* Triggered by gconf when the "transparent" parameter is changed. Calls view_create_window_mask */
