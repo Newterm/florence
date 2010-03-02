@@ -9,13 +9,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-02 17:48+0100\n"
-"PO-Revision-Date: 2010-01-05 18:21+0100\n"
+"POT-Creation-Date: 2010-03-02 18:29+0100\n"
+"PO-Revision-Date: 2010-03-02 18:28+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
-"Language-Team:  <>\n"
+"Language-Team: <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -183,14 +183,13 @@ msgstr ""
 "tapez: <prompt>#</prompt> <userinput>yum install florence</userinput>"
 
 #: C/florence.xml:45(para)
-#, fuzzy
 msgid ""
 "Make sure you have the latest version of Florence (0.4.7 as of February, the "
 "25 of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
-"Soyez sûr que vous avez la dernière version de Florence (&version; au 12 "
-"janvier 2010). Vous pouvez la télécharger ici: <ulink url=\"http://"
+"Soyez sûr que vous avez la dernière version de Florence (&version; au 25 "
+"février 2010). Vous pouvez la télécharger ici: <ulink url=\"http://"
 "sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</"
 "ulink>"
 
@@ -293,7 +292,6 @@ msgstr ""
 "votre distribution."
 
 #: C/florence.xml:66(para)
-#, fuzzy
 msgid ""
 "Red Hat/CentOS <screen>\n"
 "<prompt>$</prompt> <userinput>su</userinput>\n"
@@ -308,9 +306,9 @@ msgstr ""
 "<prompt>$</prompt> <userinput>su</userinput>\n"
 "<prompt>#</prompt> <userinput>yum install gcc make libxml2-devel libglade2-"
 "devel at-spi-devel \\</userinput>\n"
-"<prompt>#</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel "
+"<prompt>&gt;</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel "
 "libXtst-devel gnome-doc-utils \\</userinput>\n"
-"<prompt>#</prompt> <userinput>gettext intltool</userinput>\n"
+"<prompt>&gt;</prompt> <userinput>gettext intltool</userinput>\n"
 "\t\t\t\t</screen>"
 
 #: C/florence.xml:73(ulink)
@@ -392,12 +390,12 @@ msgstr ""
 "commandes suivantes:"
 
 #: C/florence.xml:95(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "tar -xjvf florence-0.4.7.tar.bz2"
 msgstr "tar -xjvf florence-&version;.tar.bz2"
 
 #: C/florence.xml:96(userinput) C/florence.xml:117(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "cd florence-0.4.7"
 msgstr "cd florence-&version;"
 
@@ -1474,13 +1472,16 @@ msgstr ""
 
 #: C/florence.xml:348(title)
 msgid "Alternatives"
-msgstr ""
+msgstr "Alternatives"
 
 #: C/florence.xml:349(para)
 msgid ""
 "There are other alternative virtual keyboard for GNOME that may fit your "
 "needs better than Florence. Here is a list of the main alternatives."
 msgstr ""
+"Il y a d'autres claviers virtuels alternatifs pour GNOME qui pourraient "
+"correspondre mieux à vos besoins que Florence. Voici une liste des "
+"principales alternatives."
 
 #: C/florence.xml:351(para)
 msgid ""
@@ -1488,13 +1489,25 @@ msgid ""
 "onscreen keyboard. It provides more features than Florence for disabled "
 "people. It can be used with special devices like switches and joysticks. GOK "
 "provides complete access to the desktop. It can be used to move and resize "
-"windows and to use any widget. It ia application aware and provides a "
+"windows and to use any widget. It is application aware and provides a "
 "predictive dictionary that make it an effcient keyboard. It is more focussed "
 "on accessibility than on aestetics. The high number of features makes it "
 "more complex. Florence is arguably prettier and easier to use for people who "
 "can easily use a pointing device. GOK is the only option for disabled people "
 "who can't use a pointing device."
 msgstr ""
+"<ulink url=\"http://www.gok.ca/gok\">GOK</ulink> est le clavier à l'écran de "
+"GNOME par défaut. Il fournit plus de fonctionnalités que Florence pour les "
+"personnes handicapées. Il peut être utilisé avec des périphériques spéciaux "
+"comme des connecteurs ou des joysticks. GOK fournit un accès complet au "
+"bureau. Il peut être utilisé pour déplacer ou dimensionner les fenêtres et "
+"utiliser tous les objets de l'interface. GOK connaît les applications et "
+"fournit un dictionnaire prédictif, ce qui en fait un clavier efficace. Il "
+"est plus orienté vers l'accessibilité que l'esthétique. Le nombre important "
+"de fonctionnalités le rend plus complexe. Florence est subjectivement plus "
+"joli et plus facile à utiliser pour les personnes pouvant utiliser un "
+"périphérique de pointage. GOK est la seule option pour les personnes "
+"handicapées qui ne peuvent pas utiliser un périphérique de pointage."
 
 #: C/florence.xml:352(para)
 msgid ""
@@ -1504,6 +1517,12 @@ msgid ""
 "GNOME as much as Florence. This is the perfect keyboard for simple window "
 "managers. Florence is arguably prettier and better integrated in GNOME."
 msgstr ""
+"XVKBD est un clavier virtuel simple et très mature. Il ne dépend pas de "
+"GNOME. Comme GOK, il complète les mots automatiquement. Comme Florence, il a "
+"une fonctionnalité de clic automatique mais il lui manque un mode cacher "
+"automatiquement et ne s'intègre pas dans GNOME aussi bien que Florence. Ce "
+"clavier est parfait pour des gestionnaires de fenêtres simples. Florence est "
+"subjectivement plus beau et mieux intégré dans GNOME."
 
 #: C/florence.xml:353(para)
 msgid ""
@@ -1513,44 +1532,47 @@ msgid ""
 "Florence and does not provide an auto-hide feature. Perfect for casual usage "
 "on Ubuntu."
 msgstr ""
+"Onboard est le clavier par défaut d'Ubuntu. Il marche avec python, ce qui "
+"est commun dans les distributions modernes de linux. Il est plus orienté "
+"vers la simplicité que les fonctionnalités. Il est beau et facile à "
+"utiliser. Il est moins adaptable que Florence et ne fournit pas de mode "
+"cacher automatiquement. Parfait pour les usages occasionnels sur Ubuntu."
 
 #: C/florence.xml:354(para)
 msgid "GTKeyboard is the FSF keyboard."
-msgstr ""
+msgstr "GTKeyboard est le clavier de la FSF."
 
 #: C/florence.xml:357(title)
-msgid "Keyboard features"
-msgstr ""
+msgid "Keyboards features"
+msgstr "Fonctionnalités des claviers"
 
 #: C/florence.xml:367(entry)
-#, fuzzy
 msgid "keyboard"
-msgstr "clavier virtuel"
+msgstr "clavier"
 
 #: C/florence.xml:368(entry)
 msgid "transparency"
-msgstr ""
+msgstr "transparence."
 
 #: C/florence.xml:369(entry)
 msgid "auto hide"
-msgstr ""
+msgstr "cacher automatiquement"
 
 #: C/florence.xml:370(entry)
 msgid "auto click"
-msgstr ""
+msgstr "clic automatique"
 
 #: C/florence.xml:371(entry)
 msgid "scanning"
-msgstr ""
+msgstr "parcours des touches"
 
 #: C/florence.xml:372(entry)
 msgid "word completion"
-msgstr ""
+msgstr "dictionnaire prédictif"
 
 #: C/florence.xml:377(entry)
-#, fuzzy
 msgid "Florence"
-msgstr "florence"
+msgstr "Florence"
 
 #: C/florence.xml:378(entry) C/florence.xml:379(entry)
 #: C/florence.xml:380(entry) C/florence.xml:387(entry)
@@ -1558,7 +1580,7 @@ msgstr "florence"
 #: C/florence.xml:390(entry) C/florence.xml:396(entry)
 #: C/florence.xml:398(entry) C/florence.xml:404(entry)
 msgid "Yes"
-msgstr ""
+msgstr "Oui"
 
 #: C/florence.xml:381(entry) C/florence.xml:382(entry)
 #: C/florence.xml:386(entry) C/florence.xml:394(entry)
@@ -1566,19 +1588,19 @@ msgstr ""
 #: C/florence.xml:402(entry) C/florence.xml:403(entry)
 #: C/florence.xml:405(entry) C/florence.xml:406(entry)
 msgid "No"
-msgstr ""
+msgstr "Non"
 
 #: C/florence.xml:385(entry)
 msgid "GOK"
-msgstr ""
+msgstr "GOK"
 
 #: C/florence.xml:393(entry)
 msgid "XVKBD"
-msgstr ""
+msgstr "XVKBD"
 
 #: C/florence.xml:401(entry)
 msgid "Onboard"
-msgstr ""
+msgstr "Onboard"
 
 #: C/florence.xml:413(title)
 msgid "Getting help"

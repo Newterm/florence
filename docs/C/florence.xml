@@ -348,13 +348,13 @@ GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr
 	<title>Alternatives</title>
 	<para>There are other alternative virtual keyboard for GNOME that may fit your needs better than Florence. Here is a list of the main alternatives.</para>
 	<orderedlist>
-		<listitem><para><ulink url="http://www.gok.ca/gok">GOK</ulink> is the default GNOME onscreen keyboard. It provides more features than Florence for disabled people. It can be used with special devices like switches and joysticks. GOK provides complete access to the desktop. It can be used to move and resize windows and to use any widget. It ia application aware and provides a predictive dictionary that make it an effcient keyboard. It is more focussed on accessibility than on aestetics. The high number of features makes it more complex. Florence is arguably prettier and easier to use for people who can easily use a pointing device. GOK is the only option for disabled people who can't use a pointing device.</para></listitem>
+		<listitem><para><ulink url="http://www.gok.ca/gok">GOK</ulink> is the default GNOME onscreen keyboard. It provides more features than Florence for disabled people. It can be used with special devices like switches and joysticks. GOK provides complete access to the desktop. It can be used to move and resize windows and to use any widget. It is application aware and provides a predictive dictionary that make it an effcient keyboard. It is more focussed on accessibility than on aestetics. The high number of features makes it more complex. Florence is arguably prettier and easier to use for people who can easily use a pointing device. GOK is the only option for disabled people who can't use a pointing device.</para></listitem>
 		<listitem><para>XVKBD is a simple and very mature virtual keyboard. It does not depend on GNOME. Like GOK, it provides word completion. Like Florence, it has an ato-click feature but it lacks an auto-hide mode and does not integrate with GNOME as much as Florence. This is the perfect keyboard for simple window managers. Florence is arguably prettier and better integrated in GNOME.</para></listitem>
 		<listitem><para>Onboard is the default Ubuntu keyboard. It runs with python, which is common in modern linux distributions. It focuses on simplicity rather than features. It is pretty and easy to use. It is less customizable than Florence and does not provide an auto-hide feature. Perfect for casual usage on Ubuntu.</para></listitem>
 		<listitem><para>GTKeyboard is the FSF keyboard.</para></listitem>
 	</orderedlist>
 	<table>
-		<title>Keyboard features</title>
+		<title>Keyboards features</title>
 		<tgroup cols="6">
 			<colspec colname="keyboard"/>
 			<colspec colname="transparency"/>
