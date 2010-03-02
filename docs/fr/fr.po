@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-01-12 18:04+0100\n"
+"POT-Creation-Date: 2010-03-02 17:48+0100\n"
 "PO-Revision-Date: 2010-01-05 18:21+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team:  <>\n"
@@ -183,9 +183,10 @@ msgstr ""
 "tapez: <prompt>#</prompt> <userinput>yum install florence</userinput>"
 
 #: C/florence.xml:45(para)
+#, fuzzy
 msgid ""
-"Make sure you have the latest version of Florence (0.4.6 as of January, the "
-"12th of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
+"Make sure you have the latest version of Florence (0.4.7 as of February, the "
+"25 of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
 "Soyez sûr que vous avez la dernière version de Florence (&version; au 12 "
@@ -292,14 +293,15 @@ msgstr ""
 "votre distribution."
 
 #: C/florence.xml:66(para)
+#, fuzzy
 msgid ""
 "Red Hat/CentOS <screen>\n"
 "<prompt>$</prompt> <userinput>su</userinput>\n"
 "<prompt>#</prompt> <userinput>yum install gcc make libxml2-devel libglade2-"
 "devel at-spi-devel \\</userinput>\n"
-"<prompt>#</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel "
+"<prompt>&gt;</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel "
 "libXtst-devel gnome-doc-utils \\</userinput>\n"
-"<prompt>#</prompt> <userinput>gettext intltool</userinput>\n"
+"<prompt>&gt;</prompt> <userinput>gettext intltool</userinput>\n"
 "\t\t\t\t</screen>"
 msgstr ""
 "Red Hat/CentOS <screen>\n"
@@ -323,7 +325,7 @@ msgstr "Mandriva"
 #: C/florence.xml:117(prompt) C/florence.xml:118(prompt)
 #: C/florence.xml:120(prompt) C/florence.xml:127(prompt)
 #: C/florence.xml:252(prompt) C/florence.xml:256(prompt)
-#: C/florence.xml:261(prompt) C/florence.xml:271(prompt)
+#: C/florence.xml:261(prompt) C/florence.xml:269(prompt)
 #: C/florence.xml:309(prompt)
 msgid "$"
 msgstr "$"
@@ -390,13 +392,13 @@ msgstr ""
 "commandes suivantes:"
 
 #: C/florence.xml:95(userinput)
-#, no-wrap
-msgid "tar -xjvf florence-0.4.6.tar.bz2"
+#, fuzzy, no-wrap
+msgid "tar -xjvf florence-0.4.7.tar.bz2"
 msgstr "tar -xjvf florence-&version;.tar.bz2"
 
 #: C/florence.xml:96(userinput) C/florence.xml:117(userinput)
-#, no-wrap
-msgid "cd florence-0.4.6"
+#, fuzzy, no-wrap
+msgid "cd florence-0.4.7"
 msgstr "cd florence-&version;"
 
 #: C/florence.xml:97(userinput)
@@ -954,9 +956,9 @@ msgid ""
 "conf"
 msgstr ""
 "-u (--use-config) fichier: utilise le fichier de configuration donné à la "
-"place de gconf. Le fichier de configuration est un fichier de clé/valeur avec "
-"des sections. Un exemple de fichier de configuration est disponible à l'emplacement /usr/share/"
-"florence/florence.conf"
+"place de gconf. Le fichier de configuration est un fichier de clé/valeur "
+"avec des sections. Un exemple de fichier de configuration est disponible à "
+"l'emplacement /usr/share/florence/florence.conf"
 
 #: C/florence.xml:243(title)
 msgid "Tips"
@@ -1079,7 +1081,12 @@ msgstr ""
 "\"http://peksystray.sourceforge.net/\">peksystray</ulink>. Vous pouvez aussi "
 "accéder au dialogue de préférences avec la commande:"
 
-#: C/florence.xml:268(para)
+#: C/florence.xml:269(userinput)
+#, no-wrap
+msgid "florence --config"
+msgstr "florence --config"
+
+#: C/florence.xml:271(para)
 msgid ""
 "You can also skip the gconfd process by using a key-value pair file instead. "
 "Gconf libraries are still required to compile florence though. Use the --use-"
@@ -1092,7 +1099,7 @@ msgstr ""
 "utiliser gconf (voir la section configuration pour plus d'informations sur "
 "cette option)"
 
-#: C/florence.xml:269(para)
+#: C/florence.xml:272(para)
 msgid ""
 "If your window manager does not support the always_on_top hint, you can use "
 "the keep_on_top parameter in gconf (/apps/florence/window/keep_on_top), or "
@@ -1106,11 +1113,6 @@ msgstr ""
 "configuration, dans la section [window]. Lorsque ce paramètre est activé, le "
 "clavier se remettra au dessus périodiquement pour ne pas être recouvert par "
 "une autre fenêtre."
-
-#: C/florence.xml:271(userinput)
-#, no-wrap
-msgid "florence --config"
-msgstr "florence --config"
 
 #: C/florence.xml:273(para)
 msgid ""
@@ -1471,10 +1473,118 @@ msgstr ""
 "inclusion dans les futures versions de Florence."
 
 #: C/florence.xml:348(title)
+msgid "Alternatives"
+msgstr ""
+
+#: C/florence.xml:349(para)
+msgid ""
+"There are other alternative virtual keyboard for GNOME that may fit your "
+"needs better than Florence. Here is a list of the main alternatives."
+msgstr ""
+
+#: C/florence.xml:351(para)
+msgid ""
+"<ulink url=\"http://www.gok.ca/gok\">GOK</ulink> is the default GNOME "
+"onscreen keyboard. It provides more features than Florence for disabled "
+"people. It can be used with special devices like switches and joysticks. GOK "
+"provides complete access to the desktop. It can be used to move and resize "
+"windows and to use any widget. It ia application aware and provides a "
+"predictive dictionary that make it an effcient keyboard. It is more focussed "
+"on accessibility than on aestetics. The high number of features makes it "
+"more complex. Florence is arguably prettier and easier to use for people who "
+"can easily use a pointing device. GOK is the only option for disabled people "
+"who can't use a pointing device."
+msgstr ""
+
+#: C/florence.xml:352(para)
+msgid ""
+"XVKBD is a simple and very mature virtual keyboard. It does not depend on "
+"GNOME. Like GOK, it provides word completion. Like Florence, it has an ato-"
+"click feature but it lacks an auto-hide mode and does not integrate with "
+"GNOME as much as Florence. This is the perfect keyboard for simple window "
+"managers. Florence is arguably prettier and better integrated in GNOME."
+msgstr ""
+
+#: C/florence.xml:353(para)
+msgid ""
+"Onboard is the default Ubuntu keyboard. It runs with python, which is common "
+"in modern linux distributions. It focuses on simplicity rather than "
+"features. It is pretty and easy to use. It is less customizable than "
+"Florence and does not provide an auto-hide feature. Perfect for casual usage "
+"on Ubuntu."
+msgstr ""
+
+#: C/florence.xml:354(para)
+msgid "GTKeyboard is the FSF keyboard."
+msgstr ""
+
+#: C/florence.xml:357(title)
+msgid "Keyboard features"
+msgstr ""
+
+#: C/florence.xml:367(entry)
+#, fuzzy
+msgid "keyboard"
+msgstr "clavier virtuel"
+
+#: C/florence.xml:368(entry)
+msgid "transparency"
+msgstr ""
+
+#: C/florence.xml:369(entry)
+msgid "auto hide"
+msgstr ""
+
+#: C/florence.xml:370(entry)
+msgid "auto click"
+msgstr ""
+
+#: C/florence.xml:371(entry)
+msgid "scanning"
+msgstr ""
+
+#: C/florence.xml:372(entry)
+msgid "word completion"
+msgstr ""
+
+#: C/florence.xml:377(entry)
+#, fuzzy
+msgid "Florence"
+msgstr "florence"
+
+#: C/florence.xml:378(entry) C/florence.xml:379(entry)
+#: C/florence.xml:380(entry) C/florence.xml:387(entry)
+#: C/florence.xml:388(entry) C/florence.xml:389(entry)
+#: C/florence.xml:390(entry) C/florence.xml:396(entry)
+#: C/florence.xml:398(entry) C/florence.xml:404(entry)
+msgid "Yes"
+msgstr ""
+
+#: C/florence.xml:381(entry) C/florence.xml:382(entry)
+#: C/florence.xml:386(entry) C/florence.xml:394(entry)
+#: C/florence.xml:395(entry) C/florence.xml:397(entry)
+#: C/florence.xml:402(entry) C/florence.xml:403(entry)
+#: C/florence.xml:405(entry) C/florence.xml:406(entry)
+msgid "No"
+msgstr ""
+
+#: C/florence.xml:385(entry)
+msgid "GOK"
+msgstr ""
+
+#: C/florence.xml:393(entry)
+msgid "XVKBD"
+msgstr ""
+
+#: C/florence.xml:401(entry)
+msgid "Onboard"
+msgstr ""
+
+#: C/florence.xml:413(title)
 msgid "Getting help"
 msgstr "Se faire aider"
 
-#: C/florence.xml:349(para)
+#: C/florence.xml:414(para)
 msgid ""
 "You can get help on the <ulink url=\"https://sourceforge.net/forum/forum.php?"
 "forum_id=784280\">forum</ulink>, or you can ask for help by email at f."
@@ -1484,11 +1594,11 @@ msgstr ""
 "forum/forum.php?forum_id=784280\">forum</ulink> ou demander de l'aide par "
 "email à f.agrech@gmail.com"
 
-#: C/florence.xml:352(title)
+#: C/florence.xml:417(title)
 msgid "Contribute"
 msgstr "Contribuer"
 
-#: C/florence.xml:353(para)
+#: C/florence.xml:418(para)
 msgid ""
 "If you want to help the Florence project, please send an email to f."
 "agrech@gmail.com"

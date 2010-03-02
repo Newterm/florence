@@ -1,0 +1,92 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-03-02 17:50+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: home.php:9 home.php:22 tools.php:16
+msgid "Florence Virtual Keyboard"
+msgstr ""
+
+#: home.php:16
+msgid ""
+"Florence is an extensible scalable virtual keyboard for GNOME. You need it "
+"if you can't use a real hardware keyboard, for example because you are "
+"disabled, your keyboard is broken or because you use a tablet PC, but you "
+"must be able to use a pointing device (as a mouse, a trackball, or a "
+"touchscreen); If you can't use a pointing device, there is gok, which can be "
+"used with just simple switches."
+msgstr ""
+
+#: home.php:18
+msgid ""
+"Florence stays out of your way when you don't need it: it appears on the "
+"screen only when you need it. A Timer-based auto-click functionality is "
+"available to help disabled people having difficulties to click."
+msgstr ""
+
+#: home.php:20
+msgid ""
+"Florence is primarily intended to be used with the GNOME desktop, although "
+"it can be used on any desktop environment."
+msgstr ""
+
+#: home.php:22
+msgid "florence-gb"
+msgstr ""
+
+#: home.php:24
+msgid "SourceForge.net Logo"
+msgstr ""
+
+#: home.php:27
+msgid "Author:"
+msgstr ""
+
+#: home.php:28
+msgid "Last update: 25th of January, 2010"
+msgstr ""
+
+#: tools.php:19
+msgid "francais"
+msgstr ""
+
+#: tools.php:19
+msgid "En français"
+msgstr ""
+
+#: tools.php:24 tools.php:26
+msgid "Home"
+msgstr ""
+
+#: tools.php:26 tools.php:32
+msgid "english"
+msgstr ""
+
+#: tools.php:28
+msgid "Screenshots"
+msgstr ""
+
+#: tools.php:30 tools.php:32
+msgid "Documentation"
+msgstr ""
+
+#: tools.php:34
+msgid "Download"
+msgstr ""
+
+#: tools.php:35
+msgid "News"
+msgstr ""
