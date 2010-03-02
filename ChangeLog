@@ -166,3 +166,10 @@
 	* Change icon
 	* fix crash on fedora 12
 
+2010-02-17 François Agrech <f.agrech@gmail.com>
+	* Version 0.4.7
+	* The window no longer covers widgets when decorated
+	* Some memory leaks fixed
+	* Add symbol outline for better visibility
+	* Close button hides the keyboard
+

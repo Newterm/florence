@@ -838,7 +838,7 @@ msgstr ""
 "Déplacer vers l'objet sélectionné: cette option n'est disponible que lorsque "
 "le mode 'disparition automatique' est activé. Lorsqu'elle est activée, le "
 "clavier sera repositionné à chaque fois qu'un autre objet éditable est "
-"sélectionné pou minimiser les aller-retours de la souris."
+"sélectionné pour minimiser les aller-retours de la souris."
 
 #: C/florence.xml:207(para)
 msgid ""
@@ -954,8 +954,8 @@ msgid ""
 "conf"
 msgstr ""
 "-u (--use-config) fichier: utilise le fichier de configuration donné à la "
-"place de gconf. L fichier de configuration est un fichier de clé/valeur avec "
-"des sections. Un exemple de fichier de configuration est donné à /usr/share/"
+"place de gconf. Le fichier de configuration est un fichier de clé/valeur avec "
+"des sections. Un exemple de fichier de configuration est disponible à l'emplacement /usr/share/"
 "florence/florence.conf"
 
 #: C/florence.xml:243(title)

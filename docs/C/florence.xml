@@ -2,8 +2,8 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "January, the 12th of 2010">
-	<!ENTITY version "0.4.6">
+	<!ENTITY date "February, the 25 of 2010">
+	<!ENTITY version "0.4.7">
 ]>
 <article id="index" lang="en">
 <articleinfo>
@@ -67,8 +67,8 @@ A Timer-based auto-click functionality is available to help disabled people havi
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>yum install gcc make libxml2-devel libglade2-devel at-spi-devel \</userinput>
-<prompt>#</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel libXtst-devel gnome-doc-utils \</userinput>
-<prompt>#</prompt> <userinput>gettext intltool</userinput>
+<prompt>></prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel libXtst-devel gnome-doc-utils \</userinput>
+<prompt>></prompt> <userinput>gettext intltool</userinput>
 				</screen></para>
 				<para><ulink url="http://www.mandriva.com/">Mandriva</ulink>
 				<screen>
@@ -265,11 +265,11 @@ If you prefer that Florence is launched at GNOME startup, choose the menu item <
 		<para>If you are not interested in auto-hide mode, you can as well compile florence without at-spi: use the --without-at-spi configure option at configure time to save some disk space.</para>
 		<para>You should run florence with the --no-gnome option. Modify the desktop file accordingly. not using this option will make florence prompt you with GNOME specific dialogs: not a big deal, but annoying anyway.</para>
 		<para>If your DE is XDG compliant (like XFCE), Florence should be accessible via the menu. Anyway, starting florence from the command line will always work. If you don't have a systray, you can install <ulink url="http://peksystray.sourceforge.net/">peksystray</ulink>. You can also access the preferences dialog with:</para>
-		<para>You can also skip the gconfd process by using a key-value pair file instead. Gconf libraries are still required to compile florence though. Use the --use-config option if you don't want to use gconf (see the configuration section for more information about this option)</para>
-		<para>If your window manager does not support the always_on_top hint, you can use the keep_on_top parameter in gconf (/apps/florence/window/keep_on_top), or in the configuration file in the [window] section. When this parameter is checked, the keyboard will keep bringing itself back to front periodically, so it does not get covered by other windows.</para>
 		<screen>
 <prompt>$</prompt> <userinput>florence --config</userinput>
 		</screen>
+		<para>You can also skip the gconfd process by using a key-value pair file instead. Gconf libraries are still required to compile florence though. Use the --use-config option if you don't want to use gconf (see the configuration section for more information about this option)</para>
+		<para>If your window manager does not support the always_on_top hint, you can use the keep_on_top parameter in gconf (/apps/florence/window/keep_on_top), or in the configuration file in the [window] section. When this parameter is checked, the keyboard will keep bringing itself back to front periodically, so it does not get covered by other windows.</para>
 		<para>Note that QT3 applications don't support at-spi. Therefore you should not deactivate auto-hide mode on KDE3.</para>
 	</sect2>
 	<sect2>
@@ -343,6 +343,71 @@ GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr
 		<para>The layout file so created in the $datadir/florence/layouts directory will automatically be selectable from the settings dialog of Florence.</para>
 		<para>If you think that your layout file could be of any use to other people than yourself, please, consider sending it by email to f.agrech@gmail.com for future inclusion in Florence distribution.</para>
 	</sect2>
+</sect1>
+<sect1 id="alternatives">
+	<title>Alternatives</title>
+	<para>There are other alternative virtual keyboard for GNOME that may fit your needs better than Florence. Here is a list of the main alternatives.</para>
+	<orderedlist>
+		<listitem><para><ulink url="http://www.gok.ca/gok">GOK</ulink> is the default GNOME onscreen keyboard. It provides more features than Florence for disabled people. It can be used with special devices like switches and joysticks. GOK provides complete access to the desktop. It can be used to move and resize windows and to use any widget. It ia application aware and provides a predictive dictionary that make it an effcient keyboard. It is more focussed on accessibility than on aestetics. The high number of features makes it more complex. Florence is arguably prettier and easier to use for people who can easily use a pointing device. GOK is the only option for disabled people who can't use a pointing device.</para></listitem>
+		<listitem><para>XVKBD is a simple and very mature virtual keyboard. It does not depend on GNOME. Like GOK, it provides word completion. Like Florence, it has an ato-click feature but it lacks an auto-hide mode and does not integrate with GNOME as much as Florence. This is the perfect keyboard for simple window managers. Florence is arguably prettier and better integrated in GNOME.</para></listitem>
+		<listitem><para>Onboard is the default Ubuntu keyboard. It runs with python, which is common in modern linux distributions. It focuses on simplicity rather than features. It is pretty and easy to use. It is less customizable than Florence and does not provide an auto-hide feature. Perfect for casual usage on Ubuntu.</para></listitem>
+		<listitem><para>GTKeyboard is the FSF keyboard.</para></listitem>
+	</orderedlist>
+	<table>
+		<title>Keyboard features</title>
+		<tgroup cols="6">
+			<colspec colname="keyboard"/>
+			<colspec colname="transparency"/>
+			<colspec colname="auto hide"/>
+			<colspec colname="auto click"/>
+			<colspec colname="scanning"/>
+			<colspec colname="word completion"/>
+			<thead>
+				<row>
+					<entry>keyboard</entry>
+					<entry>transparency</entry>
+					<entry>auto hide</entry>
+					<entry>auto click</entry>
+					<entry>scanning</entry>
+					<entry>word completion</entry>
+				</row>
+			</thead>
+			<tbody>
+				<row>
+					<entry>Florence</entry>
+					<entry>Yes</entry>
+					<entry>Yes</entry>
+					<entry>Yes</entry>
+					<entry>No</entry>
+					<entry>No</entry>
+				</row>
+				<row>
+					<entry>GOK</entry>
+					<entry>No</entry>
+					<entry>Yes</entry>
+					<entry>Yes</entry>
+					<entry>Yes</entry>
+					<entry>Yes</entry>
+				</row>
+				<row>
+					<entry>XVKBD</entry>
+					<entry>No</entry>
+					<entry>No</entry>
+					<entry>Yes</entry>
+					<entry>No</entry>
+					<entry>Yes</entry>
+				</row>
+				<row>
+					<entry>Onboard</entry>
+					<entry>No</entry>
+					<entry>No</entry>
+					<entry>Yes</entry>
+					<entry>No</entry>
+					<entry>No</entry>
+				</row>
+			</tbody>
+		</tgroup>
+	</table>
 </sect1>
 <sect1 id="gethelp">
         <title>Getting help</title>

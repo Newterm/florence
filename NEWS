@@ -5,4 +5,5 @@ Changelog:
 	* The window no longer covers widgets when decorated
 	* Some memory leaks fixed
 	* Add symbol outline for better visibility
+	* Close button hides the keyboard
 
