@@ -674,6 +674,10 @@
 	</key>
 	<key>
 		<action>config</action>
+		<modifier>
+			<code>8</code>
+			<action>switch</action>
+		</modifier>
 		<xpos>1</xpos>
 		<ypos>3</ypos>
 	</key>

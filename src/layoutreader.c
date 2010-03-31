@@ -98,6 +98,7 @@ enum layout_key_type layoutreader_key_type_get(xmlDocPtr doc, xmlNodePtr cur)
 	else if (!xmlStrcmp(tmp, (xmlChar *)"move")) ret=LAYOUT_MOVE;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"bigger")) ret=LAYOUT_BIGGER;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"smaller")) ret=LAYOUT_SMALLER;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"switch")) ret=LAYOUT_SWITCH;
 	else flo_error(_("Unknown action key type %s"), tmp);
 	xmlFree(tmp);
 	return ret;
@@ -184,20 +185,53 @@ void layoutreader_keyboard_free(struct layout *layout, struct layout_size *size)
 	if (size) g_free(size);
 }
 
+/* Appends an action type to the key for modifier mod */
+void layoutreader_action_append(struct layout_key *key, unsigned int mod, enum layout_key_type type)
+{
+	struct layout_modifier **newmods, **br;
+	struct layout_modifier **oldmods;
+	struct layout_modifier *newmod=g_malloc(sizeof(struct layout_modifier));
+	unsigned int n=2;
+	newmod->mod=mod;
+	newmod->type=type;
+	if (key->actions) { oldmods=key->actions; while (*(oldmods++)) n++; }
+	br=(newmods=g_malloc(sizeof(struct layout_modifier *)*n));
+	if (key->actions) { oldmods=key->actions; while (*oldmods) *(br++)=*(oldmods++); }
+	*(br++)=newmod;
+	*(br++)=NULL;
+	if (key->actions) g_free(key->actions);
+	key->actions=newmods;
+}
+
 /* Get the 'key' element data (see key.c) */
 struct layout_key *layoutreader_key_new(struct layout *layout)
 {
 	xmlChar *tmp=NULL;
 	xmlNodePtr cur=layout->cur;
+	xmlNodePtr curmod;
 	struct layout_key *key=layoutreader_element_init(layout, "key", sizeof(struct layout_key));
+	unsigned int code;
+	enum layout_key_type action;
 	if (key) {
+		key->actions=NULL;
 		for(cur=layout->cur;cur;cur=cur->next) {
 			if (!xmlStrcmp(cur->name, (xmlChar *)"code")) {
 				tmp=xmlNodeListGetString(layout->doc, cur->children, 1);
 				key->code=atoi((char *)tmp);
 				xmlFree(tmp);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"action")) {
-				key->type=layoutreader_key_type_get(layout->doc, cur);
+				layoutreader_action_append(key, 0, layoutreader_key_type_get(layout->doc, cur));
+			} else if (!xmlStrcmp(cur->name, (xmlChar *)"modifier")) {
+				for(curmod=cur->children;curmod;curmod=curmod->next) {
+					if (!xmlStrcmp(curmod->name, (xmlChar *)"code")) {
+						tmp=xmlNodeListGetString(layout->doc, curmod->children, 1);
+						code=atoi((char *)tmp);
+						xmlFree(tmp);
+					} else if (!xmlStrcmp(curmod->name, (xmlChar *)"action")) {
+						action=layoutreader_key_type_get(layout->doc, curmod);
+					}
+				}
+				layoutreader_action_append(key, code, action);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"xpos")) {
 				key->pos.x=layoutreader_double_get(layout->doc, cur);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"ypos")) {
@@ -218,7 +252,13 @@ struct layout_key *layoutreader_key_new(struct layout *layout)
 /* Free the 'key' element data */
 void layoutreader_key_free(struct layout_key *key)
 {
+	struct layout_modifier **mod;
 	if (key) {
+		if (key->actions) {
+			mod=key->actions;
+			while (*(mod++)) g_free(*mod);
+			g_free(key->actions);
+		}
 		if (key->shape) xmlFree(key->shape);
 		g_free(key);
 	}

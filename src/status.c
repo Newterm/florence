@@ -304,22 +304,16 @@ void status_send (struct status *status, struct key *key, enum status_event even
 	flo_debug(_("sending event %d for key %d"), event, key->code);
 	switch(event) {
 		case STATUS_PRESS:
-			if (key_press(key, status->spi)) status->moving=TRUE;
+			key_press(key, status);
 #ifdef ENABLE_XRECORD
-			if (key->type)
+			if (key->actions)
 #endif
 			status_fsm_process(status, key, STATUS_PRESSED);
 			break;
 		case STATUS_RELEASE:
-			if (key_release(key, status->spi)) {
-				switch(key->type) {
-					case LAYOUT_MOVE: status->moving=FALSE; break;
-					case LAYOUT_CLOSE: view_hide(status->view); break;
-					default: flo_warn(_("unknown action key type pressed = %d"), key->type);
-				}
-			}
+			key_release(key, status);
 #ifdef ENABLE_XRECORD
-			if (key->type)
+			if (key->actions)
 #endif
 			status_fsm_process(status, key, STATUS_RELEASED);
 			break;
@@ -558,6 +552,7 @@ void status_free(struct status *status)
 #ifdef ENABLE_XRECORD
 	status_record_stop(status);
 #endif
+	if (status->xkeyboard) xkeyboard_free(status->xkeyboard);
 	if (status->timer) g_timer_destroy(status->timer);
 	if (status->latched_keys) g_list_free(status->latched_keys);
 	if (status->locked_keys) g_list_free(status->locked_keys);

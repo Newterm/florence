@@ -56,6 +56,7 @@ keyboard-element = element keyboard {
 key-element = element key {
 	xmllang?, xmlbase?,
 	( code-element | action-element ),
+	modifier-element?,
 	element shape { xsd:string }?,
 	element xpos { xsd:decimal },
 	element ypos { xsd:decimal },
@@ -66,7 +67,12 @@ key-element = element key {
 code-element = element code { xmllang?, xmlbase?, xsd:integer { minInclusive = "0" maxInclusive = "255" } }
 
 action-element = element action {
-	"close" | "config" | "move" | "bigger" | "smaller"
+	"close" | "config" | "move" | "bigger" | "smaller" | "switch"
+}
+
+modifier-element = element modifier {
+	element code { xsd:decimal },
+	action-element
 }
 
 extension-element = element extension {

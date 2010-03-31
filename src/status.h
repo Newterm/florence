@@ -31,6 +31,7 @@
 #include <gtk/gtk.h>
 #include "key.h"
 #include "view.h"
+#include "xkeyboard.h"
 
 /* the type of the key calculated for the fsm table */
 enum status_key_type {
@@ -73,6 +74,7 @@ struct status {
 	Display *data_disp; /* Data display to record events */
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
 #endif
+	struct xkeyboard *xkeyboard; /* data from xkb */
 };
 
 #ifdef ENABLE_XRECORD

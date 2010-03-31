@@ -58,6 +58,9 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata)
 {
 	struct layout_key *lkey=layoutreader_key_new(layout);
 	struct key *key=NULL;
+	guint n=0;
+	struct layout_modifier **lmod;
+	struct key_action **actions;
 #ifndef ENABLE_XKB
 	gchar *symbolname;
 #endif
@@ -67,7 +70,19 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata)
 		memset(key, 0, sizeof(struct key));
 		key->code=lkey->code;
 		key->state=KEY_RELEASED;
-		key->type=lkey->type;
+		lmod=lkey->actions;
+		if (lmod) while(*(lmod++)) n++;
+		if (n) {
+			actions=(key->actions=g_malloc(sizeof(struct key_modifier *)*(n+1)));
+			lmod=lkey->actions;
+			while (*lmod) {
+				*actions=g_malloc(sizeof(struct key_action));
+				(*actions)->modifier=(GdkModifierType)((*lmod)->mod);
+				(*actions)->type=(*lmod)->type;
+				lmod++; actions++;
+			}
+			*actions=NULL;
+		}
 #ifdef ENABLE_XKB
 		key->modifier=xkb->map->modmap[key->code];
 		if (XkbKeyAction(xkb, key->code, 0)) {
@@ -115,6 +130,12 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata)
 /* liberate memory used by the key */
 void key_free(struct key *key)
 {
+	struct key_action **action;
+	if (key->actions) {
+		action=key->actions;
+		while (*(action++)) g_free(*action);
+		g_free(key->actions);
+	}
 	g_free(key);
 }
 
@@ -140,43 +161,59 @@ void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 #endif
 }
 
-/* Send a key press event.
- * returns TRUE is the moving key is pressed (must update the status). */
-gboolean key_press(struct key *key, gboolean spi_enabled)
+/* find the right action according to the modifier */
+struct key_action *key_action_find(struct key_action **actions, GdkModifierType mod)
 {
-	gboolean ret=FALSE;
-	if (key->type) {
-		switch (key->type) {
-			case LAYOUT_MOVE: ret=TRUE; break;
+	struct key_action *action=NULL;
+	guint score=0;
+	while (*actions) {
+		if ( (!action) || (score<(mod&((*actions)->modifier))) ) {
+			action=*actions;
+			score=mod&((*actions)->modifier);
+		}
+		actions++;
+	}
+	return action;
+}
+
+/* Send a key press event. */
+void key_press(struct key *key, struct status *status)
+{
+	struct key_action *action=NULL;
+	if (key->actions) {
+		action=key_action_find(key->actions, status_globalmod_get(status));
+		switch (action->type) {
+			case LAYOUT_MOVE: status->moving=TRUE; break;
 			case LAYOUT_BIGGER:
 			case LAYOUT_SMALLER:
 			case LAYOUT_CONFIG:
-			case LAYOUT_CLOSE: break;
-			default: flo_warn(_("unknown action key type pressed = %d"), key->type);
+			case LAYOUT_CLOSE:
+			case LAYOUT_SWITCH: break;
+			default: flo_warn(_("unknown action key type pressed = %d"), action->type);
 		}
-	} else key_event(key->code, TRUE, spi_enabled);
-	return ret;
+	} else key_event(key->code, TRUE, status->spi);
 }
 
-/* Send a key release event.
- * returns TRUE is the status must be updated. */
-gboolean key_release(struct key *key, gboolean spi_enabled)
+/* Send a key release event. */
+void key_release(struct key *key, struct status *status)
 {
-	gboolean ret=FALSE;
-	if (key->type) {
-		switch (key->type) {
-			case LAYOUT_CLOSE: ret=TRUE; break;
+	struct key_action *action=NULL;
+	if (key->actions) {
+		action=key_action_find(key->actions, status_globalmod_get(status));
+		switch (action->type) {
+			case LAYOUT_CLOSE: view_hide(status->view); break;
 			case LAYOUT_CONFIG: settings(); break;
-			case LAYOUT_MOVE: ret=TRUE; break;
+			case LAYOUT_MOVE: status->moving=FALSE; break;
 			case LAYOUT_BIGGER: settings_double_set("window/zoom",
 				settings_double_get("window/zoom")*1.05, TRUE); break;
 			case LAYOUT_SMALLER: settings_double_set("window/zoom",
 				settings_double_get("window/zoom")*0.95, TRUE); break;
-			default: flo_warn(_("unknown action key type released = %d"), key->type);
+			case LAYOUT_SWITCH:
+				xkeyboard_layout_change(status->xkeyboard); break;
+			default: flo_warn(_("unknown action key type released = %d"), action->type);
 		}
 	}
-	else key_event(key->code, FALSE, spi_enabled);
-	return ret;
+	else key_event(key->code, FALSE, status->spi);
 }
 
 /* Draw the representation of the auto-click timer on the key
@@ -212,14 +249,24 @@ void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx)
 
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
 void key_symbol_draw(struct key *key, struct style *style,
-	cairo_t *cairoctx, GdkModifierType mod, gboolean use_matrix)
+	cairo_t *cairoctx, struct status *status, gboolean use_matrix)
 {
+	struct key_action *action=NULL;
 	if (!use_matrix) {
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	}
-	if (key->type==LAYOUT_NORMAL) style_symbol_draw(style, cairoctx, key_getKeyval(key, mod), key->w, key->h);
-	else style_symbol_type_draw(style, cairoctx, key->type, key->w, key->h);
+	if (key->actions) {
+		action=key_action_find(key->actions, status_globalmod_get(status));
+		if (action->type==LAYOUT_SWITCH)
+			style_draw_text(style, cairoctx,
+				xkeyboard_current_layout_get(status->xkeyboard), key->w, key->h);
+		else
+			style_symbol_type_draw(style, cairoctx, action->type, key->w, key->h);
+	} else {
+		style_symbol_draw(style, cairoctx, key_getKeyval(key, status_globalmod_get(status)),
+			key->w, key->h);
+	}
 	if (!use_matrix) cairo_restore(cairoctx);
 }
 
@@ -257,18 +304,18 @@ void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 		key_timer_draw(key, style, cairoctx, status_timer_get(status));
 	} else style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
 		key->state==KEY_RELEASED?STYLE_MOUSE_OVER_COLOR:color);
-	key_symbol_draw(key, style, cairoctx, status->globalmod, TRUE);
+	key_symbol_draw(key, style, cairoctx, status, TRUE);
 	cairo_restore(cairoctx);
 }
 
 /* Draw the key press notifier to the cairo surface. */
-void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod)
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, struct status *status)
 {
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
 		key->state==KEY_LATCHED?STYLE_LATCHED_COLOR:STYLE_ACTIVATED_COLOR);
-	key_symbol_draw(key, style, cairoctx, mod, TRUE);
+	key_symbol_draw(key, style, cairoctx, status, TRUE);
 	cairo_restore(cairoctx);
 }
 

@@ -85,6 +85,8 @@ gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h)
 void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdouble w, gdouble h);
 /* Draw the symbol represented by type */
 void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum layout_key_type type, gdouble w, gdouble h);
+/* Draws text with cairo */
+void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdouble w, gdouble h);
 
 /* Renders a svg handle to a cairo surface at dimensions */
 void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub);

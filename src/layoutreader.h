@@ -50,7 +50,8 @@ enum layout_key_type {
 	LAYOUT_CONFIG,
 	LAYOUT_MOVE,
 	LAYOUT_BIGGER,
-	LAYOUT_SMALLER
+	LAYOUT_SMALLER,
+	LAYOUT_SWITCH
 };
 
 /* Data contained in the 'informations' element */
@@ -69,11 +70,17 @@ struct layout_pos {
 	double x, y;
 };
 
+/* Data contained in the 'modifier' elements */
+struct layout_modifier {
+	unsigned int mod;
+	enum layout_key_type type;
+};
+
 /* Data contained in 'key' elements */
 struct layout_key {
 	char *shape;
 	unsigned char code;
-	enum layout_key_type type;
+	struct layout_modifier **actions; /* NULL terminated list of actions. */
 	struct layout_pos pos;
 	struct layout_size size;
 };

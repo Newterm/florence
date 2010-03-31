@@ -29,6 +29,7 @@
 #endif
 #include "key.h"
 #include "layoutreader.h"
+#include "xkeyboard.h"
 
 /* A keyboard is a set of keys logically grouped together */
 /* Examples: the main keyboard, the numpad or the function keys */
@@ -45,10 +46,6 @@ struct keyboard {
  * Used to initialize the keyboard */
 struct keyboard_globaldata {
 	struct style *style; /* style of florence  */
-#ifdef ENABLE_XKB
-	XkbDescPtr xkb_desc; /* Keyboard description from XKB */
-	XkbStateRec xkb_state; /* Keyboard Status (get from XKB) */
-#endif
 	struct status *status; /* status of the keybaord to update */
 };
 
@@ -79,7 +76,7 @@ void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y);
 void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style);
 /* draw the keyboard symbols  to cairo surface */
 void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx,
-	struct style *style, GdkModifierType mod);
+	struct style *style, struct status *status);
 /* clear the focus key from surface */
 void keyboard_shape_clear (struct keyboard *keyboard, cairo_surface_t *surface,
 	struct style *style, struct key *key, gdouble zoom);

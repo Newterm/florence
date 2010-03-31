@@ -23,6 +23,7 @@
 #include "florence.h"
 #include "trace.h"
 #include "settings.h"
+#include "xkeyboard.h"
 #include "keyboard.h"
 #include "tools.h"
 #include "layoutreader.h"
@@ -240,38 +241,13 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 /* load the keyboards from the layout file into the keyboards member of florence */
 GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 {
-#ifdef ENABLE_XKB
-	int maj=XkbMajorVersion;
-	int min=XkbMinorVersion;
-	int opcode_rtrn=0, event_rtrn=0, error_rtrn=0;
-	int ret=0;
-#endif
 	GSList *keyboards=NULL;;
 	struct keyboard *keyboard=NULL;
 	struct keyboard_globaldata global;
 	struct layout_extension *extension=NULL;
 
-#ifdef ENABLE_XKB
-	/* Check XKB Version */
-	if (!(ret=XkbLibraryVersion(&maj, &min))) {
-		flo_fatal(_("Unable to initialize XKB library. version=%d.%d rc=%d"), maj, min, ret);
-	}
-	if (!(ret=XkbQueryExtension((Display *)gdk_x11_get_default_xdisplay(),
-		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min))) {
-		flo_fatal(_("Unable to query XKB extension from X server version=%d.%d rc=%d"), maj, min, ret);
-	}
-	/* get the modifier map from xkb */
-	global.xkb_desc=XkbGetMap((Display *)gdk_x11_get_default_xdisplay(),
-	XkbKeyActionsMask|XkbModifierMapMask, XkbUseCoreKbd);
-	/* get global modifiers state */
-	XkbGetState((Display *)gdk_x11_get_default_xdisplay(),
-		XkbUseCoreKbd, &(global.xkb_state));
-#else
-	flo_warn(_("XKB not compiled in: startup keyboard sync is disabled. You should make sure all locker keys are released."));
-#endif
 	global.status=florence->status;
-
-	/* initialize global data */
+	florence->status->xkeyboard=xkeyboard_new();
 	global.style=florence->style;
 
 	/* read the layout file and create the extensions */
@@ -291,11 +267,7 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 #endif
 	}
 
-#ifdef ENABLE_XKB
-	/* Free the modifiers map */
-	XkbFreeClientMap(global.xkb_desc, XkbKeyActionsMask|XkbModifierMapMask, True);
-#endif
-
+	xkeyboard_client_map_free(florence->status->xkeyboard);
 	return keyboards;
 }
 
@@ -482,9 +454,7 @@ gboolean flo_check_at_spi(void)
 /* create a new instance of florence. */
 struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 {
-	struct florence *florence;
-
-	florence=g_malloc(sizeof(struct florence));
+	struct florence *florence=g_malloc(sizeof(struct florence));
 	if (!florence) flo_fatal(_("Unable to allocate memory for florence"));
 	memset(florence, 0, sizeof(struct florence));
 

@@ -43,13 +43,19 @@ enum key_state {
 	KEY_STATE_NUM
 };
 
+/* action keys have actions attached */
+struct key_action {
+	GdkModifierType modifier; /* modifier mask */
+	enum layout_key_type type; /* action key type */
+};
+
 /* A key is an item of the keyboard. It represents a real keyboard key.
  * A key is replesented on the screen with a background (shape) and a foreground (symbol)
  * the background is constans, whereas the foreground change according to the global modifiers
  * when the auto-click timer is active, it is drawn between the background and the foreground */
 struct key {
 	guint code; /* hardware key code */
-	enum layout_key_type type; /* action key type */
+	struct key_action **actions; /* NULL terminated list of actions attached to the key */
 	struct shape *shape; /* graphical representation of the background of the key */
 	gdouble x, y; /* position of the key inside the keyboard */
 	gdouble w, h; /* size of the key inside the keyboard */
@@ -71,19 +77,19 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata);
 void key_free(struct key *key);
 
 /* Send SPI events coresponding to the key */
-gboolean key_press(struct key *key, gboolean spi_enabled);
-gboolean key_release(struct key *key, gboolean spi_enabled);
+void key_press(struct key *key, struct status *status);
+void key_release(struct key *key, struct status *status);
 
 /* Draw the shape of the key to the cairo surface. */
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx);
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
 void key_symbol_draw(struct key *key, struct style *style,
-	cairo_t *cairoctx, GdkModifierType mod, gboolean use_matrix);
+	cairo_t *cairoctx, struct status *status, gboolean use_matrix);
 /* Draw the focus notifier to the cairo surface. */
 void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 	gdouble width, gdouble height, struct status *status);
 /* Draw the key press notifier to the cairo surface. */
-void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, GdkModifierType mod);
+void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, struct status *status);
 
 /* setters and getters */
 void key_state_set(struct key *key, enum key_state state);

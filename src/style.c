@@ -319,13 +319,13 @@ void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum layout_
 	while (item && (type!=((struct symbol *)item->data)->id.type)) {
 		item=g_slist_next(item);
 	}
-	if (!item) flo_error(_("No style symbol for action key %d"), type); else {
+	if (item) {
 		if (((struct symbol *)item->data)->label) {
 			style_draw_text(style, cairoctx, ((struct symbol *)item->data)->label, w, h);
 		} else {
 			style_render_svg(cairoctx, ((struct symbol *)item->data)->svg, w, h, TRUE, NULL);
 		}
-	}
+	} else flo_error(_("No style symbol for action key %d"), type);
 }
 
 /* callback for layoutreader for shape */

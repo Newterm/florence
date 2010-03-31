@@ -109,8 +109,7 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 					keyboard_background_draw(keyboard, offscreen, view->style);
 					break;
 				case STYLE_SYMBOL:
-					keyboard_symbols_draw(keyboard, offscreen, view->style,
-						status_globalmod_get(view->status));
+					keyboard_symbols_draw(keyboard, offscreen, view->style, view->status);
 					break;
 			}
 		}

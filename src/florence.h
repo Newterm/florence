@@ -42,12 +42,6 @@ struct florence {
 #ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
 #endif
-#ifdef ENABLE_XKB
-	/* Xkd data: only used at startup */
-	/* TODO: ==> status.c */
-	XkbDescPtr xkb; /* Description of the hard keyboard from XKB */
-	XkbStateRec state; /* current state of the hard keyboard */
-#endif
 };
 
 /* create a new instance of florence. */

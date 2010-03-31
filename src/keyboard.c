@@ -79,9 +79,9 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 
 	/* insert all keyboard keys */
 #ifdef ENABLE_XKB
-	while ((key=key_new(layout, style, data->xkb_desc, (void *)keyboard))) {
+	while ((key=key_new(layout, style, data->status->xkeyboard->xkb_desc, (void *)keyboard))) {
 		/* if locker is locked then update the status */
-		if (key_get_modifier(key)&data->xkb_state.locked_mods) {
+		if (key_get_modifier(key)&data->status->xkeyboard->xkb_state.locked_mods) {
 			status_globalmod_set(data->status, key_get_modifier(key));
 			status_fsm_process(data->status, key, STATUS_PRESSED);
 		}
@@ -122,7 +122,7 @@ void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y)
 
 /* draw the keyboard to cairo surface */
 void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
-	struct style *style, GdkModifierType mod, enum style_class class)
+	struct style *style, struct status *status, enum style_class class)
 {
 	GSList *list=keyboard->keys;
 	cairo_save(cairoctx);
@@ -134,7 +134,7 @@ void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 				key_shape_draw((struct key *)list->data, style, cairoctx);
 				break;
 			case STYLE_SYMBOL:
-				key_symbol_draw((struct key *)list->data, style, cairoctx, mod, FALSE);
+				key_symbol_draw((struct key *)list->data, style, cairoctx, status, FALSE);
 				break;
 		}
 		list = list->next;
@@ -145,13 +145,13 @@ void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 /* draw the keyboard background to cairo surface */
 void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style)
 {
-	keyboard_draw(keyboard, cairoctx, style, 0, STYLE_SHAPE);
+	keyboard_draw(keyboard, cairoctx, style, NULL, STYLE_SHAPE);
 }
 
 /* draw the keyboard symbols  to cairo surface */
-void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style, GdkModifierType mod)
+void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style, struct status *status)
 {
-	keyboard_draw(keyboard, cairoctx, style, mod, STYLE_SYMBOL);
+	keyboard_draw(keyboard, cairoctx, style, status, STYLE_SYMBOL);
 }
 
 /* clear the focus key from surface */
@@ -198,7 +198,7 @@ void keyboard_press_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
 		if (key!=status_focus_get(status))
-			key_press_draw(key, style, cairoctx, status->globalmod);
+			key_press_draw(key, style, cairoctx, status);
 		cairo_restore(cairoctx);
 	}
 }
