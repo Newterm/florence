@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-02 17:53+0100\n"
-"PO-Revision-Date: 2010-02-24 09:05+0100\n"
+"POT-Creation-Date: 2010-03-31 08:19+0200\n"
+"PO-Revision-Date: 2010-03-31 08:19+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "MIME-Version: 1.0\n"
@@ -582,57 +582,37 @@ msgstr "arr"
 msgid "~"
 msgstr "~"
 
-#: ../src/florence.c:82
+#: ../src/florence.c:83
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Erreur de chargement du fichier icone: %s"
 
-#: ../src/florence.c:204
+#: ../src/florence.c:205
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr ""
 "SPI est désactivé: Impossible d'activer le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:257
-#, c-format
-msgid "Unable to initialize XKB library. version=%d.%d rc=%d"
-msgstr "Impossible d'initialiser la bibliothèque XKB"
-
-#: ../src/florence.c:261
-#, c-format
-msgid "Unable to query XKB extension from X server version=%d.%d rc=%d"
-msgstr ""
-"Impossible de demander l'extensio XKB depuis le serveur X version=%d.%d cr=%d"
-
-#: ../src/florence.c:270
-msgid ""
-"XKB not compiled in: startup keyboard sync is disabled. You should make sure "
-"all locker keys are released."
-msgstr ""
-"XKB n'est pas compilé avec le calvier: la synchronization du clavier est "
-"désactivée au démarrage. Vous devriez vous assurer que les touches de "
-"bloquage sont désactivées"
-
-#: ../src/florence.c:284
+#: ../src/florence.c:260
 #, c-format
 msgid "[new extension] name=%s id=%s"
 msgstr "[nouvelle extension] nom=%s id=\"%s\""
 
-#: ../src/florence.c:428
+#: ../src/florence.c:400
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:430
+#: ../src/florence.c:402
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:462
+#: ../src/florence.c:434
 msgid "Enable accessibility"
 msgstr "Activer l'accéssebilité"
 
-#: ../src/florence.c:473
+#: ../src/florence.c:445
 msgid ""
 "at-spi registry daemon is not running. Events will be sent with Xtest "
 "instead and several functions are disabled, including auto-hide."
@@ -641,16 +621,16 @@ msgstr ""
 "envoyés avec Xtest à la place et certaines fonctions sont désactivées, comme "
 "le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:488
+#: ../src/florence.c:458
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
-#: ../src/florence.c:492
+#: ../src/florence.c:462
 msgid "Old GLib version detected. Florence style will be working with a hack."
 msgstr ""
 "Vieille version de GLib détectée. Le style de Florence marche avec un hack."
 
-#: ../src/florence.c:503
+#: ../src/florence.c:473
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI a été désactivé au moment de la compilation: le mode 'cacher "
@@ -674,40 +654,40 @@ msgstr "Code impossible à atteindre dans keyboard_new"
 msgid "Unknown placement %s"
 msgstr "Placement inconnu %s"
 
-#: ../src/layoutreader.c:101
+#: ../src/layoutreader.c:102
 #, c-format
 msgid "Unknown action key type %s"
 msgstr "Type de touche action inconnu: %s"
 
-#: ../src/layoutreader.c:337
+#: ../src/layoutreader.c:377
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr ""
 "Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
 "défaut %s"
 
-#: ../src/layoutreader.c:347
+#: ../src/layoutreader.c:387
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 "%s est un répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
-#: ../src/layoutreader.c:354
+#: ../src/layoutreader.c:394
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/layoutreader.c:361
+#: ../src/layoutreader.c:401
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s n'est pas validé par %s"
 
-#: ../src/layoutreader.c:362
+#: ../src/layoutreader.c:402
 #, c-format
 msgid "Using file %s"
 msgstr "Utilisation du fichier %s"
 
-#: ../src/layoutreader.c:370
+#: ../src/layoutreader.c:410
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Le fichier %s ne contient pas de donnée xml"
@@ -863,59 +843,54 @@ msgstr "La synchronization avec le clavier est désavtivée"
 msgid "sending event %d for key %d"
 msgstr "Envoi de l'événement %d pour la touche %d"
 
-#: ../src/status.c:318 ../src/key.c:155
-#, c-format
-msgid "unknown action key type pressed = %d"
-msgstr "Un type de touche action inconnu a été pressé: %s"
-
-#: ../src/status.c:326
+#: ../src/status.c:320
 #, c-format
 msgid "Unknown event type received: %d"
 msgstr "type d'événement reçu inconnu: %d"
 
-#: ../src/status.c:433
+#: ../src/status.c:427
 #, c-format
 msgid "FSM state error. key code=%d ; event=%d ; state=%d"
 msgstr "Erreur d'état de la FSM. code de la touche=%d ; événement=%d ; état=%d"
 
-#: ../src/status.c:497 ../src/status.c:523
+#: ../src/status.c:491 ../src/status.c:517
 msgid "Unable to allocate memory for status focus"
 msgstr "Impossible d'allouer de la mémoire pour le curseur du status"
 
-#: ../src/status.c:500
+#: ../src/status.c:494
 #, c-format
 msgid "Found window %s (ID=%ld)"
 msgstr "Fenêtre %s trouvée (ID=%ld)"
 
-#: ../src/status.c:507
+#: ../src/status.c:501
 msgid "XQueryTree failed."
 msgstr "Echec de la fonction XQueryTree"
 
-#: ../src/status.c:528
+#: ../src/status.c:522
 #, c-format
 msgid "Window not found: %s, using last focused window: %s (ID=%d)"
 msgstr ""
 "Fenêtre non trouvée: %s, utilisation de la dernière fenêtre sélectionnée: %s "
 "(ID=%ld)"
 
-#: ../src/status.c:531
+#: ../src/status.c:525
 #, c-format
 msgid "Focussing window %s (ID=%d)"
 msgstr "Sélection de la fenêtre %s (ID=%ld)"
 
-#: ../src/status.c:542
+#: ../src/status.c:536
 msgid "Unable to allocate memory for status"
 msgstr "Impossible d'allouer de la mémoire pour le status"
 
-#: ../src/status.c:597
+#: ../src/status.c:592
 msgid "Neither at-spi nor XTest could be initialized."
 msgstr "Ni at-spi ni XTest n'ont pu être initialisés."
 
-#: ../src/status.c:598 ../src/status.c:606
+#: ../src/status.c:593 ../src/status.c:601
 msgid "There is no way we can send keyboard events."
 msgstr "Il n'y a aucune façon d'envoyer des évènements de clavier."
 
-#: ../src/status.c:600
+#: ../src/status.c:595
 #, c-format
 msgid ""
 "At-spi registry daemon is not running. XTest extension found: version=%d.%d; "
@@ -924,7 +899,7 @@ msgstr ""
 "Le démon d'enregistrement at-spi ne tourne pas. L'extension XTest a été "
 "trouvée en version %d.%d; elle sera utilisée à la place de at-spi"
 
-#: ../src/status.c:605
+#: ../src/status.c:600
 msgid "Xtest extension not compiled in and at-spi not working"
 msgstr "Xtest n'es pas compilé et at-spi ne marche pas"
 
@@ -978,7 +953,7 @@ msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
 msgid "unknown slant for font %s: %d"
 msgstr "dérivation de la police %s inconnu: %d"
 
-#: ../src/style.c:322
+#: ../src/style.c:328
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Aucun symbole trouvé pour la touche d'acion %d dans le style"
@@ -1045,12 +1020,12 @@ msgstr ""
 "Copyright (C) 2008, 2009 François Agrech\n"
 "\n"
 "Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou\n"
-"le modifier dans les conditions de la Licence Générale Publique GNU,\n"
+"le modifier dans les conditions de la License Générale Publique GNU,\n"
 "comme publiée par la Free Software Foundation; soit en version 2, ou\n"
 "(selon votre choix) n'importe quelle version ultérieure.\n"
 "\n"
 "Ce programme est distribué dans l'espoir qu'il sera utile, mais\n"
-"SANS AUCUNE GUARANTIE; même pas la guarantie implicite de\n"
+"SANS AUCUNE GARANTIE; même pas la guarantie implicite de\n"
 "CONVENIR A UNE UTILISATION QUELCONQUE. Consultez la Licence Publique\n"
 "Générale GNU (en anglais) pour plus de détails.\n"
 "\n"
@@ -1111,28 +1086,28 @@ msgstr "Ne plus afficher"
 msgid "Notification failed"
 msgstr "Echec de notification"
 
-#: ../src/view.c:251
+#: ../src/view.c:250
 msgid "Unable to create mask"
 msgstr "Echec de création du masque"
 
-#: ../src/view.c:371
+#: ../src/view.c:370
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr ""
 "Votre écran ne supporte pas le cannal alpha. la semi-transparence est "
 "désactivée"
 
-#: ../src/view.c:392
+#: ../src/view.c:391
 #, c-format
 msgid "Window size out of range :%d"
 msgstr "Taille de fenêtre en dehors des limites"
 
-#: ../src/view.c:513
+#: ../src/view.c:512
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Opacité de la fenêtre en dehors des limites (1.0 à 100.0): %f"
 
-#: ../src/view.c:619
+#: ../src/view.c:618
 msgid "Unable to allocate memory for view"
 msgstr "Echec d'allocation de la mémoire pour la vue"
 
@@ -1153,16 +1128,21 @@ msgstr "Impossible de créer le composant depuis l'objet accessible"
 msgid "unable to allocate memory for string"
 msgstr "Impossible d'allouer de la mémoire pour la chaîne de caractère"
 
-#: ../src/key.c:129
+#: ../src/key.c:150
 msgid "Unreachable code"
 msgstr "Code impossible à atteindre"
 
-#: ../src/key.c:175
+#: ../src/key.c:192
+#, c-format
+msgid "unknown action key type pressed = %d"
+msgstr "Un type de touche action inconnu a été pressé: %s"
+
+#: ../src/key.c:213
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr "Un type de touche action inconnu a été libéré: %s"
 
-#: ../src/key.c:251
+#: ../src/key.c:298
 #, c-format
 msgid "unknown key type: %d"
 msgstr "type de touche inconnu: %d"
@@ -1198,3 +1178,55 @@ msgstr "Confirmation"
 #: ../src/settings-window.c:456
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
+
+#: ../src/xkeyboard.c:47
+#, c-format
+msgid "new xkb symbol found: <%s>"
+msgstr "nouveau symbole xkb trouvé: <%s>"
+
+#: ../src/xkeyboard.c:129
+#, c-format
+msgid "keyboard layout found: <%s>"
+msgstr "agencement de clavier trouvé: <%s>"
+
+#: ../src/xkeyboard.c:139
+#, c-format
+msgid "keyboard layout symbol name=<%s>"
+msgstr "nom de l'agencement des symboles du clavier=<%s>"
+
+#: ../src/xkeyboard.c:171
+#, c-format
+msgid "switching to xkb layout %s"
+msgstr "bascule vers l'agencement xkb %s"
+
+#: ../src/xkeyboard.c:173
+msgid "Failed to switch xkb layout"
+msgstr "Échec de bascule de l'agencement xkb"
+
+#: ../src/xkeyboard.c:181
+msgid "Unable to allocate memory for xkeyboard data"
+msgstr "Échec d'allocation de mémoire pour les données de xkeyboard"
+
+#: ../src/xkeyboard.c:192
+#, c-format
+msgid "Unable to initialize XKB library. version=%d.%d rc=%d"
+msgstr "Impossible d'initialiser la bibliothèque XKB version=%d.%d cr=%d"
+
+#: ../src/xkeyboard.c:196
+#, c-format
+msgid "Unable to query XKB extension from X server version=%d.%d rc=%d"
+msgstr ""
+"Impossible de demander l'extensio XKB depuis le serveur X version=%d.%d cr=%d"
+
+#: ../src/xkeyboard.c:207
+msgid ""
+"XKB not compiled: startup keyboard sync is disabled. You should make sure "
+"all locker keys are released."
+msgstr ""
+"XKB n'est pas compilé avec le clavier: la synchronisation du clavier est "
+"désactivée au démarrage. Vous devriez vous assurer que les touches de "
+"bloquage sont désactivées"
+
+#: ../src/xkeyboard.c:210
+msgid "No xkb group found. Using default us group"
+msgstr "Aucun groupe xkb 'a été trouvé. Utilisation du groupe par défaut: us"

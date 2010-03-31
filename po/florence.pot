@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-02 17:53+0100\n"
+"POT-Creation-Date: 2010-03-31 08:19+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -552,65 +552,49 @@ msgstr ""
 msgid "~"
 msgstr ""
 
-#: ../src/florence.c:82
+#: ../src/florence.c:83
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr ""
 
-#: ../src/florence.c:204
+#: ../src/florence.c:205
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr ""
 
-#: ../src/florence.c:257
-#, c-format
-msgid "Unable to initialize XKB library. version=%d.%d rc=%d"
-msgstr ""
-
-#: ../src/florence.c:261
-#, c-format
-msgid "Unable to query XKB extension from X server version=%d.%d rc=%d"
-msgstr ""
-
-#: ../src/florence.c:270
-msgid ""
-"XKB not compiled in: startup keyboard sync is disabled. You should make sure "
-"all locker keys are released."
-msgstr ""
-
-#: ../src/florence.c:284
+#: ../src/florence.c:260
 #, c-format
 msgid "[new extension] name=%s id=%s"
 msgstr ""
 
-#: ../src/florence.c:428
+#: ../src/florence.c:400
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr ""
 
-#: ../src/florence.c:430
+#: ../src/florence.c:402
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 
-#: ../src/florence.c:462
+#: ../src/florence.c:434
 msgid "Enable accessibility"
 msgstr ""
 
-#: ../src/florence.c:473
+#: ../src/florence.c:445
 msgid ""
 "at-spi registry daemon is not running. Events will be sent with Xtest "
 "instead and several functions are disabled, including auto-hide."
 msgstr ""
 
-#: ../src/florence.c:488
+#: ../src/florence.c:458
 msgid "Unable to allocate memory for florence"
 msgstr ""
 
-#: ../src/florence.c:492
+#: ../src/florence.c:462
 msgid "Old GLib version detected. Florence style will be working with a hack."
 msgstr ""
 
-#: ../src/florence.c:503
+#: ../src/florence.c:473
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 
@@ -632,37 +616,37 @@ msgstr ""
 msgid "Unknown placement %s"
 msgstr ""
 
-#: ../src/layoutreader.c:101
+#: ../src/layoutreader.c:102
 #, c-format
 msgid "Unknown action key type %s"
 msgstr ""
 
-#: ../src/layoutreader.c:337
+#: ../src/layoutreader.c:377
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr ""
 
-#: ../src/layoutreader.c:347
+#: ../src/layoutreader.c:387
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 
-#: ../src/layoutreader.c:354
+#: ../src/layoutreader.c:394
 #, c-format
 msgid "Unable to open file %s."
 msgstr ""
 
-#: ../src/layoutreader.c:361
+#: ../src/layoutreader.c:401
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr ""
 
-#: ../src/layoutreader.c:362
+#: ../src/layoutreader.c:402
 #, c-format
 msgid "Using file %s"
 msgstr ""
 
-#: ../src/layoutreader.c:370
+#: ../src/layoutreader.c:410
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr ""
@@ -796,64 +780,59 @@ msgstr ""
 msgid "sending event %d for key %d"
 msgstr ""
 
-#: ../src/status.c:318 ../src/key.c:155
-#, c-format
-msgid "unknown action key type pressed = %d"
-msgstr ""
-
-#: ../src/status.c:326
+#: ../src/status.c:320
 #, c-format
 msgid "Unknown event type received: %d"
 msgstr ""
 
-#: ../src/status.c:433
+#: ../src/status.c:427
 #, c-format
 msgid "FSM state error. key code=%d ; event=%d ; state=%d"
 msgstr ""
 
-#: ../src/status.c:497 ../src/status.c:523
+#: ../src/status.c:491 ../src/status.c:517
 msgid "Unable to allocate memory for status focus"
 msgstr ""
 
-#: ../src/status.c:500
+#: ../src/status.c:494
 #, c-format
 msgid "Found window %s (ID=%ld)"
 msgstr ""
 
-#: ../src/status.c:507
+#: ../src/status.c:501
 msgid "XQueryTree failed."
 msgstr ""
 
-#: ../src/status.c:528
+#: ../src/status.c:522
 #, c-format
 msgid "Window not found: %s, using last focused window: %s (ID=%d)"
 msgstr ""
 
-#: ../src/status.c:531
+#: ../src/status.c:525
 #, c-format
 msgid "Focussing window %s (ID=%d)"
 msgstr ""
 
-#: ../src/status.c:542
+#: ../src/status.c:536
 msgid "Unable to allocate memory for status"
 msgstr ""
 
-#: ../src/status.c:597
+#: ../src/status.c:592
 msgid "Neither at-spi nor XTest could be initialized."
 msgstr ""
 
-#: ../src/status.c:598 ../src/status.c:606
+#: ../src/status.c:593 ../src/status.c:601
 msgid "There is no way we can send keyboard events."
 msgstr ""
 
-#: ../src/status.c:600
+#: ../src/status.c:595
 #, c-format
 msgid ""
 "At-spi registry daemon is not running. XTest extension found: version=%d.%d; "
 "It will be used instead of at-spi."
 msgstr ""
 
-#: ../src/status.c:605
+#: ../src/status.c:600
 msgid "Xtest extension not compiled in and at-spi not working"
 msgstr ""
 
@@ -902,7 +881,7 @@ msgstr ""
 msgid "unknown slant for font %s: %d"
 msgstr ""
 
-#: ../src/style.c:322
+#: ../src/style.c:328
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr ""
@@ -1009,26 +988,26 @@ msgstr ""
 msgid "Notification failed"
 msgstr ""
 
-#: ../src/view.c:251
+#: ../src/view.c:250
 msgid "Unable to create mask"
 msgstr ""
 
-#: ../src/view.c:371
+#: ../src/view.c:370
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr ""
 
-#: ../src/view.c:392
+#: ../src/view.c:391
 #, c-format
 msgid "Window size out of range :%d"
 msgstr ""
 
-#: ../src/view.c:513
+#: ../src/view.c:512
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr ""
 
-#: ../src/view.c:619
+#: ../src/view.c:618
 msgid "Unable to allocate memory for view"
 msgstr ""
 
@@ -1049,16 +1028,21 @@ msgstr ""
 msgid "unable to allocate memory for string"
 msgstr ""
 
-#: ../src/key.c:129
+#: ../src/key.c:150
 msgid "Unreachable code"
 msgstr ""
 
-#: ../src/key.c:175
+#: ../src/key.c:192
+#, c-format
+msgid "unknown action key type pressed = %d"
+msgstr ""
+
+#: ../src/key.c:213
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr ""
 
-#: ../src/key.c:251
+#: ../src/key.c:298
 #, c-format
 msgid "unknown key type: %d"
 msgstr ""
@@ -1093,4 +1077,52 @@ msgstr ""
 
 #: ../src/settings-window.c:456
 msgid "Discard changes?"
+msgstr ""
+
+#: ../src/xkeyboard.c:47
+#, c-format
+msgid "new xkb symbol found: <%s>"
+msgstr ""
+
+#: ../src/xkeyboard.c:129
+#, c-format
+msgid "keyboard layout found: <%s>"
+msgstr ""
+
+#: ../src/xkeyboard.c:139
+#, c-format
+msgid "keyboard layout symbol name=<%s>"
+msgstr ""
+
+#: ../src/xkeyboard.c:171
+#, c-format
+msgid "switching to xkb layout %s"
+msgstr ""
+
+#: ../src/xkeyboard.c:173
+msgid "Failed to switch xkb layout"
+msgstr ""
+
+#: ../src/xkeyboard.c:181
+msgid "Unable to allocate memory for xkeyboard data"
+msgstr ""
+
+#: ../src/xkeyboard.c:192
+#, c-format
+msgid "Unable to initialize XKB library. version=%d.%d rc=%d"
+msgstr ""
+
+#: ../src/xkeyboard.c:196
+#, c-format
+msgid "Unable to query XKB extension from X server version=%d.%d rc=%d"
+msgstr ""
+
+#: ../src/xkeyboard.c:207
+msgid ""
+"XKB not compiled: startup keyboard sync is disabled. You should make sure "
+"all locker keys are released."
+msgstr ""
+
+#: ../src/xkeyboard.c:210
+msgid "No xkb group found. Using default us group"
 msgstr ""

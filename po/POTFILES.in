@@ -19,4 +19,5 @@ src/view.c
 src/tools.c
 src/key.c
 src/settings-window.c
+src/xkeyboard.c
 
