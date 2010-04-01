@@ -212,7 +212,7 @@ void key_symbol_draw(struct key *key, struct style *style,
 		action=key_action_find(key->actions, status_globalmod_get(status));
 		if (action->type==LAYOUT_SWITCH)
 			style_draw_text(style, cairoctx,
-				xkeyboard_current_layout_get(status->xkeyboard), key->w, key->h);
+				xkeyboard_next_layout_get(status->xkeyboard), key->w, key->h);
 		else
 			style_symbol_type_draw(style, cairoctx, action->type, key->w, key->h);
 	} else {

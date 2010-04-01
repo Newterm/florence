@@ -166,14 +166,16 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 
 #endif
 
-/* returns the current layout name */
-gchar *xkeyboard_current_layout_get(struct xkeyboard *xkeyboard)
+/* returns the next layout name */
+gchar *xkeyboard_next_layout_get(struct xkeyboard *xkeyboard)
 {
 #ifdef ENABLE_XKB
+	guint newgroup;
 	XkbStateRec xkbState;
 	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
 	XkbGetState(disp, XkbUseCoreKbd, &xkbState);
-	return (gchar *)g_list_nth_data(xkeyboard->groups, xkbState.group);
+	newgroup=(xkbState.group+1)%g_list_length(xkeyboard->groups);
+	return (gchar *)g_list_nth_data(xkeyboard->groups, newgroup);
 #else
 	return (gchar *)g_list_nth_data(xkeyboard->groups, 0);
 #endif

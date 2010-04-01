@@ -43,8 +43,8 @@ struct xkeyboard {
 	gpointer user_data; /* user data to be passed to the event callback */
 };
 
-/* returns the current layout name */
-gchar *xkeyboard_current_layout_get(struct xkeyboard *xkeyboard);
+/* returns the next layout name */
+gchar *xkeyboard_next_layout_get(struct xkeyboard *xkeyboard);
 
 /* switch keyboard layout */
 void xkeyboard_layout_change(struct xkeyboard *xkeyboard);
