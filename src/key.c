@@ -36,34 +36,15 @@
 
 #define PI M_PI
 
-/* get keyval according to modifier */
-guint key_getKeyval(struct key *key, GdkModifierType mod)
-{
-	guint keyval=0;
-	if (!gdk_keymap_translate_keyboard_state(gdk_keymap_get_default(), key->code, mod, 0,
-		&keyval, NULL, NULL, NULL)) {
-		keyval=0;
-		/*flo_warn(_("Unable to translate keyboard state: keycode=%d modifiers=%d"), key->code, mod);*/
-	}
-	return keyval;
-}
-
 /* Instanciates a key
  * the key may have a static label which will be always drawn in place of the symbol */
-#ifdef ENABLE_XKB
-struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb, void *userdata)
-#else
-struct key *key_new(struct layout *layout, struct style *style, void *userdata)
-#endif
+struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *userdata)
 {
 	struct layout_key *lkey=layoutreader_key_new(layout);
 	struct key *key=NULL;
 	guint n=0;
 	struct layout_modifier **lmod;
 	struct key_action **actions;
-#ifndef ENABLE_XKB
-	gchar *symbolname;
-#endif
 	
 	if (lkey) {
 		key=g_malloc(sizeof(struct key));
@@ -83,36 +64,7 @@ struct key *key_new(struct layout *layout, struct style *style, void *userdata)
 			}
 			*actions=NULL;
 		}
-#ifdef ENABLE_XKB
-		key->modifier=xkb->map->modmap[key->code];
-		if (XkbKeyAction(xkb, key->code, 0)) {
-			switch (XkbKeyAction(xkb, key->code, 0)->type) {
-				case XkbSA_LockMods:key->locker=TRUE; break;
-				case XkbSA_SetMods:key->modifier=XkbKeyAction(xkb, key->code, 0)->mods.mask;
-					break;
-			}
-		}
-#else
-		symbolname=gdk_keyval_name(key_getKeyval(key, 0));
-		if (symbolname) if (!strcmp(symbolname, "Caps_Lock")) {
-			key->locker=TRUE;
-			key->modifier=2;
-		} else if (!strcmp(symbolname, "Num_Lock")) {
-			key->locker=TRUE;
-			key->modifier=16;
-		} else if (!strcmp(symbolname, "Shift_L") ||
-			!strcmp(symbolname, "Shift_R")) {
-			key->modifier=1;
-		} else if ( !strcmp(symbolname, "Alt_L") ||
-			!strcmp(symbolname, "Alt_R")) {
-			key->modifier=8;
-		} else if (!strcmp(symbolname, "Control_L") ||
-			!strcmp(symbolname, "Control_R")) {
-			key->modifier=4;
-		} else if (!strcmp(symbolname, "ISO_Level3_Shift")) {
-			key->modifier=128;
-		}
-#endif
+		xkeyboard_key_properties_get(xkeyboard, key->code, &(key->modifier), &(key->locker));
 		key->shape=style_shape_get(style, lkey->shape);
 		key->x=lkey->pos.x;
 		key->y=lkey->pos.y;
@@ -264,7 +216,8 @@ void key_symbol_draw(struct key *key, struct style *style,
 		else
 			style_symbol_type_draw(style, cairoctx, action->type, key->w, key->h);
 	} else {
-		style_symbol_draw(style, cairoctx, key_getKeyval(key, status_globalmod_get(status)),
+		style_symbol_draw(style, cairoctx,
+			xkeyboard_getKeyval(status->xkeyboard, key->code, status_globalmod_get(status)),
 			key->w, key->h);
 	}
 	if (!use_matrix) cairo_restore(cairoctx);

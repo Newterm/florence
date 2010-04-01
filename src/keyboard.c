@@ -79,14 +79,14 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 
 	/* insert all keyboard keys */
 #ifdef ENABLE_XKB
-	while ((key=key_new(layout, style, data->status->xkeyboard->xkb_desc, (void *)keyboard))) {
+	while ((key=key_new(layout, style, data->status->xkeyboard, (void *)keyboard))) {
 		/* if locker is locked then update the status */
 		if (key_get_modifier(key)&data->status->xkeyboard->xkb_state.locked_mods) {
 			status_globalmod_set(data->status, key_get_modifier(key));
 			status_fsm_process(data->status, key, STATUS_PRESSED);
 		}
 #else
-	while ((key=key_new(layout, style, (void *)keyboard))) {
+	while ((key=key_new(layout, style, data->status->xkeyboard, (void *)keyboard))) {
 #endif
 		keyboard->keys=g_slist_append(keyboard->keys, key);
 	}

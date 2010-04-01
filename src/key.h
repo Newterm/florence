@@ -31,6 +31,7 @@
 #include "status.h"
 #include "style.h"
 #include "layoutreader.h"
+#include "xkeyboard.h"
 
 struct status;
 
@@ -67,12 +68,7 @@ struct key {
 
 /* Instanciate a key
  * the key may have a static label which will be always drawn in place of the symbol */
-#ifdef ENABLE_XKB
-struct key *key_new(struct layout *layout, struct style *style, XkbDescPtr xkb,
-	void *userdata);
-#else
-struct key *key_new(struct layout *layout, struct style *style, void *userdata);
-#endif
+struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *userdata);
 /* deallocate memory used by the key */
 void key_free(struct key *key);
 
@@ -99,8 +95,6 @@ GdkModifierType key_get_modifier(struct key *key);
 
 /* return if key is it at position */
 gboolean key_hit(struct key *key, gint x, gint y, gdouble z);
-/* get keyval according to modifier */
-guint key_getKeyval(struct key *key, GdkModifierType mod);
 
 #endif
 

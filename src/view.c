@@ -548,7 +548,7 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 }
 
 /* on keys changed events */
-void view_on_keys_changed(GdkKeymap *keymap, gpointer user_data)
+void view_on_keys_changed(gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
 	if (view->symbols) cairo_surface_destroy(view->symbols);
@@ -643,7 +643,8 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 
-	g_signal_connect(gdk_keymap_get_default(), "keys-changed", G_CALLBACK(view_on_keys_changed), view);
+	/*g_signal_connect(gdk_keymap_get_default(), "keys-changed", G_CALLBACK(view_on_keys_changed), view);*/
+	xkeyboard_register_events(status->xkeyboard, view_on_keys_changed, (gpointer)view);
 	g_signal_connect(G_OBJECT(view->window), "screen-changed", G_CALLBACK(view_screen_changed), view);
 	view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 		G_CALLBACK(view_configure), view);

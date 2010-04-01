@@ -84,6 +84,22 @@ GList *xkeyboard_symParse(gchar *symbols)
 	return ret;
 }
 
+/* handles events from XKB */
+GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+	XkbEvent *xkbev;
+	XEvent *ev=(XEvent *)xevent;
+	struct xkeyboard *xkeyboard=(struct xkeyboard *)data;
+	if (ev->xany.type==(xkeyboard->base_event_code+XkbEventCode)) {
+		xkbev=(XkbEvent *)ev;
+		if (xkbev->any.xkb_type==XkbStateNotify) {
+			flo_debug(_("XKB state notify event received"));
+			xkeyboard->event_cb(xkeyboard->user_data);
+		}
+	}
+	return GDK_FILTER_CONTINUE;
+}
+
 /* returns the name of currently selected keyboard layout in XKB */
 void xkeyboard_layout(struct xkeyboard *xkeyboard)
 {
@@ -141,6 +157,11 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 		if (!symName) return;
 		XFree(symName);
 	}
+
+	/* Select events */
+	XkbSelectEventDetails(disp, XkbUseCoreKbd, XkbStateNotify,
+		XkbAllStateComponentsMask, XkbGroupStateMask);
+	gdk_window_add_filter(NULL, xkeyboard_event_handler, xkeyboard);
 }
 
 #endif
@@ -174,6 +195,65 @@ void xkeyboard_layout_change(struct xkeyboard *xkeyboard)
 #endif
 }
 
+/* register xkb events */
+void xkeyboard_register_events(struct xkeyboard *xkeyboard, xkeyboard_layout_changed event_cb, gpointer user_data)
+{
+	xkeyboard->event_cb=event_cb;
+	xkeyboard->user_data=user_data;
+}
+
+/* get keyval according to modifier */
+/* TODO: cache group state value */
+guint xkeyboard_getKeyval(struct xkeyboard *xkeyboard, guint code, GdkModifierType mod)
+{
+	guint keyval=0;
+	XkbStateRec xkbState;
+	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
+	XkbGetState(disp, XkbUseCoreKbd, &xkbState);
+	if (!gdk_keymap_translate_keyboard_state(gdk_keymap_get_default(), code, mod, xkbState.group,
+		&keyval, NULL, NULL, NULL)) {
+		keyval=0;
+	}
+	return keyval;
+}
+
+/* get the key properties (locker and modifier) from xkb */
+void xkeyboard_key_properties_get(struct xkeyboard *xkeyboard, guint code, GdkModifierType *mod, gboolean *locker)
+{
+	*locker=FALSE;
+	*mod=0;
+#ifdef ENABLE_XKB
+	*mod=xkeyboard->xkb_desc->map->modmap[code];
+	if (XkbKeyAction(xkeyboard->xkb_desc, code, 0)) {
+		switch (XkbKeyAction(xkeyboard->xkb_desc, code, 0)->type) {
+			case XkbSA_LockMods:*locker=TRUE; break;
+			case XkbSA_SetMods:*mod=XkbKeyAction(xkeyboard->xkb_desc, code, 0)->mods.mask;
+				break;
+		}
+	}
+#else
+	gchar *symbolname symbolname=gdk_keyval_name(xkeyboard_getKeyval(xkeyboard, code, 0));
+	if (symbolname) if (!strcmp(symbolname, "Caps_Lock")) {
+		*locker=TRUE;
+		*mod=2;
+	} else if (!strcmp(symbolname, "Num_Lock")) {
+		*locker=TRUE;
+		*mod=16;
+	} else if (!strcmp(symbolname, "Shift_L") ||
+		!strcmp(symbolname, "Shift_R")) {
+		*mod=1;
+	} else if ( !strcmp(symbolname, "Alt_L") ||
+		!strcmp(symbolname, "Alt_R")) {
+		*mod=8;
+	} else if (!strcmp(symbolname, "Control_L") ||
+		!strcmp(symbolname, "Control_R")) {
+		*mod=4;
+	} else if (!strcmp(symbolname, "ISO_Level3_Shift")) {
+		*mod=128;
+	}
+#endif
+}
+
 /* returns a new allocated structure containing data from xkb */
 struct xkeyboard *xkeyboard_new()
 {
@@ -184,7 +264,7 @@ struct xkeyboard *xkeyboard_new()
 #ifdef ENABLE_XKB
 	int maj=XkbMajorVersion;
 	int min=XkbMinorVersion;
-	int opcode_rtrn=0, event_rtrn=0, error_rtrn=0;
+	int opcode_rtrn=0, error_rtrn=0;
 	int ret=0;
 
 	/* Check XKB Version */
@@ -192,7 +272,7 @@ struct xkeyboard *xkeyboard_new()
 		flo_fatal(_("Unable to initialize XKB library. version=%d.%d rc=%d"), maj, min, ret);
 	}
 	if (!(ret=XkbQueryExtension((Display *)gdk_x11_get_default_xdisplay(),
-		&opcode_rtrn, &event_rtrn, &error_rtrn, &maj, &min))) {
+		&opcode_rtrn, &(xkeyboard->base_event_code), &error_rtrn, &maj, &min))) {
 		flo_fatal(_("Unable to query XKB extension from X server version=%d.%d rc=%d"), maj, min, ret);
 	}
 
