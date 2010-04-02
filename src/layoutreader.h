@@ -47,6 +47,7 @@ enum layout_placement {
 enum layout_key_type {
 	LAYOUT_NORMAL,
 	LAYOUT_CLOSE,
+	LAYOUT_REDUCE,
 	LAYOUT_CONFIG,
 	LAYOUT_MOVE,
 	LAYOUT_BIGGER,

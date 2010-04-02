@@ -140,6 +140,7 @@ void key_press(struct key *key, struct status *status)
 			case LAYOUT_SMALLER:
 			case LAYOUT_CONFIG:
 			case LAYOUT_CLOSE:
+			case LAYOUT_REDUCE:
 			case LAYOUT_SWITCH: break;
 			default: flo_warn(_("unknown action key type pressed = %d"), action->type);
 		}
@@ -153,7 +154,8 @@ void key_release(struct key *key, struct status *status)
 	if (key->actions) {
 		action=key_action_find(key->actions, status_globalmod_get(status));
 		switch (action->type) {
-			case LAYOUT_CLOSE: view_hide(status->view); break;
+			case LAYOUT_CLOSE: gtk_main_quit(); break;
+			case LAYOUT_REDUCE: view_hide(status->view); break;
 			case LAYOUT_CONFIG: settings(); break;
 			case LAYOUT_MOVE: status->moving=FALSE; break;
 			case LAYOUT_BIGGER: settings_double_set("window/zoom",

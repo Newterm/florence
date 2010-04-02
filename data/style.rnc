@@ -56,7 +56,7 @@ symbol-element = element symbol {
 	xmllang?, xmlbase?,
 	( element name { xsd:string } |
 		element type {
-			"close" | "config" | "move" | "bigger" | "smaller"
+			"close" | "reduce" | "config" | "move" | "bigger" | "smaller"
 		} ),
 	(
 	  external "svg11/svg11.rnc" | (

@@ -67,7 +67,7 @@ key-element = element key {
 code-element = element code { xmllang?, xmlbase?, xsd:integer { minInclusive = "0" maxInclusive = "255" } }
 
 action-element = element action {
-	"close" | "config" | "move" | "bigger" | "smaller" | "switch"
+	"close" | "reduce" | "config" | "move" | "bigger" | "smaller" | "switch"
 }
 
 modifier-element = element modifier {

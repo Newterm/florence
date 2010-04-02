@@ -625,7 +625,11 @@
 	<width>2</width>
 	<height>10</height>
 	<key>
-		<action>close</action>
+		<action>reduce</action>
+		<modifier>
+			<code>8</code> <!-- alt -->
+			<action>close</action>
+		</modifier>
 		<xpos>1</xpos>
 		<ypos>1</ypos>
 	</key>

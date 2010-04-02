@@ -210,6 +210,12 @@
 		</svg>
 	</symbol>
 	<symbol>
+		<type>reduce</type>
+		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+			<path class="symbol" d="M 30,30 20,40 50,70 80,40 70,30 50,50 30,30 z"/>
+		</svg>
+	</symbol>
+	<symbol>
 		<type>config</type>
 		<svg version="1.1" width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
 			<path class="symbol" d="m 51,41 0,-7 9,-9 6,0 0,2 -8,8 7,8 8,-8 2,0 0,6 -8,9 -7,0 -2,-2 -18,18 c -2,2 -4,3 -6,1 -2,-2 -1,-4 1,-6 L 53,43 51,41 z"/>

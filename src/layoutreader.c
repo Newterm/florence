@@ -94,6 +94,7 @@ enum layout_key_type layoutreader_key_type_get(xmlDocPtr doc, xmlNodePtr cur)
 	enum layout_key_type ret=LAYOUT_NORMAL;
 	xmlChar *tmp=xmlNodeListGetString(doc, cur->children, 1);
 	if (!xmlStrcmp(tmp, (xmlChar *)"close")) ret=LAYOUT_CLOSE;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"reduce")) ret=LAYOUT_REDUCE;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"config")) ret=LAYOUT_CONFIG;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"move")) ret=LAYOUT_MOVE;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"bigger")) ret=LAYOUT_BIGGER;

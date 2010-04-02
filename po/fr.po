@@ -1135,12 +1135,12 @@ msgstr "Code impossible à atteindre"
 #: ../src/key.c:192
 #, c-format
 msgid "unknown action key type pressed = %d"
-msgstr "Un type de touche action inconnu a été pressé: %s"
+msgstr "Un type de touche action inconnu a été pressé: %d"
 
 #: ../src/key.c:213
 #, c-format
 msgid "unknown action key type released = %d"
-msgstr "Un type de touche action inconnu a été libéré: %s"
+msgstr "Un type de touche action inconnu a été libéré: %d"
 
 #: ../src/key.c:298
 #, c-format
