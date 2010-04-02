@@ -56,21 +56,24 @@ void xkeyboard_list_append(gchar *symbol, GList **list)
 }
 
 /* parse the symbol string from xkb to extract the layout names */
-GList *xkeyboard_symParse(gchar *symbols)
+GList *xkeyboard_symParse(gchar *symbols, gint count)
 {
 	GList *ret=NULL;
 	gboolean inSymbol=FALSE;
 	gchar curSymbol[32];
 	guint i;
 	gchar ch;
+	gint c=0;
 
 	curSymbol[0]='\0';
 	for (i=0 ; i<strlen(symbols) ; i++) {
 		ch=symbols[i];
 		if (ch=='+') {
 			if (inSymbol) {
-				if (xkeyboard_is_sym(curSymbol))
+				if (xkeyboard_is_sym(curSymbol)) {
 					xkeyboard_list_append(curSymbol, &ret);
+					c++; if (c>=count) break;
+				}
 				curSymbol[0]='\0';
 			} else inSymbol=TRUE;
 		} else if (inSymbol && (ISALPHA(ch) || ch=='_')) {
@@ -81,12 +84,13 @@ GList *xkeyboard_symParse(gchar *symbols)
 		} else if (inSymbol) {
 			if (xkeyboard_is_sym(curSymbol))
 				xkeyboard_list_append(curSymbol, &ret);
+				c++; if (c>=count) break;
 			curSymbol[0]='\0';
 			inSymbol=FALSE;
 		}
 	}
 
-	if (inSymbol && curSymbol[0] && xkeyboard_is_sym(curSymbol))
+	if (inSymbol && curSymbol[0] && xkeyboard_is_sym(curSymbol) && (c<count))
 		xkeyboard_list_append(curSymbol, &ret);
 
 	return ret;
@@ -145,7 +149,7 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 	if (symNameAtom!=None) {
 		symName=XGetAtomName(disp, symNameAtom);
 		flo_debug(_("keyboard layout symbol name=<%s>"), symName);
-		xkeyboard->groups=xkeyboard_symParse(symName);
+		xkeyboard->groups=xkeyboard_symParse(symName, groupCount);
 		if (!symName) return;
 		XFree(symName);
 	}
