@@ -24,6 +24,14 @@
 #include "trace.h"
 #include <gdk/gdkx.h>
 
+/* liberate groups memory */
+void xkeyboard_groups_free(struct xkeyboard *xkeyboard) {
+	while(xkeyboard->groups) {
+		g_free(g_list_first(xkeyboard->groups)->data);
+		xkeyboard->groups=g_list_delete_link(xkeyboard->groups, g_list_first(xkeyboard->groups));
+	}
+}
+
 #ifdef ENABLE_XKB
 
 /* resurns TRUE is the symbol is a layout name */
@@ -82,22 +90,6 @@ GList *xkeyboard_symParse(gchar *symbols)
 		xkeyboard_list_append(curSymbol, &ret);
 
 	return ret;
-}
-
-/* handles events from XKB */
-GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpointer data)
-{
-	XkbEvent *xkbev;
-	XEvent *ev=(XEvent *)xevent;
-	struct xkeyboard *xkeyboard=(struct xkeyboard *)data;
-	if (ev->xany.type==(xkeyboard->base_event_code+XkbEventCode)) {
-		xkbev=(XkbEvent *)ev;
-		if (xkbev->any.xkb_type==XkbStateNotify) {
-			flo_debug(_("XKB state notify event received"));
-			xkeyboard->event_cb(xkeyboard->user_data);
-		}
-	}
-	return GDK_FILTER_CONTINUE;
 }
 
 /* returns the name of currently selected keyboard layout in XKB */
@@ -159,9 +151,28 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 	}
 
 	/* Select events */
-	XkbSelectEventDetails(disp, XkbUseCoreKbd, XkbStateNotify,
-		XkbAllStateComponentsMask, XkbGroupStateMask);
-	gdk_window_add_filter(NULL, xkeyboard_event_handler, xkeyboard);
+	/* XkbSelectEventDetails(disp, XkbUseCoreKbd, XkbStateNotify,
+		XkbAllStateComponentsMask, XkbGroupStateMask); */
+}
+
+/* handles events from XKB */
+GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpointer data)
+{
+	XkbEvent *xkbev;
+	XEvent *ev=(XEvent *)xevent;
+	struct xkeyboard *xkeyboard=(struct xkeyboard *)data;
+	if (ev->xany.type==(xkeyboard->base_event_code+XkbEventCode)) {
+		xkbev=(XkbEvent *)ev;
+		if ((xkbev->any.xkb_type==XkbStateNotify)||(xkbev->any.xkb_type==XkbNewKeyboardNotify)) {
+			if (xkbev->any.xkb_type==XkbNewKeyboardNotify) {
+				xkeyboard_groups_free(xkeyboard);
+				xkeyboard_layout(xkeyboard);
+			}
+			flo_debug(_("XKB state notify event received"));
+			xkeyboard->event_cb(xkeyboard->user_data);
+		}
+	}
+	return GDK_FILTER_CONTINUE;
 }
 
 #endif
@@ -279,6 +290,9 @@ struct xkeyboard *xkeyboard_new()
 	}
 
 	xkeyboard_layout(xkeyboard);
+	XkbSelectEvents(GDK_DISPLAY(), XkbUseCoreKbd, XkbNewKeyboardNotifyMask, XkbNewKeyboardNotifyMask);
+	XkbSelectEventDetails(GDK_DISPLAY(), XkbUseCoreKbd, XkbStateNotify, XkbAllStateComponentsMask, XkbGroupStateMask);
+	gdk_window_add_filter(NULL, xkeyboard_event_handler, xkeyboard);
 
 	/* get the modifier map from xkb */
 	xkeyboard->xkb_desc=XkbGetMap((Display *)gdk_x11_get_default_xdisplay(),
@@ -307,10 +321,7 @@ void xkeyboard_client_map_free(struct xkeyboard *xkeyboard)
 /* liberate any memory used to record xkb data */
 void xkeyboard_free(struct xkeyboard *xkeyboard)
 {
-	while(xkeyboard->groups) {
-		g_free(g_list_first(xkeyboard->groups)->data);
-		xkeyboard->groups=g_list_delete_link(xkeyboard->groups, g_list_first(xkeyboard->groups));
-	}
+	xkeyboard_groups_free(xkeyboard);
 	g_free(xkeyboard);
 }
 
