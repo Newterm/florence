@@ -79,6 +79,12 @@ if test "x$with_at_spi" != "xno"; then
 	PKG_CHECK_MODULES([AT_SPI], [cspi-1.0], AC_DEFINE([ENABLE_AT_SPI], [], [at-spi enabled.]), AC_MSG_ERROR(Could not configure at-spi. Please either install at-spi or disable it: --without-at-spi configure option))
 fi
 
+# Math library
+AC_CHECK_LIB([m], [tan], AC_DEFINE(HAVE_LIBM, 1, Math lib) LIBM="-lm", AC_MSG_ERROR(Missing working libm math lib))
+
+# X11 library
+PKG_CHECK_MODULES([X11], [x11])
+
 AC_SUBST(GNOME_DOCS_UTILS_CFLAGS)
 AC_SUBST(GNOME_DOCS_UTILS_LIBS)
 AC_SUBST(LIBNOTIFY_CFLAGS)
@@ -91,6 +97,9 @@ AC_SUBST(LIBGNOME_CFLAGS)
 AC_SUBST(LIBGNOME_LIBS)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
+AC_SUBST(X11_CFLAGS)
+AC_SUBST(X11_LIBS)
+AC_SUBST(LIBM)
 
 # Checks for header files.
 AC_FUNC_ALLOCA
