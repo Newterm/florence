@@ -1,0 +1,13 @@
+.shape {
+	fill: white;
+	stroke: gray;
+	stroke-opacity: 35%;
+	stroke-width: 4px;
+}
+
+.symbol {
+	fill: white;
+	stroke: white;
+	stroke-width: 0px;
+}
+

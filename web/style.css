@@ -74,6 +74,10 @@ div.menu {
 	text-align: right;
 	margin: 3px;
 }
+div.ads {
+	float: right;
+	margin: 3px;
+}
 hr {
 	clear: both;
 }

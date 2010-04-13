@@ -20,15 +20,21 @@ function doc {
 	xmlto -m ../../config-$1.xsl xhtml $DATADIR/gnome/help/florence/$1/florence.xml
 	mkdir figures
 	cp $DATADIR/gnome/help/florence/$1/figures/* figures
-	cd ../..
+	cd ../../svg
+	setxkbmap $4
+	./svg.sh florence-$4.png
+	cp florence-$4.png ../xhtml/images
+	cd ..
 }
 
 [ ! -d xhtml ] && mkdir xhtml
 rm -rf xhtml/*
 cp style.css xhtml
 cp index.php xhtml
-cp -r images xhtml
+mkdir xhtml/images
 cp $DATADIR/pixmaps/florence.svg xhtml/images
-doc C english C
-doc fr francais fr_FR
+setxkbmap -print >/tmp/xkbmap.tmp
+doc C english C us
+doc fr francais fr_FR fr
+cat /tmp/xkbmap.tmp | xkbcomp - $DISPLAY 2>/dev/null && rm /tmp/xkbmap.tmp
 

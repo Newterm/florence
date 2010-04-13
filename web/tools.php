@@ -5,6 +5,24 @@ bindtextdomain("messages", "locale");
 textdomain("messages");
 }
 
+function adsense() {
+?>
+<div class="ads">
+<script type="text/javascript"><!--
+google_ad_client = "pub-2152392459551245";
+/* 160x600, date de création 08/04/10 */
+google_ad_slot = "3882482999";
+google_ad_width = 160;
+google_ad_height = 600;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+<?php
+}
+
 function main_menu($location) {
 if ($location == "Home") { $path=""; } else { $path="../"; }
 ?>
