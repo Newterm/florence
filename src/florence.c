@@ -426,7 +426,7 @@ void flo_layout_reload(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 /* check if at-spi is enabled in gnome */
 gboolean flo_check_at_spi(void)
 {
-	gboolean ret=TRUE;
+	gboolean ret=FALSE;
 	GConfClient *gconfclient=gconf_client_get_default();
 	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface",
 		GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
@@ -441,6 +441,7 @@ gboolean flo_check_at_spi(void)
 					"/desktop/gnome/interface/accessibility", TRUE, NULL);
 				system("gnome-session-save --kill");
 				exit(EXIT_SUCCESS);
+			ret=TRUE;
 		}
 		flo_error(_("at-spi registry daemon is not running. "\
 		"Events will be sent with Xtest instead and several "\
