@@ -8,15 +8,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-03-02 17:50+0100\n"
+"POT-Creation-Date: 2010-04-14 09:25+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=ISO-8859-15\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: home.php:9 home.php:22 tools.php:16
+#: home.php:9 home.php:22 tools.php:34
 msgid "Florence Virtual Keyboard"
 msgstr ""
 
@@ -44,7 +44,7 @@ msgid ""
 msgstr ""
 
 #: home.php:22
-msgid "florence-gb"
+msgid "florence-us"
 msgstr ""
 
 #: home.php:24
@@ -59,34 +59,34 @@ msgstr ""
 msgid "Last update: 25th of January, 2010"
 msgstr ""
 
-#: tools.php:19
+#: tools.php:37
 msgid "francais"
 msgstr ""
 
-#: tools.php:19
+#: tools.php:37
 msgid "En français"
 msgstr ""
 
-#: tools.php:24 tools.php:26
+#: tools.php:42 tools.php:44
 msgid "Home"
 msgstr ""
 
-#: tools.php:26 tools.php:32
+#: tools.php:44 tools.php:50
 msgid "english"
 msgstr ""
 
-#: tools.php:28
+#: tools.php:46
 msgid "Screenshots"
 msgstr ""
 
-#: tools.php:30 tools.php:32
+#: tools.php:48 tools.php:50
 msgid "Documentation"
 msgstr ""
 
-#: tools.php:34
+#: tools.php:52
 msgid "Download"
 msgstr ""
 
-#: tools.php:35
+#: tools.php:53
 msgid "News"
 msgstr ""
