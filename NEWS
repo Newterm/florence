@@ -1,6 +1,10 @@
+Added symbol outlines for better visibility.
+You can now switch keyboard language with alt+config.
+The close button has been replaced with the hide button. Use alt+hide to close the program.
+
 Changelog:
 
-2010-03-31 François Agrech <f.agrech@gmail.com>
+2010-04-15 François Agrech <f.agrech@gmail.com>
 	* Version 0.4.7
 	* The window no longer covers widgets when decorated
 	* Some memory leaks fixed

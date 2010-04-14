@@ -249,7 +249,7 @@ void status_keys_add(struct status *status, GSList *keys)
 	struct key *key;
 	while (list) {
 		key=(struct key *)list->data;
-		if (key->type==LAYOUT_NORMAL) status->keys[key->code]=key;
+		if (key->code) status->keys[key->code]=key;
 		list=list->next;
 	}
 }
