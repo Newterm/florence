@@ -19,13 +19,14 @@ echo '<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?>'."\n";
    <br><br>
 <?php echo _("Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment."); ?>  
 </div>
+<br/>
 	<center><img src="images/<?php echo _("florence-us"); ?>.png" alt="<?php echo _("Florence Virtual Keyboard"); ?>"/></center>
-<br>
+<br/>
 <center><a href="http://sourceforge.net/"><img src="http://sflogo.sourceforge.net/sflogo.php?group_id=217749&amp;type=5" alt="<?php echo _("SourceForge.net Logo"); ?>" border="0" height="62" width="210"></a></center><br>
 <hr>
 <center>
 <?php echo _("Author:"); ?> <a href="mailto:f.agrech@gmail.com">François Agrech</a><br>
-<?php echo _("Last update: 25th of January, 2010"); ?>
+<?php echo _("Last update: 20th of April, 2010"); ?>
 </center>
 </body>
 </html>
