@@ -173,3 +173,4 @@
 	* Add symbol outline for better visibility
 	* Close button hides the keyboard
 	* It is not possible to switch xkb group from the keyboard
+	* make without-xrecord the default
