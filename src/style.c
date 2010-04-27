@@ -426,7 +426,7 @@ gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h)
 	cairo_surface_t *mask=style_shape_get_mask(shape, w, h);
 	unsigned char *data=cairo_image_surface_get_data(mask);
 	int stride=cairo_image_surface_get_stride(mask);
-	return data[(y*stride)+x]>127;
+	return (x>=0) && (y>=0) && (x<w) && (y<h) && data[(y*stride)+x]>127;
 }
 
 /* update the color of one item */
