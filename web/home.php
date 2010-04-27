@@ -6,6 +6,8 @@ echo '<?xml version="1.0" encoding="ISO-8859-15" standalone="no"?>'."\n";
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<meta name="description" content="<?php echo _("Florence is an extensible scalable virtual keyboard for GNOME."); ?>"/>
+<meta name="keywords" content="<?php echo _("virtual keyboard, onscreen keyboard, software keyboard, gnome keyboard, florence keyboard, linux keyboard"); ?>"/>
 <meta content="text/html; charset=ISO-8859-15" http-equiv="content-type"/><title><?php echo _("Florence Virtual Keyboard"); ?></title>
 <link rel="stylesheet" type="text/css" href="style.css"/>
 <?php piwik(); ?>

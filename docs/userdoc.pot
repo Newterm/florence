@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-04-14 09:25+0200\n"
+"POT-Creation-Date: 2010-04-27 20:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -108,7 +108,7 @@ msgid "On Fedora, just use the package manager. From the command line, you can t
 msgstr ""
 
 #: C/florence.xml:45(para)
-msgid "Make sure you have the latest version of Florence (0.4.7 as of February, the 25 of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</ulink>"
+msgid "Make sure you have the latest version of Florence (0.4.7 as of April, the 15th of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
 
 #: C/florence.xml:47(title)

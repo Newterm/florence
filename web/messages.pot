@@ -8,19 +8,29 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-14 09:25+0200\n"
+"POT-Creation-Date: 2010-04-27 20:56+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=ISO-8859-15\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: home.php:9 home.php:22 tools.php:34
+#: home.php:9
+msgid "Florence is an extensible scalable virtual keyboard for GNOME."
+msgstr ""
+
+#: home.php:10
+msgid ""
+"virtual keyboard, onscreen keyboard, software keyboard, gnome keyboard, "
+"florence keyboard, linux keyboard"
+msgstr ""
+
+#: home.php:11 home.php:25 tools.php:34
 msgid "Florence Virtual Keyboard"
 msgstr ""
 
-#: home.php:16
+#: home.php:18
 msgid ""
 "Florence is an extensible scalable virtual keyboard for GNOME. You need it "
 "if you can't use a real hardware keyboard, for example because you are "
@@ -30,33 +40,33 @@ msgid ""
 "used with just simple switches."
 msgstr ""
 
-#: home.php:18
+#: home.php:20
 msgid ""
 "Florence stays out of your way when you don't need it: it appears on the "
 "screen only when you need it. A Timer-based auto-click functionality is "
 "available to help disabled people having difficulties to click."
 msgstr ""
 
-#: home.php:20
+#: home.php:22
 msgid ""
 "Florence is primarily intended to be used with the GNOME desktop, although "
 "it can be used on any desktop environment."
 msgstr ""
 
-#: home.php:22
+#: home.php:25
 msgid "florence-us"
 msgstr ""
 
-#: home.php:24
+#: home.php:27
 msgid "SourceForge.net Logo"
 msgstr ""
 
-#: home.php:27
+#: home.php:30
 msgid "Author:"
 msgstr ""
 
-#: home.php:28
-msgid "Last update: 25th of January, 2010"
+#: home.php:31
+msgid "Last update: 20th of April, 2010"
 msgstr ""
 
 #: tools.php:37
