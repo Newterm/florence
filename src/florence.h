@@ -30,6 +30,15 @@
 #include "status.h"
 #include "trayicon.h"
 
+#ifdef ENABLE_RAMBLE
+/* Ramble structure is used to track the path of the mouse. */
+struct ramble {
+	GList *path; /* This is a list of points */
+	GList *end; /* this is the last element of the path */
+	guint n; /* number of elements in the path */
+};
+#endif
+
 /* There is one florence structure which contains all global data in florence.c */
 struct florence {
 	struct style *style; /* the style of florence */
@@ -39,6 +48,9 @@ struct florence {
 	struct trayicon *trayicon; /* tray icon object */
 	GtkWindow *icon; /* intermediate icon */
 	gint xpos, ypos; /* remember pointer position */
+#ifdef ENABLE_RAMBLE
+	struct ramble ramble; /* track the path of the mouse. */
+#endif
 #ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
 #endif

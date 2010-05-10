@@ -36,6 +36,11 @@
 /* bring the window back to front every seconds */
 #define FLO_TO_TOP_TIMEOUT 1000
 
+#ifdef ENABLE_RAMBLE
+/* maximum number of points in the ramble path */
+#define FLO_RAMBLE_MAX_POINTS 100
+#endif
+
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
@@ -351,6 +356,9 @@ gboolean flo_to_top(gpointer data)
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
+#ifdef ENABLE_RAMBLE
+	GdkPoint *pt;
+#endif
 	if (status_get_moving(florence->status)) {
 		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventMotion*)event)->x_root-florence->xpos,
 			(gint)((GdkEventMotion*)event)->y_root-florence->ypos);
@@ -358,6 +366,23 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		/* Remember mouse position for moving */
 		florence->xpos=(gint)((GdkEventMotion*)event)->x;
 		florence->ypos=(gint)((GdkEventMotion*)event)->y;
+#ifdef ENABLE_RAMBLE
+		pt=g_malloc(sizeof(GdkPoint));
+		pt->x=florence->xpos;
+		pt->y=florence->ypos;
+		florence->ramble.end=g_list_append(florence->ramble.end, (gpointer)pt);
+		if (!florence->ramble.path) florence->ramble.path=florence->ramble.end;
+		if (florence->ramble.end->next) florence->ramble.end=florence->ramble.end->next;
+		florence->ramble.n++;
+		if (florence->ramble.n > FLO_RAMBLE_MAX_POINTS) {
+			view_update_path(florence->view, florence->ramble.path->next);
+			g_free(florence->ramble.path->data);
+			florence->ramble.path=g_list_delete_link(florence->ramble.path, florence->ramble.path);
+			florence->ramble.n--;
+		}
+		florence->view->path=florence->ramble.end;
+		view_update_path(florence->view, florence->ramble.end);
+#endif
 		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 		if (status_focus_get(florence->status)!=key) {
 			if (key && settings_double_get("behaviour/auto_click")>0.0) {
@@ -504,6 +529,9 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 /* liberate all the memory used by florence */
 void flo_free(struct florence *florence)
 {
+#ifdef ENABLE_RAMBLE
+	GList *list=florence->ramble.path;
+#endif
 #ifdef ENABLE_AT_SPI
 	SPI_exit();
 #endif
@@ -511,6 +539,10 @@ void flo_free(struct florence *florence)
 	flo_layout_unload(florence);
 	if (florence->view) view_free(florence->view);
 	if (florence->status) status_free(florence->status);
+#ifdef ENABLE_RAMBLE
+	while (list) { g_free(list->data); list=list->next; }
+	g_list_free(florence->ramble.path);
+#endif
 	g_free(florence);
 	xmlCleanupParser();
 	xmlMemoryDump();

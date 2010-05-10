@@ -50,6 +50,9 @@ struct view {
 	GdkRegion *redraw; /* region that needs to be redrawn */
 	gboolean hand_cursor; /* true when the cursor is a hand */
 	gulong configure_handler; /* configure signal handler id */
+#ifdef ENABLE_RAMBLE
+	GList *path; /* Path of the mouse. This is a list of points */
+#endif
 };
 
 /* create a view of florence */
@@ -67,6 +70,8 @@ void view_hide (struct view *view);
 void view_update (struct view *view, struct key *key, gboolean statechange);
 /* Change the layout and style of the view and redraw */
 void view_update_layout(struct view *view, struct style *style, GSList *keyboards);
+/* Draw the path when modified */
+void view_update_path(struct view *view, GList *path);
 
 /* get the key at position */
 struct key *view_hit_get (struct view *view, gint x, gint y);

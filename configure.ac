@@ -2,6 +2,7 @@ AC_INIT([Florence Gnome virtual keyboard], [0.4.7], [f.agrech@gmail.com], [flore
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
+# Options
 AC_ARG_WITH([docs], AS_HELP_STRING([--without-docs], [Build without docs (default: enabled)]))
 AM_CONDITIONAL([WITH_DOCS], [test "x$with_docs" != "xno"])
 AC_ARG_WITH([notification], AS_HELP_STRING([--without-notification], [Build without notification (default: enabled)]))
@@ -9,7 +10,7 @@ AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_notification" != "xno"])
 AC_ARG_WITH([xtst], AS_HELP_STRING([--without-xtst], [Build without Xtst extension (default: enabled)]))
 AM_CONDITIONAL([WITH_XTST], [test "x$with_xtst" != "xno"])
 AC_ARG_WITH([xrecord], AS_HELP_STRING([--with-xrecord], [Build with XRecord extension (requires the Xtst extension) (default: disabled)]))
-AM_CONDITIONAL([WITH_XRECORD], [test "x$with_xrecord" == "xyes" -a "x$with_xtst" != "xyes"])
+AM_CONDITIONAL([WITH_XRECORD], [test "x$with_xrecord" == "xyes" -a "x$with_xtst" != "xno"])
 AC_ARG_WITH([at-spi], AS_HELP_STRING([--without-at-spi], [Build without at-spi(default: enabled)]))
 AM_CONDITIONAL([WITH_AT_SPI], [test "x$with_at_spi" != "xno"])
 if test "x$with_xtst" = "xno" -a  "x$with_at_spi" = "xno"; then
@@ -19,6 +20,11 @@ AC_ARG_WITH([xkb], AS_HELP_STRING([--without-xkb], [Build without xkb(default: e
 AM_CONDITIONAL([WITH_XKB], [test "x$with_xkb" != "xno"])
 if test "x$with_xkb" != "xno"; then
 	AC_DEFINE(ENABLE_XKB, ["xkb"], [xkb extension is enabled])
+fi
+AC_ARG_WITH([ramble], AS_HELP_STRING([--with-ramble], [Build with ramble mode (default: disabled)]))
+AM_CONDITIONAL([WITH_RAMBLE], [test "x$with_ramble" == "xyes"])
+if test "x$with_ramble" = "xyes"; then
+	AC_DEFINE(ENABLE_RAMBLE, ["ramble"], [Ramble mode is enabled])
 fi
 
 # Internationalization
