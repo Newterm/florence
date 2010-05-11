@@ -1,0 +1,49 @@
+/* 
+   Florence - Florence is a simple virtual keyboard for Gnome.
+
+   Copyright (C) 2008, 2009, 2010 François Agrech
+
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2, or (at your option)
+   any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software Foundation,
+   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
+
+*/
+
+#ifndef RAMBLE
+#define RAMBLE
+
+#include "system.h"
+#ifdef ENABLE_RAMBLE
+#include "view.h"
+#include <glib.h>
+
+/* Ramble structure is used to track the path of the mouse. */
+struct ramble {
+	GList *path; /* This is a list of points */
+	GList *end; /* this is the last element of the path */
+	guint n; /* number of elements in the path */
+};
+
+/* Add a point to the path and update the view */
+void ramble_add(struct ramble *ramble, struct view *view, gint x, gint y);
+
+/* Create a ramble structure */
+struct ramble *ramble_new();
+
+/* Destroy a ramble structure */
+void ramble_free(struct ramble *ramble);
+
+#endif
+
+#endif
+
