@@ -24,8 +24,14 @@
 
 #include "system.h"
 #ifdef ENABLE_RAMBLE
-#include "view.h"
 #include <glib.h>
+#include <gdk/gdk.h>
+
+struct ramble_point {
+	GdkPoint p; /* Point coordinates */
+	gdouble a; /* Angle relative to the previous point (10px away) */
+	gboolean set; /* TRUE if angle is set */
+};
 
 /* Ramble structure is used to track the path of the mouse. */
 struct ramble {
@@ -34,8 +40,12 @@ struct ramble {
 	guint n; /* number of elements in the path */
 };
 
-/* Add a point to the path and update the view */
-void ramble_add(struct ramble *ramble, struct view *view, gint x, gint y);
+/* Add a point to the path and update the window.
+ * returns TRUE if an edge is detected. */
+gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y);
+
+/* Draw the ramble path to the cairo context */
+void ramble_draw(struct ramble *ramble, cairo_t *ctx);
 
 /* Create a ramble structure */
 struct ramble *ramble_new();

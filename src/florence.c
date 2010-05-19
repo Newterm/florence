@@ -358,7 +358,8 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		florence->xpos=(gint)((GdkEventMotion*)event)->x;
 		florence->ypos=(gint)((GdkEventMotion*)event)->y;
 #ifdef ENABLE_RAMBLE
-		ramble_add(florence->ramble, florence->view, florence->xpos, florence->ypos);
+		florence->view->ramble=florence->ramble;
+		if (ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window, florence->xpos, florence->ypos)) {
 #endif
 		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 		if (status_focus_get(florence->status)!=key) {
@@ -367,6 +368,11 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 			} else status_timer_stop(florence->status);
 			status_focus_set(florence->status, key);
 		}
+#ifdef ENABLE_RAMBLE
+			status_pressed_set(florence->status, key);
+			status_pressed_set(florence->status, NULL);
+		}
+#endif
 	}
 	return FALSE;
 }

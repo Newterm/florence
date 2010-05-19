@@ -448,10 +448,6 @@ void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 {
 	cairo_t *context;
-#ifdef ENABLE_RAMBLE
-	GList *list=view->path;
-	GdkPoint *p;
-#endif
 
 	/* Don't need to redraw several times in one chunk */
 	if (!view->redraw) view->redraw=gdk_region_new();
@@ -510,23 +506,7 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	cairo_restore(context);
 
 #ifdef ENABLE_RAMBLE
-	/* draw the ramble path */
-	if (list) {
-		p=(GdkPoint *)list->data;
-		cairo_move_to(context, p->x, p->y);
-		list=list->prev;
-		while (list) {
-			p=(GdkPoint *)list->data;
-			cairo_line_to(context, p->x, p->y);
-			list=list->prev;
-		}
-		cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
-		cairo_set_line_cap (context, CAIRO_LINE_CAP_ROUND);
-		cairo_set_line_join(context, CAIRO_LINE_JOIN_ROUND);
-		cairo_set_source_rgba (context, 1, 0, 0, 1);
-		cairo_set_line_width(context, 5);
-		cairo_stroke(context);
-	}
+	if (view->ramble) ramble_draw(view->ramble, context);
 #endif
 
 	/* and free up drawing memory */
@@ -572,36 +552,6 @@ void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoint
 	view->configure_handler=0;
 	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
 	view_update_extensions(client, xnxn_id, entry, user_data);
-}
-
-/* Draw the path when modified */
-void view_update_path(struct view *view, GList *path) {
-	GdkRectangle rect;
-	GdkPoint *p1, *p2;
-
-	if (path) {
-		p1=(GdkPoint *)path->data;
-		if (path->prev) {
-			p2=(GdkPoint *)path->prev->data;
-			if (p1->x > p2->x) {
-				rect.x=p2->x;
-				rect.width=p1->x-p2->x;
-			} else {
-				rect.x=p1->x;
-				rect.width=p2->x-p1->x;
-			}
-			if (p1->y > p2->y) {
-				rect.y=p2->y;
-				rect.height=p1->y-p2->y;
-			} else {
-				rect.y=p1->y;
-				rect.height=p2->y-p1->y;
-			}
-			rect.x=rect.x-10; rect.y=rect.y-10;
-			rect.width=rect.width+20; rect.height=rect.height+20;
-			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
-		}
-	}
 }
 
 /* Triggered by gconf when the "opacity" parameter is changed. */
