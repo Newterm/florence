@@ -120,11 +120,24 @@ void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y)
 	keyboard->xpos=x; keyboard->ypos=y;
 }
 
+/* tell the keyboard that it is under another one */
+void keyboard_set_under(struct keyboard *keyboard)
+{
+	keyboard->under=TRUE;
+}
+
+/* tell the keyboard that it is above other keyboards */
+void keyboard_set_over(struct keyboard *keyboard)
+{
+	keyboard->under=FALSE;
+}
+
 /* draw the keyboard to cairo surface */
 void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, struct status *status, enum style_class class)
 {
 	GSList *list=keyboard->keys;
+	if (keyboard->under && (class==STYLE_SYMBOL)) return;
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
 	while (list)
@@ -132,6 +145,7 @@ void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 		switch(class) {
 			case STYLE_SHAPE:
 				key_shape_draw((struct key *)list->data, style, cairoctx);
+				if (keyboard->under) key_symbol_draw((struct key *)list->data, style, cairoctx, status, FALSE);
 				break;
 			case STYLE_SYMBOL:
 				key_symbol_draw((struct key *)list->data, style, cairoctx, status, FALSE);
@@ -143,9 +157,9 @@ void keyboard_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 }
 
 /* draw the keyboard background to cairo surface */
-void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style)
+void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style, struct status *status)
 {
-	keyboard_draw(keyboard, cairoctx, style, NULL, STYLE_SHAPE);
+	keyboard_draw(keyboard, cairoctx, style, status, STYLE_SHAPE);
 }
 
 /* draw the keyboard symbols  to cairo surface */
@@ -235,6 +249,7 @@ GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
 struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z)
 {
 	GSList *list=keyboard->keys;
+	if (keyboard->under) return NULL;
 	while (list &&
 		(!key_hit((struct key *)list->data, x, y, z)))
 		list=list->next;

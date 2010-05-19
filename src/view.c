@@ -106,11 +106,19 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 			/* actual draw */
 			switch(class) {
 				case STYLE_SHAPE:
-					keyboard_background_draw(keyboard, offscreen, view->style);
+					keyboard_background_draw(keyboard, offscreen, view->style, view->status);
 					break;
 				case STYLE_SYMBOL:
 					keyboard_symbols_draw(keyboard, offscreen, view->style, view->status);
 					break;
+			}
+			if (keyboard->under) {
+				cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.5);
+				cairo_set_operator(offscreen, CAIRO_OPERATOR_DEST_OUT);
+				cairo_rectangle(offscreen, keyboard->xpos, keyboard->ypos,
+					keyboard_get_width(keyboard), keyboard_get_height(keyboard));
+				cairo_fill(offscreen);
+				cairo_set_operator(offscreen, CAIRO_OPERATOR_OVER);
 			}
 		}
 		list=list->next;
@@ -130,7 +138,7 @@ void view_symbols_draw (struct view *view, cairo_t *cairoctx) {
 }
 
 /* update the keyboard positions */
-void view_keyboards_set_pos(struct view *view)
+void view_keyboards_set_pos(struct view *view, struct keyboard *over)
 {
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
@@ -149,22 +157,34 @@ void view_keyboards_set_pos(struct view *view)
 					height=keyboard_get_height(keyboard);
 					xoffset=yoffset=0;
 					x=y=0.0;
+					if (over) keyboard_set_under(keyboard); else keyboard_set_over(keyboard);
 					break;
 				case LAYOUT_TOP:
 					yoffset+=keyboard_get_height(keyboard);
 					x=0.0; y=-yoffset;
+					if (over) keyboard_set_under(keyboard); else keyboard_set_over(keyboard);
 					break;
 				case LAYOUT_BOTTOM:
 					x=0.0; y=height;
 					height+=keyboard_get_height(keyboard);
+					if (over) keyboard_set_under(keyboard); else keyboard_set_over(keyboard);
 					break;
 				case LAYOUT_LEFT:
 					xoffset+=keyboard_get_width(keyboard);
 					x=-xoffset; y=0.0;
+					if (over) keyboard_set_under(keyboard); else keyboard_set_over(keyboard);
 					break;
 				case LAYOUT_RIGHT:
 					x=width; y=0.0;
 					width+=keyboard_get_width(keyboard);
+					if (over) keyboard_set_under(keyboard); else keyboard_set_over(keyboard);
+					break;
+				case LAYOUT_OVER:
+					if (keyboard_get_width(keyboard)>width) width=keyboard_get_width(keyboard);
+					if (keyboard_get_height(keyboard)>height) height=keyboard_get_height(keyboard);
+					x=(width-view->xoffset-keyboard_get_width(keyboard))/2.0;
+					y=(height-view->yoffset-keyboard_get_height(keyboard))/2.0;
+					if (over==keyboard) keyboard_set_over(keyboard); else keyboard_set_under(keyboard);
 					break;
 			}
 			keyboard_set_pos(keyboard, x+view->xoffset, y+view->yoffset);
@@ -178,6 +198,7 @@ void view_set_dimensions(struct view *view)
 {
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
+	struct keyboard *over=NULL;
 
 	while (list)
 	{
@@ -201,13 +222,18 @@ void view_set_dimensions(struct view *view)
 				case LAYOUT_RIGHT:
 					view->vwidth+=keyboard_get_width(keyboard);
 					break;
+				case LAYOUT_OVER:
+					if (keyboard_get_width(keyboard)>view->vwidth) view->vwidth=keyboard_get_width(keyboard);
+					if (keyboard_get_height(keyboard)>view->vheight) view->vheight=keyboard_get_height(keyboard);
+					over=keyboard;
+					break;
 			}
 		}
 		list = list->next;
 	}
 	view->width=(guint)(view->vwidth*view->zoom);
 	view->height=(guint)(view->vheight*view->zoom);
-	view_keyboards_set_pos(view);
+	view_keyboards_set_pos(view, over);
 }
 
 /* get the key at position */
@@ -228,7 +254,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 		ky=keyboard->ypos*view->zoom;
 		kw=keyboard->width*view->zoom;
 		kh=keyboard->height*view->zoom;
-		if (keyboard_activated(keyboard) && (x>=kx) && (x<=(kx+kw)) && (y>=ky) && y<=(ky+kh)) {
+		if (keyboard_activated(keyboard) && (!keyboard->under) && (x>=kx) && (x<=(kx+kw)) && (y>=ky) && y<=(ky+kh)) {
 			list=NULL;
 		}
 		else list = list->next;
@@ -470,6 +496,13 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 
 	view_draw_background(view, context);
 
+	/* draw the symbols */
+	if (!view->symbols) {
+		view_symbols_draw(view, context);
+	}
+	cairo_set_source_surface(context, view->symbols, 0, 0);
+	cairo_paint(context);
+
 	/* handle composited transparency */
 	/* TODO: check for transparency support in WM */
 	if (view->composite && settings_double_get("window/opacity")!=100.0) {
@@ -484,13 +517,6 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	}
-
-	/* draw the symbols */
-	if (!view->symbols) {
-		view_symbols_draw(view, context);
-	}
-	cairo_set_source_surface(context, view->symbols, 0, 0);
-	cairo_paint(context);
 
 	cairo_save(context);
 	cairo_scale(context, view->zoom, view->zoom);

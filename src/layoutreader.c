@@ -83,6 +83,7 @@ enum layout_placement layoutreader_placement_get(struct layout *layout)
 	else if (!xmlStrcmp(tmp, (xmlChar *)"right")) ret=LAYOUT_RIGHT;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"top")) ret=LAYOUT_TOP;
 	else if (!xmlStrcmp(tmp, (xmlChar *)"bottom")) ret=LAYOUT_BOTTOM;
+	else if (!xmlStrcmp(tmp, (xmlChar *)"over")) ret=LAYOUT_OVER;
 	else flo_error(_("Unknown placement %s"), tmp);
 	xmlFree(tmp);
 	return ret;

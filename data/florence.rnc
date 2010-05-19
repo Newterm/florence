@@ -85,7 +85,7 @@ extension-element = element extension {
 }
 
 placement-element = element placement {
-	"right" | "left" | "top" | "bottom"
+	"right" | "left" | "top" | "bottom" | "over"
 }
 
 }

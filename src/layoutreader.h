@@ -40,7 +40,8 @@ enum layout_placement {
 	LAYOUT_LEFT,
 	LAYOUT_RIGHT,
 	LAYOUT_TOP,
-	LAYOUT_BOTTOM
+	LAYOUT_BOTTOM,
+	LAYOUT_OVER
 };
 
 /* Keys can be of the following types */

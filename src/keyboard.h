@@ -39,6 +39,7 @@ struct keyboard {
 	gdouble xpos, ypos; /* logical position of the keyboard (may change according to which keyboards are activated) */
 	gdouble width, height; /* logical width and height of the keyboard */
 	enum layout_placement placement; /* position of the kekboard relative to main (VOID placement) */
+	gboolean under; /* TRUE if the keyboard is under another one */
 	GSList *keys; /* list of the keys of the keyboard */
 };
 
@@ -72,8 +73,13 @@ GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
 
 /* update the relative position of the keyboard to the view */
 void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y);
+/* tell the keyboard that it is under another one */
+void keyboard_set_under(struct keyboard *keyboard);
+/* tell the keyboard that it is above other keyboards */
+void keyboard_set_over(struct keyboard *keyboard);
 /* draw the keyboard background to cairo surface */
-void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct style *style);
+void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx,
+	struct style *style, struct status *status);
 /* draw the keyboard symbols  to cairo surface */
 void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, struct status *status);
