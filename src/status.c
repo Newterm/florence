@@ -156,8 +156,8 @@ void status_fsm_process(struct status *status, struct key *key, enum status_even
 		key_state_set(key, status_fsm[event][type][state].new_state);
 		/* execute actions */
 		status_focus_window(status);
-		flo_debug(_("Event %d received for key %d (type %d). Switching from state %d to %d"),
-			event, key->code, type, state, status_fsm[event][type][state].new_state);
+		flo_debug(_("Event %d received :type %d. Switching from state %d to %d"),
+			event, type, state, status_fsm[event][type][state].new_state);
 		if (status_fsm[event][type][state].actions)
 			for (idx=0;status_fsm[event][type][state].actions[idx];idx++)
 				status_fsm[event][type][state].actions[idx](status, key, event);
@@ -249,7 +249,7 @@ void status_keys_add(struct status *status, GSList *keys)
 	struct key *key;
 	while (list) {
 		key=(struct key *)list->data;
-		if (key->code) status->keys[key->code]=key;
+		if (((struct key_mod *)key->mods)->type==KEY_CODE) status->keys[key->code]=key;
 		list=list->next;
 	}
 }
@@ -301,7 +301,7 @@ void status_update_view (struct status *status, struct key *key, enum status_eve
 /* send the event: press or release the key */
 void status_send (struct status *status, struct key *key, enum status_event event)
 {
-	flo_debug(_("sending event %d for key %d"), event, key->code);
+	flo_debug(_("sending event %d"), event);
 	switch(event) {
 		case STATUS_PRESS:
 			key_press(key, status);
@@ -424,7 +424,7 @@ void status_unlock (struct status *status, struct key *key, enum status_event ev
 /* print a status error */
 void status_error (struct status *status, struct key *key, enum status_event event)
 {
-	flo_error(_("FSM state error. key code=%d ; event=%d ; state=%d"), key->code, event, key->state);
+	flo_error(_("FSM state error. event=%d ; state=%d"), event, key->state);
 }
 
 

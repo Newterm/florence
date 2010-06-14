@@ -31,6 +31,7 @@
 #include "trace.h"
 #include "style.h"
 #include "settings.h"
+#include "layoutreader.h"
 
 #if !GLIB_CHECK_VERSION(2,14,0)
 #include "tools.h"
@@ -44,7 +45,7 @@ static gchar *style_css_file_source=DATADIR "/florence.css";
 struct symbol {
 	union {
 		GRegex *name;
-		enum layout_key_type type;
+		enum key_action_type type;
 	} id;
 	gchar *label;
 	RsvgHandle *svg;
@@ -186,14 +187,14 @@ void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble 
 }
 
 /* create a new symbol */
-void style_symbol_new(struct style *style, char *name, char *svg, char *label, enum layout_key_type type)
+void style_symbol_new(struct style *style, char *name, char *svg, char *label, char *type)
 {
 	GError *error=NULL;
 	gchar *regex=NULL;
 	gchar *source=NULL;
 	struct symbol *symbol=g_malloc(sizeof(struct symbol));
 	memset(symbol, 0, sizeof(struct symbol));
-	if ((type == LAYOUT_NORMAL) && name) {
+	if ((!type) && name) {
 		regex=g_strdup_printf("^%s$", name);
 		symbol->id.name=g_regex_new(regex, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
 		g_free(regex);
@@ -207,8 +208,8 @@ void style_symbol_new(struct style *style, char *name, char *svg, char *label, e
 		if (source) g_free(source);
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), svg);
 	} else { flo_fatal(_("Bad symbol: should have either svg or label :%s"), name); }
-	if (type != LAYOUT_NORMAL) {
-		symbol->id.type=type;
+	if (type) {
+		symbol->id.type=key_action_type_get(type);
 		style->type_symbols=g_slist_append(style->type_symbols, (gpointer)symbol);
 	} else {
 		style->symbols=g_slist_append(style->symbols, (gpointer)symbol);
@@ -313,7 +314,7 @@ void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdo
 }
 
 /* Draw the symbol represented by type */
-void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum layout_key_type type, gdouble w, gdouble h)
+void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum key_action_type type, gdouble w, gdouble h)
 {
 	GSList *item=style->type_symbols;
 	while (item && (type!=((struct symbol *)item->data)->id.type)) {

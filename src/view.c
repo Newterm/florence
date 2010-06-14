@@ -369,7 +369,7 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			view->symbols=NULL;
 			gtk_widget_queue_draw(GTK_WIDGET(view->window));
 		} else {
-			rect=keyboard_key_getrect((struct keyboard *)key_get_userdata(key),
+			rect=keyboard_key_getrect((struct keyboard *)key_get_keyboard(key),
 				key, view->zoom, status_focus_zoom_get(view->status));
 			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, rect, TRUE);
 		}
@@ -451,7 +451,7 @@ void view_draw_list (struct view *view, cairo_t *context, GList *list)
 	struct key *key;
 	while (list) {
 		key=(struct key *)list->data;
-		keyboard=(struct keyboard *)key_get_userdata(key);
+		keyboard=(struct keyboard *)key_get_keyboard(key);
 		keyboard_press_draw(keyboard, context, view->style, key, view->status);
 		list=list->next;
 	}
@@ -462,7 +462,7 @@ void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 {
 	struct keyboard *keyboard;
 	if (key) {
-		keyboard=(struct keyboard *)key_get_userdata(key);
+		keyboard=(struct keyboard *)key_get_keyboard(key);
 		keyboard_focus_draw(keyboard, context,
 			(gdouble)cairo_xlib_surface_get_width(view->background),
 			(gdouble)cairo_xlib_surface_get_height(view->background),

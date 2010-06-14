@@ -36,44 +36,70 @@
 
 #define PI M_PI
 
+/* Parse string into key type enumeration */
+enum key_action_type key_action_type_get(gchar *str)
+{
+	enum key_action_type ret=KEY_UNKNOWN;
+	if (!strcmp(str, "close")) ret=KEY_CLOSE;
+	else if (!strcmp(str, "reduce")) ret=KEY_REDUCE;
+	else if (!strcmp(str, "config")) ret=KEY_CONFIG;
+	else if (!strcmp(str, "move")) ret=KEY_MOVE;
+	else if (!strcmp(str, "bigger")) ret=KEY_BIGGER;
+	else if (!strcmp(str, "smaller")) ret=KEY_SMALLER;
+	else if (!strcmp(str, "switch")) ret=KEY_SWITCH;
+	else flo_error(_("Unknown action key type %s"), str);
+	return ret;
+}
+
+/* Append a new modifier to a key (user_data) */
+void key_modifier_append (struct layout_modifier *mod, void *user_data, void *user_data2)
+{
+	struct key *key=(struct key*) user_data;
+	struct xkeyboard *xkeyboard=(struct xkeyboard *)user_data2;
+	struct key_mod *keymod=g_malloc(sizeof(struct key_mod));
+	memset(keymod, 0, sizeof(struct key_mod));
+	keymod->modifier=mod->mod;
+	if (mod->code) {
+		keymod->type=KEY_CODE;
+		keymod->data=g_malloc(sizeof(struct key_code));
+		memset(keymod->data, 0, sizeof(struct key_code));
+		((struct key_code *)keymod->data)->code=mod->code;
+		xkeyboard_key_properties_get(xkeyboard, mod->code,
+			&(((struct key_code *)keymod->data)->modifier),
+			&(((struct key_code *)keymod->data)->locker));
+	} else {
+		keymod->type=KEY_ACTION;
+		keymod->data=g_malloc(sizeof(struct key_action));
+		memset(keymod->data, 0, sizeof(struct key_action));
+		((struct key_action *)keymod->data)->type=key_action_type_get((gchar *)mod->action);
+	}
+	key->mods=g_slist_append(key->mods, keymod);
+}
+
 /* Instanciates a key
  * the key may have a static label which will be always drawn in place of the symbol */
-struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *userdata)
+struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *keyboard)
 {
-	struct layout_key *lkey=layoutreader_key_new(layout);
-	struct key *key=NULL;
-	guint n=0;
-	struct layout_modifier **lmod;
-	struct key_action **actions;
+	struct key *key;
+	struct layout_key *lkey;
 	
+	key=g_malloc(sizeof(struct key));
+	memset(key, 0, sizeof(struct key));
+	lkey=layoutreader_key_new(layout, key_modifier_append, (void *)key, (void *)xkeyboard);
 	if (lkey) {
-		key=g_malloc(sizeof(struct key));
-		memset(key, 0, sizeof(struct key));
-		key->code=lkey->code;
 		key->state=KEY_RELEASED;
-		lmod=lkey->actions;
-		if (lmod) while(*(lmod++)) n++;
-		if (n) {
-			actions=(key->actions=g_malloc(sizeof(struct key_modifier *)*(n+1)));
-			lmod=lkey->actions;
-			while (*lmod) {
-				*actions=g_malloc(sizeof(struct key_action));
-				(*actions)->modifier=(GdkModifierType)((*lmod)->mod);
-				(*actions)->type=(*lmod)->type;
-				lmod++; actions++;
-			}
-			*actions=NULL;
-		}
-		xkeyboard_key_properties_get(xkeyboard, key->code, &(key->modifier), &(key->locker));
 		key->shape=style_shape_get(style, lkey->shape);
 		key->x=lkey->pos.x;
 		key->y=lkey->pos.y;
 		key->w=lkey->size.w==0.0?2.0:lkey->size.w;
 		key->h=lkey->size.h==0.0?2.0:lkey->size.h;
-		key->userdata=userdata;
+		key->keyboard=keyboard;
 		layoutreader_key_free(lkey);
-		flo_debug("[new key] code=%d x=%f y=%f w=%f h=%f",
-			key->code, key->x, key->y, key->w, key->h);
+		flo_debug("[new key] x=%f y=%f w=%f h=%f",
+			key->x, key->y, key->w, key->h);
+	} else {
+		g_free(key);
+		key=NULL;
 	}
 
 	return key;
@@ -82,12 +108,13 @@ struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard
 /* liberate memory used by the key */
 void key_free(struct key *key)
 {
-	struct key_action **action;
-	if (key->actions) {
-		action=key->actions;
-		while (*(action++)) g_free(*action);
-		g_free(key->actions);
+	GSList *list=key->mods;
+	while (list) {
+		g_free(((struct key_mod *)list->data)->data);
+		g_free(list->data);
+		list=list->next;
 	}
+	g_slist_free(key->mods);
 	g_free(key);
 }
 
@@ -113,61 +140,80 @@ void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 #endif
 }
 
-/* find the right action according to the modifier */
-struct key_action *key_action_find(struct key_action **actions, GdkModifierType mod)
+/* find the right modifier according to the global modifier */
+struct key_mod *key_mod_find(struct key *key, GdkModifierType mod)
 {
-	struct key_action *action=NULL;
+	GSList *list=key->mods;
+	struct key_mod *keymod=(struct key_mod *)list->data;
 	guint score=0;
-	while (*actions) {
-		if ( (!action) || (score<(mod&((*actions)->modifier))) ) {
-			action=*actions;
-			score=mod&((*actions)->modifier);
+	if (!list) flo_fatal(_("key %p has no modification."), key);
+	while (list) {
+		if (score<(mod&(((struct key_mod *)list->data)->modifier))) {
+			keymod=(struct key_mod *)list->data;
+			score=mod&(((struct key_mod *)list->data)->modifier);
 		}
-		actions++;
+		list=list->next;
 	}
-	return action;
+	return keymod;
 }
 
 /* Send a key press event. */
 void key_press(struct key *key, struct status *status)
 {
-	struct key_action *action=NULL;
-	if (key->actions) {
-		action=key_action_find(key->actions, status_globalmod_get(status));
-		switch (action->type) {
-			case LAYOUT_MOVE: status->moving=TRUE; break;
-			case LAYOUT_BIGGER:
-			case LAYOUT_SMALLER:
-			case LAYOUT_CONFIG:
-			case LAYOUT_CLOSE:
-			case LAYOUT_REDUCE:
-			case LAYOUT_SWITCH: break;
-			default: flo_warn(_("unknown action key type pressed = %d"), action->type);
+	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
+	struct key_action *action;
+	if (mod) {
+		switch (mod->type) {
+			case KEY_CODE:
+				key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
+				break;
+			case KEY_ACTION:
+				action=(struct key_action *)mod->data;
+				switch (action->type) {
+					case KEY_MOVE: status->moving=TRUE; break;
+					case KEY_BIGGER:
+					case KEY_SMALLER:
+					case KEY_CONFIG:
+					case KEY_CLOSE:
+					case KEY_REDUCE:
+					case KEY_SWITCH: break;
+					default: flo_warn(_("unknown action key type pressed = %d"), action->type);
+				}
+				break;
+			default: flo_warn(_("unknown key type pressed."));
 		}
-	} else key_event(key->code, TRUE, status->spi);
+	} else flo_warn(_("pressed key has no action associated."));
 }
 
 /* Send a key release event. */
 void key_release(struct key *key, struct status *status)
 {
-	struct key_action *action=NULL;
-	if (key->actions) {
-		action=key_action_find(key->actions, status_globalmod_get(status));
-		switch (action->type) {
-			case LAYOUT_CLOSE: gtk_main_quit(); break;
-			case LAYOUT_REDUCE: view_hide(status->view); break;
-			case LAYOUT_CONFIG: settings(); break;
-			case LAYOUT_MOVE: status->moving=FALSE; break;
-			case LAYOUT_BIGGER: settings_double_set("window/zoom",
-				settings_double_get("window/zoom")*1.05, TRUE); break;
-			case LAYOUT_SMALLER: settings_double_set("window/zoom",
-				settings_double_get("window/zoom")*0.95, TRUE); break;
-			case LAYOUT_SWITCH:
-				xkeyboard_layout_change(status->xkeyboard); break;
-			default: flo_warn(_("unknown action key type released = %d"), action->type);
+	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
+	struct key_action *action;
+	if (mod) {
+		switch (mod->type) {
+			case KEY_CODE:
+				key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
+				break;
+			case KEY_ACTION:
+				action=(struct key_action *)mod->data;
+				switch (action->type) {
+					case KEY_CLOSE: gtk_main_quit(); break;
+					case KEY_REDUCE: view_hide(status->view); break;
+					case KEY_CONFIG: settings(); break;
+					case KEY_MOVE: status->moving=FALSE; break;
+					case KEY_BIGGER: settings_double_set("window/zoom",
+						settings_double_get("window/zoom")*1.05, TRUE); break;
+					case KEY_SMALLER: settings_double_set("window/zoom",
+						settings_double_get("window/zoom")*0.95, TRUE); break;
+					case KEY_SWITCH:
+						xkeyboard_layout_change(status->xkeyboard); break;
+					default: flo_warn(_("unknown action key type released = %d"), action->type);
+				}
+				break;
+			default: flo_warn(_("unknown key type released."));
 		}
-	}
-	else key_event(key->code, FALSE, status->spi);
+	} else flo_warn(_("released key has no action associated."));
 }
 
 /* Draw the representation of the auto-click timer on the key
@@ -205,22 +251,31 @@ void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx)
 void key_symbol_draw(struct key *key, struct style *style,
 	cairo_t *cairoctx, struct status *status, gboolean use_matrix)
 {
-	struct key_action *action=NULL;
+	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
+	struct key_action *action;
+
 	if (!use_matrix) {
 		cairo_save(cairoctx);
 		cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	}
-	if (key->actions) {
-		action=key_action_find(key->actions, status_globalmod_get(status));
-		if (action->type==LAYOUT_SWITCH)
-			style_draw_text(style, cairoctx,
-				xkeyboard_next_layout_get(status->xkeyboard), key->w, key->h);
-		else
-			style_symbol_type_draw(style, cairoctx, action->type, key->w, key->h);
-	} else {
-		style_symbol_draw(style, cairoctx,
-			xkeyboard_getKeyval(status->xkeyboard, key->code, status_globalmod_get(status)),
-			key->w, key->h);
+
+	switch (mod->type) {
+		case KEY_CODE:
+			style_symbol_draw(style, cairoctx,
+				xkeyboard_getKeyval(status->xkeyboard,
+					((struct key_code *)mod->data)->code,
+					status_globalmod_get(status)),
+				key->w, key->h);
+			break;
+		case KEY_ACTION:
+			action=(struct key_action *)mod->data;
+			if (action->type==KEY_SWITCH)
+				style_draw_text(style, cairoctx,
+					xkeyboard_next_layout_get(status->xkeyboard), key->w, key->h);
+			else
+				style_symbol_type_draw(style, cairoctx, action->type, key->w, key->h);
+			break;
+		default: flo_warn(_("unknown key type to draw."));
 	}
 	if (!use_matrix) cairo_restore(cairoctx);
 }
@@ -276,9 +331,16 @@ void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, str
 
 /* getters and setters */
 void key_state_set(struct key *key, enum key_state state) { key->state=state; }
-gboolean key_is_locker(struct key *key) { return key->locker; }
-void *key_get_userdata(struct key *key) { return key->userdata; }
-GdkModifierType key_get_modifier(struct key *key) { return key->modifier; }
+/* note: a locker is a key which modification 0 is a locker key code*/
+gboolean key_is_locker(struct key *key) {
+	return ((struct key_mod *)key->mods->data)->type==KEY_CODE &&
+		((struct key_code *)((struct key_mod *)key->mods->data)->data)->locker;
+}
+void *key_get_keyboard(struct key *key) { return key->keyboard; }
+GdkModifierType key_get_modifier(struct key *key) {
+	return ((struct key_mod *)key->mods->data)->type==KEY_CODE?
+		((struct key_code *)((struct key_mod *)key->mods->data)->data)->modifier:0;
+}
 
 /* return if key is it at position */
 gboolean key_hit(struct key *key, gint x, gint y, gdouble z)

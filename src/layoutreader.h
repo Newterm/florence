@@ -44,18 +44,6 @@ enum layout_placement {
 	LAYOUT_OVER
 };
 
-/* Keys can be of the following types */
-enum layout_key_type {
-	LAYOUT_NORMAL,
-	LAYOUT_CLOSE,
-	LAYOUT_REDUCE,
-	LAYOUT_CONFIG,
-	LAYOUT_MOVE,
-	LAYOUT_BIGGER,
-	LAYOUT_SMALLER,
-	LAYOUT_SWITCH
-};
-
 /* Data contained in the 'informations' element */
 struct layout_infos {
 	char *name;
@@ -74,15 +62,18 @@ struct layout_pos {
 
 /* Data contained in the 'modifier' elements */
 struct layout_modifier {
-	unsigned int mod;
-	enum layout_key_type type;
+	unsigned int mod; /* modiier code */
+	unsigned char code; /* key code or 0 if none (for code keys) */
+	unsigned char *action; /* action depending on type */
+	unsigned char *argument; /* argument for action */
 };
+
+/* Callback for modifiers */
+typedef void (*layout_modifier_cb)(struct layout_modifier *mod, void *user_data, void *user_data2);
 
 /* Data contained in 'key' elements */
 struct layout_key {
 	char *shape;
-	unsigned char code;
-	struct layout_modifier **actions; /* NULL terminated list of actions. */
 	struct layout_pos pos;
 	struct layout_size size;
 };
@@ -105,7 +96,7 @@ struct layout_symbol {
 	char *name;
 	char *svg;
 	char *label;
-	enum layout_key_type type;
+	char *type;
 };
 
 /* Create a reader for the filename provided */
@@ -124,7 +115,7 @@ struct layout_size *layoutreader_keyboard_new(struct layout *layout);
 void layoutreader_keyboard_free(struct layout *layout, struct layout_size *size);
 
 /* Get the 'key' element data (see key.c) */
-struct layout_key *layoutreader_key_new(struct layout *layout);
+struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *user_data, void *user_data2);
 /* Free the 'key' element data */
 void layoutreader_key_free(struct layout_key *key);
 

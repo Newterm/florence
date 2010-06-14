@@ -35,6 +35,26 @@
 
 struct status;
 
+/* Keys can be of the following types */
+enum key_type {
+	KEY_CODE,
+	KEY_ACTION
+};
+
+/* Action keys can be of the following types */
+enum key_action_type {
+	KEY_CLOSE, /* Close keyboard window */
+	KEY_REDUCE, /* Hide keyboard window */
+	KEY_CONFIG, /* Sow settings dialog */
+	KEY_MOVE, /* Move keyboard window */
+	KEY_BIGGER, /* Increade keyboard window size */
+	KEY_SMALLER, /* Decrease keyboard window size */
+	KEY_SWITCH,/* Switch layout group */
+	KEY_EXTEND, /* argument = extension name */
+	KEY_UNEXTEND, /* argument = extension name */
+	KEY_UNKNOWN
+};
+
 /* the key state, used in the FSM table */
 enum key_state {
 	KEY_PRESSED,
@@ -44,31 +64,42 @@ enum key_state {
 	KEY_STATE_NUM
 };
 
-/* action keys have actions attached */
-struct key_action {
+/* Modified keys have actions attached */
+struct key_mod {
 	GdkModifierType modifier; /* modifier mask */
-	enum layout_key_type type; /* action key type */
+	enum key_type type; /* action key type */
+	void *data; /* pointer to key data structure, depending on key type */
+};
+
+/* Code keys: send the key code event */
+struct key_code {
+	guint code; /* hardware key code */
+	GdkModifierType modifier; /* Modifier mask. 0 When the key is not a modifier key. */
+	gboolean locker; /* TRUE if the key is either the caps lock or num lock key. */
+};
+
+/* Action keys: act depending on action type */
+struct key_action {
+	enum key_action_type type; /* action type */
+	gchar *arguments; /* argument for the action */
 };
 
 /* A key is an item of the keyboard. It represents a real keyboard key.
  * A key is replesented on the screen with a background (shape) and a foreground (symbol)
- * the background is constans, whereas the foreground change according to the global modifiers
+ * the background is constant, whereas the foreground change according to the global modifiers
  * when the auto-click timer is active, it is drawn between the background and the foreground */
 struct key {
-	guint code; /* hardware key code */
-	struct key_action **actions; /* NULL terminated list of actions attached to the key */
+	GSList *mods; /* list of modifications attached to the key (struct key_mod type) */
 	struct shape *shape; /* graphical representation of the background of the key */
 	gdouble x, y; /* position of the key inside the keyboard */
 	gdouble w, h; /* size of the key inside the keyboard */
-	GdkModifierType modifier; /* Modifier mask. 0 When the key is not a modifier key. */
-	gboolean locker; /* TRUE if the key is either the caps lock or num lock key. */
+	void *keyboard; /* keyboard attached to the key */
 	enum key_state state; /* state of the key (pressed, released, latched or locked) */
-	void *userdata; /* custom data attached to the key (used to attach to a keyboard) */
 };
 
 /* Instanciate a key
  * the key may have a static label which will be always drawn in place of the symbol */
-struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *userdata);
+struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *keyboard);
 /* deallocate memory used by the key */
 void key_free(struct key *key);
 
@@ -90,11 +121,13 @@ void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, str
 /* setters and getters */
 void key_state_set(struct key *key, enum key_state state);
 gboolean key_is_locker(struct key *key);
-void *key_get_userdata(struct key *key);
+void *key_get_keyboard(struct key *key);
 GdkModifierType key_get_modifier(struct key *key);
 
 /* return if key is it at position */
 gboolean key_hit(struct key *key, gint x, gint y, gdouble z);
+/* Parse string into key type enumeration */
+enum key_action_type key_action_type_get(gchar *str);
 
 #endif
 
