@@ -81,7 +81,7 @@ struct key_code {
 /* Action keys: act depending on action type */
 struct key_action {
 	enum key_action_type type; /* action type */
-	gchar *arguments; /* argument for the action */
+	gchar *argument; /* argument for the action */
 };
 
 /* A key is an item of the keyboard. It represents a real keyboard key.

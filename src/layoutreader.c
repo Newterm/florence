@@ -170,6 +170,21 @@ void layoutreader_keyboard_free(struct layout *layout, struct layout_size *size)
 	if (size) g_free(size);
 }
 
+/* Get the 'action' element data (for use in function layoutreader_key_new) */
+void layoutreader_action_get(struct layout *layout, xmlNodePtr cur, unsigned char **action, unsigned char **argument)
+{
+	xmlNodePtr curact;
+	for(curact=cur->children;curact;curact=curact->next) {
+		if (!xmlStrcmp(curact->name, (xmlChar *)"command")) {
+			*action=xmlNodeListGetString(layout->doc, curact->children, 1);
+		} else if (!xmlStrcmp(curact->name, (xmlChar *)"argument")) {
+			*argument=xmlNodeListGetString(layout->doc, curact->children, 1);
+		}
+	}
+	if (!(*action))
+		*action=xmlNodeListGetString(layout->doc, cur->children, 1);
+}
+
 /* Get the 'key' element data (see key.c) */
 struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *user_data, void *user_data2)
 {
@@ -181,6 +196,7 @@ struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_c
 	if (key) {
 		for(cur=layout->cur;cur;cur=cur->next) {
 			mod->action=NULL;
+			mod->argument=NULL;
 			if (!xmlStrcmp(cur->name, (xmlChar *)"code")) {
 				tmp=xmlNodeListGetString(layout->doc, cur->children, 1);
 				mod->mod=0;
@@ -190,23 +206,23 @@ struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_c
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"action")) {
 				mod->mod=0;
 				mod->code=0;
-				mod->action=xmlNodeListGetString(layout->doc, cur->children, 1);
+				layoutreader_action_get(layout, cur, &(mod->action), &(mod->argument));
 				mod_cb(mod, user_data, user_data2);
-				xmlFree(mod->action);
+				if (mod->action) xmlFree(mod->action);
+				if (mod->argument) xmlFree(mod->argument);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"modifier")) {
 				mod->code=0;
-				mod->action=NULL;
 				for(curmod=cur->children;curmod;curmod=curmod->next) {
 					if (!xmlStrcmp(curmod->name, (xmlChar *)"code")) {
 						tmp=xmlNodeListGetString(layout->doc, curmod->children, 1);
 						mod->mod=atoi((char *)tmp);
 						xmlFree(tmp);
-					} else if (!xmlStrcmp(curmod->name, (xmlChar *)"action")) {
-						mod->action=xmlNodeListGetString(layout->doc, curmod->children, 1);
-					}
+					} else if (!xmlStrcmp(curmod->name, (xmlChar *)"action"))
+						layoutreader_action_get(layout, curmod, &(mod->action), &(mod->argument));
 				}
 				mod_cb(mod, user_data, user_data2);
 				if (mod->action) xmlFree(mod->action);
+				if (mod->argument) xmlFree(mod->argument);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"xpos")) {
 				key->pos.x=layoutreader_double_get(layout->doc, cur);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"ypos")) {

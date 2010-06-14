@@ -47,6 +47,8 @@ enum key_action_type key_action_type_get(gchar *str)
 	else if (!strcmp(str, "bigger")) ret=KEY_BIGGER;
 	else if (!strcmp(str, "smaller")) ret=KEY_SMALLER;
 	else if (!strcmp(str, "switch")) ret=KEY_SWITCH;
+	else if (!strcmp(str, "extend")) ret=KEY_EXTEND;
+	else if (!strcmp(str, "unextend")) ret=KEY_UNEXTEND;
 	else flo_error(_("Unknown action key type %s"), str);
 	return ret;
 }
@@ -57,6 +59,7 @@ void key_modifier_append (struct layout_modifier *mod, void *user_data, void *us
 	struct key *key=(struct key*) user_data;
 	struct xkeyboard *xkeyboard=(struct xkeyboard *)user_data2;
 	struct key_mod *keymod=g_malloc(sizeof(struct key_mod));
+	struct key_action *action;
 	memset(keymod, 0, sizeof(struct key_mod));
 	keymod->modifier=mod->mod;
 	if (mod->code) {
@@ -71,7 +74,12 @@ void key_modifier_append (struct layout_modifier *mod, void *user_data, void *us
 		keymod->type=KEY_ACTION;
 		keymod->data=g_malloc(sizeof(struct key_action));
 		memset(keymod->data, 0, sizeof(struct key_action));
-		((struct key_action *)keymod->data)->type=key_action_type_get((gchar *)mod->action);
+		action=(struct key_action *)keymod->data;
+		action->type=key_action_type_get((gchar *)mod->action);
+		if (mod->argument) {
+			action->argument=g_malloc(sizeof(gchar)*(strlen((char *)mod->argument)+1));
+			strcpy(action->argument, (char *)mod->argument);
+		}
 	}
 	key->mods=g_slist_append(key->mods, keymod);
 }
@@ -108,9 +116,16 @@ struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard
 /* liberate memory used by the key */
 void key_free(struct key *key)
 {
+	struct key_action *action;
+	struct key_mod *mod;
 	GSList *list=key->mods;
 	while (list) {
-		g_free(((struct key_mod *)list->data)->data);
+		mod=(struct key_mod *)list->data;
+		if (mod->type==KEY_ACTION) {
+			action=(struct key_action *)mod->data;
+			if (action->argument) g_free(action->argument);
+		}
+		g_free(mod->data);
 		g_free(list->data);
 		list=list->next;
 	}
