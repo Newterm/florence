@@ -55,13 +55,13 @@ keyboard-element = element keyboard {
 
 key-element = element key {
 	xmllang?, xmlbase?,
+	( code-element | action-element ),
+	modifier-element*,
 	element shape { xsd:string }?,
 	element xpos { xsd:decimal },
 	element ypos { xsd:decimal },
 	element width { xsd:decimal }?,
-	element height { xsd:decimal }?,
-	( code-element | action-element ),
-	modifier-element*
+	element height { xsd:decimal }?
 }
 
 code-element = element code { xmllang?, xmlbase?, xsd:integer { minInclusive = "0" maxInclusive = "255" } }
