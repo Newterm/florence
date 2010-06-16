@@ -172,6 +172,64 @@ struct key_mod *key_mod_find(struct key *key, GdkModifierType mod)
 	return keymod;
 }
 
+/* event triggered when the "extend" key is pressed 
+ * activate the extension mentioned in the action argument */
+void key_extend(struct key_action *action) {
+	gboolean activated=FALSE;
+	gchar *newexts=NULL;
+	gchar *allextstr=NULL;
+	gchar **extstrs=NULL;
+	gchar **extstr=NULL;
+	if ((allextstr=settings_get_string("layout/extensions"))) {
+		extstrs=g_strsplit(allextstr, ":", -1);
+		extstr=extstrs;
+		while (extstr && *extstr) {
+			if (!strcmp(action->argument, *(extstr++))) { activated=TRUE; break; }
+		}
+		g_strfreev(extstrs);
+		if (!activated) {
+			newexts=g_malloc(sizeof(gchar)*(strlen(allextstr)+strlen(action->argument)+2));
+			sprintf(newexts, "%s:%s", allextstr, action->argument);
+			settings_string_set("layout/extensions", newexts);
+			g_free(newexts);
+		}
+		g_free(allextstr);
+	}
+}
+
+/* event triggered when the "extend" key is pressed 
+ * activate the extension mentioned in the action argument */
+void key_unextend(struct key_action *action) {
+	gboolean activated=FALSE;
+	gboolean started=FALSE;
+	gchar *newexts=NULL;
+	gchar *allextstr=NULL;
+	gchar **extstrs=NULL;
+	gchar **extstr=NULL;
+	if ((allextstr=settings_get_string("layout/extensions"))) {
+		newexts=g_malloc(sizeof(gchar)*(strlen(allextstr)));
+		newexts[0]='\0';
+		extstrs=g_strsplit(allextstr, ":", -1);
+		extstr=extstrs;
+		while (extstr && *extstr) {
+			if (!strcmp(action->argument, *extstr)) {
+				activated=TRUE;
+			} else {
+				if (started) strcat(newexts, ":");
+				strcat(newexts, *(extstr));
+				started=TRUE;
+			}
+			extstr++;
+		}
+		g_strfreev(extstrs);
+		if (activated) {
+			settings_string_set("layout/extensions", newexts);
+		}
+		g_free(newexts);
+		g_free(allextstr);
+	}
+}
+
 /* Send a key press event. */
 void key_press(struct key *key, struct status *status)
 {
@@ -191,7 +249,9 @@ void key_press(struct key *key, struct status *status)
 					case KEY_CONFIG:
 					case KEY_CLOSE:
 					case KEY_REDUCE:
-					case KEY_SWITCH: break;
+					case KEY_SWITCH:
+					case KEY_EXTEND:
+					case KEY_UNEXTEND: break;
 					default: flo_warn(_("unknown action key type pressed = %d"), action->type);
 				}
 				break;
@@ -223,6 +283,8 @@ void key_release(struct key *key, struct status *status)
 						settings_double_get("window/zoom")*0.95, TRUE); break;
 					case KEY_SWITCH:
 						xkeyboard_layout_change(status->xkeyboard); break;
+					case KEY_EXTEND: key_extend(action); break;
+					case KEY_UNEXTEND: key_unextend(action); break;
 					default: flo_warn(_("unknown action key type released = %d"), action->type);
 				}
 				break;
