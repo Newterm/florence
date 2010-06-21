@@ -107,18 +107,17 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 			switch(class) {
 				case STYLE_SHAPE:
 					keyboard_background_draw(keyboard, offscreen, view->style, view->status);
+					if (keyboard->under) {
+						cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.75);
+						cairo_set_operator(offscreen, CAIRO_OPERATOR_OVER);
+						cairo_rectangle(offscreen, keyboard->xpos, keyboard->ypos,
+							keyboard_get_width(keyboard), keyboard_get_height(keyboard));
+						cairo_fill(offscreen);
+					}
 					break;
 				case STYLE_SYMBOL:
 					keyboard_symbols_draw(keyboard, offscreen, view->style, view->status);
 					break;
-			}
-			if (keyboard->under) {
-				cairo_set_source_rgba(offscreen, 0.0, 0.0, 0.0, 0.5);
-				cairo_set_operator(offscreen, CAIRO_OPERATOR_DEST_OUT);
-				cairo_rectangle(offscreen, keyboard->xpos, keyboard->ypos,
-					keyboard_get_width(keyboard), keyboard_get_height(keyboard));
-				cairo_fill(offscreen);
-				cairo_set_operator(offscreen, CAIRO_OPERATOR_OVER);
 			}
 		}
 		list=list->next;
