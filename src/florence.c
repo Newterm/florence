@@ -243,24 +243,18 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 	GSList *keyboards=NULL;;
 	struct keyboard *keyboard=NULL;
 	struct keyboard_globaldata global;
-	struct layout_extension *extension=NULL;
 
 	global.status=florence->status;
 	florence->status->xkeyboard=xkeyboard_new();
 	global.style=florence->style;
 
 	/* read the layout file and create the extensions */
-	keyboards=g_slist_append(keyboards,
-		       keyboard_new(layout, florence->style, NULL, NULL, LAYOUT_VOID, &global));
+	keyboards=g_slist_append(keyboards, keyboard_new(layout, &global));
 #ifdef ENABLE_XRECORD
 	status_keys_add(florence->status, ((struct keyboard *)keyboards->data)->keys);
 #endif
-	while ((extension=layoutreader_extension_new(layout))) {
-		flo_debug(_("[new extension] name=%s id=%s"), extension->name, extension->identifiant);
-		keyboard=keyboard_new(layout, florence->style, extension->identifiant, extension->name,
-			extension->placement, &global);
+	while ((keyboard=keyboard_extension_new(layout, &global))) {
 		keyboards=g_slist_append(keyboards, keyboard);
-		layoutreader_extension_free(layout, extension);
 #ifdef ENABLE_XRECORD
 		status_keys_add(florence->status, keyboard->keys);
 #endif

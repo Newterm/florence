@@ -186,14 +186,24 @@ void layoutreader_action_get(struct layout *layout, xmlNodePtr cur, unsigned cha
 }
 
 /* Get the 'key' element data (see key.c) */
-struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *user_data, void *user_data2)
+struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *object, void *xkb)
 {
 	xmlChar *tmp=NULL;
 	xmlNodePtr cur=layout->cur;
 	xmlNodePtr curmod;
 	struct layout_key *key=layoutreader_element_init(layout, "key", sizeof(struct layout_key));
 	struct layout_modifier *mod=g_malloc(sizeof(struct layout_modifier));
+	xmlAttrPtr attr;
+	struct layout_id *id;
+
 	if (key) {
+		attr=xmlHasProp(layout->cur->parent, (xmlChar *)"id");
+		if (attr) {
+			id=g_malloc(sizeof(struct layout_id));
+			id->object=object;
+			id->name=(char *)xmlNodeListGetString(layout->doc, attr->children, 1);
+			layout->ids=g_slist_append(layout->ids, id);
+		}
 		for(cur=layout->cur;cur;cur=cur->next) {
 			mod->action=NULL;
 			mod->argument=NULL;
@@ -201,13 +211,13 @@ struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_c
 				tmp=xmlNodeListGetString(layout->doc, cur->children, 1);
 				mod->mod=0;
 				mod->code=atoi((char *)tmp);
-				mod_cb(mod, user_data, user_data2);
+				mod_cb(mod, object, xkb);
 				xmlFree(tmp);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"action")) {
 				mod->mod=0;
 				mod->code=0;
 				layoutreader_action_get(layout, cur, &(mod->action), &(mod->argument));
-				mod_cb(mod, user_data, user_data2);
+				mod_cb(mod, object, xkb);
 				if (mod->action) xmlFree(mod->action);
 				if (mod->argument) xmlFree(mod->argument);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"modifier")) {
@@ -220,7 +230,7 @@ struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_c
 					} else if (!xmlStrcmp(curmod->name, (xmlChar *)"action"))
 						layoutreader_action_get(layout, curmod, &(mod->action), &(mod->argument));
 				}
-				mod_cb(mod, user_data, user_data2);
+				mod_cb(mod, object, xkb);
 				if (mod->action) xmlFree(mod->action);
 				if (mod->argument) xmlFree(mod->argument);
 			} else if (!xmlStrcmp(cur->name, (xmlChar *)"xpos")) {
@@ -278,6 +288,35 @@ void layoutreader_extension_free(struct layout *layout, struct layout_extension 
 		if (extension->identifiant) xmlFree(extension->identifiant);
 		g_free(extension);
 	}
+}
+
+/* Read the trigger elements (only onhide for now) */
+struct layout_trigger *layoutreader_trigger_new(struct layout *layout)
+{
+	unsigned char *action, *argument;
+	GSList *list=layout->ids;
+	xmlNodePtr cur;
+	struct layout_trigger *trigger=layoutreader_element_init(layout,
+		"onhide", sizeof(struct layout_trigger));
+	if (trigger) {
+		for(cur=layout->cur;cur;cur=cur->next) {
+			if (!xmlStrcmp(cur->name, (xmlChar *)"action")) {
+				layoutreader_action_get(layout, cur, &(action), &(argument));
+				while (list && strcmp(((struct layout_id *)list->data)->name, (char *)argument)) {
+					list=list->next;
+				}
+				if (list) trigger->object=((struct layout_id *)list->data)->object;
+			}
+		}
+	}
+	return trigger;
+}
+
+/* Free the trigger data memory */
+void layoutreader_trigger_free(struct layout *layout, struct layout_trigger *trigger)
+{
+	layoutreader_element_close(layout);
+	if (trigger) g_free(trigger);
 }
 
 /* Get the 'shape' element data (see style.c) */
@@ -402,6 +441,12 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 /* free the memory used by layout reader */
 void layoutreader_free(struct layout *layout)
 {
+	GSList *list=layout->ids;
+	while (list) {
+		g_free(list->data);
+		list=list->next;
+	}
+	g_slist_free(layout->ids);
 	xmlFreeDoc(layout->doc);
 	g_free(layout);
 }

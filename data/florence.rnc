@@ -28,6 +28,7 @@ grammar {
 start = layout-element
 xmllang = attribute xml:lang { xsd:language }
 xmlbase = attribute xml:base { text }
+id = attribute id { xsd:string }
  
 layout-element = element layout {
 	xmllang?, xmlbase?,
@@ -54,7 +55,7 @@ keyboard-element = element keyboard {
 }
 
 key-element = element key {
-	xmllang?, xmlbase?,
+	xmllang?, xmlbase?, id?,
 	( code-element | action-element ),
 	modifier-element*,
 	element shape { xsd:string }?,
@@ -66,13 +67,17 @@ key-element = element key {
 
 code-element = element code { xmllang?, xmlbase?, xsd:integer { minInclusive = "0" maxInclusive = "255" } }
 
+onhide-element = element onhide {
+	action-element
+}
+
 action-element = element action {
 	"close" | "reduce" | "config" | "move" | "bigger" | "smaller" | "switch" |
 	( command-element, element argument { xsd:string } )
 }
 
 command-element = element command {
-	"extend" | "unextend"
+	"extend" | "unextend" | "release"
 }
 
 modifier-element = element modifier {
@@ -86,7 +91,8 @@ extension-element = element extension {
 	element name { xmllang, xsd:string }*,
 	element identifiant { xsd:string },
 	placement-element,
-	keyboard-element
+	keyboard-element,
+	onhide-element?
 }
 
 placement-element = element placement {

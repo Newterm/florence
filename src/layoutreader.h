@@ -26,11 +26,18 @@
 #include <libxml/tree.h>
 #include "config.h"
 
+/* Node id */
+struct layout_id {
+	void *object;
+	char *name;
+};
+
 /* The layout structure contains a pointer to the document
  * and a layout file cursor. */
 struct layout {
 	xmlDocPtr doc;
 	xmlNodePtr cur;
+	GSList *ids; /* list of node ids in document */
 };
 
 /* This is used for placing extensions around the keyboard.
@@ -69,7 +76,7 @@ struct layout_modifier {
 };
 
 /* Callback for modifiers */
-typedef void (*layout_modifier_cb)(struct layout_modifier *mod, void *user_data, void *user_data2);
+typedef void (*layout_modifier_cb)(struct layout_modifier *mod, void *object, void *xkb);
 
 /* Data contained in 'key' elements */
 struct layout_key {
@@ -83,6 +90,11 @@ struct layout_extension {
 	char *name;
 	char *identifiant;
 	enum layout_placement placement;
+};
+
+/* Trigger for extensions */
+struct layout_trigger {
+	void *object;
 };
 
 /* Data contained in 'shape' elemens */
@@ -115,7 +127,7 @@ struct layout_size *layoutreader_keyboard_new(struct layout *layout);
 void layoutreader_keyboard_free(struct layout *layout, struct layout_size *size);
 
 /* Get the 'key' element data (see key.c) */
-struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *user_data, void *user_data2);
+struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *object, void *xkb);
 /* Free the 'key' element data */
 void layoutreader_key_free(struct layout_key *key);
 
@@ -123,6 +135,11 @@ void layoutreader_key_free(struct layout_key *key);
 struct layout_extension *layoutreader_extension_new(struct layout *layout);
 /* Free the 'extension' element data and close the element */
 void layoutreader_extension_free(struct layout *layout, struct layout_extension *extension);
+
+/* Read the trigger elements (only onhide for now) */
+struct layout_trigger *layoutreader_trigger_new(struct layout *layout);
+/* Free the trigger data memory */
+void layoutreader_trigger_free(struct layout *layout, struct layout_trigger *trigger);
 
 /* Get the 'shape' element data (see style.c) */
 struct layout_shape *layoutreader_shape_new(struct layout *layout);

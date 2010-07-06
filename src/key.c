@@ -53,11 +53,11 @@ enum key_action_type key_action_type_get(gchar *str)
 	return ret;
 }
 
-/* Append a new modifier to a key (user_data) */
-void key_modifier_append (struct layout_modifier *mod, void *user_data, void *user_data2)
+/* Append a new modifier to a key (object) */
+void key_modifier_append (struct layout_modifier *mod, void *object, void *xkb)
 {
-	struct key *key=(struct key*) user_data;
-	struct xkeyboard *xkeyboard=(struct xkeyboard *)user_data2;
+	struct key *key=(struct key*) object;
+	struct xkeyboard *xkeyboard=(struct xkeyboard *)xkb;
 	struct key_mod *keymod=g_malloc(sizeof(struct key_mod));
 	struct key_action *action;
 	memset(keymod, 0, sizeof(struct key_mod));

@@ -31,6 +31,11 @@
 #include "layoutreader.h"
 #include "xkeyboard.h"
 
+/* action triggered */
+struct keyboard_trigger {
+	struct key *key;
+};
+
 /* A keyboard is a set of keys logically grouped together */
 /* Examples: the main keyboard, the numpad or the function keys */
 struct keyboard {
@@ -41,6 +46,8 @@ struct keyboard {
 	enum layout_placement placement; /* position of the kekboard relative to main (VOID placement) */
 	gboolean under; /* TRUE if the keyboard is under another one */
 	GSList *keys; /* list of the keys of the keyboard */
+	gboolean activated; /* true when the extension is activated */
+	struct keyboard_trigger *onhide; /* action triggered on hiding the keyboard */
 };
 
 /* This structure contains data from hardware keyboard as well as global florence data
@@ -50,9 +57,10 @@ struct keyboard_globaldata {
 	struct status *status; /* status of the keybaord to update */
 };
 
-/* create a keyboard: the layout is passed as a text reader */
-struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar *id, gchar *name,
-	enum layout_placement placement, struct keyboard_globaldata *data);
+/* loads the main keyboard from the layout. */
+struct keyboard *keyboard_new (struct layout *layout, struct keyboard_globaldata *data);
+/* loads an extension from the layout */
+struct keyboard *keyboard_extension_new (struct layout *layout, struct keyboard_globaldata *data);
 /* delete a keyboard */
 void keyboard_free (struct keyboard *keyboard);
 
@@ -62,8 +70,10 @@ gdouble keyboard_get_width(struct keyboard *keyboard);
 gdouble keyboard_get_height(struct keyboard *keyboard);
 /* Returns Keyboard position relative to the main keybord, as defined in the layout file */
 enum layout_placement keyboard_get_placement(struct keyboard *keyboard);
-/* Checks gconf for the activation of the keyboard. */
+/* Return TRUE is the keyboard is active */
 gboolean keyboard_activated(struct keyboard *keyboard);
+/* Update keyboard active status */
+void keyboard_status_update(struct keyboard *keyboard, struct status *status);
 /* Get the key at position (x,y) */
 struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z);
 /* returns a rectangle containing the key */

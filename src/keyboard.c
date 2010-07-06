@@ -33,41 +33,46 @@
 
 /* Checks a colon separated list of strings for the presence of a particular string.
  * This is useful to check the "extensions" gconf parameter which is a list of colon separated strings */
-gboolean keyboard_activated(struct keyboard *keyboard)
+void keyboard_status_update(struct keyboard *keyboard, struct status *status)
 {
-	gboolean ret=FALSE;
+	gboolean active=FALSE;
 	gchar *allextstr=NULL;
 	gchar **extstrs=NULL;
 	gchar **extstr=NULL;
-	if (!keyboard->id) return TRUE;
-	/* TODO: cache this and register callback for change */
-	/* check race condition with view.c */
+	if (!keyboard->id) return;
 	if ((allextstr=settings_get_string("layout/extensions"))) {
 		extstrs=g_strsplit(allextstr, ":", -1);
 		extstr=extstrs;
 		while (extstr && *extstr) {
-			if (!strcmp(keyboard->id, *(extstr++))) { ret=TRUE; break; }
+			if (!strcmp(keyboard->id, *(extstr++))) { active=TRUE; break; }
 		}
 		g_strfreev(extstrs);
 		g_free(allextstr);
 	}
-	return ret;
+	if ((!active)&&keyboard->activated&&keyboard->onhide) {
+		/* onhide trigger */
+		if (KEY_RELEASED!=keyboard->onhide->key->state) {
+			status_pressed_set(status, keyboard->onhide->key);
+			status_pressed_set(status, NULL);
+		}
+	}
+	keyboard->activated=active;
 }
 
-/* Create a keyboard: the layout is passed as a text reader */
-struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar *id, gchar *name,
-	enum layout_placement placement, struct keyboard_globaldata *data)
+/* Return TRUE if the keyboard is active */
+gboolean keyboard_activated(struct keyboard *keyboard)
 {
-	struct keyboard *keyboard=NULL;
+	return (!keyboard->id) || keyboard->activated;
+}
+
+/* populate keyboard structure */
+void keyboard_populate(struct keyboard *keyboard, struct layout *layout, gchar *id, gchar *name,
+        enum layout_placement placement, struct keyboard_globaldata *data)
+{
 	struct layout_size *size=NULL;
 	struct key *key=NULL;
 
 	flo_debug(_("[new keyboard] name=%s id=%s"), name, id);
-
-	/* allocate memory for keyboard */
-	if (!(keyboard=g_malloc(sizeof(struct keyboard))))
-		flo_fatal(_("Unable to allocate memory for keyboard"));
-	memset(keyboard, 0, sizeof(struct keyboard));
 
 	if (name) keyboard->name=g_strdup(name);
 	if (id) keyboard->id=g_strdup(id);
@@ -79,19 +84,62 @@ struct keyboard *keyboard_new (struct layout *layout, struct style *style, gchar
 
 	/* insert all keyboard keys */
 #ifdef ENABLE_XKB
-	while ((key=key_new(layout, style, data->status->xkeyboard, (void *)keyboard))) {
+	while ((key=key_new(layout, data->style, data->status->xkeyboard, (void *)keyboard))) {
 		/* if locker is locked then update the status */
 		if (key_get_modifier(key)&data->status->xkeyboard->xkb_state.locked_mods) {
 			status_globalmod_set(data->status, key_get_modifier(key));
 			status_fsm_process(data->status, key, STATUS_PRESSED);
 		}
 #else
-	while ((key=key_new(layout, style, data->status->xkeyboard, (void *)keyboard))) {
+	while ((key=key_new(layout, data->style, data->status->xkeyboard, (void *)keyboard))) {
 #endif
 		keyboard->keys=g_slist_append(keyboard->keys, key);
 	}
 
 	layoutreader_keyboard_free(layout, size);
+}
+
+/* loads the main keyboard from the layout. */
+struct keyboard *keyboard_new (struct layout *layout, struct keyboard_globaldata *data)
+{
+	struct keyboard *keyboard=NULL;
+
+	/* allocate memory for keyboard */
+	if (!(keyboard=g_malloc(sizeof(struct keyboard))))
+		flo_fatal(_("Unable to allocate memory for keyboard"));
+	memset(keyboard, 0, sizeof(struct keyboard));
+
+	keyboard_populate(keyboard, layout, NULL, NULL, LAYOUT_VOID, data);
+
+	return keyboard;
+}
+
+/* loads an extension from the layout */
+struct keyboard *keyboard_extension_new (struct layout *layout, struct keyboard_globaldata *data)
+{
+	struct layout_extension *extension=NULL;
+	struct layout_trigger *trigger=NULL;
+	struct keyboard *keyboard=NULL;
+
+	/* allocate memory for keyboard */
+	if (!(keyboard=g_malloc(sizeof(struct keyboard))))
+		flo_fatal(_("Unable to allocate memory for keyboard"));
+	memset(keyboard, 0, sizeof(struct keyboard));
+
+	if ((extension=layoutreader_extension_new(layout))) {
+		keyboard_populate(keyboard, layout, extension->identifiant, extension->name,
+			extension->placement, data);
+		if ((trigger=layoutreader_trigger_new(layout))) {
+			if (!(keyboard->onhide=g_malloc(sizeof(struct keyboard_trigger))))
+				flo_fatal(_("Unable to allocate memory for keyboard trigger"));
+			keyboard->onhide->key=trigger->object;
+		}
+		layoutreader_extension_free(layout, extension);
+	} else {
+		g_free(keyboard);
+		keyboard=NULL;
+	}
+
 	return keyboard;
 }
 
@@ -110,6 +158,7 @@ void keyboard_free (struct keyboard *keyboard)
 		g_slist_free(keyboard->keys);
 		if (keyboard->name) g_free(keyboard->name);
 		if (keyboard->id) g_free(keyboard->id);
+		if (keyboard->onhide) g_free(keyboard->onhide);
 		g_free(keyboard);
 	}
 }
