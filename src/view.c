@@ -373,7 +373,8 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, rect, TRUE);
 		}
 	}
-	if (status_focus_get(view->status)) { if (!view->hand_cursor) {
+	if (status_focus_get(view->status)) {
+		if (!view->hand_cursor) {
 			cursor=gdk_cursor_new(GDK_HAND2);
 			gdk_window_set_cursor(GTK_WIDGET(view->window)->window, cursor);
 			view->hand_cursor=TRUE;
@@ -576,6 +577,7 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	view->symbols=NULL;
 	view_create_window_mask(view);
+	status_focus_set(view->status, NULL);
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 }
 

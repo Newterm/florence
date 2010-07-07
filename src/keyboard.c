@@ -81,6 +81,7 @@ void keyboard_populate(struct keyboard *keyboard, struct layout *layout, gchar *
 	if (!size) flo_fatal(_("Unreachable code in keyboard_new"));
 	keyboard->width=size->w;
 	keyboard->height=size->h;
+	keyboard_status_update(keyboard, data->status);
 
 	/* insert all keyboard keys */
 #ifdef ENABLE_XKB
