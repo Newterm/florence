@@ -87,7 +87,11 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 	if (GTK_WIDGET_VISIBLE(trayicon->view->window)) {
 		view_hide(trayicon->view);
 	} else { 
+#ifdef ENABLE_AT_SPI
 		view_show(trayicon->view, NULL);
+#else
+		view_show(trayicon->view);
+#endif
 	}
 }
 

@@ -29,22 +29,26 @@
 #include <gdk/gdkx.h>
 #include <cairo/cairo-xlib.h>
 
-#ifdef ENABLE_AT_SPI
 /* Show the view next to the accessible object if specified. */
+#ifdef ENABLE_AT_SPI
 void view_show (struct view *view, Accessible *object)
+#else
+void view_show (struct view *view)
+#endif
 {
+#ifdef ENABLE_AT_SPI
 	/* positionnement intelligent */
 	if (settings_get_bool("behaviour/auto_hide") && 
 		settings_get_bool("behaviour/move_to_widget") && object) {
 		tools_window_move(view->window, object);
 	}
+#endif
 	gtk_widget_show(GTK_WIDGET(view->window));
 	/* Some winwow managers forget it */
 	gtk_window_set_keep_above(view->window, TRUE);
 	/* reposition the window */
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 }
-#endif
 
 /* Hides the view */
 void view_hide (struct view *view)

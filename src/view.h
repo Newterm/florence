@@ -63,9 +63,11 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 /* liberate all the memory used by the view */
 void view_free (struct view *view);
 
-#ifdef ENABLE_AT_SPI
 /* Show the view next to the accessible object if specified. */
+#ifdef ENABLE_AT_SPI
 void view_show (struct view *view, Accessible *object);
+#else
+void view_show (struct view *view);
 #endif
 /* Hides the view */
 void view_hide (struct view *view);
