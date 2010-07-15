@@ -106,7 +106,7 @@ struct keyboard *keyboard_new (struct layout *layout, struct keyboard_globaldata
 	struct keyboard *keyboard=NULL;
 
 	/* allocate memory for keyboard */
-	if (!(keyboard=g_malloc(sizeof(struct keyboard))))
+	if (!(keyboard=(struct keyboard*)g_malloc(sizeof(struct keyboard))))
 		flo_fatal(_("Unable to allocate memory for keyboard"));
 	memset(keyboard, 0, sizeof(struct keyboard));
 

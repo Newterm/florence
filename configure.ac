@@ -13,6 +13,8 @@ AC_ARG_WITH([xrecord], AS_HELP_STRING([--with-xrecord], [Build with XRecord exte
 AM_CONDITIONAL([WITH_XRECORD], [test "x$with_xrecord" == "xyes" -a "x$with_xtst" != "xno"])
 AC_ARG_WITH([at-spi], AS_HELP_STRING([--without-at-spi], [Build without at-spi(default: enabled)]))
 AM_CONDITIONAL([WITH_AT_SPI], [test "x$with_at_spi" != "xno"])
+AC_ARG_WITH([panelapplet], AS_HELP_STRING([--without-panelapplet], [Build without libpanelapplet(default: enabled)]))
+AM_CONDITIONAL([WITH_PANELAPPLET], [test "x$with_panelapplet" != "xno"])
 if test "x$with_xtst" = "xno" -a  "x$with_at_spi" = "xno"; then
 	AC_MSG_ERROR(You can't disable both xtst and at-spi as there is no way Florence can generate keyboard events.)
 fi
@@ -84,6 +86,9 @@ fi
 if test "x$with_at_spi" != "xno"; then
 	PKG_CHECK_MODULES([AT_SPI], [cspi-1.0], AC_DEFINE([ENABLE_AT_SPI], [], [at-spi enabled.]), AC_MSG_ERROR(Could not configure at-spi. Please either install at-spi or disable it: --without-at-spi configure option))
 fi
+if test "x$with_panelapplet" != "xno"; then
+	PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-2.0], AC_DEFINE([ENABLE_APPLET], [], [panelapplet enabled.]), AC_MSG_ERROR(Could not configure libpanelapplet2. Please either install libpanelapplet2 or disable it: --without-panelapplet configure option))
+fi
 
 # Math library
 AC_CHECK_LIB([m], [tan], AC_DEFINE(HAVE_LIBM, 1, Math lib) LIBM="-lm", AC_MSG_ERROR(Missing working libm math lib))
@@ -95,6 +100,8 @@ AC_SUBST(GNOME_DOCS_UTILS_CFLAGS)
 AC_SUBST(GNOME_DOCS_UTILS_LIBS)
 AC_SUBST(LIBNOTIFY_CFLAGS)
 AC_SUBST(LIBNOTIFY_LIBS)
+AC_SUBST(LIBPANELAPPLET_CFLAGS)
+AC_SUBST(LIBPANELAPPLET_LIBS)
 AC_SUBST(XTST_CFLAGS)
 AC_SUBST(XTST_LIBS)
 AC_SUBST(AT_SPI_CFLAGS)

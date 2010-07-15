@@ -38,7 +38,9 @@
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
+#ifndef APPLET
 	gtk_main_quit();
+#endif
 	//gtk_exit (0);
 }
 
@@ -455,9 +457,13 @@ gboolean flo_check_at_spi(void)
 #endif
 
 /* create a new instance of florence. */
+#ifndef APPLET
 struct florence *flo_new(gboolean gnome, const gchar *focus_back)
+#else
+struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *applet)
+#endif
 {
-	struct florence *florence=g_malloc(sizeof(struct florence));
+  struct florence *florence=(struct florence *)g_malloc(sizeof(struct florence));
 	if (!florence) flo_fatal(_("Unable to allocate memory for florence"));
 	memset(florence, 0, sizeof(struct florence));
 
@@ -482,7 +488,11 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 #endif
 
 	flo_layout_load(florence);
+#ifdef APPLET
+	florence->view=view_new(florence->status, florence->style, florence->keyboards, applet);
+#else
 	florence->view=view_new(florence->status, florence->style, florence->keyboards);
+#endif
 	status_view_set(florence->status, florence->view);
 	if (settings_get_bool("window/keep_on_top")) g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, view_window_get(florence->view));
 
@@ -495,10 +505,10 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 		G_CALLBACK(flo_button_press_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
-
+#ifndef APPLET
 	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
-
+#endif
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
@@ -513,7 +523,9 @@ void flo_free(struct florence *florence)
 #ifdef ENABLE_AT_SPI
 	SPI_exit();
 #endif
+#ifndef APPLET
 	trayicon_free(florence->trayicon);
+#endif
 	flo_layout_unload(florence);
 	if (florence->view) view_free(florence->view);
 	if (florence->status) status_free(florence->status);

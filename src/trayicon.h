@@ -20,7 +20,7 @@
 */
 
 #include <gtk/gtk.h>
-#include "config.h"
+#include "system.h"
 #ifdef ENABLE_NOTIFICATION
 	#include <libnotify/notify.h>
 #endif
@@ -35,6 +35,11 @@ struct trayicon {
 	NotifyNotification *notification; /* startup notification */
 #endif
 };
+
+/* Display the about dialog window */
+void trayicon_about(void);
+/* Open yelp */
+void trayicon_help(void);
 
 /* Creates a new trayicon instance */
 struct trayicon *trayicon_new(struct view *view, GCallback quit_cb);

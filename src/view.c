@@ -36,6 +36,7 @@ void view_show (struct view *view, Accessible *object)
 void view_show (struct view *view)
 #endif
 {
+#ifndef APPLET
 #ifdef ENABLE_AT_SPI
 	/* positionnement intelligent */
 	if (settings_get_bool("behaviour/auto_hide") && 
@@ -48,6 +49,9 @@ void view_show (struct view *view)
 	gtk_window_set_keep_above(view->window, TRUE);
 	/* reposition the window */
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
+#else
+	gtk_widget_show(GTK_WIDGET(view->window));
+#endif
 }
 
 /* Hides the view */
@@ -62,6 +66,7 @@ void view_resize (struct view *view)
 	GdkRectangle rect;
 	GdkGeometry hints;
 	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
+#ifndef APPLET
 	if (settings_get_bool("window/resizable")) {
 		hints.min_aspect=view->vwidth/view->vheight;
 		hints.max_aspect=view->vwidth/view->vheight;
@@ -73,9 +78,12 @@ void view_resize (struct view *view)
 		gtk_window_set_geometry_hints(view->window, NULL, &hints,
 			GDK_HINT_WIN_GRAVITY);
 		gtk_window_set_resizable(view->window, FALSE);
+#endif
 		gtk_widget_set_size_request(GTK_WIDGET(view->window),
 			view->width, view->height);
+#ifndef APPLET
 	}
+#endif
 	/* refresh the view */
 	if (view->window && GTK_WIDGET(view->window)->window) {
 		rect.x=0; rect.y=0;
@@ -267,6 +275,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 	return key;
 }
 
+#ifndef APPLET
 /* Create a window mask for transparent window for non-composited screen */
 /* For composited screen, this function is useless, use alpha channel instead. */
 void view_create_window_mask(struct view *view)
@@ -341,6 +350,7 @@ void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, g
 	}
 	view_resize(view);
 }
+#endif
 
 /* Triggered by gconf when a color parameter is changed. */
 void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
@@ -404,6 +414,7 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 	gtk_widget_set_colormap(widget, colormap);
 }
 
+#ifndef APPLET
 /* on configure events: record window position */
 void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view *view)
 {
@@ -433,6 +444,7 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 
 	gdk_window_configure_finished (GTK_WIDGET(view->window)->window);
 }
+#endif
 
 /* draw the background of the keyboard */
 void view_draw_background (struct view *view, cairo_t *context)
@@ -541,10 +553,12 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 
 	/* and free up drawing memory */
 	cairo_destroy(context);
-	
+
+#ifndef APPLET
 	if (!view->configure_handler) 
 		view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 			G_CALLBACK(view_configure), view);
+#endif
 }
 
 /* on keys changed events */
@@ -563,9 +577,11 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
 
+#ifndef APPLET
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
+#endif
 
 	while (list)
 	{
@@ -580,7 +596,9 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 	view->background=NULL;
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	view->symbols=NULL;
+#ifndef APPLET
 	view_create_window_mask(view);
+#endif
 	status_focus_set(view->status, NULL);
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 }
@@ -589,9 +607,11 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
+#ifndef APPLET
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
+#endif
 	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
 	view_update_extensions(client, xnxn_id, entry, user_data);
 }
@@ -604,7 +624,11 @@ void view_set_opacity(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpo
 }
 
 /* get gtk window of the view */
+#ifdef APPLET
+PanelApplet *view_window_get (struct view *view)
+#else
 GtkWindow *view_window_get (struct view *view)
+#endif
 {
 	return view->window;
 }
@@ -624,7 +648,11 @@ void view_free(struct view *view)
 }
 
 /* create a view of florence */
+#ifdef APPLET
+struct view *view_new (struct status *status, struct style *style, GSList *keyboards, PanelApplet *applet)
+#else
 struct view *view_new (struct status *status, struct style *style, GSList *keyboards)
+#endif
 {
 	struct view *view=g_malloc(sizeof(struct view));
 	if (!view) flo_fatal(_("Unable to allocate memory for view"));
@@ -635,11 +663,14 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	view->keyboards=keyboards;
 	view->zoom=settings_double_get("window/zoom");
 	view_set_dimensions(view);
-
+#ifdef APPLET
+	view->window = applet;
+#else
 	view->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));
-	gtk_window_set_accept_focus(view->window, FALSE);
+ 	gtk_window_set_accept_focus(view->window, FALSE);
 	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool("window/task_bar"));
+#endif
 	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);
 #if GTK_CHECK_VERSION(2,12,0)
@@ -652,25 +683,32 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK|GDK_POINTER_MOTION_MASK);
 #endif
 	gtk_widget_set_app_paintable(GTK_WIDGET(view->window), TRUE);
+#ifndef APPLET
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
-
+#endif
 	/*g_signal_connect(gdk_keymap_get_default(), "keys-changed", G_CALLBACK(view_on_keys_changed), view);*/
 	xkeyboard_register_events(status->xkeyboard, view_on_keys_changed, (gpointer)view);
 	g_signal_connect(G_OBJECT(view->window), "screen-changed", G_CALLBACK(view_screen_changed), view);
+#ifndef APPLET
 	view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 		G_CALLBACK(view_configure), view);
+#endif
 	g_signal_connect(G_OBJECT(view->window), "expose-event", G_CALLBACK(view_expose), view);
 	view_screen_changed(GTK_WIDGET(view->window), NULL, view);
 	gtk_widget_show(GTK_WIDGET(view->window));
+#ifndef APPLET
 	view_create_window_mask(view);
+#endif
 
 	/* register settings callbacks */
+#ifndef APPLET
 	settings_changecb_register("window/transparent", view_set_transparent, view);
 	settings_changecb_register("window/decorated", view_set_decorated, view);
 	settings_changecb_register("window/resizable", view_set_resizable, view);
 	settings_changecb_register("window/always_on_top", view_set_always_on_top, view);
 	settings_changecb_register("window/task_bar", view_set_task_bar, view);
+#endif
 	settings_changecb_register("window/zoom", view_set_zoom, view);
 	settings_changecb_register("window/opacity", view_set_opacity, view);
 	settings_changecb_register("layout/extensions", view_update_extensions, view);
@@ -681,9 +719,10 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	settings_changecb_register("colours/activated", view_redraw, view);
 	settings_changecb_register("colours/latched", view_redraw, view);
 
+#ifndef APPLET
 	/* set the window icon */
 	tools_set_icon(view->window);
-
+#endif
 	return view;
 }
 

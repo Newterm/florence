@@ -366,6 +366,7 @@ char *alloca ();
 #if ENABLE_NLS
 # include <libintl.h>
 # define _(Text) gettext (Text)
+# define __G_I18N_H__
 #else
 # undef bindtextdomain
 # define bindtextdomain(Domain, Directory) /* empty */
