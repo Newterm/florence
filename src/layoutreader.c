@@ -295,7 +295,7 @@ struct layout_trigger *layoutreader_trigger_new(struct layout *layout)
 {
 	unsigned char *action, *argument;
 	GSList *list=layout->ids;
-	xmlNodePtr cur;
+	xmlNodePtr cur=layout->cur;
 	struct layout_trigger *trigger=layoutreader_element_init(layout,
 		"onhide", sizeof(struct layout_trigger));
 	if (trigger) {
@@ -306,9 +306,10 @@ struct layout_trigger *layoutreader_trigger_new(struct layout *layout)
 					list=list->next;
 				}
 				if (list) trigger->object=((struct layout_id *)list->data)->object;
+				else flo_error(_("Id %s was not found in layout file"), argument);
 			}
 		}
-	}
+	} else layout->cur=cur;
 	return trigger;
 }
 

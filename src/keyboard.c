@@ -51,7 +51,8 @@ void keyboard_status_update(struct keyboard *keyboard, struct status *status)
 	}
 	if ((!active)&&keyboard->activated&&keyboard->onhide) {
 		/* onhide trigger */
-		if (KEY_RELEASED!=keyboard->onhide->key->state) {
+		if (!keyboard->onhide->key) flo_error(_("No key associated with onhide trigger"));
+		else if (KEY_RELEASED!=keyboard->onhide->key->state) {
 			status_pressed_set(status, keyboard->onhide->key);
 			status_pressed_set(status, NULL);
 		}
@@ -134,6 +135,7 @@ struct keyboard *keyboard_extension_new (struct layout *layout, struct keyboard_
 			if (!(keyboard->onhide=g_malloc(sizeof(struct keyboard_trigger))))
 				flo_fatal(_("Unable to allocate memory for keyboard trigger"));
 			keyboard->onhide->key=trigger->object;
+			layoutreader_trigger_free(layout, trigger);
 		}
 		layoutreader_extension_free(layout, extension);
 	} else {
