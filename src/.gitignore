@@ -1,3 +1,6 @@
 *.o
 florence
+florence_applet
+florence.server.in
+florence.server
 .deps

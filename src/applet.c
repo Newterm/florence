@@ -78,6 +78,7 @@ florence_applet_factory(PanelApplet *applet,
 		menu,
 		verbs,
 		florence);
+	g_free(menu);
 
 	modules = g_getenv("GTK_MODULES");
 	if (!modules||modules[0]=='\0') putenv("GTK_MODULES=gail:atk-bridge");
