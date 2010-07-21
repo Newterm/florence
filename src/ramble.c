@@ -22,10 +22,16 @@
 #include "ramble.h"
 #ifdef ENABLE_RAMBLE
 #include "trace.h"
+#include "settings.h"
 #include <math.h>
 
 /* Maximum number of points in the ramble path */
 #define RAMBLE_MAX_POINTS 100
+
+/* Event is triggered when the path distance that hit the key is superior to */
+#define RAMBLE_DISTANCE_THRESHOLD 2.0
+/* Event is triggered again when the path distance that hit the key is superior to */
+#define RAMBLE_DISTANCE_THRESHOLD2 3.0
 
 /* Invalidate the region modified by the path */
 void ramble_update_region(GList *path, GdkWindow *window)
@@ -59,16 +65,15 @@ void ramble_update_region(GList *path, GdkWindow *window)
 }
 
 /* Add a point to the path and update the window.
- * returns TRUE if an edge is detected. */
-gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y)
+ * returns TRUE if an event is detected. */
+gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, gpointer k)
 {
-	struct ramble_point *pt=g_malloc(sizeof(struct ramble_point));
-	gdouble w, h, velocity;
+	struct ramble_point *pt1, *pt2, *pt=g_malloc(sizeof(struct ramble_point));
 	GList *list;
-	gboolean ret=FALSE;
+	gdouble w, h, max_d, dd, d=0.0;
 
 	/* Add the point to the path */
-	pt->p.x=x; pt->p.y=y; pt->a=0.0; pt->set=FALSE;
+	pt->p.x=x; pt->p.y=y; pt->k=k; pt->ev=FALSE;
 	ramble->end=g_list_append(ramble->end, (gpointer)pt);
 	if (!ramble->path) ramble->path=ramble->end;
 	if (ramble->end->next) ramble->end=ramble->end->next;
@@ -83,27 +88,34 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y)
 
 
 	/* Gesture detection */
-	/* Find a point at least 10 px away in order to get acceptable precision */
-	pt=(struct ramble_point *)ramble->end->data; list=ramble->end;
+	list=ramble->end;
+	pt=(struct ramble_point *)ramble->end->data;
+	pt1=pt;
+	/* Calculate path distance on that key */
 	while (list) {
-		w=pt->p.x-((struct ramble_point *)list->data)->p.x;
-		h=pt->p.y-((struct ramble_point *)list->data)->p.y;
-		if (sqrt((w*w)+(h*h))>=5.0) {
-			/* Calculate the angle */
-			pt->a=atan2(h, w); pt->set=TRUE;
-			/* Calculate angle velocity */
-			if (list->prev && ((struct ramble_point *)list->prev->data)->set) {
-				velocity=pt->a-((struct ramble_point *)list->prev->data)->a;
-				if (velocity<0.0) velocity=-velocity;
-				if (velocity>M_PI) velocity=velocity-(2.0*M_PI);
-				if (velocity<0.0) velocity=-velocity;
-				if (velocity>(M_PI/6.0)) ret=TRUE;
+		pt2=(struct ramble_point *)list->data;
+		if ( (!pt2->ev) && (pt2->k==k) ) {
+			w=pt1->p.x-pt2->p.x;
+			h=pt1->p.y-pt2->p.y;
+			dd=sqrt((w*w)+(h*h));
+			if (dd>=1.0) {
+				d+=dd;
+				pt1=pt2;
 			}
+			list=list->prev;
+		} else {
 			list=NULL;
-		} else list=list->prev;
+		}
+	}
+	if (pt2->ev) max_d=RAMBLE_DISTANCE_THRESHOLD2;
+	else max_d=RAMBLE_DISTANCE_THRESHOLD;
+	max_d*=settings_double_get("window/zoom");
+	if (d>=max_d) {
+		pt->ev=TRUE;
+		list=NULL;
 	}
 
-	return ret;
+	return pt->ev;
 }
 
 /* Draw the ramble path to the cairo context */

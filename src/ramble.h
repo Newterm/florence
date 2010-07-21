@@ -29,20 +29,20 @@
 
 struct ramble_point {
 	GdkPoint p; /* Point coordinates */
-	gdouble a; /* Angle relative to the previous point (10px away) */
-	gboolean set; /* TRUE if angle is set */
+	gpointer k; /* key hit by point */
+	gboolean ev; /* TRUE when an event is triggered */
 };
 
 /* Ramble structure is used to track the path of the mouse. */
 struct ramble {
-	GList *path; /* This is a list of points */
+	GList *path; /* this is a list of points */
 	GList *end; /* this is the last element of the path */
 	guint n; /* number of elements in the path */
 };
 
 /* Add a point to the path and update the window.
- * returns TRUE if an edge is detected. */
-gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y);
+ * returns TRUE if an event is detected. */
+gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, gpointer k);
 
 /* Draw the ramble path to the cairo context */
 void ramble_draw(struct ramble *ramble, cairo_t *ctx);

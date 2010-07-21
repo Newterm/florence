@@ -353,11 +353,12 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		/* Remember mouse position for moving */
 		florence->xpos=(gint)((GdkEventMotion*)event)->x;
 		florence->ypos=(gint)((GdkEventMotion*)event)->y;
+		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 #ifdef ENABLE_RAMBLE
 		florence->view->ramble=florence->ramble;
-		if (ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window, florence->xpos, florence->ypos)) {
+		if (ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window,
+			florence->xpos, florence->ypos, (gpointer)key)) {
 #endif
-		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 		if (status_focus_get(florence->status)!=key) {
 			if (key && settings_double_get("behaviour/auto_click")>0.0) {
 				status_timer_start(florence->status, flo_timer_update, (gpointer)florence);

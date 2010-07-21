@@ -7,7 +7,12 @@ INCLUDES = -I$(top_srcdir) -DFLORENCELOCALEDIR=\""$(florencelocaledir)"\"
 
 florence_SOURCES = main.c florence.c keyboard.c key.c trace.c settings.c trayicon.c\
                    layoutreader.c style.c view.c status.c tools.c settings-window.c\
-                   xkeyboard.c ramble.c
+                   xkeyboard.c
+
+if WITH_RAMBLE
+   florence_SOURCES += ramble.c
+endif
+
 florence_CPPFLAGS = -DICONDIR="\"$(ICONDIR)\""\
    -DDATADIR="\"$(datadir)/florence\"" $(DEPS_CFLAGS)\
    $(LIBGNOME_CFLAGS) $(LIBNOTIFY_CFLAGS) $(XTST_CFLAGS) $(AT_SPI_CFLAGS) $(INCLUDES)
@@ -17,6 +22,10 @@ if WITH_PANELAPPLET
 
 florence_applet_SOURCES = applet.c florence.c keyboard.c key.c trace.c settings.c trayicon.c\
                    layoutreader.c style.c view.c status.c tools.c settings-window.c xkeyboard.c
+
+if WITH_RAMBLE
+   florence_applet_SOURCES += ramble.c
+endif
 
 florence_applet_CPPFLAGS = -DAPPLET -DICONDIR="\"$(ICONDIR)\""\
    -DDATADIR="\"$(datadir)/florence\"" $(DEPS_CFLAGS)\
