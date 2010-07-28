@@ -32,6 +32,7 @@
 #include "trayicon.h"
 #ifdef ENABLE_RAMBLE
 #include "ramble.h"
+gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k);
 #endif
 #ifdef APPLET
 #include <panel-applet.h>

@@ -26,10 +26,11 @@
 #ifdef ENABLE_RAMBLE
 #include <glib.h>
 #include <gdk/gdk.h>
+#include "key.h"
 
 struct ramble_point {
 	GdkPoint p; /* Point coordinates */
-	gpointer k; /* key hit by point */
+	struct key *k; /* key hit by point */
 	gboolean ev; /* TRUE when an event is triggered */
 };
 
@@ -42,7 +43,9 @@ struct ramble {
 
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
-gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, gpointer k);
+
+/* Reset ramble path */
+void ramble_reset(struct ramble *ramble, GdkWindow *window);
 
 /* Draw the ramble path to the cairo context */
 void ramble_draw(struct ramble *ramble, cairo_t *ctx);

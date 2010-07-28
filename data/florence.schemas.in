@@ -35,14 +35,47 @@
 			</locale>
 		</schema>
 		<schema>
-			<key>/schemas/apps/florence/behaviour/auto_click</key>
-			<applyto>/apps/florence/behaviour/auto_click</applyto>
+			<key>/schemas/apps/florence/behaviour/input_method</key>
+			<applyto>/apps/florence/behaviour/input_method</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>button</default>
+			<locale name="C">
+				<short>Input method</short>
+				<long>Set the input method. Available input methods are button, timer and ramble.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/timer</key>
+			<applyto>/apps/florence/behaviour/timer</applyto>
 			<owner>florence</owner>
 			<type>float</type>
-			<default>0</default>
+			<default>1300</default>
 			<locale name="C">
 				<short>Auto click timeout</short>
-				<long>Time, in milliseconds, to wait when the mouse is over a key before the key is automatically pressed. Set to 0 to disable auto click.</long>
+				<long>Time, in milliseconds, to wait when the mouse is over a key before the key is automatically pressed (when timer input method is selected)</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/ramble_threshold1</key>
+			<applyto>/apps/florence/behaviour/ramble_threshold1</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>1.3</default>
+			<locale name="C">
+				<short>Distance threshold for first key press.</short>
+				<long>When ramble input method is selected, this the distance the pointer must move over a key (relative to the size of the key) before the key is pressed</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/ramble_threshold2</key>
+			<applyto>/apps/florence/behaviour/ramble_threshold2</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>3</default>
+			<locale name="C">
+				<short>Distance threshold for multiple key presses.</short>
+				<long>When ramble input method is selected, this the distance the pointer must move over a key (relative to the size of the key) for pressing a key a second time and more.</long>
 			</locale>
 		</schema>
 		<schema>

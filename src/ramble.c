@@ -28,11 +28,6 @@
 /* Maximum number of points in the ramble path */
 #define RAMBLE_MAX_POINTS 100
 
-/* Event is triggered when the path distance that hit the key is superior to */
-#define RAMBLE_DISTANCE_THRESHOLD 2.0
-/* Event is triggered again when the path distance that hit the key is superior to */
-#define RAMBLE_DISTANCE_THRESHOLD2 3.0
-
 /* Invalidate the region modified by the path */
 void ramble_update_region(GList *path, GdkWindow *window)
 {
@@ -66,11 +61,12 @@ void ramble_update_region(GList *path, GdkWindow *window)
 
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
-gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, gpointer k)
+gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k)
 {
 	struct ramble_point *pt1, *pt2, *pt=g_malloc(sizeof(struct ramble_point));
 	GList *list;
-	gdouble w, h, max_d, dd, d=0.0;
+	gint dw, dh;
+	gdouble d=0.0, w, h, threshold;
 
 	/* Add the point to the path */
 	pt->p.x=x; pt->p.y=y; pt->k=k; pt->ev=FALSE;
@@ -85,6 +81,7 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, gp
 		ramble->path=g_list_delete_link(ramble->path, ramble->path);
 		ramble->n--;
 	}
+	if (!k) return FALSE;
 
 
 	/* Gesture detection */
@@ -95,27 +92,61 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, gp
 	while (list) {
 		pt2=(struct ramble_point *)list->data;
 		if ( (!pt2->ev) && (pt2->k==k) ) {
-			w=pt1->p.x-pt2->p.x;
-			h=pt1->p.y-pt2->p.y;
-			dd=sqrt((w*w)+(h*h));
-			if (dd>=1.0) {
-				d+=dd;
-				pt1=pt2;
-			}
+			dw=pt1->p.x-pt2->p.x;
+			dh=pt1->p.y-pt2->p.y;
+			w=((gdouble)dw)/k->w;
+			h=((gdouble)dh)/k->h;
+			d+=sqrt((w*w)+(h*h));
+			pt1=pt2;
 			list=list->prev;
 		} else {
 			list=NULL;
 		}
 	}
-	if (pt2->ev) max_d=RAMBLE_DISTANCE_THRESHOLD2;
-	else max_d=RAMBLE_DISTANCE_THRESHOLD;
-	max_d*=settings_double_get("window/zoom");
-	if (d>=max_d) {
+	if (pt2->ev) threshold=settings_double_get("behaviour/ramble_threshold2");
+	else threshold=settings_double_get("behaviour/ramble_threshold1");
+	threshold*=settings_double_get("window/zoom");
+	if (d>=threshold) {
 		pt->ev=TRUE;
 		list=NULL;
 	}
 
 	return pt->ev;
+}
+
+/* Reset ramble path */
+void ramble_reset(struct ramble *ramble, GdkWindow *window)
+{
+	GdkRectangle *rect=NULL;
+	GList *list=ramble->path;
+	struct ramble_point *pt;
+	while (list) {
+		pt=(struct ramble_point *)list->data;
+		if (!rect) {
+			rect=g_malloc(sizeof(GdkRectangle));
+			rect->x=pt->p.x;
+			rect->y=pt->p.y;
+			rect->width=0;
+			rect->height=0;
+		} else {
+			if (pt->p.x<rect->x) { rect->width+=(rect->x-pt->p.x); rect->x=pt->p.x; }
+			else rect->width+=(pt->p.x-rect->x);
+			if (pt->p.y<rect->y) { rect->height+=(rect->y-pt->p.y); rect->y=pt->p.y; }
+			else rect->height+=(pt->p.y-rect->y);
+		}
+		g_free(list->data);
+		list=list->next;
+	}
+	g_list_free(ramble->path);
+	if (rect) {
+		rect->x=rect->x-10; rect->y=rect->y-10;
+		rect->width=rect->width+20; rect->height=rect->height+20;
+		gdk_window_invalidate_rect(window, rect, TRUE);
+		g_free(rect);
+	}
+	ramble->path=NULL;
+	ramble->end=NULL;
+	ramble->n=0;
 }
 
 /* Draw the ramble path to the cairo context */
@@ -141,12 +172,21 @@ void ramble_draw(struct ramble *ramble, cairo_t *ctx)
 	}
 }
 
+/* called when the input method changes */
+void ramble_input_method_check(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct ramble *ramble=(struct ramble *)user_data;
+	if (strcmp("ramble", settings_get_string("behaviour/input_method")))
+		ramble_reset(ramble, NULL);
+}
+
 /* Create a ramble structure */
 struct ramble *ramble_new()
 {
 	struct ramble *ramble=g_malloc(sizeof(struct ramble));
 	if (!ramble) flo_fatal(_("Unable to allocate memory for ramble"));
 	memset(ramble, 0, sizeof(struct ramble));
+	settings_changecb_register("behaviour/input_method", ramble_input_method_check, ramble);
 	return ramble;
 }
 
@@ -154,8 +194,12 @@ struct ramble *ramble_new()
 void ramble_free(struct ramble *ramble)
 {
 	GList *list=ramble->path;
-	while (list) { g_free(list->data); list=list->next; }
+	while (list) {
+		g_free(list->data);
+		list=list->next;
+	}
 	g_list_free(ramble->path);
+	g_free(ramble);
 }
 
 #endif

@@ -111,6 +111,37 @@ void settings_window_layouts_populate()
 	} else flo_error(_("Couldn't open directory %s"), DATADIR "/layouts");
 }
 
+/* Populate input method combobox with available methods */
+void settings_window_input_method_populate()
+{
+	GtkTreeIter iter;
+	GtkCellRenderer *cell;
+
+	if (settings_window->input_method_list) {
+		gtk_list_store_clear(settings_window->input_method_list);
+		g_object_unref(G_OBJECT(settings_window->input_method_list)); 
+	}
+	settings_window->input_method_list=gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
+	cell=gtk_cell_renderer_text_new();
+	gtk_cell_layout_pack_start(
+		GTK_CELL_LAYOUT(glade_xml_get_widget(settings_window->gladexml, "input_method_combo")),
+		cell, FALSE);
+	gtk_cell_layout_set_attributes(
+		GTK_CELL_LAYOUT(glade_xml_get_widget(settings_window->gladexml, "input_method_combo")),
+		cell, "text", 0, NULL);
+	gtk_list_store_append(settings_window->input_method_list, &iter);
+	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Button"), 1, "button", -1);
+	gtk_list_store_append(settings_window->input_method_list, &iter);
+	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Timer"), 1, "timer", -1);
+#ifdef ENABLE_RAMBLE
+	gtk_list_store_append(settings_window->input_method_list, &iter);
+	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Ramble"), 1, "ramble", -1);
+#endif
+	gtk_combo_box_set_model(GTK_COMBO_BOX(glade_xml_get_widget(
+			settings_window->gladexml, "input_method_combo")),
+		GTK_TREE_MODEL(settings_window->input_method_list));
+}
+
 /* fills the preview icon view with icons representing the themes */
 void settings_window_preview_build()
 {
@@ -207,27 +238,45 @@ void settings_window_extensions_update(gchar *layoutname)
 }
 
 /* update the layout settings according to gconf */
-void settings_window_layout_update()
+gchar *settings_window_combo_update(gchar *item)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gboolean out;
-	gchar *layout;
+	gchar *data;
+	GtkComboBox *combo=GTK_COMBO_BOX(glade_xml_get_widget(settings_window->gladexml, item));
 
 	/* update the layout combo box */
-	model=gtk_combo_box_get_model(GTK_COMBO_BOX(glade_xml_get_widget(
-		settings_window->gladexml, "flo_layouts")));
+	model=gtk_combo_box_get_model(combo);
 	if (gtk_tree_model_get_iter_first(model, &iter)) {
 		do {
-			gtk_tree_model_get(model, &iter, 1, &layout, -1);
-			if ((out=(!strcmp(layout, settings_get_string("layout/file")))))
-				gtk_combo_box_set_active_iter(
-					GTK_COMBO_BOX(glade_xml_get_widget(
-						settings_window->gladexml, "flo_layouts")),
-					&iter);
-				settings_window_extensions_update(layout);
-			if (layout) g_free(layout);
+			gtk_tree_model_get(model, &iter, 1, &data, -1);
+			if ((out=(!strcmp(data,
+				settings_get_string(settings_get_gconf_name(GTK_WIDGET(combo)))))))
+				gtk_combo_box_set_active_iter(combo, &iter);
 		} while ((!out) && gtk_tree_model_iter_next(model, &iter));
+	}
+
+	return data;
+}
+
+/* update the input method options */
+void settings_window_input_method_update(gchar *method)
+{
+	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+		"flo_timer"));
+	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+		"ramble_threshold1"));
+	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+		"ramble_threshold2"));
+	if (!strcmp(method, "timer")) {
+		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+			"flo_timer"));
+	} else if (!strcmp(method, "ramble")) {
+		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_threshold1"));
+		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_threshold2"));
 	}
 }
 
@@ -275,7 +324,16 @@ void settings_window_update()
 	gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
 		"flo_intermediate_icon"), settings_get_bool("behaviour/auto_hide"));
 
-	settings_window_layout_update();
+	color=settings_window_combo_update("flo_layouts");
+	if (color) {
+		settings_window_extensions_update(color);
+		g_free(color);
+	}
+	color=settings_window_combo_update("input_method_combo");
+	if (color) {
+		settings_window_input_method_update(color);
+	       	g_free(color);
+	}
 }
 
 /*************/
@@ -334,21 +392,25 @@ void settings_window_change_color(GtkColorButton *button)
 	if (!strcmp(name, "colours/key")) settings_window_preview_build();
 }
 
-/* called on layout change: set gconf layout entry. */
-void settings_window_layout(GtkComboBox *combo)
+/* called on combo change: set gconf entry. */
+void settings_window_combo(GtkComboBox *combo)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gchar *layout;
+	gchar *data;
 
 	gtk_combo_box_get_active_iter(combo, &iter);
-	model=gtk_combo_box_get_model(GTK_COMBO_BOX(
-		glade_xml_get_widget(settings_window->gladexml, "flo_layouts")));
-	gtk_tree_model_get(model, &iter, 1, &layout, -1);
+	model=gtk_combo_box_get_model(combo);
+	gtk_tree_model_get(model, &iter, 1, &data, -1);
 	gconf_change_set_set_string(settings_window->gconfchangeset,
-		settings_get_full_path("layout/file"), layout);
-	settings_window_extensions_update(layout);
-	g_free(layout);
+		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(combo))),
+		data);
+	if (!strcmp(glade_get_widget_name(GTK_WIDGET(combo)), "flo_layouts")) {
+		settings_window_extensions_update(data);
+	} else if (!strcmp(glade_get_widget_name(GTK_WIDGET(combo)), "input_method_combo")) {
+		settings_window_input_method_update(data);
+	}
+	g_free(data);
 }
 
 /* called when an extension is activated/deactivated. */
@@ -502,6 +564,7 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 	/* populate fields*/
 	settings_window_preview_build();
 	settings_window_layouts_populate();
+	settings_window_input_method_populate();
 
 	settings_window_update();
 	settings_window->notify_id=settings_register_all(

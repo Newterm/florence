@@ -458,7 +458,7 @@ gdouble status_timer_get(struct status *status)
 {
 	gdouble ret=0.0;
 	if (status->timer)
-		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_double_get("behaviour/auto_click");
+		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_double_get("behaviour/timer");
 	return ret;
 }
 

@@ -28,6 +28,7 @@ struct settings_window {
 	gboolean gtk_exit;
 	GtkListStore *style_list;
 	GtkListStore *layout_list;
+	GtkListStore *input_method_list;
 	guint notify_id;
 };
 
