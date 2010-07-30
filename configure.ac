@@ -148,11 +148,6 @@ AC_CONFIG_FILES([Makefile
                  data/svg11/Makefile
                  docs/Makefile
                  src/Makefile
-		 data/layouts/florence.xml.in
-		 data/layouts/florence-alt.xml.in
-		 data/layouts/compact.xml.in
-		 data/layouts/compact-alt.xml.in
-		 data/florence.desktop.in
 		 po/Makefile.in])
 AC_OUTPUT
 

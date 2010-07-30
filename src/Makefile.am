@@ -46,5 +46,7 @@ endif
 
 EXTRA_DIST = florence.h keyboard.h key.h layoutreader.h settings.h settings-window.h\
              status.h style.h system.h tools.h trace.h trayicon.h view.h xkeyboard.h\
-             ramble.h
+             ramble.h florence.server.in.in
  
+DISTCLEANFILES = $(server_in_files) $(server_DATA)
+

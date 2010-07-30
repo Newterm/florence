@@ -12,6 +12,8 @@ desktopdir=$(datadir)/applications
 desktop_in_files=florence.desktop.in
 desktop_DATA=$(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
+$(desktop_in_files): $(desktop_in_files:.desktop.in=.desktop.in.in)
+	sed -e "s|\@ICONDIR\@|$(ICONDIR)|" $< > $@
 
 iconsdir=$(datadir)/pixmaps
 icons_DATA=florence.svg
@@ -25,13 +27,13 @@ meta_DATA=florence.rnc florence.css
 configdir=$(datadir)/florence
 config_DATA=florence.conf
 
-install-data-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(srcdir)/$(schema_DATA)
+install-data-local: $(schema_DATA)
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(builddir)/$(schema_DATA)
 
-uninstall-local:
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-uninstall-rule $(srcdir)/$(schema_DATA)
+uninstall-local: $(schema_DATA)
+	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-uninstall-rule $(builddir)/$(schema_DATA)
 
-EXTRA_DIST = $(config_DATA) $(desktop_DATA) $(desktop_in_files) $(glade_DATA) $(icons_DATA) $(meta_DATA) $(shema_DATA)\
-             $(schemas_in_files) florence.schemas florence.desktop
-DISTCLEANFILES = $(desktop_DATA) $(shema_DATA) florence.schemas florence.desktop
+EXTRA_DIST = $(config_DATA) $(glade_DATA) $(icons_DATA) $(meta_DATA)\
+	     $(schemas_in_files) $(desktop_in_files:.desktop.in=.desktop.in.in)
+DISTCLEANFILES = $(desktop_DATA) $(desktop_in_files) $(schema_DATA)
 
