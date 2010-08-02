@@ -79,6 +79,17 @@
 			</locale>
 		</schema>
 		<schema>
+			<key>/schemas/apps/florence/behaviour/ramble_button</key>
+			<applyto>/apps/florence/behaviour/ramble_button</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Use button to activate rambling.</short>
+				<long>When this option is set, rambling starts on button push. No button is necessary when this option is unset.</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/behaviour/startup_notification</key>
 			<applyto>/apps/florence/behaviour/startup_notification</applyto>
 			<owner>florence</owner>

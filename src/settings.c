@@ -65,6 +65,7 @@ static struct settings_param settings_defaults[] = {
 	{ "flo_timer", "behaviour/timer", SETTINGS_DOUBLE, { .vdouble = 1300. } },
 	{ "ramble_threshold1", "behaviour/ramble_threshold1", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
 	{ "ramble_threshold2", "behaviour/ramble_threshold2", SETTINGS_DOUBLE, { .vdouble = 3.0 } },
+	{ "ramble_button", "behaviour/ramble_button", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_opacity", "window/opacity", SETTINGS_DOUBLE, { .vdouble = 100. } },
 	{ SETTINGS_NONE, "window/zoom", SETTINGS_DOUBLE, { .vdouble = 20. } },
 	{ "flo_focus_zoom", "style/focus_zoom", SETTINGS_DOUBLE, { .vdouble = 1.3 } },

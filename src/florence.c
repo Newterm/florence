@@ -306,8 +306,16 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 		key=status_focus_get(florence->status);
 	}
 
+#ifdef ENABLE_RAMBLE
+	if (!strcmp("ramble", settings_get_string("behaviour/input_method"))) {
+		ramble_start(florence->ramble);
+	} else {
+#endif
 	status_pressed_set(florence->status, key);
 	status_timer_stop(florence->status);
+#ifdef ENABLE_RAMBLE
+	}
+#endif
 	return FALSE;
 }
 
@@ -317,6 +325,13 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	struct florence *florence=(struct florence *)user_data;
 	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
+#ifdef ENABLE_RAMBLE
+	if (ramble_started(florence->ramble) &&
+		settings_get_bool("behaviour/ramble_button") &&
+		(!strcmp("ramble", settings_get_string("behaviour/input_method")))) {
+		ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
+	}
+#endif
 	return FALSE;
 }
 
@@ -360,7 +375,8 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 #ifdef ENABLE_RAMBLE
 		if (!strcmp("ramble", settings_get_string("behaviour/input_method"))) {
 			florence->view->ramble=florence->ramble;
-			if (ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window,
+			if (ramble_started(florence->ramble) &&
+				ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window,
 				florence->xpos, florence->ypos, (gpointer)key)) {
 				if (status_focus_get(florence->status)!=key) {
 					status_focus_set(florence->status, key);

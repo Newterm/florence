@@ -269,6 +269,8 @@ void settings_window_input_method_update(gchar *method)
 		"ramble_threshold1"));
 	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
 		"ramble_threshold2"));
+	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+		"ramble_button"));
 	if (!strcmp(method, "timer")) {
 		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
 			"flo_timer"));
@@ -277,6 +279,8 @@ void settings_window_input_method_update(gchar *method)
 			"ramble_threshold1"));
 		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
 			"ramble_threshold2"));
+		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_button"));
 	}
 }
 

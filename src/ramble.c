@@ -111,7 +111,20 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 		list=NULL;
 	}
 
+	ramble->started=TRUE;
 	return pt->ev;
+}
+
+/* Start rambling. Note: when ramble_button is FALSE, ramble is always started. */
+void ramble_start(struct ramble *ramble)
+{
+	ramble->started=TRUE;
+}
+
+/* Return TRUE if rambling is started */
+gboolean ramble_started(struct ramble *ramble)
+{
+	return (!settings_get_bool("behaviour/ramble_button")) || ramble->started;
 }
 
 /* Reset ramble path */
@@ -147,6 +160,7 @@ void ramble_reset(struct ramble *ramble, GdkWindow *window)
 	ramble->path=NULL;
 	ramble->end=NULL;
 	ramble->n=0;
+	ramble->started=FALSE;
 }
 
 /* Draw the ramble path to the cairo context */

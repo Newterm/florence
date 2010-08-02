@@ -36,6 +36,7 @@ struct ramble_point {
 
 /* Ramble structure is used to track the path of the mouse. */
 struct ramble {
+	gboolean started; /* true when ramble button is pressed */
 	GList *path; /* this is a list of points */
 	GList *end; /* this is the last element of the path */
 	guint n; /* number of elements in the path */
@@ -44,6 +45,10 @@ struct ramble {
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
 
+/* Start rambling. Note: when ramble_button is FALSE, ramble is always started. */
+void ramble_start(struct ramble *ramble);
+/* Return TRUE if rambling is started */
+gboolean ramble_started(struct ramble *ramble);
 /* Reset ramble path */
 void ramble_reset(struct ramble *ramble, GdkWindow *window);
 

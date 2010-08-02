@@ -490,8 +490,8 @@
                                 <child>
                                   <widget class="GtkHScale" id="flo_timer">
                                     <property name="visible">True</property>
-                                    <property name="tooltip" translatable="yes" context="yes">Auto click timeout</property>
                                     <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes" context="yes">Auto click timeout</property>
                                     <property name="adjustment">1300 10 4000 100 1000 10</property>
                                     <property name="digits">0</property>
                                     <signal name="value_changed" handler="settings_window_set_double"/>
@@ -501,27 +501,41 @@
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkHScale" id="ramble_threshold1">
+                                  <widget class="GtkCheckButton" id="ramble_button">
+                                    <property name="label" translatable="yes">Activate ramble on button press</property>
                                     <property name="visible">True</property>
-                                    <property name="tooltip" translatable="yes" context="yes">Ramble distance theshold for simple press</property>
                                     <property name="can_focus">True</property>
-                                    <property name="adjustment">1.3 0 5 0.10000000000000001 1 1</property>
-                                    <signal name="value_changed" handler="settings_window_set_double"/>
+                                    <property name="receives_default">False</property>
+                                    <property name="tooltip" translatable="yes">Rambling will start when the mouse button is pressed. Always activated otherwise.</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="settings_window_set_bool"/>
                                   </widget>
                                   <packing>
                                     <property name="position">1</property>
                                   </packing>
                                 </child>
                                 <child>
-                                  <widget class="GtkHScale" id="ramble_threshold2">
+                                  <widget class="GtkHScale" id="ramble_threshold1">
                                     <property name="visible">True</property>
-                                    <property name="tooltip" translatable="yes" context="yes">Ramble distance theshold for multiple press</property>
                                     <property name="can_focus">True</property>
-                                    <property name="adjustment">3 0 10 0.10000000000000001 1 1</property>
+                                    <property name="tooltip" translatable="yes" context="yes">Ramble distance theshold for simple press</property>
+                                    <property name="adjustment">1.3 0 5 0.10000000000000001 1 1</property>
                                     <signal name="value_changed" handler="settings_window_set_double"/>
                                   </widget>
                                   <packing>
                                     <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkHScale" id="ramble_threshold2">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes" context="yes">Ramble distance theshold for multiple press</property>
+                                    <property name="adjustment">3 0 10 0.10000000000000001 1 1</property>
+                                    <signal name="value_changed" handler="settings_window_set_double"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">3</property>
                                   </packing>
                                 </child>
                               </widget>
