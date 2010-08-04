@@ -68,7 +68,7 @@ msgstr "In English"
 #: tools.php:42
 #: tools.php:44
 msgid "Home"
-msgstr "Acceuil"
+msgstr "Accueil"
 
 #: tools.php:44
 #: tools.php:50
