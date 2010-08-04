@@ -40,6 +40,7 @@ struct ramble {
 	GList *path; /* this is a list of points */
 	GList *end; /* this is the last element of the path */
 	guint n; /* number of elements in the path */
+	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
 };
 
 /* Add a point to the path and update the window.

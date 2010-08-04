@@ -271,17 +271,44 @@ void settings_window_input_method_update(gchar *method)
 		"ramble_threshold2"));
 	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
 		"ramble_button"));
-	if (!strcmp(method, "timer")) {
+	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+		"ramble_distance"));
+	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+		"ramble_time"));
+	if (!strcmp(method, "timer"))
 		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
 			"flo_timer"));
-	} else if (!strcmp(method, "ramble")) {
+#ifdef ENABLE_RAMBLE
+	else if (!strcmp(method, "ramble")) {
 		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
 			"ramble_threshold1"));
 		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
 			"ramble_threshold2"));
 		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
 			"ramble_button"));
+		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_distance"));
+		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_time"));
+		if (gtk_toggle_button_get_active(
+			GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_distance")))) {
+			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold1"));
+			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold2"));
+			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_timer"));
+		} else {
+			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold1"));
+			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold2"));
+			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_timer"));
+		}
 	}
+#endif
 }
 
 /* update the window according to gconf */
@@ -322,6 +349,17 @@ void settings_window_update()
 			}
 		searchidx++;
 	}
+
+#ifdef ENABLE_RAMBLE
+	gtk_toggle_button_set_active(
+		GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_distance")),
+		!strcmp("distance", settings_get_string("behaviour/ramble_algo")));
+	gtk_toggle_button_set_active(
+		GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
+			"ramble_time")),
+		!strcmp("time", settings_get_string("behaviour/ramble_algo")));
+#endif
 
 	gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
 		"flo_move_to_widget"), settings_get_bool("behaviour/auto_hide"));
@@ -452,7 +490,7 @@ void settings_window_extension(GtkToggleButton *button, gchar *name)
         } else { flo_fatal(_("Can't get gconf value %"), settings_get_full_path("layout/extensions")); }
 }
 
-/* Set a gconf double according to the state of the toggle button.
+/* Set a gconf double according to the state of the scale bar.
  * Look for the gconf parameter name in the parameters table */
 void settings_window_set_double(GtkHScale *scale)
 {
@@ -473,6 +511,33 @@ void settings_window_opacity(GtkHScale *scale)
  * Look for the gconf parameter name in the parameters table */
 void settings_window_set_bool (GtkToggleButton *button)
 {
+#ifdef ENABLE_RAMBLE
+	if ((!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "ramble_distance")) ||
+		(!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "ramble_time"))) {
+		if (!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "ramble_distance") &&
+			gtk_toggle_button_get_active(button)) {
+			gconf_change_set_set_string(settings_window->gconfchangeset,
+				settings_get_full_path("behaviour/ramble_algo"),
+				"distance");
+			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold1"));
+			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold2"));
+			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_timer"));
+		} else {
+			gconf_change_set_set_string(settings_window->gconfchangeset,
+				settings_get_full_path("behaviour/ramble_algo"),
+				"time");
+			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold1"));
+			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_threshold2"));
+			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
+				"ramble_timer"));
+		}
+	} else {
+#endif
 	gconf_change_set_set_bool(settings_window->gconfchangeset,
 		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(button))),
 		gtk_toggle_button_get_active(button));
@@ -482,6 +547,9 @@ void settings_window_set_bool (GtkToggleButton *button)
 		gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
 			"flo_intermediate_icon"), gtk_toggle_button_get_active(button));
 	}
+#ifdef ENABLE_RAMBLE
+	}
+#endif
 }
 
 /* apply changes: apply the changeset and free the rollback one. */

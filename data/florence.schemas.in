@@ -57,13 +57,24 @@
 			</locale>
 		</schema>
 		<schema>
+			<key>/schemas/apps/florence/behaviour/ramble_algo</key>
+			<applyto>/apps/florence/behaviour/ramble_algo</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>distance</default>
+			<locale name="C">
+				<short>Ramble algorithm</short>
+				<long>Set the ramble algorithm used. Valid algorithms are distance and time.</long>
+			</locale>
+		</schema>
+		<schema>
 			<key>/schemas/apps/florence/behaviour/ramble_threshold1</key>
 			<applyto>/apps/florence/behaviour/ramble_threshold1</applyto>
 			<owner>florence</owner>
 			<type>float</type>
 			<default>1.3</default>
 			<locale name="C">
-				<short>Distance threshold for first key press.</short>
+				<short>Distance threshold for distance based ramble mode for first key press.</short>
 				<long>When ramble input method is selected, this the distance the pointer must move over a key (relative to the size of the key) before the key is pressed</long>
 			</locale>
 		</schema>
@@ -74,8 +85,19 @@
 			<type>float</type>
 			<default>3</default>
 			<locale name="C">
-				<short>Distance threshold for multiple key presses.</short>
+				<short>Distance threshold for distance based ramble mode for multiple key presses.</short>
 				<long>When ramble input method is selected, this the distance the pointer must move over a key (relative to the size of the key) for pressing a key a second time and more.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/behaviour/ramble_timer</key>
+			<applyto>/apps/florence/behaviour/ramble_timer</applyto>
+			<owner>florence</owner>
+			<type>float</type>
+			<default>300</default>
+			<locale name="C">
+				<short>Time threshold for timer based ramble mode.</short>
+				<long>Amount of time in milliseconds before the key is automatically pressed.</long>
 			</locale>
 		</schema>
 		<schema>

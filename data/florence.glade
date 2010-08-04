@@ -515,6 +515,35 @@
                                   </packing>
                                 </child>
                                 <child>
+                                  <widget class="GtkRadioButton" id="ramble_distance">
+                                    <property name="label" translatable="yes">Distance based</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <signal name="toggled" handler="settings_window_set_bool"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">2</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkRadioButton" id="ramble_time">
+                                    <property name="label" translatable="yes">Time based</property>
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="receives_default">False</property>
+                                    <property name="active">True</property>
+                                    <property name="draw_indicator">True</property>
+                                    <property name="group">ramble_distance</property>
+                                    <signal name="toggled" handler="settings_window_set_bool"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">3</property>
+                                  </packing>
+                                </child>
+                                <child>
                                   <widget class="GtkHScale" id="ramble_threshold1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -523,7 +552,7 @@
                                     <signal name="value_changed" handler="settings_window_set_double"/>
                                   </widget>
                                   <packing>
-                                    <property name="position">2</property>
+                                    <property name="position">4</property>
                                   </packing>
                                 </child>
                                 <child>
@@ -535,7 +564,20 @@
                                     <signal name="value_changed" handler="settings_window_set_double"/>
                                   </widget>
                                   <packing>
-                                    <property name="position">3</property>
+                                    <property name="position">5</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkHScale" id="ramble_timer">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="tooltip" translatable="yes">Time threshold for time based ramble mode.</property>
+                                    <property name="adjustment">100 0 3000 10 100 100</property>
+                                    <property name="digits">0</property>
+                                    <signal name="value_changed" handler="settings_window_set_double"/>
+                                  </widget>
+                                  <packing>
+                                    <property name="position">6</property>
                                   </packing>
                                 </child>
                               </widget>

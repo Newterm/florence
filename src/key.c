@@ -430,5 +430,6 @@ gboolean key_hit(struct key *key, gint x, gint y, gdouble z)
 	if ((x>=x1) && (x<=x2) && (y>=y1) && (y<=y2)) {
 		ret=style_shape_test(key->shape, x-x1, y-y1, key->w*z, key->h*z);
 	}
+
 	return ret;
 }

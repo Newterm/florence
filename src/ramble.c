@@ -26,7 +26,7 @@
 #include <math.h>
 
 /* Maximum number of points in the ramble path */
-#define RAMBLE_MAX_POINTS 100
+#define RAMBLE_MAX_POINTS 200
 
 /* Invalidate the region modified by the path */
 void ramble_update_region(GList *path, GdkWindow *window)
@@ -59,14 +59,72 @@ void ramble_update_region(GList *path, GdkWindow *window)
 	}
 }
 
+/* Detect gesture based on distance */
+void ramble_distance(struct ramble *ramble)
+{
+	GList *list;
+	gint dw, dh;
+	gdouble d=0.0, w, h, threshold;
+	struct ramble_point *pt, *pt1, *pt2;
+
+	list=ramble->end;
+	pt=(struct ramble_point *)ramble->end->data;
+	pt1=pt;
+	/* Calculate path distance on that key */
+	while (list) {
+		pt2=(struct ramble_point *)list->data;
+		if ( (!pt2->ev) && (pt2->k==pt->k) ) {
+			dw=pt1->p.x-pt2->p.x;
+			dh=pt1->p.y-pt2->p.y;
+			w=((gdouble)dw)/pt->k->w;
+			h=((gdouble)dh)/pt->k->h;
+			d+=sqrt((w*w)+(h*h));
+			pt1=pt2;
+			list=list->prev;
+		} else {
+			list=NULL;
+		}
+	}
+	if (pt2->ev) threshold=settings_double_get("behaviour/ramble_threshold2");
+	else threshold=settings_double_get("behaviour/ramble_threshold1");
+	threshold*=settings_double_get("window/zoom");
+	if (d>=threshold) {
+		pt->ev=TRUE;
+		list=NULL;
+	}
+}
+
+/* Detect gesture based on time */
+void ramble_time(struct ramble *ramble)
+{
+	struct ramble_point *pt;
+	pt=(struct ramble_point *)ramble->end->data;
+	if (pt->k) {
+		/* TODO:
+		 * reset the timer when pointer is near the border */
+		if ( (!ramble->end->prev) ||
+			(((struct ramble_point *)ramble->end->prev->data)->k!=pt->k) ) {
+			if (ramble->timer)
+				g_timer_start(ramble->timer);
+			else
+				ramble->timer=g_timer_new();
+		} else if (g_timer_elapsed(ramble->timer, NULL)>=
+			(settings_double_get("behaviour/ramble_timer")/1000.0)) {
+			pt->ev=TRUE;
+			g_timer_start(ramble->timer);
+			g_timer_stop(ramble->timer);
+		}
+	} else if (ramble->timer) {
+		g_timer_destroy(ramble->timer);
+		ramble->timer=NULL;
+	}
+}
+
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
 gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k)
 {
-	struct ramble_point *pt1, *pt2, *pt=g_malloc(sizeof(struct ramble_point));
-	GList *list;
-	gint dw, dh;
-	gdouble d=0.0, w, h, threshold;
+	struct ramble_point *pt=g_malloc(sizeof(struct ramble_point));
 
 	/* Add the point to the path */
 	pt->p.x=x; pt->p.y=y; pt->k=k; pt->ev=FALSE;
@@ -83,32 +141,14 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 	}
 	if (!k) return FALSE;
 
-
 	/* Gesture detection */
-	list=ramble->end;
-	pt=(struct ramble_point *)ramble->end->data;
-	pt1=pt;
-	/* Calculate path distance on that key */
-	while (list) {
-		pt2=(struct ramble_point *)list->data;
-		if ( (!pt2->ev) && (pt2->k==k) ) {
-			dw=pt1->p.x-pt2->p.x;
-			dh=pt1->p.y-pt2->p.y;
-			w=((gdouble)dw)/k->w;
-			h=((gdouble)dh)/k->h;
-			d+=sqrt((w*w)+(h*h));
-			pt1=pt2;
-			list=list->prev;
-		} else {
-			list=NULL;
-		}
-	}
-	if (pt2->ev) threshold=settings_double_get("behaviour/ramble_threshold2");
-	else threshold=settings_double_get("behaviour/ramble_threshold1");
-	threshold*=settings_double_get("window/zoom");
-	if (d>=threshold) {
-		pt->ev=TRUE;
-		list=NULL;
+	if (!strcmp("distance", settings_get_string("behaviour/ramble_algo")))
+		ramble_distance(ramble);
+	else if (!strcmp("time", settings_get_string("behaviour/ramble_algo")))
+		ramble_time(ramble);
+	else {
+		flo_warn(_("Invalid ramble algorithm selected. Using default."));
+		ramble_distance(ramble);
 	}
 
 	ramble->started=TRUE;
