@@ -64,6 +64,15 @@ enum key_state {
 	KEY_STATE_NUM
 };
 
+#ifdef ENABLE_RAMBLE
+/* Informations about hit status of the key. */
+enum key_hit {
+	KEY_MISS, /* key not hit */
+	KEY_HIT, /* key hit */
+	KEY_BORDER /* key hit on the border */
+};
+#endif
+
 /* Modified keys have actions attached */
 struct key_mod {
 	GdkModifierType modifier; /* modifier mask */
@@ -125,7 +134,11 @@ void *key_get_keyboard(struct key *key);
 GdkModifierType key_get_modifier(struct key *key);
 
 /* return if key is it at position */
+#ifdef ENABLE_RAMBLE
+enum key_hit key_hit(struct key *key, gint x, gint y, gdouble z);
+#else
 gboolean key_hit(struct key *key, gint x, gint y, gdouble z);
+#endif
 /* Parse string into key type enumeration */
 enum key_action_type key_action_type_get(gchar *str);
 

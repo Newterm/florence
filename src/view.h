@@ -91,7 +91,12 @@ void view_update (struct view *view, struct key *key, gboolean statechange);
 void view_update_layout(struct view *view, struct style *style, GSList *keyboards);
 
 /* get the key at position */
+#ifdef ENABLE_RAMBLE
+enum key_hit;
+struct key *view_hit_get (struct view *view, gint x, gint y, enum key_hit *hit);
+#else
 struct key *view_hit_get (struct view *view, gint x, gint y);
+#endif
 /* get gtk window of the view */
 #ifdef APPLET
 PanelApplet *view_window_get (struct view *view);

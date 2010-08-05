@@ -75,7 +75,11 @@ gboolean keyboard_activated(struct keyboard *keyboard);
 /* Update keyboard active status */
 void keyboard_status_update(struct keyboard *keyboard, struct status *status);
 /* Get the key at position (x,y) */
+#ifdef ENABLE_RAMBLE
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z, enum key_hit *hit);
+#else
 struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z);
+#endif
 /* returns a rectangle containing the key */
 /* WARNING: not thread safe */
 GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,

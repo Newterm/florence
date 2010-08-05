@@ -120,6 +120,12 @@ void ramble_time(struct ramble *ramble)
 	}
 }
 
+/* Reset timer */
+void ramble_time_reset(struct ramble *ramble)
+{
+	g_timer_start(ramble->timer);
+}
+
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
 gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k)

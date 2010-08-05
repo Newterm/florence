@@ -52,13 +52,14 @@ void ramble_start(struct ramble *ramble);
 gboolean ramble_started(struct ramble *ramble);
 /* Reset ramble path */
 void ramble_reset(struct ramble *ramble, GdkWindow *window);
+/* Reset timer */
+void ramble_time_reset(struct ramble *ramble);
 
 /* Draw the ramble path to the cairo context */
 void ramble_draw(struct ramble *ramble, cairo_t *ctx);
 
 /* Create a ramble structure */
 struct ramble *ramble_new();
-
 /* Destroy a ramble structure */
 void ramble_free(struct ramble *ramble);
 

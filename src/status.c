@@ -429,9 +429,17 @@ void status_error (struct status *status, struct key *key, enum status_event eve
 
 
 /* returns the key currently focussed */
+#ifdef ENABLE_RAMBLE
+struct key *status_hit_get(struct status *status, gint x, gint y, enum key_hit *hit)
+#else
 struct key *status_hit_get(struct status *status, gint x, gint y)
+#endif
 {
+#ifdef ENABLE_RAMBLE
+	return view_hit_get(status->view, x, y, hit);
+#else
 	return view_hit_get(status->view, x, y);
+#endif
 }
 
 /* start the timer */

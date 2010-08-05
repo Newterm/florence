@@ -92,7 +92,12 @@ struct key *status_pressed_get(struct status *status);
  * if pressed is NULL, then release the last pressed key */
 void status_pressed_set(struct status *status, struct key *pressed);
 /* returns the key currently focussed */
+#ifdef ENABLE_RAMBLE
+enum key_hit;
+struct key *status_hit_get(struct status *status, gint x, gint y, enum key_hit *hit);
+#else
 struct key *status_hit_get(struct status *status, gint x, gint y);
+#endif
 /* Calculate single key status after key is pressed */
 void status_key_press_update(struct status *status, struct key *key);
 /* Calculate single key status after key is released */

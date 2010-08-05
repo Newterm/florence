@@ -298,13 +298,27 @@ GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
 }
 
 /* Get the key at position (x,y) */
+#ifdef ENABLE_RAMBLE
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z, enum key_hit *hit)
+#else
 struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z)
+#endif
 {
 	GSList *list=keyboard->keys;
+#ifdef ENABLE_RAMBLE
+	enum key_hit kh;
+#endif
 	if (keyboard->under) return NULL;
 	while (list &&
+#ifdef ENABLE_RAMBLE
+		(!(kh=key_hit((struct key *)list->data, x, y, z))))
+#else
 		(!key_hit((struct key *)list->data, x, y, z)))
+#endif
 		list=list->next;
+#ifdef ENABLE_RAMBLE
+	if (hit) *hit=kh;
+#endif
 	return list?(struct key *)list->data:NULL;
 }
 

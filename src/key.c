@@ -35,6 +35,9 @@
 #include <cairo/cairo-xlib.h>
 
 #define PI M_PI
+#ifdef ENABLE_RAMBLE
+#define BORDER_THRESHOLD 0.2
+#endif
 
 /* Parse string into key type enumeration */
 enum key_action_type key_action_type_get(gchar *str)
@@ -420,7 +423,11 @@ GdkModifierType key_get_modifier(struct key *key) {
 }
 
 /* return if key is it at position */
+#ifdef ENABLE_RAMBLE
+enum key_hit key_hit(struct key *key, gint x, gint y, gdouble z)
+#else
 gboolean key_hit(struct key *key, gint x, gint y, gdouble z)
+#endif
 {
 	gint x1=z*(key->x-(key->w/2.0));
 	gint y1=z*(key->y-(key->h/2.0));
@@ -431,5 +438,17 @@ gboolean key_hit(struct key *key, gint x, gint y, gdouble z)
 		ret=style_shape_test(key->shape, x-x1, y-y1, key->w*z, key->h*z);
 	}
 
+#ifdef ENABLE_RAMBLE
+	if (ret) {
+		x1+=z*key->w*BORDER_THRESHOLD;
+		y1+=z*key->h*BORDER_THRESHOLD;
+		x2-=z*key->w*BORDER_THRESHOLD;
+		y2-=z*key->h*BORDER_THRESHOLD;
+		if ((x>=x1) && (x<=x2) && (y>=y1) && (y<=y2)) 
+			return KEY_HIT;
+		else return KEY_BORDER;
+	} else return KEY_MISS;
+#else
 	return ret;
+#endif
 }

@@ -299,7 +299,11 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 	
 	if (event) {
 		key=status_hit_get(florence->status, (gint)((GdkEventButton*)event)->x,
+#ifdef ENABLE_RAMBLE
+			(gint)((GdkEventButton*)event)->y, NULL);
+#else
 			(gint)((GdkEventButton*)event)->y);
+#endif
 		/* we don't want double and triple click events */
 		if ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS)) return FALSE;
 	} else {
@@ -363,6 +367,9 @@ gboolean flo_to_top(gpointer data)
  * update the keyboard key under the mouse */
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
+#ifdef ENABLE_RAMBLE
+	enum key_hit hit;
+#endif
 	struct florence *florence=(struct florence *)user_data;
 	if (status_get_moving(florence->status)) {
 		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventMotion*)event)->x_root-florence->xpos,
@@ -371,13 +378,19 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		/* Remember mouse position for moving */
 		florence->xpos=(gint)((GdkEventMotion*)event)->x;
 		florence->ypos=(gint)((GdkEventMotion*)event)->y;
-		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 #ifdef ENABLE_RAMBLE
+		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos, &hit);
 		if (!strcmp("ramble", settings_get_string("behaviour/input_method"))) {
 			florence->view->ramble=florence->ramble;
+			if ((hit==KEY_BORDER) &&
+				(status_focus_get(florence->status)==key) &&
+				(!strcmp("time", settings_get_string("behaviour/ramble_algo")))) {
+				ramble_time_reset(florence->ramble);
+				status_focus_set(florence->status, NULL);
+			}
 			if (ramble_started(florence->ramble) &&
 				ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window,
-				florence->xpos, florence->ypos, (gpointer)key)) {
+					florence->xpos, florence->ypos, key)) {
 				if (status_focus_get(florence->status)!=key) {
 					status_focus_set(florence->status, key);
 				}
@@ -385,6 +398,8 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 				status_pressed_set(florence->status, NULL);
 			}
 		} else
+#else
+		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 #endif
 		if (status_focus_get(florence->status)!=key) {
 			if (key && settings_double_get("behaviour/timer")>0.0 &&

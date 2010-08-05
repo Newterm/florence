@@ -248,7 +248,11 @@ void view_set_dimensions(struct view *view)
 }
 
 /* get the key at position */
+#ifdef ENABLE_RAMBLE
+struct key *view_hit_get (struct view *view, gint x, gint y, enum key_hit *hit)
+#else
 struct key *view_hit_get (struct view *view, gint x, gint y)
+#endif
 {
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
@@ -270,7 +274,11 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 		}
 		else list = list->next;
 	}
+#ifdef ENABLE_RAMBLE
+	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->zoom, hit);
+#else
 	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->zoom);
+#endif
 
 	return key;
 }
