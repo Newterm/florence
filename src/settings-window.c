@@ -26,7 +26,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include <glade/glade.h>
 #include <glib/gprintf.h>
 #ifdef ENABLE_HELP
 	#include <gdk/gdkkeysyms.h>
@@ -86,10 +85,10 @@ void settings_window_layouts_populate()
 		settings_window->layout_list=gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
 		cell=gtk_cell_renderer_text_new();
 		gtk_cell_layout_pack_start(
-			GTK_CELL_LAYOUT(glade_xml_get_widget(settings_window->gladexml, "flo_layouts")),
+			GTK_CELL_LAYOUT(gtk_builder_get_object(settings_window->gtkbuilder, "flo_layouts")),
 			cell, FALSE);
 		gtk_cell_layout_set_attributes(
-			GTK_CELL_LAYOUT(glade_xml_get_widget(settings_window->gladexml, "flo_layouts")),
+			GTK_CELL_LAYOUT(gtk_builder_get_object(settings_window->gtkbuilder, "flo_layouts")),
 			cell, "text", 0, NULL);
 		while ((ep=readdir(dp))) {
 			if (ep->d_name[0]!='.') {
@@ -105,8 +104,8 @@ void settings_window_layouts_populate()
 			}
 		}
 		closedir(dp);
-		gtk_combo_box_set_model(GTK_COMBO_BOX(glade_xml_get_widget(
-				settings_window->gladexml, "flo_layouts")),
+		gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(
+				settings_window->gtkbuilder, "flo_layouts")),
 			GTK_TREE_MODEL(settings_window->layout_list));
 	} else flo_error(_("Couldn't open directory %s"), DATADIR "/layouts");
 }
@@ -124,10 +123,10 @@ void settings_window_input_method_populate()
 	settings_window->input_method_list=gtk_list_store_new(2, G_TYPE_STRING, G_TYPE_STRING);
 	cell=gtk_cell_renderer_text_new();
 	gtk_cell_layout_pack_start(
-		GTK_CELL_LAYOUT(glade_xml_get_widget(settings_window->gladexml, "input_method_combo")),
+		GTK_CELL_LAYOUT(gtk_builder_get_object(settings_window->gtkbuilder, "input_method_combo")),
 		cell, FALSE);
 	gtk_cell_layout_set_attributes(
-		GTK_CELL_LAYOUT(glade_xml_get_widget(settings_window->gladexml, "input_method_combo")),
+		GTK_CELL_LAYOUT(gtk_builder_get_object(settings_window->gtkbuilder, "input_method_combo")),
 		cell, "text", 0, NULL);
 	gtk_list_store_append(settings_window->input_method_list, &iter);
 	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Button"), 1, "button", -1);
@@ -137,8 +136,8 @@ void settings_window_input_method_populate()
 	gtk_list_store_append(settings_window->input_method_list, &iter);
 	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Ramble"), 1, "ramble", -1);
 #endif
-	gtk_combo_box_set_model(GTK_COMBO_BOX(glade_xml_get_widget(
-			settings_window->gladexml, "input_method_combo")),
+	gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(
+			settings_window->gtkbuilder, "input_method_combo")),
 		GTK_TREE_MODEL(settings_window->input_method_list));
 }
 
@@ -158,8 +157,8 @@ void settings_window_preview_build()
 			g_object_unref(G_OBJECT(settings_window->style_list)); 
 		}
 		settings_window->style_list=gtk_list_store_new(2, GDK_TYPE_PIXBUF, G_TYPE_STRING);
-		gtk_icon_view_set_model(GTK_ICON_VIEW(glade_xml_get_widget(
-				settings_window->gladexml, "flo_preview")),
+		gtk_icon_view_set_model(GTK_ICON_VIEW(gtk_builder_get_object(
+				settings_window->gtkbuilder, "flo_preview")),
 			GTK_TREE_MODEL(settings_window->style_list));
 		while ((ep=readdir(dp))) {
 			if (ep->d_name[0]!='.') {
@@ -206,7 +205,7 @@ void settings_window_extensions_update(gchar *layoutname)
 	gchar *temp;
 
 	extensions=gtk_container_get_children(
-		GTK_CONTAINER(glade_xml_get_widget(settings_window->gladexml, "flo_extensions")));
+		GTK_CONTAINER(gtk_builder_get_object(settings_window->gtkbuilder, "flo_extensions")));
 	while (extensions) {
 		extension=(GTK_WIDGET(extensions->data));
 		extensions=extensions->next;
@@ -229,7 +228,7 @@ void settings_window_extensions_update(gchar *layoutname)
 		g_signal_connect(G_OBJECT(new), "toggled",
 			G_CALLBACK(settings_window_extension), id);
 		gtk_box_pack_start(
-			GTK_BOX(glade_xml_get_widget(settings_window->gladexml, "flo_extensions")),
+			GTK_BOX(gtk_builder_get_object(settings_window->gtkbuilder, "flo_extensions")),
 			new, FALSE, FALSE, 0);
 		gtk_widget_show(new);
 		layoutreader_extension_free(layout, ext);
@@ -244,7 +243,7 @@ gchar *settings_window_combo_update(gchar *item)
 	GtkTreeIter iter;
 	gboolean out;
 	gchar *data;
-	GtkComboBox *combo=GTK_COMBO_BOX(glade_xml_get_widget(settings_window->gladexml, item));
+	GtkComboBox *combo=GTK_COMBO_BOX(gtk_builder_get_object(settings_window->gtkbuilder, item));
 
 	/* update the layout combo box */
 	model=gtk_combo_box_get_model(combo);
@@ -263,49 +262,49 @@ gchar *settings_window_combo_update(gchar *item)
 /* update the input method options */
 void settings_window_input_method_update(gchar *method)
 {
-	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-		"flo_timer"));
-	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-		"ramble_threshold1"));
-	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-		"ramble_threshold2"));
-	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-		"ramble_button"));
-	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-		"ramble_distance"));
-	gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-		"ramble_time"));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"flo_timer")));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"ramble_threshold1")));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"ramble_threshold2")));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"ramble_button")));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"ramble_distance")));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"ramble_time")));
 	if (!strcmp(method, "timer"))
-		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-			"flo_timer"));
+		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"flo_timer")));
 #ifdef ENABLE_RAMBLE
 	else if (!strcmp(method, "ramble")) {
-		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-			"ramble_threshold1"));
-		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-			"ramble_threshold2"));
-		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-			"ramble_button"));
-		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-			"ramble_distance"));
-		gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-			"ramble_time"));
+		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"ramble_threshold1")));
+		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"ramble_threshold2")));
+		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"ramble_button")));
+		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"ramble_distance")));
+		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"ramble_time")));
 		if (gtk_toggle_button_get_active(
-			GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
+			GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 			"ramble_distance")))) {
-			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold1"));
-			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold2"));
-			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_timer"));
+			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold1")));
+			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold2")));
+			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_timer")));
 		} else {
-			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold1"));
-			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold2"));
-			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_timer"));
+			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold1")));
+			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold2")));
+			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_timer")));
 		}
 	}
 #endif
@@ -318,20 +317,20 @@ void settings_window_update()
 	guint searchidx=0;
 	struct settings_param *params=settings_defaults_get();
 
-	while (params[searchidx].glade_name) {
-		if (strcmp(params[searchidx].glade_name, SETTINGS_NONE))
+	while (params[searchidx].builder_name) {
+		if (strcmp(params[searchidx].builder_name, SETTINGS_NONE))
 			switch (params[searchidx].type) {
 				case SETTINGS_BOOL:
 					gtk_toggle_button_set_active(
-						GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
-							params[searchidx].glade_name)),
+						GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
+							params[searchidx].builder_name)),
 						settings_get_bool(params[searchidx].gconf_name));
 					break;
 				case SETTINGS_COLOR:
 					color=settings_get_string(params[searchidx].gconf_name);
 					gtk_color_button_set_color(
-						GTK_COLOR_BUTTON(glade_xml_get_widget(settings_window->gladexml,
-							params[searchidx].glade_name)),
+						GTK_COLOR_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
+							params[searchidx].builder_name)),
 						settings_window_convert_color(color));
 					if (color) g_free(color);
 					break;
@@ -339,8 +338,8 @@ void settings_window_update()
 					break;
 				case SETTINGS_DOUBLE:
 					gtk_range_set_value(
-						GTK_RANGE(glade_xml_get_widget(settings_window->gladexml,
-							params[searchidx].glade_name)),
+						GTK_RANGE(gtk_builder_get_object(settings_window->gtkbuilder,
+							params[searchidx].builder_name)),
 						settings_double_get(params[searchidx].gconf_name));
 					break;
 				default:flo_error(_("unknown setting type: %d"),
@@ -352,19 +351,19 @@ void settings_window_update()
 
 #ifdef ENABLE_RAMBLE
 	gtk_toggle_button_set_active(
-		GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
+		GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 			"ramble_distance")),
 		!strcmp("distance", settings_get_string("behaviour/ramble_algo")));
 	gtk_toggle_button_set_active(
-		GTK_TOGGLE_BUTTON(glade_xml_get_widget(settings_window->gladexml,
+		GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 			"ramble_time")),
 		!strcmp("time", settings_get_string("behaviour/ramble_algo")));
 #endif
 
-	gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
-		"flo_move_to_widget"), settings_get_bool("behaviour/auto_hide"));
-	gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
-		"flo_intermediate_icon"), settings_get_bool("behaviour/auto_hide"));
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"flo_move_to_widget")), settings_get_bool("behaviour/auto_hide"));
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"flo_intermediate_icon")), settings_get_bool("behaviour/auto_hide"));
 
 	color=settings_window_combo_update("flo_layouts");
 	if (color) {
@@ -447,9 +446,9 @@ void settings_window_combo(GtkComboBox *combo)
 	gconf_change_set_set_string(settings_window->gconfchangeset,
 		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(combo))),
 		data);
-	if (!strcmp(glade_get_widget_name(GTK_WIDGET(combo)), "flo_layouts")) {
+	if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(combo)), "flo_layouts")) {
 		settings_window_extensions_update(data);
-	} else if (!strcmp(glade_get_widget_name(GTK_WIDGET(combo)), "input_method_combo")) {
+	} else if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(combo)), "input_method_combo")) {
 		settings_window_input_method_update(data);
 	}
 	g_free(data);
@@ -512,40 +511,40 @@ void settings_window_opacity(GtkHScale *scale)
 void settings_window_set_bool (GtkToggleButton *button)
 {
 #ifdef ENABLE_RAMBLE
-	if ((!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "ramble_distance")) ||
-		(!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "ramble_time"))) {
-		if (!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "ramble_distance") &&
+	if ((!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_distance")) ||
+		(!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_time"))) {
+		if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_distance") &&
 			gtk_toggle_button_get_active(button)) {
 			gconf_change_set_set_string(settings_window->gconfchangeset,
 				settings_get_full_path("behaviour/ramble_algo"),
 				"distance");
-			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold1"));
-			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold2"));
-			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_timer"));
+			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold1")));
+			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold2")));
+			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_timer")));
 		} else {
 			gconf_change_set_set_string(settings_window->gconfchangeset,
 				settings_get_full_path("behaviour/ramble_algo"),
 				"time");
-			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold1"));
-			gtk_widget_hide(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_threshold2"));
-			gtk_widget_show(glade_xml_get_widget(settings_window->gladexml,
-				"ramble_timer"));
+			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold1")));
+			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_threshold2")));
+			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+				"ramble_timer")));
 		}
 	} else {
 #endif
 	gconf_change_set_set_bool(settings_window->gconfchangeset,
 		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(button))),
 		gtk_toggle_button_get_active(button));
-	if (!strcmp(glade_get_widget_name(GTK_WIDGET(button)), "flo_auto_hide")) {
-		gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
-			"flo_move_to_widget"), gtk_toggle_button_get_active(button));
-		gtk_widget_set_sensitive(glade_xml_get_widget(settings_window->gladexml,
-			"flo_intermediate_icon"), gtk_toggle_button_get_active(button));
+	if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "flo_auto_hide")) {
+		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"flo_move_to_widget")), gtk_toggle_button_get_active(button));
+		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"flo_intermediate_icon")), gtk_toggle_button_get_active(button));
 	}
 #ifdef ENABLE_RAMBLE
 	}
@@ -617,13 +616,14 @@ gboolean settings_window_open(void)
 /* presents the settings window to the user */
 void settings_window_present(void)
 {
-	gtk_window_present(GTK_WINDOW(glade_xml_get_widget(settings_window->gladexml,
+	gtk_window_present(GTK_WINDOW(gtk_builder_get_object(settings_window->gtkbuilder,
 		"flo_config_window")));
 }
 
 /* opens the settings window */
 void settings_window_new(GConfClient *gconfclient, gboolean exit)
 {
+	GError* error = NULL;
 	settings_window=g_malloc(sizeof(struct settings_window));
 	memset(settings_window, 0, sizeof(struct settings_window));
 
@@ -631,7 +631,12 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 	settings_window->gconfclient=gconfclient;
 	settings_window->gconfchangeset=gconf_change_set_new();
 	settings_window->rollback=gconf_change_set_new();
-	settings_window->gladexml=glade_xml_new(DATADIR "/florence.glade", NULL, NULL);
+	settings_window->gtkbuilder=gtk_builder_new();
+	if (!gtk_builder_add_from_file(settings_window->gtkbuilder, DATADIR "/florence.ui", &error))
+	{
+		flo_warn(_("Couldn't load builder file: %s"), error->message);
+		g_error_free(error);
+	}
 
 	/* populate fields*/
 	settings_window_preview_build();
@@ -642,10 +647,10 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 	settings_window->notify_id=settings_register_all(
 		(GConfClientNotifyFunc)settings_window_update);
 
-	glade_xml_signal_autoconnect(settings_window->gladexml);
+	gtk_builder_connect_signals(settings_window->gtkbuilder, NULL);
 
 	/* set window icon */
-	tools_set_icon(GTK_WINDOW(glade_xml_get_widget(settings_window->gladexml,
+	tools_set_icon(GTK_WINDOW(gtk_builder_get_object(settings_window->gtkbuilder,
 		"flo_config_window")));
 }
 

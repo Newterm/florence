@@ -24,7 +24,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
-#include <glade/glade.h>
 #include "settings.h"
 #include "settings-window.h"
 #include "trace.h"
@@ -37,7 +36,7 @@ struct settings_key {
 	gchar *key;
 };
 
-/* settings defaults. { "glade name", "gconf name", "type", "default value" } */
+/* settings defaults. { "gtk builder name", "gconf name", "type", "default value" } */
 /* C99 */
 static struct settings_param settings_defaults[] = {
 	{ "flo_resizable", "window/resizable", SETTINGS_BOOL, { .vbool = TRUE } },
@@ -85,7 +84,7 @@ static struct settings_info *settings_infos=NULL;
 guint settings_default_idx(const gchar *gconf_name)
 {
 	guint ret=0;
-	while (settings_defaults[ret].glade_name &&
+	while (settings_defaults[ret].builder_name &&
 		strcmp(gconf_name, settings_defaults[ret].gconf_name)) {
 		ret++;
 	}
@@ -170,7 +169,6 @@ void settings_init(gboolean exit, gchar *conf)
 		gconf_client_add_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
 			GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 	}
-	glade_init();
 }
 
 /* liberate all settings memory */
@@ -203,13 +201,14 @@ struct settings_param *settings_defaults_get(void)
 	return settings_defaults;
 }
 
-/* Returns the gconf name of a glade object option according to the name table */
+/* Returns the gconf name of a gtk builder object option according to the name table */
 char *settings_get_gconf_name(GtkWidget *widget)
 {
+	const gchar* widget_name=gtk_buildable_get_name(GTK_BUILDABLE(widget));
 	guint searchidx=0;
-	while (settings_defaults[searchidx].glade_name &&
-		strcmp(glade_get_widget_name(widget),
-		settings_defaults[searchidx].glade_name)) {
+	while (settings_defaults[searchidx].builder_name &&
+		strcmp(widget_name,
+		settings_defaults[searchidx].builder_name)) {
 		searchidx++;
 	}
 	return settings_defaults[searchidx].gconf_name;

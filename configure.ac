@@ -61,7 +61,7 @@ if test "x$with_docs" != "xno"; then
 fi
 
 # Checks for libraries.
-DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 libglade-2.0 gtk+-2.0 >= 2.10.0"
+DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 gtk+-2.0 >= 2.12.0"
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 
 if test "x$with_docs" != "xno"; then

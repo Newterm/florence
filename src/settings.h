@@ -35,7 +35,7 @@ enum settings_type {
 
 /* This is a settings parameter. */
 struct settings_param {
-	gchar *glade_name;
+	gchar *builder_name;
 	gchar *gconf_name;
 	enum settings_type type;
 	union {
@@ -90,6 +90,6 @@ void settings_bool_set(const gchar *name, gboolean value);
 
 /* get parameters table */
 struct settings_param *settings_defaults_get(void);
-/* Returns the gconf name of a glade object option according to the name table */
+/* Returns the gconf name of a builder object option according to the name table */
 char *settings_get_gconf_name(GtkWidget *widget);
 

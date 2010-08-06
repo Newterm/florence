@@ -22,7 +22,7 @@
 /* all the informations related to the settings window */
 struct settings_window {
 	GConfClient *gconfclient;
-	GladeXML *gladexml;
+	GtkBuilder *gtkbuilder;
 	GConfChangeSet *gconfchangeset;
 	GConfChangeSet *rollback;
 	gboolean gtk_exit;
