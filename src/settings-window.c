@@ -632,7 +632,7 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 	settings_window->gconfchangeset=gconf_change_set_new();
 	settings_window->rollback=gconf_change_set_new();
 	settings_window->gtkbuilder=gtk_builder_new();
-	if (!gtk_builder_add_from_file(settings_window->gtkbuilder, DATADIR "/florence.ui", &error))
+	if (!gtk_builder_add_from_file(settings_window->gtkbuilder, DATADIR "/florence.glade", &error))
 	{
 		flo_warn(_("Couldn't load builder file: %s"), error->message);
 		g_error_free(error);

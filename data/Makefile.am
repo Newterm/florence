@@ -19,7 +19,7 @@ iconsdir=$(datadir)/pixmaps
 icons_DATA=florence.svg
 
 gtkbuilderdir=$(datadir)/florence
-gtkbuilder_DATA=florence.ui 
+gtkbuilder_DATA=florence.glade
 
 metadir=$(datadir)/florence
 meta_DATA=florence.rnc florence.css
@@ -35,5 +35,5 @@ uninstall-local: $(schema_DATA)
 
 EXTRA_DIST = $(config_DATA) $(gtkbuilder_DATA) $(icons_DATA) $(meta_DATA)\
 	     $(schemas_in_files) $(desktop_in_files:.desktop.in=.desktop.in.in)
-DISTCLEANFILES = $(desktop_DATA) $(desktop_in_files) $(schema_DATA)
+DISTCLEANFILES = $(desktop_DATA) $(desktop_in_files) $(desktop_DATA) $(schema_DATA)
 
