@@ -273,6 +273,8 @@ void settings_window_input_method_update(gchar *method)
 	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 		"ramble_distance")));
 	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"ramble_timer")));
+	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 		"ramble_time")));
 	if (!strcmp(method, "timer"))
 		gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
