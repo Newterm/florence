@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-08-06 18:54+0200\n"
+"POT-Creation-Date: 2010-11-03 09:36+0100\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -1170,7 +1170,7 @@ msgstr ""
 "(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
 "programme a une valeur légale et s'applique à ce programme."
 
-#: ../src/trayicon.c:73 ../src/trayicon.c:76 ../src/settings-window.c:396
+#: ../src/trayicon.c:73 ../src/trayicon.c:76 ../src/settings-window.c:398
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
@@ -1336,29 +1336,29 @@ msgstr "Redimensionnable"
 msgid "Unable to create preview for style %s"
 msgstr "Impossible de créer un aperçu pour le style %s"
 
-#: ../src/settings-window.c:345
+#: ../src/settings-window.c:347
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "type de paramètre inconnu: %s"
 
-#: ../src/settings-window.c:392
+#: ../src/settings-window.c:394
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Impossible d'ouvrir %s: %s"
 
-#: ../src/settings-window.c:489
+#: ../src/settings-window.c:491
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings-window.c:588
+#: ../src/settings-window.c:590
 msgid "Confirm"
 msgstr "Confirmation"
 
-#: ../src/settings-window.c:589
+#: ../src/settings-window.c:591
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
-#: ../src/settings-window.c:637
+#: ../src/settings-window.c:639
 #, fuzzy, c-format
 msgid "Couldn't load builder file: %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
