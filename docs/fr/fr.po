@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-03 09:37+0100\n"
+"POT-Creation-Date: 2010-11-04 19:07+0100\n"
 "PO-Revision-Date: 2010-04-08 09:22+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: <>\n"
@@ -38,7 +38,6 @@ msgstr "ok"
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:237(None)
-#, fuzzy
 msgid "@@image: 'figures/behaviour.png'; md5=e578dc76da690c66e7042e39a8fe1d15"
 msgstr "ok"
 
@@ -109,7 +108,6 @@ msgid "Introduction"
 msgstr "Introduction"
 
 #: C/florence.xml:34(para)
-#, fuzzy
 msgid ""
 "Florence is an extensible scalable virtual keyboard for GNOME. You need it "
 "if you can't use a real hardware keyboard, for example because of injury, "
@@ -125,12 +123,12 @@ msgstr ""
 "matériel, par exemple à cause d'un handicap, parce que votre clavier est "
 "cassé ou parce que vous utilisez un PC tablette. Cependant, vous devez être "
 "en mesure d'utiliser un périphérique de pointage (comme une souris, un "
-"trackball, ou un écran tactile) pour utiliser Florence ; si vous ne pouvez "
+"trackball, un écran tactile ou <ulink url=\"http://www.inference.phy.cam.ac."
+"uk/opengazer\">opengazer</ulink>) pour utiliser Florence ; si vous ne pouvez "
 "pas utiliser un périphérique de pointage, il y a <ulink url=\"http://www.gok."
 "ca/gok\">gok</ulink>, qui peut être utilisé avec de simples connecteurs."
 
 #: C/florence.xml:35(para)
-#, fuzzy
 msgid ""
 "Florence stays out of your way when you don't need it: it appears on the "
 "screen only when you need it. A Timer-based auto-click input method is "
@@ -139,8 +137,10 @@ msgid ""
 msgstr ""
 "Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le "
 "clavier apparaît à l'écran uniquement lorsque vous en avez besoin. Une "
-"fonctionnalité de clic automatique basée sur un minuteur est disponible pour "
-"aider les personnes handicapées qui ont des difficultés à cliquer."
+"méthode de saisie basée sur un click automatique déclenché par un minuteur "
+"est disponible pour aider les personnes handicapées qui ont des difficultés "
+"à cliquer. le mode balade est une autre méthode de saisie efficace qui peux "
+"aider."
 
 #: C/florence.xml:37(para)
 msgid ""
@@ -170,13 +170,13 @@ msgid ""
 msgstr ""
 "Si ce n'est pas déjà installé, il va falloir compiler Florence depuis un "
 "terminal sauf si vous utilisez <ulink url=\"http://fedoraproject.org"
-"\">Fedora</ulink> 9 ou supérieur, car il y a un paquetage pour Fedora (grâce "
-"à Simon Wesp) au 8 décembre 2008. Si vous ne pouvez pas utiliser de clavier, "
-"il se peut que vous ne puissiez pas installer Florence parce que vous ne "
-"pouvez pas utiliser Florence. Si vous êtes handicapé, vous devriez demander "
-"à quelqu'un de l'installer pour vous, et si vous utilisez un PC tablette, "
-"vous devriez trouver une façon créative de l'installer, comme ssh ou un "
-"autre clavier de manière temporaire."
+"\">Fedora</ulink> 9 ou supérieur, car il y a un paquetage seulement pour "
+"Fedora (grâce à Simon Wesp) au 8 décembre 2008. Si vous ne pouvez pas "
+"utiliser de clavier, il se peut que vous ne puissiez pas installer Florence "
+"parce que vous ne pouvez pas utiliser Florence. Si vous êtes handicapé, vous "
+"devriez demander à quelqu'un de l'installer pour vous, et si vous utilisez "
+"un PC tablette, vous devriez trouver une façon créative de l'installer, "
+"comme ssh ou utiliser un autre clavier de manière temporaire."
 
 #: C/florence.xml:42(para)
 msgid ""
@@ -188,15 +188,15 @@ msgstr ""
 "tapez: <prompt>#</prompt> <userinput>yum install florence</userinput>"
 
 #: C/florence.xml:45(para)
-#, fuzzy
 msgid ""
 "Make sure you have the latest version of Florence (0.5.0 as of November, the "
 "2nd of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
-"Soyez sûr que vous avez la dernière version de Florence (&version; au 25 "
-"avril 2010). Vous pouvez la télécharger ici: <ulink url=\"http://sourceforge."
-"net/project/platformdownload.php?group_id=217749\">Sourceforge</ulink>"
+"Soyez sûr que vous avez la dernière version de Florence (&version; au 2 "
+"novembre 2010). Vous pouvez la télécharger ici: <ulink url=\"http://"
+"sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</"
+"ulink>"
 
 #: C/florence.xml:47(title)
 msgid "Preparing the dependencies"
@@ -265,49 +265,44 @@ msgid "gettext"
 msgstr "gettext"
 
 #: C/florence.xml:58(para)
-#, fuzzy
 msgid ""
 "<ulink url=\"http://ftp.gnome.org/pub/GNOME/sources/intltool\">intltool</"
 "ulink> (version &gt;= 0.23)"
 msgstr ""
-"<ulink url=\"http://ftp.gnome.org/pub/gnome/sources/libxml2/\">libxml</"
-"ulink> (version &gt;= 2.0)"
+"<ulink url=\"http://ftp.gnome.org/pub/GNOME/sources/intltool\">intltool</"
+"ulink> (version &gt;= 0.23)"
 
 #: C/florence.xml:59(para)
-#, fuzzy
 msgid ""
 "(Optional: --with-docs configure option) <ulink url=\"http://ftp.gnome.org/"
 "pub/GNOME/sources/gnome-doc-utils\">gnome-doc-utils</ulink>"
 msgstr ""
-"(Optionnel: option --with-at-spi de configure) <ulink url=\"http://ftp.gnome."
-"org/pub/gnome/sources/at-spi/\">cspi</ulink> (version &gt;= 1.0)"
+"(Optionnel : option --with-docs de configure) <ulink url=\"http://ftp.gnome."
+"org/pub/GNOME/sources/gnome-doc-utils\">gnome-doc-utils</ulink>"
 
 #: C/florence.xml:60(para)
-#, fuzzy
 msgid ""
 "(Optional: --with-libnotify configure option) <ulink url=\"http://www.galago-"
 "project.org/files/releases/source/libnotify\">libnotify</ulink>"
 msgstr ""
-"(Optionnel: option --with-at-spi de configure) <ulink url=\"http://ftp.gnome."
-"org/pub/gnome/sources/at-spi/\">cspi</ulink> (version &gt;= 1.0)"
+"(Optionnel: option --with-libnotify de configure) <ulink url=\"http://www."
+"galago-project.org/files/releases/source/libnotify\">libnotify</ulink>"
 
 #: C/florence.xml:61(para)
-#, fuzzy
 msgid ""
 "(Optional: --with-xtst configure option) <ulink url=\"http://xorg."
 "freedesktop.org/releases/individual/lib/\">libxtst</ulink>"
 msgstr ""
-"(Optionnel: option --with-at-spi de configure) <ulink url=\"http://ftp.gnome."
-"org/pub/gnome/sources/at-spi/\">cspi</ulink> (version &gt;= 1.0)"
+"(Optionnel : option --with-xtst de configure) <ulink url=\"http://xorg."
+"freedesktop.org/releases/individual/lib/\">libxtst</ulink>"
 
 #: C/florence.xml:62(para)
-#, fuzzy
 msgid ""
 "(Optional: --with-panelapplet configure option) <ulink url=\" http://ftp."
 "gnome.org/pub/gnome/sources/gnome-panel\">libpanelapplet</ulink>"
 msgstr ""
-"(Optionnel: option --with-at-spi de configure) <ulink url=\"http://ftp.gnome."
-"org/pub/gnome/sources/at-spi/\">cspi</ulink> (version &gt;= 1.0)"
+"(Optionnel: option --with-panelapplet de configure) <ulink url=\" http://ftp."
+"gnome.org/pub/gnome/sources/gnome-panel\">libpanelapplet</ulink>"
 
 #: C/florence.xml:64(para)
 msgid ""
@@ -326,7 +321,6 @@ msgstr ""
 "votre distribution."
 
 #: C/florence.xml:67(para)
-#, fuzzy
 msgid ""
 "<ulink url=\"http://www.redhat.com\">Red Hat</ulink>/<ulink url=\"http://www."
 "centos.org\">CentOS</ulink><screen>\n"
@@ -339,13 +333,15 @@ msgid ""
 "userinput>\n"
 "\t\t\t\t</screen>"
 msgstr ""
-"Red Hat/CentOS <screen>\n"
+"<ulink url=\"http://www.redhat.com\">Red Hat</ulink>/<ulink url=\"http://www."
+"centos.org\">CentOS</ulink><screen>\n"
 "<prompt>$</prompt> <userinput>su</userinput>\n"
 "<prompt>#</prompt> <userinput>yum install gcc make libxml2-devel libglade2-"
 "devel at-spi-devel \\</userinput>\n"
 "<prompt>&gt;</prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel "
 "libXtst-devel gnome-doc-utils \\</userinput>\n"
-"<prompt>&gt;</prompt> <userinput>gettext intltool</userinput>\n"
+"<prompt>&gt;</prompt> <userinput>gettext intltool gnome-panel-devel</"
+"userinput>\n"
 "\t\t\t\t</screen>"
 
 #: C/florence.xml:74(ulink)
@@ -390,9 +386,9 @@ msgid "at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \\"
 msgstr "at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \\"
 
 #: C/florence.xml:79(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "libnotify libxtst6-devel intltool libpanel-applet-2-devel"
-msgstr "libnotify libxtst6-devel intltool"
+msgstr "libnotify libxtst6-devel intltool libpanel-applet-2-devel"
 
 #: C/florence.xml:83(ulink)
 msgid "Ubuntu"
@@ -409,9 +405,9 @@ msgid "libglade2-dev libatspi-dev libcairo2-dev gnome-doc-utils librsvg2-dev get
 msgstr "libglade2-dev libatspi-dev libcairo2-dev gnome-doc-utils librsvg2-dev gettext \\"
 
 #: C/florence.xml:87(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "libnotify-dev libxtst-dev intltool libpanel-applet2-dev"
-msgstr "libnotify-dev libxtst-dev intltool"
+msgstr "libnotify-dev libxtst-dev intltool libpanel-applet2-dev"
 
 #: C/florence.xml:93(title)
 msgid "Installing"
@@ -427,12 +423,12 @@ msgstr ""
 "commandes suivantes:"
 
 #: C/florence.xml:96(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "tar -xjvf florence-0.5.0.tar.bz2"
 msgstr "tar -xjvf florence-&version;.tar.bz2"
 
 #: C/florence.xml:97(userinput) C/florence.xml:118(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "cd florence-0.5.0"
 msgstr "cd florence-&version;"
 
@@ -568,7 +564,6 @@ msgstr ""
 "command> pour que Florence soit lancé avec GNOME au prochain démarrage."
 
 #: C/florence.xml:133(para)
-#, fuzzy
 msgid ""
 "Florence requires GNOME accessibility to be activated (it means that the at-"
 "spi daemon is running). If it is not activated, Florence will not start, but "
@@ -599,7 +594,7 @@ msgstr ""
 
 #: C/florence.xml:136(title)
 msgid "Running Florence as an applet"
-msgstr ""
+msgstr "Utilisation de Florence comme une applet"
 
 #: C/florence.xml:137(para)
 msgid ""
@@ -608,6 +603,10 @@ msgid ""
 "the screen space is reserved for it. Other windows get resized to make room "
 "for the panel."
 msgstr ""
+"Florence peut être intégré dans un tableau de bord de GNOME comme une "
+"applet. Dans ce cas, le clavier ne couvrira pas les autres fenêtres. Le "
+"tableau de bord peut être configuré pour réserver sa place à l'écran. Les "
+"autres fenêtres seront retaillées pour laisser sa place au tableau de bord."
 
 #: C/florence.xml:138(para)
 msgid ""
@@ -615,6 +614,10 @@ msgid ""
 "panelapplet option. This is the default. Use the --without-panelapplet to "
 "disable that feature and save disk space."
 msgstr ""
+"Pour que cette option soit disponible, Florence doit etre compilé avec "
+"l'option --with-panelapplet, ce qui est fait par défaut. Utilisez l'option --"
+"without-panelapplet pour désactiver cette fonctionalité et gagner de la "
+"place sur le disque."
 
 #: C/florence.xml:139(para)
 msgid ""
@@ -622,17 +625,29 @@ msgid ""
 "in existing panels may result in weird looking panels. It is advised to "
 "create a new panel only for it for better looking results."
 msgstr ""
+"Typiquement, Florence utilise plus de place dans le tableau de bord que les "
+"autres applets. Son intégration dans un tableau de bord existant pourrais "
+"créer un résultat pas très esthétique. Il est conseillé de créer un nouveau "
+"tableau de bord juste pour cela pour un résultat plus esthétique."
 
 #: C/florence.xml:140(para)
 msgid ""
 "To create a new panel, right-click on an existing panel and select "
 "<guimenuitem>New panel</guimenuitem>. When the new panel appears, you can "
-"right-click on it and select <guimenuitem>properties...</guimenuitem>. You "
-"can modify the properties of the new panel in the dialog. It is a good idea "
-"to increase its size so it can contain the keyboard. You can set the "
+"right-click on it and select <guimenuitem>properties</guimenuitem>. You can "
+"modify the properties of the new panel in the dialog. It is a good idea to "
+"increase its size so it can contain the keyboard. You can set the "
 "orientation of the panel and whether it should be automatically hidden in "
 "this same dialog."
 msgstr ""
+"Pour créer un nouveau tableau de bord, cliquez droit sur un tableau de bord "
+"existant et sélectionnez <guimenuitem>Nouveau tableau de bord</guimenuitem>. "
+"Lorsque le nouveau tableau de bord apparaît, vous pouvez cliquer droid "
+"dessus et sélectionner <guimenuitem>propriétés</guimenuitem>. Vous pouvez "
+"modifier les propriétés du nouveau tableau de bord dans le dialogue. "
+"Augmenter sa taille pour qu'il puisse contenir le clavier est une bonne "
+"idée. You pouvez sélectionner l'orientation du tableau de bord et si il "
+"devrais apparaître autimatiquement dans ce même dialogue."
 
 #: C/florence.xml:141(para)
 msgid ""
@@ -640,10 +655,13 @@ msgid ""
 "<guimenuitem>Add to panel...</guimenuitem>, select Florence and click Add to "
 "add Florence to the panel."
 msgstr ""
+"Lorsque le nouveau tableau de bord est créé, cliquez droit dessus de nouveau "
+"et sélectionnez <guimenuitem>Ajouter au tableau de bord...</guimenuitem>, "
+"sélectionnez Florence pour ajouter Florence au tableau de bord."
 
 #: C/florence.xml:144(title)
 msgid "Input methods"
-msgstr ""
+msgstr "Métodes de saisie"
 
 #: C/florence.xml:145(para)
 msgid ""
@@ -651,16 +669,26 @@ msgid ""
 "advantages and drawbacks. It is up to you to select the right one for your "
 "usage pattern."
 msgstr ""
+"Florence peut être utilisé avec 3 différentes méthodes de saisie. Chaque "
+"méthode a ses avantages et ses inconvénients. Il est de votre ressort de "
+"sélectionner la bonne méthode pout votre usage."
 
 #: C/florence.xml:148(para)
 msgid ""
-"The default input methos is the \"button\" method. This is adapted for mouse/"
+"The default input method is the \"button\" method. This is adapted for mouse/"
 "trackpad input. It is pretty straightforward. Just click on the key with the "
 "mouse button to activate it. Release the mouse button to deavticate the key. "
 "The advantage of this method is its simplicity. It does not require "
 "learning. The drawback is that is requires a pointing device with a button "
 "and that the user is able to use it."
 msgstr ""
+"La méthode de saisie par défaut est la méthode \"bouton\". Elle est adaptée "
+"à la souris ou au trackpad. Elle est assez simple. Cliquez une touche avec "
+"le bouton de la souris pour l'activer. Relachez le bouton de la souris pour "
+"désaciver la touche. L'avantage de cette méthode est sa simplicité. Elle ne "
+"nécessita pas de formation. L'inconvénient est qu'elle nécessite un "
+"périphérique de pointage avec un bouton et que l'utilisateur soit en mesure "
+"de l'utiliser."
 
 #: C/florence.xml:151(para)
 msgid ""
@@ -672,15 +700,30 @@ msgid ""
 "is that it does not require a button. The drawbacks are that it is slower "
 "than the button method and that you can not hold a key pressed."
 msgstr ""
+"La méthode suivante est la méthode \"minuteur\". Utilisez cette méthode si "
+"vous ne pouvez pas utiliser de bouton. Visez une touche avec le pointeur et "
+"un minuteur se déclenche. Lorsque le minuteur expire, la touche est "
+"immédiatement pressée et relachée. Le minuteur est arrêté si le pointeur "
+"quitte la touche. Notez que vous pouvez toujours utiliser le bouton pour "
+"activer la touche si vous en avez un de disponible. L'avantage de cette "
+"méthode est qu'elle ne nécessite pas de bouton. L'inconvénient est qu'elle "
+"est plus lente que la méthode bouton et que l'on ne peut pas garder une "
+"touche appuyée."
 
 #: C/florence.xml:154(para)
 msgid ""
 "The last method is the \"ramble\" method. Like the timer method, the ramble "
 "method does not require a button. This method can be faster than the timer "
 "method but requires dexterity and training to be used efficiently. The "
-"ramble method can be passive: no button necessary, or active: won't listen "
-"while the pointer button is pressed. There are two sub-methods for rambling."
+"ramble method can be passive: no button necessary, or active: deaf while the "
+"pointer button is not pressed. There are two sub-methods for rambling."
 msgstr ""
+"La dernière méthode est la méthode \"balade\". Comme la méthode minuteur, la "
+"méthode balade ne nécessite pas de bouton. Cette méthode peut être plus "
+"rapide que la méthode minuteur mais nécessite de la dextérité et de "
+"l'entrainement pour être utilisée efficacement. La méthode balade peut être "
+"passive: pas de bouton nécessaire, ou active: sourde tant que le bouton "
+"n'est pas pressé. Il y a deux sous-méthodes pour la méthode balade."
 
 #: C/florence.xml:157(para)
 msgid ""
@@ -690,6 +733,13 @@ msgid ""
 "key multiple times by moving the pointer to near the border of the key and "
 "back to the center. This method can be pretty fast with good training."
 msgstr ""
+"La méthode balade basée sur le temps nécessite un bon sens du rythme. "
+"Lorsque vous déplacez le pointeur, Florence va détecter les touches qui "
+"doivent être activées en fonction du temps que la pointeur passe au dessus "
+"d'elles. Avec cette méthode, il est possible de presser une même touche "
+"plusieurs fois en déplaçant le pointer vers l'extérieur de la touche puis de "
+"nouveau vers le centre. Cette méthode est assez rapide avec un bon "
+"entrainement."
 
 #: C/florence.xml:160(para)
 msgid ""
@@ -700,6 +750,13 @@ msgid ""
 "threshold is there to detect multiple occurences. To use this method "
 "efficiently, apply quick gestures over the keys you want to activate."
 msgstr ""
+"La méthode balade basée sur la distance nécessite une bonne dextérité pour "
+"être utilisée efficacement. La distance parcourrue par le pointeur sur une "
+"touche est mesurée et la touche est activée lorsqu'elle atteint un seuil. La "
+"touche peut être pressée plusieurs fois en bougeant le pointeur au dessus de "
+"manière répétitive. Un second seuil est paramétré pour détecter les "
+"pressions multiples. Pour utiliser cette méthode efficacement, appliquez des "
+"mouvements rapides au dessus des touches que vous voulez activer."
 
 #: C/florence.xml:167(title)
 msgid "Florence modes"
@@ -714,11 +771,10 @@ msgstr ""
 "l'utilisateur."
 
 #: C/florence.xml:169(para)
-#, fuzzy
 msgid ""
-"In this auto-hide mode, Florence hides itself when it detects you don't need "
-"it. There are several rules to detect when Florence is needed and those "
-"rules rely on the <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</"
+"In auto-hide mode, Florence hides itself when it detects you don't need it. "
+"There are several rules to detect when Florence is needed and those rules "
+"rely on the <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</"
 "ulink> framework. For instance, Florence will be shown if you select an "
 "editable widget, as it should probably be edited with a keyboard. Florence "
 "will hide itself when the editable widget is unfocused. This does not work "
@@ -728,20 +784,19 @@ msgid ""
 "spi if you intend to use Florence in hidden mode. When this mode is off, "
 "Florence is always visible on the screen."
 msgstr ""
-"Un autre mode est le mode 'cacher automatiquement'. Dans ce mode, Florence "
-"se cache lorsqu'il détecte que vous n'en avez pas besoin. Il y a quelques "
-"règles pour détecter quand vous avez besoin de Florence et ces règles "
-"utilisent les évènements de <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI"
-"\">at-spi</ulink>. Par exemple, Florence se montrera si un objet de texte "
-"éditable est sélectionné, car il est probable que vous avez besoin d'un "
-"clavier pour l'éditer. Florence se cachera ensuite si l'objet texte éditable "
-"est désélectionné. Cela ne marche pas si l'objet n'est pas accessible avec "
-"la technologie <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</"
-"ulink>. En particulier, les objets QT3 pourraient ne pas fonctionner "
-"correctement avec Florence. Vous devriez vous assurer que vos applications "
-"fonctionnent avec at-spi si vous avez l'intention d'utiliser Florence en "
-"mode caché. Quand ce mode est désactivé, Florence reste toujours visible à "
-"l'écran."
+"Dans le mode \"cacher automatiquement\", Florence se cache lorsqu'il détecte "
+"que vous n'en avez pas besoin. Il y a quelques règles pour détecter quand "
+"vous avez besoin de Florence et ces règles utilisent les évènements de "
+"<ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</ulink>. Par "
+"exemple, Florence se montrera si un objet de texte éditable est sélectionné, "
+"car il est probable que vous avez besoin d'un clavier pour l'éditer. "
+"Florence se cachera ensuite si l'objet texte éditable est désélectionné. "
+"Cela ne marche pas si l'objet n'est pas accessible avec la technologie "
+"<ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</ulink>. En "
+"particulier, les objets QT3 pourraient ne pas fonctionner correctement avec "
+"Florence. Vous devriez vous assurer que vos applications fonctionnent avec "
+"at-spi si vous avez l'intention d'utiliser Florence en mode caché. Quand ce "
+"mode est désactivé, Florence reste toujours visible à l'écran."
 
 #: C/florence.xml:171(title)
 msgid "Florence extensions"
@@ -761,7 +816,6 @@ msgstr ""
 "sélectionnés dans le dialogue des préférences (onglet agencement)."
 
 #: C/florence.xml:180(para)
-#, fuzzy
 msgid ""
 "The default keyboard layout can be extended with 3 extensions to the core "
 "keyboard. The arrows keypad is an extension added to the right of the core "
@@ -783,7 +837,6 @@ msgid "Modifier keys"
 msgstr "Touches de modification"
 
 #: C/florence.xml:184(para)
-#, fuzzy
 msgid ""
 "Some keys have a modifier attribute, just like on a real hardware keyboard. "
 "When they are pressed, the effect of other non-modifier keys is changed. The "
@@ -803,7 +856,6 @@ msgstr ""
 "au même moment que les touches normales pour modifier leur effet."
 
 #: C/florence.xml:185(para)
-#, fuzzy
 msgid ""
 "When activated, the locker keys turn red (the color can be changed in the "
 "settings dialog) and the symbol displayed on all non-modifier keys is "
@@ -840,7 +892,6 @@ msgid "Configuring"
 msgstr "Configuration"
 
 #: C/florence.xml:190(para)
-#, fuzzy
 msgid ""
 "The configuration dialog is accessible via the systray icon (right click on "
 "it and select <guimenuitem>Preferences</guimenuitem>) or via the command "
@@ -851,12 +902,11 @@ msgstr ""
 "La fenêtre de configuration est accessible par l'icône de la zone de "
 "notification (cliquez droit sur celle-ci et sélectionnez "
 "<guimenuitem>Préférences</guimenuitem>) ou depuis la ligne de commande avec "
-"l'option -c ou --config: <command>florence --config</command>. Il est "
-"possible de bidouiller la configuration par gconf (voir la section "
-"bidouillage)"
+"l'option -c ou --config: <command>florence --config</command> ou encore avec "
+"la touche du clavier si elle est présente. Il est possible de bidouiller la "
+"configuration par gconf (voir la section bidouillage)"
 
 #: C/florence.xml:191(para)
-#, fuzzy
 msgid ""
 "Some selected options are not applied until you click the 'Apply' button. "
 "Some other options are taken into account immediately but can be cancelled "
@@ -868,7 +918,6 @@ msgstr ""
 "bouton 'Annuler' tant qu'elles n'ont pas été appliquées."
 
 #: C/florence.xml:192(para)
-#, fuzzy
 msgid ""
 "The settings options have been divided into 4 groups in order to ease "
 "understanding and searching for them."
@@ -930,7 +979,6 @@ msgstr ""
 "touches."
 
 #: C/florence.xml:211(para)
-#, fuzzy
 msgid ""
 "Outline colour: set the colour surronding the key symbols. This color is "
 "used to improve visibility of the symbols. It should contrast with the "
@@ -1031,6 +1079,8 @@ msgid ""
 "Input method: select the input method. Some input methods may have "
 "additional configuration options."
 msgstr ""
+"Méthode de saisie: sélectionne la méthode de saisie. Certaines métodes de "
+"saisie peuvent avoir des options de configuration supplémentaires."
 
 #: C/florence.xml:244(para)
 msgid "Auto hide: switch auto-hide mode on and off."
@@ -1713,7 +1763,6 @@ msgid "Alternatives"
 msgstr "Alternatives"
 
 #: C/florence.xml:389(para)
-#, fuzzy
 msgid ""
 "There are other alternative virtual keyboard for GNOME that may fit your "
 "needs better than Florence. Here is a list of the main keyboard alternatives."
@@ -1749,7 +1798,6 @@ msgstr ""
 "handicapées qui ne peuvent pas utiliser un périphérique de pointage."
 
 #: C/florence.xml:392(para)
-#, fuzzy
 msgid ""
 "<ulink url=\"http://homepage3.nifty.com/tsato/xvkbd\">XVKBD</ulink> is a "
 "simple and very mature virtual keyboard. It does not depend on GNOME. Like "
@@ -1758,15 +1806,15 @@ msgid ""
 "much as Florence. This is the perfect keyboard for simple window managers. "
 "Florence is arguably prettier and better integrated in GNOME."
 msgstr ""
-"XVKBD est un clavier virtuel simple et très mature. Il ne dépend pas de "
-"GNOME. Comme GOK, il complète les mots automatiquement. Comme Florence, il a "
-"une fonctionnalité de clic automatique mais il lui manque un mode cacher "
+"<ulink url=\"http://homepage3.nifty.com/tsato/xvkbd\">XVKBD</ulink>  est un "
+"clavier virtuel simple et très mature. Il ne dépend pas de GNOME. Comme GOK, "
+"il complète les mots automatiquement. Comme Florence, il a une "
+"fonctionnalité de clic automatique mais il lui manque un mode cacher "
 "automatiquement et ne s'intègre pas dans GNOME aussi bien que Florence. Ce "
 "clavier est parfait pour des gestionnaires de fenêtres simples. Florence est "
 "subjectivement plus beau et mieux intégré dans GNOME."
 
 #: C/florence.xml:393(para)
-#, fuzzy
 msgid ""
 "<ulink url=\"https://launchpad.net/onboard\">Onboard</ulink> is the default "
 "Ubuntu keyboard. It runs with python, which is common in modern linux "
@@ -1774,11 +1822,12 @@ msgid ""
 "and easy to use. It is less customizable than Florence and does not provide "
 "an auto-hide feature. Perfect for casual usage on Ubuntu."
 msgstr ""
-"Onboard est le clavier par défaut d'Ubuntu. Il marche avec python, ce qui "
-"est commun dans les distributions modernes de linux. Il est plus orienté "
-"vers la simplicité que les fonctionnalités. Il est beau et facile à "
-"utiliser. Il est moins adaptable que Florence et ne fournit pas de mode "
-"cacher automatiquement. Parfait pour les usages occasionnels sur Ubuntu."
+"<ulink url=\"https://launchpad.net/onboard\">Onboard</ulink> est le clavier "
+"par défaut d'Ubuntu. Il marche avec python, ce qui est commun dans les "
+"distributions modernes de linux. Il est plus orienté vers la simplicité que "
+"les fonctionnalités. Il est beau et facile à utiliser. Il est moins "
+"adaptable que Florence et ne fournit pas de mode cacher automatiquement. "
+"Parfait pour les usages occasionnels sur Ubuntu."
 
 #: C/florence.xml:396(title)
 msgid "Keyboards features"
@@ -1790,7 +1839,7 @@ msgstr "clavier"
 
 #: C/florence.xml:407(entry)
 msgid "transparency"
-msgstr "transparence."
+msgstr "transparence"
 
 #: C/florence.xml:408(entry)
 msgid "auto hide"
@@ -1844,15 +1893,23 @@ msgstr "Onboard"
 msgid ""
 "There are other non-keyboard alternatives that can be used to input text."
 msgstr ""
+"Il existe d'autres alternatives pour saisir du texte qui ne sont pas des "
+"claviers."
 
 #: C/florence.xml:453(para)
 msgid ""
-"<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher/francais/\">Dasher</"
-"ulink> provides a predictive gesture based method to input text. This is a "
-"very efficient and natural input method. It can be used to input text only "
-"with eye movements when combined with <ulink url=\"http://www.inference.phy."
-"cam.ac.uk/opengazer\">opengazer</ulink>"
+"<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher\">Dasher</ulink> "
+"provides a predictive gesture based method to input text. This is a very "
+"efficient and natural input method. It can be used to input text only with "
+"eye movements when combined with <ulink url=\"http://www.inference.phy.cam."
+"ac.uk/opengazer\">opengazer</ulink>"
 msgstr ""
+"<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher/francais\">Dasher</"
+"ulink> fournit une méthode de saisie basée sur les mouvements et la "
+"prédiction des mots. C'est une méthode de saisie très efficace et naturelle. "
+"Combiné avec <ulink url=\"http://www.inference.phy.cam.ac.uk/opengazer"
+"\">opengazer</ulink>, cela peut être utilisé pour saisir du texte uniquement "
+"avec des mouvements d'oeil."
 
 #: C/florence.xml:456(para)
 msgid ""
@@ -1860,6 +1917,9 @@ msgid ""
 "writing recognition tool. It is a good text input method for tablets. "
 "CellWriter also provides a virtual keyboard."
 msgstr ""
+"<ulink url=\"http://risujin.org/cellwriter/\">CellWriter</ulink> est un "
+"outil de reconnaissance d'écriture à la main. C'est une bonne méthode de "
+"saisie pour les tablettes. CellWriter fournit aussi un clavier virtuel."
 
 #: C/florence.xml:461(title)
 msgid "Getting help"
@@ -1891,61 +1951,3 @@ msgstr ""
 #: C/florence.xml:0(None)
 msgid "translator-credits"
 msgstr "François Agrech <f.agrech@gmail.com> 2008, 2009, 2010"
-
-#~ msgid "intltool (version &gt;= 0.23)"
-#~ msgstr "intltool (version &gt;= 0.23)"
-
-#~ msgid "(Optional: --with-docs configure option) gnome-doc-utils"
-#~ msgstr "(Optionnel: option --with-docs de configure) gnome-doc-utils "
-
-#~ msgid "(Optional: --with-libnotify configure option) libnotify"
-#~ msgstr "(Optionnel: option --with-libnotify de configure) libnotify"
-
-#~ msgid "(Optional: --with-xtst configure option) libxtst"
-#~ msgstr "(Optionnel: option --with-xtst de configure) libxtst"
-
-#~ msgid ""
-#~ "In auto-click mode, you don't have to use any mouse button to use the "
-#~ "keyboard. You just have to put the pointer over a key and a timer is "
-#~ "triggered. If the pointer stays over the key until the timer expires, the "
-#~ "key is automatically 'clicked' (pressed). The duration of the timer can "
-#~ "be set in the configuration GUI in milliseconds. When it is set to 0ms, "
-#~ "auto-click mode is off: you have to point a key and click to trigger a "
-#~ "key press."
-#~ msgstr ""
-#~ "Dans le mode 'clic automatique', vous n'avez pas besoin d'utiliser les "
-#~ "boutons de la souris pour taper sur le clavier. Vous n'avez qu'à mettre "
-#~ "le pointeur sur une touche et le minuteur est déclenché. Si le pointer "
-#~ "reste sur la touche jusqu'à que le minuteur expire, la touche est "
-#~ "automatiquement 'cliquée' (pressée). La durée du minuteur peut être "
-#~ "réglée dans l'interface de configuration en millisecondes. Lorsqu'il est "
-#~ "réglé à 0ms, le mode 'clic automatique' est désactivé: vous devez pointer "
-#~ "une touche et cliquer pour déclencher une pression de la touche."
-
-#~ msgid ""
-#~ "Auto click: set the auto-click timer duration (0 deactivates the timer)."
-#~ msgstr ""
-#~ "Click automatique: change la durée du minuteur du mode clic automatique "
-#~ "(0 désactive le mode clic automatique)."
-
-#~ msgid ""
-#~ "If you have a recent distro with the new Xorg 1.6 (Mandriva 2009.1, "
-#~ "Ubuntu 9.04, Fedora 11 ...), please add the --without-xrecord option to ./"
-#~ "configure:"
-#~ msgstr ""
-#~ "Si vous avez une distribution récente avec le nouveau Xorg 1.6 (Mandriva "
-#~ "2009.1, Ubuntu 9.04, Fedora 11 ...), veuillez ajouter l'option --witout-"
-#~ "xrecord à ./configure SVP:"
-
-#~ msgid ""
-#~ "Note that QT3 applications don't support at-spi. Therefore you should not "
-#~ "deactivate auto-hide mode on KDE3."
-#~ msgstr ""
-#~ "Notez que les applications QT3 ne sont pas compatibles avec at-spi. En "
-#~ "conséquence, vous ne devriez pas utiliser le mode caché avec KDE3."
-
-#~ msgid "setxkbmap ar &amp;&amp; florence"
-#~ msgstr "setxkbmap ar &amp;&amp; florence"
-
-#~ msgid "GTKeyboard is the FSF keyboard."
-#~ msgstr "GTKeyboard est le clavier de la FSF."

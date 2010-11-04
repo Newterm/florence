@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2010-11-03 09:37+0100\n"
+"POT-Creation-Date: 2010-11-04 19:07+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -361,7 +361,7 @@ msgid "Florence typically takes more panel space than other applets. Integrating
 msgstr ""
 
 #: C/florence.xml:140(para)
-msgid "To create a new panel, right-click on an existing panel and select <guimenuitem>New panel</guimenuitem>. When the new panel appears, you can right-click on it and select <guimenuitem>properties...</guimenuitem>. You can modify the properties of the new panel in the dialog. It is a good idea to increase its size so it can contain the keyboard. You can set the orientation of the panel and whether it should be automatically hidden in this same dialog."
+msgid "To create a new panel, right-click on an existing panel and select <guimenuitem>New panel</guimenuitem>. When the new panel appears, you can right-click on it and select <guimenuitem>properties</guimenuitem>. You can modify the properties of the new panel in the dialog. It is a good idea to increase its size so it can contain the keyboard. You can set the orientation of the panel and whether it should be automatically hidden in this same dialog."
 msgstr ""
 
 #: C/florence.xml:141(para)
@@ -377,7 +377,7 @@ msgid "Florence can be used with 3 different input methods. Each method has adva
 msgstr ""
 
 #: C/florence.xml:148(para)
-msgid "The default input methos is the \"button\" method. This is adapted for mouse/trackpad input. It is pretty straightforward. Just click on the key with the mouse button to activate it. Release the mouse button to deavticate the key. The advantage of this method is its simplicity. It does not require learning. The drawback is that is requires a pointing device with a button and that the user is able to use it."
+msgid "The default input method is the \"button\" method. This is adapted for mouse/trackpad input. It is pretty straightforward. Just click on the key with the mouse button to activate it. Release the mouse button to deavticate the key. The advantage of this method is its simplicity. It does not require learning. The drawback is that is requires a pointing device with a button and that the user is able to use it."
 msgstr ""
 
 #: C/florence.xml:151(para)
@@ -385,7 +385,7 @@ msgid "The next method is the \"timer\" method. Use this method if you are unabl
 msgstr ""
 
 #: C/florence.xml:154(para)
-msgid "The last method is the \"ramble\" method. Like the timer method, the ramble method does not require a button. This method can be faster than the timer method but requires dexterity and training to be used efficiently. The ramble method can be passive: no button necessary, or active: won't listen while the pointer button is pressed. There are two sub-methods for rambling."
+msgid "The last method is the \"ramble\" method. Like the timer method, the ramble method does not require a button. This method can be faster than the timer method but requires dexterity and training to be used efficiently. The ramble method can be passive: no button necessary, or active: deaf while the pointer button is not pressed. There are two sub-methods for rambling."
 msgstr ""
 
 #: C/florence.xml:157(para)
@@ -405,7 +405,7 @@ msgid "Florence has several states affecting how it functions and how it interac
 msgstr ""
 
 #: C/florence.xml:169(para)
-msgid "In this auto-hide mode, Florence hides itself when it detects you don't need it. There are several rules to detect when Florence is needed and those rules rely on the <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</ulink> framework. For instance, Florence will be shown if you select an editable widget, as it should probably be edited with a keyboard. Florence will hide itself when the editable widget is unfocused. This does not work if the widget isn't accessible with <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</ulink>. In particular, QT3 widgets may not work properly with Florence. You should make sure your applications support at-spi if you intend to use Florence in hidden mode. When this mode is off, Florence is always visible on the screen."
+msgid "In auto-hide mode, Florence hides itself when it detects you don't need it. There are several rules to detect when Florence is needed and those rules rely on the <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</ulink> framework. For instance, Florence will be shown if you select an editable widget, as it should probably be edited with a keyboard. Florence will hide itself when the editable widget is unfocused. This does not work if the widget isn't accessible with <ulink url=\"http://en.wikipedia.org/wiki/AT-SPI\">at-spi</ulink>. In particular, QT3 widgets may not work properly with Florence. You should make sure your applications support at-spi if you intend to use Florence in hidden mode. When this mode is off, Florence is always visible on the screen."
 msgstr ""
 
 #: C/florence.xml:171(title)
@@ -937,7 +937,7 @@ msgid "There are other non-keyboard alternatives that can be used to input text.
 msgstr ""
 
 #: C/florence.xml:453(para)
-msgid "<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher/francais/\">Dasher</ulink> provides a predictive gesture based method to input text. This is a very efficient and natural input method. It can be used to input text only with eye movements when combined with <ulink url=\"http://www.inference.phy.cam.ac.uk/opengazer\">opengazer</ulink>"
+msgid "<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher\">Dasher</ulink> provides a predictive gesture based method to input text. This is a very efficient and natural input method. It can be used to input text only with eye movements when combined with <ulink url=\"http://www.inference.phy.cam.ac.uk/opengazer\">opengazer</ulink>"
 msgstr ""
 
 #: C/florence.xml:456(para)

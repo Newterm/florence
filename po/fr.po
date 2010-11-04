@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-03 09:36+0100\n"
+"POT-Creation-Date: 2010-11-04 19:07+0100\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -24,7 +24,7 @@ msgstr "Clavier virtuel Florence"
 
 #: ../data/florence.glade.h:1
 msgid "Activate ramble on button press"
-msgstr ""
+msgstr "Activer le mode balade sur pression du bouton"
 
 #: ../data/florence.glade.h:2
 msgid "Activated key background color"
@@ -74,7 +74,7 @@ msgstr "Décorée"
 
 #: ../data/florence.glade.h:13
 msgid "Distance based"
-msgstr ""
+msgstr "Basé sur la distance"
 
 #: ../data/florence.glade.h:14
 msgid "Extensions"
@@ -90,7 +90,7 @@ msgstr "Paramètres de Florence"
 
 #: ../data/florence.glade.h:17 ../data/florence.schemas.in.h:22
 msgid "Input method"
-msgstr ""
+msgstr "Méthode de saisie"
 
 #: ../data/florence.glade.h:18
 msgid "Intermediate icon"
@@ -165,17 +165,18 @@ msgstr "Quitter les préférences"
 
 #: ../data/florence.glade.h:35
 msgid "Ramble distance theshold for multiple press"
-msgstr ""
+msgstr "Seuil de distance du mode balade pour des pressions multiples"
 
 #: ../data/florence.glade.h:36
 msgid "Ramble distance theshold for simple press"
-msgstr ""
+msgstr "Seuil de distance du mode balade pour une pression simple"
 
 #: ../data/florence.glade.h:37
 msgid ""
 "Rambling will start when the mouse button is pressed. Always activated "
 "otherwise."
 msgstr ""
+"Le mode balade commencera lorsqu'un bouton sera pressé. Toujours actif sinon."
 
 #: ../data/florence.glade.h:38
 msgid "Resizable"
@@ -187,7 +188,7 @@ msgstr "Sélection de l'agencement du clavier"
 
 #: ../data/florence.glade.h:40
 msgid "Select input method"
-msgstr ""
+msgstr "Sélectionnez une méthode de saisie"
 
 #: ../data/florence.glade.h:41
 msgid "Sets the focus scaling factor"
@@ -203,11 +204,11 @@ msgstr "Barre des tâches"
 
 #: ../data/florence.glade.h:44
 msgid "Time based"
-msgstr ""
+msgstr "Basé sur le temps"
 
 #: ../data/florence.glade.h:45
 msgid "Time threshold for time based ramble mode."
-msgstr ""
+msgstr "Seuil de temps pour le mode balade basé sur le temps."
 
 #: ../data/florence.glade.h:46
 msgid "Transparent"
@@ -252,6 +253,8 @@ msgstr "Couleur de fond de la touche activée"
 #: ../data/florence.schemas.in.h:3
 msgid "Amount of time in milliseconds before the key is automatically pressed."
 msgstr ""
+"Nombre de temps en millisecondes avant que la touche ne soit automatiquement "
+"pressée."
 
 #: ../data/florence.schemas.in.h:4
 msgid "Appear in the task bar"
@@ -304,11 +307,15 @@ msgstr "Affiche un message au démarrage."
 #: ../data/florence.schemas.in.h:17
 msgid "Distance threshold for distance based ramble mode for first key press."
 msgstr ""
+"Seuil de distance pour le mode balade basé sur la distance pour la première "
+"pression."
 
 #: ../data/florence.schemas.in.h:18
 msgid ""
 "Distance threshold for distance based ramble mode for multiple key presses."
 msgstr ""
+"Seuil de distance pour le mode balade basé sur la distance pour des "
+"pressions multiples."
 
 #: ../data/florence.schemas.in.h:19
 msgid "Florence will hide automatically when no editable widget is selected."
@@ -396,7 +403,7 @@ msgstr "Position sur l'axe Y"
 
 #: ../data/florence.schemas.in.h:39
 msgid "Ramble algorithm"
-msgstr ""
+msgstr "Algorithme du mode balade"
 
 #: ../data/florence.schemas.in.h:40
 msgid "Scaling factor of the window"
@@ -406,10 +413,14 @@ msgstr "Taille de la fenêtre"
 msgid ""
 "Set the input method. Available input methods are button, timer and ramble."
 msgstr ""
+"Sélectionne la méthode de saisie. Les méthodes disponibles sont bouton, "
+"minuteur et balade"
 
 #: ../data/florence.schemas.in.h:42
 msgid "Set the ramble algorithm used. Valid algorithms are distance and time."
 msgstr ""
+"Sélectionne l'algorithm utilisé par le mode balade. Les algorithmes valides "
+"sont distance et temps."
 
 #: ../data/florence.schemas.in.h:43
 msgid ""
@@ -469,17 +480,16 @@ msgstr ""
 
 #: ../data/florence.schemas.in.h:53
 msgid "Time threshold for timer based ramble mode."
-msgstr ""
+msgstr "Seuil de temps pour le mode balade basé sur le temps."
 
 #: ../data/florence.schemas.in.h:54
-#, fuzzy
 msgid ""
 "Time, in milliseconds, to wait when the mouse is over a key before the key "
 "is automatically pressed (when timer input method is selected)"
 msgstr ""
 "Temps, en millisecondes, à attendre lorsque la souris est sur une touche "
-"avant que la touche soir automatiquement préssée. Mettre à 0 pour désactiver "
-"l'auto click."
+"avant que la touche soir automatiquement préssée (lorsque la méthode de "
+"saisie minuteur est sélectionnée)"
 
 #: ../data/florence.schemas.in.h:55
 msgid "To see the windows behind the keyboard."
@@ -487,7 +497,7 @@ msgstr "Pour voir les fenêtres derrière le clavier."
 
 #: ../data/florence.schemas.in.h:57
 msgid "Use button to activate rambling."
-msgstr ""
+msgstr "Utilisez un bouton pour activer le mode balade."
 
 #: ../data/florence.schemas.in.h:58
 msgid "Vertical position of the keyboard window on the screen (in pixel)."
@@ -498,6 +508,9 @@ msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) before the key is pressed"
 msgstr ""
+"Lorsque la méthode de saisie balade est sélecionnée, ceci est la distance "
+"que le pointeur doit parcourrir au dessus de la touche (relative à la taille "
+"de la touche) avant que la touche soit pressée"
 
 #: ../data/florence.schemas.in.h:60
 msgid ""
@@ -505,12 +518,17 @@ msgid ""
 "move over a key (relative to the size of the key) for pressing a key a "
 "second time and more."
 msgstr ""
+"Lorsque la méthode de saisie balade est sélecionnée, ceci est la distance "
+"que le pointeur doit parcourrir au dessus de la touche (relative à la taille "
+"de la touche) avant que la touche soit pressée la seconde fois et plus."
 
 #: ../data/florence.schemas.in.h:61
 msgid ""
 "When this option is set, rambling starts on button push. No button is "
 "necessary when this option is unset."
 msgstr ""
+"Lorsque cette option est active, une pression du bouton déclenche le mode "
+"balade. Aucun bouton n'est nécessaire lorsque cette option est désactivée."
 
 #: ../data/florence.schemas.in.h:62
 msgid "Window has a title bar and buttons."
@@ -571,13 +589,12 @@ msgid "Alternative Compact keyboard"
 msgstr "Clavier alternatif compact"
 
 #: ../data/styles/default/symbols.xml.in.h:1
-#, fuzzy
 msgid "123"
-msgstr "F12"
+msgstr "123"
 
 #: ../data/styles/default/symbols.xml.in.h:2
 msgid "ABC"
-msgstr ""
+msgstr "ABC"
 
 #: ../data/styles/default/symbols.xml.in.h:3
 msgid "F1"
@@ -680,34 +697,31 @@ msgid "~"
 msgstr "~"
 
 #: ../src/applet.c:68
-#, fuzzy
 msgid "_Preferences..."
-msgstr "_Préférences"
+msgstr "_Préférences..."
 
 #: ../src/applet.c:68
-#, fuzzy
 msgid "_About..."
-msgstr "A p_ropos"
+msgstr "A p_ropos..."
 
 #: ../src/applet.c:68
-#, fuzzy
 msgid "_Help..."
-msgstr "_Aide"
+msgstr "_Aide..."
 
 #: ../src/applet.c:106
 #, c-format
 msgid "Cannot parse arguments: %s.\n"
-msgstr ""
+msgstr "Argument invalide: %s.\n"
 
 #: ../src/applet.c:110
 #, c-format
 msgid "Cannot parse arguments.\n"
-msgstr ""
+msgstr "Argument invalude.\n"
 
 #: ../src/applet.c:120
 #, c-format
 msgid "Cannot initialize bonobo.\n"
-msgstr ""
+msgstr "Echec de l'initialisation de bonobo.\n"
 
 #: ../src/florence.c:84
 #, c-format
@@ -761,7 +775,7 @@ msgstr ""
 #. onhide trigger
 #: ../src/keyboard.c:54
 msgid "No key associated with onhide trigger"
-msgstr ""
+msgstr "Aucune touche n'est associée avec le déclencheur onhide"
 
 #: ../src/keyboard.c:76
 #, c-format
@@ -777,9 +791,8 @@ msgid "Unable to allocate memory for keyboard"
 msgstr "Echec d'allocation de mémoire pour le clavier"
 
 #: ../src/keyboard.c:136
-#, fuzzy
 msgid "Unable to allocate memory for keyboard trigger"
-msgstr "Echec d'allocation de mémoire pour le clavier"
+msgstr "Echec d'allocation de mémoire pour le déclendheur du clavier"
 
 #: ../src/layoutreader.c:87
 #, c-format
@@ -789,7 +802,7 @@ msgstr "Placement inconnu %s"
 #: ../src/layoutreader.c:309
 #, c-format
 msgid "Id %s was not found in layout file"
-msgstr ""
+msgstr "L'identifiant %s n'a pas été trouvé dans le fichier d'agencement"
 
 #: ../src/layoutreader.c:404
 #, c-format
@@ -940,10 +953,9 @@ msgid "Unable to focus window."
 msgstr "Impossible de sélectionner la fenêtre."
 
 #: ../src/status.c:159
-#, fuzzy, c-format
+#, c-format
 msgid "Event %d received :type %d. Switching from state %d to %d"
-msgstr ""
-"Événement %d reçu pour la touche %d (type %d). Changement d'état %d vers %d"
+msgstr "Événement %d reçu: type %d. Changement d'état %d vers %d"
 
 #: ../src/status.c:211
 #, c-format
@@ -968,12 +980,12 @@ msgstr "l'extension XRecord n'a pas été trouvée"
 
 #: ../src/status.c:226
 msgid "Keyboard synchronization is disabled."
-msgstr "La synchronization avec le clavier est désavtivée"
+msgstr "La synchronization avec le clavier est désactivée"
 
 #: ../src/status.c:304
-#, fuzzy, c-format
+#, c-format
 msgid "sending event %d"
-msgstr "Envoi de l'événement %d pour la touche %d"
+msgstr "Envoi de l'événement %d"
 
 #: ../src/status.c:320
 #, c-format
@@ -981,9 +993,9 @@ msgid "Unknown event type received: %d"
 msgstr "type d'événement reçu inconnu: %d"
 
 #: ../src/status.c:427
-#, fuzzy, c-format
+#, c-format
 msgid "FSM state error. event=%d ; state=%d"
-msgstr "Erreur d'état de la FSM. code de la touche=%d ; événement=%d ; état=%d"
+msgstr "Erreur d'état de la FSM. événement=%d ; état=%d"
 
 #: ../src/status.c:499 ../src/status.c:525
 msgid "Unable to allocate memory for status focus"
@@ -1132,7 +1144,6 @@ msgid "Copyright (C) 2008, 2009, 2010 François Agrech"
 msgstr "Copyright (C) 2008, 2009, 2010 François Agrech"
 
 #: ../src/trayicon.c:48
-#, fuzzy
 msgid ""
 "Copyright (C) 2008, 2009, 2010 François Agrech\n"
 "\n"
@@ -1150,7 +1161,7 @@ msgid ""
 "along with this program; if not, write to the Free Software Foundation,\n"
 "Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."
 msgstr ""
-"Copyright (C) 2008, 2009 François Agrech\n"
+"Copyright (C) 2008, 2009, 2010 François Agrech\n"
 "\n"
 "Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou\n"
 "le modifier dans les conditions de la License Générale Publique GNU,\n"
@@ -1273,7 +1284,7 @@ msgstr "Code impossible à atteindre"
 #: ../src/key.c:167
 #, c-format
 msgid "key %p has no modification."
-msgstr ""
+msgstr "la touche %p n'a pas de modification."
 
 #: ../src/key.c:258
 #, c-format
@@ -1281,32 +1292,29 @@ msgid "unknown action key type pressed = %d"
 msgstr "Un type de touche action inconnu a été pressé: %d"
 
 #: ../src/key.c:261
-#, fuzzy
 msgid "unknown key type pressed."
-msgstr "type de touche inconnu: %d"
+msgstr "type de touche pressée inconnu."
 
 #: ../src/key.c:263
 msgid "pressed key has no action associated."
-msgstr ""
+msgstr "la touche pressée n'a pas d'action associée."
 
 #: ../src/key.c:291
 #, c-format
 msgid "unknown action key type released = %d"
-msgstr "Un type de touche action inconnu a été libéré: %d"
+msgstr "un type de touche action inconnu a été libéré: %d"
 
 #: ../src/key.c:294
-#, fuzzy
 msgid "unknown key type released."
-msgstr "Un type de touche action inconnu a été libéré: %d"
+msgstr "un type de touche inconnu a été libéré."
 
 #: ../src/key.c:296
 msgid "released key has no action associated."
-msgstr ""
+msgstr "la touche libérée n'a pas d'action associée."
 
 #: ../src/key.c:358
-#, fuzzy
 msgid "unknown key type to draw."
-msgstr "type de touche inconnu: %d"
+msgstr "type de touche à dessiner inconnu."
 
 #: ../src/key.c:388
 #, c-format
@@ -1320,16 +1328,15 @@ msgstr "Impossible d'ouvrir le répertoire %s"
 
 #: ../src/settings-window.c:132
 msgid "Button"
-msgstr ""
+msgstr "Bouton"
 
 #: ../src/settings-window.c:134
 msgid "Timer"
-msgstr ""
+msgstr "Minuteur"
 
 #: ../src/settings-window.c:137
-#, fuzzy
 msgid "Ramble"
-msgstr "Redimensionnable"
+msgstr "Balade"
 
 #: ../src/settings-window.c:168
 #, c-format
@@ -1359,9 +1366,9 @@ msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
 #: ../src/settings-window.c:639
-#, fuzzy, c-format
+#, c-format
 msgid "Couldn't load builder file: %s"
-msgstr "Impossible d'ouvrir le répertoire %s"
+msgstr "Impossible d'ouvrir le fichier builder: %s"
 
 #: ../src/xkeyboard.c:55
 #, c-format
@@ -1420,17 +1427,11 @@ msgid "No xkb group found. Using default us group"
 msgstr "Aucun groupe xkb 'a été trouvé. Utilisation du groupe par défaut: us"
 
 #: ../src/ramble.c:156
-#, fuzzy
 msgid "Invalid ramble algorithm selected. Using default."
-msgstr "Pas de valeur gconf pour %s. Utilisation de la valeur par défaut"
+msgstr ""
+"Algorithme ramble sélectionné incorrect. Utilisation de l'algorithme par "
+"défaut."
 
 #: ../src/ramble.c:247
-#, fuzzy
 msgid "Unable to allocate memory for ramble"
-msgstr "Echec d'allocation de la mémoire pour la vue"
-
-#~ msgid "Auto click"
-#~ msgstr "Click automatique"
-
-#~ msgid "[new extension] name=%s id=%s"
-#~ msgstr "[nouvelle extension] nom=%s id=\"%s\""
+msgstr "Echec d'allocation de la mémoire pour le mode balade"
