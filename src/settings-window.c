@@ -242,7 +242,7 @@ gchar *settings_window_combo_update(gchar *item)
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gboolean out;
-	gchar *data;
+	gchar *data=NULL;
 	GtkComboBox *combo=GTK_COMBO_BOX(gtk_builder_get_object(settings_window->gtkbuilder, item));
 
 	/* update the layout combo box */
@@ -440,7 +440,7 @@ void settings_window_combo(GtkComboBox *combo)
 {
 	GtkTreeModel *model;
 	GtkTreeIter iter;
-	gchar *data;
+	gchar *data=NULL;
 
 	gtk_combo_box_get_active_iter(combo, &iter);
 	model=gtk_combo_box_get_model(combo);
