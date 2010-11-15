@@ -10,7 +10,7 @@ function adsense() {
 <div class="ads">
 <script type="text/javascript"><!--
 google_ad_client = "pub-2152392459551245";
-/* 160x600, date de création 08/04/10 */
+/* 160x600, date de crÃ©ation 08/04/10 */
 google_ad_slot = "3882482999";
 google_ad_width = 160;
 google_ad_height = 600;
@@ -34,7 +34,7 @@ if ($location == "Home") { $path=""; } else { $path="../"; }
 <h1><?php echo _("Florence Virtual Keyboard"); ?></h1>
 </div>
 <div class="language">
-<a href="<?php echo $path._("francais"); ?>.html"><?php echo _("En français"); ?></a>
+<a href="<?php echo $path._("francais"); ?>.html"><?php echo _("En franÃ§ais"); ?></a>
 </div>
 <div class="menu">
 <ul class="menu">

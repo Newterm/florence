@@ -35,6 +35,6 @@ mkdir xhtml/images
 cp $DATADIR/pixmaps/florence.svg xhtml/images
 setxkbmap -print >/tmp/xkbmap.tmp
 doc C english C us
-doc fr francais fr_FR fr
+doc fr francais fr_FR.UTF8 fr
 cat /tmp/xkbmap.tmp | xkbcomp - $DISPLAY 2>/dev/null && rm /tmp/xkbmap.tmp
 

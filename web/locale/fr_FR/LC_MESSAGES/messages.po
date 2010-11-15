@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-04-27 20:51+0200\n"
+"POT-Creation-Date: 2010-11-15 09:12+0100\n"
 "PO-Revision-Date: 2010-04-27 20:57+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: François Agrech <f.agrech@gmail.com>\n"
@@ -17,45 +17,183 @@ msgstr ""
 
 #: home.php:9
 msgid "Florence is an extensible scalable virtual keyboard for GNOME."
-msgstr "Florence est un clavier virtuel pour GNOME extensible et redimensionnable."
+msgstr ""
+"Florence est un clavier virtuel pour GNOME extensible et redimensionnable."
 
 #: home.php:10
-msgid "virtual keyboard, onscreen keyboard, software keyboard, gnome keyboard, florence keyboard, linux keyboard"
-msgstr "clavier virtuel, clavier à l'écran, clavier logiciel, clavier gnome, clavier florence, clavier linux"
+msgid ""
+"virtual keyboard, onscreen keyboard, software keyboard, gnome keyboard, "
+"florence keyboard, linux keyboard"
+msgstr ""
+"clavier virtuel, clavier à l'écran, clavier logiciel, clavier gnome, clavier "
+"florence, clavier linux"
 
-#: home.php:11
-#: home.php:25
-#: tools.php:34
+#: home.php:11 home.php:26 tools.php:34
 msgid "Florence Virtual Keyboard"
 msgstr "Clavier virtuel Florence"
 
-#: home.php:18
-msgid "Florence is an extensible scalable virtual keyboard for GNOME. You need it if you can't use a real hardware keyboard, for example because you are disabled, your keyboard is broken or because you use a tablet PC, but you must be able to use a pointing device (as a mouse, a trackball, or a touchscreen); If you can't use a pointing device, there is gok, which can be used with just simple switches."
-msgstr "Florence est un clavier virtuel pour GNOME extensible et redimensionnable. Vous avez besoin de Florence si vous ne pouvez pas utiliser un vrai clavier matériel, par exemple à cause d'un handicap, parce que votre clavier est cassé ou parce que vous utilisez un PC tablette. Cependant, vous devez être en mesure d'utiliser un périphérique de pointage (comme une souris, un trackball, ou un écran tactile) pour utiliser Florence ; Si vous ne pouvez pas utiliser un périphérique de pointage, il y a gok, qui peut être utilisé avec de simples connecteurs."
+#: home.php:17
+msgid "About"
+msgstr "A propos"
 
-#: home.php:20
-msgid "Florence stays out of your way when you don't need it: it appears on the screen only when you need it. A Timer-based auto-click functionality is available to help disabled people having difficulties to click."
-msgstr "Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le clavier apparaît à l'écran uniquement lorsque vous en avez besoin. Une fonctionnalité de click automatique basée sur un minuteur est disponible pour aider les personnes handicapées qui ont des difficultés à cliquer."
+#: home.php:19
+msgid ""
+"Florence is an extensible scalable virtual keyboard for GNOME. You need it "
+"if you can't use a real hardware keyboard, for example because you are "
+"disabled, your keyboard is broken or because you use a tablet PC, but you "
+"must be able to use a pointing device (as a mouse, a trackball, a "
+"touchscreen or <a href=\"http://www.inference.phy.cam.ac.uk/opengazer"
+"\">opengazer</a>); If you can't use a pointing device, there is gok, which "
+"can be used with just simple switches."
+msgstr ""
+"Florence est un clavier virtuel pour GNOME extensible et redimensionnable. "
+"Vous avez besoin de Florence si vous ne pouvez pas utiliser un vrai clavier "
+"matériel, par exemple à cause d'un handicap, parce que votre clavier est "
+"cassé ou parce que vous utilisez un PC tablette. Cependant, vous devez être "
+"en mesure d'utiliser un périphérique de pointage (comme une souris, un "
+"trackball, un écran tactile ou <a href=\"http://www.inference.phy.cam.ac.uk/"
+"opengazer\">opengazer</a>) pour utiliser Florence ; Si vous ne pouvez pas "
+"utiliser un périphérique de pointage, il y a gok, qui peut être utilisé avec "
+"de simples connecteurs."
 
-#: home.php:22
-msgid "Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment."
-msgstr "Florence est principalement conçu pour être utilisé avec le bureau GNOME, mais peut être utilisé avec n'importe quel environnement de bureau."
+#: home.php:21
+msgid ""
+"Florence stays out of your way when you don't need it: it appears on the "
+"screen only when you need it. A timer-based auto-click input method is "
+"available to help disabled people having difficulties to click. You may also "
+"check the new efficient ramble method."
+msgstr ""
+"Florence reste hors de votre vue lorsque vous n'en avez pas besoin: le "
+"clavier apparaît à l'écran uniquement lorsque vous en avez besoin. Une "
+"méthode de saisie basée sur un minuteur est disponible pour aider les "
+"personnes handicapées qui ont des difficultés à cliquer. Vous pouvez aussi "
+"utiliser la nouvelle méthode balade pour une saisie efficace."
 
-#: home.php:25
+#: home.php:23
+msgid ""
+"Florence is primarily intended to be used with the GNOME desktop, although "
+"it can be used on any desktop environment."
+msgstr ""
+"Florence est principalement conçu pour être utilisé avec le bureau GNOME, "
+"mais peut être utilisé avec n'importe quel environnement de bureau."
+
+#: home.php:26
 msgid "florence-us"
 msgstr "florence-fr"
 
-#: home.php:27
+#: home.php:29
+msgid "You can browse the full documentation for more informations."
+msgstr ""
+"Vous pouvez consulter la documentation complète pour plus d'informations."
+
+#: home.php:32
+msgid "Alternatives"
+msgstr "Alternatives"
+
+#: home.php:34
+msgid ""
+"If you are looking for an input method for your GNOME desktop, Florence may "
+"suit your needs or you may check the <a href=\"english/alternatives.html"
+"\">alternatives</a> section of the documentation."
+msgstr ""
+"Si vous cherchez une méthode de saisie pour votre bureau GNOME, Florence "
+"peut convenir, ou vous pouvez regarder la section <a href=\"francais/"
+"alternatives.html\">alternatives</a> de la documentation."
+
+#: home.php:37
+msgid "License"
+msgstr "Licence"
+
+#: home.php:40
+msgid ""
+"Florence is free software. You are free do use it for any purpose, to modify "
+"it or to hire someone to modify it for you. You are also free to distribute "
+"it or a modified version, provided you do not add any other restriction. If "
+"you wish to distribute this software, please make sure you understand all "
+"the implications of the license. The full license is available at <a href="
+"\"http://www.gnu.org/licenses/old-licenses/gpl-2.0.html\">http://www.gnu.org/"
+"licenses/old-licenses/gpl-2.0.html</a>."
+msgstr ""
+"Florence est un logiciel libre. Vous êtes libre de l'utiliser dans n'importe "
+"quel but, de le modifier ou d'engager quelqu'un pour le modifier pour vous. "
+"Vous êtes aussi libre de le distribuer ou une version modifiée, à condition "
+"de ne pas ajouter de restriction supplémentaire. Si vous désirez distribuer "
+"ce logiciel, veuillez vérifier que vous avez bien compris toutes les "
+"implications de la licence. La license complète traduite en français est "
+"disponible à l'adresse <a href=\"http://fsffrance.org/gpl/gpl-fr.fr.html"
+"\">http://fsffrance.org/gpl/gpl-fr.fr.html</a>."
+
+#: home.php:43
+msgid "Credits"
+msgstr "Remerciements"
+
+#: home.php:45
+msgid ""
+"Florence is integrated in the <a href=\"http://code.google.com/p/ardesia/"
+"\">Ardesia project</a>"
+msgstr ""
+"Florence est intégrée dans <a href=\"http://code.google.com/p/ardesia/\">le "
+"projet Ardesia</a>"
+
+#: home.php:49
+msgid ""
+"Ardesia is the free digital sketchpad software that help you to make colored "
+"free-hand annotations with digital ink everywhere, record it and share on "
+"the network. It is easy to use and impressively fast and reactive. You can "
+"draw upon the desktop or import an image and annotate it and redistribute "
+"your work to the world. Let's create quick sketch and artwork."
+msgstr ""
+"Ardesia est un logiciel de croquis virtuel libre qui vous aide à créer des "
+"annotations colorées à la main avec de l'encre virtuel partout, les "
+"enregistrer et les partager sur le réseau. Il est facile à utiliser et "
+"impressionant par sa rapidité et sa réactivité. Vous pouvez dessiner sur le "
+"bureau ou importer des images et les annoter et distribuer votre travail au "
+"monde entier. Créez des croquis et des œuvres d'art rapidement."
+
+#: home.php:53
+msgid ""
+"Pietro Pilolli &lt;alpha@paranoici.org&gt; of the Ardesia project has "
+"contributed back a significant amount of code to the Florence project, "
+"including the original ramble input method implementation, bug fixes and "
+"other patches that have yet to be merged."
+msgstr ""
+"Pietro Pilolli &lt;alpha@paranoici.org&gt; du projet Ardesia a contribué "
+"beaucoup de lignes de codes en retour au projet Florence, parmis lequelles "
+"l'implémentation originale de la méthode de saisue balade, des corrections "
+"de bogue et d'autres patches qui doivent encore être fusionés."
+
+#: home.php:57
+msgid ""
+"Arnaud Andoval &lt;arnaudsandoval@gmail.com&gt;, Stéphane Ancelot &lt;"
+"sancelot@free.fr&gt; and Laurent Bessard &lt;laurent.bessard@gmail.com&gt; "
+"from Numalliance have contributed a lot of code, including the gnome panel "
+"applet implementation, bug fixes and more patches that have yet to be merged."
+msgstr ""
+"Arnaud Andoval &lt;arnaudsandoval@gmail.com&gt;, Stéphane Ancelot &lt;"
+"sancelot@free.fr&gt; et Laurent Bessard &lt;laurent.bessard@gmail.com&gt;  "
+"de Numalliance ont contribué beaucoup de code, incluant l'implémentation de "
+"l'applet du tableau de bord de GNOME, des corrections de bogue et d'autres "
+"patches qui doivent encore être fusionés."
+
+#: home.php:61
+msgid ""
+"Sourceforge.net is hosting the git repository, this web site, the bug "
+"tracker, the forum, the releases and other useful services at no charge."
+msgstr ""
+"Souceforge.net héberge le référentiel git, ce site web, le tracker de "
+"bogues, le forum, les releases et d'autre services utiles gratuitement."
+
+#: home.php:64
 msgid "SourceForge.net Logo"
 msgstr "Logo SourceForge.net"
 
-#: home.php:30
+#: home.php:68
 msgid "Author:"
 msgstr "Auteur:"
 
-#: home.php:31
-msgid "Last update: 20th of April, 2010"
-msgstr "Dernière mise à jour: 25 avril 2010"
+#: home.php:69
+msgid "Last update: 5th of November, 2010"
+msgstr "Dernière mise à jour: 5 novembre 2010"
 
 #: tools.php:37
 msgid "francais"
@@ -65,13 +203,11 @@ msgstr "english"
 msgid "En français"
 msgstr "In English"
 
-#: tools.php:42
-#: tools.php:44
+#: tools.php:42 tools.php:44
 msgid "Home"
 msgstr "Accueil"
 
-#: tools.php:44
-#: tools.php:50
+#: tools.php:44 tools.php:50
 msgid "english"
 msgstr "francais"
 
@@ -79,8 +215,7 @@ msgstr "francais"
 msgid "Screenshots"
 msgstr "Copies d'écran"
 
-#: tools.php:48
-#: tools.php:50
+#: tools.php:48 tools.php:50
 msgid "Documentation"
 msgstr "Documentation"
 
@@ -91,4 +226,3 @@ msgstr "Téléchargement"
 #: tools.php:53
 msgid "News"
 msgstr "Nouvelles"
-

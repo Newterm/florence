@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-04 19:07+0100\n"
+"POT-Creation-Date: 2010-11-15 18:53+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,47 +26,124 @@ msgid ""
 "florence keyboard, linux keyboard"
 msgstr ""
 
-#: home.php:11 home.php:25 tools.php:34
+#: home.php:11 home.php:26 tools.php:34
 msgid "Florence Virtual Keyboard"
 msgstr ""
 
-#: home.php:18
+#: home.php:17
+msgid "About"
+msgstr ""
+
+#: home.php:19
 msgid ""
 "Florence is an extensible scalable virtual keyboard for GNOME. You need it "
 "if you can't use a real hardware keyboard, for example because you are "
 "disabled, your keyboard is broken or because you use a tablet PC, but you "
-"must be able to use a pointing device (as a mouse, a trackball, or a "
-"touchscreen); If you can't use a pointing device, there is gok, which can be "
-"used with just simple switches."
+"must be able to use a pointing device (as a mouse, a trackball, a "
+"touchscreen or <a href=\"http://www.inference.phy.cam.ac.uk/opengazer"
+"\">opengazer</a>); If you can't use a pointing device, there is gok, which "
+"can be used with just simple switches."
 msgstr ""
 
-#: home.php:20
+#: home.php:21
 msgid ""
 "Florence stays out of your way when you don't need it: it appears on the "
-"screen only when you need it. A Timer-based auto-click functionality is "
-"available to help disabled people having difficulties to click."
+"screen only when you need it. A timer-based auto-click input method is "
+"available to help disabled people having difficulties to click. You may also "
+"check the new efficient ramble method."
 msgstr ""
 
-#: home.php:22
+#: home.php:23
 msgid ""
 "Florence is primarily intended to be used with the GNOME desktop, although "
 "it can be used on any desktop environment."
 msgstr ""
 
-#: home.php:25
+#: home.php:26
 msgid "florence-us"
 msgstr ""
 
-#: home.php:27
+#: home.php:29
+msgid "You can browse the full documentation for more informations."
+msgstr ""
+
+#: home.php:32
+msgid "Alternatives"
+msgstr ""
+
+#: home.php:34
+msgid ""
+"If you are looking for an input method for your GNOME desktop, Florence may "
+"suit your needs or you may check the <a href=\"english/alternatives.html"
+"\">alternatives</a> section of the documentation."
+msgstr ""
+
+#: home.php:37
+msgid "License"
+msgstr ""
+
+#: home.php:40
+msgid ""
+"Florence is free software. You are free do use it for any purpose, to modify "
+"it or to hire someone to modify it for you. You are also free to distribute "
+"it or a modified version, provided you do not add any other restriction. If "
+"you wish to distribute this software, please make sure you understand all "
+"the implications of the license. The full license is available at <a href="
+"\"http://www.gnu.org/licenses/old-licenses/gpl-2.0.html\">http://www.gnu.org/"
+"licenses/old-licenses/gpl-2.0.html</a>."
+msgstr ""
+
+#: home.php:43
+msgid "Credits"
+msgstr ""
+
+#: home.php:45
+msgid ""
+"Florence is integrated in the <a href=\"http://code.google.com/p/ardesia/"
+"\">Ardesia project</a>"
+msgstr ""
+
+#: home.php:49
+msgid ""
+"Ardesia is the free digital sketchpad software that help you to make colored "
+"free-hand annotations with digital ink everywhere, record it and share on "
+"the network. It is easy to use and impressively fast and reactive. You can "
+"draw upon the desktop or import an image and annotate it and redistribute "
+"your work to the world. Let's create quick sketch and artwork."
+msgstr ""
+
+#: home.php:53
+msgid ""
+"Pietro Pilolli &lt;alpha@paranoici.org&gt; of the Ardesia project has "
+"contributed back a significant amount of code to the Florence project, "
+"including the original ramble input method implementation, bug fixes and "
+"other patches that have yet to be merged."
+msgstr ""
+
+#: home.php:57
+msgid ""
+"Arnaud Andoval &lt;arnaudsandoval@gmail.com&gt;, Stéphane Ancelot &lt;"
+"sancelot@free.fr&gt; and Laurent Bessard &lt;laurent.bessard@gmail.com&gt; "
+"from Numalliance have contributed a lot of code, including the gnome panel "
+"applet implementation, bug fixes and more patches that have yet to be merged."
+msgstr ""
+
+#: home.php:61
+msgid ""
+"Sourceforge.net is hosting the git repository, this web site, the bug "
+"tracker, the forum, the releases and other useful services at no charge."
+msgstr ""
+
+#: home.php:64
 msgid "SourceForge.net Logo"
 msgstr ""
 
-#: home.php:30
+#: home.php:68
 msgid "Author:"
 msgstr ""
 
-#: home.php:31
-msgid "Last update: 20th of April, 2010"
+#: home.php:69
+msgid "Last update: 5th of November, 2010"
 msgstr ""
 
 #: tools.php:37
