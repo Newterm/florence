@@ -23,9 +23,9 @@ AM_CONDITIONAL([WITH_XKB], [test "x$with_xkb" != "xno"])
 if test "x$with_xkb" != "xno"; then
 	AC_DEFINE(ENABLE_XKB, ["xkb"], [xkb extension is enabled])
 fi
-AC_ARG_WITH([ramble], AS_HELP_STRING([--with-ramble], [Build with ramble mode (default: disabled)]))
-AM_CONDITIONAL([WITH_RAMBLE], [test "x$with_ramble" == "xyes"])
-if test "x$with_ramble" = "xyes"; then
+AC_ARG_WITH([ramble], AS_HELP_STRING([--without-ramble], [Build without ramble mode (default: enabled)]))
+AM_CONDITIONAL([WITH_RAMBLE], [test "x$with_ramble" != "xno"])
+if test "x$with_ramble" != "xno"; then
 	AC_DEFINE(ENABLE_RAMBLE, ["ramble"], [Ramble mode is enabled])
 fi
 
