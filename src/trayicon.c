@@ -155,11 +155,19 @@ gboolean trayicon_notification_start(gpointer userdata)
 {
 	struct trayicon *trayicon=(struct trayicon *)userdata;
 	if (!notify_init(_("Florence"))) flo_warn(_("libnotify failed to initialize"));
+#ifdef ENABLE_NOTIFICATION_ICON
 	trayicon->notification=notify_notification_new_with_status_icon(
+#else
+	trayicon->notification=notify_notification_new(
+#endif
 		_("Florence is running"),
 		_("Click on Florence icon to show/hide Florence.\n"
 		"Right click on it to display menu and get help."),
+#ifdef ENABLE_NOTIFICATION_ICON
 		GTK_STOCK_INFO, trayicon->tray_icon);
+#else
+		GTK_STOCK_INFO);
+#endif
 	notify_notification_add_action(trayicon->notification, "STOP",
 		_("Do not show again"), trayicon_notification_stop, NULL, NULL);
 	notify_notification_set_timeout(trayicon->notification, 5000);

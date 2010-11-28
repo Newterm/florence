@@ -74,6 +74,7 @@ Please either install gnome-doc-utils package or disable docs: --without-docs co
 fi
 if test "x$with_notification" != "xno"; then
 	PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], AC_DEFINE([ENABLE_NOTIFICATION], [], [Notification enabled.]), AC_MSG_ERROR(Could not configure libnotify. Please either install libnotify or disable notifications: --without-notification configure option))
+	PKG_CHECK_MODULES([LIBNOTIFY_ICON], [libnotify < 0.7.0], AC_DEFINE([ENABLE_NOTIFICATION_ICON], [], [Notification icon enabled.]), AC_MSG_NOTICE([Notification icon disabled.]))
 fi
 
 if test "x$with_xtst" != "xno"; then
