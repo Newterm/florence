@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-15 09:12+0100\n"
+"POT-Creation-Date: 2010-11-28 17:27+0100\n"
 "PO-Revision-Date: 2010-04-27 20:57+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: François Agrech <f.agrech@gmail.com>\n"
@@ -28,15 +28,45 @@ msgstr ""
 "clavier virtuel, clavier à l'écran, clavier logiciel, clavier gnome, clavier "
 "florence, clavier linux"
 
-#: home.php:11 home.php:26 tools.php:34
+#: home.php:11 home.php:30 tools.php:34
 msgid "Florence Virtual Keyboard"
 msgstr "Clavier virtuel Florence"
 
-#: home.php:17
+#: home.php:19
+msgid ""
+" <form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\"> "
+"<input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden"
+"\" name=\"encrypted\" value=\"-----BEGIN PKCS7-----"
+"MIIHNwYJKoZIhvcNAQcEoIIHKDCCByQCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYAzVGBifOAjSIVAwGmNB8siuVs8ahTVTXRHQJLiLmicMn6jl7pCwKzWfnBOUbekb4v0a"
+"+h56zU6QlJ0Bz"
+"+jYwUjWT5goxEs8FANZif2SEdGA7KoWIu5bkj9yyHv8Gl7YdH2CL6eldgwyronNAjA07V0vWUxKQw5xjVDpujl0jpLeDELMAkGBSsOAwIaBQAwgbQGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQImm9M45hO3VWAgZBO52yjRE2721DdNDf812CnI6MQTns7akeKsWme74AtOzl96x5f5ge8ZE"
+"+k2j7JcwqJAIA+ddmasrNwTShq7R/"
+"GOfyocT8DpCKjrhl2EXOCo8kyG6awBlASmfThpNKtWsIRqBKVgJaTe4wv0XJNwnhf9+cRpKp6zjqj"
+"+WguZYd7Nlx1pEnd1I3R6fwY4/"
+"rSdb2gggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS"
+"+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/"
+"hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH"
+"+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/"
+"MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//"
+"Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb"
+"+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa"
+"+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xMDExMjMxMzM3MzhaMCMGCSqGSIb3DQEJBDEWBBTPd"
+"+3qRUDFogRj/m3SAZ0d5fdB1zANBgkqhkiG9w0BAQEFAASBgE4yiSjAW"
+"+lEIZj0G7A31fcKD9YZc6XBrek1+HkMs6VWWruV"
+"+WmEAeJRKm8SsP4gOziWQxpzfEfIwz7j9mqX6lvplF8tdeOUyBNAFXMVzHn4ftMiESKKEfDcVk1OUUgf"
+"+Rf/TrCTXOGmyCpCc1ME9V6dJuVnHTwHYy7zQGSLCRXi-----END PKCS7----- \"> <input "
+"type=\"image\" src=\"https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif"
+"\" border=\"0\" name=\"submit\" alt=\"PayPal - The safer, easier way to pay "
+"online!\"> <img alt=\"\" border=\"0\" src=\"https://www.paypal.com/fr_FR/i/"
+"scr/pixel.gif\" width=\"1\" height=\"1\"> </form> "
+msgstr ""
+"<form action=\"https://www.paypal.com/cgi-bin/webscr\" method=\"post\"> <input type=\"hidden\" name=\"cmd\" value=\"_s-xclick\"> <input type=\"hidden\" name=\"encrypted\" value=\"-----BEGIN PKCS7-----MIIHNwYJKoZIhvcNAQcEoIIHKDCCByQCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYCIHefPba/eMzEPxPRXCsWAANPepgArLsw2aJRIR1z3lQG7GoBijXFFS1xRYTXOJKrXn9j4I2sjJaF0ZO5A7LpYqQhQ107bjMnHQUvIlwHRl0vLFWo2IVs8KF70F8THLLwLPDUexyx9XXRxjTY/Wb9rEujCifFMBnSbn5UhbxzVizELMAkGBSsOAwIaBQAwgbQGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQI9d/JQttOh0mAgZB0WbTrpAvKLjf7NWCMoDRo3OqvlCjijI0f1gLQr/CdshZPlQ3riAFaxf7q3anbuUjkzkv+UT3N8fHanyy20HJzFxsMG0+TGNaM0bzs8kGnF08gg9Kxxezqyp41oAxz5hCmCG9jFP2TWis6V81KJCYbfxyUC9MHBYRKNmFrXUt1Rv2KCO1lhuII4N6kY8ylzBCgggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0xMDExMjgxNjM1MDBaMCMGCSqGSIb3DQEJBDEWBBTi6PBBpJnwOvMtVM+CYh//TO86ijANBgkqhkiG9w0BAQEFAASBgG4WPyI6YKPeiw9elY32FedH9hqsLBd7VcwXEtoV/r+iMnW24wz2gwx1brCEgDfpRT1+Dx2mz0WXUbor2Te1mYwO0iG2MKkdUc1nGJn83BBDQKNn8AOzKTj7+Gj3Vq5/awSFRNYZ6tlkQevxiZ1fYCXozU2GPgr0G02GL2PyRf04-----END PKCS7----- \"> <input type=\"image\" src=\"https://www.paypal.com/fr_FR/FR/i/btn/btn_donateCC_LG.gif\" border=\"0\" name=\"submit\" alt=\"PayPal - la solution de paiement en ligne la plus simple et la plus sécurisée !\"> <img alt=\"\" border=\"0\" src=\"https://www.paypal.com/fr_FR/i/scr/pixel.gif\" width=\"1\" height=\"1\"> </form>"
+
+#: home.php:21
 msgid "About"
 msgstr "A propos"
 
-#: home.php:19
+#: home.php:23
 msgid ""
 "Florence is an extensible scalable virtual keyboard for GNOME. You need it "
 "if you can't use a real hardware keyboard, for example because you are "
@@ -56,7 +86,7 @@ msgstr ""
 "utiliser un périphérique de pointage, il y a gok, qui peut être utilisé avec "
 "de simples connecteurs."
 
-#: home.php:21
+#: home.php:25
 msgid ""
 "Florence stays out of your way when you don't need it: it appears on the "
 "screen only when you need it. A timer-based auto-click input method is "
@@ -69,7 +99,7 @@ msgstr ""
 "personnes handicapées qui ont des difficultés à cliquer. Vous pouvez aussi "
 "utiliser la nouvelle méthode balade pour une saisie efficace."
 
-#: home.php:23
+#: home.php:27
 msgid ""
 "Florence is primarily intended to be used with the GNOME desktop, although "
 "it can be used on any desktop environment."
@@ -77,20 +107,20 @@ msgstr ""
 "Florence est principalement conçu pour être utilisé avec le bureau GNOME, "
 "mais peut être utilisé avec n'importe quel environnement de bureau."
 
-#: home.php:26
+#: home.php:30
 msgid "florence-us"
 msgstr "florence-fr"
 
-#: home.php:29
+#: home.php:33
 msgid "You can browse the full documentation for more informations."
 msgstr ""
 "Vous pouvez consulter la documentation complète pour plus d'informations."
 
-#: home.php:32
+#: home.php:36
 msgid "Alternatives"
 msgstr "Alternatives"
 
-#: home.php:34
+#: home.php:38
 msgid ""
 "If you are looking for an input method for your GNOME desktop, Florence may "
 "suit your needs or you may check the <a href=\"english/alternatives.html"
@@ -100,11 +130,11 @@ msgstr ""
 "peut convenir, ou vous pouvez regarder la section <a href=\"francais/"
 "alternatives.html\">alternatives</a> de la documentation."
 
-#: home.php:37
+#: home.php:41
 msgid "License"
 msgstr "Licence"
 
-#: home.php:40
+#: home.php:44
 msgid ""
 "Florence is free software. You are free do use it for any purpose, to modify "
 "it or to hire someone to modify it for you. You are also free to distribute "
@@ -123,11 +153,11 @@ msgstr ""
 "disponible à l'adresse <a href=\"http://fsffrance.org/gpl/gpl-fr.fr.html"
 "\">http://fsffrance.org/gpl/gpl-fr.fr.html</a>."
 
-#: home.php:43
+#: home.php:47
 msgid "Credits"
 msgstr "Remerciements"
 
-#: home.php:45
+#: home.php:49
 msgid ""
 "Florence is integrated in the <a href=\"http://code.google.com/p/ardesia/"
 "\">Ardesia project</a>"
@@ -135,7 +165,7 @@ msgstr ""
 "Florence est intégrée dans <a href=\"http://code.google.com/p/ardesia/\">le "
 "projet Ardesia</a>"
 
-#: home.php:49
+#: home.php:53
 msgid ""
 "Ardesia is the free digital sketchpad software that help you to make colored "
 "free-hand annotations with digital ink everywhere, record it and share on "
@@ -150,7 +180,7 @@ msgstr ""
 "bureau ou importer des images et les annoter et distribuer votre travail au "
 "monde entier. Créez des croquis et des œuvres d'art rapidement."
 
-#: home.php:53
+#: home.php:57
 msgid ""
 "Pietro Pilolli &lt;alpha@paranoici.org&gt; of the Ardesia project has "
 "contributed back a significant amount of code to the Florence project, "
@@ -162,7 +192,7 @@ msgstr ""
 "l'implémentation originale de la méthode de saisue balade, des corrections "
 "de bogue et d'autres patches qui doivent encore être fusionés."
 
-#: home.php:57
+#: home.php:61
 msgid ""
 "Arnaud Andoval &lt;arnaudsandoval@gmail.com&gt;, Stéphane Ancelot &lt;"
 "sancelot@free.fr&gt; and Laurent Bessard &lt;laurent.bessard@gmail.com&gt; "
@@ -175,7 +205,7 @@ msgstr ""
 "l'applet du tableau de bord de GNOME, des corrections de bogue et d'autres "
 "patches qui doivent encore être fusionés."
 
-#: home.php:61
+#: home.php:65
 msgid ""
 "Sourceforge.net is hosting the git repository, this web site, the bug "
 "tracker, the forum, the releases and other useful services at no charge."
@@ -183,15 +213,15 @@ msgstr ""
 "Souceforge.net héberge le référentiel git, ce site web, le tracker de "
 "bogues, le forum, les releases et d'autre services utiles gratuitement."
 
-#: home.php:64
+#: home.php:68
 msgid "SourceForge.net Logo"
 msgstr "Logo SourceForge.net"
 
-#: home.php:68
+#: home.php:74
 msgid "Author:"
 msgstr "Auteur:"
 
-#: home.php:69
+#: home.php:75
 msgid "Last update: 5th of November, 2010"
 msgstr "Dernière mise à jour: 5 novembre 2010"
 
