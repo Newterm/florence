@@ -215,6 +215,11 @@ class object:
 				self.dirty = True
 				self.status = 0
 
+	def onleave(self):
+		if self.status == 1:
+			self.dirty = True
+			self.status = 0
+
 	def draw(self, crctx):
 		a = 1
 		if self.moving:
@@ -389,6 +394,11 @@ class scene:
 		self.gridx = dx
 		self.gridy = dy
 
+	def leave(self, widget, event, data):
+		for obj in self.objects:
+			obj.onleave()
+		widget.queue_draw()
+
 	def motion(self, widget, event, data):
 		dirty = False
 		if self.top:
@@ -527,10 +537,28 @@ class scene:
 			crctx.rectangle(self.xsel, self.ysel, self.xsel2 - self.xsel, self.ysel2 - self.ysel)
 			crctx.stroke()
 
-	def __init__(self, widget, w, h):
+	def setSize(self, w, h):
 		self.w = w
 		self.h = h
 
+	def __init__(self):
+		self.reset()
+
+	def connect(self, widget):
+		self.handler1 = widget.connect("leave-notify-event", self.leave, self)
+		self.handler2 = widget.connect("motion-notify-event", self.motion, self)
+		self.handler3 = widget.connect("button-press-event", self.press, self)
+		self.handler4 = widget.connect("button-release-event", self.release, self)
+		self.handler5 = widget.connect("expose-event", self.expose, self)
+
+	def disconnect(self, widget):
+		widget.disconnect(self.handler1)
+		widget.disconnect(self.handler2)
+		widget.disconnect(self.handler3)
+		widget.disconnect(self.handler4)
+		widget.disconnect(self.handler5)
+
+	def reset(self):
 		self.objects = []
 		self.sel = selection()
 		self.top = None		
@@ -541,13 +569,6 @@ class scene:
 		self.ysel2 = 0
 		self.gridx = 0
 		self.gridy = 0
-
-		widget.set_events(gtk.gdk.ALL_EVENTS_MASK)
-		widget.connect("motion-notify-event", self.motion, self)
-		widget.connect("button-press-event", self.press, self)
-		widget.connect("button-release-event", self.release, self)
-		widget.connect("expose-event", self.expose, self)
-		widget.set_size_request(w, h)
 
 	def add(self, object):
 		self.objects.append(object)
