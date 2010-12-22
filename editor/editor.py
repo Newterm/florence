@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+import io
 from xml.dom import minidom
 import gtk
 import toolkit
@@ -83,6 +84,8 @@ class keyboard(toolkit.scene):
 
 	def __str__(self):
 		str = "<keyboard>\n"
+		str = str + "<width>%s</width>\n" %  ( self.w/30.0 )
+		str = str + "<height>%s</height>\n" %  ( self.h/30.0 )
 		for k in self.objects:
 			str = str + k.__str__()
 		str = str + "</keyboard>\n"
@@ -99,6 +102,8 @@ class extension:
 
 	def load(self, node):
 		self.placement = node.getElementsByTagName('placement')[0].firstChild.data
+		self.name = node.getElementsByTagName('name')[0].firstChild.data
+		self.id = node.getElementsByTagName('identifiant')[0].firstChild.data
 		self.keyboard = keyboard( node.getElementsByTagName('keyboard')[0] )
 
 	def getSize(self):
@@ -128,19 +133,32 @@ class extension:
 		y2 = self.y + ( h/3.0 )
 		return ( x > self.x ) and ( y > self.y ) and ( x < x2 ) and ( y < y2 )
 
+	def __str__(self):
+		str = ""
+		if self.placement != "main":
+			str = str + "<extension>\n"
+			str = str + "<name>" + self.name + "</name>\n"
+			str = str + "<identifiant>" + self.id + "</identifiant>\n"
+			str = str + "<placement>" + self.placement + "</placement>\n"
+		str = str + self.keyboard.__str__()
+		if self.placement != "main": str = str + "</extension>\n"
+		return str
+
 class extensions:
-	def __init__(self, keyboard):
-		self.exts = []
-		self.main = extension()
-		self.main.loadmain( keyboard )
-		self.select = self.main
+	def __init__(self, keyboard, widget):
+		self.widget = widget
+		self.reset( keyboard )
+		widget.connect("expose-event", self.expose, self)
 
 	def reset(self, keyboard):
 		self.exts = []
 		self.main = extension()
 		self.main.loadmain( keyboard )
+		(w, h) = self.main.getSize()
+		self.widget.set_size_request(int(w), int(h))
+		self.select = self.main
 
-	def load(self, widget, nodes):
+	def load(self, nodes):
 		self.exts = []
 		for ext in nodes:
 			local = extension()
@@ -198,9 +216,8 @@ class extensions:
 			y += h
 			hh += h
 
-		widget.connect("expose-event", self.expose, self)
-		widget.set_size_request(int(ww), int(hh))
-		widget.queue_draw()
+		self.widget.set_size_request(int(ww), int(hh))
+		self.widget.queue_draw()
 
 	def expose(self, widget, event, data):
 		crctx = widget.window.cairo_create()
@@ -223,6 +240,12 @@ class extensions:
 			self.select = sel
 		return self.select.keyboard
 
+	def __str__(self):
+		str = self.main.__str__()
+		for ext in self.exts:
+			str = str + ext.__str__()
+		return str
+
 class editor:
 	def __init__(self):
 		self.exts = None
@@ -239,7 +262,6 @@ class editor:
 			self.load( self.file )
 		else:
 			self.new( None )
-			self.exts = extensions(self.kbd)
 		self.kbd.connect( self.builder.get_object("keyboard") )
 
 		self.builder.connect_signals(self)
@@ -256,16 +278,16 @@ class editor:
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
-			self.exts = extensions(self.kbd)
+			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
 		nodes = xmldoc.getElementsByTagName('extension')
-		self.exts.load(self.builder.get_object("exts"), nodes)
+		self.exts.load(nodes)
 
 	def new( self, widget ):
 		self.kbd.reset()
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
-			self.exts = extensions( self.kbd )
+			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(w, h)
 
@@ -285,6 +307,23 @@ class editor:
 			self.load( chooser.get_filename() )
 		chooser.destroy()
 
+	def save( self, widget ):
+		chooser = gtk.FileChooserDialog( title="Save layout file as", action=gtk.FILE_CHOOSER_ACTION_SAVE,
+				buttons=( gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
+		#TODO: use $PREFIX
+		chooser.set_current_folder("/usr/share/florence/layouts")
+		if self.file:
+			chooser.set_filename( self.file )
+		filter = gtk.FileFilter()
+		filter.set_name( "Layout files (*.xml)" )
+		filter.add_pattern( "*.xml" )
+		chooser.add_filter( filter )
+		response = chooser.run()
+		if response == gtk.RESPONSE_OK:
+			file = io.FileIO( chooser.get_filename(), "w" )
+			file.write( self.__str__() )
+		chooser.destroy()
+
 	def gg( self, widget ):
 		#print self.kbd
 		gtk.main_quit()
@@ -299,6 +338,19 @@ class editor:
 			self.builder.get_object("keyboard").set_size_request(int(w), int(h))
 			self.builder.get_object("keyboard").queue_draw()
 			widget.queue_draw()
+
+	def __str__(self):
+		str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		str = str + "<layout xmlns:xi=\"http://www.w3.org/2001/XInclude\" xmlns=\"http://florence.sourceforge.net\">\n"
+		str = str + "<informations>\n"
+		str = str + "\t<name>Unnamed</name>\n"
+		str = str + "\t<author>Anonymous</author>\n"
+		str = str + "\t<date>0000-00-00</date>\n"
+		str = str + "\t<florence_version>0.5.0</florence_version>\n"
+		str = str + "</informations>\n"
+		str = str + self.exts.__str__()
+		str = str + "</layout>"
+		return str
 
 ed = editor()
 gtk.main()

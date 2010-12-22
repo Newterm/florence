@@ -278,6 +278,7 @@
   </object>
   <object class="GtkAction" id="save">
     <property name="stock_id">gtk-media-record</property>
+    <signal name="activate" handler="save"/>
   </object>
   <object class="GtkAction" id="saveas">
     <property name="stock_id">gtk-save-as</property>
