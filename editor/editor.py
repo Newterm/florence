@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys
 import io
+import os
 from xml.dom import minidom
 import gtk
 import toolkit
@@ -258,8 +259,7 @@ class editor:
 
 		self.kbd = keyboard()
 		if len( sys.argv ) > 1:
-			self.file = sys.argv[1]
-			self.load( self.file )
+			self.load( sys.argv[1] )
 		else:
 			self.new( None )
 		self.kbd.connect( self.builder.get_object("keyboard") )
@@ -267,9 +267,10 @@ class editor:
 		self.builder.connect_signals(self)
 		self.builder.get_object("editor").show()
 		self.builder.get_object("extensions").show()
-		self.builder.get_object("exts").connect("button-press-event", self.selectExtension, self)
+		self.builder.get_object("extensions").connect("button-press-event", self.selectExtension, self)
 
 	def load( self, file ):
+		self.file = file
 		self.kbd.reset()
 		xmldoc = minidom.parse(file)
 		self.kbd.load(xmldoc.getElementsByTagName('keyboard')[0])
@@ -281,6 +282,8 @@ class editor:
 			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
 		nodes = xmldoc.getElementsByTagName('extension')
 		self.exts.load(nodes)
+		self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
+		self.builder.get_object("extensions").set_title(os.path.basename(self.file) + " - Florence layout extensions")
 
 	def new( self, widget ):
 		self.kbd.reset()
@@ -290,6 +293,8 @@ class editor:
 			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(w, h)
+		self.builder.get_object("editor").set_title("Unsaved layout - Florence layout editor")
+		self.builder.get_object("extensions").set_title("Unsaved layout - Florence layout extensions")
 
 	def open( self, widget ):
 		chooser = gtk.FileChooserDialog( title="Open layout file", action=gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -322,6 +327,8 @@ class editor:
 		if response == gtk.RESPONSE_OK:
 			file = io.FileIO( chooser.get_filename(), "w" )
 			file.write( self.__str__() )
+			self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
+			self.builder.get_object("exts").set_title(os.path.basename(self.file) + " - Florence layout extensions")
 		chooser.destroy()
 
 	def gg( self, widget ):
