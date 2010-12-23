@@ -206,7 +206,7 @@
             <property name="n_rows">2</property>
             <property name="n_columns">2</property>
             <child>
-              <object class="GtkVRuler" id="vruler1">
+              <object class="GtkVRuler" id="vruler">
                 <property name="visible">True</property>
                 <property name="orientation">vertical</property>
                 <property name="upper">10</property>
@@ -220,7 +220,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkHRuler" id="hruler1">
+              <object class="GtkHRuler" id="hruler">
                 <property name="visible">True</property>
                 <property name="upper">10</property>
                 <property name="position">5</property>

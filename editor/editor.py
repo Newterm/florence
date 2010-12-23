@@ -269,6 +269,11 @@ class editor:
 		self.builder.get_object("extensions").show()
 		self.builder.get_object("extensions").connect("button-press-event", self.selectExtension, self)
 
+		def onmousemove(widget, event, self):
+			self.builder.get_object("hruler").emit("motion-notify-event", event);
+			self.builder.get_object("vruler").emit("motion-notify-event", event);
+		self.builder.get_object("keyboard").connect("motion-notify-event", onmousemove, self)
+
 	def load( self, file ):
 		self.file = file
 		self.kbd.reset()
@@ -276,6 +281,7 @@ class editor:
 		self.kbd.load(xmldoc.getElementsByTagName('keyboard')[0])
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(w, h)
+		self.updateRulers()
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
@@ -293,6 +299,7 @@ class editor:
 			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(w, h)
+		self.updateRulers()
 		self.builder.get_object("editor").set_title("Unsaved layout - Florence layout editor")
 		self.builder.get_object("extensions").set_title("Unsaved layout - Florence layout extensions")
 
@@ -343,8 +350,14 @@ class editor:
 			self.kbd.connect( self.builder.get_object("keyboard") )
 			(w, h) = self.kbd.getSize()
 			self.builder.get_object("keyboard").set_size_request(int(w), int(h))
+			self.updateRulers()
 			self.builder.get_object("keyboard").queue_draw()
 			widget.queue_draw()
+
+	def updateRulers(self):
+		(w, h) = self.kbd.getSize()
+		self.builder.get_object("hruler").set_range(0, w/30.0, 0, w/30.0)
+		self.builder.get_object("vruler").set_range(0, h/30.0, 0, h/30.0)
 
 	def __str__(self):
 		str = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
