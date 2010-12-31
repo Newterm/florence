@@ -158,8 +158,8 @@
             <child>
               <object class="GtkToolButton" id="newButton">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">new</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -171,8 +171,8 @@
             <child>
               <object class="GtkToolButton" id="openButton">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">open</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -184,8 +184,8 @@
             <child>
               <object class="GtkToolButton" id="saveButton">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">save</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -282,6 +282,7 @@
   </object>
   <object class="GtkAction" id="saveas">
     <property name="stock_id">gtk-save-as</property>
+    <signal name="activate" handler="saveas"/>
   </object>
   <object class="GtkWindow" id="extensions">
     <property name="title" translatable="yes">Florence layout extensions</property>

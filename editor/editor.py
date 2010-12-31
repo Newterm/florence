@@ -320,6 +320,12 @@ class editor:
 		chooser.destroy()
 
 	def save( self, widget ):
+		if not self.file:
+			self.saveas( None )
+		file = io.FileIO( self.file, "w" )
+		file.write( self.__str__() )
+
+	def saveas( self, widget ):
 		chooser = gtk.FileChooserDialog( title="Save layout file as", action=gtk.FILE_CHOOSER_ACTION_SAVE,
 				buttons=( gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL, gtk.STOCK_SAVE, gtk.RESPONSE_OK))
 		#TODO: use $PREFIX
