@@ -204,6 +204,14 @@ void settings_window_extensions_update(gchar *layoutname)
 	gchar *id;
 	gchar *temp;
 
+	GSList *list=settings_window->extensions;
+	while (list) {
+		g_free(list->data);
+		list=list->next;
+	}
+	if (settings_window->extensions) g_slist_free(settings_window->extensions);
+	settings_window->extensions=NULL;
+
 	extensions=gtk_container_get_children(
 		GTK_CONTAINER(gtk_builder_get_object(settings_window->gtkbuilder, "flo_extensions")));
 	while (extensions) {
@@ -217,6 +225,7 @@ void settings_window_extensions_update(gchar *layoutname)
 	while ((ext=layoutreader_extension_new(layout))) {
 		new=gtk_check_button_new_with_label(ext->name);
 		id=g_strdup(ext->identifiant);
+		settings_window->extensions=g_slist_append(settings_window->extensions, id);
 		temp=settings_get_string("layout/extensions");
 		extstrs=extstr=g_strsplit(temp, ":", -1);
 		while (extstr && *extstr && strcmp(*extstr, id)) {
@@ -244,16 +253,18 @@ gchar *settings_window_combo_update(gchar *item)
 	gboolean out;
 	gchar *data=NULL;
 	GtkComboBox *combo=GTK_COMBO_BOX(gtk_builder_get_object(settings_window->gtkbuilder, item));
+	gchar *val;
 
 	/* update the layout combo box */
 	model=gtk_combo_box_get_model(combo);
 	if (gtk_tree_model_get_iter_first(model, &iter)) {
+		val=settings_get_string(settings_get_gconf_name(GTK_WIDGET(combo)));
 		do {
 			gtk_tree_model_get(model, &iter, 1, &data, -1);
-			if ((out=(!strcmp(data,
-				settings_get_string(settings_get_gconf_name(GTK_WIDGET(combo)))))))
+			if ((out=(!strcmp(data, val))))
 				gtk_combo_box_set_active_iter(combo, &iter);
 		} while ((!out) && gtk_tree_model_iter_next(model, &iter));
+		if (val) g_free(val);
 	}
 
 	return data;
@@ -318,6 +329,9 @@ void settings_window_update()
 	gchar *color;
 	guint searchidx=0;
 	struct settings_param *params=settings_defaults_get();
+#ifdef ENABLE_RAMBLE
+	gchar *val;
+#endif
 
 	while (params[searchidx].builder_name) {
 		if (strcmp(params[searchidx].builder_name, SETTINGS_NONE))
@@ -352,14 +366,16 @@ void settings_window_update()
 	}
 
 #ifdef ENABLE_RAMBLE
+	val=settings_get_string("behaviour/ramble_algo");
 	gtk_toggle_button_set_active(
 		GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 			"ramble_distance")),
-		!strcmp("distance", settings_get_string("behaviour/ramble_algo")));
+		!strcmp("distance", val));
 	gtk_toggle_button_set_active(
 		GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 			"ramble_time")),
-		!strcmp("time", settings_get_string("behaviour/ramble_algo")));
+		!strcmp("time", val));
+	if (val) g_free(val);
 #endif
 
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
@@ -659,6 +675,15 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 /* liberate memory used by settings window */
 void settings_window_free()
 {
-	if (settings_window) g_free(settings_window);
+	if (settings_window) {
+		GSList *list=settings_window->extensions;
+		while (list) {
+			g_free(list->data);
+			list=list->next;
+		}
+		if (settings_window->extensions) g_slist_free(settings_window->extensions);
+		if (settings_window->gtkbuilder) g_object_unref(settings_window->gtkbuilder);
+		if (settings_window) g_free(settings_window);
+	}
 }
 

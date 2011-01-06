@@ -294,6 +294,9 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 /* handles button press events */
 gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
+#ifdef ENABLE_RAMBLE
+	gchar *val;
+#endif
 	struct florence *florence=(struct florence *)user_data;
 	struct key *key=NULL;
 	
@@ -311,7 +314,8 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 	}
 
 #ifdef ENABLE_RAMBLE
-	if (!strcmp("ramble", settings_get_string("behaviour/input_method"))) {
+	val=settings_get_string("behaviour/input_method");
+	if (!strcmp("ramble", val)) {
 		ramble_start(florence->ramble);
 	} else {
 #endif
@@ -319,6 +323,7 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 	status_timer_stop(florence->status);
 #ifdef ENABLE_RAMBLE
 	}
+	if (val) g_free(val);
 #endif
 	return FALSE;
 }
@@ -369,7 +374,9 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 {
 #ifdef ENABLE_RAMBLE
 	enum key_hit hit;
+	gchar *algo;
 #endif
+	gchar *val;
 	struct florence *florence=(struct florence *)user_data;
 	if (status_get_moving(florence->status)) {
 		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventMotion*)event)->x_root-florence->xpos,
@@ -378,16 +385,19 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		/* Remember mouse position for moving */
 		florence->xpos=(gint)((GdkEventMotion*)event)->x;
 		florence->ypos=(gint)((GdkEventMotion*)event)->y;
+		val=settings_get_string("behaviour/input_method");
 #ifdef ENABLE_RAMBLE
 		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos, &hit);
-		if (!strcmp("ramble", settings_get_string("behaviour/input_method"))) {
+		if (!strcmp("ramble", val)) {
 			florence->view->ramble=florence->ramble;
+			algo=settings_get_string("behaviour/ramble_algo");
 			if ((hit==KEY_BORDER) &&
 				(status_focus_get(florence->status)==key) &&
-				(!strcmp("time", settings_get_string("behaviour/ramble_algo")))) {
+				(!strcmp("time", algo))) {
 				ramble_time_reset(florence->ramble);
 				status_focus_set(florence->status, NULL);
 			}
+			if (algo) g_free(algo);
 			if (ramble_started(florence->ramble) &&
 				ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window,
 					florence->xpos, florence->ypos, key)) {
@@ -403,11 +413,12 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 #endif
 		if (status_focus_get(florence->status)!=key) {
 			if (key && settings_double_get("behaviour/timer")>0.0 &&
-				(!strcmp("timer", settings_get_string("behaviour/input_method")))) {
+				(!strcmp("timer", val))) {
 				status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
 			} else status_timer_stop(florence->status);
 			status_focus_set(florence->status, key);
 		}
+		if (val) g_free(val);
 	}
 	return FALSE;
 }

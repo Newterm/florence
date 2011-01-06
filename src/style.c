@@ -252,7 +252,7 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 
 	g_object_get(settings, "gtk-font-name", &fontname, NULL);
 	fontdesc=pango_font_description_from_string(fontname?fontname:"sans 10");
-	g_free(fontname);
+	if (fontname) g_free(fontname);
 	fontfamilly=pango_font_description_get_family(fontdesc);
 	switch(pango_font_description_get_style(fontdesc)) {
 		case PANGO_STYLE_NORMAL: slant=CAIRO_FONT_SLANT_NORMAL; break;

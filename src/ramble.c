@@ -130,6 +130,7 @@ void ramble_time_reset(struct ramble *ramble)
  * returns TRUE if an event is detected. */
 gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k)
 {
+	gchar *val;
 	struct ramble_point *pt=g_malloc(sizeof(struct ramble_point));
 
 	/* Add the point to the path */
@@ -148,14 +149,16 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 	if (!k) return FALSE;
 
 	/* Gesture detection */
-	if (!strcmp("distance", settings_get_string("behaviour/ramble_algo")))
+	val=settings_get_string("behaviour/ramble_algo");
+	if (!strcmp("distance", val))
 		ramble_distance(ramble);
-	else if (!strcmp("time", settings_get_string("behaviour/ramble_algo")))
+	else if (!strcmp("time", val))
 		ramble_time(ramble);
 	else {
 		flo_warn(_("Invalid ramble algorithm selected. Using default."));
 		ramble_distance(ramble);
 	}
+	if (val) g_free(val);
 
 	ramble->started=TRUE;
 	return pt->ev;
@@ -236,8 +239,10 @@ void ramble_draw(struct ramble *ramble, cairo_t *ctx)
 void ramble_input_method_check(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct ramble *ramble=(struct ramble *)user_data;
-	if (strcmp("ramble", settings_get_string("behaviour/input_method")))
+	gchar *val=settings_get_string("behaviour/input_method");
+	if (strcmp("ramble", val))
 		ramble_reset(ramble, NULL);
+	if (val) g_free(val);
 }
 
 /* Create a ramble structure */

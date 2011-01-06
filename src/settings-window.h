@@ -30,6 +30,7 @@ struct settings_window {
 	GtkListStore *layout_list;
 	GtkListStore *input_method_list;
 	guint notify_id;
+	GSList *extensions;
 };
 
 /* returns true if settings window is open */
