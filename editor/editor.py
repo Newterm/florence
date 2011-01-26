@@ -322,8 +322,14 @@ class editor:
 	def save( self, widget ):
 		if not self.file:
 			self.saveas( None )
-		file = io.FileIO( self.file, "w" )
-		file.write( self.__str__() )
+		try:
+			file = io.FileIO( self.file, "w" )
+			file.write( self.__str__() )
+		except IOError as e:
+			dialog = gtk.MessageDialog( self.builder.get_object("editor"), gtk.DIALOG_DESTROY_WITH_PARENT,
+				gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "Unable to save file " + self.file + " : " + e.__str__() )
+			dialog.run()
+			dialog.destroy()
 
 	def saveas( self, widget ):
 		chooser = gtk.FileChooserDialog( title="Save layout file as", action=gtk.FILE_CHOOSER_ACTION_SAVE,
@@ -338,10 +344,16 @@ class editor:
 		chooser.add_filter( filter )
 		response = chooser.run()
 		if response == gtk.RESPONSE_OK:
-			file = io.FileIO( chooser.get_filename(), "w" )
-			file.write( self.__str__() )
-			self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
-			self.builder.get_object("exts").set_title(os.path.basename(self.file) + " - Florence layout extensions")
+			try:
+				file = io.FileIO( chooser.get_filename(), "w" )
+				file.write( self.__str__() )
+				self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
+				self.builder.get_object("exts").set_title(os.path.basename(self.file) + " - Florence layout extensions")
+			except IOError as e:
+				dialog = gtk.MessageDialog( self.builder.get_object("editor"), gtk.DIALOG_DESTROY_WITH_PARENT,
+					gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "Unable to save file " + chooser.get_filename() + " : " + e.__str__() )
+				dialog.run()
+				dialog.destroy()
 		chooser.destroy()
 
 	def gg( self, widget ):

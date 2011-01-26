@@ -111,6 +111,7 @@
                       <object class="GtkImageMenuItem" id="imagemenuitem9">
                         <property name="label">gtk-delete</property>
                         <property name="visible">True</property>
+                        <property name="related_action">delete</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                       </object>
@@ -158,8 +159,8 @@
             <child>
               <object class="GtkToolButton" id="newButton">
                 <property name="visible">True</property>
-                <property name="related_action">new</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">new</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -171,8 +172,8 @@
             <child>
               <object class="GtkToolButton" id="openButton">
                 <property name="visible">True</property>
-                <property name="related_action">open</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">open</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -184,8 +185,8 @@
             <child>
               <object class="GtkToolButton" id="saveButton">
                 <property name="visible">True</property>
-                <property name="related_action">save</property>
                 <property name="use_action_appearance">True</property>
+                <property name="related_action">save</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -373,5 +374,8 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAction" id="delete">
+    <property name="stock_id">gtk-delete</property>
   </object>
 </interface>
