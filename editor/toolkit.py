@@ -573,3 +573,8 @@ class scene:
 	def add(self, object):
 		self.objects.append(object)
 
+	def delete(self):
+		for obj in self.sel.objects:
+			self.objects.remove( obj );
+		self.sel.clear()
+

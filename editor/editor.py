@@ -273,6 +273,10 @@ class editor:
 			self.builder.get_object("hruler").emit("motion-notify-event", event);
 			self.builder.get_object("vruler").emit("motion-notify-event", event);
 		self.builder.get_object("keyboard").connect("motion-notify-event", onmousemove, self)
+		def onkeyrelease(widget, event, self):
+			if event.keyval in (gtk.keysyms.Delete, gtk.keysyms.KP_Delete):
+				self.delete( widget )
+		self.builder.get_object("keyboard").connect("key-release-event", onkeyrelease, self)
 
 	def load( self, file ):
 		self.file = file
@@ -355,6 +359,11 @@ class editor:
 				dialog.run()
 				dialog.destroy()
 		chooser.destroy()
+
+	def delete( self, widget ):
+		if self.kbd:
+			self.kbd.delete()
+			self.builder.get_object("editor").queue_draw()
 
 	def gg( self, widget ):
 		#print self.kbd

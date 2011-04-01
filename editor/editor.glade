@@ -159,8 +159,8 @@
             <child>
               <object class="GtkToolButton" id="newButton">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">new</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -172,8 +172,8 @@
             <child>
               <object class="GtkToolButton" id="openButton">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">open</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -185,8 +185,8 @@
             <child>
               <object class="GtkToolButton" id="saveButton">
                 <property name="visible">True</property>
-                <property name="use_action_appearance">True</property>
                 <property name="related_action">save</property>
+                <property name="use_action_appearance">True</property>
                 <property name="label" translatable="yes">toolbutton1</property>
                 <property name="use_underline">True</property>
               </object>
@@ -204,6 +204,7 @@
         <child>
           <object class="GtkTable" id="table2">
             <property name="visible">True</property>
+            <property name="can_focus">True</property>
             <property name="n_rows">2</property>
             <property name="n_columns">2</property>
             <child>
@@ -236,6 +237,9 @@
             <child>
               <object class="GtkDrawingArea" id="keyboard">
                 <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="has_focus">True</property>
+                <property name="is_focus">True</property>
               </object>
               <packing>
                 <property name="left_attach">1</property>
@@ -377,5 +381,6 @@
   </object>
   <object class="GtkAction" id="delete">
     <property name="stock_id">gtk-delete</property>
+    <signal name="activate" handler="delete"/>
   </object>
 </interface>
