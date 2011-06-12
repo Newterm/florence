@@ -162,9 +162,10 @@ void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 struct key_mod *key_mod_find(struct key *key, GdkModifierType mod)
 {
 	GSList *list=key->mods;
-	struct key_mod *keymod=(struct key_mod *)list->data;
+	struct key_mod *keymod;
 	guint score=0;
 	if (!list) flo_fatal(_("key %p has no modification."), key);
+	keymod=(struct key_mod *)list->data;
 	while (list) {
 		if (score<(mod&(((struct key_mod *)list->data)->modifier))) {
 			keymod=(struct key_mod *)list->data;

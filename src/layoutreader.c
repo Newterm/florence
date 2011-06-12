@@ -408,11 +408,15 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 	/* if file is a directory, try to find a matching file in the directory */
 	if (!lstat(layoutfile, &stat) && S_ISDIR(stat.st_mode)) {
 		tmp=g_strdup_printf("%s/florence.style", layoutfile);
-		if (lstat(tmp, &stat))
+		if (lstat(tmp, &stat)) {
+			g_free(tmp);
 			tmp=g_strdup_printf("%s/florence.xml", layoutfile);
+		}
 		if (lstat(tmp, &stat)) {
 			flo_error(_("%s is a directory and no matching file has been found inside"),
 				layoutfile);
+			g_free(tmp);
+			g_free(layout);
 			return NULL;
 		}
 		layoutfile=tmp; mustfree=TRUE;
