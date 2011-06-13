@@ -364,8 +364,25 @@ gboolean flo_timer_update(gpointer data)
 /* bring the window back to front: to be calles periodically */
 gboolean flo_to_top(gpointer data)
 {
-	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(data))) gtk_window_present(GTK_WINDOW(data));
+	struct florence *florence=data;
+	GtkWindow *window=GTK_WINDOW(view_window_get(florence->view));
+	if (!settings_get_bool("window/keep_on_top")) return FALSE;
+	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window))) gtk_window_present(window);
 	return TRUE;
+}
+/* start keeping the keyboard back to front every second */
+void flo_start_keep_on_top(struct florence *florence, gboolean keep_on_top)
+{
+	if (settings_get_bool("window/keep_on_top")) {
+		g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, florence);
+	}
+}
+
+/* Triggered by gconf when the "keep_on_top" parameter is changed. */
+void flo_set_keep_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct florence *florence=user_data;
+	flo_start_keep_on_top(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
 }
 
 /* handles mouse motion events 
@@ -544,7 +561,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	florence->view=view_new(florence->status, florence->style, florence->keyboards);
 #endif
 	status_view_set(florence->status, florence->view);
-	if (settings_get_bool("window/keep_on_top")) g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, view_window_get(florence->view));
+	flo_start_keep_on_top(florence, settings_get_bool("window/keep_on_top"));
 
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "destroy", G_CALLBACK(flo_destroy), NULL);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "motion-notify-event",
@@ -560,6 +577,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
 #endif
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
+	settings_changecb_register("window/keep_on_top", flo_set_keep_on_top, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 	settings_changecb_register("layout/file", flo_layout_reload, florence);
