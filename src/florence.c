@@ -530,7 +530,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *applet)
 #endif
 {
-  struct florence *florence=(struct florence *)g_malloc(sizeof(struct florence));
+	struct florence *florence=(struct florence *)g_malloc(sizeof(struct florence));
 	if (!florence) flo_fatal(_("Unable to allocate memory for florence"));
 	memset(florence, 0, sizeof(struct florence));
 
@@ -574,6 +574,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 		G_CALLBACK(flo_button_release_event), florence);
 #ifndef APPLET
 	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
+	if (settings_get_bool("behaviour/hide_on_start")) view_hide(florence->view);
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
 #endif
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);

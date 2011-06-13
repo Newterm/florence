@@ -43,6 +43,7 @@ static struct settings_param settings_defaults[] = {
 	{ "flo_keep_ratio", "window/keep_ratio", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_decorated", "window/decorated", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_auto_hide", "behaviour/auto_hide", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_NONE, "behaviour/hide_on_start", SETTINGS_BOOL, { .vbool = FALSE } },
 	{ "flo_move_to_widget", "behaviour/move_to_widget", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_intermediate_icon", "behaviour/intermediate_icon", SETTINGS_BOOL, { .vbool = TRUE } },
 	{ "flo_transparent", "window/transparent", SETTINGS_BOOL, { .vbool = TRUE } },
