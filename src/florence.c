@@ -573,8 +573,8 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 #ifndef APPLET
-	flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
-	if (settings_get_bool("behaviour/hide_on_start")) view_hide(florence->view);
+	if (settings_get_bool("behaviour/hide_on_start") && (!settings_get_bool("behaviour/auto_hide"))) view_hide(florence->view);
+	else flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
 #endif
 	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
