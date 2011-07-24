@@ -87,8 +87,8 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
-		style_render_svg(context, handle, settings_double_get("window/zoom")*2,
-			settings_double_get("window/zoom")*2, TRUE, NULL);
+		style_render_svg(context, handle, settings_double_get("window/scalex")*2,
+			settings_double_get("window/scaley")*2, TRUE, NULL);
 		rsvg_handle_free(handle);
 	}
 
@@ -107,8 +107,8 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 			florence->icon=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 			gtk_window_set_keep_above(florence->icon, TRUE);
 			gtk_window_set_skip_taskbar_hint(florence->icon, TRUE);
-			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_double_get("window/zoom")*2,
-				settings_double_get("window/zoom")*2);
+			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_double_get("window/scalex")*2,
+				settings_double_get("window/scaley")*2);
 			gtk_container_set_border_width(GTK_CONTAINER(florence->icon), 0);
 			gtk_window_set_decorated(florence->icon, FALSE);
 			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);

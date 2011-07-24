@@ -68,11 +68,19 @@ void view_resize (struct view *view)
 	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
 #ifndef APPLET
 	if (settings_get_bool("window/resizable")) {
-		hints.min_aspect=view->vwidth/view->vheight;
-		hints.max_aspect=view->vwidth/view->vheight;
 		gtk_window_set_resizable(view->window, TRUE);
-		gtk_window_set_geometry_hints(view->window, NULL, &hints,
-			GDK_HINT_ASPECT|GDK_HINT_WIN_GRAVITY);
+		if (settings_get_bool("window/keep_ratio")) {
+			hints.min_aspect=view->vwidth/view->vheight;
+			hints.max_aspect=view->vwidth/view->vheight;
+			gtk_window_set_geometry_hints(view->window, NULL, &hints,
+				GDK_HINT_ASPECT|GDK_HINT_WIN_GRAVITY);
+		} else {
+			gtk_window_set_geometry_hints(view->window, NULL, &hints,
+				GDK_HINT_WIN_GRAVITY);
+		}
+		/* Do not call configure signal handler */
+		if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
+		view->configure_handler=0;
 		gtk_window_resize(view->window, view->width, view->height);
 	} else {
 		gtk_window_set_geometry_hints(view->window, NULL, &hints,
@@ -110,7 +118,7 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 
 	/* browse the keyboards */
 	cairo_save(offscreen);
-	cairo_scale(offscreen, view->zoom, view->zoom);
+	cairo_scale(offscreen, view->scalex, view->scaley);
 	while (list)
 	{
 		keyboard=(struct keyboard *)list->data;
@@ -242,8 +250,8 @@ void view_set_dimensions(struct view *view)
 		}
 		list = list->next;
 	}
-	view->width=(guint)(view->vwidth*view->zoom);
-	view->height=(guint)(view->vheight*view->zoom);
+	view->width=(guint)(view->vwidth*view->scalex);
+	view->height=(guint)(view->vheight*view->scaley);
 	view_keyboards_set_pos(view, over);
 }
 
@@ -265,19 +273,19 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 		keyboard=(struct keyboard *)list->data;
 		/* TODO: record in pixel
 		 * and move that to keyboard_test */
-		kx=keyboard->xpos*view->zoom;
-		ky=keyboard->ypos*view->zoom;
-		kw=keyboard->width*view->zoom;
-		kh=keyboard->height*view->zoom;
+		kx=keyboard->xpos*view->scalex;
+		ky=keyboard->ypos*view->scaley;
+		kw=keyboard->width*view->scalex;
+		kh=keyboard->height*view->scaley;
 		if (keyboard_activated(keyboard) && (!keyboard->under) && (x>=kx) && (x<=(kx+kw)) && (y>=ky) && y<=(ky+kh)) {
 			list=NULL;
 		}
 		else list = list->next;
 	}
 #ifdef ENABLE_RAMBLE
-	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->zoom, hit);
+	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->scalex, view->scaley, hit);
 #else
-	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->zoom);
+	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->scalex, view->scaley);
 #endif
 
 	return key;
@@ -378,6 +386,18 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 }
 
+/* Triggered by gconf when the "resizable" parameter is changed.
+   makes the window (not)resizable the window. */
+void view_set_keep_ratio(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct view *view=(struct view *)user_data;
+	if (settings_get_bool("window/keep_ratio")) {
+		view->scaley=view->scalex;
+	}
+	view_resize(view);
+	view_redraw(client, xnxn_id, entry, user_data);
+}
+
 /* Redraw the key to the window */
 void view_update(struct view *view, struct key *key, gboolean statechange)
 {
@@ -391,7 +411,7 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 			gtk_widget_queue_draw(GTK_WIDGET(view->window));
 		} else {
 			rect=keyboard_key_getrect((struct keyboard *)key_get_keyboard(key),
-				key, view->zoom, status_focus_zoom_get(view->status));
+				key, status_focus_zoom_get(view->status));
 			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, rect, TRUE);
 		}
 	}
@@ -436,9 +456,18 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 
 	/* handle resize events */
 	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
-		view->zoom=(gdouble)pConfig->width/view->vwidth;
-		if (view->zoom > 200.0) flo_warn(_("Window size out of range :%d"), view->zoom);
-		else settings_double_set("window/zoom", view->zoom, FALSE);
+		if (settings_get_bool("window/keep_ratio")) {
+			view->scalex=view->scaley=(gdouble)pConfig->width/view->vwidth;
+		} else {
+			view->scalex=(gdouble)pConfig->width/view->vwidth;
+			view->scaley=(gdouble)pConfig->height/view->vheight;
+		}
+		if ((view->scalex>200.0)||(view->scaley>200.0))
+			flo_warn(_("Window size out of range :%d, %d"), view->scalex, view->scaley);
+		else {
+			settings_double_set("window/scalex", view->scalex, FALSE);
+			settings_double_set("window/scaley", view->scaley, FALSE);
+		}
 		view->width=pConfig->width; view->height=pConfig->height;
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
@@ -543,7 +572,7 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	}
 
 	cairo_save(context);
-	cairo_scale(context, view->zoom, view->zoom);
+	cairo_scale(context, view->scalex, view->scaley);
 
 	/* draw highlights (pressed keys) */
 	view_draw_list(view, context, status_list_latched(view->status));
@@ -563,6 +592,7 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	cairo_destroy(context);
 
 #ifndef APPLET
+	/* restore configure event handler. */
 	if (!view->configure_handler) 
 		view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 			G_CALLBACK(view_configure), view);
@@ -612,7 +642,7 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
-void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_scalex(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
 	struct view *view=(struct view *)user_data;
 #ifndef APPLET
@@ -620,7 +650,22 @@ void view_set_zoom(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoint
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
 #endif
-	view->zoom=gconf_value_get_float(gconf_entry_get_value(entry));
+	view->scalex=gconf_value_get_float(gconf_entry_get_value(entry));
+	if (settings_get_bool("window/keep_ratio")) view->scaley=view->scalex;
+	view_update_extensions(client, xnxn_id, entry, user_data);
+}
+
+/* Triggered by gconf when the "zoom" parameter is changed. */
+void view_set_scaley(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct view *view=(struct view *)user_data;
+#ifndef APPLET
+	/* Do not call configure signal handler */
+	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
+	view->configure_handler=0;
+#endif
+	view->scaley=gconf_value_get_float(gconf_entry_get_value(entry));
+	if (settings_get_bool("window/keep_ratio")) view->scalex=view->scaley;
 	view_update_extensions(client, xnxn_id, entry, user_data);
 }
 
@@ -669,7 +714,8 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	view->status=status;
 	view->style=style;
 	view->keyboards=keyboards;
-	view->zoom=settings_double_get("window/zoom");
+	view->scalex=settings_double_get("window/scalex");
+	view->scaley=settings_double_get("window/scaley");
 	view_set_dimensions(view);
 #ifdef APPLET
 	view->window = applet;
@@ -717,7 +763,9 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	settings_changecb_register("window/always_on_top", view_set_always_on_top, view);
 	settings_changecb_register("window/task_bar", view_set_task_bar, view);
 #endif
-	settings_changecb_register("window/zoom", view_set_zoom, view);
+	settings_changecb_register("window/keep_ratio", view_set_keep_ratio, view);
+	settings_changecb_register("window/scalex", view_set_scalex, view);
+	settings_changecb_register("window/scaley", view_set_scaley, view);
 	settings_changecb_register("window/opacity", view_set_opacity, view);
 	settings_changecb_register("layout/extensions", view_update_extensions, view);
 	settings_changecb_register("colours/key", view_redraw, view);

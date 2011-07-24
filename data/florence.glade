@@ -374,6 +374,7 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_keep_ratio">
                                 <property context="yes" name="label" translatable="yes">Keep ratio</property>
+                                <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>

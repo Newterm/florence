@@ -76,14 +76,14 @@ gboolean keyboard_activated(struct keyboard *keyboard);
 void keyboard_status_update(struct keyboard *keyboard, struct status *status);
 /* Get the key at position (x,y) */
 #ifdef ENABLE_RAMBLE
-struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z, enum key_hit *hit);
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y,
+	gdouble zx, gdouble zy, enum key_hit *hit);
 #else
-struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z);
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble zx, gdouble zy);
 #endif
 /* returns a rectangle containing the key */
 /* WARNING: not thread safe */
-GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
-	gdouble zoom, gboolean focus_zoom);
+GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key, gboolean focus_zoom);
 
 /* update the relative position of the keyboard to the view */
 void keyboard_set_pos(struct keyboard *keyboard, gdouble x, gdouble y);
@@ -97,12 +97,6 @@ void keyboard_background_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 /* draw the keyboard symbols  to cairo surface */
 void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx,
 	struct style *style, struct status *status);
-/* clear the focus key from surface */
-void keyboard_shape_clear (struct keyboard *keyboard, cairo_surface_t *surface,
-	struct style *style, struct key *key, gdouble zoom);
-/* add the focus key to surface */
-void keyboard_shape_draw (struct keyboard *keyboard, cairo_surface_t *surface,
-	struct style *style, struct key *key, gdouble zoom);
 /* draw the focus indicator on a key */
 void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble w, gdouble h,
 	struct style *style, struct key *key, struct status *status);

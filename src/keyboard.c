@@ -220,32 +220,6 @@ void keyboard_symbols_draw (struct keyboard *keyboard, cairo_t *cairoctx, struct
 	keyboard_draw(keyboard, cairoctx, style, status, STYLE_SYMBOL);
 }
 
-/* clear the focus key from surface */
-void keyboard_shape_clear (struct keyboard *keyboard, cairo_surface_t *surface,
-	struct style *style, struct key *key, gdouble zoom)
-{
-	cairo_t *cairoctx;
-	cairoctx=cairo_create(surface);
-	cairo_scale(cairoctx, zoom, zoom);
-	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-	cairo_set_operator(cairoctx, CAIRO_OPERATOR_CLEAR);
-	key_shape_draw(key, style, cairoctx);
-	cairo_destroy(cairoctx);
-}
-
-/* add the focus key to surface */
-void keyboard_shape_draw (struct keyboard *keyboard, cairo_surface_t *surface,
-	struct style *style, struct key *key, gdouble zoom)
-{
-	cairo_t *cairoctx;
-	cairoctx=cairo_create(surface);
-	cairo_scale(cairoctx, zoom, zoom);
-	cairo_translate(cairoctx, keyboard->xpos, keyboard->ypos);
-	cairo_set_operator(cairoctx, CAIRO_OPERATOR_OVER);
-	key_shape_draw(key, style, cairoctx);
-	cairo_destroy(cairoctx);
-}
-
 /* draw the focus indicator on a key */
 void keyboard_focus_draw (struct keyboard *keyboard, cairo_t *cairoctx, gdouble w, gdouble h,
 	struct style *style, struct key *key, struct status *status)
@@ -276,8 +250,7 @@ enum layout_placement keyboard_get_placement(struct keyboard *keyboard) { return
 
 /* returns a rectangle containing the key */
 /* WARNING: not thread safe */
-GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
-	gdouble zoom, gboolean focus_zoom)
+GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key, gboolean focus_zoom)
 {
 	static GdkRectangle rect;
 	gdouble x, y, w, h, xmargin, ymargin;
@@ -286,22 +259,24 @@ GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key,
 	w=key->w;
 	h=key->h;
 	if (focus_zoom) {
-		xmargin=(w*zoom*(settings_double_get("style/focus_zoom")-1.0))+5.0;
-		ymargin=(h*zoom*(settings_double_get("style/focus_zoom")-1.0))+5.0;
+		xmargin=(w*settings_double_get("window/scalex")*(settings_double_get("style/focus_zoom")-1.0))+5.0;
+		ymargin=(h*settings_double_get("window/scaley")*(settings_double_get("style/focus_zoom")-1.0))+5.0;
 	} else {
 		xmargin=5.0;
 		ymargin=5.0;
 	}
-	rect.x=(x*zoom)-xmargin; rect.y=(y*zoom)-ymargin;
-	rect.width=(w*zoom)+(xmargin*2); rect.height=(h*zoom)+(ymargin*2);
+	rect.x=(x*settings_double_get("window/scalex"))-xmargin;
+	rect.y=(y*settings_double_get("window/scaley"))-ymargin;
+	rect.width=(w*settings_double_get("window/scalex"))+(xmargin*2);
+	rect.height=(h*settings_double_get("window/scaley"))+(ymargin*2);
 	return &rect;
 }
 
 /* Get the key at position (x,y) */
 #ifdef ENABLE_RAMBLE
-struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z, enum key_hit *hit)
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble zx, gdouble zy, enum key_hit *hit)
 #else
-struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble z)
+struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble zx, gdouble zy)
 #endif
 {
 	GSList *list=keyboard->keys;
@@ -311,9 +286,9 @@ struct key *keyboard_hit_get(struct keyboard *keyboard, gint x, gint y, gdouble 
 	if (keyboard->under) return NULL;
 	while (list &&
 #ifdef ENABLE_RAMBLE
-		(!(kh=key_hit((struct key *)list->data, x, y, z))))
+		(!(kh=key_hit((struct key *)list->data, x, y, zx, zy))))
 #else
-		(!key_hit((struct key *)list->data, x, y, z)))
+		(!key_hit((struct key *)list->data, x, y, zx, zy)))
 #endif
 		list=list->next;
 #ifdef ENABLE_RAMBLE

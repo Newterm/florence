@@ -281,10 +281,15 @@ void key_release(struct key *key, struct status *status)
 					case KEY_REDUCE: view_hide(status->view); break;
 					case KEY_CONFIG: settings(); break;
 					case KEY_MOVE: status->moving=FALSE; break;
-					case KEY_BIGGER: settings_double_set("window/zoom",
-						settings_double_get("window/zoom")*1.05, TRUE); break;
-					case KEY_SMALLER: settings_double_set("window/zoom",
-						settings_double_get("window/zoom")*0.95, TRUE); break;
+					case KEY_BIGGER: settings_double_set("window/scalex",
+							settings_double_get("window/scalex")*1.05, TRUE);
+						settings_double_set("window/scaley",
+							settings_double_get("window/scaley")*1.05, TRUE);
+						break;
+					case KEY_SMALLER: settings_double_set("window/scalex",
+							settings_double_get("window/scalex")*0.95, TRUE);
+						settings_double_set("window/scaley",
+							settings_double_get("window/scaley")*0.95, TRUE);
 					case KEY_SWITCH:
 						xkeyboard_layout_change(status->xkeyboard); break;
 					case KEY_EXTEND: key_extend(action); break;
@@ -425,26 +430,26 @@ GdkModifierType key_get_modifier(struct key *key) {
 
 /* return if key is it at position */
 #ifdef ENABLE_RAMBLE
-enum key_hit key_hit(struct key *key, gint x, gint y, gdouble z)
+enum key_hit key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 #else
-gboolean key_hit(struct key *key, gint x, gint y, gdouble z)
+gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 #endif
 {
-	gint x1=z*(key->x-(key->w/2.0));
-	gint y1=z*(key->y-(key->h/2.0));
-	gint x2=x1+(z*key->w);
-	gint y2=y1+(z*key->h);
+	gint x1=zx*(key->x-(key->w/2.0));
+	gint y1=zy*(key->y-(key->h/2.0));
+	gint x2=x1+(zx*key->w);
+	gint y2=y1+(zy*key->h);
 	gboolean ret=FALSE;
 	if ((x>=x1) && (x<=x2) && (y>=y1) && (y<=y2)) {
-		ret=style_shape_test(key->shape, x-x1, y-y1, key->w*z, key->h*z);
+		ret=style_shape_test(key->shape, x-x1, y-y1, key->w*zx, key->h*zy);
 	}
 
 #ifdef ENABLE_RAMBLE
 	if (ret) {
-		x1+=z*key->w*BORDER_THRESHOLD;
-		y1+=z*key->h*BORDER_THRESHOLD;
-		x2-=z*key->w*BORDER_THRESHOLD;
-		y2-=z*key->h*BORDER_THRESHOLD;
+		x1+=zx*key->w*BORDER_THRESHOLD;
+		y1+=zy*key->h*BORDER_THRESHOLD;
+		x2-=zx*key->w*BORDER_THRESHOLD;
+		y2-=zy*key->h*BORDER_THRESHOLD;
 		if ((x>=x1) && (x<=x2) && (y>=y1) && (y<=y2)) 
 			return KEY_HIT;
 		else return KEY_BORDER;

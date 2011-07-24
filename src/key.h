@@ -135,9 +135,9 @@ GdkModifierType key_get_modifier(struct key *key);
 
 /* return if key is it at position */
 #ifdef ENABLE_RAMBLE
-enum key_hit key_hit(struct key *key, gint x, gint y, gdouble z);
+enum key_hit key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy);
 #else
-gboolean key_hit(struct key *key, gint x, gint y, gdouble z);
+gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy);
 #endif
 /* Parse string into key type enumeration */
 enum key_action_type key_action_type_get(gchar *str);

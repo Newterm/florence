@@ -87,7 +87,7 @@ void ramble_distance(struct ramble *ramble)
 	}
 	if (pt2->ev) threshold=settings_double_get("behaviour/ramble_threshold2");
 	else threshold=settings_double_get("behaviour/ramble_threshold1");
-	threshold*=settings_double_get("window/zoom");
+	threshold*=(settings_double_get("window/scalex")+settings_double_get("window/scaley"))/2.0;
 	if (d>=threshold) {
 		pt->ev=TRUE;
 		list=NULL;

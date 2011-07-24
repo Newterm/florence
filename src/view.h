@@ -52,7 +52,8 @@ struct view {
 	gboolean composite; /* true if the screen has composite extension */
 	guint width, height; /* dimensions of the view, in pixels */
 	gdouble vwidth, vheight; /* virtual dimensions of the view */
-	gdouble zoom; /* scaling factor of the window */
+	gdouble scalex; /* horizontal scaling factor of the window */
+	gdouble scaley; /* vertical scaling factor of the window */
 	GSList *keyboards; /* Main list of keyboard extensions */
 	gdouble xoffset, yoffset; /* offset of the main keyboard */
 	struct style *style; /* Do it with style */

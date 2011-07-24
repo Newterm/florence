@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # 
 #  Florence - Florence is a simple virtual keyboard for Gnome.
 #
