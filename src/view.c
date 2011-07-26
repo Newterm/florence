@@ -724,6 +724,10 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));
  	gtk_window_set_accept_focus(view->window, FALSE);
 	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool("window/task_bar"));
+#ifdef HAVE_RESIZE_GRIP
+	/* Remove resize grip since it is buggy */
+	gtk_window_set_has_resize_grip(view->window, FALSE);
+#endif
 #endif
 	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);

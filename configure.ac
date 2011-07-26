@@ -97,6 +97,8 @@ AC_CHECK_LIB([m], [tan], AC_DEFINE(HAVE_LIBM, 1, Math lib) LIBM="-lm", AC_MSG_ER
 # X11 library
 PKG_CHECK_MODULES([X11], [x11])
 
+AC_CHECK_LIB([gtk-x11-2.0], [gtk_window_set_has_resize_grip], AC_DEFINE(HAVE_RESIZE_GRIP, 1, [gtk resize grip present]), [])
+
 AC_SUBST(GNOME_DOCS_UTILS_CFLAGS)
 AC_SUBST(GNOME_DOCS_UTILS_LIBS)
 AC_SUBST(LIBNOTIFY_CFLAGS)
