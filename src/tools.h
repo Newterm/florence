@@ -21,7 +21,13 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#ifdef ENABLE_AT_SPI2
+#define AT_SPI
+#include <dbus/dbus.h>
+#include <atspi/atspi.h>
+#endif
 #ifdef ENABLE_AT_SPI
+#define AT_SPI
 #include <cspi/spi.h>
 #endif
 
@@ -33,6 +39,9 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 #ifdef ENABLE_AT_SPI
 /* position a window near the specified object */
 void tools_window_move(GtkWindow *window, Accessible *object);
+#endif
+#ifdef ENABLE_AT_SPI2
+void tools_window_move(GtkWindow *window, AtspiAccessible *object);
 #endif
 
 #if !GLIB_CHECK_VERSION(2,14,0)

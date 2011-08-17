@@ -21,9 +21,6 @@
 #include <stdio.h>
 #include <X11/XKBlib.h>
 #include <gtk/gtk.h>
-#ifdef ENABLE_AT_SPI
-#include <cspi/spi.h>
-#endif
 #include <gconf/gconf-client.h>
 #include "system.h"
 #include "trace.h"

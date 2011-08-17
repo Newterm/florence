@@ -28,7 +28,13 @@
 #include "layoutreader.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
+#ifdef ENABLE_AT_SPI2
+#define AT_SPI
+#include <dbus/dbus.h>
+#include <atspi/atspi.h>
+#endif
 #ifdef ENABLE_AT_SPI
+#define AT_SPI
 #include <cspi/spi.h>
 #endif
 
@@ -44,14 +50,18 @@ void flo_destroy (void)
 	//gtk_exit (0);
 }
 
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
 /* Called to destroy the icon */
 void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 {
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
 	if (florence->obj) {
+#ifdef ENABLE_AT_SPI2
+		g_object_unref(florence->obj);
+#else
 		Accessible_unref(florence->obj);
+#endif
 		florence->obj=NULL;
 	}
 	florence->icon=NULL;
@@ -65,7 +75,11 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 	florence->icon=NULL;
 	view_show(florence->view, florence->obj);
 	if (florence->obj) {
+#ifdef ENABLE_AT_SPI2
+		g_object_unref(florence->obj);
+#else
 		Accessible_unref(florence->obj);
+#endif
 		florence->obj=NULL;
 	}
 }
@@ -97,11 +111,19 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 
 /* Show an intermediate icon before showing the keyboard (if intermediate_icon is activated) 
  * otherwise, directly show the keyboard */
+#ifdef ENABLE_AT_SPI2
+void flo_check_show (struct florence *florence, AtspiAccessible *obj)
+#else
 void flo_check_show (struct florence *florence, Accessible *obj)
+#endif
 {
 	if (GTK_WIDGET_VISIBLE(florence->view->window)) view_hide(florence->view);
 	if (settings_get_bool("behaviour/intermediate_icon")) {
+#ifdef ENABLE_AT_SPI2
+		if (florence->obj) g_object_unref(florence->obj);
+#else
 		if (florence->obj) Accessible_unref(florence->obj);
+#endif
 		florence->obj=obj;
 		if (!florence->icon) {
 			florence->icon=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -130,15 +152,30 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 
 /* Called when a widget is focused.
  * Check if the widget is editable and show the keyboard or hide if not. */
+#ifdef ENABLE_AT_SPI2
+void flo_focus_event (const AtspiEvent *event, void *user_data)
+#else
 void flo_focus_event (const AccessibleEvent *event, void *user_data)
+#endif
 {
 	struct florence *florence=(struct florence *)user_data;
 	gboolean hide=FALSE;
 
+#ifdef ENABLE_AT_SPI2
+	if (atspi_accessible_get_role(event->source, NULL)==ATSPI_ROLE_TERMINAL ||
+		(((atspi_accessible_get_role(event->source, NULL)==ATSPI_ROLE_TEXT) ||
+		(atspi_accessible_get_role(event->source, NULL)==ATSPI_ROLE_PASSWORD_TEXT)) &&
+		 atspi_state_set_contains(atspi_accessible_get_state_set(event->source), ATSPI_STATE_EDITABLE))) {
+#else
 	if (Accessible_getRole(event->source)==SPI_ROLE_TERMINAL || Accessible_isEditableText(event->source)) {
+#endif
 		if (event->detail1) {
 			flo_check_show(florence, event->source);
+#ifdef ENABLE_AT_SPI2
+			g_object_ref(event->source);
+#else
 			Accessible_ref(event->source);
+#endif
 		} else {
 			hide=TRUE;
 		}
@@ -148,39 +185,72 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 	if (hide) {
 		view_hide(florence->view);
 		if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+#ifdef ENABLE_AT_SPI2
+		if (florence->obj) g_object_unref(florence->obj);
+#else
 		if (florence->obj) Accessible_unref(florence->obj);
+#endif
 		florence->icon=NULL;
 		florence->obj=NULL;
 	}
 }
+#endif
 
+#ifdef AT_SPI
 /* Shouldn't be used but it seems like we need to traverse accessible widgets when a new window is open to trigger
  * focus events. This is at least the case for gedit. Will need to check how this all work.
  * Can't we get a focus event when the widget is greated focussed? */
+#ifdef ENABLE_AT_SPI2
+void flo_traverse (struct florence *florence, AtspiAccessible *obj)
+#else
 void flo_traverse (struct florence *florence, Accessible *obj)
+#endif
 {
 	int n_children, i;
-	Accessible *child;
+#ifdef ENABLE_AT_SPI2
+	AtspiAccessible *child;
+	n_children=atspi_accessible_get_child_count(obj, NULL);
 
+	if (!atspi_accessible_get_table(obj)) {
+#else
+	Accessible *child;
 	n_children=Accessible_getChildCount(obj);
-	if (!Accessible_isTable(obj))
-	{
+
+	if (!Accessible_isTable(obj)) {
+#endif
 		for (i=0;i<n_children;++i)
 		{
+#ifdef ENABLE_AT_SPI2
+			child=atspi_accessible_get_child_at_index(obj, i, NULL);
+			if (atspi_state_set_contains(atspi_accessible_get_state_set(child), ATSPI_STATE_FOCUSED) &&
+				(atspi_accessible_get_role(child, NULL)==ATSPI_ROLE_TERMINAL ||
+				(((atspi_accessible_get_role(child, NULL)==ATSPI_ROLE_TEXT) ||
+				(atspi_accessible_get_role(child, NULL)==ATSPI_ROLE_PASSWORD_TEXT)) &&
+				 atspi_state_set_contains(atspi_accessible_get_state_set(child), ATSPI_STATE_EDITABLE)))) {
+#else
 			child=Accessible_getChildAtIndex(obj, i);
 			if (Accessible_isEditableText(child) &&
 				AccessibleStateSet_contains(Accessible_getStateSet(child), SPI_STATE_FOCUSED)) {
+#endif
 				flo_check_show(florence, child);
 			} else {
 				flo_traverse(florence, child);
+#ifdef ENABLE_AT_SPI2
+				if (child) g_object_unref(child);
+#else
 				if (child) Accessible_unref(child);
+#endif
 			}
 		}
 	}
 }
 
 /* Called when a window is created */
+#ifdef ENABLE_AT_SPI2
+void flo_window_create_event (const AtspiEvent *event, gpointer user_data)
+#else
 void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
+#endif
 {
 	/* For some reason, focus state change does happen after traverse 
 	 * ==> did I misunderstand? */
@@ -197,8 +267,10 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 #ifdef ENABLE_AT_SPI
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
-	int i;
 	Accessible *obj=NULL;
+#endif
+#ifdef AT_SPI
+	int i;
 #endif
 
 	if (auto_hide) {
@@ -206,11 +278,15 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 			flo_warn(_("SPI is disabled: Unable to switch auto-hide mode on."));
 			return;
 		}
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
 		view_hide(florence->view);
-		focus_listener=SPI_createAccessibleEventListener (flo_focus_event, (void*)florence);
+#ifdef ENABLE_AT_SPI2
+		atspi_event_listener_register_from_callback(flo_focus_event, (void*)florence, NULL, "object:state-changed:focused", NULL);
+		atspi_event_listener_register_from_callback(flo_window_create_event, (void*)florence, NULL, "window:activate", NULL);
+#else
+		focus_listener=SPI_createAccessibleEventListener(flo_focus_event, (void*)florence);
 		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");
-		window_listener=SPI_createAccessibleEventListener (flo_window_create_event, (void*)florence);
+		window_listener=SPI_createAccessibleEventListener(flo_window_create_event, (void*)florence);
 		SPI_registerGlobalEventListener(window_listener, "window:activate");
 		for (i=1;i<=SPI_getDesktopCount();i++) {
 			obj=SPI_getDesktop(i);
@@ -219,7 +295,17 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 				Accessible_unref(obj);
 			}
 		}
+#endif
 	} else {
+#ifdef ENABLE_AT_SPI2
+		if (!atspi_event_listener_deregister_from_callback(flo_focus_event, (void*)florence, "object:state-changed:focused", NULL)) {
+			flo_warn(_("AT SPI: problem deregistering focus listener"));
+		}
+		if (!atspi_event_listener_deregister_from_callback(flo_window_create_event, (void*)florence, "window:activate", NULL)) {
+			flo_warn(_("AT SPI: problem deregistering window listener"));
+		}
+#endif
+#ifdef ENABLE_AT_SPI
 		if (focus_listener) {
 			SPI_deregisterGlobalEventListenerAll(focus_listener);
 			AccessibleEventListener_unref(focus_listener);
@@ -230,9 +316,12 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 			AccessibleEventListener_unref(window_listener);
 			window_listener=NULL;
 		}
+#endif
 		view_show(florence->view, NULL);
 		if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+#ifdef ENABLE_AT_SPI
 		if (florence->obj) Accessible_unref(obj);
+#endif
 		florence->obj=NULL;
 		florence->icon=NULL;
 #endif
@@ -543,11 +632,14 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 #endif
 
 	florence->status=status_new(focus_back);
-#ifdef ENABLE_AT_SPI
-	if (0!=SPI_init()) {
-		if ((!gnome) || (!flo_check_at_spi())) {
+#ifdef AT_SPI
+#ifdef ENABLE_AT_SPI2
+//	florence->dbus=dbus_connection_open(getenv("DBUS_SESSION_BUS_ADDRESS"), NULL);
+	if (atspi_init()) {
+#else
+	if (SPI_init() || (!gnome) || (!flo_check_at_spi())) {
+#endif
 			status_spi_disable(florence->status);
-		}
 	}
 #else
 	flo_warn(_("AT-SPI has been disabled at compile time: auto-hide mode is disabled."));
@@ -589,8 +681,12 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 /* liberate all the memory used by florence */
 void flo_free(struct florence *florence)
 {
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
+#ifdef ENABLE_AT_SPI2
+	atspi_exit();
+#else
 	SPI_exit();
+#endif
 #endif
 #ifndef APPLET
 	trayicon_free(florence->trayicon);

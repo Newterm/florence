@@ -50,6 +50,9 @@ struct florence {
 #ifdef ENABLE_RAMBLE
 	struct ramble *ramble; /* track the path of the mouse. */
 #endif
+#ifdef ENABLE_AT_SPI2
+	AtspiAccessible *obj; /* editable object being selected */
+#endif
 #ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
 #endif

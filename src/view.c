@@ -30,8 +30,12 @@
 #include <cairo/cairo-xlib.h>
 
 /* Show the view next to the accessible object if specified. */
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
+#ifdef ENABLE_AT_SPI2
+void view_show (struct view *view, AtspiAccessible *object)
+#else
 void view_show (struct view *view, Accessible *object)
+#endif
 #else
 void view_show (struct view *view)
 #endif

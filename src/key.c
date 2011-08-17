@@ -27,7 +27,13 @@
 #include <string.h>
 #include <gdk/gdkx.h>
 #ifdef ENABLE_AT_SPI
+#define AT_SPI
+#include <dbus/dbus.h>
 #include <cspi/spi.h>
+#endif
+#ifdef ENABLE_AT_SPI2
+#define AT_SPI
+#include <atspi/atspi.h>
 #endif
 #ifdef ENABLE_XTST
 #include <X11/extensions/XTest.h>
@@ -141,8 +147,12 @@ void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 {
 #ifdef ENABLE_XTST
 	if (spi_enabled)
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
+#ifdef ENABLE_AT_SPI2
+		atspi_generate_keyboard_event(code, NULL, pressed?ATSPI_KEY_PRESS:ATSPI_KEY_RELEASE, NULL);
+#else
 		SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
+#endif
 #else
 		flo_fatal(_("Unreachable code"));
 #endif
@@ -150,8 +160,12 @@ void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 		(Display *)gdk_x11_get_default_xdisplay(),
 		code, pressed, 0);
 #else
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
+#ifdef ENABLE_AT_SPI2
+	atspi_generate_keyboard_event(code NULL, pressed?ATSPI_KEY_PRESS:ATSPI_KEY_RELEASE);
+#else
 	SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
+#endif
 #else
 #error _("Neither at-spi nor Xtest is compiled. You should compile one.")
 #endif

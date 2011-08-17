@@ -30,6 +30,12 @@
 	#include <libgnome/gnome-help.h>
 #endif
 #endif
+#ifdef ENABLE_AT_SPI
+#define AT_SPI
+#endif
+#ifdef ENABLE_AT_SPI2
+#define AT_SPI
+#endif
 
 /* Display the about dialog window */
 void trayicon_about(void)
@@ -87,7 +93,7 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 	if (GTK_WIDGET_VISIBLE(trayicon->view->window)) {
 		view_hide(trayicon->view);
 	} else { 
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
 		view_show(trayicon->view, NULL);
 #else
 		view_show(trayicon->view);

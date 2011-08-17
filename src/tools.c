@@ -56,11 +56,20 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 	return ret;
 }
 
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
 /* position a window near the specified object */
+#ifdef ENABLE_AT_SPI2
+void tools_window_move(GtkWindow *window, AtspiAccessible *object)
+#else
 void tools_window_move(GtkWindow *window, Accessible *object)
+#endif
 {
+#ifdef ENABLE_AT_SPI2
+	AtspiRect *rect;
+	AtspiComponent *component;
+#else
 	AccessibleComponent *component;
+#endif
 	long int x, y, w, h;
 	gint screen_width, screen_height;
 	gint win_width, win_height;
@@ -69,11 +78,21 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 	       flo_error(_("NULL accessible object, unable to move window"));
 	       return;
 	}
+#ifdef ENABLE_AT_SPI2
+	component=atspi_accessible_get_component(object);
+#else
 	component=Accessible_getComponent(object);
+#endif
 	if (component) {
 		screen_height=gdk_screen_get_height(gdk_screen_get_default());
 		screen_width=gdk_screen_get_width(gdk_screen_get_default());
+#ifdef ENABLE_AT_SPI2
+		rect=atspi_component_get_extents(component, ATSPI_COORD_TYPE_SCREEN, NULL);
+		x=rect->x; y=rect->y; w=rect->width; h=rect->height;
+		g_free(rect);
+#else
 		AccessibleComponent_getExtents(component, &x, &y, &w, &h, SPI_COORD_TYPE_SCREEN);
+#endif
 		gtk_window_get_size(window, &win_width, &win_height);
 		if (x<0) x=0;
 		else if (win_width>(screen_width-x)) x=screen_width-win_width;

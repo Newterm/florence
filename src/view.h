@@ -25,7 +25,13 @@
 #include "config.h"
 #include <gtk/gtk.h>
 #include <cairo.h>
+#ifdef ENABLE_AT_SPI2
+#define AT_SPI
+#include <dbus/dbus.h>
+#include <atspi/atspi.h>
+#endif
 #ifdef ENABLE_AT_SPI
+#define AT_SPI
 #include <cspi/spi.h>
 #endif
 #ifdef APPLET
@@ -79,8 +85,12 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 void view_free (struct view *view);
 
 /* Show the view next to the accessible object if specified. */
-#ifdef ENABLE_AT_SPI
+#ifdef AT_SPI
+#ifdef ENABLE_AT_SPI2
+void view_show (struct view *view, AtspiAccessible *object);
+#else
 void view_show (struct view *view, Accessible *object);
+#endif
 #else
 void view_show (struct view *view);
 #endif
