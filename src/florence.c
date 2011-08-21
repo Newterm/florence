@@ -90,6 +90,7 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	cairo_t *context;
 	RsvgHandle *handle;
 	GError *error=NULL;
+	gdouble w, h;
 
 	context=gdk_cairo_create(window->window);
 	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
@@ -97,12 +98,13 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	handle=rsvg_handle_new_from_file(ICONDIR "/florence.svg", &error);
 	if (error) flo_error(_("Error loading florence icon: %s"), error->message);
 	else {
+		w=settings_double_get("window/scalex")*2;
+		h=settings_double_get("window/scaley")*2;
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 100.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
-		style_render_svg(context, handle, settings_double_get("window/scalex")*2,
-			settings_double_get("window/scaley")*2, TRUE, NULL);
+		style_render_svg(context, handle, w, h, TRUE, NULL);
 		rsvg_handle_free(handle);
 	}
 
@@ -634,10 +636,9 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	florence->status=status_new(focus_back);
 #ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
-//	florence->dbus=dbus_connection_open(getenv("DBUS_SESSION_BUS_ADDRESS"), NULL);
 	if (atspi_init()) {
 #else
-	if (SPI_init() || (!gnome) || (!flo_check_at_spi())) {
+	if (SPI_init() && ((!gnome) || (!flo_check_at_spi()))) {
 #endif
 			status_spi_disable(florence->status);
 	}
