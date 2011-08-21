@@ -87,10 +87,11 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 /* on expose event: display florence icon */
 void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata)
 {
-	cairo_t *context;
+	cairo_t *context, *mask_context;
 	RsvgHandle *handle;
 	GError *error=NULL;
 	gdouble w, h;
+	GdkBitmap *mask=NULL;
 
 	context=gdk_cairo_create(window->window);
 	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
@@ -100,11 +101,22 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	else {
 		w=settings_double_get("window/scalex")*2;
 		h=settings_double_get("window/scaley")*2;
+		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, w, h, 1)))
+			flo_fatal(_("Unable to create mask"));
+		mask_context=gdk_cairo_create(mask);
+		cairo_set_source_rgba(mask_context, 0.0, 0.0, 0.0, 0.0);
+		cairo_set_operator(mask_context, CAIRO_OPERATOR_SOURCE);
+		cairo_paint(mask_context);
+		cairo_set_operator(mask_context, CAIRO_OPERATOR_OVER);
+		style_render_svg(mask_context, handle, w, h, TRUE, NULL);
+		gdk_window_shape_combine_mask(window->window, mask, 0, 0);
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 100.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 		style_render_svg(context, handle, w, h, TRUE, NULL);
+		cairo_destroy(mask_context);
+		g_object_unref(G_OBJECT(mask));
 		rsvg_handle_free(handle);
 	}
 
