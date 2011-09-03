@@ -174,3 +174,22 @@
 	* Close button hides the keyboard
 	* It is not possible to switch xkb group from the keyboard
 	* make without-xrecord the default
+
+2010-11-28 François Agrech <f.agrech@gmail.com>
+	* Version 0.5.0
+	* A lot of bug fixes.
+	* New ramble input method for fast input.
+	* GNOME Panel applet
+	* Under the hood design changes: redesign input handling, add layout triggers,
+		first implementation of the future layout editor, new layout extension
+		placement: over.
+
+2011-09-03 François Agrech <f.agrech@gmail.com>
+	* Version 0.5.1
+	* A lot of bug fixes.
+	* New hide_on_start configuration parameter.
+	* New keep_ratio configuration parameter.
+	* New icon.
+	* AT-SPI2 (over dbus) support.
+	* Remove resize grip on latest Gtk implementations.
+
