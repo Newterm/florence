@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-15 18:53+0100\n"
+"POT-Creation-Date: 2011-09-03 12:13+0200\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../data/florence.desktop.in.in.h:1 ../src/florence.server.in.in.h:1
-#: ../src/trayicon.c:43 ../src/trayicon.c:199
+#: ../src/trayicon.c:49 ../src/trayicon.c:213
 msgid "Florence Virtual Keyboard"
 msgstr "Clavier virtuel Florence"
 
@@ -88,7 +88,7 @@ msgstr "Propriétés"
 msgid "Florence Settings"
 msgstr "Paramètres de Florence"
 
-#: ../data/florence.glade.h:17 ../data/florence.schemas.in.h:22
+#: ../data/florence.glade.h:17 ../data/florence.schemas.in.h:25
 msgid "Input method"
 msgstr "Méthode de saisie"
 
@@ -100,11 +100,11 @@ msgstr "Icône intermédiaire"
 msgid "Keep ratio"
 msgstr "Garder les proportions"
 
-#: ../data/florence.glade.h:20 ../data/florence.schemas.in.h:23
+#: ../data/florence.glade.h:20 ../data/florence.schemas.in.h:26
 msgid "Keep the keyboard on top."
 msgstr "Garder le clavier au dessus."
 
-#: ../data/florence.glade.h:21 ../data/florence.schemas.in.h:25
+#: ../data/florence.glade.h:21 ../data/florence.schemas.in.h:28
 msgid "Keep window ratio when resizing window."
 msgstr "Garder les proportions de la fenêtre lors du redimenssionement"
 
@@ -214,7 +214,7 @@ msgstr "Seuil de temps pour le mode balade basé sur le temps."
 msgid "Transparent"
 msgstr "Transparente"
 
-#: ../data/florence.glade.h:47 ../data/florence.schemas.in.h:56
+#: ../data/florence.glade.h:47 ../data/florence.schemas.in.h:59
 msgid "Transparent mode"
 msgstr "Mode transparent"
 
@@ -324,22 +324,34 @@ msgstr ""
 "sélectionné"
 
 #: ../data/florence.schemas.in.h:20
+msgid "Florence will hide the keyboard window just after starting up."
+msgstr ""
+
+#: ../data/florence.schemas.in.h:21
 msgid "Hide the keyboard automatically when not needed"
 msgstr "Cache le clavier lorsqu'il n'est pas nécessaire"
 
-#: ../data/florence.schemas.in.h:21
+#: ../data/florence.schemas.in.h:22
+msgid "Hide the keyboard when Florence starts"
+msgstr "Cache le clavier lorsque Florence démarre"
+
+#: ../data/florence.schemas.in.h:23
 msgid "Horizontal position of the keyboard window on the screen (in pixel)."
 msgstr "Position horizontale de la fenêtre du clavier à l'écran (en pixels)."
 
 #: ../data/florence.schemas.in.h:24
+msgid "Horizontal scaling factor of the window"
+msgstr "Mise à l'échelle horizontale de la fenêtre"
+
+#: ../data/florence.schemas.in.h:27
 msgid "Keep the keyboard window on top of other windows."
 msgstr "Garder la fenêtre du clavier au dessus des autres fenêtres."
 
-#: ../data/florence.schemas.in.h:26
+#: ../data/florence.schemas.in.h:29
 msgid "List of colon-separated (:) extension names"
 msgstr "Liste des noms d'extension (séparés par des deux-points)"
 
-#: ../data/florence.schemas.in.h:27
+#: ../data/florence.schemas.in.h:30
 msgid ""
 "List of keyboard extensions names (colon-separated). extension names must be "
 "found in layout file"
@@ -347,15 +359,15 @@ msgstr ""
 "Liste des noms d'extension du clavier séparés par des deux-points (:). Les "
 "noms d'extension doivent se trouver dans le fichier layout"
 
-#: ../data/florence.schemas.in.h:28
+#: ../data/florence.schemas.in.h:31
 msgid "Make Florence appear in the task bar."
 msgstr "Fait apparaître Florence dans la barre des tâches."
 
-#: ../data/florence.schemas.in.h:29
+#: ../data/florence.schemas.in.h:32
 msgid "Mouse over color"
 msgstr "Couleur de la touche sous la souris"
 
-#: ../data/florence.schemas.in.h:30
+#: ../data/florence.schemas.in.h:33
 msgid ""
 "Move the keyboard to near the selected editable widget in auto-hide mode. "
 "Only useful when auto_hide is activated."
@@ -364,27 +376,27 @@ msgstr ""
 "auto-hide ('cacher automatiquement'). Utile seulement lorsque 'cacher "
 "automatiquement' est activé."
 
-#: ../data/florence.schemas.in.h:31
+#: ../data/florence.schemas.in.h:34
 msgid "Move the keyboard to near the selected widget"
 msgstr "Déplace the clavier vers les environs de l'objet sélectionné"
 
-#: ../data/florence.schemas.in.h:32
+#: ../data/florence.schemas.in.h:35
 msgid "Opacity of the keyboard window"
 msgstr "Opacité de la fenêtre"
 
-#: ../data/florence.schemas.in.h:33
+#: ../data/florence.schemas.in.h:36
 msgid "Outline color"
 msgstr "Couleur des bordures"
 
-#: ../data/florence.schemas.in.h:34
+#: ../data/florence.schemas.in.h:37
 msgid "Path of the layout file"
 msgstr "Chemin vers le fichier layout"
 
-#: ../data/florence.schemas.in.h:35
+#: ../data/florence.schemas.in.h:38
 msgid "Path of the layout style file"
 msgstr "Chemin vers le fichier de style du layout"
 
-#: ../data/florence.schemas.in.h:36
+#: ../data/florence.schemas.in.h:39
 msgid ""
 "Periodically (each second) bring back the keyboard to top. This is useful "
 "for window managers not supporting the always_on_top hint."
@@ -393,36 +405,36 @@ msgstr ""
 "pour les gestionnaires de fenêtre qui ne supportent pas l'option 'toujours "
 "au dessus'"
 
-#: ../data/florence.schemas.in.h:37
+#: ../data/florence.schemas.in.h:40
 msgid "Position along the X axis"
 msgstr "Position sur l'axe X"
 
-#: ../data/florence.schemas.in.h:38
+#: ../data/florence.schemas.in.h:41
 msgid "Position along the Y axis"
 msgstr "Position sur l'axe Y"
 
-#: ../data/florence.schemas.in.h:39
+#: ../data/florence.schemas.in.h:42
 msgid "Ramble algorithm"
 msgstr "Algorithme du mode balade"
 
-#: ../data/florence.schemas.in.h:40
-msgid "Scaling factor of the window"
-msgstr "Taille de la fenêtre"
-
-#: ../data/florence.schemas.in.h:41
+#: ../data/florence.schemas.in.h:43
 msgid ""
 "Set the input method. Available input methods are button, timer and ramble."
 msgstr ""
 "Sélectionne la méthode de saisie. Les méthodes disponibles sont bouton, "
 "minuteur et balade"
 
-#: ../data/florence.schemas.in.h:42
+#: ../data/florence.schemas.in.h:44
 msgid "Set the ramble algorithm used. Valid algorithms are distance and time."
 msgstr ""
 "Sélectionne l'algorithm utilisé par le mode balade. Les algorithmes valides "
 "sont distance et temps."
 
-#: ../data/florence.schemas.in.h:43
+#: ../data/florence.schemas.in.h:45
+msgid "Sets the horizontal size of the window and of the keys"
+msgstr "Détermine la taille horizontale de la fenêtre et des touches"
+
+#: ../data/florence.schemas.in.h:46
 msgid ""
 "Sets the opacity of the keyboard window. Requires window manager compositing "
 "to work"
@@ -430,18 +442,18 @@ msgstr ""
 "Détermine l'opacité de la fenêtre du clavier. Nécessite que gestionnaire de "
 "fenêtre support l'effet 'composite'"
 
-#: ../data/florence.schemas.in.h:44
-msgid "Sets the size of the window and of the keys"
-msgstr "Détermine la taille des touches et de la fenêtre"
+#: ../data/florence.schemas.in.h:47
+msgid "Sets the vertical size of the window and of the keys"
+msgstr "Détermine la taille verticale des touches et de la fenêtre"
 
-#: ../data/florence.schemas.in.h:45
+#: ../data/florence.schemas.in.h:48
 msgid ""
 "Show an intermediate icon before showing the keyboard in auto-hide mode."
 msgstr ""
 "Montre une icône intermédiaire avant d'afficher le clavier en mode "
 "disparition automatique"
 
-#: ../data/florence.schemas.in.h:46
+#: ../data/florence.schemas.in.h:49
 msgid ""
 "Show an intermediate icon when you click on an editable widget. Click on the "
 "icon to show the actual keyboard."
@@ -449,40 +461,40 @@ msgstr ""
 "Montre une icône intermédiaire lorque vous cliquez sur un objet éditable. "
 "Cliquez sur l'icône pour afficher le clavier."
 
-#: ../data/florence.schemas.in.h:47
+#: ../data/florence.schemas.in.h:50
 msgid "Text color"
 msgstr "Couleur du texte"
 
-#: ../data/florence.schemas.in.h:48
+#: ../data/florence.schemas.in.h:51
 msgid "Text outline color"
 msgstr "Couleur des bordures du texte"
 
-#: ../data/florence.schemas.in.h:49
+#: ../data/florence.schemas.in.h:52
 msgid "The keyboard window can be resized with the mouse."
 msgstr "La fenêtre du clavier peut être redimensionée avec la souris."
 
-#: ../data/florence.schemas.in.h:50
+#: ../data/florence.schemas.in.h:53
 msgid "The layout file contains the layout of the keys on the keyboard"
 msgstr "Le fichier layout contient l'arrangement des touches sur le clavier"
 
-#: ../data/florence.schemas.in.h:51
+#: ../data/florence.schemas.in.h:54
 msgid ""
 "The layout style file contains the style to draw the keys of the keyboard"
 msgstr ""
 "Le fichier de style du layout contient le style pour dessiner les touches "
 "sur le clavier"
 
-#: ../data/florence.schemas.in.h:52
+#: ../data/florence.schemas.in.h:55
 msgid "The window proportions are kept intact while resizing the window."
 msgstr ""
 "Les proportions sont conservées intactes pendant le redimensionement de la "
 "fenêtre."
 
-#: ../data/florence.schemas.in.h:53
+#: ../data/florence.schemas.in.h:56
 msgid "Time threshold for timer based ramble mode."
 msgstr "Seuil de temps pour le mode balade basé sur le temps."
 
-#: ../data/florence.schemas.in.h:54
+#: ../data/florence.schemas.in.h:57
 msgid ""
 "Time, in milliseconds, to wait when the mouse is over a key before the key "
 "is automatically pressed (when timer input method is selected)"
@@ -491,19 +503,23 @@ msgstr ""
 "avant que la touche soir automatiquement préssée (lorsque la méthode de "
 "saisie minuteur est sélectionnée)"
 
-#: ../data/florence.schemas.in.h:55
+#: ../data/florence.schemas.in.h:58
 msgid "To see the windows behind the keyboard."
 msgstr "Pour voir les fenêtres derrière le clavier."
 
-#: ../data/florence.schemas.in.h:57
+#: ../data/florence.schemas.in.h:60
 msgid "Use button to activate rambling."
 msgstr "Utilisez un bouton pour activer le mode balade."
 
-#: ../data/florence.schemas.in.h:58
+#: ../data/florence.schemas.in.h:61
 msgid "Vertical position of the keyboard window on the screen (in pixel)."
 msgstr "Position verticale de la fenêtre du clavier à l'écran (en pixel)."
 
-#: ../data/florence.schemas.in.h:59
+#: ../data/florence.schemas.in.h:62
+msgid "Vertical scaling factor of the window"
+msgstr "Mise à l'échelle verticale de la fenêtre"
+
+#: ../data/florence.schemas.in.h:63
 msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) before the key is pressed"
@@ -512,7 +528,7 @@ msgstr ""
 "que le pointeur doit parcourrir au dessus de la touche (relative à la taille "
 "de la touche) avant que la touche soit pressée"
 
-#: ../data/florence.schemas.in.h:60
+#: ../data/florence.schemas.in.h:64
 msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) for pressing a key a "
@@ -522,7 +538,7 @@ msgstr ""
 "que le pointeur doit parcourrir au dessus de la touche (relative à la taille "
 "de la touche) avant que la touche soit pressée la seconde fois et plus."
 
-#: ../data/florence.schemas.in.h:61
+#: ../data/florence.schemas.in.h:65
 msgid ""
 "When this option is set, rambling starts on button push. No button is "
 "necessary when this option is unset."
@@ -530,19 +546,19 @@ msgstr ""
 "Lorsque cette option est active, une pression du bouton déclenche le mode "
 "balade. Aucun bouton n'est nécessaire lorsque cette option est désactivée."
 
-#: ../data/florence.schemas.in.h:62
+#: ../data/florence.schemas.in.h:66
 msgid "Window has a title bar and buttons."
 msgstr "La fenêtre a une barre de titre et des boutons."
 
-#: ../data/florence.schemas.in.h:63
+#: ../data/florence.schemas.in.h:67
 msgid "key color"
 msgstr "Couleur des touches"
 
-#: ../data/florence.schemas.in.h:64
+#: ../data/florence.schemas.in.h:68
 msgid "latched color"
 msgstr "couleur des touches verrouillées temporairement"
 
-#: ../data/florence.schemas.in.h:65
+#: ../data/florence.schemas.in.h:69
 msgid "scaling factor of the focused key"
 msgstr "taille de la touche pointée"
 
@@ -723,32 +739,44 @@ msgstr "Argument invalude.\n"
 msgid "Cannot initialize bonobo.\n"
 msgstr "Echec de l'initialisation de bonobo.\n"
 
-#: ../src/florence.c:84
+#: ../src/florence.c:100
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Erreur de chargement du fichier icone: %s"
 
-#: ../src/florence.c:206
+#: ../src/florence.c:105 ../src/view.c:308
+msgid "Unable to create mask"
+msgstr "Echec de création du masque"
+
+#: ../src/florence.c:292
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr ""
 "SPI est désactivé: Impossible d'activer le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:443
+#: ../src/florence.c:316
+msgid "AT SPI: problem deregistering focus listener"
+msgstr "AT SPI: problème de désenregistrement de l'auditeur du point focal"
+
+#: ../src/florence.c:319
+msgid "AT SPI: problem deregistering window listener"
+msgstr "AT SPI: problème de désenregistrement de l'auditeur de fenêtre"
+
+#: ../src/florence.c:574
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:445
+#: ../src/florence.c:576
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:477
+#: ../src/florence.c:608
 msgid "Enable accessibility"
 msgstr "Activer l'accéssebilité"
 
-#: ../src/florence.c:489
+#: ../src/florence.c:620
 msgid ""
 "at-spi registry daemon is not running. Events will be sent with Xtest "
 "instead and several functions are disabled, including auto-hide."
@@ -757,40 +785,40 @@ msgstr ""
 "envoyés avec Xtest à la place et certaines fonctions sont désactivées, comme "
 "le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:506
+#: ../src/florence.c:637
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
-#: ../src/florence.c:510
+#: ../src/florence.c:641
 msgid "Old GLib version detected. Florence style will be working with a hack."
 msgstr ""
 "Vieille version de GLib détectée. Le style de Florence marche avec un hack."
 
-#: ../src/florence.c:525
+#: ../src/florence.c:658
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI a été désactivé au moment de la compilation: le mode 'cacher "
 "automatiquement est désactivé."
 
 #. onhide trigger
-#: ../src/keyboard.c:54
+#: ../src/keyboard.c:51
 msgid "No key associated with onhide trigger"
 msgstr "Aucune touche n'est associée avec le déclencheur onhide"
 
-#: ../src/keyboard.c:76
+#: ../src/keyboard.c:73
 #, c-format
 msgid "[new keyboard] name=%s id=%s"
 msgstr "[nouveau clavier] nom=%s id=%s"
 
-#: ../src/keyboard.c:82
+#: ../src/keyboard.c:79
 msgid "Unreachable code in keyboard_new"
 msgstr "Code impossible à atteindre dans keyboard_new"
 
-#: ../src/keyboard.c:111 ../src/keyboard.c:128
+#: ../src/keyboard.c:108 ../src/keyboard.c:125
 msgid "Unable to allocate memory for keyboard"
 msgstr "Echec d'allocation de mémoire pour le clavier"
 
-#: ../src/keyboard.c:136
+#: ../src/keyboard.c:133
 msgid "Unable to allocate memory for keyboard trigger"
 msgstr "Echec d'allocation de mémoire pour le déclendheur du clavier"
 
@@ -811,28 +839,28 @@ msgstr ""
 "Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
 "défaut %s"
 
-#: ../src/layoutreader.c:414
+#: ../src/layoutreader.c:416
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 "%s est un répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
-#: ../src/layoutreader.c:421
+#: ../src/layoutreader.c:425
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/layoutreader.c:428
+#: ../src/layoutreader.c:432
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s n'est pas validé par %s"
 
-#: ../src/layoutreader.c:429
+#: ../src/layoutreader.c:433
 #, c-format
 msgid "Using file %s"
 msgstr "Utilisation du fichier %s"
 
-#: ../src/layoutreader.c:437
+#: ../src/layoutreader.c:441
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Le fichier %s ne contient pas de donnée xml"
@@ -903,47 +931,47 @@ msgstr ""
 "Envoyez vos bugs à <f.agrech@gmail.com>\n"
 "Plus d'informations à <http://florence.sourceforge.net>.\n"
 
-#: ../src/settings.c:100
+#: ../src/settings.c:102
 #, c-format
 msgid "Settings/split: buffer overflow : %s"
 msgstr "Settings/split: dépassement de buffer: %s"
 
-#: ../src/settings.c:131 ../src/settings.c:296
+#: ../src/settings.c:133 ../src/settings.c:298
 #, c-format
 msgid "Unknown value type: %d"
 msgstr "type de valeur inconnu: %s"
 
-#: ../src/settings.c:145
+#: ../src/settings.c:147
 #, c-format
 msgid "Settings/get_full_path: buffer overflow : %s/%s"
 msgstr "Settings/get_full_path: dépassement de buffer: %s/%s"
 
-#: ../src/settings.c:164
+#: ../src/settings.c:166
 #, c-format
 msgid "Unable to open file %s"
 msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/settings.c:166
+#: ../src/settings.c:168
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Utilisation du fichier de configuration %s"
 
-#: ../src/settings.c:186
+#: ../src/settings.c:188
 #, c-format
 msgid "Unable to save configuration to %s: %s"
 msgstr "Impossible de sauvegarder la configuration dans le fichier %s: %s"
 
-#: ../src/settings.c:269
+#: ../src/settings.c:271
 #, c-format
 msgid "gconf error reading key %s"
 msgstr "erreur gconf en lisant la clé %s"
 
-#: ../src/settings.c:300
+#: ../src/settings.c:302
 #, c-format
 msgid "Error reading value for %s: %s"
 msgstr "Erreur de lecture de la valeur pour %s: %s"
 
-#: ../src/settings.c:307
+#: ../src/settings.c:309
 #, c-format
 msgid "No gconf value for %s. Using default."
 msgstr "Pas de valeur gconf pour %s. Utilisation de la valeur par défaut"
@@ -1139,11 +1167,11 @@ msgstr ""
 "et envoyez le résultat à f.agrech@gmail.com\n"
 "\n"
 
-#: ../src/trayicon.c:44
+#: ../src/trayicon.c:50
 msgid "Copyright (C) 2008, 2009, 2010 François Agrech"
 msgstr "Copyright (C) 2008, 2009, 2010 François Agrech"
 
-#: ../src/trayicon.c:48
+#: ../src/trayicon.c:54
 msgid ""
 "Copyright (C) 2008, 2009, 2010 François Agrech\n"
 "\n"
@@ -1181,40 +1209,40 @@ msgstr ""
 "(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
 "programme a une valeur légale et s'applique à ce programme."
 
-#: ../src/trayicon.c:73 ../src/trayicon.c:76 ../src/settings-window.c:398
+#: ../src/trayicon.c:79 ../src/trayicon.c:82 ../src/settings-window.c:414
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
 
-#: ../src/trayicon.c:110
+#: ../src/trayicon.c:116
 msgid "_Quit"
 msgstr "_Quitter"
 
-#: ../src/trayicon.c:116
+#: ../src/trayicon.c:122
 msgid "_Help"
 msgstr "_Aide"
 
-#: ../src/trayicon.c:122
+#: ../src/trayicon.c:128
 msgid "_About"
 msgstr "A p_ropos"
 
-#: ../src/trayicon.c:127
+#: ../src/trayicon.c:133
 msgid "_Preferences"
 msgstr "_Préférences"
 
-#: ../src/trayicon.c:157
+#: ../src/trayicon.c:163
 msgid "Florence"
 msgstr "Florence"
 
-#: ../src/trayicon.c:157
+#: ../src/trayicon.c:163
 msgid "libnotify failed to initialize"
 msgstr "Echec de l'initialisation de libnotify"
 
-#: ../src/trayicon.c:159
+#: ../src/trayicon.c:169
 msgid "Florence is running"
 msgstr "Florence est lancée"
 
-#: ../src/trayicon.c:160
+#: ../src/trayicon.c:170
 msgid ""
 "Click on Florence icon to show/hide Florence.\n"
 "Right click on it to display menu and get help."
@@ -1222,36 +1250,31 @@ msgstr ""
 "Cliquez sur l'icône de Florence pour afficher/cacher Florence.\n"
 "Cliquez droit pour afficher le menu et obtenir de l'aide."
 
-#: ../src/trayicon.c:164
+#: ../src/trayicon.c:178
 msgid "Do not show again"
 msgstr "Ne plus afficher"
 
-#: ../src/trayicon.c:167
+#: ../src/trayicon.c:181
 msgid "Notification failed"
 msgstr "Echec de notification"
 
-#: ../src/view.c:296
-msgid "Unable to create mask"
-msgstr "Echec de création du masque"
-
-#: ../src/view.c:418
+#: ../src/view.c:442
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr ""
 "Votre écran ne supporte pas le cannal alpha. la semi-transparence est "
 "désactivée"
 
-#: ../src/view.c:440
-#, c-format
-msgid "Window size out of range :%d"
-msgstr "Taille de fenêtre en dehors des limites"
+#: ../src/view.c:470
+msgid "Window size out of range :%d, %d"
+msgstr "Taille de fenêtre en dehors des limites: %d, %d"
 
-#: ../src/view.c:535
+#: ../src/view.c:568
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Opacité de la fenêtre en dehors des limites (1.0 à 100.0): %f"
 
-#: ../src/view.c:666
+#: ../src/view.c:715
 msgid "Unable to allocate memory for view"
 msgstr "Echec d'allocation de la mémoire pour la vue"
 
@@ -1260,63 +1283,63 @@ msgstr "Echec d'allocation de la mémoire pour la vue"
 msgid "Error loading icon file: %s (%s)"
 msgstr "Erreur de chargement du fichier icone: %s (%s)"
 
-#: ../src/tools.c:69
+#: ../src/tools.c:78
 msgid "NULL accessible object, unable to move window"
 msgstr "Objet accessible NULL, impossible de déplacer la fenêtre"
 
-#: ../src/tools.c:83
+#: ../src/tools.c:102
 msgid "Unable to get component from accessible object"
 msgstr "Impossible de créer le composant depuis l'objet accessible"
 
-#: ../src/tools.c:147
+#: ../src/tools.c:166
 msgid "unable to allocate memory for string"
 msgstr "Impossible d'allouer de la mémoire pour la chaîne de caractère"
 
-#: ../src/key.c:55
+#: ../src/key.c:61
 #, c-format
 msgid "Unknown action key type %s"
 msgstr "Type de touche action inconnu: %s"
 
-#: ../src/key.c:147
+#: ../src/key.c:157
 msgid "Unreachable code"
 msgstr "Code impossible à atteindre"
 
-#: ../src/key.c:167
+#: ../src/key.c:181
 #, c-format
 msgid "key %p has no modification."
 msgstr "la touche %p n'a pas de modification."
 
-#: ../src/key.c:258
+#: ../src/key.c:273
 #, c-format
 msgid "unknown action key type pressed = %d"
 msgstr "Un type de touche action inconnu a été pressé: %d"
 
-#: ../src/key.c:261
+#: ../src/key.c:276
 msgid "unknown key type pressed."
 msgstr "type de touche pressée inconnu."
 
-#: ../src/key.c:263
+#: ../src/key.c:278
 msgid "pressed key has no action associated."
 msgstr "la touche pressée n'a pas d'action associée."
 
-#: ../src/key.c:291
+#: ../src/key.c:311
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr "un type de touche action inconnu a été libéré: %d"
 
-#: ../src/key.c:294
+#: ../src/key.c:314
 msgid "unknown key type released."
 msgstr "un type de touche inconnu a été libéré."
 
-#: ../src/key.c:296
+#: ../src/key.c:316
 msgid "released key has no action associated."
 msgstr "la touche libérée n'a pas d'action associée."
 
-#: ../src/key.c:358
+#: ../src/key.c:378
 msgid "unknown key type to draw."
 msgstr "type de touche à dessiner inconnu."
 
-#: ../src/key.c:388
+#: ../src/key.c:408
 #, c-format
 msgid "unknown key type: %d"
 msgstr "type de touche inconnu: %d"
@@ -1343,29 +1366,29 @@ msgstr "Balade"
 msgid "Unable to create preview for style %s"
 msgstr "Impossible de créer un aperçu pour le style %s"
 
-#: ../src/settings-window.c:347
+#: ../src/settings-window.c:361
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "type de paramètre inconnu: %s"
 
-#: ../src/settings-window.c:394
+#: ../src/settings-window.c:410
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Impossible d'ouvrir %s: %s"
 
-#: ../src/settings-window.c:491
+#: ../src/settings-window.c:507
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings-window.c:590
+#: ../src/settings-window.c:606
 msgid "Confirm"
 msgstr "Confirmation"
 
-#: ../src/settings-window.c:591
+#: ../src/settings-window.c:607
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
-#: ../src/settings-window.c:639
+#: ../src/settings-window.c:655
 #, c-format
 msgid "Couldn't load builder file: %s"
 msgstr "Impossible d'ouvrir le fichier builder: %s"
@@ -1426,12 +1449,12 @@ msgstr ""
 msgid "No xkb group found. Using default us group"
 msgstr "Aucun groupe xkb 'a été trouvé. Utilisation du groupe par défaut: us"
 
-#: ../src/ramble.c:156
+#: ../src/ramble.c:158
 msgid "Invalid ramble algorithm selected. Using default."
 msgstr ""
 "Algorithme ramble sélectionné incorrect. Utilisation de l'algorithme par "
 "défaut."
 
-#: ../src/ramble.c:247
+#: ../src/ramble.c:252
 msgid "Unable to allocate memory for ramble"
 msgstr "Echec d'allocation de la mémoire pour le mode balade"
