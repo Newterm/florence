@@ -13,6 +13,7 @@ function doc {
 	[ -e $DATADIR/gnome/help/florence/$1/florence.xml ] ||
 		fatal "Please install florence with documentation (--with-help configure parameter)"
 	export LC_ALL=$3
+	export LANGUAGE=$3
 	php config.php > config-$1.xsl
 	php home.php > xhtml/$2.html
 	mkdir xhtml/$2
@@ -35,6 +36,7 @@ mkdir xhtml/images
 cp $DATADIR/pixmaps/florence.svg xhtml/images
 setxkbmap -print >/tmp/xkbmap.tmp
 doc C english C us
+doc ru russian ru_RU.UTF8 ru
 doc fr francais fr_FR.UTF8 fr
 cat /tmp/xkbmap.tmp | xkbcomp - $DISPLAY 2>/dev/null && rm /tmp/xkbmap.tmp
 

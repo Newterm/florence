@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-28 17:32+0100\n"
+"POT-Creation-Date: 2011-09-25 11:18+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -175,34 +175,26 @@ msgstr ""
 msgid "Last update: 5th of November, 2010"
 msgstr ""
 
-#: tools.php:37
-msgid "francais"
-msgstr ""
-
-#: tools.php:37
-msgid "En français"
-msgstr ""
-
-#: tools.php:42 tools.php:44
+#: tools.php:49 tools.php:51
 msgid "Home"
 msgstr ""
 
-#: tools.php:44 tools.php:50
+#: tools.php:51 tools.php:57
 msgid "english"
 msgstr ""
 
-#: tools.php:46
+#: tools.php:53
 msgid "Screenshots"
 msgstr ""
 
-#: tools.php:48 tools.php:50
+#: tools.php:55 tools.php:57
 msgid "Documentation"
 msgstr ""
 
-#: tools.php:52
+#: tools.php:59
 msgid "Download"
 msgstr ""
 
-#: tools.php:53
+#: tools.php:60
 msgid "News"
 msgstr ""

@@ -184,7 +184,7 @@
 		first implementation of the future layout editor, new layout extension
 		placement: over.
 
-2011-09-03 François Agrech <f.agrech@gmail.com>
+2011-09-25 François Agrech <f.agrech@gmail.com>
 	* Version 0.5.1
 	* A lot of bug fixes.
 	* New hide_on_start configuration parameter.
@@ -192,4 +192,5 @@
 	* New icon.
 	* AT-SPI2 (over dbus) support.
 	* Remove resize grip on latest Gtk implementations.
+	* Add Russian translation
 

@@ -34,7 +34,7 @@ AC_PROG_INTLTOOL([0.23])
 GETTEXT_PACKAGE=florence
 AC_SUBST(GETTEXT_PACKAGE)
 AC_DEFINE(GETTEXT_PACKAGE, ["florence"], [Package name for gettext])
-ALL_LINGUAS="fr"
+ALL_LINGUAS="fr ru"
 AM_GLIB_GNU_GETTEXT
 florencelocaledir='${prefix}/${DATADIRNAME}/locale'
 AC_SUBST(florencelocaledir)

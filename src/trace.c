@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2008, 2009, 2010, 2011 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -112,7 +112,7 @@ void flo_warn(char *s, ...)
 {
 	va_list ap;
 	va_start(ap, s);
-	trace_msg("WARNING: ", stderr, s, ap);
+	trace_msg(_("WARNING: "), stderr, s, ap);
 	va_end(ap);
 }
 
@@ -120,7 +120,7 @@ void flo_warn_distinct(char *s, ...)
 {
 	va_list ap;
 	va_start(ap, s);
-	trace_distinct_msg("WARNING: ", stderr, s, ap);
+	trace_distinct_msg(_("WARNING: "), stderr, s, ap);
 	va_end(ap);
 }
 
@@ -128,7 +128,7 @@ void flo_error(char *s, ...)
 {
 	va_list ap;
 	va_start(ap, s);
-	trace_msg("ERROR: ", stderr, s, ap);
+	trace_msg(_("ERROR: "), stderr, s, ap);
 	va_end(ap);
 }
 

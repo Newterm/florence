@@ -62,11 +62,14 @@ div.mainmenu {
 }
 div.maintitle {
 	margin: 0px 10px 0px 10px;
-	float: left;
+	position: absolute;
 }
 div.language {
 	float: right;
 	text-align: right;
+}
+div.language p {
+	display: inline;
 }
 div.menu {
 	float: right;

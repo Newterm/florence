@@ -28,13 +28,22 @@ if ($location == "Home") { $path=""; } else { $path="../"; }
 ?>
 <div class="mainmenu">
 <div class="maintitle">
-<object type="image/svg+xml" data="<?php echo $path; ?>images/florence.svg" width="32" height="32"></object>
+<div style="float: left; margin: -10px 10px 10px -10px;">
+<object type="image/svg+xml" data="<?php echo $path; ?>images/florence.svg"></object>
 </div>
-<div class="maintitle">
+<div style="float: right;">
 <h1><?php echo _("Florence Virtual Keyboard"); ?></h1>
 </div>
+</div>
 <div class="language">
-<a href="<?php echo $path._("francais"); ?>.html"><?php echo _("En français"); ?></a>
+<?php if (substr(getenv('LC_ALL'),0,2)=='fr') {
+	echo "<a href=\"${path}english.html\">English</a><p> | </p><em>Français</em><p> | </p><a href=\"${path}russian.html\">Pусский</a>";
+} else if (substr(getenv('LC_ALL'),0,2)=='ru') {
+	echo "<a href=\"${path}english.html\">English</a><p> | </p><a href=\"${path}francais.html\">Français</a><p> | </p><em>Pусский</em>";
+} else {
+	echo "<em>English</em><p> | </p><a href=\"${path}francais.html\">Français</a><p> | </p><a href=\"${path}russian.html\">Pусский</a>";
+}
+?>
 </div>
 <div class="menu">
 <ul class="menu">
