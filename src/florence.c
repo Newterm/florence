@@ -41,6 +41,9 @@
 /* bring the window back to front every seconds */
 #define FLO_TO_TOP_TIMEOUT 1000
 
+/* exit signal */
+static int flo_exit=FALSE;
+
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
@@ -131,6 +134,7 @@ void flo_check_show (struct florence *florence, AtspiAccessible *obj)
 void flo_check_show (struct florence *florence, Accessible *obj)
 #endif
 {
+	if (flo_exit || (!florence->view)) return;
 	if (GTK_WIDGET_VISIBLE(florence->view->window)) view_hide(florence->view);
 	if (settings_get_bool("behaviour/intermediate_icon")) {
 #ifdef ENABLE_AT_SPI2
@@ -694,6 +698,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 /* liberate all the memory used by florence */
 void flo_free(struct florence *florence)
 {
+	flo_exit=TRUE;
 #ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
 	atspi_exit();
@@ -703,12 +708,16 @@ void flo_free(struct florence *florence)
 #endif
 #ifndef APPLET
 	trayicon_free(florence->trayicon);
+	florence->trayicon=NULL;
 #endif
 	flo_layout_unload(florence);
 	if (florence->view) view_free(florence->view);
+	florence->view=NULL;
 	if (florence->status) status_free(florence->status);
+	florence->status=NULL;
 #ifdef ENABLE_RAMBLE
 	if (florence->ramble) ramble_free(florence->ramble);
+	florence->ramble=NULL;
 #endif
 	g_free(florence);
 	xmlCleanupParser();
