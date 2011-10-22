@@ -28,7 +28,6 @@
 #endif
 #include <gdk/gdk.h>
 #include <glib.h>
-#include "status.h"
 #include "style.h"
 #include "layoutreader.h"
 #include "xkeyboard.h"

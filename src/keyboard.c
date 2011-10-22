@@ -87,7 +87,7 @@ void keyboard_populate(struct keyboard *keyboard, struct layout *layout, gchar *
 		/* if locker is locked then update the status */
 		if (key_get_modifier(key)&data->status->xkeyboard->xkb_state.locked_mods) {
 			status_globalmod_set(data->status, key_get_modifier(key));
-			status_fsm_process(data->status, key, STATUS_PRESSED);
+			fsm_process(data->status, key, FSM_PRESSED);
 		}
 #else
 	while ((key=key_new(layout, data->style, data->status->xkeyboard, (void *)keyboard))) {

@@ -29,6 +29,7 @@
 #include <libxml/xmlsave.h>
 #include "system.h"
 #include "trace.h"
+#include "key.h"
 #include "style.h"
 #include "settings.h"
 #include "layoutreader.h"

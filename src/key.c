@@ -23,6 +23,7 @@
 #include "key.h"
 #include "trace.h"
 #include "settings.h"
+#include "status.h"
 #include <math.h>
 #include <string.h>
 #include <gdk/gdkx.h>

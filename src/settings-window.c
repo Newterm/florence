@@ -37,6 +37,7 @@
 #include "settings.h"
 #include "trace.h"
 #include "layoutreader.h"
+#include "key.h"
 #include "style.h"
 #include "tools.h"
 #include "settings-window.h"
