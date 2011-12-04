@@ -51,7 +51,8 @@ enum key_action_type {
 	KEY_SWITCH,/* Switch layout group */
 	KEY_EXTEND, /* argument = extension name */
 	KEY_UNEXTEND, /* argument = extension name */
-	KEY_UNKNOWN
+	KEY_UNKNOWN, /* unknown action */
+	KEY_NOP /* no action */
 };
 
 /* the key state, used in the FSM table */
@@ -140,6 +141,8 @@ gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy);
 #endif
 /* Parse string into key type enumeration */
 enum key_action_type key_action_type_get(gchar *str);
+/* return the action type for the key and the status globalmod */
+enum key_action_type key_get_action(struct key *key, struct status *status);
 
 #endif
 

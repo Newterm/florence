@@ -305,6 +305,7 @@ void key_release(struct key *key, struct status *status)
 							settings_double_get("window/scalex")*0.95, TRUE);
 						settings_double_set("window/scaley",
 							settings_double_get("window/scaley")*0.95, TRUE);
+						break;
 					case KEY_SWITCH:
 						xkeyboard_layout_change(status->xkeyboard); break;
 					case KEY_EXTEND: key_extend(action); break;
@@ -473,3 +474,12 @@ gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 	return ret;
 #endif
 }
+
+/* return the action type for the key and the status globalmod */
+enum key_action_type key_get_action(struct key *key, struct status *status) {
+	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
+	enum key_action_type ret=KEY_NOP;
+	if (mod->type==KEY_ACTION) ret=((struct key_action *)mod->data)->type;
+	return ret;
+}
+

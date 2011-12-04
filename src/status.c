@@ -28,6 +28,8 @@
 #define STATUS_EVENTCHECK_INTERVAL 100
 /* animate keyboard every 1/50th of a second */
 #define STATUS_ANIMATION_INTERVAL 20
+/* show visual effect for touched keys for 200ms */
+#define STATUS_TOUCH_TIMEOUT 200
 
 /* handle X11 errors */
 int status_error_handler(Display *my_dpy, XErrorEvent *event)
@@ -163,13 +165,26 @@ struct key *status_pressed_get(struct status *status) { return status->pressed; 
 void status_pressed_set(struct status *status, struct key *pressed)
 {
 	enum fsm_event event;
+	gboolean touch=(status_im_get(status)==STATUS_IM_TOUCH);
+
 	/* find actions in fsm table */
 	if (pressed) {
 		event=FSM_PRESS;
-		status->pressed=pressed;
-	} else event=FSM_RELEASE;
+		if ((!touch) || (key_get_action(pressed, status)==KEY_MOVE)) status->pressed=pressed;
+	} else {
+		event=FSM_RELEASE;
+		if (touch && !((status->pressed)&&(key_get_action(status->pressed, status)==KEY_MOVE))) {
+			if (status->pressed && (!key_get_modifier(status->pressed))) {
+				key_state_set(status->pressed, KEY_RELEASED);
+				view_update(status->view, status->pressed, FALSE);
+			}
+			status->pressed=status->focus;
+		}
+	}
+
 	fsm_process(status, status->pressed, event);
-	status->pressed=pressed;
+	if (touch) { if (status->pressed && key_get_modifier(status->pressed)) status->pressed=NULL; }
+	else status->pressed=pressed;
 }
 
 /****************************/
@@ -177,32 +192,57 @@ void status_pressed_set(struct status *status, struct key *pressed)
 /****************************/
 
 /* update the view according to the change */
-void status_update_view (struct status *status, struct key *key, enum fsm_event event)
+void status_update_view (struct status *status, struct key *key)
 {
-	/* update view */
 	if (status->view) view_update(status->view, key, key_get_modifier(key));
 }
 
-/* send the event: press or release the key */
-void status_send (struct status *status, struct key *key, enum fsm_event event)
+/* update the key */
+void status_update_key (struct status *status, struct key *key)
 {
-	flo_debug(_("sending event %d"), event);
-	switch(event) {
-		case FSM_PRESS:
-			key_press(key, status);
+	if (status->view) view_update(status->view, key, FALSE);
+}
+
+/* triggered after 200ms when a key has been touched. */
+gboolean status_touch_timer(gpointer data)
+{
+	struct status *status=(struct status *)data;
+	if (status->pressed) {
+		key_state_set(status->pressed, KEY_RELEASED);
+		view_update(status->view, status->pressed, FALSE);
+		status->pressed=NULL;
+	}
+	return FALSE;
+}
+
+/* send the press event */
+void status_press (struct status *status, struct key *key)
+{
+	flo_debug(_("sending press event"));
+	key_press(key, status);
 #ifdef ENABLE_XRECORD
-			if (key->actions)
+	if (key->actions)
 #endif
-			fsm_process(status, key, FSM_PRESSED);
-			break;
-		case FSM_RELEASE:
-			key_release(key, status);
+	fsm_process(status, key, FSM_PRESSED);
 #ifdef ENABLE_XRECORD
-			if (key->actions)
+	status_record_process(status);
 #endif
-			fsm_process(status, key, FSM_RELEASED);
-			break;
-		default: flo_warn(_("Unknown event type received: %d"), event); break;
+}
+
+/* send the press event */
+void status_release (struct status *status, struct key *key)
+{
+	flo_debug(_("sending release event"));
+	key_release(key, status);
+#ifdef ENABLE_XRECORD
+	if (key->actions)
+#endif
+	fsm_process(status, key, FSM_RELEASED);
+	if (status_im_get(status)==STATUS_IM_TOUCH && (!key_get_modifier(key))) {
+		key_state_set(key, KEY_PRESSED);
+		view_update(status->view, key, FALSE);
+		status->timer=g_timer_new();
+		g_timeout_add(STATUS_TOUCH_TIMEOUT, status_touch_timer, status);
 	}
 #ifdef ENABLE_XRECORD
 	status_record_process(status);
@@ -210,13 +250,13 @@ void status_send (struct status *status, struct key *key, enum fsm_event event)
 }
 
 /* press all latched keys */
-void status_send_latched (struct status *status, struct key *key, enum fsm_event event)
+void status_press_latched (struct status *status, struct key *key)
 {
 	struct key *latched;
 	GList *list=status->latched_keys;
 	while (list) {
 		latched=((struct key *)list->data);
-		status_send(status, latched, event);
+		status_press(status, latched);
 		list=list->next;
 	}
 	/* send "locked" modifier keys that are not lockers */
@@ -224,7 +264,28 @@ void status_send_latched (struct status *status, struct key *key, enum fsm_event
 	while (list) {
 		latched=((struct key *)list->data);
 		if (!key_is_locker(latched)) {
-			status_send(status, latched, event);
+			status_press(status, latched);
+		}
+		list=list->next;
+	}
+}
+
+/* release all latched keys */
+void status_release_latched (struct status *status, struct key *key)
+{
+	struct key *latched;
+	GList *list=status->latched_keys;
+	while (list) {
+		latched=((struct key *)list->data);
+		status_release(status, latched);
+		list=list->next;
+	}
+	/* send "locked" modifier keys that are not lockers */
+	list=status->locked_keys;
+	while (list) {
+		latched=((struct key *)list->data);
+		if (!key_is_locker(latched)) {
+			status_release(status, latched);
 		}
 		list=list->next;
 	}
@@ -248,8 +309,7 @@ void status_globalmod_calc(struct status *status)
 }
 
 /* latch or lock a key (depending on state) */
-void status_latchorlock (struct status *status, struct key *key, enum fsm_event event,
-	enum key_state state)
+void status_latchorlock (struct status *status, struct key *key, enum key_state state)
 {
 	GList **list=(state==KEY_LATCHED?&(status->latched_keys):&(status->locked_keys));
 	*list=g_list_append(*list, key);
@@ -258,8 +318,7 @@ void status_latchorlock (struct status *status, struct key *key, enum fsm_event 
 }
 
 /* unlatch or unlock a key (depending on state) */
-void status_unlatchorlock (struct status *status, struct key *key,
-	enum fsm_event event, enum key_state state)
+void status_unlatchorlock (struct status *status, struct key *key, enum key_state state)
 {
 	GList **list=(state==KEY_LATCHED?&(status->latched_keys):&(status->locked_keys));
 	GList *found;
@@ -269,19 +328,19 @@ void status_unlatchorlock (struct status *status, struct key *key,
 }
 
 /* latch a key */
-void status_latch (struct status *status, struct key *key, enum fsm_event event)
+void status_latch (struct status *status, struct key *key)
 {
-	status_latchorlock(status, key, event, KEY_LATCHED);
+	status_latchorlock(status, key, KEY_LATCHED);
 }
 
 /* unlatch a key */
-void status_unlatch (struct status *status, struct key *key, enum fsm_event event)
+void status_unlatch (struct status *status, struct key *key)
 {
-	status_unlatchorlock(status, key, event, KEY_LATCHED);
+	status_unlatchorlock(status, key, KEY_LATCHED);
 }
 
 /* unlatch all latched keys */
-void status_unlatch_all (struct status *status, struct key *key, enum fsm_event event)
+void status_unlatch_all (struct status *status, struct key *key)
 {
 	struct key *latched;
 	while(status->latched_keys) {
@@ -295,21 +354,15 @@ void status_unlatch_all (struct status *status, struct key *key, enum fsm_event 
 }
 
 /* lock a key*/
-void status_lock (struct status *status, struct key *key, enum fsm_event event)
+void status_lock (struct status *status, struct key *key)
 {
-	status_latchorlock(status, key, event, KEY_LOCKED);
+	status_latchorlock(status, key, KEY_LOCKED);
 }
 
 /* unlock a key */
-void status_unlock (struct status *status, struct key *key, enum fsm_event event)
+void status_unlock (struct status *status, struct key *key)
 {
-	status_unlatchorlock(status, key, event, KEY_LOCKED);
-}
-
-/* print a status error */
-void status_error (struct status *status, struct key *key, enum fsm_event event)
-{
-	flo_error(_("FSM state error. event=%d ; state=%d"), event, key->state);
+	status_unlatchorlock(status, key, KEY_LOCKED);
 }
 
 
@@ -422,9 +475,38 @@ struct status_focus *status_find_window(const gchar *win)
 	return focus;
 }
 
+/* Set input method */
+void status_im_set(struct status *status, gchar *val)
+{
+	if (!strcmp(val, "button")) status->input_method=STATUS_IM_BUTTON;
+	else if (!strcmp(val, "timer")) status->input_method=STATUS_IM_TIMER;
+#ifdef ENABLE_RAMBLE
+	else if (!strcmp(val, "ramble")) status->input_method=STATUS_IM_RAMBLE;
+#endif
+	else if (!strcmp(val, "touch")) status->input_method=STATUS_IM_TOUCH;
+	else {
+		status->input_method=STATUS_IM_BUTTON;
+		flo_warn(_("Unknown input method: %s ; using button input method"), val);
+	}
+}
+
+/* Called on input method change */
+void status_input_method(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	struct status *status=(struct status *)user_data;
+	status_im_set(status, (gchar *)gconf_value_get_string(gconf_entry_get_value(entry)));
+}
+
+/* get selected input method */
+enum status_input_method status_im_get(struct status *status)
+{
+	return status->input_method;
+}
+
 /* allocate memory for status */
 struct status *status_new(const gchar *focus_back)
 {
+	gchar *im;
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
 	memset(status, 0, sizeof(struct status));
@@ -436,6 +518,10 @@ struct status *status_new(const gchar *focus_back)
 	if (focus_back) {
 		status->w_focus=status_find_window(focus_back);
 	}
+	im=settings_get_string("behaviour/input_method");
+	status_im_set(status, im);
+	if (im) g_free(im);
+	settings_changecb_register("behaviour/input_method", status_input_method, status);
 	return status;
 }
 

@@ -34,16 +34,30 @@
 #include "xkeyboard.h"
 #include "fsm.h"
 
+/* input methods. */
+enum status_input_method {
+	STATUS_IM_BUTTON,
+	STATUS_IM_TIMER,
+#ifdef ENABLE_RAMBLE
+	STATUS_IM_RAMBLE,
+#endif
+	STATUS_IM_TOUCH,
+	STATUS_IM_NUM
+};
+
 /* all FSM actions */
-void status_send (struct status *, struct key *, enum fsm_event);
-void status_send_latched (struct status *, struct key *, enum fsm_event);
-void status_latch (struct status *, struct key *, enum fsm_event);
-void status_unlatch (struct status *, struct key *, enum fsm_event);
-void status_unlatch_all (struct status *, struct key *, enum fsm_event);
-void status_lock (struct status *, struct key *, enum fsm_event);
-void status_unlock (struct status *, struct key *, enum fsm_event);
-void status_update_view (struct status *, struct key *, enum fsm_event);
-void status_error (struct status *, struct key *, enum fsm_event);
+void status_press (struct status *, struct key *);
+void status_release (struct status *, struct key *);
+void status_press_latched (struct status *, struct key *);
+void status_release_latched (struct status *, struct key *);
+void status_latch (struct status *, struct key *);
+void status_unlatch (struct status *, struct key *);
+void status_unlatch_all (struct status *, struct key *);
+void status_lock (struct status *, struct key *);
+void status_unlock (struct status *, struct key *);
+void status_update_view (struct status *, struct key *);
+void status_update_key (struct status *status, struct key *key);
+void status_error (struct status *, struct key *);
 
 /* describes a window that has the focus */
 struct status_focus {
@@ -70,6 +84,7 @@ struct status {
 	struct key *keys[256]; /* keys by keycode. used to look up for key. */
 #endif
 	struct xkeyboard *xkeyboard; /* data from xkb */
+	enum status_input_method input_method; /* selected input method */
 };
 
 #ifdef ENABLE_XRECORD
@@ -140,6 +155,9 @@ struct status_focus *status_w_focus_get(struct status *status);
 /* zoom the focused key */
 void status_focus_zoom_set(struct status *status, gboolean focus_zoom);
 gboolean status_focus_zoom_get(struct status *status);
+
+/* get selected input method */
+enum status_input_method status_im_get(struct status *status);
 
 #endif
 
