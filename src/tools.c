@@ -73,6 +73,7 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 	long int x, y, w, h;
 	gint screen_width, screen_height;
 	gint win_width, win_height;
+	GdkRectangle win_rect;
 
 	if (!object) {
 	       flo_error(_("NULL accessible object, unable to move window"));
@@ -93,9 +94,16 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 #else
 		AccessibleComponent_getExtents(component, &x, &y, &w, &h, SPI_COORD_TYPE_SCREEN);
 #endif
-		gtk_window_get_size(window, &win_width, &win_height);
+		if (gtk_window_get_decorated(window)) {
+			gdk_window_get_frame_extents(GTK_WIDGET(window)->window, &win_rect);
+			win_width=win_rect.width;
+			win_height=win_rect.height;
+		} else gtk_window_get_size(window, &win_width, &win_height);
+
 		if (x<0) x=0;
 		else if (win_width>(screen_width-x)) x=screen_width-win_width;
+
+		gtk_window_set_gravity(window, GDK_GRAVITY_NORTH_WEST);
 		if (win_height<(screen_height-y-h)) gtk_window_move(window, x, y+h);
 		else if (y>win_height) gtk_window_move(window, x, y-win_height);
 		else gtk_window_move(window, x, screen_height-win_height);

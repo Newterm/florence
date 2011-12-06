@@ -262,7 +262,7 @@ void key_press(struct key *key, struct status *status)
 			case KEY_ACTION:
 				action=(struct key_action *)mod->data;
 				switch (action->type) {
-					case KEY_MOVE: status->moving=TRUE; break;
+					case KEY_MOVE: status_set_moving(status, TRUE); break;
 					case KEY_BIGGER:
 					case KEY_SMALLER:
 					case KEY_CONFIG:
@@ -295,7 +295,7 @@ void key_release(struct key *key, struct status *status)
 					case KEY_CLOSE: gtk_main_quit(); break;
 					case KEY_REDUCE: view_hide(status->view); break;
 					case KEY_CONFIG: settings(); break;
-					case KEY_MOVE: status->moving=FALSE; break;
+					case KEY_MOVE: status_set_moving(status, FALSE); break;
 					case KEY_BIGGER: settings_double_set("window/scalex",
 							settings_double_get("window/scalex")*1.05, TRUE);
 						settings_double_set("window/scaley",

@@ -41,6 +41,11 @@ void view_show (struct view *view)
 #endif
 {
 #ifndef APPLET
+	gtk_widget_show(GTK_WIDGET(view->window));
+	/* Some winwow managers forget it */
+	gtk_window_set_keep_above(view->window, TRUE);
+	/* reposition the window */
+	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 #ifdef ENABLE_AT_SPI
 	/* positionnement intelligent */
 	if (settings_get_bool("behaviour/auto_hide") && 
@@ -48,11 +53,6 @@ void view_show (struct view *view)
 		tools_window_move(view->window, object);
 	}
 #endif
-	gtk_widget_show(GTK_WIDGET(view->window));
-	/* Some winwow managers forget it */
-	gtk_window_set_keep_above(view->window, TRUE);
-	/* reposition the window */
-	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
 #else
 	gtk_widget_show(GTK_WIDGET(view->window));
 #endif

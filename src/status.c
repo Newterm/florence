@@ -586,7 +586,14 @@ void status_spi_disable(struct status *status)
 gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
 
 /* set/get moving status */
-void status_set_moving(struct status *status, gboolean moving) { status->moving=moving; }
+void status_set_moving(struct status *status, gboolean moving)
+{
+	status->moving=moving;
+#ifndef APPLET
+	if (moving) gtk_window_set_gravity(view_window_get(status->view), GDK_GRAVITY_STATIC);
+	else gtk_window_set_gravity(view_window_get(status->view), GDK_GRAVITY_NORTH_WEST);
+#endif
+}
 gboolean status_get_moving(struct status *status) { return status->moving; }
 
 /* zoom the focused key */
