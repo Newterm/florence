@@ -130,7 +130,9 @@ void settings_window_input_method_populate()
 		GTK_CELL_LAYOUT(gtk_builder_get_object(settings_window->gtkbuilder, "input_method_combo")),
 		cell, "text", 0, NULL);
 	gtk_list_store_append(settings_window->input_method_list, &iter);
-	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Button"), 1, "button", -1);
+	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Mouse"), 1, "button", -1);
+	gtk_list_store_append(settings_window->input_method_list, &iter);
+	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Touch screen"), 1, "touch", -1);
 	gtk_list_store_append(settings_window->input_method_list, &iter);
 	gtk_list_store_set(settings_window->input_method_list, &iter, 0, _("Timer"), 1, "timer", -1);
 #ifdef ENABLE_RAMBLE
