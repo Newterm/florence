@@ -391,10 +391,21 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 	if (status_get_moving(florence->status)) {
 		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventCrossing*)event)->x_root-florence->xpos,
 			(gint)((GdkEventCrossing*)event)->y_root-florence->ypos);
-	} else status_pressed_set(florence->status, NULL);
+	} else {
+		status_pressed_set(florence->status, NULL);
+		status_press_latched(florence->status, NULL);
+	}
 #ifdef ENABLE_RAMBLE
 	if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
 #endif
+	return FALSE;
+}
+
+/* handles mouse enter events */
+gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
+{
+	struct florence *florence=(struct florence *)user_data;
+	status_release_latched(florence->status, NULL);
 	return FALSE;
 }
 
@@ -669,6 +680,8 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 		G_CALLBACK(flo_mouse_move_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "leave-notify-event",
 		G_CALLBACK(flo_mouse_leave_event), florence);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "enter-notify-event",
+		G_CALLBACK(flo_mouse_enter_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-press-event",
 		G_CALLBACK(flo_button_press_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
