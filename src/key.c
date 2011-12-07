@@ -29,12 +29,12 @@
 #include <gdk/gdkx.h>
 #ifdef ENABLE_AT_SPI
 #define AT_SPI
-#include <dbus/dbus.h>
 #include <cspi/spi.h>
 #endif
 #ifdef ENABLE_AT_SPI2
 #define AT_SPI
 #include <atspi/atspi.h>
+#include <dbus/dbus.h>
 #endif
 #ifdef ENABLE_XTST
 #include <X11/extensions/XTest.h>

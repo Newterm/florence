@@ -173,7 +173,7 @@ GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpoi
 				xkeyboard_layout(xkeyboard);
 			}
 			flo_debug(_("XKB state notify event received"));
-			xkeyboard->event_cb(xkeyboard->user_data);
+			if (xkeyboard->user_data) xkeyboard->event_cb(xkeyboard->user_data);
 		}
 	}
 	return GDK_FILTER_CONTINUE;
