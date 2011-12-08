@@ -35,6 +35,7 @@ struct fsm_change {
 void fsm_error (struct status *status, struct key *key);
 static fsm_action fsm_action_p[]={ status_press, NULL };
 static fsm_action fsm_action_r[]={ status_release, NULL };
+static fsm_action fsm_action_pu[]={ status_press, status_update_key, NULL };
 static fsm_action fsm_action_ru[]={ status_release, status_update_key, NULL };
 static fsm_action fsm_action_la[]={ status_latch, status_update_view, NULL };
 static fsm_action fsm_action_ulalo[]={ status_unlatch, status_lock, status_update_view, NULL };
@@ -114,7 +115,7 @@ static struct fsm_change fsm_touch[FSM_EVENT_NUM][FSM_KEY_TYPE_NUM][KEY_STATE_NU
 	{ /* PRESS event */
 		{ /* NORMAL key */
 			{ KEY_PRESSED, NULL }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_plap }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_action_pu }, /* RELEASED state */
 		}, { /* MODIFIER key */
 			{ KEY_RELEASED, NULL }, /* PRESSED state */
 			{ KEY_LATCHED, NULL }, /* RELEASED state */

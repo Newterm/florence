@@ -212,6 +212,7 @@ gboolean status_touch_timer(gpointer data)
 		view_update(status->view, status->pressed, FALSE);
 		status->pressed=NULL;
 	}
+	status->touch_id=0;
 	return FALSE;
 }
 
@@ -241,8 +242,8 @@ void status_release (struct status *status, struct key *key)
 	if (status_im_get(status)==STATUS_IM_TOUCH && (!key_get_modifier(key))) {
 		key_state_set(key, KEY_PRESSED);
 		view_update(status->view, key, FALSE);
-		status->timer=g_timer_new();
-		g_timeout_add(STATUS_TOUCH_TIMEOUT, status_touch_timer, status);
+		if (status->touch_id) g_source_remove(status->touch_id);
+		status->touch_id=g_timeout_add(STATUS_TOUCH_TIMEOUT, status_touch_timer, status);
 	}
 #ifdef ENABLE_XRECORD
 	status_record_process(status);

@@ -70,6 +70,7 @@ struct status {
 	struct key *focus; /* focus key (key located under the pointer) or NULL */
 	gboolean focus_zoom; /* zoom the focused key (if composite screen or mask is disabled) */
 	GTimer *timer; /* auto click timer: amount of time the mouse has been over the current key */
+	guint touch_id; /* GSourceId of the touch timeout */
 	struct key *pressed; /* key currently being pressed or NULL */
 	GList *latched_keys; /* the list of all currently latched keys */
 	GList *locked_keys; /* the list of all currently locked keys */
