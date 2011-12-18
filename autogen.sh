@@ -23,17 +23,13 @@ export COMMAND="$0"
 
 # exit on missing command
 function fatal {
-	echo "You need the $1 command to execute $COMMAND. Please install $1 and rerun $COMMAND"
+	echo "You need the $1 command to execute $COMMAND. Please install $1 and rerun $COMMAND" >&2
 	exit 1
 }
 
 # check for the presence of a command
 function check {
-	which $1 >/dev/null 2>&1
-	if [ $? -ne 0 ]
-	then
-		fatal $1
-	fi
+	hash $1 2>&- >/dev/null || fatal $1
 }
 
 # execute action and print a message
@@ -47,13 +43,6 @@ function run {
 OLD_PWD=$PWD
 cd ${0%%/*}
 
-# check for which
-which which >/dev/null 2>&1
-if [ $? -ne 0 ]
-then
-	fatal which
-fi
-
 run aclocal
 CURR_PWD=$PWD
 run gnome-doc-prepare --force
@@ -63,8 +52,18 @@ run autoheader
 run automake --foreign
 run autoconf
 cd data
-run trang -I rnc -O rng florence.rnc relaxng/florence.rng
-run trang -I rnc -O rng style.rnc relaxng/style.rng
+hash trang 2>&- >/dev/null
+if [ $? -eq 0 ]; then
+	run trang -I rnc -O rng florence.rnc relaxng/florence.rng
+	run trang -I rnc -O rng style.rnc relaxng/style.rng
+else
+	test "x$TRANGPATH" = "x" && echo "Please set the TRANGPATH environment variable." >&2 && exit 1
+	[ ! -e $TRANGPATH/trang.jar ] &&
+		echo "You need trang to execute $COMMAND. please install trand and rerun $COMMAND." &&
+		exit 1
+	run java -jar $TRANGPATH/trang.jar -I rnc -O rng florence.rnc relaxng/florence.rng
+	run java -jar $TRANGPATH/trang.jar -I rnc -O rng style.rnc relaxng/style.rng
+fi
 
 # go back
 cd $OLD_PWD
