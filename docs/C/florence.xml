@@ -76,7 +76,7 @@ A Timer-based auto-click input method is available to help disabled people havin
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel \</userinput>
 <prompt>></prompt> <userinput>at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \</userinput>
-<prompt>></prompt> <userinput>libnotify libxtst6-devel intltool libpanel-applet-2-devel</userinput>
+<prompt>></prompt> <userinput>libnotify-devel libxtst6-devel intltool libpanel-applet-2-devel</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>
