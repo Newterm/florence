@@ -25,8 +25,9 @@ class key(toolkit.object):
 		return str
 
 class keyboard(toolkit.scene):
-	def __init__(self, node=None):
+	def __init__(self, builder, node=None):
 		toolkit.scene.__init__( self )
+		self.builder = builder
 		if node:
 			self.load( node )
 		else:
@@ -83,6 +84,38 @@ class keyboard(toolkit.scene):
 			self.add( key(code, x, y, w, h) )
 		self.setgrid( 30, 30 );
 
+	def update(self, code, extents):
+		(x, y, w, h) = extents
+		self.builder.get_object("code").set_value(int(code))
+		self.builder.get_object("xpos").set_value(x / 30.0)
+		self.builder.get_object("ypos").set_value(y / 30.0)
+		self.builder.get_object("width").set_value(w / 30.0)
+		self.builder.get_object("height").set_value(h / 30.0)
+		self.builder.get_object("code").set_sensitive(True)
+		self.builder.get_object("xpos").set_sensitive(True)
+		self.builder.get_object("ypos").set_sensitive(True)
+		self.builder.get_object("width").set_sensitive(True)
+		self.builder.get_object("height").set_sensitive(True)
+
+	def clearSel(self):
+		toolkit.scene.clearSel(self)
+		self.builder.get_object("code").set_value(0.0)
+		self.builder.get_object("xpos").set_value(0.0)
+		self.builder.get_object("ypos").set_value(0.0)
+		self.builder.get_object("width").set_value(2.0)
+		self.builder.get_object("height").set_value(2.0)
+		self.builder.get_object("code").set_sensitive(False)
+		self.builder.get_object("xpos").set_sensitive(False)
+		self.builder.get_object("ypos").set_sensitive(False)
+		self.builder.get_object("width").set_sensitive(False)
+		self.builder.get_object("height").set_sensitive(False)
+
+	def objectMenu(self, event):
+		self.builder.get_object("keyMenu").popup(None, None, None, event.button, event.time) 
+
+	def sceneMenu(self, event):
+		self.builder.get_object("keyboardMenu").popup(None, None, None, event.button, event.time) 
+
 	def __str__(self):
 		str = "<keyboard>\n"
 		str = str + "<width>%s</width>\n" %  ( self.w/30.0 )
@@ -93,7 +126,8 @@ class keyboard(toolkit.scene):
 		return str
 
 class extension:
-	def __init__(self):
+	def __init__(self, builder):
+		self.builder = builder
 		self.x = 0
 		self.y = 0
 
@@ -105,7 +139,7 @@ class extension:
 		self.placement = node.getElementsByTagName('placement')[0].firstChild.data
 		self.name = node.getElementsByTagName('name')[0].firstChild.data
 		self.id = node.getElementsByTagName('identifiant')[0].firstChild.data
-		self.keyboard = keyboard( node.getElementsByTagName('keyboard')[0] )
+		self.keyboard = keyboard( self.builder, node.getElementsByTagName('keyboard')[0] )
 
 	def getSize(self):
 		(w, h) = self.keyboard.getSize()
@@ -146,14 +180,15 @@ class extension:
 		return str
 
 class extensions:
-	def __init__(self, keyboard, widget):
-		self.widget = widget
+	def __init__(self, builder, keyboard ):
+		self.builder = builder
+		self.widget = builder.get_object("exts")
 		self.reset( keyboard )
-		widget.connect("expose-event", self.expose, self)
+		self.widget.connect("expose-event", self.expose, self)
 
 	def reset(self, keyboard):
 		self.exts = []
-		self.main = extension()
+		self.main = extension( self.builder )
 		self.main.loadmain( keyboard )
 		(w, h) = self.main.getSize()
 		self.widget.set_size_request(int(w), int(h))
@@ -162,7 +197,7 @@ class extensions:
 	def load(self, nodes):
 		self.exts = []
 		for ext in nodes:
-			local = extension()
+			local = extension( self.builder )
 			local.load( ext )
 			self.exts.append( local )
 
@@ -256,19 +291,18 @@ class editor:
 
 		self.builder.get_object("keyboard").set_events(gtk.gdk.ALL_EVENTS_MASK)
 		self.builder.get_object("exts").set_events(gtk.gdk.ALL_EVENTS_MASK)
+		self.builder.get_object("editor").show()
+		self.builder.get_object("extensions").show()
+		self.builder.get_object("properties").show()
 
-		self.kbd = keyboard()
+		self.kbd = keyboard( self.builder )
 		if len( sys.argv ) > 1:
 			self.load( sys.argv[1] )
 		else:
 			self.new( None )
 		self.kbd.connect( self.builder.get_object("keyboard") )
 
-		self.builder.connect_signals(self)
-		self.builder.get_object("editor").show()
-		self.builder.get_object("extensions").show()
 		self.builder.get_object("extensions").connect("button-press-event", self.selectExtension, self)
-
 		def onmousemove(widget, event, self):
 			self.builder.get_object("hruler").emit("motion-notify-event", event);
 			self.builder.get_object("vruler").emit("motion-notify-event", event);
@@ -277,6 +311,7 @@ class editor:
 			if event.keyval in (gtk.keysyms.Delete, gtk.keysyms.KP_Delete):
 				self.delete( widget )
 		self.builder.get_object("keyboard").connect("key-release-event", onkeyrelease, self)
+		self.builder.connect_signals(self)
 
 	def load( self, file ):
 		self.file = file
@@ -289,7 +324,7 @@ class editor:
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
-			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
+			self.exts = extensions( self.builder, self.kbd )
 		nodes = xmldoc.getElementsByTagName('extension')
 		self.exts.load(nodes)
 		self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
@@ -300,7 +335,7 @@ class editor:
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
-			self.exts = extensions( self.kbd, self.builder.get_object("exts") )
+			self.exts = extensions( self.builder, self.kbd )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(w, h)
 		self.updateRulers()
@@ -360,10 +395,44 @@ class editor:
 				dialog.destroy()
 		chooser.destroy()
 
+	def add( self, widget ):
+		if self.kbd:
+			x, y = self.builder.get_object("keyboard").get_pointer()
+			self.kbd.add( key("0", x / 30.0, y / 30.0, 2.0, 2.0) )
+			ev = gtk.gdk.Event(gtk.gdk.BUTTON_PRESS)
+			ev.x = float(x)
+			ev.y = float(y)
+			self.kbd.press(self.builder.get_object("keyboard"), ev, None)
+	
 	def delete( self, widget ):
 		if self.kbd:
 			self.kbd.delete()
 			self.builder.get_object("editor").queue_draw()
+	
+	def code_changed( self, widget ):
+		if self.kbd:
+			self.kbd.setName( self.builder.get_object("keyboard"),
+				str(int(self.builder.get_object("code").get_value())) )
+
+	def width_changed( self, widget ):
+		if self.kbd:
+			self.kbd.setWidth( self.builder.get_object("keyboard"),
+				30 * self.builder.get_object("width").get_value() )
+
+	def height_changed( self, widget ):
+		if self.kbd:
+			self.kbd.setHeight( self.builder.get_object("keyboard"),
+				30 * self.builder.get_object("height").get_value() )
+
+	def xpos_changed( self, widget ):
+		if self.kbd:
+			self.kbd.setXpos( self.builder.get_object("keyboard"),
+				30 * self.builder.get_object("xpos").get_value() )
+
+	def ypos_changed( self, widget ):
+		if self.kbd:
+			self.kbd.setYpos( self.builder.get_object("keyboard"),
+				30 * self.builder.get_object("ypos").get_value() )
 
 	def gg( self, widget ):
 		#print self.kbd

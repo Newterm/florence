@@ -30,6 +30,29 @@ class object:
 	def get_extents(self):
 		return self.x, self.y, self.w, self.h
 
+	def get_extents_after_hug(self):
+		# 173
+		# 506
+		# 284
+		if self.anchor == 1:
+			return self.x + self.dx, self.y + self.dy, self.w - self.dx, self.h - self.dy
+		elif self.anchor == 2:
+			return self.x + self.dx, self.y, self.w - self.dx, self.h + self.dy
+		elif self.anchor == 3:
+			return self.x, self.y + self.dy, self.w + self.dx, self.h - self.dy
+		elif self.anchor == 4:
+			return self.x, self.y, self.w + self.dx, self.h + self.dy
+		elif self.anchor == 5:
+			return self.x + self.dx, self.y, self.w - self.dx, self.h
+		elif self.anchor == 6:
+			return self.x, self.y, self.w + self.dx, self.h
+		elif self.anchor == 7:
+			return self.x, self.y + self.dy, self.w, self.h - self.dy
+		elif self.anchor == 8:
+			return self.x, self.y, self.w, self.h + self.dy
+		else:
+			return self.x + self.dx, self.y + self.dy, self.w, self.h
+
 	def inbox(self, x, y, bx, by, bw=10, bh=10):
 		x2 = bx + bw
 		y2 = by + bh
@@ -243,27 +266,8 @@ class object:
 			pat = cairo.SurfacePattern(tmp)
 			pat.set_extend(cairo.EXTEND_REPEAT)
 			crctx.set_source(pat)
-			# 173
-			# 506
-			# 284
-			if self.anchor == 1:
-				crctx.rectangle(self.x + self.dx + 2, self.y + self.dy + 2, self.w - 4 - self.dx, self.h - 4 - self.dy)
-			elif self.anchor == 2:
-				crctx.rectangle(self.x + self.dx + 2, self.y, self.w - 4 - self.dx, self.h - 4 + self.dy)
-			elif self.anchor == 3:
-				crctx.rectangle(self.x + 2, self.y + self.dy + 2, self.w - 4 + self.dx, self.h - 4 - self.dy)
-			elif self.anchor == 4:
-				crctx.rectangle(self.x + 2, self.y + 2, self.w - 4 + self.dx, self.h - 4 + self.dy)
-			elif self.anchor == 5:
-				crctx.rectangle(self.x + self.dx + 2, self.y + 2, self.w - 4 - self.dx, self.h - 4)
-			elif self.anchor == 6:
-				crctx.rectangle(self.x + 2, self.y + 2, self.w - 4 + self.dx, self.h - 4)
-			elif self.anchor == 7:
-				crctx.rectangle(self.x + 2, self.y + 2 + self.dy, self.w - 4, self.h - 4 - self.dy)
-			elif self.anchor == 8:
-				crctx.rectangle(self.x + 2, self.y + 2, self.w - 4, self.h - 4 + self.dy)
-			else:
-				crctx.rectangle(self.x + self.dx + 2, self.y + self.dy + 2, self.w - 4, self.h - 4)
+			x, y, w, h = self.get_extents_after_hug()
+			crctx.rectangle(x + 2, y + 2, w - 4, h - 4)
 			crctx.set_line_width(4)
 			crctx.stroke()
 
@@ -384,6 +388,32 @@ class selection:
 		for sel in self.objects:
 			sel.hug(dx, dy)
 
+	def setWidth(self, width):
+		if self.active:
+			delta = width - self.active.w
+			for sel in self.objects:
+				if sel.w+delta > 0:
+					sel.w += delta
+
+	def setHeight(self, height):
+		if self.active:
+			delta = height - self.active.h
+			for sel in self.objects:
+				if sel.h+delta > 0:
+					sel.h += delta
+
+	def setXpos(self, xpos):
+		if self.active:
+			delta = xpos - self.active.x
+			for sel in self.objects:
+				sel.x += delta
+
+	def setYpos(self, ypos):
+		if self.active:
+			delta = ypos - self.active.y
+			for sel in self.objects:
+				sel.y += delta
+
 class scene:
 	def totop(self, obj):
 		self.top = obj
@@ -404,11 +434,11 @@ class scene:
 		if self.top:
 			dirty = self.sel.motion(event.x, event.y)
 			# edge hugging
+			dx = 0
+			dy = 0
 			self.sel.hug( 0, 0 )
 			if event.state & gtk.gdk.MOD1_MASK:
 				x, y, w, h = self.sel.get_extents()
-				dx = 0
-				dy = 0
 
 				# align to grid
 				if self.gridx != 0:
@@ -455,6 +485,9 @@ class scene:
 				elif ( dy == 0 ) and ( ( y+h ) >= ( self.h - 10 ) ):
 					dy = self.h - h - y
 				self.sel.hug( dx, dy )
+
+			self.sel.active = self.top
+			self.update(self.top.name, self.top.get_extents_after_hug())
 		else:
 			if self.moving:
 				self.xsel2 = event.x
@@ -479,25 +512,40 @@ class scene:
 
 	def press(self, widget, event, data):
 		hit = False
+
 		for obj in self.objects.__reversed__():
 			if obj.hit(event.x, event.y):
 				hit = True
 				if event.state & gtk.gdk.CONTROL_MASK:
 					self.sel.toggle(obj)
+					if obj.status == 0:
+						self.clearSel()
 				else:
 					self.totop(obj)
 					self.sel.select(obj)
 				if obj.status == 2:
 					self.sel.press(obj, event.x, event.y)
+					self.sel.active = obj
+					self.update(obj.name, obj.get_extents_after_hug())
 				break
-		if not hit:
+
+		if not hit and event.button == 1:
 			if not (event.state & gtk.gdk.CONTROL_MASK):
 				self.sel.clear()
+				self.clearSel()
 			self.moving = True
 			self.xsel = event.x
 			self.ysel = event.y
 			self.xsel2 = event.x
 			self.ysel2 = event.y
+
+		if event.button == 3:
+			self.release(widget, event, data)
+			if hit:
+				self.objectMenu(event)
+			else:
+				self.sceneMenu(event)
+
 		widget.queue_draw()
 
 	def release(self, widget, event, data):
@@ -577,4 +625,29 @@ class scene:
 		for obj in self.sel.objects:
 			self.objects.remove( obj );
 		self.sel.clear()
+		self.clearSel()
+
+	def setName(self, widget, name):
+		if self.sel.active:
+			self.sel.active.name = name
+			widget.queue_draw()
+
+	def setWidth(self, widget, width):
+		self.sel.setWidth(width)
+		widget.queue_draw()
+
+	def setHeight(self, widget, height):
+		self.sel.setHeight(height)
+		widget.queue_draw()
+
+	def setXpos(self, widget, xpos):
+		self.sel.setXpos(xpos)
+		widget.queue_draw()
+
+	def setYpos(self, widget, ypos):
+		self.sel.setYpos(ypos)
+		widget.queue_draw()
+
+	def clearSel(self):
+		self.sel.active = None
 
