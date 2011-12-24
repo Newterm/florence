@@ -33,19 +33,19 @@ struct fsm_change {
 
 /* FSM action groups */
 void fsm_error (struct status *status, struct key *key);
-static fsm_action fsm_action_p[]={ status_press, NULL };
-static fsm_action fsm_action_r[]={ status_release, NULL };
-static fsm_action fsm_action_pu[]={ status_press, status_update_key, NULL };
-static fsm_action fsm_action_ru[]={ status_release, status_update_key, NULL };
-static fsm_action fsm_action_la[]={ status_latch, status_update_view, NULL };
-static fsm_action fsm_action_ulalo[]={ status_unlatch, status_lock, status_update_view, NULL };
-static fsm_action fsm_action_lo[]={ status_lock, status_update_view, NULL };
-static fsm_action fsm_action_ul[]={ status_unlock, status_update_view, NULL };
-static fsm_action fsm_action_plap[]={ status_press_latched, status_press, NULL };
-static fsm_action fsm_action_rrlaulaa[]={ status_release, status_release_latched, status_unlatch_all, status_update_view, NULL };
-static fsm_action fsm_action_uv[]={ status_update_view, NULL };
-static fsm_action fsm_action_u[]={ status_update_key, NULL };
-static fsm_action fsm_action_err[]={ fsm_error, NULL };
+static fsm_action fsm_press[]={ status_press, NULL };
+static fsm_action fsm_release[]={ status_release, NULL };
+static fsm_action fsm_press_update[]={ status_press, status_update_key, NULL };
+static fsm_action fsm_release_update[]={ status_release, status_update_key, NULL };
+static fsm_action fsm_latch[]={ status_latch, status_update_view, NULL };
+static fsm_action fsm_unlatch_lock[]={ status_unlatch, status_lock, status_update_view, NULL };
+static fsm_action fsm_lock[]={ status_lock, status_update_view, NULL };
+static fsm_action fsm_unlock[]={ status_unlock, status_update_view, NULL };
+static fsm_action fsm_press_latched[]={ status_press_latched, status_press, NULL };
+static fsm_action fsm_release_latched[]={ status_release, status_release_latched, status_unlatch_all, status_update_view, NULL };
+static fsm_action fsm_update[]={ status_update_view, NULL };
+static fsm_action fsm_update_key[]={ status_update_key, NULL };
+static fsm_action fsm_display_error[]={ fsm_error, NULL };
 
 /* Mouse FSM - This FSM is adapted for Mouse input. Simulate sticky keys.
  * changes by type, event and state */
@@ -53,56 +53,56 @@ static struct fsm_change fsm_mouse[FSM_EVENT_NUM][FSM_KEY_TYPE_NUM][KEY_STATE_NU
 	{ /* PRESS event */
 		{ /* NORMAL key */
 			{ KEY_PRESSED, NULL }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_plap }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_press_latched }, /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_LATCHED, fsm_action_la }, /* RELEASED state */
-			{ KEY_RELEASED, fsm_action_ul }, /* LOCKED state */
-			{ KEY_LOCKED, fsm_action_ulalo } /* LATHCED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_LATCHED, fsm_latch }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_unlock }, /* LOCKED state */
+			{ KEY_LOCKED, fsm_unlatch_lock } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_p }, /* RELEASED state */
-			{ KEY_LOCKED, fsm_action_p } /* LOCKED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_press }, /* RELEASED state */
+			{ KEY_LOCKED, fsm_press } /* LOCKED state */
 		}
 	}, { /* RELEASE event */
 		{ /* NORMAL key */
-			{ KEY_PRESSED, fsm_action_rrlaulaa }, /* PRESSED state */
+			{ KEY_PRESSED, fsm_release_latched }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_u }, /* RELEASED state */
-			{ KEY_LOCKED, fsm_action_u }, /* LOCKED state */
-			{ KEY_LATCHED, fsm_action_u } /* LATHCED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_update_key }, /* RELEASED state */
+			{ KEY_LOCKED, fsm_update_key }, /* LOCKED state */
+			{ KEY_LATCHED, fsm_update_key } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_ru }, /* RELEASED state */
-			{ KEY_LOCKED, fsm_action_ru } /* LOCKED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_release_update }, /* RELEASED state */
+			{ KEY_LOCKED, fsm_release_update } /* LOCKED state */
 		}
 	}, { /* PRESSED event */
 		{ /* NORMAL key */
 			{ KEY_PRESSED, NULL }, /* PRESSED state */
-			{ KEY_PRESSED, fsm_action_uv } /* RELEASED state */
+			{ KEY_PRESSED, fsm_update_key } /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_PRESSED, fsm_action_err }, /* PRESSED state */
+			{ KEY_PRESSED, fsm_display_error }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
 			{ KEY_LOCKED, NULL }, /* LOCKED state */
 			{ KEY_LATCHED, NULL } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_LOCKED, fsm_action_lo }, /* RELEASED state */
-			{ KEY_RELEASED, fsm_action_ul } /* LOCKED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_LOCKED, fsm_lock }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_unlock } /* LOCKED state */
 		}
 	}, { /* RELEASED event */
 		{ /* NORMAL key */
-			{ KEY_RELEASED, fsm_action_uv }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_update_key }, /* PRESSED state */
 			{ KEY_RELEASED, NULL } /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
 			{ KEY_LOCKED, NULL }, /* LOCKED state */
 			{ KEY_LATCHED, NULL } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
 			{ KEY_LOCKED, NULL } /* LOCKED state */
 		}
@@ -115,7 +115,7 @@ static struct fsm_change fsm_touch[FSM_EVENT_NUM][FSM_KEY_TYPE_NUM][KEY_STATE_NU
 	{ /* PRESS event */
 		{ /* NORMAL key */
 			{ KEY_PRESSED, NULL }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_pu }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_press_update }, /* RELEASED state */
 		}, { /* MODIFIER key */
 			{ KEY_RELEASED, NULL }, /* PRESSED state */
 			{ KEY_LATCHED, NULL }, /* RELEASED state */
@@ -128,45 +128,45 @@ static struct fsm_change fsm_touch[FSM_EVENT_NUM][FSM_KEY_TYPE_NUM][KEY_STATE_NU
 		}
 	}, { /* RELEASE event */
 		{ /* NORMAL key */
-			{ KEY_PRESSED, fsm_action_rrlaulaa }, /* PRESSED state */
-			{ KEY_PRESSED, fsm_action_plap }, /* RELEASED state */
+			{ KEY_PRESSED, fsm_release_latched }, /* PRESSED state */
+			{ KEY_PRESSED, fsm_press_latched }, /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_LATCHED, fsm_action_la }, /* RELEASED state */
-			{ KEY_RELEASED, fsm_action_ul }, /* LOCKED state */
-			{ KEY_LOCKED, fsm_action_ulalo } /* LATHCED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_LATCHED, fsm_latch }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_unlock }, /* LOCKED state */
+			{ KEY_LOCKED, fsm_unlatch_lock } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_p }, /* RELEASED state */
-			{ KEY_LOCKED, fsm_action_p } /* LOCKED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_press }, /* RELEASED state */
+			{ KEY_LOCKED, fsm_press } /* LOCKED state */
 		}
 	}, { /* PRESSED event */
 		{ /* NORMAL key */
-			{ KEY_PRESSED, fsm_action_rrlaulaa }, /* PRESSED state */
+			{ KEY_PRESSED, fsm_release_latched }, /* PRESSED state */
 			{ KEY_PRESSED, NULL } /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_PRESSED, fsm_action_err }, /* PRESSED state */
+			{ KEY_PRESSED, fsm_display_error }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
 			{ KEY_LOCKED, NULL }, /* LOCKED state */
 			{ KEY_LATCHED, NULL } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_r }, /* RELEASED state */
-			{ KEY_LOCKED, fsm_action_r } /* LOCKED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_release }, /* RELEASED state */
+			{ KEY_LOCKED, fsm_release } /* LOCKED state */
 		}
 	}, { /* RELEASED event */
 		{ /* NORMAL key */
-			{ KEY_RELEASED, fsm_action_uv }, /* PRESSED state */
-			{ KEY_RELEASED, fsm_action_err } /* RELEASED state */
+			{ KEY_RELEASED, fsm_update }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_display_error } /* RELEASED state */
 		}, { /* MODIFIER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
 			{ KEY_RELEASED, NULL }, /* RELEASED state */
 			{ KEY_LOCKED, NULL }, /* LOCKED state */
 			{ KEY_LATCHED, NULL } /* LATHCED state */
 		}, { /* LOCKER key */
-			{ KEY_RELEASED, fsm_action_err }, /* PRESSED state */
-			{ KEY_LOCKED, fsm_action_lo }, /* RELEASED state */
-			{ KEY_RELEASED, fsm_action_ul } /* LOCKED state */
+			{ KEY_RELEASED, fsm_display_error }, /* PRESSED state */
+			{ KEY_LOCKED, fsm_lock }, /* RELEASED state */
+			{ KEY_RELEASED, fsm_unlock } /* LOCKED state */
 		}
 	}
 };

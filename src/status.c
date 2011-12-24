@@ -134,9 +134,15 @@ void status_keys_add(struct status *status, GSList *keys)
 {
 	GSList *list=keys;
 	struct key *key;
+	struct key_mod *mod;
+	struct key_code *code;
 	while (list) {
-		key=(struct key *)list->data;
-		if (((struct key_mod *)key->mods)->type==KEY_CODE) status->keys[key->code]=key;
+		key=(struct key *)(list->data);
+		mod=(struct key_mod *)(key->mods->data);
+		if (mod->type==KEY_CODE) {
+			code=(struct key_code *)(mod->data);
+			status->keys[code->code]=key;
+		}
 		list=list->next;
 	}
 }
@@ -145,8 +151,9 @@ void status_keys_add(struct status *status, GSList *keys)
 /* update the focus key */
 void status_focus_set(struct status *status, struct key *focus)
 {
-	view_update(status->view, status->focus, FALSE);
+	struct key *old = status->focus;
 	status->focus=focus;
+	view_update(status->view, old, FALSE);
 	view_update(status->view, status->focus, FALSE);
 }
 
@@ -200,6 +207,10 @@ void status_update_view (struct status *status, struct key *key)
 /* update the key */
 void status_update_key (struct status *status, struct key *key)
 {
+	if (!key_get_modifier(key)) {
+		if (key->state==KEY_PRESSED) status->pressed=key;
+		else if ((key->state==KEY_RELEASED) && (status->pressed==key)) status->pressed=NULL;
+	}
 	if (status->view) view_update(status->view, key, FALSE);
 }
 
@@ -222,7 +233,7 @@ void status_press (struct status *status, struct key *key)
 	flo_debug(_("sending press event"));
 	key_press(key, status);
 #ifdef ENABLE_XRECORD
-	if (key->actions)
+	if (((struct key_mod *)(key->mods->data))->type==KEY_ACTION)
 #endif
 	fsm_process(status, key, FSM_PRESSED);
 #ifdef ENABLE_XRECORD
@@ -230,13 +241,13 @@ void status_press (struct status *status, struct key *key)
 #endif
 }
 
-/* send the press event */
+/* send the release event */
 void status_release (struct status *status, struct key *key)
 {
 	flo_debug(_("sending release event"));
 	key_release(key, status);
 #ifdef ENABLE_XRECORD
-	if (key->actions)
+	if (((struct key_mod *)(key->mods->data))->type==KEY_ACTION)
 #endif
 	fsm_process(status, key, FSM_RELEASED);
 	if (status_im_get(status)==STATUS_IM_TOUCH && (!key_get_modifier(key))) {
