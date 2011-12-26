@@ -383,7 +383,7 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 	if ((!strcmp(key, "key")) || (!strcmp(key, "outline"))) {
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
-	} else if (!strcmp(key, "label")) {
+	} else if (!strncmp(key, "label", 5)) {
 		if (view->symbols) cairo_surface_destroy(view->symbols);
 		view->symbols=NULL;
 	}
