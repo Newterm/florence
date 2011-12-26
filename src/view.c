@@ -531,6 +531,7 @@ void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 {
 	cairo_t *context;
+	enum key_state state;
 
 	/* Don't need to redraw several times in one chunk */
 	if (!view->redraw) view->redraw=gdk_region_new();
@@ -583,8 +584,13 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	view_draw_list(view, context, status_list_locked(view->status));
 
 	/* pressed and focused key */
-	view_draw_key(view, context, status_pressed_get(view->status));
 	view_draw_key(view, context, status_focus_get(view->status));
+	if (status_pressed_get(view->status)) {
+		state=status_pressed_get(view->status)->state;
+		key_state_set(status_pressed_get(view->status), KEY_PRESSED);
+		view_draw_key(view, context, status_pressed_get(view->status));
+		key_state_set(status_pressed_get(view->status), state);
+	}
 
 	cairo_restore(context);
 
