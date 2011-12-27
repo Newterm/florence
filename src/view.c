@@ -455,7 +455,9 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	if (!GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window))) return;
 
 	/* record window position */
-	gtk_window_get_position(GTK_WINDOW(view->window), &xpos, &ypos);
+	if (gtk_window_get_decorated(GTK_WINDOW(view->window)))
+		gtk_window_get_position(GTK_WINDOW(view->window), &xpos, &ypos);
+	else { xpos=pConfig->x; ypos=pConfig->y; }
 	if (settings_get_int("window/xpos")!=xpos)
 		settings_set_int("window/xpos", xpos);
 	if (settings_get_int("window/ypos")!=ypos)
