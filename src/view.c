@@ -451,12 +451,15 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view *view)
 {
 	GdkRectangle rect;
+	gint xpos, ypos;
+	if (!GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window))) return;
 
 	/* record window position */
-	if (settings_get_int("window/xpos")!=pConfig->x)
-		settings_set_int("window/xpos", pConfig->x);
-	if (settings_get_int("window/ypos")!=pConfig->y)
-		settings_set_int("window/ypos", pConfig->y);
+	gtk_window_get_position(GTK_WINDOW(view->window), &xpos, &ypos);
+	if (settings_get_int("window/xpos")!=xpos)
+		settings_set_int("window/xpos", xpos);
+	if (settings_get_int("window/ypos")!=ypos)
+		settings_set_int("window/ypos", ypos);
 
 	/* handle resize events */
 	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
