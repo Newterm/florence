@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-25 11:18+0200\n"
+"POT-Creation-Date: 2011-12-26 18:14+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,7 +26,7 @@ msgid ""
 "florence keyboard, linux keyboard"
 msgstr ""
 
-#: home.php:11 home.php:30 tools.php:34
+#: home.php:11 home.php:30 tools.php:35
 msgid "Florence Virtual Keyboard"
 msgstr ""
 
@@ -175,26 +175,26 @@ msgstr ""
 msgid "Last update: 5th of November, 2010"
 msgstr ""
 
-#: tools.php:49 tools.php:51
+#: tools.php:51 tools.php:53
 msgid "Home"
 msgstr ""
 
-#: tools.php:51 tools.php:57
+#: tools.php:53 tools.php:59
 msgid "english"
 msgstr ""
 
-#: tools.php:53
+#: tools.php:55
 msgid "Screenshots"
 msgstr ""
 
-#: tools.php:55 tools.php:57
+#: tools.php:57 tools.php:59
 msgid "Documentation"
 msgstr ""
 
-#: tools.php:59
+#: tools.php:61
 msgid "Download"
 msgstr ""
 
-#: tools.php:60
+#: tools.php:62
 msgid "News"
 msgstr ""

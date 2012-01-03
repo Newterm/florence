@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.4.7\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-09-03 12:13+0200\n"
+"POT-Creation-Date: 2011-12-26 18:14+0100\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -739,44 +739,44 @@ msgstr "Argument invalude.\n"
 msgid "Cannot initialize bonobo.\n"
 msgstr "Echec de l'initialisation de bonobo.\n"
 
-#: ../src/florence.c:100
+#: ../src/florence.c:103
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Erreur de chargement du fichier icone: %s"
 
-#: ../src/florence.c:105 ../src/view.c:308
+#: ../src/florence.c:108 ../src/view.c:308
 msgid "Unable to create mask"
 msgstr "Echec de création du masque"
 
-#: ../src/florence.c:292
+#: ../src/florence.c:296
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr ""
 "SPI est désactivé: Impossible d'activer le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:316
+#: ../src/florence.c:320
 msgid "AT SPI: problem deregistering focus listener"
 msgstr "AT SPI: problème de désenregistrement de l'auditeur du point focal"
 
-#: ../src/florence.c:319
+#: ../src/florence.c:323
 msgid "AT SPI: problem deregistering window listener"
 msgstr "AT SPI: problème de désenregistrement de l'auditeur de fenêtre"
 
-#: ../src/florence.c:574
+#: ../src/florence.c:581
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:576
+#: ../src/florence.c:583
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:608
+#: ../src/florence.c:615
 msgid "Enable accessibility"
 msgstr "Activer l'accéssebilité"
 
-#: ../src/florence.c:620
+#: ../src/florence.c:627
 msgid ""
 "at-spi registry daemon is not running. Events will be sent with Xtest "
 "instead and several functions are disabled, including auto-hide."
@@ -785,16 +785,16 @@ msgstr ""
 "envoyés avec Xtest à la place et certaines fonctions sont désactivées, comme "
 "le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:637
+#: ../src/florence.c:644
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
-#: ../src/florence.c:641
+#: ../src/florence.c:648
 msgid "Old GLib version detected. Florence style will be working with a hack."
 msgstr ""
 "Vieille version de GLib détectée. Le style de Florence marche avec un hack."
 
-#: ../src/florence.c:658
+#: ../src/florence.c:665
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI a été désactivé au moment de la compilation: le mode 'cacher "
@@ -976,93 +976,88 @@ msgstr "Erreur de lecture de la valeur pour %s: %s"
 msgid "No gconf value for %s. Using default."
 msgstr "Pas de valeur gconf pour %s. Utilisation de la valeur par défaut"
 
-#: ../src/status.c:128
+#: ../src/status.c:37
 msgid "Unable to focus window."
 msgstr "Impossible de sélectionner la fenêtre."
 
-#: ../src/status.c:159
-#, c-format
-msgid "Event %d received :type %d. Switching from state %d to %d"
-msgstr "Événement %d reçu: type %d. Changement d'état %d vers %d"
-
-#: ../src/status.c:211
+#: ../src/status.c:98
 #, c-format
 msgid "XRecord extension found version=%d.%d"
 msgstr "Extension XRecord trouvée version=%d.%d"
 
-#: ../src/status.c:212
+#: ../src/status.c:99
 msgid "Unable to allocate memory for record range"
 msgstr "Echec d'allocation de mémoire pour la liste d'enregistrement"
 
-#: ../src/status.c:221
+#: ../src/status.c:108
 msgid "Unable to record events"
 msgstr "Impossible d'enregistrer les évènements %s"
 
-#: ../src/status.c:222
+#: ../src/status.c:109
 msgid "Unable to create xrecord context"
 msgstr "Impossible de créer le contexte pour XRecord%s"
 
-#: ../src/status.c:225
+#: ../src/status.c:112
 msgid "No XRecord extension found"
 msgstr "l'extension XRecord n'a pas été trouvée"
 
-#: ../src/status.c:226
+#: ../src/status.c:113
 msgid "Keyboard synchronization is disabled."
 msgstr "La synchronization avec le clavier est désactivée"
 
-#: ../src/status.c:304
-#, c-format
-msgid "sending event %d"
+#: ../src/status.c:233
+#, fuzzy
+msgid "sending press event"
 msgstr "Envoi de l'événement %d"
 
-#: ../src/status.c:320
-#, c-format
-msgid "Unknown event type received: %d"
-msgstr "type d'événement reçu inconnu: %d"
+#: ../src/status.c:247
+#, fuzzy
+msgid "sending release event"
+msgstr "Envoi de l'événement %d"
 
-#: ../src/status.c:427
-#, c-format
-msgid "FSM state error. event=%d ; state=%d"
-msgstr "Erreur d'état de la FSM. événement=%d ; état=%d"
-
-#: ../src/status.c:499 ../src/status.c:525
+#: ../src/status.c:449 ../src/status.c:475
 msgid "Unable to allocate memory for status focus"
 msgstr "Impossible d'allouer de la mémoire pour le curseur du status"
 
-#: ../src/status.c:502
+#: ../src/status.c:452
 #, c-format
 msgid "Found window %s (ID=%ld)"
 msgstr "Fenêtre %s trouvée (ID=%ld)"
 
-#: ../src/status.c:509
+#: ../src/status.c:459
 msgid "XQueryTree failed."
 msgstr "Echec de la fonction XQueryTree"
 
-#: ../src/status.c:530
+#: ../src/status.c:480
 #, c-format
 msgid "Window not found: %s, using last focused window: %s (ID=%d)"
 msgstr ""
 "Fenêtre non trouvée: %s, utilisation de la dernière fenêtre sélectionnée: %s "
 "(ID=%ld)"
 
-#: ../src/status.c:533
+#: ../src/status.c:483
 #, c-format
 msgid "Focussing window %s (ID=%d)"
 msgstr "Sélection de la fenêtre %s (ID=%ld)"
 
-#: ../src/status.c:544
+#: ../src/status.c:501
+#, c-format
+msgid "Unknown input method: %s ; using button input method"
+msgstr ""
+
+#: ../src/status.c:523
 msgid "Unable to allocate memory for status"
 msgstr "Impossible d'allouer de la mémoire pour le status"
 
-#: ../src/status.c:600
+#: ../src/status.c:583
 msgid "Neither at-spi nor XTest could be initialized."
 msgstr "Ni at-spi ni XTest n'ont pu être initialisés."
 
-#: ../src/status.c:601 ../src/status.c:609
+#: ../src/status.c:584 ../src/status.c:592
 msgid "There is no way we can send keyboard events."
 msgstr "Il n'y a aucune façon d'envoyer des évènements de clavier."
 
-#: ../src/status.c:603
+#: ../src/status.c:586
 #, c-format
 msgid ""
 "At-spi registry daemon is not running. XTest extension found: version=%d.%d; "
@@ -1071,16 +1066,16 @@ msgstr ""
 "Le démon d'enregistrement at-spi ne tourne pas. L'extension XTest a été "
 "trouvée en version %d.%d; elle sera utilisée à la place de at-spi"
 
-#: ../src/status.c:608
+#: ../src/status.c:591
 msgid "Xtest extension not compiled in and at-spi not working"
 msgstr "Xtest n'es pas compilé et at-spi ne marche pas"
 
-#: ../src/style.c:70
+#: ../src/style.c:71
 #, c-format
 msgid "Unknown style color: %d"
 msgstr "Couleur de style inconnue: %d"
 
-#: ../src/style.c:71
+#: ../src/style.c:72
 msgid ""
 "You probably installed Florence in a location that is not in the gconf path. "
 "Please read the FAQ in Florence documentation to learn more about how to "
@@ -1090,59 +1085,59 @@ msgstr ""
 "le chemin de recherche de gconf. Veuillez lire la FAQ dans la documentation "
 "de Florence pour apprendre plus sur la configuration de gconf SVP."
 
-#: ../src/style.c:84
+#: ../src/style.c:85
 #, c-format
 msgid "can't parse color %s"
 msgstr "Echec d'analyse de la couleur %s"
 
-#: ../src/style.c:103
+#: ../src/style.c:104
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
-#: ../src/style.c:154
+#: ../src/style.c:155
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr ""
 "Manque de mémoire pour afficher les symboles. Certains symboles pourraient "
 "ne pas être affichés correctement"
 
-#: ../src/style.c:156
+#: ../src/style.c:157
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "Une erreur de cairo est survenue: %d"
 
-#: ../src/style.c:209 ../src/style.c:446
+#: ../src/style.c:210 ../src/style.c:447
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
 
-#: ../src/style.c:210
+#: ../src/style.c:211
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
 
-#: ../src/style.c:261
+#: ../src/style.c:262
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "dérivation de la police %s inconnu: %d"
 
-#: ../src/style.c:329
+#: ../src/style.c:330
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Aucun symbole trouvé pour la touche d'acion %d dans le style"
 
-#: ../src/style.c:350
+#: ../src/style.c:351
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Echec de l'analyse du svg depuis le ficher d'agencement: svg=\"%s\" erreur="
 "\"%s\""
 
-#: ../src/style.c:354
+#: ../src/style.c:355
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nouvelle forme] nom=%s svg=\"%s\""
 
-#: ../src/style.c:377
+#: ../src/style.c:378
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "La forme %s n'existe pas pour le style sélectionné."
@@ -1166,6 +1161,15 @@ msgid ""
 msgstr ""
 "et envoyez le résultat à f.agrech@gmail.com\n"
 "\n"
+
+#: ../src/trace.c:115 ../src/trace.c:123
+msgid "WARNING: "
+msgstr ""
+
+#: ../src/trace.c:131
+#, fuzzy
+msgid "ERROR: "
+msgstr "ERREUR FATALE: "
 
 #: ../src/trayicon.c:50
 msgid "Copyright (C) 2008, 2009, 2010 François Agrech"
@@ -1209,7 +1213,7 @@ msgstr ""
 "(GNU General Public Licence), que vous devriez avoir reçu avec ce\n"
 "programme a une valeur légale et s'applique à ce programme."
 
-#: ../src/trayicon.c:79 ../src/trayicon.c:82 ../src/settings-window.c:414
+#: ../src/trayicon.c:79 ../src/trayicon.c:82 ../src/settings-window.c:417
 #, c-format
 msgid "Unable to open %s"
 msgstr "Impossible d'ouvrir %s"
@@ -1266,15 +1270,16 @@ msgstr ""
 "désactivée"
 
 #: ../src/view.c:470
+#, c-format
 msgid "Window size out of range :%d, %d"
 msgstr "Taille de fenêtre en dehors des limites: %d, %d"
 
-#: ../src/view.c:568
+#: ../src/view.c:569
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Opacité de la fenêtre en dehors des limites (1.0 à 100.0): %f"
 
-#: ../src/view.c:715
+#: ../src/view.c:721
 msgid "Unable to allocate memory for view"
 msgstr "Echec d'allocation de la mémoire pour la vue"
 
@@ -1283,112 +1288,116 @@ msgstr "Echec d'allocation de la mémoire pour la vue"
 msgid "Error loading icon file: %s (%s)"
 msgstr "Erreur de chargement du fichier icone: %s (%s)"
 
-#: ../src/tools.c:78
+#: ../src/tools.c:79
 msgid "NULL accessible object, unable to move window"
 msgstr "Objet accessible NULL, impossible de déplacer la fenêtre"
 
-#: ../src/tools.c:102
+#: ../src/tools.c:110
 msgid "Unable to get component from accessible object"
 msgstr "Impossible de créer le composant depuis l'objet accessible"
 
-#: ../src/tools.c:166
+#: ../src/tools.c:174
 msgid "unable to allocate memory for string"
 msgstr "Impossible d'allouer de la mémoire pour la chaîne de caractère"
 
-#: ../src/key.c:61
+#: ../src/key.c:62
 #, c-format
 msgid "Unknown action key type %s"
 msgstr "Type de touche action inconnu: %s"
 
-#: ../src/key.c:157
+#: ../src/key.c:158
 msgid "Unreachable code"
 msgstr "Code impossible à atteindre"
 
-#: ../src/key.c:181
+#: ../src/key.c:182
 #, c-format
 msgid "key %p has no modification."
 msgstr "la touche %p n'a pas de modification."
 
-#: ../src/key.c:273
+#: ../src/key.c:274
 #, c-format
 msgid "unknown action key type pressed = %d"
 msgstr "Un type de touche action inconnu a été pressé: %d"
 
-#: ../src/key.c:276
+#: ../src/key.c:277
 msgid "unknown key type pressed."
 msgstr "type de touche pressée inconnu."
 
-#: ../src/key.c:278
+#: ../src/key.c:279
 msgid "pressed key has no action associated."
 msgstr "la touche pressée n'a pas d'action associée."
 
-#: ../src/key.c:311
+#: ../src/key.c:313
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr "un type de touche action inconnu a été libéré: %d"
 
-#: ../src/key.c:314
+#: ../src/key.c:316
 msgid "unknown key type released."
 msgstr "un type de touche inconnu a été libéré."
 
-#: ../src/key.c:316
+#: ../src/key.c:318
 msgid "released key has no action associated."
 msgstr "la touche libérée n'a pas d'action associée."
 
-#: ../src/key.c:378
+#: ../src/key.c:380
 msgid "unknown key type to draw."
 msgstr "type de touche à dessiner inconnu."
 
-#: ../src/key.c:408
+#: ../src/key.c:410
 #, c-format
 msgid "unknown key type: %d"
 msgstr "type de touche inconnu: %d"
 
-#: ../src/settings-window.c:110 ../src/settings-window.c:180
+#: ../src/settings-window.c:111 ../src/settings-window.c:183
 #, c-format
 msgid "Couldn't open directory %s"
 msgstr "Impossible d'ouvrir le répertoire %s"
 
-#: ../src/settings-window.c:132
-msgid "Button"
-msgstr "Bouton"
+#: ../src/settings-window.c:133
+msgid "Mouse"
+msgstr ""
 
-#: ../src/settings-window.c:134
+#: ../src/settings-window.c:135
+msgid "Touch screen"
+msgstr ""
+
+#: ../src/settings-window.c:137
 msgid "Timer"
 msgstr "Minuteur"
 
-#: ../src/settings-window.c:137
+#: ../src/settings-window.c:140
 msgid "Ramble"
 msgstr "Balade"
 
-#: ../src/settings-window.c:168
+#: ../src/settings-window.c:171
 #, c-format
 msgid "Unable to create preview for style %s"
 msgstr "Impossible de créer un aperçu pour le style %s"
 
-#: ../src/settings-window.c:361
+#: ../src/settings-window.c:364
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "type de paramètre inconnu: %s"
 
-#: ../src/settings-window.c:410
+#: ../src/settings-window.c:413
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Impossible d'ouvrir %s: %s"
 
-#: ../src/settings-window.c:507
+#: ../src/settings-window.c:510
 msgid "Can't get gconf value %"
 msgstr "Echec de récupération de la valeur gconf %s"
 
-#: ../src/settings-window.c:606
+#: ../src/settings-window.c:609
 msgid "Confirm"
 msgstr "Confirmation"
 
-#: ../src/settings-window.c:607
+#: ../src/settings-window.c:610
 msgid "Discard changes?"
 msgstr "Abandonner les changements?"
 
-#: ../src/settings-window.c:655
+#: ../src/settings-window.c:658
 #, c-format
 msgid "Couldn't load builder file: %s"
 msgstr "Impossible d'ouvrir le fichier builder: %s"
@@ -1458,3 +1467,15 @@ msgstr ""
 #: ../src/ramble.c:252
 msgid "Unable to allocate memory for ramble"
 msgstr "Echec d'allocation de la mémoire pour le mode balade"
+
+#~ msgid "Event %d received :type %d. Switching from state %d to %d"
+#~ msgstr "Événement %d reçu: type %d. Changement d'état %d vers %d"
+
+#~ msgid "Unknown event type received: %d"
+#~ msgstr "type d'événement reçu inconnu: %d"
+
+#~ msgid "FSM state error. event=%d ; state=%d"
+#~ msgstr "Erreur d'état de la FSM. événement=%d ; état=%d"
+
+#~ msgid "Button"
+#~ msgstr "Bouton"

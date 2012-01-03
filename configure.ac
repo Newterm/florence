@@ -1,4 +1,4 @@
-AC_INIT([Florence Gnome virtual keyboard], [0.5.1], [f.agrech@gmail.com], [florence])
+AC_INIT([Florence Gnome virtual keyboard], [0.5.2], [f.agrech@gmail.com], [florence])
 AC_CONFIG_HEADERS(config.h)
 AM_INIT_AUTOMAKE(no-dist-gzip dist-bzip2)
 
@@ -9,8 +9,8 @@ AC_ARG_WITH([notification], AS_HELP_STRING([--without-notification], [Build with
 AM_CONDITIONAL([WITH_NOTIFICATION], [test "x$with_notification" != "xno"])
 AC_ARG_WITH([xtst], AS_HELP_STRING([--without-xtst], [Build without Xtst extension (default: enabled)]))
 AM_CONDITIONAL([WITH_XTST], [test "x$with_xtst" != "xno"])
-AC_ARG_WITH([xrecord], AS_HELP_STRING([--with-xrecord], [Build with XRecord extension (requires the Xtst extension) (default: disabled)]))
-AM_CONDITIONAL([WITH_XRECORD], [test "x$with_xrecord" == "xyes" -a "x$with_xtst" != "xno"])
+AC_ARG_WITH([xrecord], AS_HELP_STRING([--without-xrecord], [Build without XRecord extension (requires the Xtst extension) (default: enabled)]))
+AM_CONDITIONAL([WITH_XRECORD], [test "x$with_xrecord" != "xno" -a "x$with_xtst" != "xno"])
 AC_ARG_WITH([at-spi], AS_HELP_STRING([--without-at-spi], [Build without at-spi(default: enabled)]))
 AM_CONDITIONAL([WITH_AT_SPI], [test "x$with_at_spi" != "xno"])
 AC_ARG_WITH([panelapplet], AS_HELP_STRING([--without-panelapplet], [Build without libpanelapplet(default: enabled)]))
@@ -79,8 +79,8 @@ fi
 
 if test "x$with_xtst" != "xno"; then
 	PKG_CHECK_MODULES([XTST], [xtst], AC_DEFINE([ENABLE_XTST], [], [Xtst extension enabled.]), AC_MSG_ERROR(Could not configure xtst. Please either install xtst or disable it: --without-xtst configure option))
-	if test "x$with_xrecord" == "xyes"; then
-		AC_MSG_WARN([Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xrecord if you are planning to use a recent version of Xorg avoiding to use the option --with-xrecord])
+	if test "x$with_xrecord" != "xno"; then
+		AC_MSG_WARN([Xorg RECORD extension is severely broken in version 1.6 of Xorg: see bugs http://bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/show_bug.cgi?id=21971 ; Please disable xrecord if you affected by this bug: --without-xrecord option])
 		AC_DEFINE(ENABLE_XRECORD, ["xrecord"], [xrecord extension is enabled])
 	fi
 fi

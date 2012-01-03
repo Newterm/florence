@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2010-11-15 18:53+0100\n"
+"POT-Creation-Date: 2011-12-26 18:14+0100\n"
 "PO-Revision-Date: 2010-04-08 09:22+0100\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: <>\n"
@@ -386,8 +386,8 @@ msgid "at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \\"
 msgstr "at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \\"
 
 #: C/florence.xml:79(userinput)
-#, no-wrap
-msgid "libnotify libxtst6-devel intltool libpanel-applet-2-devel"
+#, fuzzy, no-wrap
+msgid "libnotify-devel libxtst6-devel intltool libpanel-applet-2-devel"
 msgstr "libnotify libxtst6-devel intltool libpanel-applet-2-devel"
 
 #: C/florence.xml:83(ulink)

@@ -383,7 +383,7 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 	if ((!strcmp(key, "key")) || (!strcmp(key, "outline"))) {
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
-	} else if (!strcmp(key, "label")) {
+	} else if (!strncmp(key, "label", 5)) {
 		if (view->symbols) cairo_surface_destroy(view->symbols);
 		view->symbols=NULL;
 	}
@@ -451,12 +451,17 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view *view)
 {
 	GdkRectangle rect;
+	gint xpos, ypos;
+	if (!GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window))) return;
 
 	/* record window position */
-	if (settings_get_int("window/xpos")!=pConfig->x)
-		settings_set_int("window/xpos", pConfig->x);
-	if (settings_get_int("window/ypos")!=pConfig->y)
-		settings_set_int("window/ypos", pConfig->y);
+	if (gtk_window_get_decorated(GTK_WINDOW(view->window)))
+		gtk_window_get_position(GTK_WINDOW(view->window), &xpos, &ypos);
+	else { xpos=pConfig->x; ypos=pConfig->y; }
+	if (settings_get_int("window/xpos")!=xpos)
+		settings_set_int("window/xpos", xpos);
+	if (settings_get_int("window/ypos")!=ypos)
+		settings_set_int("window/ypos", ypos);
 
 	/* handle resize events */
 	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
@@ -531,6 +536,7 @@ void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 {
 	cairo_t *context;
+	enum key_state state;
 
 	/* Don't need to redraw several times in one chunk */
 	if (!view->redraw) view->redraw=gdk_region_new();
@@ -583,8 +589,13 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	view_draw_list(view, context, status_list_locked(view->status));
 
 	/* pressed and focused key */
-	view_draw_key(view, context, status_pressed_get(view->status));
 	view_draw_key(view, context, status_focus_get(view->status));
+	if (status_pressed_get(view->status)) {
+		state=status_pressed_get(view->status)->state;
+		key_state_set(status_pressed_get(view->status), KEY_PRESSED);
+		view_draw_key(view, context, status_pressed_get(view->status));
+		key_state_set(status_pressed_get(view->status), state);
+	}
 
 	cairo_restore(context);
 
