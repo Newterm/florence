@@ -21,10 +21,7 @@
 
 #include "trace.h"
 #include "system.h"
-#include <glib/gprintf.h>
-#include <glib/gutils.h>
-#include <glib/gslist.h>
-#include <glib/gstrfuncs.h>
+#include <glib.h>
 #include <stdio.h>
 #include <stdarg.h>
 
