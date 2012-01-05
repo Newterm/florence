@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@
 /* Display the about dialog window */
 void trayicon_about(void)
 {
+	START_FUNC
 	gchar *authors[] = {
 		"François Agrech <f.agrech@gmail.com>",
 		"Pietro Pilolli <alpha@paranoici.org>",
@@ -47,11 +48,11 @@ void trayicon_about(void)
 		"Stéphane Ancelot <sancelot@free.fr>",
 		"Laurent Bessard <laurent.bessard@gmail.com>", NULL};
 	gtk_show_about_dialog(NULL, "program-name", _("Florence Virtual Keyboard"),
-		"version", VERSION, "copyright", _("Copyright (C) 2008, 2009, 2010 François Agrech"),
+		"version", VERSION, "copyright", _("Copyright (C) 2012 François Agrech"),
 		"logo", gdk_pixbuf_new_from_file(ICONDIR "/florence.svg", NULL),
 		"website", "http://florence.sourceforge.net",
 		"authors", authors,
-		"license", _("Copyright (C) 2008, 2009, 2010 François Agrech\n\
+		"license", _("Copyright (C) 2012 François Agrech\n\
 \n\
 This program is free software; you can redistribute it and/or modify\n\
 it under the terms of the GNU General Public License as published by\n\
@@ -67,12 +68,14 @@ You should have received a copy of the GNU General Public License\n\
 along with this program; if not, write to the Free Software Foundation,\n\
 Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."),
 		NULL);
+	END_FUNC
 }
 
 #ifdef ENABLE_HELP
 /* Open yelp */
 void trayicon_help(void)
 {
+	START_FUNC
 #if GTK_CHECK_VERSION(2,14,0)
 	GError *error=NULL;
 	gtk_show_uri(NULL, "ghelp:florence", gtk_get_current_event_time(), &error);
@@ -82,6 +85,7 @@ void trayicon_help(void)
 		flo_error(_("Unable to open %s"), "ghelp:florence");
 	}
 #endif
+	END_FUNC
 }
 #endif
 
@@ -89,6 +93,7 @@ void trayicon_help(void)
  * Toggles florence window between visible and hidden. */
 void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 {
+	START_FUNC
 	struct trayicon *trayicon=(struct trayicon *)(user_data);
 	if (GTK_WIDGET_VISIBLE(trayicon->view->window)) {
 		view_hide(trayicon->view);
@@ -99,12 +104,14 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 		view_show(trayicon->view);
 #endif
 	}
+	END_FUNC
 }
 
 /* Called when the tray icon is right->clicked
  * Displays the menu. */
 void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_time, gpointer user_data)
 {
+	START_FUNC
 	GtkWidget *menu, *about, *config, *quit;
 #ifdef ENABLE_HELP
 	GtkWidget *help;
@@ -146,19 +153,23 @@ void trayicon_on_menu(GtkStatusIcon *status_icon, guint button, guint activate_t
  
 	gtk_menu_popup(GTK_MENU(menu), NULL, NULL, gtk_status_icon_position_menu,
 		status_icon, button, activate_time);
+	END_FUNC
 }
 
 #ifdef ENABLE_NOTIFICATION
 /* Called to stop showing startup notification. */
 void trayicon_notification_stop(NotifyNotification *notification, gchar *action, gpointer userdate)
 {
+	START_FUNC
 	if (!strcmp(action, "STOP"))
 		settings_bool_set("behaviour/startup_notification", FALSE);
+	END_FUNC
 }
 
 /* Display startup notification */
 gboolean trayicon_notification_start(gpointer userdata)
 {
+	START_FUNC
 	struct trayicon *trayicon=(struct trayicon *)userdata;
 	if (!notify_init(_("Florence"))) flo_warn(_("libnotify failed to initialize"));
 #ifdef ENABLE_NOTIFICATION_ICON
@@ -179,6 +190,7 @@ gboolean trayicon_notification_start(gpointer userdata)
 	notify_notification_set_timeout(trayicon->notification, 5000);
 	if (!notify_notification_show(trayicon->notification, NULL))
 		flo_warn(_("Notification failed"));
+	END_FUNC
 	return FALSE;
 }
 #endif
@@ -186,17 +198,20 @@ gboolean trayicon_notification_start(gpointer userdata)
 /* Deallocate all the memory used bu the trayicon. */
 void trayicon_free(struct trayicon *trayicon)
 {
+	START_FUNC
 #ifdef ENABLE_NOTIFICATION
 	if (trayicon->notification) g_object_unref(trayicon->notification);
 	notify_uninit();
 #endif
 	g_object_unref(trayicon->tray_icon);
 	g_free(trayicon);
+	END_FUNC
 }
 
 /* Creates a new trayicon instance */
 struct trayicon *trayicon_new(struct view *view, GCallback quit_cb)
 {
+	START_FUNC
 	struct trayicon *trayicon;
 
 	trayicon=g_malloc(sizeof(struct trayicon));
@@ -218,5 +233,6 @@ struct trayicon *trayicon_new(struct view *view, GCallback quit_cb)
 		g_timeout_add(2000, trayicon_notification_start, (gpointer)trayicon);
 #endif
 
+	END_FUNC
 	return trayicon;
 }

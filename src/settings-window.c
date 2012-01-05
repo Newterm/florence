@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -58,6 +58,7 @@ void settings_window_extension(GtkToggleButton *button, gchar *name);
 /* update rollback changeset */
 void settings_window_save(const char *name)
 {
+	START_FUNC
 	GConfValue *value;
 	if (!gconf_change_set_check_value(settings_window->rollback,
 			settings_get_full_path(name), &value)) {
@@ -65,11 +66,13 @@ void settings_window_save(const char *name)
 		gconf_change_set_set(settings_window->rollback,
 			settings_get_full_path(name), value);
 	}
+	END_FUNC
 }
 
 /* Populate layout combobox with available layouts */
 void settings_window_layouts_populate()
 {
+	START_FUNC
 	GtkTreeIter iter;
 	GtkCellRenderer *cell;
 	DIR *dp=opendir(DATADIR "/layouts");
@@ -109,11 +112,13 @@ void settings_window_layouts_populate()
 				settings_window->gtkbuilder, "flo_layouts")),
 			GTK_TREE_MODEL(settings_window->layout_list));
 	} else flo_error(_("Couldn't open directory %s"), DATADIR "/layouts");
+	END_FUNC
 }
 
 /* Populate input method combobox with available methods */
 void settings_window_input_method_populate()
 {
+	START_FUNC
 	GtkTreeIter iter;
 	GtkCellRenderer *cell;
 
@@ -142,11 +147,13 @@ void settings_window_input_method_populate()
 	gtk_combo_box_set_model(GTK_COMBO_BOX(gtk_builder_get_object(
 			settings_window->gtkbuilder, "input_method_combo")),
 		GTK_TREE_MODEL(settings_window->input_method_list));
+	END_FUNC
 }
 
 /* fills the preview icon view with icons representing the themes */
 void settings_window_preview_build()
 {
+	START_FUNC
 	GtkTreeIter iter;
 	GdkPixbuf *pixbuf;
 	struct style *style;
@@ -181,23 +188,27 @@ void settings_window_preview_build()
 		}
 		closedir(dp);
 	} else flo_error(_("Couldn't open directory %s"), DATADIR "/styles");
+	END_FUNC
 }
 
 /* converts a color from string ro gdk */
 GdkColor *settings_window_convert_color(gchar *strcolor)
 {
+	START_FUNC
 	static GdkColor ret;
 	sscanf(strcolor, "#%02x%02x%02x",
 		(unsigned int *)&ret.red,
 		(unsigned int *)&ret.green,
 		(unsigned int *)&ret.blue);
 	ret.red<<=8; ret.green<<=8; ret.blue<<=8;
+	END_FUNC
 	return &ret;
 }
 
 /* update the extension check box list according to the layout and gconf */
 void settings_window_extensions_update(gchar *layoutname)
 {
+	START_FUNC
 	GList *extensions;
 	GtkWidget *extension;
 	struct layout *layout;
@@ -246,11 +257,13 @@ void settings_window_extensions_update(gchar *layoutname)
 		layoutreader_extension_free(layout, ext);
 	}
 	layoutreader_free(layout);
+	END_FUNC
 }
 
 /* update the layout settings according to gconf */
 gchar *settings_window_combo_update(gchar *item)
 {
+	START_FUNC
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gboolean out;
@@ -270,12 +283,14 @@ gchar *settings_window_combo_update(gchar *item)
 		if (val) g_free(val);
 	}
 
+	END_FUNC
 	return data;
 }
 
 /* update the input method options */
 void settings_window_input_method_update(gchar *method)
 {
+	START_FUNC
 	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 		"flo_timer")));
 	gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
@@ -324,11 +339,13 @@ void settings_window_input_method_update(gchar *method)
 		}
 	}
 #endif
+	END_FUNC
 }
 
 /* update the window according to gconf */
 void settings_window_update()
 {
+	START_FUNC
 	gchar *color;
 	guint searchidx=0;
 	struct settings_param *params=settings_defaults_get();
@@ -396,6 +413,7 @@ void settings_window_update()
 		settings_window_input_method_update(color);
 	       	g_free(color);
 	}
+	END_FUNC
 }
 
 /*************/
@@ -405,6 +423,7 @@ void settings_window_update()
 /* opens yelp when F1 is pressed  */
 void settings_window_help(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
+	START_FUNC
 #ifdef ENABLE_HELP
 	GError *error=NULL;
 	if (event->keyval==GDK_F1) {
@@ -419,11 +438,13 @@ void settings_window_help(GtkWidget *widget, GdkEventKey *event, gpointer user_d
 #endif
 	}
 #endif
+	END_FUNC
 }
 
 /* Called when a new style is selected */
 void settings_window_style_change (GtkIconView *iconview, gpointer user_data) 
 {
+	START_FUNC
 	gchar *path;
 	gchar *name;
 	GtkTreeIter iter;
@@ -438,11 +459,13 @@ void settings_window_style_change (GtkIconView *iconview, gpointer user_data)
 		g_list_free(list);
 		g_free(path);
 	}
+	END_FUNC
 }
 
 /* on color change */
 void settings_window_change_color(GtkColorButton *button)
 {
+	START_FUNC
 	GdkColor color;
 	gchar strcolor[8];
 	char *name=settings_get_gconf_name(GTK_WIDGET(button));
@@ -452,11 +475,13 @@ void settings_window_change_color(GtkColorButton *button)
 	settings_string_set(name, strcolor);
 	/* update style preview */
 	if (!strcmp(name, "colours/key")) settings_window_preview_build();
+	END_FUNC
 }
 
 /* called on combo change: set gconf entry. */
 void settings_window_combo(GtkComboBox *combo)
 {
+	START_FUNC
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 	gchar *data=NULL;
@@ -473,11 +498,13 @@ void settings_window_combo(GtkComboBox *combo)
 		settings_window_input_method_update(data);
 	}
 	g_free(data);
+	END_FUNC
 }
 
 /* called when an extension is activated/deactivated. */
 void settings_window_extension(GtkToggleButton *button, gchar *name)
 {
+	START_FUNC
         gchar *allextstr=NULL;
         gchar **extstrs=NULL;
         gchar **extstr=NULL;
@@ -508,22 +535,27 @@ void settings_window_extension(GtkToggleButton *button, gchar *name)
                 g_free(newextstrs);
 		if (!value) g_free(allextstr);
         } else { flo_fatal(_("Can't get gconf value %"), settings_get_full_path("layout/extensions")); }
+	END_FUNC
 }
 
 /* Set a gconf double according to the state of the scale bar.
  * Look for the gconf parameter name in the parameters table */
 void settings_window_set_double(GtkHScale *scale)
 {
+	START_FUNC
 	gconf_change_set_set_float(settings_window->gconfchangeset,
 		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(scale))),
 		gtk_range_get_value(GTK_RANGE(scale)));
+	END_FUNC
 }
 
 /* on opacity change: apply immediately */
 void settings_window_opacity(GtkHScale *scale)
 {
+	START_FUNC
 	settings_window_save("window/opacity");
 	settings_double_set("window/opacity", gtk_range_get_value(GTK_RANGE(scale)), TRUE);
+	END_FUNC
 }
 
 
@@ -531,6 +563,7 @@ void settings_window_opacity(GtkHScale *scale)
  * Look for the gconf parameter name in the parameters table */
 void settings_window_set_bool (GtkToggleButton *button)
 {
+	START_FUNC
 #ifdef ENABLE_RAMBLE
 	if ((!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_distance")) ||
 		(!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_time"))) {
@@ -570,18 +603,22 @@ void settings_window_set_bool (GtkToggleButton *button)
 #ifdef ENABLE_RAMBLE
 	}
 #endif
+	END_FUNC
 }
 
 /* apply changes: apply the changeset and free the rollback one. */
 void settings_window_commit(GtkWidget *window, GtkWidget *button)
 {
+	START_FUNC
 	settings_commit(settings_window->gconfchangeset);
 	if (settings_window->rollback) gconf_change_set_clear(settings_window->rollback);
+	END_FUNC
 }
 
 /* discard changes: apply the rollback changeset and clear it. */
 void settings_window_rollback(GtkWidget *window, GtkWidget *button)
 {
+	START_FUNC
 	GConfValue *value;
 	gboolean color_changed=gconf_change_set_check_value(settings_window->rollback,
 		settings_get_full_path("colours/key"), &value);
@@ -594,12 +631,14 @@ void settings_window_rollback(GtkWidget *window, GtkWidget *button)
 		if (window) settings_window_preview_build();
 	}
 	settings_window_update();
+	END_FUNC
 }
 
 /* Called when the 'close' button is pressed:
  * check changes and ask the user if they need commit or discard if any. */
 void settings_window_close(GtkWidget *window, GtkWidget *button)
 {
+	START_FUNC
 	static gboolean closed=FALSE;
 	if (closed) return;
 	if ((settings_window->gconfchangeset &&
@@ -622,6 +661,7 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 	if (settings_window->rollback) gconf_change_set_unref(settings_window->rollback);
 	if (settings_window->gtk_exit) gtk_exit(0);
 	closed=FALSE;
+	END_FUNC
 }
 
 /********************/
@@ -631,19 +671,24 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 /* returns true if settings window is open */
 gboolean settings_window_open(void)
 {
+	START_FUNC
+	END_FUNC
 	return (settings_window && (settings_window->notify_id!=0));
 }
 
 /* presents the settings window to the user */
 void settings_window_present(void)
 {
+	START_FUNC
 	gtk_window_present(GTK_WINDOW(gtk_builder_get_object(settings_window->gtkbuilder,
 		"flo_config_window")));
+	END_FUNC
 }
 
 /* opens the settings window */
 void settings_window_new(GConfClient *gconfclient, gboolean exit)
 {
+	START_FUNC
 	GError* error = NULL;
 	settings_window=g_malloc(sizeof(struct settings_window));
 	memset(settings_window, 0, sizeof(struct settings_window));
@@ -673,11 +718,13 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 	/* set window icon */
 	tools_set_icon(GTK_WINDOW(gtk_builder_get_object(settings_window->gtkbuilder,
 		"flo_config_window")));
+	END_FUNC
 }
 
 /* liberate memory used by settings window */
 void settings_window_free()
 {
+	START_FUNC
 	if (settings_window) {
 		GSList *list=settings_window->extensions;
 		while (list) {
@@ -688,5 +735,6 @@ void settings_window_free()
 		if (settings_window->gtkbuilder) g_object_unref(settings_window->gtkbuilder);
 		if (settings_window) g_free(settings_window);
 	}
+	END_FUNC
 }
 

@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -32,27 +32,34 @@
 /* Open a layout element */
 gboolean layoutreader_element_open(struct layout *layout, char *name)
 {
+	START_FUNC
 	if (name) while (layout->cur && xmlStrcmp(layout->cur->name, (xmlChar *)name))
 		layout->cur=layout->cur->next;
 	if (layout->cur) layout->cur=layout->cur->children;
+	END_FUNC
 	return layout->cur==NULL?FALSE:TRUE;
 }
 
 /* Close a layout element */
 void layoutreader_element_close(struct layout *layout)
 {
+	START_FUNC
 	if (layout->cur && layout->cur->parent) layout->cur=layout->cur->parent->next;
+	END_FUNC
 }
 
 /* Reset layout cursor */
 void layoutreader_reset(struct layout *layout)
 {
+	START_FUNC
 	layout->cur=layout->doc->children;
+	END_FUNC
 }
 
 /* Initialize an element structure and look for it in the layout document */
 void *layoutreader_element_init(struct layout *layout, char *element, size_t size)
 {
+	START_FUNC
 	void *ret=NULL;
 	while (layout->cur && xmlStrcmp(layout->cur->name, (xmlChar *)element))
 		layout->cur=layout->cur->next;
@@ -61,22 +68,26 @@ void *layoutreader_element_init(struct layout *layout, char *element, size_t siz
 		memset(ret, 0, size);
 		layout->cur=layout->cur->children;
 	}
+	END_FUNC
 	return ret;
 }
 
 /* Get double from layout text */
 double layoutreader_double_get(xmlDocPtr doc, xmlNodePtr cur)
 {
+	START_FUNC
 	double ret=0.0;
 	xmlChar *tmp=xmlNodeListGetString(doc, cur->children, 1);
 	ret=g_ascii_strtod((gchar *)tmp, NULL);
 	xmlFree(tmp);
+	END_FUNC
 	return ret;
 }
 
 /* Translate xml placement name to placement enumeration */
 enum layout_placement layoutreader_placement_get(struct layout *layout)
 {
+	START_FUNC
 	enum layout_placement ret=LAYOUT_VOID;
 	xmlChar *tmp=xmlNodeListGetString(layout->doc, layout->cur->children, 1);
 	if (!xmlStrcmp(tmp, (xmlChar *)"left")) ret=LAYOUT_LEFT;
@@ -86,12 +97,14 @@ enum layout_placement layoutreader_placement_get(struct layout *layout)
 	else if (!xmlStrcmp(tmp, (xmlChar *)"over")) ret=LAYOUT_OVER;
 	else flo_error(_("Unknown placement %s"), tmp);
 	xmlFree(tmp);
+	END_FUNC
 	return ret;
 }
 
 /* Update the string if the node lang matches locale */
 void layoutreader_update_lang(xmlDocPtr doc, xmlNodePtr node, char **update)
 {
+	START_FUNC
 	xmlChar *lang=xmlNodeGetLang(node);
 #ifdef HAVE_LOCALE_H
 	if (!lang ||
@@ -104,11 +117,13 @@ void layoutreader_update_lang(xmlDocPtr doc, xmlNodePtr node, char **update)
 		*update=(char *)xmlNodeListGetString(doc, node, 1);
 	}
 	xmlFree(lang);
+	END_FUNC
 }
 
 /* dump svg from file */
 char *layoutreader_svg_get(xmlDocPtr doc, xmlNodePtr cur)
 {
+	START_FUNC
 	char *ret=NULL;
 	xmlBufferPtr buf=xmlBufferCreate();
 	xmlOutputBufferPtr outputbuf=xmlOutputBufferCreateBuffer(buf,
@@ -117,12 +132,14 @@ char *layoutreader_svg_get(xmlDocPtr doc, xmlNodePtr cur)
 	ret=g_strdup((char *)xmlBufferContent(outputbuf->buffer));
 	xmlFree(outputbuf);
 	xmlBufferFree(buf);
+	END_FUNC
 	return ret;
 }
 
 /* Get the 'informatons' element data (see florence.c) */
 struct layout_infos *layoutreader_infos_new(struct layout *layout)
 {
+	START_FUNC
 	struct layout_infos *infos=layoutreader_element_init(layout,
 		"informations", sizeof(struct layout_infos));
 	xmlNodePtr cur=layout->cur;
@@ -134,22 +151,26 @@ struct layout_infos *layoutreader_infos_new(struct layout *layout)
 		}
 	}
 	layoutreader_element_close(layout);
+	END_FUNC
 	return infos;
 }
 
 /* Free the 'informations' element data */
 void layoutreader_infos_free(struct layout_infos *infos)
 {
+	START_FUNC
 	if (infos) {
 		if (infos->name) xmlFree(infos->name);
 		if (infos->version) xmlFree(infos->version);
 		g_free(infos);
 	}
+	END_FUNC
 }
 
 /* Get the 'keyboard' element data (see keyboard.c) */
 struct layout_size *layoutreader_keyboard_new(struct layout *layout)
 {
+	START_FUNC
 	struct layout_size *size=layoutreader_element_init(layout,
 		"keyboard", sizeof(struct layout_size));
 	if (size) for(;layout->cur && xmlStrcmp(layout->cur->name, (xmlChar *)"key");
@@ -160,19 +181,23 @@ struct layout_size *layoutreader_keyboard_new(struct layout *layout)
 			size->h=layoutreader_double_get(layout->doc, layout->cur);
 		}
 	}
+	END_FUNC
 	return size;
 }
 
 /* Free the 'keyboard' element data */
 void layoutreader_keyboard_free(struct layout *layout, struct layout_size *size)
 {
+	START_FUNC
 	layoutreader_element_close(layout);
 	if (size) g_free(size);
+	END_FUNC
 }
 
 /* Get the 'action' element data (for use in function layoutreader_key_new) */
 void layoutreader_action_get(struct layout *layout, xmlNodePtr cur, unsigned char **action, unsigned char **argument)
 {
+	START_FUNC
 	xmlNodePtr curact;
 	for(curact=cur->children;curact;curact=curact->next) {
 		if (!xmlStrcmp(curact->name, (xmlChar *)"command")) {
@@ -183,11 +208,13 @@ void layoutreader_action_get(struct layout *layout, xmlNodePtr cur, unsigned cha
 	}
 	if (!(*action))
 		*action=xmlNodeListGetString(layout->doc, cur->children, 1);
+	END_FUNC
 }
 
 /* Get the 'key' element data (see key.c) */
 struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_cb mod_cb, void *object, void *xkb)
 {
+	START_FUNC
 	xmlChar *tmp=NULL;
 	xmlNodePtr cur=layout->cur;
 	xmlNodePtr curmod;
@@ -248,21 +275,25 @@ struct layout_key *layoutreader_key_new(struct layout *layout, layout_modifier_c
 		layoutreader_element_close(layout);
 	} else layout->cur=cur;
 	g_free(mod);
+	END_FUNC
 	return key;
 }
 
 /* Free the 'key' element data */
 void layoutreader_key_free(struct layout_key *key)
 {
+	START_FUNC
 	if (key) {
 		if (key->shape) xmlFree(key->shape);
 		g_free(key);
 	}
+	END_FUNC
 }
 
 /* Get the 'extension' element data (see keyboard.c) */
 struct layout_extension *layoutreader_extension_new(struct layout *layout)
 {
+	START_FUNC
 	struct layout_extension *extension=layoutreader_element_init(layout,
 		"extension", sizeof(struct layout_extension));
 	if (extension) for(;layout->cur && xmlStrcmp(layout->cur->name, (xmlChar *)"keyboard");
@@ -276,23 +307,27 @@ struct layout_extension *layoutreader_extension_new(struct layout *layout)
 				layout->cur->children, 1);
 		}
 	}
+	END_FUNC
 	return extension;
 }
 
 /* Free the 'extension' element data */
 void layoutreader_extension_free(struct layout *layout, struct layout_extension *extension)
 {
+	START_FUNC
 	layoutreader_element_close(layout);
 	if (extension) {
 		if (extension->name) xmlFree(extension->name);
 		if (extension->identifiant) xmlFree(extension->identifiant);
 		g_free(extension);
 	}
+	END_FUNC
 }
 
 /* Read the trigger elements (only onhide for now) */
 struct layout_trigger *layoutreader_trigger_new(struct layout *layout)
 {
+	START_FUNC
 	unsigned char *action, *argument;
 	GSList *list=layout->ids;
 	xmlNodePtr cur=layout->cur;
@@ -310,19 +345,23 @@ struct layout_trigger *layoutreader_trigger_new(struct layout *layout)
 			}
 		}
 	} else layout->cur=cur;
+	END_FUNC
 	return trigger;
 }
 
 /* Free the trigger data memory */
 void layoutreader_trigger_free(struct layout *layout, struct layout_trigger *trigger)
 {
+	START_FUNC
 	layoutreader_element_close(layout);
 	if (trigger) g_free(trigger);
+	END_FUNC
 }
 
 /* Get the 'shape' element data (see style.c) */
 struct layout_shape *layoutreader_shape_new(struct layout *layout)
 {
+	START_FUNC
 	struct layout_shape *shape=layoutreader_element_init(layout,
 		"shape", sizeof(struct layout_shape));
 	xmlNodePtr cur=layout->cur;
@@ -334,22 +373,26 @@ struct layout_shape *layoutreader_shape_new(struct layout *layout)
 		}
 	}
 	layoutreader_element_close(layout);
+	END_FUNC
 	return shape;
 }
 
 /* Free the 'shape' element data */
 void layoutreader_shape_free(struct layout_shape *shape)
 {
+	START_FUNC
 	if (shape) {
 		if (shape->name) xmlFree(shape->name);
 		if (shape->svg) g_free(shape->svg);
 		g_free(shape);
 	}
+	END_FUNC
 }
 
 /* Get the 'symbol' element data (see style.c) */
 struct layout_symbol *layoutreader_symbol_new(struct layout *layout)
 {
+	START_FUNC
 	struct layout_symbol *symbol=layoutreader_element_init(layout,
 		"symbol", sizeof(struct layout_symbol));
 	xmlNodePtr cur=layout->cur;
@@ -365,12 +408,14 @@ struct layout_symbol *layoutreader_symbol_new(struct layout *layout)
 		}
 	}
 	layoutreader_element_close(layout);
+	END_FUNC
 	return symbol;
 }
 
 /* Free the 'shape' element data */
 void layoutreader_symbol_free(struct layout_symbol *symbol)
 {
+	START_FUNC
 	if (symbol) {
 		if (symbol->name) xmlFree(symbol->name);
 		if (symbol->svg) g_free(symbol->svg);
@@ -378,6 +423,7 @@ void layoutreader_symbol_free(struct layout_symbol *symbol)
 		if (symbol->type) xmlFree(symbol->type);
 		g_free(symbol);
 	}
+	END_FUNC
 }
 
 /* instanciates a new layout reader. Called in florence.c and style.c
@@ -386,6 +432,7 @@ void layoutreader_symbol_free(struct layout_symbol *symbol)
  * return the layoutreader handle */
 struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relaxng)
 {
+	START_FUNC
 	xmlRelaxNGParserCtxtPtr rngctx;
 	xmlRelaxNGPtr rng;
 	xmlRelaxNGValidCtxtPtr validrng;
@@ -430,7 +477,7 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 	validrng=xmlRelaxNGNewValidCtxt(rng);
 	if (0!=xmlRelaxNGValidateDoc(validrng, layout->doc))
 		flo_fatal(_("%s does not valdate against %s"), layoutfile, relaxng);
-	flo_debug(_("Using file %s"), layoutfile);
+	flo_debug(TRACE_DEBUG, _("Using file %s"), layoutfile);
 	if (mustfree) g_free(layoutfile);
 
 	xmlRelaxNGFreeValidCtxt(validrng);
@@ -440,12 +487,14 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 	if (!layout->doc || !layout->doc->children)
 		flo_error(_("File %s does not contain xml data"), layoutfile);
 	else layout->cur=layout->doc->children;
+	END_FUNC
 	return layout;
 }
 
 /* free the memory used by layout reader */
 void layoutreader_free(struct layout *layout)
 {
+	START_FUNC
 	GSList *list=layout->ids;
 	while (list) {
 		g_free(list->data);
@@ -454,5 +503,6 @@ void layoutreader_free(struct layout *layout)
 	g_slist_free(layout->ids);
 	xmlFreeDoc(layout->doc);
 	g_free(layout);
+	END_FUNC
 }
 

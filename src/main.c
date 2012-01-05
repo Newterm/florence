@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -38,6 +38,8 @@ char *program_name=NULL;
 char *config_file=NULL;
 /* focus window name, if given as argument, or NULL */
 char *focus=NULL;
+/* debug level */
+enum trace_level debug_level=TRACE_WARNING;
 
 /* Option flags and variables */
 static struct option const long_options[] =
@@ -45,7 +47,7 @@ static struct option const long_options[] =
 	{"help", no_argument, 0, 'h'},
 	{"version", no_argument, 0, 'V'},
 	{"config", no_argument, 0, 'c'},
-	{"debug", no_argument, 0, 'd'},
+	{"debug", optional_argument, 0, 'd'},
 	{"no-gnome", no_argument, 0, 'n'},
 	{"focus", optional_argument, 0, 'f'},
 	{"use-config", required_argument, 0, 'u'},
@@ -73,7 +75,11 @@ int main (int argc, char **argv)
 
 	program_name=argv[0];
 	config=decode_switches (argc, argv);
-	trace_init(config&2);
+	if (!(config&2)&&getenv("FLO_DEBUG"))
+		debug_level=trace_parse_level(getenv("FLO_DEBUG"));
+	trace_init(debug_level);
+	flo_info("debug_level=%d", debug_level);
+	START_FUNC
 	flo_info(_("Florence version %s"), VERSION);
 #ifndef ENABLE_XRECORD
 	flo_info(_("XRECORD has been disabled at compile time."));
@@ -100,12 +106,13 @@ int main (int argc, char **argv)
 	if (config_file) g_free(config_file);
 	if (focus) g_free(focus);
 
+	END_FUNC
 	trace_exit();
 	return ret;
 }
 
 /* Set all the option flags according to the switches specified.
-   Return the index of the first non-option argument.  */
+   Return a flag list of decoded switches.  */
 static int decode_switches (int argc, char **argv)
 {
 	int c;
@@ -129,9 +136,12 @@ static int decode_switches (int argc, char **argv)
 				break;
 			case 'h':usage (0);
 			case 'c':ret|=1; break;
-			case 'd':ret|=2; break;
+			case 'd':ret|=2;
+				if (optarg) debug_level=trace_parse_level(optarg);
+				else debug_level=TRACE_DEBUG;
+				break;
 			case 'n':ret|=4; break;
-			case 'f':if (g_strdup(optarg)) focus=g_strdup(optarg);
+			case 'f':if (optarg) focus=g_strdup(optarg);
 				else focus=g_strdup("");
 				break;
 			case 'u':config_file=g_strdup(optarg);break;
@@ -153,7 +163,7 @@ Options:\n\
   -h, --help              display this help and exit\n\
   -V, --version	          output version information and exit\n\
   -c, --config            open configuration window\n\
-  -d, --debug             print debug information to stdout\n\
+  -d, --debug [level]     print debug information to stdout\n\
   -n, --no-gnome          use this flag if you are not using GNOME\n\
   -f, --focus [window]    give the focus to the window\n\
   -u, --use-config file   use the given config file instead of gconf\n\n\

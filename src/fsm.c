@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2011 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -174,6 +174,7 @@ static struct fsm_change fsm_touch[FSM_EVENT_NUM][FSM_KEY_TYPE_NUM][KEY_STATE_NU
 /* process the fsm actions and state change */
 void fsm_process(struct status *status, struct key *key, enum fsm_event event)
 {
+	START_FUNC
 	enum key_state state;
 	enum status_key_type type;
 	guint idx;
@@ -187,17 +188,20 @@ void fsm_process(struct status *status, struct key *key, enum fsm_event event)
 		key_state_set(key, (*fsm)[event][type][state].new_state);
 		/* execute actions */
 		status_focus_window(status);
-		flo_debug(_("Key %p (type %d): Event %d received : Switching from state %d to %d"),
+		flo_debug(TRACE_DEBUG, _("Key %p (type %d): Event %d received : Switching from state %d to %d"),
 			key, type, event, state, (*fsm)[event][type][state].new_state);
 		if ((*fsm)[event][type][state].actions)
 			for (idx=0;(*fsm)[event][type][state].actions[idx];idx++)
 				(*fsm)[event][type][state].actions[idx](status, key);
 	}
+	END_FUNC
 }
 
 /* print a fsm error */
 void fsm_error (struct status *status, struct key *key)
 {
+	START_FUNC
 	flo_error(_("FSM state errorr: state=%d"), key->state);
+	END_FUNC
 }
 

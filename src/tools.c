@@ -1,7 +1,7 @@
 /* 
  * florence - Florence is a simple virtual keyboard for Gnome.
 
- * Copyright (C) 2008, 2009, 2010 François Agrech
+ * Copyright (C) 2012 François Agrech
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +28,7 @@
 /* sets the window icon to florence.svg */
 void tools_set_icon (GtkWindow *window)
 {
+	START_FUNC
 	GError *error=NULL;
 	GdkPixbuf *icon;
 	icon=gdk_pixbuf_new_from_file_at_size(ICONDIR "/florence.svg", 64, 64, &error);
@@ -37,12 +38,14 @@ void tools_set_icon (GtkWindow *window)
 		gtk_window_set_icon(window, icon);
 		gdk_pixbuf_unref(icon);
 	}
+	END_FUNC
 }
 
 /* open a YES/NO dialog window and return the user response */
 gint tools_dialog(const gchar *title, GtkWindow *parent,
 	const gchar *accept, const gchar *reject, const gchar *text)
 {
+	START_FUNC
 	gint ret;
         GtkWidget *dialog, *label;
 	dialog=gtk_dialog_new_with_buttons(title, parent, GTK_DIALOG_MODAL|GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -53,6 +56,7 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 	gtk_widget_show_all(dialog);
 	ret=gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_object_destroy(GTK_OBJECT(dialog));
+	END_FUNC
 	return ret;
 }
 
@@ -64,6 +68,7 @@ void tools_window_move(GtkWindow *window, AtspiAccessible *object)
 void tools_window_move(GtkWindow *window, Accessible *object)
 #endif
 {
+	START_FUNC
 #ifdef ENABLE_AT_SPI2
 	AtspiRect *rect;
 	AtspiComponent *component;
@@ -108,6 +113,7 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 		else if (y>win_height) gtk_window_move(window, x, y-win_height);
 		else gtk_window_move(window, x, screen_height-win_height);
 	} else flo_warn(_("Unable to get component from accessible object"));
+	END_FUNC
 }
 #endif
 
@@ -115,14 +121,18 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 /* replace glib 2.14's g_regex_new */
 gchar *tools_regex_new(gchar *regex)
 {
+	START_FUNC
 	gchar *result=g_malloc(strlen(regex)+1);
+	END_FUNC
 	return strcpy(result, regex);
 }
 
 /* replace glib 2.14's g_regex_unref */
 void tools_regex_free(gchar *regex)
 {
+	START_FUNC
 	g_free(regex);
+	END_FUNC
 }
 
 /* replace glib 2.14's g_regex_match */
@@ -130,6 +140,7 @@ void tools_regex_free(gchar *regex)
 /* It is best to have proper GRegex with GLib. */
 gboolean tools_regex_match(gchar *regex, gchar *text)
 {
+	START_FUNC
 	gboolean match=FALSE;
 	if ((!strchr(regex, '(')) && (!strchr(regex, '['))) {
 		match=((!strncmp(regex+1, text, strlen(regex)-2))&&
@@ -161,12 +172,14 @@ gboolean tools_regex_match(gchar *regex, gchar *text)
 		match=(!strcmp(text, "Left")) || (!strcmp(text, "KP_Left"));
 	else if (!strcmp(regex, "^(KP_|)Right$"))
 		match=(!strcmp(text, "Right")) || (!strcmp(text, "KP_Right"));
+	END_FUNC
 	return match;
 }
 
 /* replace glib 2.14's g_regex_replace_literal */
 gchar *tools_regex_replace_literal(gchar *old, gchar *source, gchar *new)
 {
+	START_FUNC
 	gchar *match=NULL;
 	gchar *result=NULL;
 	if ((match=strstr(source, old))) {
@@ -185,6 +198,7 @@ gchar *tools_regex_replace_literal(gchar *old, gchar *source, gchar *new)
 		g_free(result);
 		result=match;
 	}
+	END_FUNC
 	return result;
 }
 #endif

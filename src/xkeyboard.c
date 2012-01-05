@@ -1,7 +1,7 @@
 /* 
  * florence - Florence is a simple virtual keyboard for Gnome.
 
- * Copyright (C) 2008, 2009, 2010 François Agrech
+ * Copyright (C) 2012 François Agrech
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,10 +26,12 @@
 
 /* liberate groups memory */
 void xkeyboard_groups_free(struct xkeyboard *xkeyboard) {
+	START_FUNC
 	while(xkeyboard->groups) {
 		g_free(g_list_first(xkeyboard->groups)->data);
 		xkeyboard->groups=g_list_delete_link(xkeyboard->groups, g_list_first(xkeyboard->groups));
 	}
+	END_FUNC
 }
 
 #ifdef ENABLE_XKB
@@ -37,27 +39,32 @@ void xkeyboard_groups_free(struct xkeyboard *xkeyboard) {
 /* resurns TRUE is the symbol is a layout name */
 gboolean xkeyboard_is_sym(gchar *symbol)
 {
+	START_FUNC
 	gboolean ret=TRUE;
 	static gchar *nonSymbols[]={"group", "inet", "pc", "terminate", "compose", "level", NULL};
 	int i;
 	for(i=0; nonSymbols[i]; i++) {
 		if (!strcmp(symbol, nonSymbols[i])) { ret=FALSE; break; }
 	}
+	END_FUNC
 	return ret;
 }
 
 /* append a symbol to the list */
 void xkeyboard_list_append(gchar *symbol, GList **list)
 {
+	START_FUNC
 	gchar *newsymbol=g_malloc(sizeof(gchar)*(strlen(symbol)+1));
 	strcpy(newsymbol, symbol);
 	*list=g_list_append(*list, newsymbol);
-	flo_debug(_("new xkb symbol found: <%s>"), newsymbol);
+	flo_debug(TRACE_DEBUG, _("new xkb symbol found: <%s>"), newsymbol);
+	END_FUNC
 }
 
 /* parse the symbol string from xkb to extract the layout names */
 GList *xkeyboard_symParse(gchar *symbols, gint count)
 {
+	START_FUNC
 	GList *ret=NULL;
 	gboolean inSymbol=FALSE;
 	gchar curSymbol[32];
@@ -93,12 +100,14 @@ GList *xkeyboard_symParse(gchar *symbols, gint count)
 	if (inSymbol && curSymbol[0] && xkeyboard_is_sym(curSymbol) && (c<count))
 		xkeyboard_list_append(curSymbol, &ret);
 
+	END_FUNC
 	return ret;
 }
 
 /* returns the name of currently selected keyboard layout in XKB */
 void xkeyboard_layout(struct xkeyboard *xkeyboard)
 {
+	START_FUNC
 	gint i;
 	gint groupCount;
 	Atom* tmpGroupSource=None;
@@ -138,7 +147,7 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 		for (i=0 ; i<groupCount ; i++) {
 			if ((curGroupAtom=tmpGroupSource[i])!=None) {
 				groupName=XGetAtomName(disp, curGroupAtom);
-				flo_debug(_("keyboard layout found: <%s>"), groupName);
+				flo_debug(TRACE_DEBUG, _("keyboard layout found: <%s>"), groupName);
 				XFree(groupName);
 			}
 		}
@@ -148,7 +157,7 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 	symNameAtom=kbdDescPtr->names->symbols;
 	if (symNameAtom!=None) {
 		symName=XGetAtomName(disp, symNameAtom);
-		flo_debug(_("keyboard layout symbol name=<%s>"), symName);
+		flo_debug(TRACE_DEBUG, _("keyboard layout symbol name=<%s>"), symName);
 		xkeyboard->groups=xkeyboard_symParse(symName, groupCount);
 		if (!symName) return;
 		XFree(symName);
@@ -157,11 +166,13 @@ void xkeyboard_layout(struct xkeyboard *xkeyboard)
 	/* Select events */
 	/* XkbSelectEventDetails(disp, XkbUseCoreKbd, XkbStateNotify,
 		XkbAllStateComponentsMask, XkbGroupStateMask); */
+	END_FUNC
 }
 
 /* handles events from XKB */
 GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpointer data)
 {
+	START_FUNC
 	XkbEvent *xkbev;
 	XEvent *ev=(XEvent *)xevent;
 	struct xkeyboard *xkeyboard=(struct xkeyboard *)data;
@@ -172,10 +183,11 @@ GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpoi
 				xkeyboard_groups_free(xkeyboard);
 				xkeyboard_layout(xkeyboard);
 			}
-			flo_debug(_("XKB state notify event received"));
+			flo_debug(TRACE_DEBUG, _("XKB state notify event received"));
 			if (xkeyboard->user_data) xkeyboard->event_cb(xkeyboard->user_data);
 		}
 	}
+	END_FUNC
 	return GDK_FILTER_CONTINUE;
 }
 
@@ -184,14 +196,17 @@ GdkFilterReturn xkeyboard_event_handler(GdkXEvent *xevent, GdkEvent *event, gpoi
 /* returns the next layout name */
 gchar *xkeyboard_next_layout_get(struct xkeyboard *xkeyboard)
 {
+	START_FUNC
 #ifdef ENABLE_XKB
 	guint newgroup;
 	XkbStateRec xkbState;
 	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
 	XkbGetState(disp, XkbUseCoreKbd, &xkbState);
 	newgroup=(xkbState.group+1)%g_list_length(xkeyboard->groups);
+	END_FUNC
 	return (gchar *)g_list_nth_data(xkeyboard->groups, newgroup);
 #else
+	END_FUNC
 	return (gchar *)g_list_nth_data(xkeyboard->groups, 0);
 #endif
 }
@@ -199,6 +214,7 @@ gchar *xkeyboard_next_layout_get(struct xkeyboard *xkeyboard)
 /* switch keyboard layout */
 void xkeyboard_layout_change(struct xkeyboard *xkeyboard)
 {
+	START_FUNC
 #ifdef ENABLE_XKB
 	guint newgroup;
 	XkbStateRec xkbState;
@@ -206,23 +222,27 @@ void xkeyboard_layout_change(struct xkeyboard *xkeyboard)
 	XkbGetState(disp, XkbUseCoreKbd, &xkbState);
 	newgroup=(xkbState.group+1)%g_list_length(xkeyboard->groups);
 	if (XkbLockGroup(disp, XkbUseCoreKbd, newgroup)) {
-		flo_debug(_("switching to xkb layout %s"),
+		flo_debug(TRACE_DEBUG, _("switching to xkb layout %s"),
 			g_list_nth_data(xkeyboard->groups, newgroup));
 	} else flo_warn(_("Failed to switch xkb layout"));
 #endif
+	END_FUNC
 }
 
 /* register xkb events */
 void xkeyboard_register_events(struct xkeyboard *xkeyboard, xkeyboard_layout_changed event_cb, gpointer user_data)
 {
+	START_FUNC
 	xkeyboard->event_cb=event_cb;
 	xkeyboard->user_data=user_data;
+	END_FUNC
 }
 
 /* get keyval according to modifier */
 /* TODO: cache group state value */
 guint xkeyboard_getKeyval(struct xkeyboard *xkeyboard, guint code, GdkModifierType mod)
 {
+	START_FUNC
 	guint keyval=0;
 	XkbStateRec xkbState;
 	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
@@ -231,12 +251,14 @@ guint xkeyboard_getKeyval(struct xkeyboard *xkeyboard, guint code, GdkModifierTy
 		&keyval, NULL, NULL, NULL)) {
 		keyval=0;
 	}
+	END_FUNC
 	return keyval;
 }
 
 /* get the key properties (locker and modifier) from xkb */
 void xkeyboard_key_properties_get(struct xkeyboard *xkeyboard, guint code, GdkModifierType *mod, gboolean *locker)
 {
+	START_FUNC
 	*locker=FALSE;
 	*mod=0;
 #ifdef ENABLE_XKB
@@ -269,11 +291,13 @@ void xkeyboard_key_properties_get(struct xkeyboard *xkeyboard, guint code, GdkMo
 		*mod=128;
 	}
 #endif
+	END_FUNC
 }
 
 /* returns a new allocated structure containing data from xkb */
 struct xkeyboard *xkeyboard_new()
 {
+	START_FUNC
 	struct xkeyboard *xkeyboard=g_malloc(sizeof(struct xkeyboard));
 	if (!xkeyboard) flo_fatal(_("Unable to allocate memory for xkeyboard data"));
 	memset(xkeyboard, 0, sizeof(struct xkeyboard));
@@ -310,22 +334,27 @@ struct xkeyboard *xkeyboard_new()
 	       flo_warn(_("No xkb group found. Using default us group"));
 	       xkeyboard_list_append("us", &(xkeyboard->groups));
 	}
+	END_FUNC
 	return xkeyboard;
 }
 
 /* liberate memory used by the modifier map */
 void xkeyboard_client_map_free(struct xkeyboard *xkeyboard)
 {
+	START_FUNC
 #ifdef ENABLE_XKB
 	/* Free the modifiers map */
 	XkbFreeClientMap(xkeyboard->xkb_desc, XkbKeyActionsMask|XkbModifierMapMask, True);
 #endif
+	END_FUNC
 }
 
 /* liberate any memory used to record xkb data */
 void xkeyboard_free(struct xkeyboard *xkeyboard)
 {
+	START_FUNC
 	xkeyboard_groups_free(xkeyboard);
 	g_free(xkeyboard);
+	END_FUNC
 }
 

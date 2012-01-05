@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -85,11 +85,13 @@ static struct settings_info *settings_infos=NULL;
 /* returns the defaults table's index for gconf name */
 guint settings_default_idx(const gchar *gconf_name)
 {
+	START_FUNC
 	guint ret=0;
 	while (settings_defaults[ret].builder_name &&
 		strcmp(gconf_name, settings_defaults[ret].gconf_name)) {
 		ret++;
 	}
+	END_FUNC
 	return ret;
 }
 
@@ -97,6 +99,7 @@ guint settings_default_idx(const gchar *gconf_name)
 /* ! not thread safe */
 struct settings_key *settings_split(const gchar *key)
 {
+	START_FUNC
 	static struct settings_key ret;
 	if (strlen(key+1)>64) {
 		flo_fatal(_("Settings/split: buffer overflow : %s"), key);
@@ -105,12 +108,14 @@ struct settings_key *settings_split(const gchar *key)
 	ret.group=settings_infos->buffer;
 	ret.key=g_strrstr(settings_infos->buffer, "/");
 	*(ret.key++)='\0';
+	END_FUNC
 	return &ret;
 }
 
 /* called by settings_commit on each record of the changeset */
 void settings_value_set (GConfChangeSet *cs, const gchar *name, GConfValue *value, gpointer user_data)
 {
+	START_FUNC
 	struct settings_key *key;
 	key=settings_split(name+strlen(FLO_SETTINGS_ROOT)+1);
 	switch(value->type) {
@@ -133,6 +138,7 @@ void settings_value_set (GConfChangeSet *cs, const gchar *name, GConfValue *valu
 		default:flo_warn(_("Unknown value type: %d"), value->type);
 			break;
 	}
+	END_FUNC
 }
 
 /********************/
@@ -143,18 +149,21 @@ void settings_value_set (GConfChangeSet *cs, const gchar *name, GConfValue *valu
 /* ! not thread safe */
 char *settings_get_full_path(const char *path)
 {
+	START_FUNC
 	if ((strlen(FLO_SETTINGS_ROOT)+strlen(path)+2)>64) {
 		flo_fatal(_("Settings/get_full_path: buffer overflow : %s/%s"), FLO_SETTINGS_ROOT, path);
 	}
 	strcpy(settings_infos->buffer, FLO_SETTINGS_ROOT);
 	strcat(settings_infos->buffer, "/");
 	strcat(settings_infos->buffer, path);
+	END_FUNC
 	return settings_infos->buffer;
 }
 
 /* must be called before calling any settings function */
 void settings_init(gboolean exit, gchar *conf)
 {
+	START_FUNC
 	settings_infos=g_malloc(sizeof(struct settings_info));
 	memset(settings_infos, 0, sizeof(struct settings_info));
 	settings_infos->gtk_exit=exit;
@@ -171,11 +180,13 @@ void settings_init(gboolean exit, gchar *conf)
 		gconf_client_add_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
 			GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
 	}
+	END_FUNC
 }
 
 /* liberate all settings memory */
 void settings_exit(void)
 {
+	START_FUNC
 	GError *err=NULL;
 	gsize len;
 	gchar *data=NULL;
@@ -195,17 +206,21 @@ void settings_exit(void)
 		g_free(settings_infos);
 	}
 	settings_window_free();
+	END_FUNC
 }
 
 /* get parameters table */
 struct settings_param *settings_defaults_get(void)
 {
+	START_FUNC
+	END_FUNC
 	return settings_defaults;
 }
 
 /* Returns the gconf name of a gtk builder object option according to the name table */
 char *settings_get_gconf_name(GtkWidget *widget)
 {
+	START_FUNC
 	const gchar* widget_name=gtk_buildable_get_name(GTK_BUILDABLE(widget));
 	guint searchidx=0;
 	while (settings_defaults[searchidx].builder_name &&
@@ -213,52 +228,62 @@ char *settings_get_gconf_name(GtkWidget *widget)
 		settings_defaults[searchidx].builder_name)) {
 		searchidx++;
 	}
+	END_FUNC
 	return settings_defaults[searchidx].gconf_name;
 }
 
 /* register for gconf events */
 void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data)
 {
+	START_FUNC
 	if (settings_infos->gconfclient) {
 		gconf_client_notify_add(settings_infos->gconfclient,
 			settings_get_full_path(name), cb, user_data, NULL, NULL);
 	}
 	/* TODO: propagate key_file events? */
+	END_FUNC
 }
 
 /* register all events */
 guint settings_register_all(GConfClientNotifyFunc cb)
 {
+	START_FUNC
 	guint ret;
 	if (settings_infos->gconfclient) {
 		ret=gconf_client_notify_add(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
 			cb, NULL, NULL, NULL);
 	} else { ret=1; }
+	END_FUNC
 	return ret;
 }
 
 /* unregister events */
 void settings_unregister(guint notify_id)
 {
+	START_FUNC
 	if (settings_infos->gconfclient) {
 		gconf_client_notify_remove(settings_infos->gconfclient, notify_id);
 	}
+	END_FUNC
 }
 
 /* commit a changeset */
 void settings_commit(GConfChangeSet *cs)
 {
+	START_FUNC
 	if (settings_infos->gconfclient) {	
 		gconf_client_commit_change_set(settings_infos->gconfclient, cs, TRUE, NULL);
 	} else {
 		gconf_change_set_foreach(cs, (GConfChangeSetForeachFunc)settings_value_set, NULL);
 	}
 	gconf_change_set_clear(cs);
+	END_FUNC
 }
 
 /* get a value from gconf */
 GConfValue *settings_value_get(const gchar *name)
 {
+	START_FUNC
 	GError *err=NULL;
 	char *fullpath=settings_get_full_path(name);
 	GConfValue *ret;
@@ -303,17 +328,19 @@ GConfValue *settings_value_get(const gchar *name)
 	}
 	if (ret) {
 		str=gconf_value_to_string(ret);
-		flo_debug_distinct("CONF:%s=<%s>", fullpath, str);
+		flo_debug_distinct(TRACE_DEBUG, "CONF:%s=<%s>", fullpath, str);
 		if (str) g_free(str);
 	} else {
  		flo_warn_distinct(_("No gconf value for %s. Using default."), fullpath);
 	}
+	END_FUNC
 	return ret;
 }
 
 /* get an integer from gconf */
 gint settings_get_int(const gchar *name)
 {
+	START_FUNC
 	gint ret=0;
 	GConfValue *val=settings_value_get(name);;
 	if (!val) {
@@ -322,12 +349,14 @@ gint settings_get_int(const gchar *name)
 		ret=gconf_value_get_int(val);
 		gconf_value_free(val);
 	}
+	END_FUNC
 	return ret;
 }
 
 /* set a gconf integer */
 void settings_set_int(const gchar *name, gint value)
 {
+	START_FUNC
 	struct settings_key *key;
 	if (settings_infos->gconfclient) {
 		gconf_client_remove_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT, NULL);
@@ -338,11 +367,13 @@ void settings_set_int(const gchar *name, gint value)
 		key=settings_split(name);
 		g_key_file_set_integer(settings_infos->config, key->group, key->key, value);
 	}
+	END_FUNC
 }
 
 /* get a double from gconf */
 gdouble settings_double_get(const gchar *name)
 {
+	START_FUNC
 	gdouble ret=0.0;
 	GConfValue *val=settings_value_get(name);;
 	if (!val) {
@@ -351,12 +382,14 @@ gdouble settings_double_get(const gchar *name)
 		ret=gconf_value_get_float(val);
 		gconf_value_free(val);
 	}
+	END_FUNC
 	return ret;
 }
 
 /* set a gconf double */
 void settings_double_set(const gchar *name, gdouble value, gboolean b)
 {
+	START_FUNC
 	struct settings_key *key;
 	if (settings_infos->gconfclient) {
 		if (!b) gconf_client_remove_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT, NULL);
@@ -367,11 +400,13 @@ void settings_double_set(const gchar *name, gdouble value, gboolean b)
 		key=settings_split(name);
 		g_key_file_set_double(settings_infos->config, key->group, key->key, value);
 	}
+	END_FUNC
 }
 
 /* get a gconf string */
 gchar *settings_get_string(const gchar *name)
 {
+	START_FUNC
 	gchar *ret=NULL;
 	GConfValue *val=settings_value_get(name);;
 	if (!val) {
@@ -380,12 +415,14 @@ gchar *settings_get_string(const gchar *name)
 		ret=g_strdup(gconf_value_get_string(val));
 		gconf_value_free(val);
 	}
+	END_FUNC
 	return ret;
 }
 
 /* set a gconf string */
 void settings_string_set(const gchar *name, const gchar *value)
 {
+	START_FUNC
 	struct settings_key *key;
 	if (settings_infos->gconfclient) {
 		gconf_client_set_string(settings_infos->gconfclient, settings_get_full_path(name), value, NULL);
@@ -393,11 +430,13 @@ void settings_string_set(const gchar *name, const gchar *value)
 		key=settings_split(name);
 		g_key_file_set_string(settings_infos->config, key->group, key->key, value);
 	}
+	END_FUNC
 }
 
 /* get a gconf boolean */
 gboolean settings_get_bool(const gchar *name)
 {
+	START_FUNC
 	gboolean ret=FALSE;
 	GConfValue *val=settings_value_get(name);;
 	if (!val) {
@@ -406,12 +445,14 @@ gboolean settings_get_bool(const gchar *name)
 		ret=gconf_value_get_bool(val);
 		gconf_value_free(val);
 	}
+	END_FUNC
 	return ret;
 }
 
 /* set a gconf boolean */
 void settings_bool_set(const gchar *name, gboolean value)
 {
+	START_FUNC
 	struct settings_key *key;
 	if (settings_infos->gconfclient) {
 		gconf_client_set_bool(settings_infos->gconfclient, settings_get_full_path(name), value, NULL);
@@ -419,15 +460,18 @@ void settings_bool_set(const gchar *name, gboolean value)
 		key=settings_split(name);
 		g_key_file_set_boolean(settings_infos->config, key->group, key->key, value);
 	}
+	END_FUNC
 }
 
 /* Displays the settings dialog box on the screen and register events */
 void settings(void)
 {
+	START_FUNC
 	if (settings_window_open()) {
 		settings_window_present();
 	} else {
 		settings_window_new(settings_infos->gconfclient, settings_infos->gtk_exit);
 	}
+	END_FUNC
 }
 

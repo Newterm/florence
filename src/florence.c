@@ -1,7 +1,7 @@
 /* 
  * florence - Florence is a simple virtual keyboard for Gnome.
 
- * Copyright (C) 2008, 2009, 2010 François Agrech
+ * Copyright (C) 2012 François Agrech
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -47,16 +47,19 @@ static int flo_exit=FALSE;
 /* Called on destroy event (systray quit or close window) */
 void flo_destroy (void)
 {
+	START_FUNC
 #ifndef APPLET
 	gtk_main_quit();
 #endif
 	//gtk_exit (0);
+	END_FUNC
 }
 
 #ifdef AT_SPI
 /* Called to destroy the icon */
 void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
 	if (florence->obj) {
@@ -68,11 +71,13 @@ void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 		florence->obj=NULL;
 	}
 	florence->icon=NULL;
+	END_FUNC
 }
 
 /* on button-press events: destroy the icon and show the actual keyboard */
 void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
 	florence->icon=NULL;
@@ -85,11 +90,13 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 #endif
 		florence->obj=NULL;
 	}
+	END_FUNC
 }
 
 /* on expose event: display florence icon */
 void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata)
 {
+	START_FUNC
 	cairo_t *context, *mask_context;
 	RsvgHandle *handle;
 	GError *error=NULL;
@@ -124,6 +131,7 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	}
 
 	cairo_destroy(context);
+	END_FUNC
 }
 
 /* Show an intermediate icon before showing the keyboard (if intermediate_icon is activated) 
@@ -134,6 +142,7 @@ void flo_check_show (struct florence *florence, AtspiAccessible *obj)
 void flo_check_show (struct florence *florence, Accessible *obj)
 #endif
 {
+	START_FUNC
 	if (flo_exit || (!florence->view)) return;
 	if (GTK_WIDGET_VISIBLE(florence->view->window)) view_hide(florence->view);
 	if (settings_get_bool("behaviour/intermediate_icon")) {
@@ -166,6 +175,7 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 		tools_window_move(florence->icon, obj);
 		gtk_widget_show(GTK_WIDGET(florence->icon));
 	} else view_show(florence->view, obj);
+	END_FUNC
 }
 
 /* Called when a widget is focused.
@@ -176,6 +186,7 @@ void flo_focus_event (const AtspiEvent *event, void *user_data)
 void flo_focus_event (const AccessibleEvent *event, void *user_data)
 #endif
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	gboolean hide=FALSE;
 
@@ -211,6 +222,7 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 		florence->icon=NULL;
 		florence->obj=NULL;
 	}
+	END_FUNC
 }
 #endif
 
@@ -224,6 +236,7 @@ void flo_traverse (struct florence *florence, AtspiAccessible *obj)
 void flo_traverse (struct florence *florence, Accessible *obj)
 #endif
 {
+	START_FUNC
 	int n_children, i;
 #ifdef ENABLE_AT_SPI2
 	AtspiAccessible *child;
@@ -261,6 +274,7 @@ void flo_traverse (struct florence *florence, Accessible *obj)
 			}
 		}
 	}
+	END_FUNC
 }
 
 /* Called when a window is created */
@@ -270,10 +284,12 @@ void flo_window_create_event (const AtspiEvent *event, gpointer user_data)
 void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
 #endif
 {
+	START_FUNC
 	/* For some reason, focus state change does happen after traverse 
 	 * ==> did I misunderstand? */
 	/* TODO: remettre le keyboard au front. Attention: always_on_screen désactive cette fonction */
 	flo_traverse((struct florence *)user_data, event->source);
+	END_FUNC
 }
 #endif
 
@@ -282,6 +298,7 @@ void flo_window_create_event (const AccessibleEvent *event, gpointer user_data)
  * the events are deregistered when always on screen mode is activated */
 void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 {
+	START_FUNC
 #ifdef ENABLE_AT_SPI
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
@@ -344,11 +361,13 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 		florence->icon=NULL;
 #endif
 	}
+	END_FUNC
 }
 
 /* load the keyboards from the layout file into the keyboards member of florence */
 GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 {
+	START_FUNC
 	GSList *keyboards=NULL;;
 	struct keyboard *keyboard=NULL;
 	struct keyboard_globaldata global;
@@ -370,19 +389,23 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 	}
 
 	xkeyboard_client_map_free(florence->status->xkeyboard);
+	END_FUNC
 	return keyboards;
 }
 
 /* Triggered by gconf when the "auto_hide" parameter is changed. */
 void flo_set_auto_hide(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	flo_switch_mode(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	END_FUNC
 }
 
 /* handles mouse leave events */
 gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	status_focus_set(florence->status, NULL);
 	status_timer_stop(florence->status);
@@ -398,20 +421,24 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 #ifdef ENABLE_RAMBLE
 	if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
 #endif
+	END_FUNC
 	return FALSE;
 }
 
 /* handles mouse enter events */
 gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	status_release_latched(florence->status, NULL);
+	END_FUNC
 	return FALSE;
 }
 
 /* handles button press events */
 gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	struct key *key=NULL;
 	
@@ -438,12 +465,14 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 #ifdef ENABLE_RAMBLE
 	}
 #endif
+	END_FUNC
 	return FALSE;
 }
 
 /* handles button release events */
 gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
@@ -454,12 +483,14 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 		ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
 	}
 #endif
+	END_FUNC
 	return FALSE;
 }
 
 /* update the timer representation: to be called periodically */
 gboolean flo_timer_update(gpointer data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)data;
 	gboolean ret=TRUE;
 	if (status_timer_get(florence->status)>0.0 && status_focus_get(florence->status)) {
@@ -471,37 +502,45 @@ gboolean flo_timer_update(gpointer data)
 		/* view update */
 		status_focus_set(florence->status, status_focus_get(florence->status));
 	} else ret=FALSE;
+	END_FUNC
 	return ret;
 }
 
 /* bring the window back to front: to be calles periodically */
 gboolean flo_to_top(gpointer data)
 {
+	START_FUNC
 	struct florence *florence=data;
 	GtkWindow *window=GTK_WINDOW(view_window_get(florence->view));
 	if (!settings_get_bool("window/keep_on_top")) return FALSE;
 	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window))) gtk_window_present(window);
+	END_FUNC
 	return TRUE;
 }
 /* start keeping the keyboard back to front every second */
 void flo_start_keep_on_top(struct florence *florence, gboolean keep_on_top)
 {
+	START_FUNC
 	if (settings_get_bool("window/keep_on_top")) {
 		g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, florence);
 	}
+	END_FUNC
 }
 
 /* Triggered by gconf when the "keep_on_top" parameter is changed. */
 void flo_set_keep_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=user_data;
 	flo_start_keep_on_top(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	END_FUNC
 }
 
 /* handles mouse motion events 
  * update the keyboard key under the mouse */
 gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
+	START_FUNC
 #ifdef ENABLE_RAMBLE
 	enum key_hit hit;
 	gchar *algo;
@@ -547,6 +586,7 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 			status_focus_set(florence->status, key);
 		}
 	}
+	END_FUNC
 	return FALSE;
 }
 
@@ -554,6 +594,7 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
  * Those objects are the style object, the keyboards and the keys */
 void flo_layout_unload(struct florence *florence)
 {
+	START_FUNC
 	struct keyboard *keyboard;
 	while (florence->keyboards) {
 		keyboard=(struct keyboard *)florence->keyboards->data;
@@ -561,12 +602,14 @@ void flo_layout_unload(struct florence *florence)
 		florence->keyboards=g_slist_delete_link(florence->keyboards, florence->keyboards);
 	}
 	if (florence->style) style_free(florence->style);
+	END_FUNC
 }
 
 /* loads the layout file
  * create the layour objects: the style, the keyboards and the keys */
 void flo_layout_load(struct florence *florence)
 {
+	START_FUNC
 	struct layout *layout;
 	struct layout_infos *infos;
 	gchar *layoutname;
@@ -578,7 +621,7 @@ void flo_layout_load(struct florence *florence)
 		DATADIR "/relaxng/florence.rng");
 	layoutreader_element_open(layout, "layout");
 	infos=layoutreader_infos_new(layout);
-	flo_debug(_("Layout name: \"%s\""), infos->name);
+	flo_debug(TRACE_DEBUG, _("Layout name: \"%s\""), infos->name);
 	if (!infos->version || strcmp(infos->version, VERSION))
 		flo_warn(_("Layout version %s is different from program version %s"),
 			infos->version, VERSION);
@@ -591,22 +634,26 @@ void flo_layout_load(struct florence *florence)
 	florence->keyboards=flo_keyboards_load(florence, layout);
 	layoutreader_free(layout);
 	g_free(layoutname);
+	END_FUNC
 }
 
 /* reloads the layout file */
 void flo_layout_reload(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	status_reset(florence->status);
 	flo_layout_unload(florence);
 	flo_layout_load(florence);
 	view_update_layout(florence->view, florence->style, florence->keyboards);
+	END_FUNC
 }
 
 #ifdef ENABLE_AT_SPI
 /* check if at-spi is enabled in gnome */
 gboolean flo_check_at_spi(void)
 {
+	START_FUNC
 	gboolean ret=FALSE;
 	GConfClient *gconfclient=gconf_client_get_default();
 	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface",
@@ -629,6 +676,7 @@ gboolean flo_check_at_spi(void)
 		"functions are disabled, including auto-hide."));
 		ret=FALSE;
 	}
+	END_FUNC
 	return ret;
 }
 #endif
@@ -640,6 +688,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *applet)
 #endif
 {
+	START_FUNC
 	struct florence *florence=(struct florence *)g_malloc(sizeof(struct florence));
 	if (!florence) flo_fatal(_("Unable to allocate memory for florence"));
 	memset(florence, 0, sizeof(struct florence));
@@ -697,12 +746,14 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 	settings_changecb_register("layout/file", flo_layout_reload, florence);
 
+	END_FUNC
 	return florence;
 }
 
 /* liberate all the memory used by florence */
 void flo_free(struct florence *florence)
 {
+	START_FUNC
 	flo_exit=TRUE;
 #ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
@@ -727,5 +778,6 @@ void flo_free(struct florence *florence)
 	g_free(florence);
 	xmlCleanupParser();
 	xmlMemoryDump();
+	END_FUNC
 }
 

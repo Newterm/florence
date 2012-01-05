@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -19,25 +19,40 @@
 
 */
 
+/* debug level */
+enum trace_level {
+	TRACE_SEVERE,
+	TRACE_ERROR,
+	TRACE_WARNING,
+	TRACE_DEBUG,
+	TRACE_HIDEBUG
+};
+
 /* initializes the trace module. Must be called before any trace function
- * debug is a boolean. If it's true, the trace module will print debug informations */
-void trace_init(int debug);
+ * level indicates the minimum debug level of errors to display */
+void trace_init(enum trace_level level);
 /* liberate any memory used by the trace module */
 void trace_exit();
+/* return trace level parsed from the string argument */
+enum trace_level trace_parse_level(char *s);
 
-void flo_fatal (char *s, ...);
-void flo_error (char *s, ...);
-void flo_warn (char *s, ...);
+void flo_fatal(char *s, ...);
+void flo_error(char *s, ...);
+void flo_warn(char *s, ...);
 void flo_warn_distinct(char *s, ...);
-void flo_info (char *s, ...);
-void flo_debug (char *s, ...);
-void flo_debug_distinct(char *s, ...);
+void flo_info(char *s, ...);
+void flo_debug(enum trace_level level, char *s, ...);
+void flo_debug_distinct(enum trace_level level, char *s, ...);
+
+void flo_start_func(int line, const char *func, const char *file);
+void flo_end_func(int line, const char *func, const char *file);
 
 #if __GNUC__ >= 2
 #define FLO_FUNC __PRETTY_FUNCTION__
 #else
-#define FLO_FUNC "<unknown>"
+#define FLO_FUNC __func__
 #endif
 
-#define flo_start_func() (g_printf("%d: %s\n", (__LINE__), (FLO_FUNC)))
+#define START_FUNC (flo_start_func((__LINE__), (FLO_FUNC), (__FILE__)));
+#define END_FUNC (flo_end_func((__LINE__), (FLO_FUNC), (__FILE__)));
 

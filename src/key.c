@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -49,6 +49,7 @@
 /* Parse string into key type enumeration */
 enum key_action_type key_action_type_get(gchar *str)
 {
+	START_FUNC
 	enum key_action_type ret=KEY_UNKNOWN;
 	if (!strcmp(str, "close")) ret=KEY_CLOSE;
 	else if (!strcmp(str, "reduce")) ret=KEY_REDUCE;
@@ -60,12 +61,14 @@ enum key_action_type key_action_type_get(gchar *str)
 	else if (!strcmp(str, "extend")) ret=KEY_EXTEND;
 	else if (!strcmp(str, "unextend")) ret=KEY_UNEXTEND;
 	else flo_error(_("Unknown action key type %s"), str);
+	END_FUNC
 	return ret;
 }
 
 /* Append a new modifier to a key (object) */
 void key_modifier_append (struct layout_modifier *mod, void *object, void *xkb)
 {
+	START_FUNC
 	struct key *key=(struct key*) object;
 	struct xkeyboard *xkeyboard=(struct xkeyboard *)xkb;
 	struct key_mod *keymod=g_malloc(sizeof(struct key_mod));
@@ -92,12 +95,14 @@ void key_modifier_append (struct layout_modifier *mod, void *object, void *xkb)
 		}
 	}
 	key->mods=g_slist_append(key->mods, keymod);
+	END_FUNC
 }
 
 /* Instanciates a key
  * the key may have a static label which will be always drawn in place of the symbol */
 struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard *xkeyboard, void *keyboard)
 {
+	START_FUNC
 	struct key *key;
 	struct layout_key *lkey;
 	
@@ -113,19 +118,21 @@ struct key *key_new(struct layout *layout, struct style *style, struct xkeyboard
 		key->h=lkey->size.h==0.0?2.0:lkey->size.h;
 		key->keyboard=keyboard;
 		layoutreader_key_free(lkey);
-		flo_debug("[new key] x=%f y=%f w=%f h=%f",
+		flo_debug(TRACE_DEBUG, "[new key] x=%f y=%f w=%f h=%f",
 			key->x, key->y, key->w, key->h);
 	} else {
 		g_free(key);
 		key=NULL;
 	}
 
+	END_FUNC
 	return key;
 }
 
 /* liberate memory used by the key */
 void key_free(struct key *key)
 {
+	START_FUNC
 	struct key_action *action;
 	struct key_mod *mod;
 	GSList *list=key->mods;
@@ -141,11 +148,13 @@ void key_free(struct key *key)
 	}
 	g_slist_free(key->mods);
 	g_free(key);
+	END_FUNC
 }
 
 /* send a simple event: press (pressed=TRUE) or release (pressed=FALSE) */
 void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 {
+	START_FUNC
 #ifdef ENABLE_XTST
 	if (spi_enabled)
 #ifdef AT_SPI
@@ -171,11 +180,13 @@ void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 #error _("Neither at-spi nor Xtest is compiled. You should compile one.")
 #endif
 #endif
+	END_FUNC
 }
 
 /* find the right modifier according to the global modifier */
 struct key_mod *key_mod_find(struct key *key, GdkModifierType mod)
 {
+	START_FUNC
 	GSList *list=key->mods;
 	struct key_mod *keymod;
 	guint score=0;
@@ -188,12 +199,14 @@ struct key_mod *key_mod_find(struct key *key, GdkModifierType mod)
 		}
 		list=list->next;
 	}
+	END_FUNC
 	return keymod;
 }
 
 /* event triggered when the "extend" key is pressed 
  * activate the extension mentioned in the action argument */
 void key_extend(struct key_action *action) {
+	START_FUNC
 	gboolean activated=FALSE;
 	gchar *newexts=NULL;
 	gchar *allextstr=NULL;
@@ -214,11 +227,13 @@ void key_extend(struct key_action *action) {
 		}
 		g_free(allextstr);
 	}
+	END_FUNC
 }
 
 /* event triggered when the "extend" key is pressed 
  * activate the extension mentioned in the action argument */
 void key_unextend(struct key_action *action) {
+	START_FUNC
 	gboolean activated=FALSE;
 	gboolean started=FALSE;
 	gchar *newexts=NULL;
@@ -247,11 +262,13 @@ void key_unextend(struct key_action *action) {
 		g_free(newexts);
 		g_free(allextstr);
 	}
+	END_FUNC
 }
 
 /* Send a key press event. */
 void key_press(struct key *key, struct status *status)
 {
+	START_FUNC
 	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
 	struct key_action *action;
 	if (mod) {
@@ -277,11 +294,13 @@ void key_press(struct key *key, struct status *status)
 			default: flo_warn(_("unknown key type pressed."));
 		}
 	} else flo_warn(_("pressed key has no action associated."));
+	END_FUNC
 }
 
 /* Send a key release event. */
 void key_release(struct key *key, struct status *status)
 {
+	START_FUNC
 	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
 	struct key_action *action;
 	if (mod) {
@@ -316,12 +335,14 @@ void key_release(struct key *key, struct status *status)
 			default: flo_warn(_("unknown key type released."));
 		}
 	} else flo_warn(_("released key has no action associated."));
+	END_FUNC
 }
 
 /* Draw the representation of the auto-click timer on the key
  * value is between 0 and 1 */
 void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, double value)
 {
+	START_FUNC
 	cairo_save(cairoctx);
 	style_cairo_set_color(style, cairoctx, STYLE_MOUSE_OVER_COLOR);
 	cairo_move_to(cairoctx, key->w/2.0, key->h/2.0);
@@ -338,21 +359,25 @@ void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, dou
 	cairo_clip(cairoctx);
 	style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_MOUSE_OVER_COLOR);
 	cairo_restore(cairoctx);
+	END_FUNC
 }
 
 /* Draw the shape of the key to the cairo surface. */
 void key_shape_draw(struct key *key, struct style *style, cairo_t *cairoctx)
 {
+	START_FUNC
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	style_shape_draw(style, key->shape, cairoctx, key->w, key->h, STYLE_KEY_COLOR);
 	cairo_restore(cairoctx);
+	END_FUNC
 }
 
 /* Draw the symbol of the key to the cairo surface. The symbol drawn on the key depends on the modifier */
 void key_symbol_draw(struct key *key, struct style *style,
 	cairo_t *cairoctx, struct status *status, gboolean use_matrix)
 {
+	START_FUNC
 	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
 	struct key_action *action;
 
@@ -380,12 +405,14 @@ void key_symbol_draw(struct key *key, struct style *style,
 		default: flo_warn(_("unknown key type to draw."));
 	}
 	if (!use_matrix) cairo_restore(cairoctx);
+	END_FUNC
 }
 
 /* Draw the focus notifier to the cairo surface. */
 void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 	gdouble width, gdouble height, struct status *status)
 {
+	START_FUNC
 	enum style_colours color;
 	cairo_matrix_t matrix;
 	gdouble focus_zoom=status_focus_zoom_get(status)?settings_double_get("style/focus_zoom"):1.0;
@@ -418,28 +445,35 @@ void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 		key->state==KEY_RELEASED?STYLE_MOUSE_OVER_COLOR:color);
 	key_symbol_draw(key, style, cairoctx, status, TRUE);
 	cairo_restore(cairoctx);
+	END_FUNC
 }
 
 /* Draw the key press notifier to the cairo surface. */
 void key_press_draw(struct key *key, struct style *style, cairo_t *cairoctx, struct status *status)
 {
+	START_FUNC
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w/2.0), key->y-(key->h/2.0));
 	style_shape_draw(style, key->shape, cairoctx, key->w, key->h,
 		key->state==KEY_LATCHED?STYLE_LATCHED_COLOR:STYLE_ACTIVATED_COLOR);
 	key_symbol_draw(key, style, cairoctx, status, TRUE);
 	cairo_restore(cairoctx);
+	END_FUNC
 }
 
 /* getters and setters */
 void key_state_set(struct key *key, enum key_state state) { key->state=state; }
 /* note: a locker is a key which modification 0 is a locker key code*/
 gboolean key_is_locker(struct key *key) {
+	START_FUNC
+	END_FUNC
 	return ((struct key_mod *)key->mods->data)->type==KEY_CODE &&
 		((struct key_code *)((struct key_mod *)key->mods->data)->data)->locker;
 }
 void *key_get_keyboard(struct key *key) { return key->keyboard; }
 GdkModifierType key_get_modifier(struct key *key) {
+	START_FUNC
+	END_FUNC
 	return ((struct key_mod *)key->mods->data)->type==KEY_CODE?
 		((struct key_code *)((struct key_mod *)key->mods->data)->data)->modifier:0;
 }
@@ -451,6 +485,7 @@ enum key_hit key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 #endif
 {
+	START_FUNC
 	gint x1=zx*(key->x-(key->w/2.0));
 	gint y1=zy*(key->y-(key->h/2.0));
 	gint x2=x1+(zx*key->w);
@@ -460,6 +495,7 @@ gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 		ret=style_shape_test(key->shape, x-x1, y-y1, key->w*zx, key->h*zy);
 	}
 
+	END_FUNC
 #ifdef ENABLE_RAMBLE
 	if (ret) {
 		x1+=zx*key->w*BORDER_THRESHOLD;
@@ -477,9 +513,11 @@ gboolean key_hit(struct key *key, gint x, gint y, gdouble zx, gdouble zy)
 
 /* return the action type for the key and the status globalmod */
 enum key_action_type key_get_action(struct key *key, struct status *status) {
+	START_FUNC
 	struct key_mod *mod=key_mod_find(key, status_globalmod_get(status));
 	enum key_action_type ret=KEY_NOP;
 	if (mod->type==KEY_ACTION) ret=((struct key_action *)mod->data)->type;
+	END_FUNC
 	return ret;
 }
 

@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -56,6 +56,7 @@ struct symbol {
 /* color functions */
 gchar *style_get_color(enum style_colours c)
 {
+	START_FUNC
 	gchar *color=NULL;
 	switch(c) {
 		case STYLE_KEY_COLOR: color=(gchar *)settings_get_string("colours/key"); break;
@@ -73,12 +74,14 @@ gchar *style_get_color(enum style_colours c)
 			" Please read the FAQ in Florence documentation to learn more about how to"
 			" properly configure gconf."));
 	}
+	END_FUNC
 	return color;
 }
 
 /* set cairo color to one of the style colors */
 void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c)
 {
+	START_FUNC
 	guint r, g, b;
 	gchar *color=style_get_color(c);
 	if (3!=sscanf(color, "#%02x%02x%02x", &r, &g, &b)) {
@@ -86,11 +89,13 @@ void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_co
 		cairo_set_source_rgb(cairoctx, 0.0, 0.0, 0.0);
 	} else cairo_set_source_rgb(cairoctx, (gdouble)r/255.0, (gdouble)g/255.0, (gdouble)b/255.0);
 	if (color) g_free(color);
+	END_FUNC
 }
 
 /* insert css into an svg string */
 gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 {
+	START_FUNC
 	xmlSaveCtxtPtr save;
 	xmlBufferPtr buffer=xmlBufferCreate();
 	xmlDocPtr doc=xmlParseDoc((xmlChar *)svg);
@@ -144,23 +149,27 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 
 	xmlFreeDoc(doc);
 	xmlBufferFree(buffer);
+	END_FUNC
 	return ret;
 }
 
 /* check for cairo status */
 void style_cairo_status_check(cairo_t *cairoctx)
 {
+	START_FUNC
 	if (cairo_status(cairoctx)) {
 		if (cairo_status(cairoctx)==CAIRO_STATUS_NO_MEMORY)
 			flo_warn(_("Out of memory. Some symbols may not be displayed correctly."));
 		else
 			flo_warn(_("A cairo error occured: %d"), cairo_status(cairoctx));
 	}
+	END_FUNC
 }
 
 /* Renders a svg handle to a cairo surface at dimensions */
 void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub)
 {
+	START_FUNC
 	gdouble xscale, yscale;
 	gdouble xoffset=0., yoffset=0.;
 	RsvgDimensionData dimensions;
@@ -185,11 +194,13 @@ void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble 
 	cairo_scale(cairoctx, xscale, yscale);
 	rsvg_handle_render_cairo_sub(handle, cairoctx, sub);
 	cairo_restore(cairoctx);
+	END_FUNC
 }
 
 /* create a new symbol */
 void style_symbol_new(struct style *style, char *name, char *svg, char *label, char *type)
 {
+	START_FUNC
 	GError *error=NULL;
 	gchar *regex=NULL;
 	gchar *source=NULL;
@@ -215,12 +226,14 @@ void style_symbol_new(struct style *style, char *name, char *svg, char *label, c
 	} else {
 		style->symbols=g_slist_append(style->symbols, (gpointer)symbol);
 	}
-	flo_debug("[new symbol] name=%s label=%s", name, symbol->label);
+	flo_debug(TRACE_DEBUG, "[new symbol] name=%s label=%s", name, symbol->label);
+	END_FUNC
 }
 
 /* free up memory used by the symbol */
 void style_symbol_free(gpointer data, gpointer userdata)
 {
+	START_FUNC
 	struct symbol *symbol=(struct symbol *)data;
 	if (symbol) {
 		if (symbol->id.name) g_regex_unref(symbol->id.name);
@@ -229,11 +242,14 @@ void style_symbol_free(gpointer data, gpointer userdata)
 		if (symbol->source) g_free(symbol->source);
 		g_free(symbol);
 	}
+	END_FUNC
 }
 
 /* return TRUE if the name matches the symbol regexp */
 gboolean style_symbol_matches(struct symbol *symbol, gchar *name)
 {
+	START_FUNC
+	END_FUNC
 	if (!name) return FALSE;
 	return g_regex_match(symbol->id.name, name, G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
 }
@@ -241,6 +257,7 @@ gboolean style_symbol_matches(struct symbol *symbol, gchar *name)
 /* Draws text with cairo */
 void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdouble w, gdouble h)
 {
+	START_FUNC
 	cairo_font_extents_t fe;
 	cairo_text_extents_t te;
 	PangoFontDescription *fontdesc;
@@ -282,11 +299,13 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	cairo_restore(cairoctx);
 
 	pango_font_description_free(fontdesc);
+	END_FUNC
 }
 
 /* Draw the symbol represented by keyval */
 void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdouble w, gdouble h)
 {
+	START_FUNC
 	GSList *item=style->symbols;
 	gchar name[7];
 	guint keyval2=keyval;
@@ -312,11 +331,13 @@ void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdo
 	} else {
 		style_render_svg(cairoctx, ((struct symbol *)item->data)->svg, w, h, TRUE, NULL);
 	}
+	END_FUNC
 }
 
 /* Draw the symbol represented by type */
 void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum key_action_type type, gdouble w, gdouble h)
 {
+	START_FUNC
 	GSList *item=style->type_symbols;
 	while (item && (type!=((struct symbol *)item->data)->id.type)) {
 		item=g_slist_next(item);
@@ -328,11 +349,13 @@ void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum key_act
 			style_render_svg(cairoctx, ((struct symbol *)item->data)->svg, w, h, TRUE, NULL);
 		}
 	} else flo_error(_("No style symbol for action key %d"), type);
+	END_FUNC
 }
 
 /* callback for layoutreader for shape */
 void style_shape_new(struct style *style, char *name, char *svg)
 {
+	START_FUNC
 	struct shape *shape=g_malloc(sizeof(struct shape));
 	GError *error=NULL;
 	gchar *default_uri, *source;
@@ -352,13 +375,15 @@ void style_shape_new(struct style *style, char *name, char *svg)
 		source, error->message);
 	style->shapes=g_slist_append(style->shapes, (gpointer)shape);
 	if (!strcmp(name, "default")) style->default_shape=shape;
-	flo_debug(_("[new shape] name=%s svg=\"%s\""), shape->name, source);
+	flo_debug(TRACE_DEBUG, _("[new shape] name=%s svg=\"%s\""), shape->name, source);
 	if (source) g_free(source);
+	END_FUNC
 }
 
 /* liberate memory used for shape */
 void style_shape_free(gpointer data, gpointer userdata)
 {
+	START_FUNC
 	struct shape *shape=(struct shape *)data;
 	if (shape) {
 		if (shape->name) g_free(shape->name);
@@ -367,24 +392,32 @@ void style_shape_free(gpointer data, gpointer userdata)
 		if (shape->mask) cairo_surface_destroy(shape->mask);
 		g_free(shape);
 	}
+	END_FUNC
 }
 
 /* get the shape by its name */
-struct shape *style_shape_get (struct style *style, gchar *name) {
+struct shape *style_shape_get (struct style *style, gchar *name)
+{
+	START_FUNC
 	GSList *item=style->shapes;
-	if (!name) return style->default_shape;
-	while (item && strcmp(((struct shape *)item->data)->name, name)) item=g_slist_next(item);
-	if (!item) {
-		flo_warn(_("Shape %s doesn't exist for selected style."), name);
-		return style->default_shape;
-	}
-	return (struct shape *)item->data;
+	struct shape *ret=NULL;
+	if (name) {
+		while (item && strcmp(((struct shape *)item->data)->name, name)) item=g_slist_next(item);
+		if (item) ret=(struct shape *)item->data;
+		else {
+			flo_warn(_("Shape %s doesn't exist for selected style."), name);
+			ret=style->default_shape;
+		}
+	} else ret=style->default_shape;
+	END_FUNC
+	return ret;
 }
 
 /* draw the shape to the cairo context. */
 void style_shape_draw(struct style *style, struct shape *shape, cairo_t *cairoctx,
 	gdouble w, gdouble h, enum style_colours c)
 {
+	START_FUNC
 	gchar *source, *default_uri;
 	RsvgHandle *svg;
 	GError *error=NULL;
@@ -405,11 +438,13 @@ void style_shape_draw(struct style *style, struct shape *shape, cairo_t *cairoct
 		if (source) g_free(source);
 		if (svg) rsvg_handle_free(svg);
 	}
+	END_FUNC
 }
 
 /* create a mask surface for the shape, if it doesn't already exist */
 cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h)
 {
+	START_FUNC
 	cairo_t *maskctx;
 	if ((!shape->mask)||(w!=shape->maskw)||(h!=shape->maskh)) {
 		if (shape->mask) cairo_surface_destroy(shape->mask);
@@ -419,21 +454,25 @@ cairo_surface_t *style_shape_get_mask(struct shape *shape, guint w, guint h)
 		style_render_svg(maskctx, shape->svg, w, h, FALSE, NULL);
 		cairo_destroy(maskctx);
 	}
+	END_FUNC
 	return shape->mask;
 }
 
 /* test if point is inside the mask */
 gboolean style_shape_test(struct shape *shape, gint x, gint y, guint w, guint h)
 {
+	START_FUNC
 	cairo_surface_t *mask=style_shape_get_mask(shape, w, h);
 	unsigned char *data=cairo_image_surface_get_data(mask);
 	int stride=cairo_image_surface_get_stride(mask);
+	END_FUNC
 	return (x>=0) && (y>=0) && (x<w) && (y<h) && data[(y*stride)+x]>127;
 }
 
 /* update the color of one item */
 void style_update_color (gchar *source, RsvgHandle **svg, gchar *default_uri)
 {
+	START_FUNC
 	GError *error=NULL;
 	gchar *source_with_css;
 	if (*svg) {
@@ -447,11 +486,13 @@ void style_update_color (gchar *source, RsvgHandle **svg, gchar *default_uri)
 		if (error) flo_fatal(_("Unable to parse svg from layout file: %s"), source_with_css);
 		if (source_with_css) g_free(source_with_css);
 	}
+	END_FUNC
 }
 
 /* update the colors */
 void style_update_colors (struct style *style)
 {
+	START_FUNC
 	GSList *list;
 	struct symbol *symbol;
 	struct shape *shape;
@@ -480,22 +521,26 @@ void style_update_colors (struct style *style)
 		list=g_slist_next(list);
 	}
 	if (default_uri) g_free(default_uri);
+	END_FUNC
 }
 
 /* draw a style preview to a 32x32 gdk pixbuf 
  * this function is called by the settings dialog */
 GdkPixbuf *style_pixbuf_draw(struct style *style)
 {
+	START_FUNC
 	struct shape *shape=style_shape_get(style, NULL);
 	GdkPixbuf *temp=rsvg_handle_get_pixbuf(shape->svg);
 	GdkPixbuf *ret=gdk_pixbuf_scale_simple(temp, 32, 32, GDK_INTERP_HYPER);
 	gdk_pixbuf_unref(temp);
+	END_FUNC
 	return ret;
 }
 
 /* create a new style from the layout file */
 struct style *style_new(gchar *base_uri)
 {
+	START_FUNC
 	struct layout *layout=NULL;
 	struct layout_shape *shape=NULL;
 	struct layout_symbol *symbol=NULL;
@@ -528,12 +573,14 @@ struct style *style_new(gchar *base_uri)
 
 	layoutreader_free(layout);
 	if (!base_uri) g_free(uri);
+	END_FUNC
 	return style;
 }
 
 /* free style */
 void style_free(struct style *style)
 {
+	START_FUNC
 	if (style) {
 		g_slist_foreach(style->shapes, style_shape_free, NULL);
 		g_slist_free(style->shapes);
@@ -541,5 +588,6 @@ void style_free(struct style *style)
 		g_slist_free(style->symbols);
 		g_free(style);
 	}
+	END_FUNC
 }
 

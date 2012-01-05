@@ -1,7 +1,7 @@
 /* 
  * florence - Florence is a simple virtual keyboard for Gnome.
 
- * Copyright (C) 2008, 2009, 2010 François Agrech
+ * Copyright (C) 2012 François Agrech
 
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -40,6 +40,7 @@ void view_show (struct view *view, Accessible *object)
 void view_show (struct view *view)
 #endif
 {
+	START_FUNC
 #ifndef APPLET
 	gtk_widget_show(GTK_WIDGET(view->window));
 	/* Some winwow managers forget it */
@@ -56,17 +57,21 @@ void view_show (struct view *view)
 #else
 	gtk_widget_show(GTK_WIDGET(view->window));
 #endif
+	END_FUNC
 }
 
 /* Hides the view */
 void view_hide (struct view *view)
 {
+	START_FUNC
 	gtk_widget_hide(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* resize the window */
 void view_resize (struct view *view)
 {
+	START_FUNC
 	GdkRectangle rect;
 	GdkGeometry hints;
 	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
@@ -102,11 +107,13 @@ void view_resize (struct view *view)
 		rect.width=view->width; rect.height=view->height;
 		gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
 	}
+	END_FUNC
 }
 
 /* draws the background of florence */
 void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface, enum style_class class)
 {
+	START_FUNC
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
 	cairo_t *offscreen;
@@ -147,22 +154,29 @@ void view_draw (struct view *view, cairo_t *cairoctx, cairo_surface_t **surface,
 		list=list->next;
 	}
 	cairo_destroy(offscreen);
+	END_FUNC
 }
 
 /* draws the background of florence */
 void view_background_draw (struct view *view, cairo_t *cairoctx)
 {
+	START_FUNC
 	view_draw(view, cairoctx, &(view->background), STYLE_SHAPE);
+	END_FUNC
 }
 
 /* draws the symbols */
-void view_symbols_draw (struct view *view, cairo_t *cairoctx) {
+void view_symbols_draw (struct view *view, cairo_t *cairoctx)
+{
+	START_FUNC
 	view_draw(view, cairoctx, &(view->symbols), STYLE_SYMBOL);
+	END_FUNC
 }
 
 /* update the keyboard positions */
 void view_keyboards_set_pos(struct view *view, struct keyboard *over)
 {
+	START_FUNC
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
 	gdouble width, height, xoffset, yoffset;
@@ -214,11 +228,13 @@ void view_keyboards_set_pos(struct view *view, struct keyboard *over)
 		}
 		list = list->next;
 	}
+	END_FUNC
 }
 
 /* calculate the dimensions of Florence */
 void view_set_dimensions(struct view *view)
 {
+	START_FUNC
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
 	struct keyboard *over=NULL;
@@ -257,6 +273,7 @@ void view_set_dimensions(struct view *view)
 	view->width=(guint)(view->vwidth*view->scalex);
 	view->height=(guint)(view->vheight*view->scaley);
 	view_keyboards_set_pos(view, over);
+	END_FUNC
 }
 
 /* get the key at position */
@@ -266,6 +283,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y, enum key_hit *hit)
 struct key *view_hit_get (struct view *view, gint x, gint y)
 #endif
 {
+	START_FUNC
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
 	struct key *key;
@@ -292,6 +310,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 	key=keyboard_hit_get(keyboard, x-kx, y-ky, view->scalex, view->scaley);
 #endif
 
+	END_FUNC
 	return key;
 }
 
@@ -300,6 +319,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 /* For composited screen, this function is useless, use alpha channel instead. */
 void view_create_window_mask(struct view *view)
 {
+	START_FUNC
 	GdkBitmap *mask=NULL;
 	cairo_t *cairoctx=NULL;
 
@@ -324,57 +344,69 @@ void view_create_window_mask(struct view *view)
 		status_focus_zoom_set(view->status, TRUE);
 	}
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "transparent" parameter is changed. Calls view_create_window_mask */
 void view_set_transparent(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	gboolean shown=GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window));
 	gtk_widget_show(GTK_WIDGET(view->window));
 	view_create_window_mask(view);
 	if (!shown) gtk_widget_hide(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "decorated" parameter is changed. Decorates or undecorate the window. */
 void view_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	gtk_window_set_decorated(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "always_on_top" parameter is changed. 
    Change the window property to be always on top or not to be. */
 void view_set_always_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	gtk_window_set_keep_above(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "task_bar" parameter is changed. 
    Change the window hint to appear in the task bar or not. */
 void view_set_task_bar(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	gtk_window_set_skip_taskbar_hint(view->window, !gconf_value_get_bool(gconf_entry_get_value(entry)));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "resizable" parameter is changed.
    makes the window (not)resizable the window. */
 void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	if (settings_get_bool("window/resizable")) {
 		gtk_widget_set_size_request(GTK_WIDGET(view->window), view->vwidth, view->vheight);
 	}
 	view_resize(view);
+	END_FUNC
 }
 #endif
 
 /* Triggered by gconf when a color parameter is changed. */
 void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	char *key;
 	key=strrchr(entry->key, '/');
@@ -388,23 +420,27 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 		view->symbols=NULL;
 	}
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "resizable" parameter is changed.
    makes the window (not)resizable the window. */
 void view_set_keep_ratio(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	if (settings_get_bool("window/keep_ratio")) {
 		view->scaley=view->scalex;
 	}
 	view_resize(view);
 	view_redraw(client, xnxn_id, entry, user_data);
+	END_FUNC
 }
 
 /* Redraw the key to the window */
 void view_update(struct view *view, struct key *key, gboolean statechange)
 {
+	START_FUNC
 	GdkRectangle *rect;
 	GdkCursor *cursor;
 
@@ -429,11 +465,13 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 		gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
 		view->hand_cursor=FALSE;
 	}
+	END_FUNC
 }
 
 /* on screen change event: check for composite extension */
 void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view *view)
 {
+	START_FUNC
 	GdkScreen *screen=gtk_widget_get_screen(widget);
 	GdkColormap *colormap=gdk_screen_get_rgba_colormap(screen);
 	if (colormap) {
@@ -444,12 +482,14 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 		colormap=gdk_screen_get_rgb_colormap(screen);
 	}
 	gtk_widget_set_colormap(widget, colormap);
+	END_FUNC
 }
 
 #ifndef APPLET
 /* on configure events: record window position */
 void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view *view)
 {
+	START_FUNC
 	GdkRectangle rect;
 	gint xpos, ypos;
 	if (!GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window))) return;
@@ -489,12 +529,14 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	}
 
 	gdk_window_configure_finished (GTK_WIDGET(view->window)->window);
+	END_FUNC
 }
 #endif
 
 /* draw the background of the keyboard */
 void view_draw_background (struct view *view, cairo_t *context)
 {
+	START_FUNC
 	/* prepare the background */
 	if (!view->background) {
 		view_background_draw(view, context);
@@ -504,11 +546,13 @@ void view_draw_background (struct view *view, cairo_t *context)
 	cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 	cairo_set_source_surface(context, view->background, 0, 0);
 	cairo_paint(context);
+	END_FUNC
 }
 
 /* draw a list of keys (latched or locked keys) */
 void view_draw_list (struct view *view, cairo_t *context, GList *list)
 {
+	START_FUNC
 	struct keyboard *keyboard;
 	struct key *key;
 	while (list) {
@@ -517,11 +561,13 @@ void view_draw_list (struct view *view, cairo_t *context, GList *list)
 		keyboard_press_draw(keyboard, context, view->style, key, view->status);
 		list=list->next;
 	}
+	END_FUNC
 }
 
 /* draw a single key (pressed or focused) */
 void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 {
+	START_FUNC
 	struct keyboard *keyboard;
 	if (key) {
 		keyboard=(struct keyboard *)key_get_keyboard(key);
@@ -530,11 +576,13 @@ void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 			(gdouble)cairo_xlib_surface_get_height(view->background),
 			view->style, key, view->status);
 	}
+	END_FUNC
 }
 
 /* on expose event: draws the keyboards to the window */
 void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 {
+	START_FUNC
 	cairo_t *context;
 	enum key_state state;
 
@@ -612,20 +660,24 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 		view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 			G_CALLBACK(view_configure), view);
 #endif
+	END_FUNC
 }
 
 /* on keys changed events */
 void view_on_keys_changed(gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	view->symbols=NULL;
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "extensions" parameter is changed. */
 void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
@@ -654,11 +706,13 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 #endif
 	status_focus_set(view->status, NULL);
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
 void view_set_scalex(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 #ifndef APPLET
 	/* Do not call configure signal handler */
@@ -668,11 +722,13 @@ void view_set_scalex(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoi
 	view->scalex=gconf_value_get_float(gconf_entry_get_value(entry));
 	if (settings_get_bool("window/keep_ratio")) view->scaley=view->scalex;
 	view_update_extensions(client, xnxn_id, entry, user_data);
+	END_FUNC
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
 void view_set_scaley(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 #ifndef APPLET
 	/* Do not call configure signal handler */
@@ -682,13 +738,16 @@ void view_set_scaley(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoi
 	view->scaley=gconf_value_get_float(gconf_entry_get_value(entry));
 	if (settings_get_bool("window/keep_ratio")) view->scalex=view->scaley;
 	view_update_extensions(client, xnxn_id, entry, user_data);
+	END_FUNC
 }
 
 /* Triggered by gconf when the "opacity" parameter is changed. */
 void view_set_opacity(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct view *view=(struct view *)user_data;
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
+	END_FUNC
 }
 
 /* get gtk window of the view */
@@ -698,21 +757,27 @@ PanelApplet *view_window_get (struct view *view)
 GtkWindow *view_window_get (struct view *view)
 #endif
 {
+	START_FUNC
+	END_FUNC
 	return view->window;
 }
 
 /* get gtk window of the view */
 void view_status_set (struct view *view, struct status *status)
 {
+	START_FUNC
 	view->status=status;
+	END_FUNC
 }
 
 /* liberate all the memory used by the view */
 void view_free(struct view *view)
 {
+	START_FUNC
 	if (view->background) cairo_surface_destroy(view->background);
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	g_free(view);
+	END_FUNC
 }
 
 /* create a view of florence */
@@ -722,6 +787,7 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 struct view *view_new (struct status *status, struct style *style, GSList *keyboards)
 #endif
 {
+	START_FUNC
 	struct view *view=g_malloc(sizeof(struct view));
 	if (!view) flo_fatal(_("Unable to allocate memory for view"));
 	memset(view, 0, sizeof(struct view));
@@ -798,14 +864,17 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	/* set the window icon */
 	tools_set_icon(view->window);
 #endif
+	END_FUNC
 	return view;
 }
 
 /* Change the layout and style of the view and redraw */
 void view_update_layout(struct view *view, struct style *style, GSList *keyboards)
 {
+	START_FUNC
 	view->style=style;
 	view->keyboards=keyboards;
 	view_update_extensions(NULL, 0, NULL, (gpointer)view);
+	END_FUNC
 }
 

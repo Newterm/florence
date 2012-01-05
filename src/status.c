@@ -1,7 +1,7 @@
 /* 
    Florence - Florence is a simple virtual keyboard for Gnome.
 
-   Copyright (C) 2008, 2009, 2010 François Agrech
+   Copyright (C) 2012 François Agrech
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -34,13 +34,16 @@
 /* handle X11 errors */
 int status_error_handler(Display *my_dpy, XErrorEvent *event)
 {
+	START_FUNC
 	flo_warn(_("Unable to focus window."));
+	END_FUNC
 	return 0;
 }
 
 /* switch focus to focus window */
 void status_focus_window(struct status *status)
 {
+	START_FUNC
 	int (*old_handler)(Display *, XErrorEvent *);
 	if (status->w_focus) {
 		old_handler=XSetErrorHandler(status_error_handler);
@@ -49,18 +52,22 @@ void status_focus_window(struct status *status)
 		XSync(gdk_x11_get_default_xdisplay(), FALSE);
 		XSetErrorHandler(old_handler);
 	}
+	END_FUNC
 }
 
 /* update the global modifier mask */
 void status_globalmod_set(struct status *status, GdkModifierType mod)
 {
+	START_FUNC
 	status->globalmod|=mod;
+	END_FUNC
 }
 
 #ifdef ENABLE_XRECORD
 /* Called when a record event is received from XRecord */
 void status_record_event (XPointer priv, XRecordInterceptData *hook)
 {
+	START_FUNC
 	xEvent *event;
 	struct status *status=(struct status *)priv;
 	struct key *key;
@@ -74,19 +81,23 @@ void status_record_event (XPointer priv, XRecordInterceptData *hook)
 		}
 	}
 	if (hook) XRecordFreeData(hook);
+	END_FUNC
 }
 
 /* Process record events (every 1/10th of a second) */
 gboolean status_record_process (gpointer data)
 {
+	START_FUNC
 	struct status *status=(struct status *)data;
 	XRecordProcessReplies(status->data_disp);
+	END_FUNC
 	return TRUE;
 }
 
 /* Record keyboard events */
 gpointer status_record_start (gpointer data)
 {
+	START_FUNC
 	struct status *status=(struct status *)data;
 	int major, minor;
 	XRecordRange *range;
@@ -111,12 +122,14 @@ gpointer status_record_start (gpointer data)
 	}
 	else flo_warn(_("No XRecord extension found"));
 	if (!status->RecordContext) flo_warn(_("Keyboard synchronization is disabled."));
+	END_FUNC
 	return data;
 }
 
 /* Stop recording keyboard events */
 void status_record_stop (struct status *status)
 {
+	START_FUNC
 	if (status->RecordContext) {
 		XRecordDisableContext(status->data_disp, status->RecordContext);
 		XRecordFreeContext(status->data_disp, status->RecordContext);
@@ -127,11 +140,13 @@ void status_record_stop (struct status *status)
 		/* XCloseDisplay(status->data_disp); */
 		status->data_disp=NULL;
 	}
+	END_FUNC
 }
 
 /* Add keys to the keycode indexed keys */
 void status_keys_add(struct status *status, GSList *keys)
 {
+	START_FUNC
 	GSList *list=keys;
 	struct key *key;
 	struct key_mod *mod;
@@ -145,21 +160,26 @@ void status_keys_add(struct status *status, GSList *keys)
 		}
 		list=list->next;
 	}
+	END_FUNC
 }
 #endif
 
 /* update the focus key */
 void status_focus_set(struct status *status, struct key *focus)
 {
+	START_FUNC
 	struct key *old = status->focus;
 	status->focus=focus;
 	view_update(status->view, old, FALSE);
 	view_update(status->view, status->focus, FALSE);
+	END_FUNC
 }
 
 /* return the focus key */
 struct key *status_focus_get(struct status *status)
 {
+	START_FUNC
+	END_FUNC
 	return status->focus;
 }
 
@@ -171,6 +191,7 @@ struct key *status_pressed_get(struct status *status) { return status->pressed; 
  * WARNING: not multi-touch safe! */
 void status_pressed_set(struct status *status, struct key *pressed)
 {
+	START_FUNC
 	enum fsm_event event;
 	gboolean touch=(status_im_get(status)==STATUS_IM_TOUCH);
 
@@ -192,6 +213,7 @@ void status_pressed_set(struct status *status, struct key *pressed)
 	fsm_process(status, status->pressed, event);
 	if (touch) { if (status->pressed && key_get_modifier(status->pressed)) status->pressed=NULL; }
 	else status->pressed=pressed;
+	END_FUNC
 }
 
 /****************************/
@@ -201,22 +223,27 @@ void status_pressed_set(struct status *status, struct key *pressed)
 /* update the view according to the change */
 void status_update_view (struct status *status, struct key *key)
 {
+	START_FUNC
 	if (status->view) view_update(status->view, key, key_get_modifier(key));
+	END_FUNC
 }
 
 /* update the key */
 void status_update_key (struct status *status, struct key *key)
 {
+	START_FUNC
 	if (!key_get_modifier(key)) {
 		if (key->state==KEY_PRESSED) status->pressed=key;
 		else if ((key->state==KEY_RELEASED) && (status->pressed==key)) status->pressed=NULL;
 	}
 	if (status->view) view_update(status->view, key, FALSE);
+	END_FUNC
 }
 
 /* triggered after 200ms when a key has been touched. */
 gboolean status_touch_timer(gpointer data)
 {
+	START_FUNC
 	struct status *status=(struct status *)data;
 	if (status->pressed) {
 		key_state_set(status->pressed, KEY_RELEASED);
@@ -224,13 +251,15 @@ gboolean status_touch_timer(gpointer data)
 		status->pressed=NULL;
 	}
 	status->touch_id=0;
+	END_FUNC
 	return FALSE;
 }
 
 /* send the press event */
 void status_press (struct status *status, struct key *key)
 {
-	flo_debug(_("sending press event"));
+	START_FUNC
+	flo_debug(TRACE_DEBUG, _("sending press event"));
 	key_press(key, status);
 #ifdef ENABLE_XRECORD
 	if (((struct key_mod *)(key->mods->data))->type==KEY_ACTION)
@@ -239,12 +268,14 @@ void status_press (struct status *status, struct key *key)
 #ifdef ENABLE_XRECORD
 	status_record_process(status);
 #endif
+	END_FUNC
 }
 
 /* send the release event */
 void status_release (struct status *status, struct key *key)
 {
-	flo_debug(_("sending release event"));
+	START_FUNC
+	flo_debug(TRACE_DEBUG, _("sending release event"));
 	key_release(key, status);
 #ifdef ENABLE_XRECORD
 	if (((struct key_mod *)(key->mods->data))->type==KEY_ACTION)
@@ -259,11 +290,13 @@ void status_release (struct status *status, struct key *key)
 #ifdef ENABLE_XRECORD
 	status_record_process(status);
 #endif
+	END_FUNC
 }
 
 /* press all latched keys */
 void status_press_latched (struct status *status, struct key *key)
 {
+	START_FUNC
 	struct key *latched;
 	GList *list=status->latched_keys;
 	while (list) {
@@ -280,11 +313,13 @@ void status_press_latched (struct status *status, struct key *key)
 		}
 		list=list->next;
 	}
+	END_FUNC
 }
 
 /* release all latched keys */
 void status_release_latched (struct status *status, struct key *key)
 {
+	START_FUNC
 	struct key *latched;
 	GList *list=status->latched_keys;
 	while (list) {
@@ -301,11 +336,13 @@ void status_release_latched (struct status *status, struct key *key)
 		}
 		list=list->next;
 	}
+	END_FUNC
 }
 
 /* calculate globalmod according to latched and locked list */
 void status_globalmod_calc(struct status *status)
 {
+	START_FUNC
 	GdkModifierType globalmod=0;
 	GList *list=status->latched_keys;
 	while (list) {
@@ -318,42 +355,52 @@ void status_globalmod_calc(struct status *status)
 		list=list->next;
 	}
 	status->globalmod=globalmod;
+	END_FUNC
 }
 
 /* latch or lock a key (depending on state) */
 void status_latchorlock (struct status *status, struct key *key, enum key_state state)
 {
+	START_FUNC
 	GList **list=(state==KEY_LATCHED?&(status->latched_keys):&(status->locked_keys));
 	*list=g_list_append(*list, key);
 	/* update globalmod */
 	status_globalmod_set(status, key_get_modifier(key));
+	END_FUNC
 }
 
 /* unlatch or unlock a key (depending on state) */
 void status_unlatchorlock (struct status *status, struct key *key, enum key_state state)
 {
+	START_FUNC
 	GList **list=(state==KEY_LATCHED?&(status->latched_keys):&(status->locked_keys));
 	GList *found;
 	if ((found=g_list_find(*list, key)))
 		*list=g_list_delete_link(*list, found);
 	status_globalmod_calc(status);
+	END_FUNC
 }
 
 /* latch a key */
 void status_latch (struct status *status, struct key *key)
 {
+	START_FUNC
 	status_latchorlock(status, key, KEY_LATCHED);
+	END_FUNC
 }
 
 /* unlatch a key */
 void status_unlatch (struct status *status, struct key *key)
 {
+	START_FUNC
 	status_unlatchorlock(status, key, KEY_LATCHED);
+	END_FUNC
 }
 
 /* unlatch all latched keys */
 void status_unlatch_all (struct status *status, struct key *key)
 {
+	START_FUNC
 	struct key *latched;
 	while(status->latched_keys) {
 		latched=(struct key *)(g_list_first(status->latched_keys)->data);
@@ -363,18 +410,23 @@ void status_unlatch_all (struct status *status, struct key *key)
 		if (status->view) view_update(status->view, latched, TRUE);
 	}
 	status_globalmod_calc(status);
+	END_FUNC
 }
 
 /* lock a key*/
 void status_lock (struct status *status, struct key *key)
 {
+	START_FUNC
 	status_latchorlock(status, key, KEY_LOCKED);
+	END_FUNC
 }
 
 /* unlock a key */
 void status_unlock (struct status *status, struct key *key)
 {
+	START_FUNC
 	status_unlatchorlock(status, key, KEY_LOCKED);
+	END_FUNC
 }
 
 
@@ -385,6 +437,8 @@ struct key *status_hit_get(struct status *status, gint x, gint y, enum key_hit *
 struct key *status_hit_get(struct status *status, gint x, gint y)
 #endif
 {
+	START_FUNC
+	END_FUNC
 #ifdef ENABLE_RAMBLE
 	return view_hit_get(status->view, x, y, hit);
 #else
@@ -395,28 +449,34 @@ struct key *status_hit_get(struct status *status, gint x, gint y)
 /* start the timer */
 void status_timer_start(struct status *status, GSourceFunc update, gpointer data)
 {
+	START_FUNC
 	if (status->timer) g_timer_start(status->timer);
 	else {
 		status->timer=g_timer_new();
 		g_timeout_add(STATUS_ANIMATION_INTERVAL, update, data);
 	}
+	END_FUNC
 }
 
 /* stop the timer */
 void status_timer_stop(struct status *status)
 {
+	START_FUNC
 	if (status->timer) {
 		g_timer_destroy(status->timer);
 		status->timer=NULL;
 	}
+	END_FUNC
 }
 
 /* get timer value */
 gdouble status_timer_get(struct status *status)
 {
+	START_FUNC
 	gdouble ret=0.0;
 	if (status->timer)
 		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_double_get("behaviour/timer");
+	END_FUNC
 	return ret;
 }
 
@@ -432,6 +492,7 @@ GdkModifierType status_globalmod_get(struct status *status) { return status->glo
 /* find a child window of win to focus by its name */
 struct status_focus *status_find_subwin(Window parent, const gchar *win)
 {
+	START_FUNC
 	Window root_return, parent_return;
 	Window *children;
 	guint nchildren, idx;
@@ -458,6 +519,7 @@ struct status_focus *status_find_subwin(Window parent, const gchar *win)
 	} else {
 		flo_warn(_("XQueryTree failed."));
 	}
+	END_FUNC
 	return focus;
 }
 
@@ -465,6 +527,7 @@ struct status_focus *status_find_subwin(Window parent, const gchar *win)
 /* TODO: wait for window to exist */
 struct status_focus *status_find_window(const gchar *win)
 {
+	START_FUNC
 	gchar *name;
 	struct status_focus *focus=NULL;
 	if (win && win[0]) {
@@ -484,12 +547,14 @@ struct status_focus *status_find_window(const gchar *win)
 		}
 		if (name) XFree(name);
 	}
+	END_FUNC
 	return focus;
 }
 
 /* Set input method */
 void status_im_set(struct status *status, gchar *val)
 {
+	START_FUNC
 	if (!strcmp(val, "button")) status->input_method=STATUS_IM_BUTTON;
 	else if (!strcmp(val, "timer")) status->input_method=STATUS_IM_TIMER;
 #ifdef ENABLE_RAMBLE
@@ -500,24 +565,30 @@ void status_im_set(struct status *status, gchar *val)
 		status->input_method=STATUS_IM_BUTTON;
 		flo_warn(_("Unknown input method: %s ; using button input method"), val);
 	}
+	END_FUNC
 }
 
 /* Called on input method change */
 void status_input_method(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct status *status=(struct status *)user_data;
 	status_im_set(status, (gchar *)gconf_value_get_string(gconf_entry_get_value(entry)));
+	END_FUNC
 }
 
 /* get selected input method */
 enum status_input_method status_im_get(struct status *status)
 {
+	START_FUNC
+	END_FUNC
 	return status->input_method;
 }
 
 /* allocate memory for status */
 struct status *status_new(const gchar *focus_back)
 {
+	START_FUNC
 	gchar *im;
 	struct status *status=g_malloc(sizeof(struct status));
 	if (!status) flo_fatal(_("Unable to allocate memory for status"));
@@ -534,12 +605,14 @@ struct status *status_new(const gchar *focus_back)
 	status_im_set(status, im);
 	if (im) g_free(im);
 	settings_changecb_register("behaviour/input_method", status_input_method, status);
+	END_FUNC
 	return status;
 }
 
 /* liberate status memory */
 void status_free(struct status *status)
 {
+	START_FUNC
 #ifdef ENABLE_XRECORD
 	status_record_stop(status);
 #endif
@@ -549,11 +622,13 @@ void status_free(struct status *status)
 	if (status->locked_keys) g_list_free(status->locked_keys);
 	if (status->w_focus) g_free(status->w_focus);
 	if (status) g_free(status);
+	END_FUNC
 }
 
 /* reset the status to its original state */
 void status_reset(struct status *status)
 {
+	START_FUNC
 	status->focus=NULL;
 	status->pressed=NULL;
 	if (status->timer) g_timer_destroy(status->timer);
@@ -563,18 +638,22 @@ void status_reset(struct status *status)
 	status->latched_keys=NULL;
 	status->locked_keys=NULL;
 	status->globalmod=0;
+	END_FUNC
 }
 
 /* sets the view to update on status change */
 void status_view_set(struct status *status, struct view *view)
 {
+	START_FUNC
 	status->view=view;
 	view_status_set(view, status);
+	END_FUNC
 }
 
 /* disable sending of spi events: send xtest events instead */
 void status_spi_disable(struct status *status)
 {
+	START_FUNC
 #ifdef ENABLE_XTST
 	int event_base, error_base, major, minor;
 	if (!XTestQueryExtension(
@@ -592,6 +671,7 @@ void status_spi_disable(struct status *status)
 	flo_fatal(_("There is no way we can send keyboard events."));
 #endif
 	status->spi=FALSE;
+	END_FUNC
 }
 
 /* tell if spi is enabled */
@@ -600,11 +680,13 @@ gboolean status_spi_is_enabled(struct status *status) { return status->spi; }
 /* set/get moving status */
 void status_set_moving(struct status *status, gboolean moving)
 {
+	START_FUNC
 	status->moving=moving;
 #ifndef APPLET
 	if (moving) gtk_window_set_gravity(view_window_get(status->view), GDK_GRAVITY_STATIC);
 	else gtk_window_set_gravity(view_window_get(status->view), GDK_GRAVITY_NORTH_WEST);
 #endif
+	END_FUNC
 }
 gboolean status_get_moving(struct status *status) { return status->moving; }
 

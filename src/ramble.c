@@ -31,6 +31,7 @@
 /* Invalidate the region modified by the path */
 void ramble_update_region(GList *path, GdkWindow *window)
 {
+	START_FUNC
 	GdkRectangle rect;
 	struct ramble_point *p1, *p2;
 
@@ -57,11 +58,13 @@ void ramble_update_region(GList *path, GdkWindow *window)
 			gdk_window_invalidate_rect(window, &rect, TRUE);
 		}
 	}
+	END_FUNC
 }
 
 /* Detect gesture based on distance */
 void ramble_distance(struct ramble *ramble)
 {
+	START_FUNC
 	GList *list;
 	gint dw, dh;
 	gdouble d=0.0, w, h, threshold;
@@ -92,11 +95,13 @@ void ramble_distance(struct ramble *ramble)
 		pt->ev=TRUE;
 		list=NULL;
 	}
+	END_FUNC
 }
 
 /* Detect gesture based on time */
 void ramble_time(struct ramble *ramble)
 {
+	START_FUNC
 	struct ramble_point *pt;
 	pt=(struct ramble_point *)ramble->end->data;
 	if (pt->k) {
@@ -118,18 +123,22 @@ void ramble_time(struct ramble *ramble)
 		g_timer_destroy(ramble->timer);
 		ramble->timer=NULL;
 	}
+	END_FUNC
 }
 
 /* Reset timer */
 void ramble_time_reset(struct ramble *ramble)
 {
+	START_FUNC
 	g_timer_start(ramble->timer);
+	END_FUNC
 }
 
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
 gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k)
 {
+	START_FUNC
 	gchar *val;
 	struct ramble_point *pt=g_malloc(sizeof(struct ramble_point));
 
@@ -161,24 +170,30 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 	if (val) g_free(val);
 
 	ramble->started=TRUE;
+	END_FUNC
 	return pt->ev;
 }
 
 /* Start rambling. Note: when ramble_button is FALSE, ramble is always started. */
 void ramble_start(struct ramble *ramble)
 {
+	START_FUNC
 	ramble->started=TRUE;
+	END_FUNC
 }
 
 /* Return TRUE if rambling is started */
 gboolean ramble_started(struct ramble *ramble)
 {
+	START_FUNC
+	END_FUNC
 	return (!settings_get_bool("behaviour/ramble_button")) || ramble->started;
 }
 
 /* Reset ramble path */
 void ramble_reset(struct ramble *ramble, GdkWindow *window)
 {
+	START_FUNC
 	GdkRectangle *rect=NULL;
 	GList *list=ramble->path;
 	struct ramble_point *pt;
@@ -210,11 +225,13 @@ void ramble_reset(struct ramble *ramble, GdkWindow *window)
 	ramble->end=NULL;
 	ramble->n=0;
 	ramble->started=FALSE;
+	END_FUNC
 }
 
 /* Draw the ramble path to the cairo context */
 void ramble_draw(struct ramble *ramble, cairo_t *ctx)
 {
+	START_FUNC
 	GList *list=ramble->end;
 	struct ramble_point *p;
 	if (list) {
@@ -233,31 +250,37 @@ void ramble_draw(struct ramble *ramble, cairo_t *ctx)
 		cairo_set_line_width(ctx, 5);
 		cairo_stroke(ctx);
 	}
+	END_FUNC
 }
 
 /* called when the input method changes */
 void ramble_input_method_check(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
 {
+	START_FUNC
 	struct ramble *ramble=(struct ramble *)user_data;
 	gchar *val=settings_get_string("behaviour/input_method");
 	if (strcmp("ramble", val))
 		ramble_reset(ramble, NULL);
 	if (val) g_free(val);
+	END_FUNC
 }
 
 /* Create a ramble structure */
 struct ramble *ramble_new()
 {
+	START_FUNC
 	struct ramble *ramble=g_malloc(sizeof(struct ramble));
 	if (!ramble) flo_fatal(_("Unable to allocate memory for ramble"));
 	memset(ramble, 0, sizeof(struct ramble));
 	settings_changecb_register("behaviour/input_method", ramble_input_method_check, ramble);
+	END_FUNC
 	return ramble;
 }
 
 /* Destroy a ramble structure */
 void ramble_free(struct ramble *ramble)
 {
+	START_FUNC
 	GList *list=ramble->path;
 	while (list) {
 		g_free(list->data);
@@ -265,6 +288,7 @@ void ramble_free(struct ramble *ramble)
 	}
 	g_list_free(ramble->path);
 	g_free(ramble);
+	END_FUNC
 }
 
 #endif
