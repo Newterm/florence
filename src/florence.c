@@ -406,21 +406,25 @@ void flo_set_auto_hide(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	START_FUNC
+	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
 	struct florence *florence=(struct florence *)user_data;
-	status_focus_set(florence->status, NULL);
-	status_timer_stop(florence->status);
-	/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
-	 * we just release any pressed key when the mouse leaves. */
-	if (status_get_moving(florence->status)) {
-		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventCrossing*)event)->x_root-florence->xpos,
-			(gint)((GdkEventCrossing*)event)->y_root-florence->ypos);
-	} else {
-		status_pressed_set(florence->status, NULL);
-		status_press_latched(florence->status, NULL);
-	}
+	/* Work around gtk bug */
+	if (detail!=GDK_NOTIFY_ANCESTOR) {
+		status_focus_set(florence->status, NULL);
+		status_timer_stop(florence->status);
+		/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
+		 * we just release any pressed key when the mouse leaves. */
+		if (status_get_moving(florence->status)) {
+			gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventCrossing*)event)->x_root-florence->xpos,
+				(gint)((GdkEventCrossing*)event)->y_root-florence->ypos);
+		} else {
+			status_pressed_set(florence->status, NULL);
+			status_press_latched(florence->status, NULL);
+		}
 #ifdef ENABLE_RAMBLE
-	if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
+		if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
 #endif
+		}
 	END_FUNC
 	return FALSE;
 }
@@ -429,8 +433,12 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	START_FUNC
+	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
 	struct florence *florence=(struct florence *)user_data;
-	status_release_latched(florence->status, NULL);
+	/* Work around gtk bug */
+	if (detail!=GDK_NOTIFY_ANCESTOR) {
+		status_release_latched(florence->status, NULL);
+	}
 	END_FUNC
 	return FALSE;
 }

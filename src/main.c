@@ -78,7 +78,6 @@ int main (int argc, char **argv)
 	if (!(config&2)&&getenv("FLO_DEBUG"))
 		debug_level=trace_parse_level(getenv("FLO_DEBUG"));
 	trace_init(debug_level);
-	flo_info("debug_level=%d", debug_level);
 	START_FUNC
 	flo_info(_("Florence version %s"), VERSION);
 #ifndef ENABLE_XRECORD
