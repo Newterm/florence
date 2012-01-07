@@ -138,8 +138,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Normal key background color</property>
-                                <property context="yes" name="title" translatable="yes">Key background color</property>
+                                <property name="tooltip-text" translatable="yes">Normal key background color</property>
+                                <property name="title" translatable="yes">Key background color</property>
                                 <property name="color">#000000000000</property>
                                 <signal handler="settings_window_change_color" name="color_set"/>
                               </object>
@@ -154,8 +154,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Activated key background color</property>
-                                <property context="yes" name="title" translatable="yes">Activated key background color</property>
+                                <property name="tooltip-text" translatable="yes">Activated key background color</property>
+                                <property name="title" translatable="yes">Activated key background color</property>
                                 <property name="color">#000000000000</property>
                                 <signal handler="settings_window_change_color" name="color_set"/>
                               </object>
@@ -172,8 +172,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Labels and symbols color</property>
-                                <property context="yes" name="title" translatable="yes">Labels and symbols color</property>
+                                <property name="tooltip-text" translatable="yes">Labels and symbols color</property>
+                                <property name="title" translatable="yes">Labels and symbols color</property>
                                 <property name="color">#000000000000</property>
                                 <signal handler="settings_window_change_color" name="color_set"/>
                               </object>
@@ -190,8 +190,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Labels and symbols outline color</property>
-                                <property context="yes" name="title" translatable="yes">Labels and symbols outline color</property>
+                                <property name="tooltip-text" translatable="yes">Labels and symbols outline color</property>
+                                <property name="title" translatable="yes">Labels and symbols outline color</property>
                                 <property name="color">#000000000000</property>
                                 <signal handler="settings_window_change_color" name="color_set"/>
                               </object>
@@ -208,8 +208,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Latched keys background color</property>
-                                <property context="yes" name="title" translatable="yes">Latched keys color</property>
+                                <property name="tooltip-text" translatable="yes">Latched keys background color</property>
+                                <property name="title" translatable="yes">Latched keys color</property>
                                 <property name="color">#000000000000</property>
                                 <signal handler="settings_window_change_color" name="color_set"/>
                               </object>
@@ -228,8 +228,8 @@
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Key with mouve over background color</property>
-                                <property context="yes" name="title" translatable="yes">Key background color when the mouse is over</property>
+                                <property name="tooltip-text" translatable="yes">Key with mouve over background color</property>
+                                <property name="title" translatable="yes">Key background color when the mouse is over</property>
                                 <property name="color">#000000000000</property>
                                 <signal handler="settings_window_change_color" name="color_set"/>
                               </object>
@@ -322,12 +322,12 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCheckButton" id="flo_decorated">
-                                <property context="yes" name="label" translatable="yes">Decorated</property>
+                                <property name="label" translatable="yes">Decorated</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Decorate window</property>
+                                <property name="tooltip-text" translatable="yes">Decorate window</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
                               </object>
@@ -339,12 +339,12 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="flo_transparent">
-                                <property context="yes" name="label" translatable="yes">Transparent</property>
+                                <property name="label" translatable="yes">Transparent</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Transparent mode</property>
+                                <property name="tooltip-text" translatable="yes">Transparent mode</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
                               </object>
@@ -356,12 +356,12 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="flo_resizable">
-                                <property context="yes" name="label" translatable="yes">Resizable</property>
+                                <property name="label" translatable="yes">Resizable</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Allow to resize window.</property>
+                                <property name="tooltip-text" translatable="yes">Allow to resize window.</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
                               </object>
@@ -373,12 +373,12 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="flo_keep_ratio">
-                                <property context="yes" name="label" translatable="yes">Keep ratio</property>
+                                <property name="label" translatable="yes">Keep ratio</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Keep window ratio when resizing window.</property>
+                                <property name="tooltip-text" translatable="yes">Keep window ratio when resizing window.</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
                               </object>
@@ -390,12 +390,12 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="flo_task_bar">
-                                <property context="yes" name="label" translatable="yes">Task bar</property>
+                                <property name="label" translatable="yes">Task bar</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Appear in task bar.</property>
+                                <property name="tooltip-text" translatable="yes">Appear in task bar.</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
                               </object>
@@ -407,12 +407,12 @@
                             </child>
                             <child>
                               <object class="GtkCheckButton" id="flo_always_on_top">
-                                <property context="yes" name="label" translatable="yes">Always on top</property>
+                                <property name="label" translatable="yes">Always on top</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Keep the keyboard on top.</property>
+                                <property name="tooltip-text" translatable="yes">Keep the keyboard on top.</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
                               </object>
@@ -508,7 +508,7 @@
                             <child>
                               <object class="GtkComboBox" id="input_method_combo">
                                 <property name="visible">True</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Select input method</property>
+                                <property name="tooltip-text" translatable="yes">Select input method</property>
                                 <signal handler="settings_window_combo" name="changed"/>
                               </object>
                               <packing>
@@ -523,7 +523,7 @@
                                   <object class="GtkHScale" id="flo_timer">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property context="yes" name="tooltip-text" translatable="yes">Auto click timeout</property>
+                                    <property name="tooltip-text" translatable="yes">Auto click timeout</property>
                                     <property name="adjustment">adjustment3</property>
                                     <property name="digits">0</property>
                                     <signal handler="settings_window_set_double" name="value_changed"/>
@@ -579,7 +579,7 @@
                                   <object class="GtkHScale" id="ramble_threshold1">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property context="yes" name="tooltip-text" translatable="yes">Ramble distance theshold for simple press</property>
+                                    <property name="tooltip-text" translatable="yes">Ramble distance theshold for simple press</property>
                                     <property name="adjustment">adjustment4</property>
                                     <signal handler="settings_window_set_double" name="value_changed"/>
                                   </object>
@@ -591,7 +591,7 @@
                                   <object class="GtkHScale" id="ramble_threshold2">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
-                                    <property context="yes" name="tooltip-text" translatable="yes">Ramble distance theshold for multiple press</property>
+                                    <property name="tooltip-text" translatable="yes">Ramble distance theshold for multiple press</property>
                                     <property name="adjustment">adjustment5</property>
                                     <signal handler="settings_window_set_double" name="value_changed"/>
                                   </object>
@@ -624,7 +624,7 @@
                     <child type="label">
                       <object class="GtkLabel" id="label1">
                         <property name="visible">True</property>
-                        <property context="yes" name="label" translatable="yes">Input method</property>
+                        <property name="label" translatable="yes">Input method</property>
                         <property name="use_markup">True</property>
                       </object>
                     </child>
@@ -649,11 +649,11 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCheckButton" id="flo_auto_hide">
-                                <property context="yes" name="label" translatable="yes">Auto hide</property>
+                                <property name="label" translatable="yes">Auto hide</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="receives_default">False</property>
-                                <property context="yes" name="tooltip-text" translatable="yes">Auto hide (only show when an editable widget is selected).</property>
+                                <property name="tooltip-text" translatable="yes">Auto hide (only show when an editable widget is selected).</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal handler="settings_window_set_bool" name="toggled"/>
@@ -763,7 +763,7 @@
                     <child type="label">
                       <object class="GtkLabel" id="label3">
                         <property name="visible">True</property>
-                        <property context="yes" name="label" translatable="yes">Extensions</property>
+                        <property name="label" translatable="yes">Extensions</property>
                         <property name="use_markup">True</property>
                       </object>
                     </child>
@@ -796,11 +796,11 @@
             <property name="visible">True</property>
             <child>
               <object class="GtkButton" id="flo_close">
-                <property context="yes" name="label">gtk-close</property>
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property context="yes" name="tooltip-text" translatable="yes">Quit preferences</property>
+                <property name="tooltip-text" translatable="yes">Quit preferences</property>
                 <property name="use_stock">True</property>
                 <signal handler="settings_window_close" name="clicked" object="flo_config_window"/>
               </object>
@@ -812,11 +812,11 @@
             </child>
             <child>
               <object class="GtkButton" id="flo_config_rollback">
-                <property context="yes" name="label">gtk-cancel</property>
+                <property name="label">gtk-cancel</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property context="yes" name="tooltip-text" translatable="yes">Cancel</property>
+                <property name="tooltip-text" translatable="yes">Cancel</property>
                 <property name="use_stock">True</property>
                 <signal handler="settings_window_rollback" name="clicked" object="flo_config_window"/>
               </object>
@@ -827,11 +827,11 @@
             </child>
             <child>
               <object class="GtkButton" id="flo_config_commit">
-                <property context="yes" name="label">gtk-apply</property>
+                <property name="label">gtk-apply</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
-                <property context="yes" name="tooltip-text" translatable="yes">Apply changes</property>
+                <property name="tooltip-text" translatable="yes">Apply changes</property>
                 <property name="use_stock">True</property>
                 <signal handler="settings_window_commit" name="clicked" object="flo_config_window"/>
               </object>
