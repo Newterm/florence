@@ -409,7 +409,11 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
 	struct florence *florence=(struct florence *)user_data;
 	/* Work around gtk bug */
-	if (detail!=GDK_NOTIFY_ANCESTOR) {
+	if (florence->last_pos &&
+		(((GdkEventCrossing *)event)->x==florence->last_xpos) &&
+		(((GdkEventCrossing *)event)->y==florence->last_ypos)) {
+		florence->last_pos=FALSE;
+	} else {
 		status_focus_set(florence->status, NULL);
 		status_timer_stop(florence->status);
 		/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
@@ -424,7 +428,7 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 #ifdef ENABLE_RAMBLE
 		if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
 #endif
-		}
+	}
 	END_FUNC
 	return FALSE;
 }
@@ -433,12 +437,9 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	START_FUNC
-	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
 	struct florence *florence=(struct florence *)user_data;
-	/* Work around gtk bug */
-	if (detail!=GDK_NOTIFY_ANCESTOR) {
-		status_release_latched(florence->status, NULL);
-	}
+	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
+	status_release_latched(florence->status, NULL);
 	END_FUNC
 	return FALSE;
 }
@@ -484,6 +485,9 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	struct florence *florence=(struct florence *)user_data;
 	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
+	florence->last_xpos=((GdkEventButton*)event)->x;
+	florence->last_ypos=((GdkEventButton*)event)->y;
+	florence->last_pos=TRUE;
 #ifdef ENABLE_RAMBLE
 	if (ramble_started(florence->ramble) &&
 		status_im_get(florence->status)==STATUS_IM_RAMBLE &&
@@ -675,8 +679,9 @@ gboolean flo_check_at_spi(void)
 			"Alternatively, you may enable accessibility with gnome-at-properties.")) {
 				gconf_client_set_bool(gconfclient,
 					"/desktop/gnome/interface/accessibility", TRUE, NULL);
-				system("gnome-session-save --kill");
-				exit(EXIT_SUCCESS);
+				if (system("gnome-session-save --kill")) {
+					flo_error(_("gnome-session-save returned an error"));
+				} else exit(EXIT_SUCCESS);
 			ret=TRUE;
 		}
 		flo_error(_("at-spi registry daemon is not running. "\

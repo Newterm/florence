@@ -56,6 +56,9 @@ struct florence {
 #ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
 #endif
+	/* gtk bug 556006 */
+	gdouble last_xpos, last_ypos;
+	gboolean last_pos;
 };
 
 /* create a new instance of florence. */
