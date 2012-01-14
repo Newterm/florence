@@ -408,12 +408,10 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 	START_FUNC
 	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
 	struct florence *florence=(struct florence *)user_data;
-	/* Work around gtk bug */
-	if (florence->last_pos &&
+	/* Work around gtk bug 556006 */
+	if (!((detail==GDK_NOTIFY_ANCESTOR) && florence->last_pos &&
 		(((GdkEventCrossing *)event)->x==florence->last_xpos) &&
-		(((GdkEventCrossing *)event)->y==florence->last_ypos)) {
-		florence->last_pos=FALSE;
-	} else {
+		(((GdkEventCrossing *)event)->y==florence->last_ypos))) {
 		status_focus_set(florence->status, NULL);
 		status_timer_stop(florence->status);
 		/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
@@ -429,6 +427,7 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 		if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
 #endif
 	}
+	florence->last_pos=FALSE;
 	END_FUNC
 	return FALSE;
 }
