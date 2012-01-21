@@ -406,28 +406,21 @@ void flo_set_auto_hide(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
 {
 	START_FUNC
-	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
 	struct florence *florence=(struct florence *)user_data;
-	/* Work around gtk bug 556006 */
-	if (!((detail==GDK_NOTIFY_ANCESTOR) && florence->last_pos &&
-		(((GdkEventCrossing *)event)->x==florence->last_xpos) &&
-		(((GdkEventCrossing *)event)->y==florence->last_ypos))) {
-		status_focus_set(florence->status, NULL);
-		status_timer_stop(florence->status);
-		/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
-		 * we just release any pressed key when the mouse leaves. */
-		if (status_get_moving(florence->status)) {
-			gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventCrossing*)event)->x_root-florence->xpos,
-				(gint)((GdkEventCrossing*)event)->y_root-florence->ypos);
-		} else {
-			status_pressed_set(florence->status, NULL);
-			status_press_latched(florence->status, NULL);
-		}
-#ifdef ENABLE_RAMBLE
-		if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
-#endif
+	status_focus_set(florence->status, NULL);
+	status_timer_stop(florence->status);
+	/* As we don't support multitouch yet, and we no longer get button events when the mouse is outside,
+	 * we just release any pressed key when the mouse leaves. */
+	if (status_get_moving(florence->status)) {
+		gtk_window_move(GTK_WINDOW(window), (gint)((GdkEventCrossing*)event)->x_root-florence->xpos,
+			(gint)((GdkEventCrossing*)event)->y_root-florence->ypos);
+	} else {
+		status_pressed_set(florence->status, NULL);
+		status_press_latched(florence->status, NULL);
 	}
-	florence->last_pos=FALSE;
+#ifdef ENABLE_RAMBLE
+	if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
+#endif
 	END_FUNC
 	return FALSE;
 }
@@ -437,7 +430,14 @@ gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer use
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
-	GdkNotifyType detail=((GdkEventCrossing *)event)->detail;
+	/* Work around gtk bug 556006 */
+	GdkEventCrossing *crossing=(GdkEventCrossing *)event;
+	GdkEventMotion motion;
+	motion.x=crossing->x;
+	motion.y=crossing->y;
+	motion.x_root=crossing->x_root;
+	motion.y_root=crossing->y_root;
+	flo_mouse_move_event(window, &motion, user_data);
 	status_release_latched(florence->status, NULL);
 	END_FUNC
 	return FALSE;
@@ -484,9 +484,6 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	struct florence *florence=(struct florence *)user_data;
 	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
-	florence->last_xpos=((GdkEventButton*)event)->x;
-	florence->last_ypos=((GdkEventButton*)event)->y;
-	florence->last_pos=TRUE;
 #ifdef ENABLE_RAMBLE
 	if (ramble_started(florence->ramble) &&
 		status_im_get(florence->status)==STATUS_IM_RAMBLE &&
