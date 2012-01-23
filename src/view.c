@@ -102,10 +102,10 @@ void view_resize (struct view *view)
 	}
 #endif
 	/* refresh the view */
-	if (view->window && GTK_WIDGET(view->window)->window) {
+	if (view->window && gtk_widget_get_window(GTK_WIDGET(view->window))) {
 		rect.x=0; rect.y=0;
 		rect.width=view->width; rect.height=view->height;
-		gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+		gdk_window_invalidate_rect(gtk_widget_get_window(GTK_WIDGET(view->window)), &rect, TRUE);
 	}
 	END_FUNC
 }
@@ -452,17 +452,17 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 		} else {
 			rect=keyboard_key_getrect((struct keyboard *)key_get_keyboard(key),
 				key, status_focus_zoom_get(view->status));
-			gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, rect, TRUE);
+			gdk_window_invalidate_rect(gtk_widget_get_window(GTK_WIDGET(view->window)), rect, TRUE);
 		}
 	}
 	if (status_focus_get(view->status)) {
 		if (!view->hand_cursor) {
 			cursor=gdk_cursor_new(GDK_HAND2);
-			gdk_window_set_cursor(GTK_WIDGET(view->window)->window, cursor);
+			gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(view->window)), cursor);
 			view->hand_cursor=TRUE;
 		}
 	} else if (view->hand_cursor) {
-		gdk_window_set_cursor(GTK_WIDGET(view->window)->window, NULL);
+		gdk_window_set_cursor(gtk_widget_get_window(GTK_WIDGET(view->window)), NULL);
 		view->hand_cursor=FALSE;
 	}
 	END_FUNC
@@ -592,7 +592,7 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 	if (pExpose->count>0) return;
 
 	/* create the context */
-	context=gdk_cairo_create(window->window);
+	context=gdk_cairo_create(gtk_widget_get_window(window));
 	gdk_cairo_region(context, view->redraw);
 	cairo_clip(context); 
 	gdk_region_destroy(view->redraw);
@@ -673,6 +673,19 @@ void view_on_keys_changed(gpointer user_data)
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 	END_FUNC
 }
+
+/* track the windows state changes */
+void view_window_state (GtkWidget *window, GdkEventWindowState *event, struct view *view)
+{
+	START_FUNC
+	gint is_iconified=gdk_window_get_state(gtk_widget_get_window(window))&GDK_WINDOW_STATE_ICONIFIED;
+	if (is_iconified) {
+		view_hide(view);
+		gtk_window_deiconify(GTK_WINDOW(view->window));
+	} 
+	END_FUNC
+}
+
 
 /* Triggered by gconf when the "extensions" parameter is changed. */
 void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
@@ -834,6 +847,7 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 		G_CALLBACK(view_configure), view);
 #endif
 	g_signal_connect(G_OBJECT(view->window), "expose-event", G_CALLBACK(view_expose), view);
+	g_signal_connect(G_OBJECT(view->window), "window-state-event", G_CALLBACK(view_window_state), view);
 	view_screen_changed(GTK_WIDGET(view->window), NULL, view);
 	gtk_widget_show(GTK_WIDGET(view->window));
 #ifndef APPLET

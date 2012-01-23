@@ -95,7 +95,7 @@ void trayicon_on_click(GtkStatusIcon *status_icon, gpointer user_data)
 {
 	START_FUNC
 	struct trayicon *trayicon=(struct trayicon *)(user_data);
-	if (GTK_WIDGET_VISIBLE(trayicon->view->window)) {
+	if (gtk_widget_get_visible(GTK_WIDGET(trayicon->view->window))) {
 		view_hide(trayicon->view);
 	} else { 
 #ifdef AT_SPI

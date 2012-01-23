@@ -344,7 +344,7 @@ gint settings_get_int(const gchar *name)
 	gint ret=0;
 	GConfValue *val=settings_value_get(name);;
 	if (!val) {
-		ret=settings_defaults[settings_default_idx(name)].default_value.vdouble;
+		ret=settings_defaults[settings_default_idx(name)].default_value.vinteger;
 	} else {
 		ret=gconf_value_get_int(val);
 		gconf_value_free(val);

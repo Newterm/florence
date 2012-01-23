@@ -20,8 +20,8 @@
 #  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.  
 #
 
-kill -HUP $(ps -ef | grep gconfd | grep -v grep | tr -s ' ' ' ' | cut -d' ' -f 2) ||
-echo "Unable to send HUP signal to gconf daemon.
+kill -9 $(ps -ef | grep gconfd | grep -v grep | tr -s ' ' ' ' | cut -d' ' -f 2) ||
+echo "Unable to send KILL signal to gconf daemon.
 Configuration will not be updated until reboot.
 Florence may not function correctly before reboot."
 

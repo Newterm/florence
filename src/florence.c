@@ -103,7 +103,7 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	gdouble w, h;
 	GdkBitmap *mask=NULL;
 
-	context=gdk_cairo_create(window->window);
+	context=gdk_cairo_create(gtk_widget_get_window(window));
 	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
 
 	handle=rsvg_handle_new_from_file(ICONDIR "/florence.svg", &error);
@@ -119,7 +119,7 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 		cairo_paint(mask_context);
 		cairo_set_operator(mask_context, CAIRO_OPERATOR_OVER);
 		style_render_svg(mask_context, handle, w, h, TRUE, NULL);
-		gdk_window_shape_combine_mask(window->window, mask, 0, 0);
+		gdk_window_shape_combine_mask(gtk_widget_get_window(window), mask, 0, 0);
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 100.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
@@ -144,7 +144,7 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 {
 	START_FUNC
 	if (flo_exit || (!florence->view)) return;
-	if (GTK_WIDGET_VISIBLE(florence->view->window)) view_hide(florence->view);
+	if (gtk_widget_get_visible(GTK_WIDGET(florence->view->window))) view_hide(florence->view);
 	if (settings_get_bool("behaviour/intermediate_icon")) {
 #ifdef ENABLE_AT_SPI2
 		if (florence->obj) g_object_unref(florence->obj);
@@ -419,7 +419,7 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 		status_press_latched(florence->status, NULL);
 	}
 #ifdef ENABLE_RAMBLE
-	if (florence->ramble) ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
+	if (florence->ramble) ramble_reset(florence->ramble, gtk_widget_get_window(GTK_WIDGET(florence->view->window)));
 #endif
 	END_FUNC
 	return FALSE;
@@ -458,7 +458,10 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 			(gint)((GdkEventButton*)event)->y);
 #endif
 		/* we don't want double and triple click events */
-		if ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS)) return FALSE;
+		if ((event->type==GDK_2BUTTON_PRESS) || (event->type==GDK_3BUTTON_PRESS)) {
+			END_FUNC
+			return FALSE;
+		}
 	} else {
 		key=status_focus_get(florence->status);
 	}
@@ -488,7 +491,7 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	if (ramble_started(florence->ramble) &&
 		status_im_get(florence->status)==STATUS_IM_RAMBLE &&
 		settings_get_bool("behaviour/ramble_button")) {
-		ramble_reset(florence->ramble, GTK_WIDGET(florence->view->window)->window);
+		ramble_reset(florence->ramble, gtk_widget_get_window(GTK_WIDGET(florence->view->window)));
 	}
 #endif
 	END_FUNC
@@ -521,7 +524,7 @@ gboolean flo_to_top(gpointer data)
 	struct florence *florence=data;
 	GtkWindow *window=GTK_WINDOW(view_window_get(florence->view));
 	if (!settings_get_bool("window/keep_on_top")) return FALSE;
-	if (GTK_WIDGET_VISIBLE(GTK_WIDGET(window))) gtk_window_present(window);
+	if (gtk_widget_get_visible(GTK_WIDGET(window))) gtk_window_present(window);
 	END_FUNC
 	return TRUE;
 }
@@ -574,7 +577,7 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 			}
 			if (algo) g_free(algo);
 			if (ramble_started(florence->ramble) &&
-				ramble_add(florence->ramble, GTK_WIDGET(florence->view->window)->window,
+				ramble_add(florence->ramble, gtk_widget_get_window(GTK_WIDGET(florence->view->window)),
 					florence->xpos, florence->ypos, key)) {
 				if (status_focus_get(florence->status)!=key) {
 					status_focus_set(florence->status, key);
@@ -717,7 +720,8 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 #else
 	if (SPI_init() && ((!gnome) || (!flo_check_at_spi()))) {
 #endif
-			status_spi_disable(florence->status);
+		flo_warn(_("AT-SPI has been disabled at run time: auto-hide mode is disabled."));
+		status_spi_disable(florence->status);
 	}
 #else
 	flo_warn(_("AT-SPI has been disabled at compile time: auto-hide mode is disabled."));

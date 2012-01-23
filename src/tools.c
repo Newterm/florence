@@ -52,7 +52,7 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 		accept, GTK_RESPONSE_ACCEPT, reject, GTK_RESPONSE_REJECT, NULL);
 	label=gtk_label_new(text);
 	tools_set_icon(GTK_WINDOW(dialog));
-	gtk_container_add(GTK_CONTAINER(GTK_DIALOG(dialog)->vbox), label);
+	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
 	gtk_widget_show_all(dialog);
 	ret=gtk_dialog_run(GTK_DIALOG(dialog));
 	gtk_object_destroy(GTK_OBJECT(dialog));
@@ -71,9 +71,9 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 	START_FUNC
 #ifdef ENABLE_AT_SPI2
 	AtspiRect *rect;
-	AtspiComponent *component;
+	AtspiComponent *component=NULL;
 #else
-	AccessibleComponent *component;
+	AccessibleComponent *component=NULL;
 #endif
 	long int x, y, w, h;
 	gint screen_width, screen_height;
@@ -82,12 +82,13 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 
 	if (!object) {
 	       flo_error(_("NULL accessible object, unable to move window"));
+	       END_FUNC
 	       return;
 	}
 #ifdef ENABLE_AT_SPI2
 	component=atspi_accessible_get_component(object);
 #else
-	component=Accessible_getComponent(object);
+	if (Accessible_isComponent(object)) component=Accessible_getComponent(object);
 #endif
 	if (component) {
 		screen_height=gdk_screen_get_height(gdk_screen_get_default());
@@ -100,7 +101,7 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 		AccessibleComponent_getExtents(component, &x, &y, &w, &h, SPI_COORD_TYPE_SCREEN);
 #endif
 		if (gtk_window_get_decorated(window)) {
-			gdk_window_get_frame_extents(GTK_WIDGET(window)->window, &win_rect);
+			gdk_window_get_frame_extents(gtk_widget_get_window(GTK_WIDGET(window)), &win_rect);
 			win_width=win_rect.width;
 			win_height=win_rect.height;
 		} else gtk_window_get_size(window, &win_width, &win_height);

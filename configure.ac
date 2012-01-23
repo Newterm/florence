@@ -156,6 +156,8 @@ AC_CONFIG_FILES([Makefile
                  data/styles/hard/Makefile
                  data/svg11/Makefile
                  docs/Makefile
+                 docs/florence.1
+                 docs/florence_applet.1
                  src/Makefile
 		 po/Makefile.in])
 AC_OUTPUT

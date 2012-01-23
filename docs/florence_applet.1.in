@@ -1,0 +1,51 @@
+'\" t
+.\"     Title: florence_applet
+.\"    Author: [see the "AUTHOR" section]
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 09/26/2011
+.\"    Manual: \ \&
+.\"    Source: Florence
+.\"  Language: English
+.\"
+.TH "FLORENCE_APPLET" "1" "09/26/2011" "Florence" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+florence_applet \- virtual keyboard applet for the GNOME panel
+.SH "SYNOPSIS"
+.sp
+florence_applet [\fIOPTIONS\fR]
+.SH "DESCRIPTION"
+.sp
+Florence is an extensible scalable virtual keyboard for GNOME\&.
+.sp
+florence_applet is a panel applet which will display a virtual keyboard in a panel of the GNOME desktop\&.
+.sp
+This program is not intended to be run on a command\-line\&. To add this applet to a panel, right\-click on the panel, select "Add to Panel\&..." and choose Florence in the subsequent list\&.
+.SH "SEE ALSO"
+.sp
+\fIflorence(1)\fR
+.sp
+Florence documentation in the GNOME help system\&.
+.sp
+Florence website: http://florence\&.sourceforge\&.net/
+.SH "AUTHOR"
+.sp
+François Agrech <f\&.agrech@gmail\&.com>

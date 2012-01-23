@@ -1,0 +1,86 @@
+'\" t
+.\"     Title: florence
+.\"    Author: [see the "AUTHOR" section]
+.\" Generator: DocBook XSL Stylesheets v1.75.2 <http://docbook.sf.net/>
+.\"      Date: 09/26/2011
+.\"    Manual: \ \&
+.\"    Source: Florence
+.\"  Language: English
+.\"
+.TH "FLORENCE" "1" "09/26/2011" "Florence" "\ \&"
+.\" -----------------------------------------------------------------
+.\" * Define some portability stuff
+.\" -----------------------------------------------------------------
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.\" http://bugs.debian.org/507673
+.\" http://lists.gnu.org/archive/html/groff/2009-02/msg00013.html
+.\" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.ie \n(.g .ds Aq \(aq
+.el       .ds Aq '
+.\" -----------------------------------------------------------------
+.\" * set default formatting
+.\" -----------------------------------------------------------------
+.\" disable hyphenation
+.nh
+.\" disable justification (adjust text to left margin only)
+.ad l
+.\" -----------------------------------------------------------------
+.\" * MAIN CONTENT STARTS HERE *
+.\" -----------------------------------------------------------------
+.SH "NAME"
+florence \- extensible and scalable virtual keyboard for GNOME
+.SH "SYNOPSIS"
+.sp
+\fBflorence\fR [\fIOPTIONS\fR]
+.SH "DESCRIPTION"
+.sp
+Florence is an extensible scalable virtual keyboard for GNOME\&. You need it if you can\(cqt use a real hardware keyboard, for example because of injury, handicap, your keyboard is broken or because you use a tablet PC, but you must be able to use a pointing device (as a mouse, a trackball, a touchscreen or opengazer); If you can\(cqt use a pointing device, there is gok, which can be used with just simple switches\&.
+.sp
+Florence stays out of your way when you don\(cqt need it: it appears on the screen only when you need it\&. A timer\-based auto\-click input method is available to help disabled people having difficulties to click\&. The ramble mode is another efficient input method that can help\&.
+.sp
+Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment by using the \fB\-\-no\-gnome\fR option\&.
+.SH "OPTIONS"
+.PP
+\fB\-h, \-\-help\fR
+.RS 4
+Print help message and exit\&.
+.RE
+.PP
+\fB\-V, \-\-version\fR
+.RS 4
+Print Florence version and exit\&.
+.RE
+.PP
+\fB\-c, \-\-config\fR
+.RS 4
+Open configuration dialog\&.
+.RE
+.PP
+\fB\-d, \-\-debug\fR
+.RS 4
+Launch Florence in verbose mode\&.
+.RE
+.PP
+\fB\-n, \-\-no\-gnome\fR
+.RS 4
+Use this option if you are not using the GNOME desktop environment\&. This will disable some GNOME specific features\&.
+.RE
+.PP
+\fB\-f\fR \fB, \-\-focus\fR[\fB=\fR\fIWINDOW\fR]
+.RS 4
+With this option, any florence input will go to the selected window\&. The window argument is the name of the window (the one that most window managers put in the title bar)\&. if the window argument is not provided, florence will select the last focused window\&. This option is useful for window managers that don\(cqt support the "not focusable" hint and focus the keyboard window instead of the output one\&. It can also be useful if you want to input text to a window that is not focused\&. This option must be used for the keyboard to work in GDM\&.
+.RE
+.PP
+\fB\-u\fR \fIFILE\fR, \fB\-\-use\-config=\fR\fIFILE\fR
+.RS 4
+Use the configuration file provided instead of gconf\&. The configuration file is a key\-value pair file with sections\&. An example of configuration file is provided at
+\fI/usr/share/doc/florence/examples/florence\&.conf\fR\&.
+.RE
+.SH "SEE ALSO"
+.sp
+Florence documentation in the GNOME help system\&.
+.sp
+Florence website: http://florence\&.sourceforge\&.net/
+.SH "AUTHOR"
+.sp
+François Agrech <f\&.agrech@gmail\&.com>
