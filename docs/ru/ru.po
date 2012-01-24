@@ -7,10 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2011-12-26 18:14+0100\n"
+"POT-Creation-Date: 2012-01-24 19:46+0000\n"
 "PO-Revision-Date: 2011-08-10 17:10+0000\n"
 "Last-Translator: SomeOneBrick <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -174,8 +175,8 @@ msgstr ""
 "если вы находитесь на <ulink url=\"http://fedoraproject.org\"> Fedora </ "
 "ulink> 9 или более поздней версии (Спасибо Симон ВЭСБ), а это единственный "
 "дистрибутив включить Флоренции в пакете, по состоянию на декабрь, 8 2008 "
-"года. Если вы не можете использовать клавиатуру, вы можете оказаться в Catch-"
-"22 ситуацию, когда вы не можете установить Флоренции, потому что вы не "
+"года. Если вы не можете использовать клавиатуру, вы можете оказаться в "
+"Catch-22 ситуацию, когда вы не можете установить Флоренции, потому что вы не "
 "можете использовать Флоренции. Если вы инвалид, вы, возможно, потребуется "
 "попросить кого-нибудь установить его для вас, и если у вас есть планшетный "
 "ПК, вам может понадобиться, чтобы найти творческий способ установки "
@@ -192,8 +193,9 @@ msgstr ""
 "userinput>"
 
 #: C/florence.xml:45(para)
+#, fuzzy
 msgid ""
-"Make sure you have the latest version of Florence (0.5.1 as of November, the "
+"Make sure you have the latest version of Florence (0.5.2 as of November, the "
 "2nd of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
@@ -425,13 +427,13 @@ msgstr ""
 "использующих GNU autotools. Откройте терминал и выполните следующие команды:"
 
 #: C/florence.xml:96(userinput)
-#, no-wrap
-msgid "tar -xjvf florence-0.5.1.tar.bz2"
+#, fuzzy, no-wrap
+msgid "tar -xjvf florence-0.5.2.tar.bz2"
 msgstr "tar -xjvf florence-0.5.1.tar.bz2"
 
 #: C/florence.xml:97(userinput) C/florence.xml:118(userinput)
-#, no-wrap
-msgid "cd florence-0.5.1"
+#, fuzzy, no-wrap
+msgid "cd florence-0.5.2"
 msgstr "cd florence-0.5.1"
 
 #: C/florence.xml:98(userinput)
@@ -1002,8 +1004,8 @@ msgstr ""
 "Непрозрачность: настройка непрозрачности клавиатуры, чтобы видеть другие "
 "окна сквозь клавиши. Оконный менеджер должен поддерживать эту опцию и она "
 "должна быть включена. Если вы используете metacity, настройте /apps/metacity/"
-"general/compositing_manager gconf key при помощи gconf-editor или gconftool-"
-"2."
+"general/compositing_manager gconf key при помощи gconf-editor или "
+"gconftool-2."
 
 #: C/florence.xml:232(title)
 msgid "Behaviour configuration"

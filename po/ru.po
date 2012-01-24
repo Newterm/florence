@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-12-26 18:14+0100\n"
+"POT-Creation-Date: 2012-01-24 19:45+0000\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,7 +20,7 @@ msgstr ""
 "X-Generator: Launchpad (build 13830)\n"
 
 #: ../data/florence.desktop.in.in.h:1 ../src/florence.server.in.in.h:1
-#: ../src/trayicon.c:49 ../src/trayicon.c:213
+#: ../src/trayicon.c:50 ../src/trayicon.c:228
 msgid "Florence Virtual Keyboard"
 msgstr "Виртуальная Клавиатура Florence"
 
@@ -724,42 +725,46 @@ msgstr "Невозможно получить аргументы.\n"
 msgid "Cannot initialize bonobo.\n"
 msgstr "Невозможно инициализировать bonobo.\n"
 
-#: ../src/florence.c:103
+#: ../src/florence.c:110
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Ошибка загрузки значка florence: %s"
 
-#: ../src/florence.c:108 ../src/view.c:308
+#: ../src/florence.c:115 ../src/view.c:328
 msgid "Unable to create mask"
 msgstr "Не удается создать маску"
 
-#: ../src/florence.c:296
+#: ../src/florence.c:313
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr "SPI выключен: невозможно включить автоскрытие."
 
-#: ../src/florence.c:320
+#: ../src/florence.c:337
 msgid "AT SPI: problem deregistering focus listener"
 msgstr ""
 
-#: ../src/florence.c:323
+#: ../src/florence.c:340
 msgid "AT SPI: problem deregistering window listener"
 msgstr ""
 
-#: ../src/florence.c:581
+#: ../src/florence.c:635
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Имя разметки: \"%s\""
 
-#: ../src/florence.c:583
+#: ../src/florence.c:637
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr "Версия разметки %s отличается от программной версии %s"
 
-#: ../src/florence.c:615
+#: ../src/florence.c:673
 msgid "Enable accessibility"
 msgstr "Включить доступность"
 
-#: ../src/florence.c:627
+#: ../src/florence.c:682
+msgid "gnome-session-save returned an error"
+msgstr ""
+
+#: ../src/florence.c:686
 msgid ""
 "at-spi registry daemon is not running. Events will be sent with Xtest "
 "instead and several functions are disabled, including auto-hide."
@@ -767,126 +772,115 @@ msgstr ""
 "Демон реестра at-spi не работает. События будут отправлены с XTEST и "
 "несколько функций будет не работать, в том числе автоматическое скрытие."
 
-#: ../src/florence.c:644
+#: ../src/florence.c:705
 msgid "Unable to allocate memory for florence"
 msgstr "Невозможно выделить память для florence"
 
-#: ../src/florence.c:648
+#: ../src/florence.c:709
 msgid "Old GLib version detected. Florence style will be working with a hack."
 msgstr ""
 "Обнаружена старая версия GLib. Стиль Florence будет работать со взломом."
 
-#: ../src/florence.c:665
+#: ../src/florence.c:723
+#, fuzzy
+msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
+msgstr ""
+"AT-SPI было отключено во время компилирования: автоскрытие не работает."
+
+#: ../src/florence.c:727
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."
 
 #. onhide trigger
-#: ../src/keyboard.c:51
+#: ../src/keyboard.c:52
 msgid "No key associated with onhide trigger"
 msgstr "Нет клавиши, связанной с триггером скрывать"
 
-#: ../src/keyboard.c:73
+#: ../src/keyboard.c:79
 #, c-format
 msgid "[new keyboard] name=%s id=%s"
 msgstr "[новая клавиатура] имя= %s id=%s"
 
-#: ../src/keyboard.c:79
+#: ../src/keyboard.c:85
 msgid "Unreachable code in keyboard_new"
 msgstr "Недоступный код в keyboard_new"
 
-#: ../src/keyboard.c:108 ../src/keyboard.c:125
+#: ../src/keyboard.c:116 ../src/keyboard.c:135
 msgid "Unable to allocate memory for keyboard"
 msgstr "Невозможно выделить память для клавиатуры"
 
-#: ../src/keyboard.c:133
+#: ../src/keyboard.c:143
 msgid "Unable to allocate memory for keyboard trigger"
 msgstr "Не удалось выделить память для триггера клавиатуры"
 
-#: ../src/layoutreader.c:87
+#: ../src/layoutreader.c:98
 #, c-format
 msgid "Unknown placement %s"
 msgstr "Неизвестное размещение %s"
 
-#: ../src/layoutreader.c:309
+#: ../src/layoutreader.c:344
 #, c-format
 msgid "Id %s was not found in layout file"
 msgstr "Id %s не найдено в файле разметки"
 
-#: ../src/layoutreader.c:404
+#: ../src/layoutreader.c:451
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr "Невозможно открыть файл %s, использую стандартный %s"
 
-#: ../src/layoutreader.c:416
+#: ../src/layoutreader.c:463
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr "%s является папкой и внутри не найдено файлов"
 
-#: ../src/layoutreader.c:425
+#: ../src/layoutreader.c:472
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Невозможно открыть файл %s."
 
-#: ../src/layoutreader.c:432
+#: ../src/layoutreader.c:479
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s не проверено по %s"
 
-#: ../src/layoutreader.c:433
+#: ../src/layoutreader.c:480
 #, c-format
 msgid "Using file %s"
 msgstr "Использую файл %s"
 
-#: ../src/layoutreader.c:441
+#: ../src/layoutreader.c:488
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Файл %s не содержит данных xml"
 
-#: ../src/main.c:77
+#: ../src/main.c:82
 #, c-format
 msgid "Florence version %s"
 msgstr "Версия Florence %s"
 
-#: ../src/main.c:79
-msgid ""
-"Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"
-"bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop.org/"
-"show_bug.cgi?id=21971 ; Please disable xrecord if you are using a recent "
-"version of Xorg: --without-xrecord configure option. Use AT-SPI instead. "
-"Since XEVIE was dropped from Xorg some months ago, there is no way to "
-"provide the same functionality for now. Sorry for the inconvenience."
-msgstr ""
-"Расширение Xorg RECORD блокировано с версии Xorg 1.6: см. ошибки http://bugs."
-"freedesktop.org/show_bug.cgi?id=20500 и http://bugs.freedesktop.org/show_bug."
-"cgi?id=21971 ; Пожалуйста, отключите xrecord если вы используете последнюю "
-"версию Xorg: : --without-xrecord опция про конфигурации. Используйте AT-SPI. "
-"XEVIE был исключен из Xorg несколько месяцев назад, не существует способа, "
-"чтобы обеспечить ту же функциональность на данный момент. Извините за "
-"причиненные неудобства."
-
-#: ../src/main.c:81
+#: ../src/main.c:84
 msgid "XRECORD has been disabled at compile time."
 msgstr "XRECORD был отключен во время компиляции."
 
-#: ../src/main.c:150
+#: ../src/main.c:157
 #, c-format
 msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
 msgstr "%s - Florence - это простая виртуальная клавиатура для Gnome.\n"
 
-#: ../src/main.c:152
+#: ../src/main.c:159
 #, c-format
 msgid "Usage: %s [OPTION]...\n"
 msgstr "Использование: %s [ОПЦИЯ]...\n"
 
-#: ../src/main.c:153
-#, c-format
+#: ../src/main.c:160
+#, fuzzy, c-format
 msgid ""
 "Options:\n"
 "  -h, --help              display this help and exit\n"
 "  -V, --version\t          output version information and exit\n"
 "  -c, --config            open configuration window\n"
-"  -d, --debug             print debug information to stdout\n"
+"  -d, --debug [level]     print debug information to stdout\n"
 "  -n, --no-gnome          use this flag if you are not using GNOME\n"
 "  -f, --focus [window]    give the focus to the window\n"
 "  -u, --use-config file   use the given config file instead of gconf\n"
@@ -906,131 +900,131 @@ msgstr ""
 "Написать об ошибке: <f.agrech@gmail.com>.\n"
 "Больше информации на <http://florence.sourceforge.net>.\n"
 
-#: ../src/settings.c:102
+#: ../src/settings.c:105
 #, c-format
 msgid "Settings/split: buffer overflow : %s"
 msgstr "Настройки/split: переполнение буфера: %s"
 
-#: ../src/settings.c:133 ../src/settings.c:298
+#: ../src/settings.c:138 ../src/settings.c:323
 #, c-format
 msgid "Unknown value type: %d"
 msgstr "Неизвестный тип значения : %d"
 
-#: ../src/settings.c:147
+#: ../src/settings.c:154
 #, c-format
 msgid "Settings/get_full_path: buffer overflow : %s/%s"
 msgstr "Настройки /get_full_path: переполнение буфера : %s/%s"
 
-#: ../src/settings.c:166
+#: ../src/settings.c:175
 #, c-format
 msgid "Unable to open file %s"
 msgstr "Невозможно открыть файл %s"
 
-#: ../src/settings.c:168
+#: ../src/settings.c:177
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Используется файл конфигурации %s"
 
-#: ../src/settings.c:188
+#: ../src/settings.c:199
 #, c-format
 msgid "Unable to save configuration to %s: %s"
 msgstr "Невозможно сохранить конфигурацию в %s: %s"
 
-#: ../src/settings.c:271
+#: ../src/settings.c:296
 #, c-format
 msgid "gconf error reading key %s"
 msgstr "Ошибка gconf чтения клавиши %s"
 
-#: ../src/settings.c:302
+#: ../src/settings.c:327
 #, c-format
 msgid "Error reading value for %s: %s"
 msgstr "Ошибка чтения значения для %s: %s"
 
-#: ../src/settings.c:309
+#: ../src/settings.c:334
 #, c-format
 msgid "No gconf value for %s. Using default."
 msgstr "Нет значения gconf для %s. Используется значение по умолчанию."
 
-#: ../src/status.c:37
+#: ../src/status.c:38
 msgid "Unable to focus window."
 msgstr "Невозможно сфокусировать окно."
 
-#: ../src/status.c:98
+#: ../src/status.c:109
 #, c-format
 msgid "XRecord extension found version=%d.%d"
 msgstr "Найдена версия расширения XRecord=%d.%d"
 
-#: ../src/status.c:99
+#: ../src/status.c:110
 msgid "Unable to allocate memory for record range"
 msgstr "Не удалось выделить память для записи диапазона"
 
-#: ../src/status.c:108
+#: ../src/status.c:119
 msgid "Unable to record events"
 msgstr "Невозможно записать события"
 
-#: ../src/status.c:109
+#: ../src/status.c:120
 msgid "Unable to create xrecord context"
 msgstr "Невозможно создать связь xrecord"
 
-#: ../src/status.c:112
+#: ../src/status.c:123
 msgid "No XRecord extension found"
 msgstr "Не найдено расширение XRecord."
 
-#: ../src/status.c:113
+#: ../src/status.c:124
 msgid "Keyboard synchronization is disabled."
 msgstr "Синхронизация клавиатуры выключена."
 
-#: ../src/status.c:233
+#: ../src/status.c:262
 #, fuzzy
 msgid "sending press event"
 msgstr "отправка события %d"
 
-#: ../src/status.c:247
+#: ../src/status.c:278
 #, fuzzy
 msgid "sending release event"
 msgstr "отправка события %d"
 
-#: ../src/status.c:449 ../src/status.c:475
+#: ../src/status.c:510 ../src/status.c:538
 msgid "Unable to allocate memory for status focus"
 msgstr "Не удалось выделить память для фокусировки статуса"
 
-#: ../src/status.c:452
+#: ../src/status.c:513
 #, c-format
 msgid "Found window %s (ID=%ld)"
 msgstr "Найдено окно %s (ID=%ld)"
 
-#: ../src/status.c:459
+#: ../src/status.c:520
 msgid "XQueryTree failed."
 msgstr "XQueryTree неудачно."
 
-#: ../src/status.c:480
+#: ../src/status.c:543
 #, c-format
 msgid "Window not found: %s, using last focused window: %s (ID=%d)"
 msgstr "Окно не найдено: %s, используется последнее активное окно: %s (ID=%d)"
 
-#: ../src/status.c:483
+#: ../src/status.c:546
 #, c-format
 msgid "Focussing window %s (ID=%d)"
 msgstr "Фокусировка на окне %s (ID=%d)"
 
-#: ../src/status.c:501
+#: ../src/status.c:566
 #, c-format
 msgid "Unknown input method: %s ; using button input method"
 msgstr ""
 
-#: ../src/status.c:523
+#: ../src/status.c:594
 msgid "Unable to allocate memory for status"
 msgstr "Не удалось выделить память для статуса."
 
-#: ../src/status.c:583
+#: ../src/status.c:662
 msgid "Neither at-spi nor XTest could be initialized."
 msgstr "Ни at-spi, ни XTest не могут быть инициализированы."
 
-#: ../src/status.c:584 ../src/status.c:592
+#: ../src/status.c:663 ../src/status.c:671
 msgid "There is no way we can send keyboard events."
 msgstr "Нет пути, куда бы мы могли отправить клавиатурные события."
 
-#: ../src/status.c:586
+#: ../src/status.c:665
 #, c-format
 msgid ""
 "At-spi registry daemon is not running. XTest extension found: version=%d.%d; "
@@ -1039,16 +1033,16 @@ msgstr ""
 "At-spi демон реестра не запущен. XTest расширение найдено: версия=%d.%d; Оно "
 "будет использоваться вместо at-spi."
 
-#: ../src/status.c:591
+#: ../src/status.c:670
 msgid "Xtest extension not compiled in and at-spi not working"
 msgstr "Xtest расширения не скомпилированы и at-spi не работает"
 
-#: ../src/style.c:71
+#: ../src/style.c:72
 #, c-format
 msgid "Unknown style color: %d"
 msgstr "Неизвестный стиль цвета: %d"
 
-#: ../src/style.c:72
+#: ../src/style.c:73
 msgid ""
 "You probably installed Florence in a location that is not in the gconf path. "
 "Please read the FAQ in Florence documentation to learn more about how to "
@@ -1058,71 +1052,81 @@ msgstr ""
 "Пожалуйста, прочтите FAQ в документации Florence, чтобы узнать больше о том, "
 "как правильно настроить gconf."
 
-#: ../src/style.c:85
+#: ../src/style.c:88
 #, c-format
 msgid "can't parse color %s"
 msgstr "невозможно анализирова цвет %s"
 
-#: ../src/style.c:104
+#: ../src/style.c:109
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Не удалось выделить память для чтения css буфера"
 
-#: ../src/style.c:155
+#: ../src/style.c:162
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr "Не хватает памяти. Некоторые символы могут отображаться неправильно."
 
-#: ../src/style.c:157
+#: ../src/style.c:164
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "Произошла ошибка cairo: %d"
 
-#: ../src/style.c:210 ../src/style.c:447
+#: ../src/style.c:221 ../src/style.c:486
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Невозможно проанализировать svg из файла: %s"
 
-#: ../src/style.c:211
+#: ../src/style.c:222
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Плохой символ: должен иметь svg или метку :%s"
 
-#: ../src/style.c:262
+#: ../src/style.c:279
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "Неизвестен наклон для шрифта %s: %d"
 
-#: ../src/style.c:330
+#: ../src/style.c:351
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Нет стиля символа для дейсткия клавиши %d"
 
-#: ../src/style.c:351
+#: ../src/style.c:374
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr "Невозможно проанализировать svg из файла: svg=\"%s\" ошибка=\"%s\""
 
-#: ../src/style.c:355
+#: ../src/style.c:378
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[новая форма] имя=%s svg=\"%s\""
 
-#: ../src/style.c:378
+#: ../src/style.c:408
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "Форма %s не существует для выбранного стиля."
 
-#: ../src/trace.c:91
+#: ../src/trace.c:112
+#, fuzzy, c-format
+msgid "Unable to parse debug level <%s>, using default <warning>"
+msgstr "Невозможно открыть файл %s, использую стандартный %s"
+
+#: ../src/trace.c:113
+#, c-format
+msgid "Setting debug level to <%s>"
+msgstr ""
+
+#: ../src/trace.c:120
 #, c-format
 msgid "FATAL ERROR: "
 msgstr "КРИТИЧЕСКАЯ ОШИБКА: "
 
-#: ../src/trace.c:97
+#: ../src/trace.c:126
 #, c-format
 msgid "If you need help, please rerun with the -d switch (debug)\n"
 msgstr ""
 "Если вам нужна помощь, пожалуйста, перезапустите с ключом -d (для отладки)\n"
 
-#: ../src/trace.c:98
+#: ../src/trace.c:127
 #, c-format
 msgid ""
 "and send the output to f.agrech@gmail.com\n"
@@ -1131,22 +1135,39 @@ msgstr ""
 "и отправьте вывод на f.agrech@gmail.com\n"
 "\n"
 
-#: ../src/trace.c:115 ../src/trace.c:123
+#: ../src/trace.c:145 ../src/trace.c:155
 msgid "WARNING: "
 msgstr ""
 
-#: ../src/trace.c:131
+#: ../src/trace.c:165
 #, fuzzy
 msgid "ERROR: "
 msgstr "КРИТИЧЕСКАЯ ОШИБКА: "
 
-#: ../src/trayicon.c:50
-msgid "Copyright (C) 2008, 2009, 2010 François Agrech"
+#: ../src/trace.c:198
+#, c-format
+msgid "Too many function levels at function <%s>."
+msgstr ""
+
+#: ../src/trace.c:207
+#, c-format
+msgid "Trace function checksum error at function <%s>."
+msgstr ""
+
+#: ../src/trace.c:209
+#, c-format
+msgid "Trace indent error at function <%s>."
+msgstr ""
+
+#: ../src/trayicon.c:51
+#, fuzzy
+msgid "Copyright (C) 2012 François Agrech"
 msgstr "Копирайт (C) 2008, 2009, 2010 François Agrech"
 
-#: ../src/trayicon.c:54
+#: ../src/trayicon.c:55
+#, fuzzy
 msgid ""
-"Copyright (C) 2008, 2009, 2010 François Agrech\n"
+"Copyright (C) 2012 François Agrech\n"
 "\n"
 "This program is free software; you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -1180,40 +1201,40 @@ msgstr ""
 "вместе с этой программой, а если нет, напишите в Free Software Foundation,\n"
 "Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."
 
-#: ../src/trayicon.c:79 ../src/trayicon.c:82 ../src/settings-window.c:417
+#: ../src/trayicon.c:82 ../src/trayicon.c:85 ../src/settings-window.c:436
 #, c-format
 msgid "Unable to open %s"
 msgstr "Невозможно открыть %s"
 
-#: ../src/trayicon.c:116
+#: ../src/trayicon.c:123
 msgid "_Quit"
 msgstr "_Выход"
 
-#: ../src/trayicon.c:122
+#: ../src/trayicon.c:129
 msgid "_Help"
 msgstr "_Помощь"
 
-#: ../src/trayicon.c:128
+#: ../src/trayicon.c:135
 msgid "_About"
 msgstr "_О программе"
 
-#: ../src/trayicon.c:133
+#: ../src/trayicon.c:140
 msgid "_Preferences"
 msgstr "_Параметры"
 
-#: ../src/trayicon.c:163
+#: ../src/trayicon.c:174
 msgid "Florence"
 msgstr "Florence"
 
-#: ../src/trayicon.c:163
+#: ../src/trayicon.c:174
 msgid "libnotify failed to initialize"
 msgstr "сбой инициализации libnotify"
 
-#: ../src/trayicon.c:169
+#: ../src/trayicon.c:180
 msgid "Florence is running"
 msgstr "Florence запущена"
 
-#: ../src/trayicon.c:170
+#: ../src/trayicon.c:181
 msgid ""
 "Click on Florence icon to show/hide Florence.\n"
 "Right click on it to display menu and get help."
@@ -1221,195 +1242,195 @@ msgstr ""
 "Нажмите на значок Florence, чтобы показать/скрыть Florence.\n"
 "Нажмите правую кнопку, чтобы посмотреть меню и получить помощь."
 
-#: ../src/trayicon.c:178
+#: ../src/trayicon.c:189
 msgid "Do not show again"
 msgstr "Больше не показывать"
 
-#: ../src/trayicon.c:181
+#: ../src/trayicon.c:192
 msgid "Notification failed"
 msgstr "Уведомление неудачно"
 
-#: ../src/view.c:442
+#: ../src/view.c:480
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr "Ваш экран не поддерживает альфа-канал. Полупрозрачность отключена"
 
-#: ../src/view.c:470
+#: ../src/view.c:515
 #, fuzzy, c-format
 msgid "Window size out of range :%d, %d"
 msgstr "Размер окна вне диапазона :%d"
 
-#: ../src/view.c:569
+#: ../src/view.c:622
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Непрозрачность окна вне диапазона(от 1.0 до 100.0): %f"
 
-#: ../src/view.c:721
+#: ../src/view.c:805
 msgid "Unable to allocate memory for view"
 msgstr "Не удалось выделить память для просмотра"
 
-#: ../src/tools.c:34
+#: ../src/tools.c:35
 #, c-format
 msgid "Error loading icon file: %s (%s)"
 msgstr "Ошибка при загрузке файла значка: %s (%s)"
 
-#: ../src/tools.c:79
+#: ../src/tools.c:84
 msgid "NULL accessible object, unable to move window"
 msgstr "Ноль доступных объектов, не в состоянии двигать окно"
 
-#: ../src/tools.c:110
+#: ../src/tools.c:116
 msgid "Unable to get component from accessible object"
 msgstr "Не удалось получить компонент из доступных объектов"
 
-#: ../src/tools.c:174
+#: ../src/tools.c:188
 msgid "unable to allocate memory for string"
 msgstr "Не удалось выделить память для строки"
 
-#: ../src/key.c:62
+#: ../src/key.c:63
 #, c-format
 msgid "Unknown action key type %s"
 msgstr "Клавиша с действием неизвестного типа %s"
 
-#: ../src/key.c:158
+#: ../src/key.c:167
 msgid "Unreachable code"
 msgstr "Недоступный код"
 
-#: ../src/key.c:182
+#: ../src/key.c:193
 #, c-format
 msgid "key %p has no modification."
 msgstr "клавиша %p не имеет модификации."
 
-#: ../src/key.c:274
+#: ../src/key.c:291
 #, c-format
 msgid "unknown action key type pressed = %d"
 msgstr "нажата клавиша неизвестного типа = %d"
 
-#: ../src/key.c:277
+#: ../src/key.c:294
 msgid "unknown key type pressed."
 msgstr "нажата клавиша неизвестного типа."
 
-#: ../src/key.c:279
+#: ../src/key.c:296
 msgid "pressed key has no action associated."
 msgstr "нажатая клавиша не связана с каким-либо действием."
 
-#: ../src/key.c:313
+#: ../src/key.c:332
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr "освобождена клавиша неизвестного типа = %d"
 
-#: ../src/key.c:316
+#: ../src/key.c:335
 msgid "unknown key type released."
 msgstr "освобождена клавиша неизвестного типа."
 
-#: ../src/key.c:318
+#: ../src/key.c:337
 msgid "released key has no action associated."
 msgstr "освобождённая клавиша не связана с каким-либо действием."
 
-#: ../src/key.c:380
+#: ../src/key.c:405
 msgid "unknown key type to draw."
 msgstr "неизвестный тип клавиши для отрисовки"
 
-#: ../src/key.c:410
+#: ../src/key.c:437
 #, c-format
 msgid "unknown key type: %d"
 msgstr "неизвестный тип клавиш: %d"
 
-#: ../src/settings-window.c:111 ../src/settings-window.c:183
+#: ../src/settings-window.c:114 ../src/settings-window.c:190
 #, c-format
 msgid "Couldn't open directory %s"
 msgstr "Не удалось открыть каталог %s"
 
-#: ../src/settings-window.c:133
+#: ../src/settings-window.c:138
 msgid "Mouse"
 msgstr ""
 
-#: ../src/settings-window.c:135
+#: ../src/settings-window.c:140
 msgid "Touch screen"
 msgstr ""
 
-#: ../src/settings-window.c:137
+#: ../src/settings-window.c:142
 msgid "Timer"
 msgstr "Таймер"
 
-#: ../src/settings-window.c:140
+#: ../src/settings-window.c:145
 msgid "Ramble"
 msgstr "Переход"
 
-#: ../src/settings-window.c:171
+#: ../src/settings-window.c:178
 #, c-format
 msgid "Unable to create preview for style %s"
 msgstr "Невозможно создать предварительный просмотр для стиля %s"
 
-#: ../src/settings-window.c:364
+#: ../src/settings-window.c:381
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "неизвестный тип настройки: %d"
 
-#: ../src/settings-window.c:413
+#: ../src/settings-window.c:432
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Невозможно открыть %s: %s"
 
-#: ../src/settings-window.c:510
+#: ../src/settings-window.c:537
 msgid "Can't get gconf value %"
 msgstr "Не удалось получить значение gconf %"
 
-#: ../src/settings-window.c:609
+#: ../src/settings-window.c:648
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: ../src/settings-window.c:610
+#: ../src/settings-window.c:649
 msgid "Discard changes?"
 msgstr "Отменить изменения?"
 
-#: ../src/settings-window.c:658
+#: ../src/settings-window.c:703
 #, c-format
 msgid "Couldn't load builder file: %s"
 msgstr "Не удалось загрузить файл компоновки: %s"
 
-#: ../src/xkeyboard.c:55
+#: ../src/xkeyboard.c:60
 #, c-format
 msgid "new xkb symbol found: <%s>"
 msgstr "найден новый символ xkb: <%s>"
 
-#: ../src/xkeyboard.c:141
+#: ../src/xkeyboard.c:150
 #, c-format
 msgid "keyboard layout found: <%s>"
 msgstr "найденная раскладка клавиатуры: <%s>"
 
-#: ../src/xkeyboard.c:151
+#: ../src/xkeyboard.c:160
 #, c-format
 msgid "keyboard layout symbol name=<%s>"
 msgstr "название символа раскладки клавиатуры=<%s>"
 
-#: ../src/xkeyboard.c:175
+#: ../src/xkeyboard.c:186
 msgid "XKB state notify event received"
 msgstr "Получено состояние XKB предупреждения события"
 
-#: ../src/xkeyboard.c:209
+#: ../src/xkeyboard.c:225
 #, c-format
 msgid "switching to xkb layout %s"
 msgstr "переключение в xkb раскладку %s"
 
-#: ../src/xkeyboard.c:211
+#: ../src/xkeyboard.c:227
 msgid "Failed to switch xkb layout"
 msgstr "Ошибка переключения раскладки xkb"
 
-#: ../src/xkeyboard.c:278
+#: ../src/xkeyboard.c:302
 msgid "Unable to allocate memory for xkeyboard data"
 msgstr "Не удалось выделить память для данных xkeyboard"
 
-#: ../src/xkeyboard.c:289
+#: ../src/xkeyboard.c:313
 #, c-format
 msgid "Unable to initialize XKB library. version=%d.%d rc=%d"
 msgstr "Не удалось инициализировать библиотеку XKB. версия=%d.%d rc=%d"
 
-#: ../src/xkeyboard.c:293
+#: ../src/xkeyboard.c:317
 #, c-format
 msgid "Unable to query XKB extension from X server version=%d.%d rc=%d"
 msgstr "Невозможно запросить расширение XKB от версии X server=%d.%d rc=%d"
 
-#: ../src/xkeyboard.c:307
+#: ../src/xkeyboard.c:331
 msgid ""
 "XKB not compiled: startup keyboard sync is disabled. You should make sure "
 "all locker keys are released."
@@ -1417,17 +1438,34 @@ msgstr ""
 "XKB не скомпилировано: запуск синхронизации клавиатуры отключен. Вы должны "
 "убедиться, что все клавиши освобождены."
 
-#: ../src/xkeyboard.c:310
+#: ../src/xkeyboard.c:334
 msgid "No xkb group found. Using default us group"
 msgstr "Не обнаружена группа xkb. Используется группа по умолчанию"
 
-#: ../src/ramble.c:158
+#: ../src/ramble.c:167
 msgid "Invalid ramble algorithm selected. Using default."
 msgstr "Выбран неверный алгоритм перехода. Использую стандартный."
 
-#: ../src/ramble.c:252
+#: ../src/ramble.c:273
 msgid "Unable to allocate memory for ramble"
 msgstr "Невозможно выделить память на переход"
+
+#~ msgid ""
+#~ "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"
+#~ "bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop."
+#~ "org/show_bug.cgi?id=21971 ; Please disable xrecord if you are using a "
+#~ "recent version of Xorg: --without-xrecord configure option. Use AT-SPI "
+#~ "instead. Since XEVIE was dropped from Xorg some months ago, there is no "
+#~ "way to provide the same functionality for now. Sorry for the "
+#~ "inconvenience."
+#~ msgstr ""
+#~ "Расширение Xorg RECORD блокировано с версии Xorg 1.6: см. ошибки http://"
+#~ "bugs.freedesktop.org/show_bug.cgi?id=20500 и http://bugs.freedesktop.org/"
+#~ "show_bug.cgi?id=21971 ; Пожалуйста, отключите xrecord если вы используете "
+#~ "последнюю версию Xorg: : --without-xrecord опция про конфигурации. "
+#~ "Используйте AT-SPI. XEVIE был исключен из Xorg несколько месяцев назад, "
+#~ "не существует способа, чтобы обеспечить ту же функциональность на данный "
+#~ "момент. Извините за причиненные неудобства."
 
 #~ msgid "Event %d received :type %d. Switching from state %d to %d"
 #~ msgstr "Событие %d получено :тип %d. Переход из состояния %d в %d"

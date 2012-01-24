@@ -51,6 +51,7 @@ run intltoolize --copy --force --automake
 run autoheader
 run automake --foreign
 run autoconf
+
 cd data
 hash trang 2>&- >/dev/null
 if [ $? -eq 0 ]; then
@@ -64,6 +65,18 @@ else
 	run java -jar $TRANGPATH/trang.jar -I rnc -O rng florence.rnc relaxng/florence.rng
 	run java -jar $TRANGPATH/trang.jar -I rnc -O rng style.rnc relaxng/style.rng
 fi
+
+cd ../po
+run intltool-update -r
+run intltool-update -p
+
+cd ../docs
+LINGUAS="fr ru"
+for lang in $LINGUAS
+do
+	run xml2po -u $lang/$lang.po C/florence.xml
+done
+run xml2po -o userdoc.pot C/florence.xml
 
 # go back
 cd $OLD_PWD
