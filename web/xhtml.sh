@@ -28,6 +28,16 @@ function doc {
 	cd ..
 }
 
+xgettext home.php config.php tools.php -o messages.pot --from-code=utf-8 -l PHP
+LINGUAS="fr_FR ru_RU"
+for lang in $LINGUAS
+do
+	msgmerge -U locale/$lang/LC_MESSAGES/messages.po messages.pot
+	cd locale/$lang/LC_MESSAGES
+	msgfmt messages.po
+	cd ../../..
+done
+
 [ ! -d xhtml ] && mkdir xhtml
 rm -rf xhtml/*
 cp style.css xhtml

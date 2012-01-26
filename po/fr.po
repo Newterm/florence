@@ -2,14 +2,14 @@
 # Traductions françaises du paquet Florence Gnome virtual keyboard.
 # Copyright (C) 2012 François Agrech
 # This file is distributed under the same license as the Florence Gnome virtual keyboard package.
-#
 # François Agrech <f.agrech@gmail.com>, 2012.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-24 19:45+0000\n"
-"PO-Revision-Date: 2010-04-07 18:45+0100\n"
+"POT-Creation-Date: 2012-01-25 23:32+0000\n"
+"PO-Revision-Date: 2012-01-25 23:17+0000\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "Language: fr\n"
@@ -326,7 +326,7 @@ msgstr ""
 
 #: ../data/florence.schemas.in.h:20
 msgid "Florence will hide the keyboard window just after starting up."
-msgstr ""
+msgstr "Florence va cacher la fenêtre du clavier juste après le lancement."
 
 #: ../data/florence.schemas.in.h:21
 msgid "Hide the keyboard automatically when not needed"
@@ -779,7 +779,7 @@ msgstr "Activer l'accéssebilité"
 
 #: ../src/florence.c:682
 msgid "gnome-session-save returned an error"
-msgstr ""
+msgstr "gnome-session-save a retourné une erreur"
 
 #: ../src/florence.c:686
 msgid ""
@@ -800,11 +800,10 @@ msgstr ""
 "Vieille version de GLib détectée. Le style de Florence marche avec un hack."
 
 #: ../src/florence.c:723
-#, fuzzy
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
-"AT-SPI a été désactivé au moment de la compilation: le mode 'cacher "
-"automatiquement est désactivé."
+"AT-SPI a été désactivé pendant l'exécution: le mode 'cacher automatiquement' "
+"est désactivé."
 
 #: ../src/florence.c:727
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
@@ -897,7 +896,7 @@ msgid "Usage: %s [OPTION]...\n"
 msgstr "Utilisation: %s [OPTION|...\n"
 
 #: ../src/main.c:160
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Options:\n"
 "  -h, --help              display this help and exit\n"
@@ -915,7 +914,7 @@ msgstr ""
 "  -h, --help                afficher cette aide et quitter\n"
 "  -V, --version             afficher la version et quitter\n"
 "  -c, --config              ouvrir la fenêtre de configuration\n"
-"  -d, --debug               donner des informations pour le déboggage dans "
+"  -d, --debug [niveau]      donner des informations pour le déboggage dans "
 "stdout\n"
 "  -n, --no-gnome            utilisez cette option si vous n'utilisez pas "
 "GNOME\n"
@@ -1001,14 +1000,12 @@ msgid "Keyboard synchronization is disabled."
 msgstr "La synchronization avec le clavier est désactivée"
 
 #: ../src/status.c:262
-#, fuzzy
 msgid "sending press event"
-msgstr "Envoi de l'événement %d"
+msgstr "Envoi de l'événement pression"
 
 #: ../src/status.c:278
-#, fuzzy
 msgid "sending release event"
-msgstr "Envoi de l'événement %d"
+msgstr "Envoi de l'événement relachement"
 
 #: ../src/status.c:510 ../src/status.c:538
 msgid "Unable to allocate memory for status focus"
@@ -1039,6 +1036,7 @@ msgstr "Sélection de la fenêtre %s (ID=%ld)"
 #, c-format
 msgid "Unknown input method: %s ; using button input method"
 msgstr ""
+"Méthode de saisie inconnue: %s ; utilisation de la méthode de saisie bouton"
 
 #: ../src/status.c:594
 msgid "Unable to allocate memory for status"
@@ -1138,16 +1136,16 @@ msgid "Shape %s doesn't exist for selected style."
 msgstr "La forme %s n'existe pas pour le style sélectionné."
 
 #: ../src/trace.c:112
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse debug level <%s>, using default <warning>"
 msgstr ""
-"Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
-"défaut %s"
+"Impossible d'analyser le niveau de déboggage <%s>, utilisation du défaut "
+"<warning>"
 
 #: ../src/trace.c:113
 #, c-format
 msgid "Setting debug level to <%s>"
-msgstr ""
+msgstr "Mise en place du niveau de debug <%s>"
 
 #: ../src/trace.c:120
 #, c-format
@@ -1171,35 +1169,32 @@ msgstr ""
 
 #: ../src/trace.c:145 ../src/trace.c:155
 msgid "WARNING: "
-msgstr ""
+msgstr "ATTENTION:"
 
 #: ../src/trace.c:165
-#, fuzzy
 msgid "ERROR: "
-msgstr "ERREUR FATALE: "
+msgstr "ERREUR: "
 
 #: ../src/trace.c:198
 #, c-format
 msgid "Too many function levels at function <%s>."
-msgstr ""
+msgstr "Trop de niveaux de fonction à la fonction <%s>."
 
 #: ../src/trace.c:207
 #, c-format
 msgid "Trace function checksum error at function <%s>."
-msgstr ""
+msgstr "Erreur de somme de la fonction de trace <%s>."
 
 #: ../src/trace.c:209
 #, c-format
 msgid "Trace indent error at function <%s>."
-msgstr ""
+msgstr "Erreur d'indentation à la fonction <%s>."
 
 #: ../src/trayicon.c:51
-#, fuzzy
 msgid "Copyright (C) 2012 François Agrech"
-msgstr "Copyright (C) 2008, 2009, 2010 François Agrech"
+msgstr "Copyright (C) 2012 François Agrech"
 
 #: ../src/trayicon.c:55
-#, fuzzy
 msgid ""
 "Copyright (C) 2012 François Agrech\n"
 "\n"
@@ -1217,7 +1212,7 @@ msgid ""
 "along with this program; if not, write to the Free Software Foundation,\n"
 "Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."
 msgstr ""
-"Copyright (C) 2008, 2009, 2010 François Agrech\n"
+"Copyright (C) 2012 François Agrech\n"
 "\n"
 "Ce programme est un logiciel libre; vous pouvez le redistribuer et/ou\n"
 "le modifier dans les conditions de la License Générale Publique GNU,\n"
@@ -1380,11 +1375,11 @@ msgstr "Impossible d'ouvrir le répertoire %s"
 
 #: ../src/settings-window.c:138
 msgid "Mouse"
-msgstr ""
+msgstr "Souris"
 
 #: ../src/settings-window.c:140
 msgid "Touch screen"
-msgstr ""
+msgstr "Ecran tactile"
 
 #: ../src/settings-window.c:142
 msgid "Timer"

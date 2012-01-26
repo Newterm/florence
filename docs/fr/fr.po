@@ -2,21 +2,21 @@
 # Traductions françaises de la documentation du clavier virtuel Florence.
 # Copyright (C) 2012 François Agrech
 # This file is distributed under the same license as the Florence Gnome virtual keyboard package.
-#
-#
 # François Agrech <f.agrech@gmail.com>, 2012.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.4.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-01-24 19:46+0000\n"
-"PO-Revision-Date: 2010-04-08 09:22+0100\n"
+"POT-Creation-Date: 2012-01-25 23:32+0000\n"
+"PO-Revision-Date: 2012-01-25 23:33+0000\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
-"Language-Team: <>\n"
+"Language-Team: French <f.agrech@gmail.com>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
@@ -189,14 +189,13 @@ msgstr ""
 "tapez: <prompt>#</prompt> <userinput>yum install florence</userinput>"
 
 #: C/florence.xml:45(para)
-#, fuzzy
 msgid ""
-"Make sure you have the latest version of Florence (0.5.2 as of November, the "
-"2nd of 2010). You can get it at <ulink url=\"http://sourceforge.net/project/"
+"Make sure you have the latest version of Florence (0.5.2 as of January, the "
+"25th of 2012). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
-"Soyez sûr que vous avez la dernière version de Florence (&version; au 2 "
-"novembre 2010). Vous pouvez la télécharger ici: <ulink url=\"http://"
+"Soyez sûr que vous avez la dernière version de Florence (&version; au 25 "
+"janvier 2012). Vous pouvez la télécharger ici: <ulink url=\"http://"
 "sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</"
 "ulink>"
 
@@ -388,9 +387,9 @@ msgid "at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \\"
 msgstr "at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \\"
 
 #: C/florence.xml:79(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "libnotify-devel libxtst6-devel intltool libpanel-applet-2-devel"
-msgstr "libnotify libxtst6-devel intltool libpanel-applet-2-devel"
+msgstr "libnotify-devel libxtst6-devel intltool libpanel-applet-2-devel"
 
 #: C/florence.xml:83(ulink)
 msgid "Ubuntu"
@@ -425,12 +424,12 @@ msgstr ""
 "commandes suivantes:"
 
 #: C/florence.xml:96(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "tar -xjvf florence-0.5.2.tar.bz2"
 msgstr "tar -xjvf florence-&version;.tar.bz2"
 
 #: C/florence.xml:97(userinput) C/florence.xml:118(userinput)
-#, fuzzy, no-wrap
+#, no-wrap
 msgid "cd florence-0.5.2"
 msgstr "cd florence-&version;"
 
