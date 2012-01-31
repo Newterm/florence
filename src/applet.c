@@ -24,6 +24,9 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 #include "system.h"
+#ifdef ENABLE_APPLET4
+	#include <bonobo/bonobo-ui-component.h>
+#endif
 #include <panel-applet.h>
 #include <gconf/gconf-client.h>
 #include "trace.h"
@@ -33,17 +36,29 @@
 
 struct florence *florence=NULL;
 
+#ifdef ENABLE_APPLET4
+void applet_properties (GtkAction *action, PanelApplet *applet)
+#else
 void applet_properties (BonoboUIComponent *uic, gpointer *florence, gchar *cname)
+#endif
 {
 	settings();
 }
 
+#ifdef ENABLE_APPLET4
+void applet_about (GtkAction *action, PanelApplet *applet)
+#else
 void applet_about (BonoboUIComponent *uic, gpointer *florence, gchar *cname)
+#endif
 {
 	trayicon_about();
 }
 
+#ifdef ENABLE_APPLET4
+void applet_help (GtkAction *action, PanelApplet *applet)
+#else
 void applet_help (BonoboUIComponent *uic, gpointer *florence, gchar *cname)
+#endif
 {
 	trayicon_help();
 }
@@ -54,31 +69,55 @@ florence_applet_factory(PanelApplet *applet,
                         gpointer data)
 {
 	const char *modules;
-	static const BonoboUIVerb verbs [] = {
+	char *menu;
+#ifdef ENABLE_APPLET4
+	static const GtkActionEntry actions[]={
+		{ "Properties", GTK_STOCK_PREFERENCES, "Properties", NULL, NULL, G_CALLBACK(applet_properties) },
+		{ "About", GTK_STOCK_PREFERENCES, "About", NULL, NULL, G_CALLBACK(applet_about) },
+		{ "Help", GTK_STOCK_PREFERENCES, "Help", NULL, NULL, G_CALLBACK(applet_help) },
+	};
+	GtkActionGroup *action_group;
+#else
+	static const BonoboUIVerb verbs[]={
 		BONOBO_UI_VERB ("Properties", (BonoboUIVerbFn)applet_properties),
 		BONOBO_UI_VERB ("About", (BonoboUIVerbFn)applet_about),
 		BONOBO_UI_VERB ("Help", (BonoboUIVerbFn)applet_help),
 		BONOBO_UI_VERB_END
 	};
-	char *menu = g_strdup_printf(
-		"<popup name=\"button3\">\
-		        <menuitem name=\"Properties\" verb=\"Properties\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-properties\"/>\
-		        <menuitem name=\"About\" verb=\"About\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-about\"/>\
-		        <menuitem name=\"Help\" verb=\"Help\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-help\"/>\
-		</popup>", _("_Preferences..."), _("_About..."), _("_Help..."));
-	
+#endif
+
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, FLORENCELOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
+#ifdef ENABLE_APPLET4
+	menu=g_strdup_printf(
+		"<menuitem name=\"Properties\" action=\"Properties\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-properties\"/>\
+		 <menuitem name=\"About\" action=\"About\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-about\"/>\
+		 <menuitem name=\"Help\" action=\"Help\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-help\"/>", _("_Preferences..."), _("_About..."), _("_Help..."));
+#else
+	menu=g_strdup_printf(
+		"<popup name=\"button3\">\
+		        <menuitem name=\"Properties\" verb=\"Properties\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-properties\"/>\
+		        <menuitem name=\"About\" verb=\"About\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-about\"/>\
+		        <menuitem name=\"Help\" verb=\"Help\" _label=\"%s\" pixtype=\"stock\" pixname=\"gtk-help\"/>\
+		</popup>", _("_Preferences..."), _("_About..."), _("_Help..."));
+#endif
+
 	g_return_val_if_fail (PANEL_IS_APPLET (applet), FALSE);
 
+#ifdef ENABLE_APPLET4
+	action_group=gtk_action_group_new("Florence actions");
+	gtk_action_group_add_actions(action_group, action_group, G_N_ELEMENTS(action_group), applet);
+	panel_applet_setup_menu(PANEL_APPLET (applet), menu, action_group);
+#else
 	panel_applet_setup_menu(PANEL_APPLET (applet),
 		menu,
 		verbs,
 		florence);
 	g_free(menu);
+#endif
 
 	modules = g_getenv("GTK_MODULES");
 	if (!modules||modules[0]=='\0') putenv("GTK_MODULES=gail:atk-bridge");

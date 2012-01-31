@@ -92,7 +92,12 @@ if test "x$with_at_spi" != "xno"; then
 	fi
 fi
 if test "x$with_panelapplet" != "xno"; then
-	PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-2.0], AC_DEFINE([ENABLE_APPLET], [], [panelapplet enabled.]), AC_MSG_ERROR(Could not configure libpanelapplet2. Please either install libpanelapplet2 or disable it: --without-panelapplet configure option))
+	PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-4.0], AC_DEFINE([ENABLE_APPLET4], [], [panelapplet-4.0 enabled.]), [libpanelapplet4=x])
+	if test "x$libpanelapplet4" = "xx"; then
+		PKG_CHECK_MODULES([LIBPANELAPPLET], [libpanelapplet-2.0], AC_DEFINE([ENABLE_APPLET], [], [panelapplet-2.0 enabled.]), AC_MSG_ERROR(Could not configure either libpanelapplet4 or libpanelapplet2. Please either install libpanelapplet or disable it: --without-panelapplet configure option))
+	else
+		PKG_CHECK_MODULES([LIBBONOBOUI], [libbonoboui-2.0])
+	fi
 fi
 
 # Math library
