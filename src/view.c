@@ -73,9 +73,9 @@ void view_resize (struct view *view)
 {
 	START_FUNC
 	GdkRectangle rect;
+#ifndef APPLET
 	GdkGeometry hints;
 	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
-#ifndef APPLET
 	if (settings_get_bool("window/resizable")) {
 		gtk_window_set_resizable(view->window, TRUE);
 		if (settings_get_bool("window/keep_ratio")) {

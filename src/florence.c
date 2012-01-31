@@ -425,24 +425,6 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 	return FALSE;
 }
 
-/* handles mouse enter events */
-gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
-{
-	START_FUNC
-	struct florence *florence=(struct florence *)user_data;
-	/* Work around gtk bug 556006 */
-	GdkEventCrossing *crossing=(GdkEventCrossing *)event;
-	GdkEventMotion motion;
-	motion.x=crossing->x;
-	motion.y=crossing->y;
-	motion.x_root=crossing->x_root;
-	motion.y_root=crossing->y_root;
-	flo_mouse_move_event(window, &motion, user_data);
-	status_release_latched(florence->status, NULL);
-	END_FUNC
-	return FALSE;
-}
-
 /* handles button press events */
 gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
@@ -528,6 +510,7 @@ gboolean flo_to_top(gpointer data)
 	END_FUNC
 	return TRUE;
 }
+
 /* start keeping the keyboard back to front every second */
 void flo_start_keep_on_top(struct florence *florence, gboolean keep_on_top)
 {
@@ -535,15 +518,6 @@ void flo_start_keep_on_top(struct florence *florence, gboolean keep_on_top)
 	if (settings_get_bool("window/keep_on_top")) {
 		g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, florence);
 	}
-	END_FUNC
-}
-
-/* Triggered by gconf when the "keep_on_top" parameter is changed. */
-void flo_set_keep_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
-{
-	START_FUNC
-	struct florence *florence=user_data;
-	flo_start_keep_on_top(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
 	END_FUNC
 }
 
@@ -599,6 +573,33 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 	}
 	END_FUNC
 	return FALSE;
+}
+
+/* handles mouse enter events */
+gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer user_data)
+{
+	START_FUNC
+	struct florence *florence=(struct florence *)user_data;
+	/* Work around gtk bug 556006 */
+	GdkEventCrossing *crossing=(GdkEventCrossing *)event;
+	GdkEventMotion motion;
+	motion.x=crossing->x;
+	motion.y=crossing->y;
+	motion.x_root=crossing->x_root;
+	motion.y_root=crossing->y_root;
+	flo_mouse_move_event(window, (GdkEvent *)(&motion), user_data);
+	status_release_latched(florence->status, NULL);
+	END_FUNC
+	return FALSE;
+}
+
+/* Triggered by gconf when the "keep_on_top" parameter is changed. */
+void flo_set_keep_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+{
+	START_FUNC
+	struct florence *florence=user_data;
+	flo_start_keep_on_top(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	END_FUNC
 }
 
 /* liberate memory used by the objects of the layout.
