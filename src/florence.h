@@ -25,17 +25,16 @@
 #include "system.h"
 #include "config.h"
 #ifdef ENABLE_XKB
-#include <X11/XKBlib.h>
+	#include <X11/XKBlib.h>
 #endif
 #include <gtk/gtk.h>
 #include "status.h"
 #include "trayicon.h"
 #ifdef ENABLE_RAMBLE
-#include "ramble.h"
-gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k);
+	#include "ramble.h"
 #endif
 #ifdef APPLET
-#include <panel-applet.h>
+	#include <panel-applet.h>
 #endif
 
 /* There is one florence structure which contains all global data in florence.c */

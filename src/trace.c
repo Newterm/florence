@@ -36,6 +36,7 @@ char trace_indent[TRACE_MAX_INDENT];
 int trace_fn_cksum[TRACE_MAX_INDENT];
 
 gint g_vfprintf(FILE *file, gchar const *format, va_list args);
+gint g_fprintf(FILE *file, gchar const *format, ...) G_GNUC_PRINTF (2, 3);
 
 /* calculate a simple checksum of a string. */
 int trace_cksum(const char *str)

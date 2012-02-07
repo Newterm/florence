@@ -311,6 +311,7 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 	if (auto_hide) {
 		if (!status_spi_is_enabled(florence->status)) {
 			flo_warn(_("SPI is disabled: Unable to switch auto-hide mode on."));
+			END_FUNC
 			return;
 		}
 #ifdef AT_SPI
@@ -419,7 +420,9 @@ gboolean flo_mouse_leave_event (GtkWidget *window, GdkEvent *event, gpointer use
 		status_press_latched(florence->status, NULL);
 	}
 #ifdef ENABLE_RAMBLE
-	if (florence->ramble) ramble_reset(florence->ramble, gtk_widget_get_window(GTK_WIDGET(florence->view->window)));
+	if (florence->ramble) {
+		ramble_reset(florence->ramble, gtk_widget_get_window(GTK_WIDGET(florence->view->window)), NULL);
+	}
 #endif
 	END_FUNC
 	return FALSE;
@@ -450,7 +453,14 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 
 #ifdef ENABLE_RAMBLE
 	if (status_im_get(florence->status)==STATUS_IM_RAMBLE) {
-		ramble_start(florence->ramble);
+		if (ramble_start(florence->ramble,
+			gtk_widget_get_window(GTK_WIDGET(florence->view->window)),
+			(gint)((GdkEventButton*)event)->x,
+			(gint)((GdkEventButton*)event)->y, key)) {
+			status_pressed_set(florence->status, key);
+			status_pressed_set(florence->status, NULL);
+			status_focus_set(florence->status, key);
+		}
 	} else {
 #endif
 	status_pressed_set(florence->status, key);
@@ -467,13 +477,23 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
+#ifdef ENABLE_RAMBLE
+	struct key *key=status_hit_get(florence->status,
+			(gint)((GdkEventButton*)event)->x,
+			(gint)((GdkEventButton*)event)->y, NULL);
+#endif
 	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
 #ifdef ENABLE_RAMBLE
 	if (ramble_started(florence->ramble) &&
 		status_im_get(florence->status)==STATUS_IM_RAMBLE &&
 		settings_get_bool("behaviour/ramble_button")) {
-		ramble_reset(florence->ramble, gtk_widget_get_window(GTK_WIDGET(florence->view->window)));
+		if (ramble_reset(florence->ramble,
+				gtk_widget_get_window(GTK_WIDGET(florence->view->window)), key)) {
+			status_pressed_set(florence->status, key);
+			status_pressed_set(florence->status, NULL);
+			status_focus_set(florence->status, key);
+		}
 	}
 #endif
 	END_FUNC
@@ -583,11 +603,13 @@ gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer use
 	/* Work around gtk bug 556006 */
 	GdkEventCrossing *crossing=(GdkEventCrossing *)event;
 	GdkEventMotion motion;
-	motion.x=crossing->x;
-	motion.y=crossing->y;
-	motion.x_root=crossing->x_root;
-	motion.y_root=crossing->y_root;
-	flo_mouse_move_event(window, (GdkEvent *)(&motion), user_data);
+	if (status_im_get(florence->status)!=STATUS_IM_RAMBLE) {
+		motion.x=crossing->x;
+		motion.y=crossing->y;
+		motion.x_root=crossing->x_root;
+		motion.y_root=crossing->y_root;
+		flo_mouse_move_event(window, (GdkEvent *)(&motion), user_data);
+	}
 	status_release_latched(florence->status, NULL);
 	END_FUNC
 	return FALSE;

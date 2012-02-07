@@ -145,7 +145,10 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 	/* Add the point to the path */
 	pt->p.x=x; pt->p.y=y; pt->k=k; pt->ev=FALSE;
 	ramble->end=g_list_append(ramble->end, (gpointer)pt);
-	if (!ramble->path) ramble->path=ramble->end;
+	if (!ramble->path) {
+		ramble->path=ramble->end;
+		pt->ev=TRUE;
+	}
 	if (ramble->end->next) ramble->end=ramble->end->next;
 	ramble->n++;
 	ramble_update_region(ramble->end, window);
@@ -174,12 +177,14 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 	return pt->ev;
 }
 
-/* Start rambling. Note: when ramble_button is FALSE, ramble is always started. */
-void ramble_start(struct ramble *ramble)
+/* Start rambling. Note: when ramble_button is FALSE, ramble is always started.
+ * returns TRUE if an event is detected. */
+gboolean ramble_start(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k)
 {
 	START_FUNC
 	ramble->started=TRUE;
 	END_FUNC
+	return ramble_add(ramble, window, x, y, k);
 }
 
 /* Return TRUE if rambling is started */
@@ -190,13 +195,15 @@ gboolean ramble_started(struct ramble *ramble)
 	return (!settings_get_bool("behaviour/ramble_button")) || ramble->started;
 }
 
-/* Reset ramble path */
-void ramble_reset(struct ramble *ramble, GdkWindow *window)
+/* Reset ramble path
+ * returns TRUE if an event is detected. */
+gboolean ramble_reset(struct ramble *ramble, GdkWindow *window, struct key *k)
 {
 	START_FUNC
 	GdkRectangle *rect=NULL;
 	GList *list=ramble->path;
 	struct ramble_point *pt;
+	struct key *last=NULL;
 	while (list) {
 		pt=(struct ramble_point *)list->data;
 		if (!rect) {
@@ -211,6 +218,7 @@ void ramble_reset(struct ramble *ramble, GdkWindow *window)
 			if (pt->p.y<rect->y) { rect->height+=(rect->y-pt->p.y); rect->y=pt->p.y; }
 			else rect->height+=(pt->p.y-rect->y);
 		}
+		if (pt->ev) last=pt->k;
 		g_free(list->data);
 		list=list->next;
 	}
@@ -226,6 +234,7 @@ void ramble_reset(struct ramble *ramble, GdkWindow *window)
 	ramble->n=0;
 	ramble->started=FALSE;
 	END_FUNC
+	return (last!=k);
 }
 
 /* Draw the ramble path to the cairo context */
@@ -260,7 +269,7 @@ void ramble_input_method_check(GConfClient *client, guint xnxn_id, GConfEntry *e
 	struct ramble *ramble=(struct ramble *)user_data;
 	gchar *val=settings_get_string("behaviour/input_method");
 	if (strcmp("ramble", val))
-		ramble_reset(ramble, NULL);
+		ramble_reset(ramble, NULL, NULL);
 	if (val) g_free(val);
 	END_FUNC
 }

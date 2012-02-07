@@ -46,14 +46,19 @@ struct ramble {
 /* Add a point to the path and update the window.
  * returns TRUE if an event is detected. */
 
-/* Start rambling. Note: when ramble_button is FALSE, ramble is always started. */
-void ramble_start(struct ramble *ramble);
+/* Start rambling. Note: when ramble_button is FALSE, ramble is always started. 
+ * returns TRUE if an event is detected. */
+gboolean ramble_start(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k);
 /* Return TRUE if rambling is started */
 gboolean ramble_started(struct ramble *ramble);
-/* Reset ramble path */
-void ramble_reset(struct ramble *ramble, GdkWindow *window);
+/* Reset ramble path
+ * returns TRUE if an event is detected. */
+gboolean ramble_reset(struct ramble *ramble, GdkWindow *window, struct key *k);
 /* Reset timer */
 void ramble_time_reset(struct ramble *ramble);
+/* Add a point to the path and update the window.
+ * returns TRUE if an event is detected. */
+gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, struct key *k);
 
 /* Draw the ramble path to the cairo context */
 void ramble_draw(struct ramble *ramble, cairo_t *ctx);
