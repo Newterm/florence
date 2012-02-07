@@ -453,7 +453,9 @@ gboolean flo_button_press_event (GtkWidget *window, GdkEventButton *event, gpoin
 
 #ifdef ENABLE_RAMBLE
 	if (status_im_get(florence->status)==STATUS_IM_RAMBLE) {
-		if (ramble_start(florence->ramble,
+		if (key_get_action(key, florence->status)==KEY_MOVE) {
+			status_pressed_set(florence->status, key);
+		} else if (ramble_start(florence->ramble,
 			gtk_widget_get_window(GTK_WIDGET(florence->view->window)),
 			(gint)((GdkEventButton*)event)->x,
 			(gint)((GdkEventButton*)event)->y, key)) {
