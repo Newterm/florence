@@ -1,15 +1,21 @@
-This release adds some GNOME3 features.
-The horrible icon has been fixed too and Russian translation has been added.
+This release introduces the touch screen input method.
+There has been some improvements to the ramble input method.
+Modifier (Alt, Shift, Ctrl, etc...) keys + click now works.
+Florence strings has been partially translated in Italian by the Ardesia team:
+	http://code.google.com/p/ardesia/
+Some other minor improvements have been added and a lot of bugs have been fixed.
 
 Changelog:
 
-2011-09-25 François Agrech <f.agrech@gmail.com>
-	* Version 0.5.1
+2012-02-08 François Agrech <f.agrech@gmail.com>
+	* Version 0.5.2
 	* A lot of bug fixes.
-	* New hide_on_start configuration parameter.
-	* New keep_ratio configuration parameter.
-	* New icon.
-	* AT-SPI2 (over dbus) support.
-	* Remove resize grip on latest Gtk implementations.
-	* Add Russian translation
+	* Ramble mode improvements.
+	* Add libpanelapplet-4 support.
+	* Add italian partial translation.
+	* Fix xrecord for hardware keyboard feedback.
+	* Enable xrecord by default.
+	* New trace level: hidebug.
+	* Modifier(Alt/Ctrl/Shift...)+click now works.
+	* Added touch input method.
 

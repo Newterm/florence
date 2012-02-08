@@ -194,3 +194,15 @@
 	* Remove resize grip on latest Gtk implementations.
 	* Add Russian translation
 
+2012-02-08 François Agrech <f.agrech@gmail.com>
+	* Version 0.5.2
+	* A lot of bug fixes.
+	* Ramble mode improvements.
+	* Add libpanelapplet-4 support.
+	* Add italian partial translation.
+	* Fix xrecord for hardware keyboard feedback.
+	* Enable xrecord by default.
+	* New trace level: hidebug.
+	* Modifier(Alt/Ctrl/Shift...)+click now works.
+	* Added touch input method.
+
