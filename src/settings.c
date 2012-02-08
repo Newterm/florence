@@ -58,6 +58,7 @@ static struct settings_param settings_defaults[] = {
 	{ "flo_activated", "colours/activated", SETTINGS_COLOR, { .vstring = "#FF0000" } },
 	{ "flo_mouseover", "colours/mouseover", SETTINGS_COLOR, { .vstring = "#0000FF" } },
 	{ "flo_latched", "colours/latched", SETTINGS_COLOR, { .vstring = "#00FF00" } },
+	{ SETTINGS_NONE, "colours/ramble", SETTINGS_COLOR, { .vstring = "#FF00FFAA" } },
 	{ "flo_extensions", "layout/extensions", SETTINGS_STRING, { .vstring = "" } },
 	{ "flo_layouts", "layout/file", SETTINGS_STRING, { .vstring = DATADIR "/layouts/florence.xml" } },
 	{ "flo_preview", "layout/style", SETTINGS_STRING, { .vstring = DATADIR "/styles/default/florence.style" } },

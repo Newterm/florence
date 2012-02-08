@@ -23,6 +23,7 @@
 #ifdef ENABLE_RAMBLE
 #include "trace.h"
 #include "settings.h"
+#include "style.h"
 #include <math.h>
 
 /* Maximum number of points in the ramble path */
@@ -252,10 +253,10 @@ void ramble_draw(struct ramble *ramble, cairo_t *ctx)
 			cairo_line_to(ctx, p->p.x, p->p.y);
 			list=list->prev;
 		}
-		cairo_set_operator(ctx, CAIRO_OPERATOR_SOURCE);
+		cairo_set_operator(ctx, CAIRO_OPERATOR_OVER);
 		cairo_set_line_cap (ctx, CAIRO_LINE_CAP_ROUND);
 		cairo_set_line_join(ctx, CAIRO_LINE_JOIN_ROUND);
-		cairo_set_source_rgba (ctx, 1, 0, 0, 1);
+		style_cairo_set_color(ctx, STYLE_RAMBLE_COLOR);
 		cairo_set_line_width(ctx, 5);
 		cairo_stroke(ctx);
 	}

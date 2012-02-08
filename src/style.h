@@ -48,6 +48,7 @@ enum style_colours {
 	STYLE_TEXT_COLOR,
 	STYLE_TEXT_OUTLINE_COLOR,
 	STYLE_MOUSE_OVER_COLOR,
+	STYLE_RAMBLE_COLOR,
 	STYLE_NUM_COLOURS
 };
 
@@ -74,7 +75,7 @@ void style_free(struct style *style);
 GdkPixbuf *style_pixbuf_draw(struct style *style);
 
 /* set cairo color to one of the style colors */
-void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c);
+void style_cairo_set_color(cairo_t *cairoctx, enum style_colours c);
 /* update the colours */
 void style_update_colors(struct style *style);
 

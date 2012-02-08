@@ -66,6 +66,7 @@ gchar *style_get_color(enum style_colours c)
 		case STYLE_ACTIVATED_COLOR: color=(gchar *)settings_get_string("colours/activated"); break;
 		case STYLE_MOUSE_OVER_COLOR: color=(gchar *)settings_get_string("colours/mouseover"); break;
 		case STYLE_LATCHED_COLOR: color=(gchar *)settings_get_string("colours/latched"); break;
+		case STYLE_RAMBLE_COLOR: color=(gchar *)settings_get_string("colours/ramble"); break;
 		default: color=NULL;
 	}
 	if (!color) {
@@ -79,12 +80,14 @@ gchar *style_get_color(enum style_colours c)
 }
 
 /* set cairo color to one of the style colors */
-void style_cairo_set_color(struct style *style, cairo_t *cairoctx, enum style_colours c)
+void style_cairo_set_color(cairo_t *cairoctx, enum style_colours c)
 {
 	START_FUNC
-	guint r, g, b;
+	guint r, g, b, a;
 	gchar *color=style_get_color(c);
-	if (3!=sscanf(color, "#%02x%02x%02x", &r, &g, &b)) {
+	if (4==sscanf(color, "#%02x%02x%02x%02x", &r, &g, &b, &a)) {
+		cairo_set_source_rgba(cairoctx, (gdouble)r/255.0, (gdouble)g/255.0, (gdouble)b/255.0, (gdouble)a/255.0);
+	} else if (3!=sscanf(color, "#%02x%02x%02x", &r, &g, &b)) {
 		flo_warn(_("can't parse color %s"), color);
 		cairo_set_source_rgb(cairoctx, 0.0, 0.0, 0.0);
 	} else cairo_set_source_rgb(cairoctx, (gdouble)r/255.0, (gdouble)g/255.0, (gdouble)b/255.0);
@@ -281,7 +284,7 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	}
 
 	cairo_save(cairoctx);
-	style_cairo_set_color(style, cairoctx, STYLE_TEXT_OUTLINE_COLOR);
+	style_cairo_set_color(cairoctx, STYLE_TEXT_OUTLINE_COLOR);
 	cairo_select_font_face(cairoctx, fontfamilly, slant, 
 		pango_font_description_get_weight(fontdesc)<=500?CAIRO_FONT_WEIGHT_NORMAL:CAIRO_FONT_WEIGHT_BOLD);
 	cairo_set_font_size(cairoctx, 0.8);
@@ -292,7 +295,7 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	cairo_set_line_width(cairoctx, 0.1);
 	cairo_text_path(cairoctx, text);
 	cairo_stroke(cairoctx);
-	style_cairo_set_color(style, cairoctx, STYLE_TEXT_COLOR);
+	style_cairo_set_color(cairoctx, STYLE_TEXT_COLOR);
 	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);
 	cairo_text_path(cairoctx, text);
 	cairo_fill(cairoctx);

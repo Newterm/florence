@@ -344,7 +344,7 @@ void key_timer_draw(struct key *key, struct style *style, cairo_t *cairoctx, dou
 {
 	START_FUNC
 	cairo_save(cairoctx);
-	style_cairo_set_color(style, cairoctx, STYLE_MOUSE_OVER_COLOR);
+	style_cairo_set_color(cairoctx, STYLE_MOUSE_OVER_COLOR);
 	cairo_move_to(cairoctx, key->w/2.0, key->h/2.0);
 	cairo_line_to(cairoctx, key->w/2.0, 0.0);
 	if (value>0.125) cairo_line_to(cairoctx, key->w, 0.0);

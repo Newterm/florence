@@ -344,6 +344,17 @@
 				<long>Color of the latched keys</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/colours/ramble</key>
+			<applyto>/apps/florence/colours/ramble</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>#FF00FFAA</default>
+			<locale name="C">
+				<short>Ramble path color</short>
+				<long>Color of the ramble path drawn in ramble mode.</long>
+			</locale>
+		</schema>
 
 		<schema>
 			<key>/schemas/apps/florence/layout/file</key>
