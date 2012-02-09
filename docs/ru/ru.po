@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2012-01-25 23:32+0000\n"
+"POT-Creation-Date: 2012-02-09 20:13+0000\n"
 "PO-Revision-Date: 2011-08-10 17:10+0000\n"
 "Last-Translator: SomeOneBrick <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -20,35 +20,35 @@ msgstr ""
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/florence.xml:174(None)
+#: C/florence.xml:177(None)
 msgid "@@image: 'figures/florence.png'; md5=ad4d8900416e69900035d27e07e43ac5"
 msgstr ""
 "@@изображение: 'figures/florence.png'; md5=ad4d8900416e69900035d27e07e43ac5"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/florence.xml:198(None)
+#: C/florence.xml:201(None)
 msgid "@@image: 'figures/style.png'; md5=2e56402545536919f65c2d9153425a52"
 msgstr ""
 "@@изображение: 'figures/style.png'; md5=2e56402545536919f65c2d9153425a52"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/florence.xml:219(None)
+#: C/florence.xml:222(None)
 msgid "@@image: 'figures/window.png'; md5=2900ebbbce54d60097bde0e72dbeb5fa"
 msgstr ""
 "@@изображение: 'figures/window.png'; md5=2900ebbbce54d60097bde0e72dbeb5fa"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/florence.xml:237(None)
+#: C/florence.xml:240(None)
 msgid "@@image: 'figures/behaviour.png'; md5=e578dc76da690c66e7042e39a8fe1d15"
 msgstr ""
 "@@изображение: 'figures/behaviour.png'; md5=e578dc76da690c66e7042e39a8fe1d15"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
-#: C/florence.xml:253(None)
+#: C/florence.xml:256(None)
 msgid "@@image: 'figures/layout.png'; md5=56d00918f2b781fb6626bebfcb698351"
 msgstr ""
 "@@изображение: 'figures/layout.png'; md5=56d00918f2b781fb6626bebfcb698351"
@@ -78,8 +78,8 @@ msgid "f.agrech@gmail.com"
 msgstr "f.agrech@gmail.com"
 
 #: C/florence.xml:25(year)
-msgid "2008,2009,2010"
-msgstr "2008, 2009, 2010"
+msgid "2012"
+msgstr ""
 
 #: C/florence.xml:25(holder)
 msgid "François Agrech"
@@ -195,8 +195,8 @@ msgstr ""
 #: C/florence.xml:45(para)
 #, fuzzy
 msgid ""
-"Make sure you have the latest version of Florence (0.5.2 as of January, the "
-"25th of 2012). You can get it at <ulink url=\"http://sourceforge.net/project/"
+"Make sure you have the latest version of Florence (0.5.2 as of February, the "
+"8th of 2012). You can get it at <ulink url=\"http://sourceforge.net/project/"
 "platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
 "Проверьте, насколько новую версию Florence Вы используете (версия 0.5.1 на "
@@ -360,9 +360,9 @@ msgstr "Mandriva"
 #: C/florence.xml:105(prompt) C/florence.xml:111(prompt)
 #: C/florence.xml:118(prompt) C/florence.xml:119(prompt)
 #: C/florence.xml:121(prompt) C/florence.xml:128(prompt)
-#: C/florence.xml:291(prompt) C/florence.xml:295(prompt)
-#: C/florence.xml:300(prompt) C/florence.xml:308(prompt)
-#: C/florence.xml:348(prompt)
+#: C/florence.xml:294(prompt) C/florence.xml:298(prompt)
+#: C/florence.xml:303(prompt) C/florence.xml:311(prompt)
+#: C/florence.xml:351(prompt)
 msgid "$"
 msgstr "$"
 
@@ -371,7 +371,7 @@ msgstr "$"
 msgid "su"
 msgstr "su"
 
-#: C/florence.xml:77(prompt) C/florence.xml:334(prompt)
+#: C/florence.xml:77(prompt) C/florence.xml:337(prompt)
 msgid "#"
 msgstr "№"
 
@@ -672,8 +672,9 @@ msgstr ""
 "выбираете вы."
 
 #: C/florence.xml:148(para)
+#, fuzzy
 msgid ""
-"The default input method is the \"button\" method. This is adapted for mouse/"
+"The default input method is the \"mouse\" method. This is adapted for mouse/"
 "trackpad input. It is pretty straightforward. Just click on the key with the "
 "mouse button to activate it. Release the mouse button to deavticate the key. "
 "The advantage of this method is its simplicity. It does not require "
@@ -687,6 +688,14 @@ msgstr ""
 "требование к наличию указывающего устройства."
 
 #: C/florence.xml:151(para)
+msgid ""
+"The second input method is the \"touch\" method. This is adapted for touch "
+"screen input. The difference with the mouse input method is that it not "
+"possible to touch the keyboard without clicking. In this mode, the keys are "
+"pressed on touch end."
+msgstr ""
+
+#: C/florence.xml:154(para)
 msgid ""
 "The next method is the \"timer\" method. Use this method if you are unable "
 "to use a button. Point a key with the pointer and a timer is triggered. When "
@@ -705,7 +714,7 @@ msgstr ""
 "Недостатком является то, что скорость набора текста значительно падает, и вы "
 "не можете зажать нажатую кнопку."
 
-#: C/florence.xml:154(para)
+#: C/florence.xml:157(para)
 msgid ""
 "The last method is the \"ramble\" method. Like the timer method, the ramble "
 "method does not require a button. This method can be faster than the timer "
@@ -714,7 +723,7 @@ msgid ""
 "pointer button is not pressed. There are two sub-methods for rambling."
 msgstr ""
 
-#: C/florence.xml:157(para)
+#: C/florence.xml:160(para)
 msgid ""
 "The time-based ramble method requires good timing. While you move the "
 "pointer, Florence will detect keys that are to be activated based on the "
@@ -723,7 +732,7 @@ msgid ""
 "back to the center. This method can be pretty fast with good training."
 msgstr ""
 
-#: C/florence.xml:160(para)
+#: C/florence.xml:163(para)
 msgid ""
 "The distance-based ramble method requires some dexterity to be used "
 "efficiently. The distance the pointer moves over the key is measured and the "
@@ -733,11 +742,11 @@ msgid ""
 "efficiently, apply quick gestures over the keys you want to activate."
 msgstr ""
 
-#: C/florence.xml:167(title)
+#: C/florence.xml:170(title)
 msgid "Florence modes"
 msgstr "Режимы Florence"
 
-#: C/florence.xml:168(para)
+#: C/florence.xml:171(para)
 msgid ""
 "Florence has several states affecting how it functions and how it interacts "
 "with the user."
@@ -745,7 +754,7 @@ msgstr ""
 "Florence работает в нескольких режимах, влияющих на его функционал и "
 "использование пользователем."
 
-#: C/florence.xml:169(para)
+#: C/florence.xml:172(para)
 msgid ""
 "In auto-hide mode, Florence hides itself when it detects you don't need it. "
 "There are several rules to detect when Florence is needed and those rules "
@@ -771,15 +780,15 @@ msgstr ""
 "использовать Florence в скрытом режиме. Когда этот режим отключён, Florence "
 "всегда виден на экране."
 
-#: C/florence.xml:171(title)
+#: C/florence.xml:174(title)
 msgid "Florence extensions"
 msgstr "Расширения Florence"
 
-#: C/florence.xml:175(phrase)
+#: C/florence.xml:178(phrase)
 msgid "Shows the extensions available."
 msgstr "Показывает доступные расширения"
 
-#: C/florence.xml:179(para)
+#: C/florence.xml:182(para)
 msgid ""
 "The above figure shows the different parts of the default layout. There are "
 "other layouts that can be selected in the settings dialog (layout tab)."
@@ -788,7 +797,7 @@ msgstr ""
 "показаны другие раскладки, которые могут быть выбраны в окне настройки "
 "(раздел раскладок)."
 
-#: C/florence.xml:180(para)
+#: C/florence.xml:183(para)
 msgid ""
 "The default keyboard layout can be extended with 3 extensions to the core "
 "keyboard. The arrows keypad is an extension added to the right of the core "
@@ -804,11 +813,11 @@ msgstr ""
 "включать и выключать независимо от других. Каждое расширение можно соотнести "
 "с определёнными раскладками."
 
-#: C/florence.xml:183(title)
+#: C/florence.xml:186(title)
 msgid "Modifier keys"
 msgstr "Клавиши-модификаторы"
 
-#: C/florence.xml:184(para)
+#: C/florence.xml:187(para)
 msgid ""
 "Some keys have a modifier attribute, just like on a real hardware keyboard. "
 "When they are pressed, the effect of other non-modifier keys is changed. The "
@@ -826,7 +835,7 @@ msgstr ""
 "деактивируется, когда кнопка нажата ещё раз. Неблокированный тип активирован "
 "только когда кнопка нажата."
 
-#: C/florence.xml:185(para)
+#: C/florence.xml:188(para)
 msgid ""
 "When activated, the locker keys turn red (the color can be changed in the "
 "settings dialog) and the symbol displayed on all non-modifier keys is "
@@ -834,7 +843,7 @@ msgid ""
 "active, its effect will be modified according to it."
 msgstr ""
 
-#: C/florence.xml:186(para)
+#: C/florence.xml:189(para)
 msgid ""
 "When using a mouse, it is not possible to press 2 keys at the same time. As "
 "a solution to this problem, Florence latches non-locker modifiers when "
@@ -845,11 +854,11 @@ msgid ""
 "again to become released."
 msgstr ""
 
-#: C/florence.xml:189(title)
+#: C/florence.xml:192(title)
 msgid "Configuring"
 msgstr "Настраивается"
 
-#: C/florence.xml:190(para)
+#: C/florence.xml:193(para)
 msgid ""
 "The configuration dialog is accessible via the systray icon (right click on "
 "it and select <guimenuitem>Preferences</guimenuitem>) or via the command "
@@ -864,7 +873,7 @@ msgstr ""
 "такая доступна). Также возможно взломать конфигурацию через gconf (смотрите "
 "секцию взлома)."
 
-#: C/florence.xml:191(para)
+#: C/florence.xml:194(para)
 msgid ""
 "Some selected options are not applied until you click the 'Apply' button. "
 "Some other options are taken into account immediately but can be cancelled "
@@ -874,7 +883,7 @@ msgstr ""
 "\". Некоторые другие опции применяются сразу, но могут быть отменены "
 "нажатием кнопки \"Отмена\", если вы перед этим не применили изменения."
 
-#: C/florence.xml:192(para)
+#: C/florence.xml:195(para)
 msgid ""
 "The settings options have been divided into 4 groups in order to ease "
 "understanding and searching for them."
@@ -882,42 +891,42 @@ msgstr ""
 "Настраиваемые опции разделены на четыре группы для более лучшего понимания и "
 "поиска между ними."
 
-#: C/florence.xml:193(title)
+#: C/florence.xml:196(title)
 msgid "Style configuration"
 msgstr "Конфигурировать стиль"
 
-#: C/florence.xml:195(title)
+#: C/florence.xml:198(title)
 msgid "Style preferences dialog"
 msgstr "Диалог настроек стиля"
 
-#: C/florence.xml:199(phrase)
+#: C/florence.xml:202(phrase)
 msgid "Shows the style preferences dialog."
 msgstr "Показывает диалог настройки стиля."
 
-#: C/florence.xml:203(para)
+#: C/florence.xml:206(para)
 msgid "The following style options are configurable:"
 msgstr "Следующие опции стиля могут быть настроены:"
 
-#: C/florence.xml:205(para)
+#: C/florence.xml:208(para)
 msgid "Style: select your style by clicking on the style icon."
 msgstr "Стиль: выберите ваш стиль, нажав на иконку стиля."
 
-#: C/florence.xml:206(para)
+#: C/florence.xml:209(para)
 msgid "Default keys colour: set the background colour of normal keys."
 msgstr "Цвет кнопок по умолчанию: выбор цвета обычных кнопок."
 
-#: C/florence.xml:207(para)
+#: C/florence.xml:210(para)
 msgid "Latched keys colour: set the background colour of latched keys."
 msgstr ""
 "Цвет заблокированных кнопок: выбор цвета недоступных к использованию кнопок."
 
-#: C/florence.xml:208(para)
+#: C/florence.xml:211(para)
 msgid ""
 "Activated keys colour: set the background colour of the keys that are "
 "pressed or locked."
 msgstr "Цвет нажатых кнопок: выбор цвета нажатых или заблокированных кнопок."
 
-#: C/florence.xml:209(para)
+#: C/florence.xml:212(para)
 msgid ""
 "Focused key colour: set the background colour of the key that is under the "
 "pointer."
@@ -925,11 +934,11 @@ msgstr ""
 "Цвет сфокусированной кнопки: выбор цвета клавиши, на которой находится "
 "курсор."
 
-#: C/florence.xml:210(para)
+#: C/florence.xml:213(para)
 msgid "Symbol colour: set the colour of the symbol or text printed on keys."
 msgstr "Цвет символов: выбор цвета текста на клавишах."
 
-#: C/florence.xml:211(para)
+#: C/florence.xml:214(para)
 msgid ""
 "Outline colour: set the colour surronding the key symbols. This color is "
 "used to improve visibility of the symbols. It should contrast with the "
@@ -939,7 +948,7 @@ msgstr ""
 "видимости символов на кнопках. Должен быть более контрастным, нежели цвет "
 "самого символа."
 
-#: C/florence.xml:212(para)
+#: C/florence.xml:215(para)
 msgid ""
 "Focus zoom: set the scaling factor of the focused key. Useful for visualy "
 "impaired people."
@@ -947,19 +956,19 @@ msgstr ""
 "Увеличение фокуса: установка масштаба \"лупы\". Полезно для людей с "
 "нарушением зрения."
 
-#: C/florence.xml:214(title)
+#: C/florence.xml:217(title)
 msgid "Window configuration"
 msgstr "Настройка окна"
 
-#: C/florence.xml:216(title)
+#: C/florence.xml:219(title)
 msgid "Window preferences dialog"
 msgstr "Диалог настройки окна."
 
-#: C/florence.xml:220(phrase)
+#: C/florence.xml:223(phrase)
 msgid "Shows the window preferences dialog."
 msgstr "Показывает диалог настроек окна."
 
-#: C/florence.xml:225(para)
+#: C/florence.xml:228(para)
 msgid ""
 "Decorated: decorates the window with a title bar. Makes it easy to move the "
 "window."
@@ -967,14 +976,14 @@ msgstr ""
 "Декорирование: украшает окно и заголовок. Делает перетаскивание окна более "
 "удобным."
 
-#: C/florence.xml:226(para)
+#: C/florence.xml:229(para)
 msgid ""
 "Transparent: allows you to see the windows behind the keyboard between the "
 "keys and to click on them."
 msgstr ""
 "Прозрачность: позволяет вам видеть окна под клавиатурой и щёлкать по ним."
 
-#: C/florence.xml:227(para)
+#: C/florence.xml:230(para)
 msgid ""
 "Resizable: allow you to set the visual scale of the keyboard with the window "
 "manager. Some window managers require the decorated option to be activated "
@@ -983,17 +992,17 @@ msgstr ""
 "Масштаб: позволяет вам настроить величину клавиатуры. Некоторые менеджеры "
 "окон требуют включения декора окна, чтобы масштабировать окно."
 
-#: C/florence.xml:228(para)
+#: C/florence.xml:231(para)
 msgid "Task bar: make Florence appear on the desktop task bar."
 msgstr "Панель задач: сделать Florence видимым на панели задач."
 
-#: C/florence.xml:229(para)
+#: C/florence.xml:232(para)
 msgid ""
 "Always on top: tells to the window manager to always keep the keyboard on "
 "top of other windows."
 msgstr "Всегда наверху: держит окно с клавиатурой всегда поверх всех окон."
 
-#: C/florence.xml:230(para)
+#: C/florence.xml:233(para)
 msgid ""
 "Opacity: set the window opacity in order to see the other windows through "
 "the keys. The window manager must support compositing and it must be "
@@ -1007,19 +1016,19 @@ msgstr ""
 "general/compositing_manager gconf key при помощи gconf-editor или "
 "gconftool-2."
 
-#: C/florence.xml:232(title)
+#: C/florence.xml:235(title)
 msgid "Behaviour configuration"
 msgstr "Настройка поведения"
 
-#: C/florence.xml:234(title)
+#: C/florence.xml:237(title)
 msgid "Behaviour preferences dialog"
 msgstr "Диалог настройки поведения"
 
-#: C/florence.xml:238(phrase)
+#: C/florence.xml:241(phrase)
 msgid "Shows the behaviour preferences dialog."
 msgstr "Показывает диалог настройки поведения"
 
-#: C/florence.xml:243(para)
+#: C/florence.xml:246(para)
 msgid ""
 "Input method: select the input method. Some input methods may have "
 "additional configuration options."
@@ -1027,11 +1036,11 @@ msgstr ""
 "Метод ввода: устанавливает метод ввода. Некоторые методы ввода могут иметь "
 "дополнительные опции."
 
-#: C/florence.xml:244(para)
+#: C/florence.xml:247(para)
 msgid "Auto hide: switch auto-hide mode on and off."
 msgstr "Автоскрытие: включает или выключает автоскрытие окна."
 
-#: C/florence.xml:245(para)
+#: C/florence.xml:248(para)
 msgid ""
 "Move to near selected widget: this option is only available when auto-hide "
 "mode is activated. When activated, the keyboard will be moved to near the "
@@ -1043,7 +1052,7 @@ msgstr ""
 "виджету каждый раз, когда вы выберите другой, с целью уменьшить расстояние "
 "от указателя до клавиатуры."
 
-#: C/florence.xml:246(para)
+#: C/florence.xml:249(para)
 msgid ""
 "Intermediate icon: In auto-hide mode, don't show the keyboard directly on "
 "editable widgets, but make an intermediate icon appear instead. Click on the "
@@ -1052,19 +1061,19 @@ msgid ""
 "editing, the intermediate icon takes less screen space than the keyboard."
 msgstr ""
 
-#: C/florence.xml:248(title)
+#: C/florence.xml:251(title)
 msgid "Layout configuration"
 msgstr "Настройка раскладок"
 
-#: C/florence.xml:250(title)
+#: C/florence.xml:253(title)
 msgid "Layout preferences dialog"
 msgstr "Диалог настройки раскладок"
 
-#: C/florence.xml:254(phrase)
+#: C/florence.xml:257(phrase)
 msgid "Shows the layout preferences dialog."
 msgstr "Показывает диалог настройки раскладок."
 
-#: C/florence.xml:258(para)
+#: C/florence.xml:261(para)
 msgid ""
 "The first combo box allows you to choose your keyboard layout. The "
 "extensions are relative to the layout. They can be activated or deactivated "
@@ -1075,51 +1084,51 @@ msgstr ""
 "выключены независимо друг от друга. Ниже приведены четыре расширения для "
 "стандартной раскладки:"
 
-#: C/florence.xml:260(para)
+#: C/florence.xml:263(para)
 msgid "Navigation keys: activate/deactivate the arrows keypad."
 msgstr "Клавиши навигации: включить или выключить стрелки."
 
-#: C/florence.xml:261(para)
+#: C/florence.xml:264(para)
 msgid "Numeric keys: activate/deactivate the numpad extension."
 msgstr "Цифровые клавиши: включение или выключение Num-клавиатуры."
 
-#: C/florence.xml:262(para)
+#: C/florence.xml:265(para)
 msgid "Function keys: activate/deactivate the function keys extensions."
 msgstr ""
 "Функциональные клавиши: включение или выключение расширенных функциональных "
 "клавиш."
 
-#: C/florence.xml:263(para)
+#: C/florence.xml:266(para)
 msgid "Action keys: activate/deactivate the action keys extensions."
 msgstr "Клавиши действия: включить/выключить расширение клавиш действия."
 
-#: C/florence.xml:268(title)
+#: C/florence.xml:271(title)
 msgid "Command line options"
 msgstr "Параметры командной строки"
 
-#: C/florence.xml:269(para)
+#: C/florence.xml:272(para)
 msgid "Florence accepts the following command line options:"
 msgstr "Florence принимает следующие значения командной строки:"
 
-#: C/florence.xml:271(para)
+#: C/florence.xml:274(para)
 msgid "-h (--help): print help message and exit."
 msgstr "-h (--help): показывает краткую помощь и закрывает программу."
 
-#: C/florence.xml:272(para)
+#: C/florence.xml:275(para)
 msgid "-V (--version): print Florence version and exit."
 msgstr ""
 "-V (--version): показывает установленную версию Florence и закрывает "
 "программу."
 
-#: C/florence.xml:273(para)
+#: C/florence.xml:276(para)
 msgid "-c (--config): open configuration dialog."
 msgstr "-c (--config): открывает окно настроек."
 
-#: C/florence.xml:274(para)
+#: C/florence.xml:277(para)
 msgid "-d (--debug): launch Florence in verbose mode."
 msgstr "-d (--debug): запускает Florence с дебаггером."
 
-#: C/florence.xml:275(para)
+#: C/florence.xml:278(para)
 msgid ""
 "-n (--no-gnome): use this option if you are not using the GNOME desktop "
 "environment. This will disable some GNOME specific features."
@@ -1128,7 +1137,7 @@ msgstr ""
 "окружение GNOME. При этом отключатся настройки, которые работают только под "
 "GNOME."
 
-#: C/florence.xml:276(para)
+#: C/florence.xml:279(para)
 msgid ""
 "-f (--focus) [window]: with this option, any florence input will go to the "
 "selected window. The window argument is the name of the window (the one that "
@@ -1140,7 +1149,7 @@ msgid ""
 "be used for the keyboard to work in GDM."
 msgstr ""
 
-#: C/florence.xml:277(para)
+#: C/florence.xml:280(para)
 msgid ""
 "-u (--use-config) file: use the configuration file provided instead of "
 "gconf. The configuration file is a key-value pair file with sections. An "
@@ -1152,11 +1161,11 @@ msgstr ""
 "разбитый на разделы. Пример файла приведён в /usr/share/florence/florence."
 "conf (путь может быть изменён командой \"--prefix configure\"."
 
-#: C/florence.xml:282(title)
+#: C/florence.xml:285(title)
 msgid "Tips"
 msgstr "Подсказки"
 
-#: C/florence.xml:283(para)
+#: C/florence.xml:286(para)
 msgid ""
 "This section describes how to obtain the best from florence outside of the "
 "GNOME desktop"
@@ -1164,11 +1173,11 @@ msgstr ""
 "В этом разделе объясняется как лучше использовать Florence без окружения "
 "GNOME"
 
-#: C/florence.xml:285(title)
+#: C/florence.xml:288(title)
 msgid "Using Florence without GNOME"
 msgstr "Использование Florence без GNOME"
 
-#: C/florence.xml:286(para)
+#: C/florence.xml:289(para)
 msgid ""
 "Florence is primarily intended to be used with the GNOME desktop. It makes "
 "use of the libraries that are commonly installed with a GNOME desktop. "
@@ -1182,7 +1191,7 @@ msgstr ""
 "стола и использовать Florence. Необходимые пакеты библиотек расписаны в "
 "<link linkend=\"dependencies\">секции установкиn</link>."
 
-#: C/florence.xml:287(para)
+#: C/florence.xml:290(para)
 msgid ""
 "For auto-hide mode to work, you need to start the at-spi registry daemon at "
 "session startup: Start at-spi registry daemon before Florence (at session "
@@ -1192,25 +1201,25 @@ msgstr ""
 "Ниже описаны способы включения at-spi перед тем, как запустится Florence "
 "(при запуске сессии):"
 
-#: C/florence.xml:289(para)
+#: C/florence.xml:292(para)
 msgid "Gentoo:"
 msgstr "Gentoo:"
 
-#: C/florence.xml:291(userinput)
+#: C/florence.xml:294(userinput)
 #, no-wrap
 msgid "/usr/libexec/at-spi-registryd &amp;"
 msgstr "/usr/libexec/at-spi-registryd &amp;"
 
-#: C/florence.xml:293(para)
+#: C/florence.xml:296(para)
 msgid "Mandriva:"
 msgstr "Mandriva:"
 
-#: C/florence.xml:295(userinput)
+#: C/florence.xml:298(userinput)
 #, no-wrap
 msgid "/usr/lib/at-spi-registryd &amp;"
 msgstr "/usr/lib/at-spi-registryd &amp;"
 
-#: C/florence.xml:298(para)
+#: C/florence.xml:301(para)
 msgid ""
 "Some distros may put the at-spi-registryd command elsewhere. Use the find "
 "command to find out where your distro put at-spi-registryd:"
@@ -1219,16 +1228,16 @@ msgstr ""
 "месте. Используйте команду поиска, чтобы найти местоположение at-spi-"
 "registryd:"
 
-#: C/florence.xml:300(userinput)
+#: C/florence.xml:303(userinput)
 #, no-wrap
 msgid "find /usr -name at-spi-registryd"
 msgstr "find /usr -name at-spi-registryd"
 
-#: C/florence.xml:302(para)
+#: C/florence.xml:305(para)
 msgid "Adapt according to the result."
 msgstr "Адаптирование в соответствии с результатом."
 
-#: C/florence.xml:303(para)
+#: C/florence.xml:306(para)
 msgid ""
 "GNOME does start the daemon automatically if it is configured with the "
 "<command>gnome-at-property</command> dialog."
@@ -1236,7 +1245,7 @@ msgstr ""
 "GNOME не запустит at-spi автоматически, если это не настроено в "
 "<command>gnome-at-property</command>."
 
-#: C/florence.xml:304(para)
+#: C/florence.xml:307(para)
 msgid ""
 "If you are not interested in auto-hide mode, you can as well compile "
 "florence without at-spi: use the --without-at-spi configure option at "
@@ -1246,7 +1255,7 @@ msgstr ""
 "используйте опцию \"--without-at-spi\" во время настройки, чтобы сэкономить "
 "дисковое пространство."
 
-#: C/florence.xml:305(para)
+#: C/florence.xml:308(para)
 msgid ""
 "You should run florence with the --no-gnome option. Modify the desktop file "
 "accordingly. not using this option will make florence prompt you with GNOME "
@@ -1256,7 +1265,7 @@ msgstr ""
 "рабочего стола в соответствии. Без использования этой опции Florence будет "
 "\"притормаживать\". Не сильно, но всё равно раздражает."
 
-#: C/florence.xml:306(para)
+#: C/florence.xml:309(para)
 msgid ""
 "If your DE is XDG compliant (like XFCE), Florence should be accessible via "
 "the menu. Anyway, starting florence from the command line will always work. "
@@ -1270,12 +1279,12 @@ msgstr ""
 "<ulink url=\"http://peksystray.sourceforge.net/\">peksystray</ulink>. Вы "
 "также можете получить доступ к диалогу настроек используя:"
 
-#: C/florence.xml:308(userinput)
+#: C/florence.xml:311(userinput)
 #, no-wrap
 msgid "florence --config"
 msgstr "florence --config"
 
-#: C/florence.xml:310(para)
+#: C/florence.xml:313(para)
 msgid ""
 "You can also skip the gconfd process by using a key-value pair file instead. "
 "Gconf libraries are still required to compile florence though. Use the --use-"
@@ -1283,7 +1292,7 @@ msgid ""
 "\">configuration section</link> for more information about this option)"
 msgstr ""
 
-#: C/florence.xml:311(para)
+#: C/florence.xml:314(para)
 msgid ""
 "If your window manager does not support the always_on_top hint, you can use "
 "the keep_on_top parameter in gconf (/apps/florence/window/keep_on_top), or "
@@ -1296,7 +1305,7 @@ msgstr ""
 "keep_on_top), или в конфигурационном файле в секции [окно]. Если этот "
 "параметр выбран, то клавиатура будет всегда поверх всех окон."
 
-#: C/florence.xml:312(para)
+#: C/florence.xml:315(para)
 msgid ""
 "Note that QT3 applications don't support at-spi. Therefore you should not "
 "deactivate auto-hide mode on KDE3. QT4 application will support at-spi when "
@@ -1308,11 +1317,11 @@ msgstr ""
 "at-spi, когда демон at-spi будет перемещён в dbus. Пока что автоскрытие до "
 "сих пор не работает в KDE4."
 
-#: C/florence.xml:315(title)
+#: C/florence.xml:318(title)
 msgid "Using Florence with GDM"
 msgstr "Использование Florence с GDM"
 
-#: C/florence.xml:316(para)
+#: C/florence.xml:319(para)
 msgid ""
 "Using florence at GDM is possible with gdmlogin. gdmgreeter has some issues "
 "with accessibility currently."
@@ -1320,7 +1329,7 @@ msgstr ""
 "Использование Florence на GDM возможно с gdmlogin. В настоящее время "
 "gdmgreeter имеет некоторые проблемы с доступностью."
 
-#: C/florence.xml:317(para)
+#: C/florence.xml:320(para)
 msgid ""
 "Configuring GDM to launch florence at login time involves editing 2 files "
 "in /etc/X11/gdm (requires root privileges): custom.conf and modules/"
@@ -1330,7 +1339,7 @@ msgstr ""
 "X11/gdm (требует привилегий root): custom.conf и modules/"
 "AccessKeyMouseEvents."
 
-#: C/florence.xml:318(para)
+#: C/florence.xml:321(para)
 msgid ""
 "In /etc/X11/gdm/custom.conf, add the following lines in the [daemon] section "
 "(if they are not already present):"
@@ -1338,7 +1347,7 @@ msgstr ""
 "В /etc/X11/gdm/custom.conf добавьте следующие строки в секции [daemon] (если "
 "они ещё не готовы):"
 
-#: C/florence.xml:319(programlisting)
+#: C/florence.xml:322(programlisting)
 #, no-wrap
 msgid ""
 "\n"
@@ -1351,11 +1360,11 @@ msgstr ""
 "GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr/lib/gtk-2.0/modules/libdwellmouselistener\n"
 "\t\t"
 
-#: C/florence.xml:323(para)
+#: C/florence.xml:326(para)
 msgid "In /etc/X11/gdm/modules/AccessKeyMouseEvents, add the following lines:"
 msgstr "В /etc/X11/gdm/modules/AccessKeyMouseEvents добавьте следующие строки:"
 
-#: C/florence.xml:324(programlisting)
+#: C/florence.xml:327(programlisting)
 #, no-wrap
 msgid ""
 "\n"
@@ -1372,7 +1381,7 @@ msgstr ""
 "&lt;Mouse3&gt; 1 2000 10000 /usr/bin/florence --focus --no-gnome --use-config /usr/share/florence/florence.conf\n"
 "\t\t"
 
-#: C/florence.xml:330(para)
+#: C/florence.xml:333(para)
 msgid ""
 "You should delete any other line starting with &lt;mouse1&gt;, &lt;"
 "mouse2&gt; or &lt;mouse3&gt; in order to prevent any other keyboard from "
@@ -1382,7 +1391,7 @@ msgstr ""
 "mouse2&gt; или &lt;mouse3&gt; для того, чтобы предотвратить запуск любой "
 "другой клавиатуры при старте вместе с Florence (например, gok)."
 
-#: C/florence.xml:331(para)
+#: C/florence.xml:334(para)
 msgid ""
 "When you have edited those two files, you should be able to start florence "
 "at next boot at gdm login. Press any mouse button for more than 2 seconds on "
@@ -1393,22 +1402,22 @@ msgstr ""
 "мыши и удерживайте её в течении двух секунд в диалоге входа в систему, чтобы "
 "запустить Florence."
 
-#: C/florence.xml:332(para)
+#: C/florence.xml:335(para)
 msgid "You can modify the keyboard settings for GDM as root with this command:"
 msgstr ""
 "Вы также можете настраивать параметры клавиатуры в GDM посредством этой "
 "команды (под root):"
 
-#: C/florence.xml:334(userinput)
+#: C/florence.xml:337(userinput)
 #, no-wrap
 msgid "florence -c --use-config /usr/share/florence/florence.conf"
 msgstr "florence -c --use-config /usr/share/florence/florence.conf"
 
-#: C/florence.xml:339(title)
+#: C/florence.xml:342(title)
 msgid "FAQ (Frequently Asked Questions)"
 msgstr "FAQ (часто задаваемые вопросы)"
 
-#: C/florence.xml:343(para)
+#: C/florence.xml:346(para)
 msgid ""
 "Does Florence support international keyboards with non-European characters "
 "(such as Arab, Chinese, Punjab, etc...)"
@@ -1416,7 +1425,7 @@ msgstr ""
 "Поддерживает ли Florence национальные клавиатуры с неевропескими символами "
 "(Арабскую, Китайскую, Пенджабскую и так далее)"
 
-#: C/florence.xml:346(para)
+#: C/florence.xml:349(para)
 msgid ""
 "Yes. Florence does support all the keyboards supported by X. In order to use "
 "a different keyboard, you can use the gnome-keyboard-properties dialog or "
@@ -1428,16 +1437,16 @@ msgstr ""
 "gnome-keyboard-properties или команду setxkbmap. Например, чтобы "
 "использовать арабскую клавиатуру, используйте следующую команду:"
 
-#: C/florence.xml:348(userinput)
+#: C/florence.xml:351(userinput)
 #, no-wrap
 msgid "setxkbmap ar"
 msgstr "setxkbmap ar"
 
-#: C/florence.xml:350(para)
+#: C/florence.xml:353(para)
 msgid "This works for any language supported by your X server."
 msgstr "Это работает с любым языком, который поддерживает Xorg"
 
-#: C/florence.xml:351(para)
+#: C/florence.xml:354(para)
 msgid ""
 "You can configure several language layouts in gnome-keyboard-properties. "
 "There are several applets that allow you to easily change layout. You can "
@@ -1452,11 +1461,11 @@ msgstr ""
 "переключать раскладку к следующему языку, установленному в gnome-keyboard-"
 "properties."
 
-#: C/florence.xml:356(para)
+#: C/florence.xml:359(para)
 msgid "My layout is weird. Is there a way to change it?"
 msgstr "Моя раскладка мне не подходит. Могу ли я сменить её?"
 
-#: C/florence.xml:359(para)
+#: C/florence.xml:362(para)
 msgid ""
 "Yes. One can change the layout with the settings dialog (layout tab). You "
 "can even make your own layout (see the <link linkend=\"hacking\">hacking "
@@ -1466,11 +1475,11 @@ msgstr ""
 "Вы также можете сделать собственную раскладку (смотрите <link linkend="
 "\"hacking\">секцию взлома</link> этой документации)."
 
-#: C/florence.xml:365(title)
+#: C/florence.xml:368(title)
 msgid "Known bugs"
 msgstr "Известные баги"
 
-#: C/florence.xml:366(para)
+#: C/florence.xml:369(para)
 msgid ""
 "Here is a list of known bugs. Those bugs do not have a fix yet. If you know "
 "how to fix one of them, please email the author."
@@ -1478,7 +1487,7 @@ msgstr ""
 "Здесь приведён список известных нам багов. Эти баги ещё не исправлены. Если "
 "вы знаете, как их исправить, свяжитесь с автором по E-mail, пожалуйста."
 
-#: C/florence.xml:368(para)
+#: C/florence.xml:371(para)
 msgid ""
 "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs <ulink url="
 "\"http://bugs.freedesktop.org/show_bug.cgi?id=20500\">http://bugs."
@@ -1497,11 +1506,11 @@ msgstr ""
 "клавиатуры в Xorg. Костыль: использовать Florence без расширения xrecord "
 "(отключение опции \"--with-xrecord\" в конфигурационной команде."
 
-#: C/florence.xml:372(title)
+#: C/florence.xml:375(title)
 msgid "Hacking"
 msgstr ""
 
-#: C/florence.xml:373(para)
+#: C/florence.xml:376(para)
 msgid ""
 "Some extra configuration options are available in GConf (under apps/"
 "florence). You can modify configuration parameters from the configuration "
@@ -1509,17 +1518,17 @@ msgid ""
 "has a detailed description in Florence gconf schema."
 msgstr ""
 
-#: C/florence.xml:375(title)
+#: C/florence.xml:378(title)
 msgid "Create your own layout"
 msgstr ""
 
-#: C/florence.xml:376(para)
+#: C/florence.xml:379(para)
 msgid ""
 "It is possible to create your own keyboard layout if those available by "
 "default are not suitable for your needs."
 msgstr ""
 
-#: C/florence.xml:377(para)
+#: C/florence.xml:380(para)
 msgid ""
 "The layout files are available in the florence/layouts directory, under the "
 "installation data directory that is configured with the --datadir configure "
@@ -1528,7 +1537,7 @@ msgid ""
 "so /usr/share/florence/layouts would be the full path)."
 msgstr ""
 
-#: C/florence.xml:378(para)
+#: C/florence.xml:381(para)
 msgid ""
 "The easiest way to create one's own layout file is to copy an existing one "
 "and to adapt it. The existing ones are florence.xml and compact.xml. Those "
@@ -1539,7 +1548,7 @@ msgid ""
 "the extended relaxng validation file."
 msgstr ""
 
-#: C/florence.xml:379(para)
+#: C/florence.xml:382(para)
 msgid ""
 "The root element of the XML layout file is the &lt;layout&gt; element. It "
 "contains the elements &lt;informations&gt;, &lt;keyboard&gt; and several &lt;"
@@ -1550,13 +1559,13 @@ msgid ""
 "order to make it selectable."
 msgstr ""
 
-#: C/florence.xml:380(para)
+#: C/florence.xml:383(para)
 msgid ""
 "The layout data are contained in the &lt;keyboard&gt; and &lt;extension&gt; "
 "elements."
 msgstr ""
 
-#: C/florence.xml:381(para)
+#: C/florence.xml:384(para)
 msgid ""
 "The &lt;keyboard&gt; element contains the main data of the layout. The sub-"
 "elements &lt;width&gt; and &lt;height&gt; contain respectively the relative "
@@ -1576,7 +1585,7 @@ msgid ""
 "style."
 msgstr ""
 
-#: C/florence.xml:382(para)
+#: C/florence.xml:385(para)
 msgid ""
 "One can then define several &lt;extension&gt; elements. Each extension has a "
 "&lt;name&gt; element that will be displayed in the settings dialog to "
@@ -1592,30 +1601,30 @@ msgid ""
 "extension."
 msgstr ""
 
-#: C/florence.xml:383(para)
+#: C/florence.xml:386(para)
 msgid ""
 "The layout file so created in the $datadir/florence/layouts directory will "
 "automatically be selectable from the settings dialog of Florence."
 msgstr ""
 
-#: C/florence.xml:384(para)
+#: C/florence.xml:387(para)
 msgid ""
 "If you think that your layout file could be of any use to other people than "
 "yourself, please, consider sending it by email to f.agrech@gmail.com for "
 "future inclusion in Florence distribution."
 msgstr ""
 
-#: C/florence.xml:388(title)
+#: C/florence.xml:391(title)
 msgid "Alternatives"
 msgstr ""
 
-#: C/florence.xml:389(para)
+#: C/florence.xml:392(para)
 msgid ""
 "There are other alternative virtual keyboard for GNOME that may fit your "
 "needs better than Florence. Here is a list of the main keyboard alternatives."
 msgstr ""
 
-#: C/florence.xml:391(para)
+#: C/florence.xml:394(para)
 msgid ""
 "<ulink url=\"http://www.gok.ca/gok\">GOK</ulink> is the default GNOME "
 "onscreen keyboard. It provides more features than Florence for disabled "
@@ -1629,7 +1638,7 @@ msgid ""
 "who can't use a pointing device."
 msgstr ""
 
-#: C/florence.xml:392(para)
+#: C/florence.xml:395(para)
 msgid ""
 "<ulink url=\"http://homepage3.nifty.com/tsato/xvkbd\">XVKBD</ulink> is a "
 "simple and very mature virtual keyboard. It does not depend on GNOME. Like "
@@ -1639,7 +1648,7 @@ msgid ""
 "Florence is arguably prettier and better integrated in GNOME."
 msgstr ""
 
-#: C/florence.xml:393(para)
+#: C/florence.xml:396(para)
 msgid ""
 "<ulink url=\"https://launchpad.net/onboard\">Onboard</ulink> is the default "
 "Ubuntu keyboard. It runs with python, which is common in modern linux "
@@ -1648,72 +1657,72 @@ msgid ""
 "an auto-hide feature. Perfect for casual usage on Ubuntu."
 msgstr ""
 
-#: C/florence.xml:396(title)
+#: C/florence.xml:399(title)
 msgid "Keyboards features"
 msgstr ""
 
-#: C/florence.xml:406(entry)
+#: C/florence.xml:409(entry)
 msgid "keyboard"
 msgstr ""
 
-#: C/florence.xml:407(entry)
+#: C/florence.xml:410(entry)
 msgid "transparency"
 msgstr ""
 
-#: C/florence.xml:408(entry)
+#: C/florence.xml:411(entry)
 msgid "auto hide"
 msgstr ""
 
-#: C/florence.xml:409(entry)
+#: C/florence.xml:412(entry)
 msgid "auto click"
 msgstr ""
 
-#: C/florence.xml:410(entry)
+#: C/florence.xml:413(entry)
 msgid "scanning"
 msgstr ""
 
-#: C/florence.xml:411(entry)
+#: C/florence.xml:414(entry)
 msgid "word completion"
 msgstr ""
 
-#: C/florence.xml:416(entry)
+#: C/florence.xml:419(entry)
 msgid "Florence"
 msgstr ""
 
-#: C/florence.xml:417(entry) C/florence.xml:418(entry)
-#: C/florence.xml:419(entry) C/florence.xml:426(entry)
-#: C/florence.xml:427(entry) C/florence.xml:428(entry)
-#: C/florence.xml:429(entry) C/florence.xml:435(entry)
-#: C/florence.xml:437(entry) C/florence.xml:443(entry)
+#: C/florence.xml:420(entry) C/florence.xml:421(entry)
+#: C/florence.xml:422(entry) C/florence.xml:429(entry)
+#: C/florence.xml:430(entry) C/florence.xml:431(entry)
+#: C/florence.xml:432(entry) C/florence.xml:438(entry)
+#: C/florence.xml:440(entry) C/florence.xml:446(entry)
 msgid "Yes"
 msgstr ""
 
-#: C/florence.xml:420(entry) C/florence.xml:421(entry)
-#: C/florence.xml:425(entry) C/florence.xml:433(entry)
-#: C/florence.xml:434(entry) C/florence.xml:436(entry)
-#: C/florence.xml:441(entry) C/florence.xml:442(entry)
+#: C/florence.xml:423(entry) C/florence.xml:424(entry)
+#: C/florence.xml:428(entry) C/florence.xml:436(entry)
+#: C/florence.xml:437(entry) C/florence.xml:439(entry)
 #: C/florence.xml:444(entry) C/florence.xml:445(entry)
+#: C/florence.xml:447(entry) C/florence.xml:448(entry)
 msgid "No"
 msgstr ""
 
-#: C/florence.xml:424(entry)
+#: C/florence.xml:427(entry)
 msgid "GOK"
 msgstr ""
 
-#: C/florence.xml:432(entry)
+#: C/florence.xml:435(entry)
 msgid "XVKBD"
 msgstr ""
 
-#: C/florence.xml:440(entry)
+#: C/florence.xml:443(entry)
 msgid "Onboard"
 msgstr ""
 
-#: C/florence.xml:450(para)
+#: C/florence.xml:453(para)
 msgid ""
 "There are other non-keyboard alternatives that can be used to input text."
 msgstr ""
 
-#: C/florence.xml:453(para)
+#: C/florence.xml:456(para)
 msgid ""
 "<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher\">Dasher</ulink> "
 "provides a predictive gesture based method to input text. This is a very "
@@ -1722,29 +1731,29 @@ msgid ""
 "ac.uk/opengazer\">opengazer</ulink>"
 msgstr ""
 
-#: C/florence.xml:456(para)
+#: C/florence.xml:459(para)
 msgid ""
 "<ulink url=\"http://risujin.org/cellwriter/\">CellWriter</ulink> is a hand "
 "writing recognition tool. It is a good text input method for tablets. "
 "CellWriter also provides a virtual keyboard."
 msgstr ""
 
-#: C/florence.xml:461(title)
+#: C/florence.xml:464(title)
 msgid "Getting help"
 msgstr ""
 
-#: C/florence.xml:462(para)
+#: C/florence.xml:465(para)
 msgid ""
 "You can get help on the <ulink url=\"https://sourceforge.net/forum/forum.php?"
 "forum_id=784280\">forum</ulink>, or you can ask for help by email at f."
 "agrech@gmail.com"
 msgstr ""
 
-#: C/florence.xml:465(title)
+#: C/florence.xml:468(title)
 msgid "Contribute"
 msgstr ""
 
-#: C/florence.xml:466(para)
+#: C/florence.xml:469(para)
 msgid ""
 "If you want to help the Florence project, please send an email to f."
 "agrech@gmail.com"
@@ -1758,3 +1767,6 @@ msgstr ""
 "  Alexander 'FONTER' Zinin https://launchpad.net/~spore-09\n"
 "  Alexandr Belugin https://launchpad.net/~box789\n"
 "  SomeOneBrick https://launchpad.net/~someonebrick"
+
+#~ msgid "2008,2009,2010"
+#~ msgstr "2008, 2009, 2010"

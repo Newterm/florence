@@ -2,7 +2,7 @@
 <!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
   "http://www.oasis-open.org/docbook/xml/4.4/docbookx.dtd" [
 	<!ENTITY gfdl SYSTEM "gfdl.dbk">
-	<!ENTITY date "January, the 25th of 2012">
+	<!ENTITY date "February, the 8th of 2012">
 	<!ENTITY version "0.5.2">
 ]>
 <article id="index" lang="en">
@@ -22,7 +22,7 @@
 			<date>&date;</date> 
     		</revision> 
 	</revhistory>
-	<copyright><year>2008,2009,2010</year><holder>François Agrech</holder></copyright>
+	<copyright><year>2012</year><holder>François Agrech</holder></copyright>
 	<legalnotice>
 		<para>Permission is granted to copy, distribute and/or modify this document under the terms of the GNU Free Documentation License, Version 1.2 or any later version published by the Free Software Foundation; with no Invariant Sections, no Front-Cover Texts, and no Back-Cover Texts. A copy of the license is included in the section entitled "GNU Free Documentation License".</para>
 	</legalnotice>
@@ -145,7 +145,10 @@ A Timer-based auto-click input method is available to help disabled people havin
 		<para>Florence can be used with 3 different input methods. Each method has advantages and drawbacks. It is up to you to select the right one for your usage pattern.</para>
 		<orderedlist>
 			<listitem>
-				<para>The default input method is the "button" method. This is adapted for mouse/trackpad input. It is pretty straightforward. Just click on the key with the mouse button to activate it. Release the mouse button to deavticate the key. The advantage of this method is its simplicity. It does not require learning. The drawback is that is requires a pointing device with a button and that the user is able to use it.</para>
+				<para>The default input method is the "mouse" method. This is adapted for mouse/trackpad input. It is pretty straightforward. Just click on the key with the mouse button to activate it. Release the mouse button to deavticate the key. The advantage of this method is its simplicity. It does not require learning. The drawback is that is requires a pointing device with a button and that the user is able to use it.</para>
+			</listitem>
+			<listitem>
+				<para>The second input method is the "touch" method. This is adapted for touch screen input. The difference with the mouse input method is that it not possible to touch the keyboard without clicking. In this mode, the keys are pressed on touch end.</para>
 			</listitem>
 			<listitem>
 				<para>The next method is the "timer" method. Use this method if you are unable to use a button. Point a key with the pointer and a timer is triggered. When the timer expires, the key is pressed and immediately released. The timer is cancelled if the pointer leaves the key. Note you can still press the button to activate the key if you have one available. The advantage of this method is that it does not require a button. The drawbacks are that it is slower than the button method and that you can not hold a key pressed.</para>	
