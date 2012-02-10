@@ -23,4 +23,5 @@ src/key.c
 src/settings-window.c
 src/xkeyboard.c
 src/ramble.c
+src/fsm.c
 

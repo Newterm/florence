@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 20:13+0000\n"
+"POT-Creation-Date: 2012-02-09 20:19+0000\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -1459,6 +1459,16 @@ msgstr "Выбран неверный алгоритм перехода. Исп�
 msgid "Unable to allocate memory for ramble"
 msgstr "Невозможно выделить память на переход"
 
+#: ../src/fsm.c:191
+#, fuzzy, c-format
+msgid "Key %p (type %d): Event %d received : Switching from state %d to %d"
+msgstr "Событие %d получено :тип %d. Переход из состояния %d в %d"
+
+#: ../src/fsm.c:204
+#, fuzzy, c-format
+msgid "FSM state errorr: state=%d"
+msgstr "FSM ошибка состояния. событие =%d ; состояние=%d"
+
 #~ msgid ""
 #~ "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"
 #~ "bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop."
@@ -1476,14 +1486,8 @@ msgstr "Невозможно выделить память на переход"
 #~ "не существует способа, чтобы обеспечить ту же функциональность на данный "
 #~ "момент. Извините за причиненные неудобства."
 
-#~ msgid "Event %d received :type %d. Switching from state %d to %d"
-#~ msgstr "Событие %d получено :тип %d. Переход из состояния %d в %d"
-
 #~ msgid "Unknown event type received: %d"
 #~ msgstr "Получен неизвестный тип состояния: %d"
-
-#~ msgid "FSM state error. event=%d ; state=%d"
-#~ msgstr "FSM ошибка состояния. событие =%d ; состояние=%d"
 
 #~ msgid "Button"
 #~ msgstr "Кнопка"

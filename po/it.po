@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 20:13+0000\n"
+"POT-Creation-Date: 2012-02-09 20:19+0000\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: Pietro Pilolli\n"
 "Language-Team: Italian\n"
@@ -1484,6 +1484,16 @@ msgstr "Nessun valore gconf %s. Utilizzo il default"
 msgid "Unable to allocate memory for ramble"
 msgstr "Impossibile allocare la memoria per il ramble"
 
+#: ../src/fsm.c:191
+#, fuzzy, c-format
+msgid "Key %p (type %d): Event %d received : Switching from state %d to %d"
+msgstr "Ricevuto evento %d  %d (type %d). Passo dallo stato %d a %d"
+
+#: ../src/fsm.c:204
+#, fuzzy, c-format
+msgid "FSM state errorr: state=%d"
+msgstr "Errore nella FSM. codice del tasto=%d ; evento=%d ; stato=%d"
+
 #~ msgid "Auto click"
 #~ msgstr "Click automatico"
 
@@ -1504,16 +1514,8 @@ msgstr "Impossibile allocare la memoria per il ramble"
 #~ "XEVIE è stato rimosso da Xorg qualche mese fa, non c'è alcun modo per "
 #~ "supplire la stessafunzionalità. Scusate per l'inconveniente"
 
-#, fuzzy
-#~ msgid "Event %d received :type %d. Switching from state %d to %d"
-#~ msgstr "Ricevuto evento %d  %d (type %d). Passo dallo stato %d a %d"
-
 #~ msgid "Unknown event type received: %d"
 #~ msgstr "Arrivato evento sconosciuto: %d"
-
-#, fuzzy
-#~ msgid "FSM state error. event=%d ; state=%d"
-#~ msgstr "Errore nella FSM. codice del tasto=%d ; evento=%d ; stato=%d"
 
 #~ msgid "[new extension] name=%s id=%s"
 #~ msgstr "[nouvelle extension] nom=%s id=\"%s\""

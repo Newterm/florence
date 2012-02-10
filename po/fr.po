@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.5.2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 20:13+0000\n"
+"POT-Creation-Date: 2012-02-09 20:19+0000\n"
 "PO-Revision-Date: 2012-01-25 23:17+0000\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -1495,6 +1495,16 @@ msgstr ""
 msgid "Unable to allocate memory for ramble"
 msgstr "Echec d'allocation de la mémoire pour le mode balade"
 
+#: ../src/fsm.c:191
+#, c-format
+msgid "Key %p (type %d): Event %d received : Switching from state %d to %d"
+msgstr "Touche %p (type %d): Evenement %d reçu : Changement d'état %d vers %d"
+
+#: ../src/fsm.c:204
+#, c-format
+msgid "FSM state errorr: state=%d"
+msgstr "Erreur d'état de la FSM: état=%d"
+
 #~ msgid ""
 #~ "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"
 #~ "bugs.freedesktop.org/show_bug.cgi?id=20500 and http://bugs.freedesktop."
@@ -1513,14 +1523,8 @@ msgstr "Echec d'allocation de la mémoire pour le mode balade"
 #~ "d'obtenir les mêmes fonctionalités pour le moment. Désolé pour le "
 #~ "désagrément"
 
-#~ msgid "Event %d received :type %d. Switching from state %d to %d"
-#~ msgstr "Événement %d reçu: type %d. Changement d'état %d vers %d"
-
 #~ msgid "Unknown event type received: %d"
 #~ msgstr "type d'événement reçu inconnu: %d"
-
-#~ msgid "FSM state error. event=%d ; state=%d"
-#~ msgstr "Erreur d'état de la FSM. événement=%d ; état=%d"
 
 #~ msgid "Button"
 #~ msgstr "Bouton"
