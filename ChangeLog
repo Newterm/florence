@@ -205,4 +205,5 @@
 	* New trace level: hidebug.
 	* Modifier(Alt/Ctrl/Shift...)+click now works.
 	* Added touch input method.
+	* Added man pages
 

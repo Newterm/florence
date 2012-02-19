@@ -7,7 +7,7 @@ INCLUDES = -I$(top_srcdir) -DFLORENCELOCALEDIR=\""$(florencelocaledir)"\"
 
 florence_SOURCES = main.c florence.c keyboard.c key.c trace.c settings.c trayicon.c\
                    layoutreader.c style.c view.c status.c tools.c settings-window.c\
-                   xkeyboard.c fsm.c
+                   xkeyboard.c fsm.c service.c
 
 if WITH_RAMBLE
    florence_SOURCES += ramble.c
@@ -22,7 +22,7 @@ if WITH_PANELAPPLET
 
 florence_applet_SOURCES = applet.c florence.c keyboard.c key.c trace.c settings.c trayicon.c\
                    layoutreader.c style.c view.c status.c tools.c settings-window.c xkeyboard.c\
-		   fsm.c
+		   fsm.c service.c
 
 if WITH_RAMBLE
    florence_applet_SOURCES += ramble.c
@@ -51,7 +51,7 @@ endif
 
 EXTRA_DIST = florence.h keyboard.h key.h layoutreader.h settings.h settings-window.h\
              status.h style.h system.h tools.h trace.h trayicon.h view.h xkeyboard.h\
-             ramble.h fsm.h florence.server.in.in
+             ramble.h fsm.h service.h florence.server.in.in
  
 DISTCLEANFILES = $(server_in_files) $(server_DATA)
 

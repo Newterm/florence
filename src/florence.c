@@ -784,6 +784,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 	settings_changecb_register("layout/file", flo_layout_reload, florence);
 
+	florence->service=service_new(florence->view);
 	END_FUNC
 	return florence;
 }
@@ -813,6 +814,7 @@ void flo_free(struct florence *florence)
 	if (florence->ramble) ramble_free(florence->ramble);
 	florence->ramble=NULL;
 #endif
+	if (florence->service) service_free(florence->service);
 	g_free(florence);
 	xmlCleanupParser();
 	xmlMemoryDump();

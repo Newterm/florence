@@ -36,6 +36,7 @@
 #ifdef APPLET
 	#include <panel-applet.h>
 #endif
+#include "service.h"
 
 /* There is one florence structure which contains all global data in florence.c */
 struct florence {
@@ -55,6 +56,7 @@ struct florence {
 #ifdef ENABLE_AT_SPI
 	Accessible *obj; /* editable object being selected */
 #endif
+	struct service *service; /* dbus service object */
 };
 
 /* create a new instance of florence. */
