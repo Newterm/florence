@@ -23,6 +23,7 @@
 #include <sys/types.h>
 #include <getopt.h>
 #include <gtk/gtk.h>
+#include <gst/gst.h>
 #include <gconf/gconf-client.h>
 #include "system.h"
 #include "trace.h"
@@ -72,6 +73,7 @@ int main (int argc, char **argv)
 	gtk_init(&argc, &argv);
 	gconf_init(argc, argv, NULL);
 	g_type_init();
+	gst_init(&argc, &argv);
 
 	program_name=argv[0];
 	config=decode_switches (argc, argv);

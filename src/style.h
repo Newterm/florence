@@ -39,6 +39,21 @@ struct shape {
 	guint maskw, maskh; /* size of the mask */
 };
 
+/* sound types */
+enum style_sound_type {
+	STYLE_SOUND_PRESS,
+	STYLE_SOUND_RELEASE,
+	STYLE_SOUND_HOVER
+};
+
+/* sounds */
+struct sound {
+	GRegex *match;
+	gchar *press;
+	gchar *release;
+	gchar *hover;
+};
+
 /* There are 6 classes of color for the style */
 enum style_colours {
 	STYLE_KEY_COLOR, /* color of the background of the key */
@@ -65,6 +80,7 @@ struct style {
 	GSList *symbols; /* list of symbols by keyval */
 	GSList *type_symbols; /* list of symbols by type */
 	GSList *shapes;
+	GSList *sounds; /* list of sounds */
 	struct shape *default_shape;
 };
 
@@ -90,6 +106,8 @@ void style_symbol_draw(struct style *style, cairo_t *cairoctx, guint keyval, gdo
 void style_symbol_type_draw(struct style *style, cairo_t *cairoctx, enum key_action_type type, gdouble w, gdouble h);
 /* Draws text with cairo */
 void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdouble w, gdouble h);
+/* play a sound */
+void style_sound_play(struct style *style, const gchar *match, enum style_sound_type type);
 
 /* Renders a svg handle to a cairo surface at dimensions */
 void style_render_svg(cairo_t *cairoctx, RsvgHandle *handle, gdouble w, gdouble h, gboolean keep_ratio, gchar *sub);

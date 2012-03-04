@@ -19,10 +19,11 @@
 
 */
 
-#include <gio/gio.h>
 #include "system.h"
 #include "trace.h"
 #include "service.h"
+
+#if GTK_CHECK_VERSION(2,26,0)
 
 /* Service interface */
 static const gchar service_introspection[]=
@@ -112,3 +113,4 @@ void service_free(struct service *service)
 	END_FUNC
 }
 
+#endif

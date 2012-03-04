@@ -115,5 +115,6 @@
 	</shape>
 	</shapes>
 	<xi:include href="symbols.xml"/>
+	<xi:include href="sounds/sounds.xml"/>
 </style>
 

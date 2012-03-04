@@ -1,3 +1,3 @@
 
-SUBDIRS=default bright hard
+SUBDIRS=default bright hard default/sounds
 

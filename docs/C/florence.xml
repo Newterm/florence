@@ -84,7 +84,7 @@ A Timer-based auto-click input method is available to help disabled people havin
 				<screen>
 <prompt>$</prompt> <userinput>sudo apt-get install build-essential libxml2-dev libgconf2-dev \</userinput>
 <prompt>></prompt> <userinput>libglade2-dev libatspi-dev libcairo2-dev gnome-doc-utils librsvg2-dev gettext \</userinput>
-<prompt>></prompt> <userinput>libnotify-dev libxtst-dev intltool libpanel-applet2-dev</userinput>
+<prompt>></prompt> <userinput>libnotify-dev libxtst-dev intltool libpanel-applet2-dev libgstreamer0.10-dev</userinput>
 				</screen></para>
 			</listitem>
 		</orderedlist>

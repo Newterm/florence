@@ -46,21 +46,27 @@
 #define BORDER_THRESHOLD 0.2
 #endif
 
+static const gchar *key_actions[] = {
+	"close",
+	"reduce",
+	"config",
+	"move",
+	"bigger",
+	"smaller",
+	"switch",
+	"extend",
+	"unextend"
+};
+
 /* Parse string into key type enumeration */
 enum key_action_type key_action_type_get(gchar *str)
 {
 	START_FUNC
-	enum key_action_type ret=KEY_UNKNOWN;
-	if (!strcmp(str, "close")) ret=KEY_CLOSE;
-	else if (!strcmp(str, "reduce")) ret=KEY_REDUCE;
-	else if (!strcmp(str, "config")) ret=KEY_CONFIG;
-	else if (!strcmp(str, "move")) ret=KEY_MOVE;
-	else if (!strcmp(str, "bigger")) ret=KEY_BIGGER;
-	else if (!strcmp(str, "smaller")) ret=KEY_SMALLER;
-	else if (!strcmp(str, "switch")) ret=KEY_SWITCH;
-	else if (!strcmp(str, "extend")) ret=KEY_EXTEND;
-	else if (!strcmp(str, "unextend")) ret=KEY_UNEXTEND;
-	else flo_error(_("Unknown action key type %s"), str);
+	enum key_action_type ret;
+	for (ret=0; ret<=KEY_UNKNOWN; ret++) {
+		if (ret<KEY_UNKNOWN && (!strcmp(str, key_actions[ret]))) break;
+	}
+	if (ret>=KEY_UNKNOWN) flo_error(_("Unknown action key type %s"), str);
 	END_FUNC
 	return ret;
 }
@@ -275,6 +281,11 @@ void key_press(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
+				style_sound_play(status->view->style,
+					gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
+						((struct key_code *)mod->data)->code,
+						status_globalmod_get(status))),
+					STYLE_SOUND_PRESS);
 				break;
 			case KEY_ACTION:
 				action=(struct key_action *)mod->data;
@@ -287,7 +298,9 @@ void key_press(struct key *key, struct status *status)
 					case KEY_REDUCE:
 					case KEY_SWITCH:
 					case KEY_EXTEND:
-					case KEY_UNEXTEND: break;
+					case KEY_UNEXTEND: style_sound_play(status->view->style,
+							key_actions[action->type],
+							STYLE_SOUND_PRESS); break;
 					default: flo_warn(_("unknown action key type pressed = %d"), action->type);
 				}
 				break;
@@ -307,6 +320,11 @@ void key_release(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
+				style_sound_play(status->view->style,
+					gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
+						((struct key_code *)mod->data)->code,
+						status_globalmod_get(status))),
+					STYLE_SOUND_RELEASE);
 				break;
 			case KEY_ACTION:
 				action=(struct key_action *)mod->data;
@@ -328,7 +346,10 @@ void key_release(struct key *key, struct status *status)
 					case KEY_SWITCH:
 						xkeyboard_layout_change(status->xkeyboard); break;
 					case KEY_EXTEND: key_extend(action); break;
-					case KEY_UNEXTEND: key_unextend(action); break;
+					case KEY_UNEXTEND: key_unextend(action);
+						style_sound_play(status->view->style,
+							key_actions[action->type],
+							STYLE_SOUND_RELEASE); break;
 					default: flo_warn(_("unknown action key type released = %d"), action->type);
 				}
 				break;

@@ -43,7 +43,7 @@ QUICK INSTALL
 
             $ sudo apt-get install build-essential libxml2-dev libgconf2-dev libglade2-dev \
               libatspi-dev librsvg2-dev gnome-doc-utils libcairo2-dev gettext libnotify-dev \
-              libxtst-dev intltool
+              libxtst-dev intltool libgstreamer0.10-dev
             
       * Open a terminal and type (don't type the $ or #):
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sounds xmlns="http://florence.sourceforge.net">
+	<sound match="*">
+		<press>file://@SNDDIR@/press.ogg</press>
+		<release>file://@SNDDIR@/release.ogg</release>
+		<hover/>
+	</sound>
+</sounds>

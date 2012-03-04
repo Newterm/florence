@@ -19,7 +19,10 @@
 
 */
 
+#include <gio/gio.h>
 #include "view.h"
+
+#if GTK_CHECK_VERSION(2,26,0)
 
 /* Service object */
 struct service {
@@ -32,3 +35,5 @@ struct service {
 struct service *service_new(struct view *view);
 /* Destroy a service object */
 void service_free(struct service *service);
+
+#endif

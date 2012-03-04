@@ -111,6 +111,14 @@ struct layout_symbol {
 	char *type;
 };
 
+/* Data contained in 'sound' elemens */
+struct layout_sound {
+	char *match;
+	char *press;
+	char *release;
+	char *hover;
+};
+
 /* Create a reader for the filename provided */
 struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relaxng);
 /* liberate memory for the reader */
@@ -150,6 +158,11 @@ void layoutreader_shape_free(struct layout_shape *shape);
 struct layout_symbol *layoutreader_symbol_new(struct layout *layout);
 /* Free the 'symbol' element data */
 void layoutreader_symbol_free(struct layout_symbol *symbol);
+
+/* Get the 'sound' element data (see style.c) */
+struct layout_sound *layoutreader_sound_new(struct layout *layout);
+/* Free the 'sound' element data */
+void layoutreader_sound_free(struct layout_sound *sound);
 
 /* Open a layout element */
 gboolean layoutreader_element_open(struct layout *layout, char *name);

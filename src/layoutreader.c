@@ -412,7 +412,7 @@ struct layout_symbol *layoutreader_symbol_new(struct layout *layout)
 	return symbol;
 }
 
-/* Free the 'shape' element data */
+/* Free the 'symbol' element data */
 void layoutreader_symbol_free(struct layout_symbol *symbol)
 {
 	START_FUNC
@@ -422,6 +422,48 @@ void layoutreader_symbol_free(struct layout_symbol *symbol)
 		if (symbol->label) xmlFree(symbol->label);
 		if (symbol->type) xmlFree(symbol->type);
 		g_free(symbol);
+	}
+	END_FUNC
+}
+
+/* Get the 'sound' element data (see style.c) */
+struct layout_sound *layoutreader_sound_new(struct layout *layout)
+{
+	START_FUNC
+	struct layout_sound *sound=layoutreader_element_init(layout,
+		"sound", sizeof(struct layout_sound));
+	xmlNodePtr cur=layout->cur;
+	xmlAttrPtr attr;
+	if (sound) {
+		attr=xmlHasProp(cur->parent, (xmlChar *)"match");
+		if (attr) {
+			sound->match=(char *)xmlNodeListGetString(layout->doc, attr->children, 1);
+		}
+		for(;cur;cur=cur->next) {
+			if (!xmlStrcmp(cur->name, (xmlChar *)"press")) {
+				sound->press=(char *)xmlNodeListGetString(layout->doc, cur->children, 1);
+			} else if (!xmlStrcmp(cur->name, (xmlChar *)"release")) {
+				sound->release=(char *)xmlNodeListGetString(layout->doc, cur->children, 1);
+			} else if (!xmlStrcmp(cur->name, (xmlChar *)"hover")) {
+				sound->hover=(char *)xmlNodeListGetString(layout->doc, cur->children, 1);
+			}
+		}
+	}
+	layoutreader_element_close(layout);
+	END_FUNC
+	return sound;
+}
+
+/* Free the 'sound' element data */
+void layoutreader_sound_free(struct layout_sound *sound)
+{
+	START_FUNC
+	if (sound) {
+		if (sound->match) xmlFree(sound->match);
+		if (sound->press) xmlFree(sound->press);
+		if (sound->release) xmlFree(sound->release);
+		if (sound->hover) xmlFree(sound->hover);
+		g_free(sound);
 	}
 	END_FUNC
 }

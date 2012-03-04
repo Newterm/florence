@@ -27,6 +27,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 #include <libxml/xmlsave.h>
+#include <gst/gst.h>
 #include "system.h"
 #include "trace.h"
 #include "key.h"
@@ -540,6 +541,121 @@ GdkPixbuf *style_pixbuf_draw(struct style *style)
 	return ret;
 }
 
+/* Liberate the pipeline */
+void style_sound_pipeline_free(GstElement *pipeline)
+{
+	START_FUNC
+	gst_element_set_state(GST_ELEMENT(pipeline), GST_STATE_NULL);
+	gst_object_unref(GST_OBJECT(pipeline));
+	END_FUNC
+}
+
+/* Called on sound event */
+static gboolean style_sound_bus_call(GstBus *bus, GstMessage *msg, void *user_data)
+{
+	GError *err;
+	switch GST_MESSAGE_TYPE(msg) {
+		case GST_MESSAGE_ERROR:
+			gst_message_parse_error(msg, &err, NULL);
+			flo_error(_("An error occured while playing sound: %s"), err->message);
+			g_error_free(err);
+		case GST_MESSAGE_EOS:
+			style_sound_pipeline_free((GstElement *)user_data);
+			break;
+		default: break;
+	}
+	return TRUE;
+}
+
+/* Initialize the pipeline to play a sound */
+GstElement *style_sound_setup(const gchar *uri)
+{
+	START_FUNC
+	GstElement *pipeline=NULL;
+	GstBus *bus;
+	if (uri) {
+		pipeline=gst_element_factory_make("playbin", "player");
+		g_object_set(G_OBJECT(pipeline), "uri", uri, NULL);
+	}
+	bus=gst_pipeline_get_bus(GST_PIPELINE(pipeline));
+	gst_bus_add_watch(bus, style_sound_bus_call, (gpointer)pipeline);
+	gst_object_unref(bus);
+	END_FUNC
+	return pipeline;
+}
+
+/* create a new sound */
+void style_sound_new(struct style *style, char *match, char *press, char *release, char *hover)
+{
+	START_FUNC
+	gchar *regex=NULL;
+	struct sound *sound=g_malloc(sizeof(struct sound));
+	memset(sound, 0, sizeof(struct sound));
+	regex=g_strdup_printf("^%s$", match);
+	sound->match=g_regex_new(regex, G_REGEX_OPTIMIZE, G_REGEX_MATCH_ANCHORED, NULL);
+	g_free(regex);
+	if (press) sound->press=g_strdup(press);
+	if (release) sound->release=g_strdup(release);
+	if (hover) sound->hover=g_strdup(hover);
+	style->sounds=g_slist_append(style->sounds, (gpointer)sound);
+	flo_debug(TRACE_DEBUG, "[new sound] match=%s press=%s release=%s hover=%s", match, press, release, hover);
+	END_FUNC
+}
+
+/* free up memory used by the sound */
+void style_sound_free(gpointer data, gpointer userdata)
+{
+	START_FUNC
+	struct sound *sound=(struct sound *)data;
+	if (sound) {
+		if (sound->match) g_regex_unref(sound->match);
+		if (sound->press) g_free(sound->press);
+		if (sound->release) g_free(sound->release);
+		if (sound->hover) g_free(sound->hover);
+		g_free(sound);
+	}
+	END_FUNC
+}
+
+/* return true if the name matches the sound */
+gboolean style_sound_matches(struct sound *sound, const gchar *name)
+{
+	START_FUNC
+	gboolean ret;
+	if (name) {
+		if (sound->match)
+			ret=g_regex_match(sound->match, name,
+				G_REGEX_MATCH_ANCHORED|G_REGEX_MATCH_NOTEMPTY, NULL);
+		else ret=TRUE;
+	}
+	else ret=FALSE;
+	END_FUNC
+	return ret;
+}
+
+/* play a sound */
+void style_sound_play(struct style *style, const gchar *match, enum style_sound_type type)
+{
+	START_FUNC
+	struct sound *sound=NULL;
+	GstElement *pipeline=NULL;
+	GSList *item=style->sounds;
+	while (item && !style_sound_matches((struct sound *)item->data, match)) {
+		item=g_slist_next(item);
+	}
+	if (item) {
+		sound=(struct sound *)item->data;
+		switch(type) {
+			case STYLE_SOUND_PRESS: pipeline=style_sound_setup(sound->press); break;
+			case STYLE_SOUND_RELEASE: pipeline=style_sound_setup(sound->release); break;
+			case STYLE_SOUND_HOVER: pipeline=style_sound_setup(sound->hover); break;
+			default: flo_error(_("Unknown sound type: %d"), type);
+		};
+		if (pipeline) { gst_element_set_state(GST_ELEMENT(pipeline), GST_STATE_PLAYING); }
+	}
+	END_FUNC
+}
+
 /* create a new style from the layout file */
 struct style *style_new(gchar *base_uri)
 {
@@ -547,6 +663,7 @@ struct style *style_new(gchar *base_uri)
 	struct layout *layout=NULL;
 	struct layout_shape *shape=NULL;
 	struct layout_symbol *symbol=NULL;
+	struct layout_sound *sound=NULL;
 	struct style *style=g_malloc(sizeof(struct style));
 	char *uri=base_uri;
 
@@ -574,6 +691,15 @@ struct style *style_new(gchar *base_uri)
 		}
 	}
 
+	layoutreader_reset(layout);
+	layoutreader_element_open(layout, "style");
+	if (layoutreader_element_open(layout, "sounds")) {
+		while ((sound=layoutreader_sound_new(layout))) {
+			style_sound_new(style, sound->match, sound->press, sound->release, sound->hover);
+			layoutreader_sound_free(sound);
+		}
+	}
+
 	layoutreader_free(layout);
 	if (!base_uri) g_free(uri);
 	END_FUNC
@@ -589,6 +715,8 @@ void style_free(struct style *style)
 		g_slist_free(style->shapes);
 		g_slist_foreach(style->symbols, style_symbol_free, NULL);
 		g_slist_free(style->symbols);
+		g_slist_foreach(style->sounds, style_sound_free, NULL);
+		g_slist_free(style->sounds);
 		g_free(style);
 	}
 	END_FUNC

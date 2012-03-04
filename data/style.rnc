@@ -32,8 +32,9 @@ xmlbase = attribute xml:base { text }
 
 style-element = element style {
 	xmllang?, xmlbase?,
-	shapes-element+,
-	symbols-element
+	shapes-element,
+	symbols-element,
+	sounds-element?
 }
 
 shapes-element = element shapes {
@@ -44,6 +45,11 @@ shapes-element = element shapes {
 symbols-element = element symbols {
 	xmllang?, xmlbase?,
 	symbol-element+
+}
+
+sounds-element = element sounds {
+	xmllang?, xmlbase?,
+	sound-element+
 }
 
 shape-element = element shape {
@@ -64,6 +70,14 @@ symbol-element = element symbol {
 		element label { xmllang, xsd:string }*
 	  )
 	)
+}
+
+sound-element = element sound {
+	xmllang?, xmlbase?,
+	attribute match { xsd:string },
+	element press { xsd:string },
+	element release { xsd:string },
+	element hover { xsd:string }
 }
 
 }
