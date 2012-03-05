@@ -6,15 +6,27 @@ from xml.dom import minidom
 import gtk
 import toolkit
 
-class key(toolkit.object):
-	def __init__(self, code, x, y, w, h):
-		toolkit.object.__init__( self, code, int((x-(w/2.0))*30.0), int((y-(h/2.0))*30.0), int(w*30.0), int(h*30.0) )
+class Key(toolkit.object):
+	def __init__(self, code, x, y, w, h, action=None):
+		self.code = code
+		self.action = action
+		name = self.code
+		if action:
+			name = self.action
+		toolkit.object.__init__( self, name,
+			int((x-(w/2.0))*30.0),
+			int((y-(h/2.0))*30.0),
+			int(w*30.0),
+			int(h*30.0) )
 
 	def __str__(self):
 		w = self.w / 30.0
 		h = self.h / 30.0
 		str = "<key>\n"
-		str = str + "\t<code>%s</code>\n" % self.name
+		if self.action:
+			str = str + "\t<action>%s</action>\n" % self.action
+		else:
+			str = str + "\t<code>%s</code>\n" % self.code
 		str = str + "\t<xpos>%s</xpos>\n" % ( ( self.x + (self.w/2.0) ) / 30.0 )
 		str = str + "\t<ypos>%s</ypos>\n" % ( ( self.y + (self.h/2.0) ) / 30.0 )
 		if w != 2:
@@ -24,15 +36,73 @@ class key(toolkit.object):
 		str = str + "</key>\n"
 		return str
 
-class keyboard(toolkit.scene):
+	def setCode(self, code):
+		self.code = code
+		self.action = None
+		self.name = code
+
+	def setAction(self, action):
+		self.action = action
+		self.code = None
+		self.name = action
+
+	def getCode(self):
+		return self.code
+
+	def getAction(self):
+		return self.action
+
+	@staticmethod
+	def load(k):
+		try:
+			code = None
+			action = None
+			if 'code' in [ x.tagName for x in k.childNodes if isinstance(x, minidom.Element) ]:
+				codes = k.getElementsByTagName('code')
+				code = codes[0].firstChild.data
+			else:
+				action = k.getElementsByTagName('action')[0] 
+				command = action.getElementsByTagName('command')
+				if len(command) > 0:
+					command = command[0].firstChild.data
+				else:
+					command = action.firstChild.data
+				action = command
+		except Exception as e:
+			print k.toxml()
+			print e
+			quit()
+		x = float(k.getElementsByTagName('xpos')[0].firstChild.data)
+		y = float(k.getElementsByTagName('ypos')[0].firstChild.data)
+		try:
+			w = float(k.getElementsByTagName('width')[0].firstChild.data)
+		except IndexError:
+			w = 2
+		try:
+			h = float(k.getElementsByTagName('height')[0].firstChild.data)
+		except IndexError:
+			h = 2
+		return Key(code, x, y, w, h, action=action)
+
+class Keyboard(toolkit.scene):
 	def __init__(self, builder, node=None):
-		toolkit.scene.__init__( self )
 		self.builder = builder
+		toolkit.scene.__init__( self )
 		if node:
 			self.load( node )
 		else:
 			self.setSize()
 		self.setgrid( 30, 30 );
+
+	def setCode(self, widget, code):
+		if self.sel.active:
+			self.sel.active.setCode( code )
+			widget.queue_draw()
+
+	def setAction(self, widget, action):
+		if self.sel.active:
+			self.sel.active.setAction( action )
+			widget.queue_draw()
 
 	def setSize(self, w=20*30, h=10*30):
 		self.w = w
@@ -56,41 +126,27 @@ class keyboard(toolkit.scene):
 		self.setSize( w, h )
 		keys = node.getElementsByTagName('key')
 		for k in keys:
-			try:
-				codes = k.getElementsByTagName('code')
-				if len(codes) > 0:
-					code = codes[0].firstChild.data
-				else:
-					action = k.getElementsByTagName('action')[0] 
-					command = action.getElementsByTagName('command')
-					if len(command) > 0:
-						code = command[0].firstChild.data
-					else:
-						code = action.firstChild.data
-			except Exception as e:
-				print k.toxml()
-				print e
-				quit()
-			x = float(k.getElementsByTagName('xpos')[0].firstChild.data)
-			y = float(k.getElementsByTagName('ypos')[0].firstChild.data)
-			try:
-				w = float(k.getElementsByTagName('width')[0].firstChild.data)
-			except IndexError:
-				w = 2
-			try:
-				h = float(k.getElementsByTagName('height')[0].firstChild.data)
-			except IndexError:
-				h = 2
-			self.add( key(code, x, y, w, h) )
+			self.add( Key.load(k) )
 		self.setgrid( 30, 30 );
 
-	def update(self, code, extents):
-		(x, y, w, h) = extents
-		self.builder.get_object("code").set_value(int(code))
+	def update(self, key):
+		(x, y, w, h) = key.get_extents_after_hug()
+		if key.getCode() == None:
+			index = 0
+			for action in self.builder.get_object("actions"):
+				if action[0] == key.getAction(): break
+				index += 1
+			self.builder.get_object("actionComboBox").set_active(index)
+			self.builder.get_object("notebook").set_current_page(1)
+		else:
+			code = int(key.getCode())
+			self.builder.get_object("code").set_value(code)
+			self.builder.get_object("notebook").set_current_page(0)
 		self.builder.get_object("xpos").set_value(x / 30.0)
 		self.builder.get_object("ypos").set_value(y / 30.0)
 		self.builder.get_object("width").set_value(w / 30.0)
 		self.builder.get_object("height").set_value(h / 30.0)
+		self.builder.get_object("notebook").set_sensitive(True)
 		self.builder.get_object("code").set_sensitive(True)
 		self.builder.get_object("xpos").set_sensitive(True)
 		self.builder.get_object("ypos").set_sensitive(True)
@@ -104,6 +160,8 @@ class keyboard(toolkit.scene):
 		self.builder.get_object("ypos").set_value(0.0)
 		self.builder.get_object("width").set_value(2.0)
 		self.builder.get_object("height").set_value(2.0)
+		self.builder.get_object("notebook").set_current_page(0)
+		self.builder.get_object("notebook").set_sensitive(False)
 		self.builder.get_object("code").set_sensitive(False)
 		self.builder.get_object("xpos").set_sensitive(False)
 		self.builder.get_object("ypos").set_sensitive(False)
@@ -125,7 +183,7 @@ class keyboard(toolkit.scene):
 		str = str + "</keyboard>\n"
 		return str
 
-class extension:
+class Extension:
 	def __init__(self, builder):
 		self.builder = builder
 		self.x = 0
@@ -139,7 +197,7 @@ class extension:
 		self.placement = node.getElementsByTagName('placement')[0].firstChild.data
 		self.name = node.getElementsByTagName('name')[0].firstChild.data
 		self.id = node.getElementsByTagName('identifiant')[0].firstChild.data
-		self.keyboard = keyboard( self.builder, node.getElementsByTagName('keyboard')[0] )
+		self.keyboard = Keyboard( self.builder, node.getElementsByTagName('keyboard')[0] )
 
 	def getSize(self):
 		(w, h) = self.keyboard.getSize()
@@ -179,7 +237,7 @@ class extension:
 		if self.placement != "main": str = str + "</extension>\n"
 		return str
 
-class extensions:
+class Extensions:
 	def __init__(self, builder, keyboard ):
 		self.builder = builder
 		self.widget = builder.get_object("exts")
@@ -188,7 +246,7 @@ class extensions:
 
 	def reset(self, keyboard):
 		self.exts = []
-		self.main = extension( self.builder )
+		self.main = Extension( self.builder )
 		self.main.loadmain( keyboard )
 		(w, h) = self.main.getSize()
 		self.widget.set_size_request(int(w), int(h))
@@ -197,7 +255,7 @@ class extensions:
 	def load(self, nodes):
 		self.exts = []
 		for ext in nodes:
-			local = extension( self.builder )
+			local = Extension( self.builder )
 			local.load( ext )
 			self.exts.append( local )
 
@@ -282,8 +340,9 @@ class extensions:
 			str = str + ext.__str__()
 		return str
 
-class editor:
+class Editor:
 	def __init__(self):
+		self.changing_type = False
 		self.exts = None
 		self.file = None
 		self.builder = gtk.Builder()
@@ -295,7 +354,7 @@ class editor:
 		self.builder.get_object("extensions").show()
 		self.builder.get_object("properties").show()
 
-		self.kbd = keyboard( self.builder )
+		self.kbd = Keyboard( self.builder )
 		if len( sys.argv ) > 1:
 			self.load( sys.argv[1] )
 		else:
@@ -313,6 +372,8 @@ class editor:
 		self.builder.get_object("keyboard").connect("key-release-event", onkeyrelease, self)
 		self.builder.connect_signals(self)
 
+		self.clip = gtk.Clipboard()
+
 	def load( self, file ):
 		self.file = file
 		self.kbd.reset()
@@ -324,7 +385,7 @@ class editor:
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
-			self.exts = extensions( self.builder, self.kbd )
+			self.exts = Extensions( self.builder, self.kbd )
 		nodes = xmldoc.getElementsByTagName('extension')
 		self.exts.load(nodes)
 		self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
@@ -335,7 +396,7 @@ class editor:
 		if self.exts:
 			self.exts.reset(self.kbd)
 		else:
-			self.exts = extensions( self.builder, self.kbd )
+			self.exts = Extensions( self.builder, self.kbd )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(w, h)
 		self.updateRulers()
@@ -386,11 +447,16 @@ class editor:
 			try:
 				file = io.FileIO( chooser.get_filename(), "w" )
 				file.write( self.__str__() )
-				self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
-				self.builder.get_object("exts").set_title(os.path.basename(self.file) + " - Florence layout extensions")
+				self.builder.get_object("editor").set_title(os.path.basename(self.file) + \
+					" - Florence layout editor")
+				self.builder.get_object("exts").set_title(os.path.basename(self.file) + \
+					" - Florence layout extensions")
 			except IOError as e:
-				dialog = gtk.MessageDialog( self.builder.get_object("editor"), gtk.DIALOG_DESTROY_WITH_PARENT,
-					gtk.MESSAGE_ERROR, gtk.BUTTONS_OK, "Unable to save file " + chooser.get_filename() + " : " + e.__str__() )
+				dialog = gtk.MessageDialog( self.builder.get_object("editor"),
+						gtk.DIALOG_DESTROY_WITH_PARENT,
+						gtk.MESSAGE_ERROR, gtk.BUTTONS_OK,
+							"Unable to save file " + \
+							chooser.get_filename() + " : " + e.__str__() )
 				dialog.run()
 				dialog.destroy()
 		chooser.destroy()
@@ -398,7 +464,7 @@ class editor:
 	def add( self, widget ):
 		if self.kbd:
 			x, y = self.builder.get_object("keyboard").get_pointer()
-			self.kbd.add( key("0", x / 30.0, y / 30.0, 2.0, 2.0) )
+			self.kbd.add( Key("0", x / 30.0, y / 30.0, 2.0, 2.0) )
 			ev = gtk.gdk.Event(gtk.gdk.BUTTON_PRESS)
 			ev.x = float(x)
 			ev.y = float(y)
@@ -408,11 +474,56 @@ class editor:
 		if self.kbd:
 			self.kbd.delete()
 			self.builder.get_object("editor").queue_draw()
-	
+
+	def cut( self, widget ):
+		self.copy( widget )
+		self.delete( widget )
+
+	def copy( self, widget ):
+		if self.kbd:
+			self.clip.set_text("<clip>" + self.kbd.sel.__str__() + "</clip>")
+			self.clip.store()
+
+	def paste( self, widget ):
+		text =  self.clip.wait_for_text()
+		xmldoc = minidom.parseString( text )
+		node = xmldoc.getElementsByTagName('clip')[0]
+		keys = node.getElementsByTagName('key')
+		self.kbd.sel.clear()
+		self.kbd.clearSel()
+		for k in keys:
+			self.kbd.add( Key.load(k), True )
+		self.builder.get_object("keyboard").queue_draw()
+
+	def page_changed( self, widget, page_num, user_data ):
+		''' Avoid infinite recursion '''
+		if self.changing_type: return
+		if self.builder.get_object("notebook").get_current_page() == 0:
+			self.builder.get_object("actionRadio").set_active(True)
+		else:
+			self.builder.get_object("codeRadio").set_active(True)
+
+	def type_changed( self, widget ):
+		''' Avoid infinite recursion '''
+		self.changing_type = True
+		if self.builder.get_object("codeRadio").get_active():
+			self.builder.get_object("notebook").set_current_page(0)
+			self.code_changed( widget )
+		else:
+			self.builder.get_object("notebook").set_current_page(1)
+			self.action_changed( widget )
+		self.changing_type = False
+
 	def code_changed( self, widget ):
 		if self.kbd:
-			self.kbd.setName( self.builder.get_object("keyboard"),
+			self.kbd.setCode( self.builder.get_object("keyboard"),
 				str(int(self.builder.get_object("code").get_value())) )
+
+	def action_changed( self, widget ):
+		if self.kbd:
+			index = self.builder.get_object("actionComboBox").get_active()
+			self.kbd.setAction( self.builder.get_object("keyboard"),
+				self.builder.get_object("actions")[index][0] )
 
 	def width_changed( self, widget ):
 		if self.kbd:
@@ -439,6 +550,7 @@ class editor:
 		gtk.main_quit()
 
 	def selectExtension(self, widget, event, data):
+		self.kbd.resetSel()
 		kbd = self.exts.setSel(event.x, event.y)
 		if kbd:
 			self.kbd.disconnect( self.builder.get_object("keyboard") )
@@ -462,11 +574,12 @@ class editor:
 		str = str + "\t<name>Unnamed</name>\n"
 		str = str + "\t<author>Anonymous</author>\n"
 		str = str + "\t<date>0000-00-00</date>\n"
-		str = str + "\t<florence_version>0.5.1</florence_version>\n"
+		str = str + "\t<florence_version>0.5.2</florence_version>\n"
 		str = str + "</informations>\n"
 		str = str + self.exts.__str__()
 		str = str + "</layout>"
 		return str
 
-ed = editor()
+ed = Editor()
 gtk.main()
+

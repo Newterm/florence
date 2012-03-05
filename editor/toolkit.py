@@ -320,6 +320,12 @@ class selection:
 		self.objects = []
 		self.active = None
 
+	def __str__(self):
+		ret = ""
+		for sel in self.objects:
+			ret += sel.__str__()
+		return ret
+
 	def get_extents(self):
 		x = None
 		y = None
@@ -415,6 +421,11 @@ class selection:
 				sel.y += delta
 
 class scene:
+
+	def __init__(self):
+		self.sel = selection()
+		self.reset()
+
 	def totop(self, obj):
 		self.top = obj
 		self.objects.remove(obj)
@@ -487,7 +498,7 @@ class scene:
 				self.sel.hug( dx, dy )
 
 			self.sel.active = self.top
-			self.update(self.top.name, self.top.get_extents_after_hug())
+			self.update(self.top)
 		else:
 			if self.moving:
 				self.xsel2 = event.x
@@ -526,7 +537,7 @@ class scene:
 				if obj.status == 2:
 					self.sel.press(obj, event.x, event.y)
 					self.sel.active = obj
-					self.update(obj.name, obj.get_extents_after_hug())
+					self.update(obj)
 				break
 
 		if not hit and event.button == 1:
@@ -589,9 +600,6 @@ class scene:
 		self.w = w
 		self.h = h
 
-	def __init__(self):
-		self.reset()
-
 	def connect(self, widget):
 		self.handler1 = widget.connect("leave-notify-event", self.leave, self)
 		self.handler2 = widget.connect("motion-notify-event", self.motion, self)
@@ -606,9 +614,14 @@ class scene:
 		widget.disconnect(self.handler4)
 		widget.disconnect(self.handler5)
 
-	def reset(self):
-		self.objects = []
+	def resetSel(self):
+		self.sel.clear()
+		self.clearSel()
 		self.sel = selection()
+
+	def reset(self):
+		self.resetSel()
+		self.objects = []
 		self.top = None		
 		self.moving = False
 		self.xsel = 0
@@ -618,8 +631,9 @@ class scene:
 		self.gridx = 0
 		self.gridy = 0
 
-	def add(self, object):
+	def add(self, object, addToSel = False):
 		self.objects.append(object)
+		if addToSel: self.sel.add(object)
 
 	def delete(self):
 		for obj in self.sel.objects:
