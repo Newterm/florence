@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sounds xmlns="http://florence.sourceforge.net">
+	<sound match="(Control_[LR]|Super_[LR]|Alt_[LR]|Meta_L|ISO_Level3_Shift|Shift_[LR]|Caps_Lock|Num_Lock)">
+		<press>file://@SNDDIR@/modifier_press.ogg</press>
+		<release>file://@SNDDIR@/modifier_release.ogg</release>
+		<hover/>
+	</sound>
+	<sound match="(Tab|[Ss]pace|BackSpace)">
+		<press>file://@SNDDIR@/modifier_press.ogg</press>
+		<release/>
+		<hover/>
+	</sound>
+	<sound match="Return">
+		<press>file://@SNDDIR@/return_press.ogg</press>
+		<release>file://@SNDDIR@/return_release.ogg</release>
+		<hover/>
+	</sound>
 	<sound match="*">
 		<press>file://@SNDDIR@/press.ogg</press>
 		<release>file://@SNDDIR@/release.ogg</release>

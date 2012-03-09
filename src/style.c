@@ -576,10 +576,10 @@ GstElement *style_sound_setup(const gchar *uri)
 	if (uri) {
 		pipeline=gst_element_factory_make("playbin", "player");
 		g_object_set(G_OBJECT(pipeline), "uri", uri, NULL);
+		bus=gst_pipeline_get_bus(GST_PIPELINE(pipeline));
+		gst_bus_add_watch(bus, style_sound_bus_call, (gpointer)pipeline);
+		gst_object_unref(bus);
 	}
-	bus=gst_pipeline_get_bus(GST_PIPELINE(pipeline));
-	gst_bus_add_watch(bus, style_sound_bus_call, (gpointer)pipeline);
-	gst_object_unref(bus);
 	END_FUNC
 	return pipeline;
 }
