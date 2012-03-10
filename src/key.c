@@ -281,11 +281,12 @@ void key_press(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
-				style_sound_play(status->view->style,
-					gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
-						((struct key_code *)mod->data)->code,
-						status_globalmod_get(status))),
-					STYLE_SOUND_PRESS);
+				if (settings_get_bool("style/sounds"))
+					style_sound_play(status->view->style,
+						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
+							((struct key_code *)mod->data)->code,
+							status_globalmod_get(status))),
+						STYLE_SOUND_PRESS);
 				break;
 			case KEY_ACTION:
 				action=(struct key_action *)mod->data;
@@ -298,9 +299,12 @@ void key_press(struct key *key, struct status *status)
 					case KEY_REDUCE:
 					case KEY_SWITCH:
 					case KEY_EXTEND:
-					case KEY_UNEXTEND: style_sound_play(status->view->style,
-							key_actions[action->type],
-							STYLE_SOUND_PRESS); break;
+					case KEY_UNEXTEND:
+						if (settings_get_bool("style/sounds"))
+							style_sound_play(status->view->style,
+								key_actions[action->type],
+								STYLE_SOUND_PRESS);
+						break;
 					default: flo_warn(_("unknown action key type pressed = %d"), action->type);
 				}
 				break;
@@ -320,11 +324,12 @@ void key_release(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
-				style_sound_play(status->view->style,
-					gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
-						((struct key_code *)mod->data)->code,
-						status_globalmod_get(status))),
-					STYLE_SOUND_RELEASE);
+				if (settings_get_bool("style/sounds"))
+					style_sound_play(status->view->style,
+						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
+							((struct key_code *)mod->data)->code,
+							status_globalmod_get(status))),
+						STYLE_SOUND_RELEASE);
 				break;
 			case KEY_ACTION:
 				action=(struct key_action *)mod->data;
@@ -347,9 +352,11 @@ void key_release(struct key *key, struct status *status)
 						xkeyboard_layout_change(status->xkeyboard); break;
 					case KEY_EXTEND: key_extend(action); break;
 					case KEY_UNEXTEND: key_unextend(action);
-						style_sound_play(status->view->style,
-							key_actions[action->type],
-							STYLE_SOUND_RELEASE); break;
+						if (settings_get_bool("style/sounds"))
+							style_sound_play(status->view->style,
+								key_actions[action->type],
+								STYLE_SOUND_RELEASE);
+						break;
 					default: flo_warn(_("unknown action key type released = %d"), action->type);
 				}
 				break;

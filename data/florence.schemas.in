@@ -401,6 +401,17 @@
 				<long>scaling factor of the focused key</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/style/sounds</key>
+			<applyto>/apps/florence/style/sounds</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>activate sound</short>
+				<long>enable sound feedback when a key is hovered, pressed or released</long>
+			</locale>
+		</schema>
 
 	</schemalist>
 </gconfschemafile>
