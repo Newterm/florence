@@ -74,6 +74,8 @@ static struct settings_param settings_defaults[] = {
 	{ SETTINGS_NONE, "window/scaley", SETTINGS_DOUBLE, { .vdouble = 20. } },
 	{ "flo_focus_zoom", "style/focus_zoom", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
 	{ "flo_sounds", "style/sounds", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ "flo_system_font", "style/system_font", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ "flo_font", "style/font", SETTINGS_STRING, { .vstring = "sans 10" } },
 	{ SETTINGS_NONE, "window/xpos", SETTINGS_INTEGER, { .vinteger = 0 } },
 	{ SETTINGS_NONE, "window/ypos", SETTINGS_INTEGER, { .vinteger = 0 } },
 	{ NULL } };

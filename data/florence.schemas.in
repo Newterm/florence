@@ -412,6 +412,28 @@
 				<long>enable sound feedback when a key is hovered, pressed or released</long>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/florence/style/system_font</key>
+			<applyto>/apps/florence/style/system_font</applyto>
+			<owner>florence</owner>
+			<type>bool</type>
+			<default>true</default>
+			<locale name="C">
+				<short>Use system font</short>
+				<long>Set to true to use gtk default font. Set to false to use the style font.</long>
+			</locale>
+		</schema>
+		<schema>
+			<key>/schemas/apps/florence/style/font</key>
+			<applyto>/apps/florence/style/font</applyto>
+			<owner>florence</owner>
+			<type>string</type>
+			<default>sans 10</default>
+			<locale name="C">
+				<short>Keyboard font</short>
+				<long>Font used to display labels on the keyboard</long>
+			</locale>
+		</schema>
 
 	</schemalist>
 </gconfschemafile>

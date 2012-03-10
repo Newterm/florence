@@ -267,12 +267,16 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	PangoFontDescription *fontdesc;
 	gchar *fontname;
 	const gchar *fontfamilly;
-	GtkSettings *settings=gtk_settings_get_default();
+	GtkSettings *settings=NULL;
 	cairo_font_slant_t slant;
+	gint size=0.0;
 
 	style_cairo_status_check(cairoctx);
 
-	g_object_get(settings, "gtk-font-name", &fontname, NULL);
+	if (settings_get_bool("style/system_font")) {
+		settings=gtk_settings_get_default();
+		g_object_get(settings, "gtk-font-name", &fontname, NULL);
+	} else fontname=settings_get_string("style/font");
 	fontdesc=pango_font_description_from_string(fontname?fontname:"sans 10");
 	if (fontname) g_free(fontname);
 	fontfamilly=pango_font_description_get_family(fontdesc);
@@ -288,7 +292,11 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	style_cairo_set_color(cairoctx, STYLE_TEXT_OUTLINE_COLOR);
 	cairo_select_font_face(cairoctx, fontfamilly, slant, 
 		pango_font_description_get_weight(fontdesc)<=500?CAIRO_FONT_WEIGHT_NORMAL:CAIRO_FONT_WEIGHT_BOLD);
-	cairo_set_font_size(cairoctx, 0.8);
+	size=pango_font_description_get_size(fontdesc);
+	if (pango_font_description_get_size_is_absolute(fontdesc)) {
+		size=pango_units_to_double(size);
+	}
+	cairo_set_font_size(cairoctx, (gdouble)(size)/12800.);
 	cairo_text_extents(cairoctx, text, &te);
 	cairo_font_extents(cairoctx, &fe);
 	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);

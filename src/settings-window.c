@@ -346,6 +346,7 @@ void settings_window_input_method_update(gchar *method)
 void settings_window_update()
 {
 	START_FUNC
+	GObject *object;
 	gchar *color;
 	guint searchidx=0;
 	struct settings_param *params=settings_defaults_get();
@@ -371,6 +372,12 @@ void settings_window_update()
 					if (color) g_free(color);
 					break;
 				case SETTINGS_STRING:
+					object=gtk_builder_get_object(settings_window->gtkbuilder,
+						params[searchidx].builder_name);
+					if (GTK_IS_FONT_BUTTON(object))
+						gtk_font_button_set_font_name(
+							GTK_FONT_BUTTON(object),
+							settings_get_string(params[searchidx].gconf_name));
 					break;
 				case SETTINGS_DOUBLE:
 					gtk_range_set_value(
@@ -402,6 +409,10 @@ void settings_window_update()
 		"flo_move_to_widget")), settings_get_bool("behaviour/auto_hide"));
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 		"flo_intermediate_icon")), settings_get_bool("behaviour/auto_hide"));
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"flo_font")), !settings_get_bool("style/system_font"));
+	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+		"flo_font_label")), !settings_get_bool("style/system_font"));
 
 	color=settings_window_combo_update("flo_layouts");
 	if (color) {
@@ -413,6 +424,7 @@ void settings_window_update()
 		settings_window_input_method_update(color);
 	       	g_free(color);
 	}
+
 	END_FUNC
 }
 
@@ -558,6 +570,14 @@ void settings_window_opacity(GtkHScale *scale)
 	END_FUNC
 }
 
+/* on font change: apply immediately */
+void settings_window_font(GtkFontButton *font)
+{
+	START_FUNC
+	settings_window_save("style/font");
+	settings_string_set("style/font", gtk_font_button_get_font_name(font));
+	END_FUNC
+}
 
 /* set a gconf boolean according to the state of the toggle button.
  * Look for the gconf parameter name in the parameters table */
@@ -599,6 +619,14 @@ void settings_window_set_bool (GtkToggleButton *button)
 			"flo_move_to_widget")), gtk_toggle_button_get_active(button));
 		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 			"flo_intermediate_icon")), gtk_toggle_button_get_active(button));
+	} else if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "flo_system_font")) {
+		/* apply immediately */
+		settings_window_save("style/system_font");
+		settings_bool_set("style/system_font", gtk_toggle_button_get_active(button));
+		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"flo_font_label")), !gtk_toggle_button_get_active(button));
+		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
+			"flo_font")), !gtk_toggle_button_get_active(button));
 	}
 #ifdef ENABLE_RAMBLE
 	}

@@ -415,7 +415,7 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 	if ((!strcmp(key, "key")) || (!strcmp(key, "outline"))) {
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
-	} else if (!strncmp(key, "label", 5)) {
+	} else if (!strncmp(key, "label", 5) || (!strcmp(key, "font")) || (!strcmp(key, "system_font"))) {
 		if (view->symbols) cairo_surface_destroy(view->symbols);
 		view->symbols=NULL;
 	}
@@ -873,6 +873,8 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	settings_changecb_register("colours/label_outline", view_redraw, view);
 	settings_changecb_register("colours/activated", view_redraw, view);
 	settings_changecb_register("colours/latched", view_redraw, view);
+	settings_changecb_register("style/system_font", view_redraw, view);
+	settings_changecb_register("style/font", view_redraw, view);
 
 #ifndef APPLET
 	/* set the window icon */
