@@ -65,5 +65,6 @@
 	</shape>
 	</shapes>
 	<xi:include href="../default/symbols.xml"/>
+	<xi:include href="../default/sounds/sounds.xml"/>
 </style>
 
