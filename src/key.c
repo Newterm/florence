@@ -281,7 +281,7 @@ void key_press(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
-				if (settings_get_bool("style/sounds"))
+				if (settings_get_bool("style/sounds") && status->view)
 					style_sound_play(status->view->style,
 						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
 							((struct key_code *)mod->data)->code,
@@ -300,7 +300,7 @@ void key_press(struct key *key, struct status *status)
 					case KEY_SWITCH:
 					case KEY_EXTEND:
 					case KEY_UNEXTEND:
-						if (settings_get_bool("style/sounds"))
+						if (settings_get_bool("style/sounds") && status->view)
 							style_sound_play(status->view->style,
 								key_actions[action->type],
 								STYLE_SOUND_PRESS);
@@ -324,7 +324,7 @@ void key_release(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
-				if (settings_get_bool("style/sounds"))
+				if (settings_get_bool("style/sounds") && status->view)
 					style_sound_play(status->view->style,
 						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
 							((struct key_code *)mod->data)->code,
@@ -352,7 +352,7 @@ void key_release(struct key *key, struct status *status)
 						xkeyboard_layout_change(status->xkeyboard); break;
 					case KEY_EXTEND: key_extend(action); break;
 					case KEY_UNEXTEND: key_unextend(action);
-						if (settings_get_bool("style/sounds"))
+						if (settings_get_bool("style/sounds") && status->view)
 							style_sound_play(status->view->style,
 								key_actions[action->type],
 								STYLE_SOUND_RELEASE);
