@@ -299,13 +299,23 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 	cairo_set_font_size(cairoctx, (gdouble)(size)/12800.);
 	cairo_text_extents(cairoctx, text, &te);
 	cairo_font_extents(cairoctx, &fe);
-	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);
-	/*cairo_show_text(cairoctx, text);*/
+	if (te.width > w) {
+		size=size*w/te.width;
+		cairo_set_font_size(cairoctx, (gdouble)(size)/12800.);
+		cairo_text_extents(cairoctx, text, &te);
+		cairo_font_extents(cairoctx, &fe);
+	} 
+	if (fe.height > h) {
+		cairo_set_font_size(cairoctx, (gdouble)(size*h/fe.height)/12800.);
+		cairo_text_extents(cairoctx, text, &te);
+		cairo_font_extents(cairoctx, &fe);
+	}
+	cairo_move_to(cairoctx, (w-te.width)/2.-te.x_bearing, ((h+fe.height)/2.)-fe.descent);
 	cairo_set_line_width(cairoctx, 0.1);
 	cairo_text_path(cairoctx, text);
 	cairo_stroke(cairoctx);
 	style_cairo_set_color(cairoctx, STYLE_TEXT_COLOR);
-	cairo_move_to(cairoctx, (w-te.width)/2-te.x_bearing, (h-fe.descent+fe.height)/2);
+	cairo_move_to(cairoctx, (w-te.width)/2.-te.x_bearing, ((h+fe.height)/2.)-fe.descent);
 	cairo_text_path(cairoctx, text);
 	cairo_fill(cairoctx);
 	cairo_restore(cairoctx);
