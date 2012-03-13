@@ -62,14 +62,7 @@ void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
-	if (florence->obj) {
-#ifdef ENABLE_AT_SPI2
-		g_object_unref(florence->obj);
-#else
-		Accessible_unref(florence->obj);
-#endif
-		florence->obj=NULL;
-	}
+	florence->obj=NULL;
 	florence->icon=NULL;
 	END_FUNC
 }
