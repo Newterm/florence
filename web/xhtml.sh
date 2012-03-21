@@ -28,7 +28,7 @@ function doc {
 	cd ..
 }
 
-xgettext home.php config.php tools.php -o messages.pot --from-code=utf-8 -l PHP
+xgettext home.php config.php tools.php svg/docs.php svg/switch.php -o messages.pot --from-code=utf-8 -l PHP
 LINGUAS="fr_FR ru_RU"
 for lang in $LINGUAS
 do

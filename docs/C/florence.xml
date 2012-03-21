@@ -56,6 +56,7 @@ A Timer-based auto-click input method is available to help disabled people havin
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/librsvg/">librsvg</ulink></para></listitem>
 			<listitem><para><ulink url="http://www.gnu.org/software/gettext/">gettext</ulink></para></listitem>
 			<listitem><para><ulink url="http://ftp.gnome.org/pub/GNOME/sources/intltool">intltool</ulink> (version &gt;= 0.23)</para></listitem>
+			<listitem><para><ulink url="http://gstreamer.freedesktop.org">gstreamer</ulink> (version &gt; 0.10)</para></listitem>
 			<listitem><para>(Optional: --with-docs configure option) <ulink url="http://ftp.gnome.org/pub/GNOME/sources/gnome-doc-utils">gnome-doc-utils</ulink></para></listitem>
 			<listitem><para>(Optional: --with-libnotify configure option) <ulink url="http://www.galago-project.org/files/releases/source/libnotify">libnotify</ulink></para></listitem>
 			<listitem><para>(Optional: --with-xtst configure option) <ulink url="http://xorg.freedesktop.org/releases/individual/lib/">libxtst</ulink></para></listitem>
@@ -69,14 +70,15 @@ A Timer-based auto-click input method is available to help disabled people havin
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>yum install gcc make libxml2-devel libglade2-devel at-spi-devel \</userinput>
 <prompt>></prompt> <userinput>librsvg2-devel GConf2-devel libnotify-devel libXtst-devel gnome-doc-utils \</userinput>
-<prompt>></prompt> <userinput>gettext intltool gnome-panel-devel</userinput>
+<prompt>></prompt> <userinput>gettext intltool gnome-panel-devel gstreamer-devel</userinput>
 				</screen></para>
 				<para><ulink url="http://www.mandriva.com/">Mandriva</ulink>
 				<screen>
 <prompt>$</prompt> <userinput>su</userinput>
 <prompt>#</prompt> <userinput>urpmi gcc make libxml2-dev libgconf2-dev libglade2-devel \</userinput>
 <prompt>></prompt> <userinput>at-spi-devel libcairo-devel gnome-doc-utils librsvg-devel gettext \</userinput>
-<prompt>></prompt> <userinput>libnotify-devel libxtst6-devel intltool libpanel-applet-2-devel</userinput>
+<prompt>></prompt> <userinput>libnotify-devel libxtst6-devel intltool libpanel-applet-2-devel \</userinput>
+<prompt>></prompt> <userinput>libgstreamer0.10-devel</userinput>
 				</screen></para>
 			</listitem>
 			<listitem>
@@ -142,7 +144,7 @@ A Timer-based auto-click input method is available to help disabled people havin
 	</sect2>
 	<sect2 id="input_methods">
 		<title>Input methods</title>
-		<para>Florence can be used with 3 different input methods. Each method has advantages and drawbacks. It is up to you to select the right one for your usage pattern.</para>
+		<para>Florence can be used with 4 different input methods. Each method has advantages and drawbacks. It is up to you to select the right one for your usage pattern.</para>
 		<orderedlist>
 			<listitem>
 				<para>The default input method is the "mouse" method. This is adapted for mouse/trackpad input. It is pretty straightforward. Just click on the key with the mouse button to activate it. Release the mouse button to deavticate the key. The advantage of this method is its simplicity. It does not require learning. The drawback is that is requires a pointing device with a button and that the user is able to use it.</para>
@@ -180,7 +182,60 @@ A Timer-based auto-click input method is available to help disabled people havin
 			</screenshot>
 		</figure>
 		<para>The above figure shows the different parts of the default layout. There are other layouts that can be selected in the settings dialog (layout tab).</para>
-		<para>The default keyboard layout can be extended with 3 extensions to the core keyboard. The arrows keypad is an extension added to the right of the core keyboard and contains the arrow keys along with navigation keys. The numpad extension contains the numeric keys and the function keys extension contains the function keys. Each extension can be activated and deactivated independantly. The extensions are relative to the selected layout.</para>
+		<para>The default keyboard layout can be extended with 4 extensions to the core keyboard. The Florence key pad is an extension to the left of the main keyboard which contains keys to access to special Florence functions: see below for a complete list of the Florence functions. The arrows keypad is an extension added to the right of the core keyboard and contains the arrow keys along with navigation keys. The numpad extension contains the numeric keys and the function keys extension contains the function keys. Each extension can be activated and deactivated independantly. The extensions are relative to the selected layout.</para>
+	</sect2>
+	<sect2 id="florencekeys">
+		<title>Florence keys</title>
+		<para>The following keys give access to special Florence functions. They are located on the "Florence keys" extension.</para>
+		<para><figure id="minimize">
+			<title>Minimize key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/minimize.png" format="PNG"/></imageobject>
+				<textobject><phrase>Minimize key.</phrase></textobject>
+			</mediaobject>
+		</figure>The minimize key hides the keyboard. The program is still running and the keyboard can be shown again by clicking on the icon or by selecting a text entry widget when auto-hide mode is on.</para>
+		<para><figure id="configuration">
+			<title>Configuration key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/configuration.png" format="PNG"/></imageobject>
+				<textobject><phrase>Configuration key.</phrase></textobject>
+			</mediaobject>
+		</figure>The configuration key opens the configuration dialog. See the configuring chapter for more information about the configuration dialog.</para>
+		<para><figure id="move">
+			<title>Move key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/move.png" format="PNG"/></imageobject>
+				<textobject><phrase>Move key.</phrase></textobject>
+			</mediaobject>
+		</figure>You can move the keyboard around the screen with the move key. Press the move key, move the pointer and release the button when the keyboard is located where you want it.</para>
+		<para><figure id="bigger">
+			<title>Bigger key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/bigger.png" format="PNG"/></imageobject>
+				<textobject><phrase>Bigger key.</phrase></textobject>
+			</mediaobject>
+		</figure>Press the bigger key to increase the size of the keyboard.</para>
+		<para><figure id="smaller">
+			<title>Smaller key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/smaller.png" format="PNG"/></imageobject>
+				<textobject><phrase>Smaller key.</phrase></textobject>
+			</mediaobject>
+		</figure>Press the smaller key to decrease the size of the keyboard.</para>
+		<para><figure id="close">
+			<title>Close key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/close.png" format="PNG"/></imageobject>
+				<textobject><phrase>Close key.</phrase></textobject>
+			</mediaobject>
+		</figure>Press the close key to terminate the program. The close key is accessible when the alt modifier key is pressed, at the location of the minimize key.</para>
+		<para><figure id="switch">
+			<title>Switch key</title>
+			<mediaobject>
+				<imageobject><imagedata fileref="figures/switch.png" format="PNG"/></imageobject>
+				<textobject><phrase>Switch key.</phrase></textobject>
+			</mediaobject>
+	</figure>The switch key is accessible when the alt modifier key is pressed, at the location of the configuration key. The label of the key shows the current language of the keyboard. Pressing it switches to the next laguage. Pressing it several times cycles through the available language layouts. The available language layouts can be configured with the <command>gnome-keyboard-properties</command> program (in the layout tab). If only one language is configured, pressing this key has no effect, it just shows the language layout currently configured.</para>
 	</sect2>
 	<sect2 id="modifiers">
 		<title>Modifier keys</title>

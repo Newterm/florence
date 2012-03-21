@@ -4,7 +4,10 @@ dist-hook: doc-dist-hook
 DOC_MODULE = florence
 DOC_ENTITIES = gfdl.dbk
 DOC_INCLUDES =
-DOC_FIGURES = figures/behaviour.png figures/florence.png figures/layout.png figures/style.png figures/window.png
+DOC_FIGURES = figures/behaviour.png figures/florence.png figures/layout.png \
+              figures/style.png figures/window.png figures/minimize.png \
+              figures/configuration.png figures/move.png figures/bigger.png \
+              figures/smaller.png figures/close.png figures/switch.png
 DOC_LINGUAS = fr ru
 
 man_MANS = florence.1 florence_applet.1
