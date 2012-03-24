@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-02-09 20:19+0000\n"
+"POT-Creation-Date: 2012-03-24 16:04+0000\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -78,101 +78,110 @@ msgid "Distance based"
 msgstr "Базовое расстояние"
 
 #: ../data/florence.glade.h:14
+msgid "Enable sound feedback\t"
+msgstr ""
+
+#: ../data/florence.glade.h:15
 msgid "Extensions"
 msgstr "Расширения"
 
-#: ../data/florence.glade.h:15
+#: ../data/florence.glade.h:16
 msgid "Features"
 msgstr "Возможности"
 
-#: ../data/florence.glade.h:16
+#: ../data/florence.glade.h:17
 msgid "Florence Settings"
 msgstr "Настройки Florence"
 
-#: ../data/florence.glade.h:17 ../data/florence.schemas.in.h:26
+#: ../data/florence.glade.h:18 ../data/florence.schemas.in.h:27
 msgid "Input method"
 msgstr "Метод ввода"
 
-#: ../data/florence.glade.h:18
+#: ../data/florence.glade.h:19
 msgid "Intermediate icon"
 msgstr "Промежуточный значок"
 
-#: ../data/florence.glade.h:19
+#: ../data/florence.glade.h:20
 msgid "Keep ratio"
 msgstr "Сохранять пропорции"
 
-#: ../data/florence.glade.h:20 ../data/florence.schemas.in.h:27
+#: ../data/florence.glade.h:21 ../data/florence.schemas.in.h:28
 msgid "Keep the keyboard on top."
 msgstr "Показывать клавиатуру поверх всех окон"
 
-#: ../data/florence.glade.h:21 ../data/florence.schemas.in.h:29
+#: ../data/florence.glade.h:22 ../data/florence.schemas.in.h:30
 msgid "Keep window ratio when resizing window."
 msgstr "Сохранять пропорции окна при изменении его размеров."
 
-#: ../data/florence.glade.h:22
+#: ../data/florence.glade.h:23
 msgid "Key background color"
 msgstr "Цвет клавиш"
 
-#: ../data/florence.glade.h:23
+#: ../data/florence.glade.h:24
 msgid "Key background color when the mouse is over"
 msgstr "Цвет клавиш при наведенной мыши"
 
-#: ../data/florence.glade.h:24
+#: ../data/florence.glade.h:25
 msgid "Key with mouve over background color"
 msgstr "Цвет фона клавиш при наведенной мыши"
 
-#: ../data/florence.glade.h:25
+#: ../data/florence.glade.h:26
+#, fuzzy
+msgid "Keyboard font: "
+msgstr "найденная раскладка клавиатуры: <%s>"
+
+#: ../data/florence.glade.h:27
 msgid "Labels and symbols color"
 msgstr "Цвет букв и символов"
 
-#: ../data/florence.glade.h:26
+#: ../data/florence.glade.h:28
 msgid "Labels and symbols outline color"
 msgstr "Цвет контура меток и символов"
 
-#: ../data/florence.glade.h:27
+#: ../data/florence.glade.h:29
 msgid "Latched keys background color"
 msgstr "Цвет зажатых клавиш"
 
-#: ../data/florence.glade.h:28
+#: ../data/florence.glade.h:30
 msgid "Latched keys color"
 msgstr "Цвет зажатых клавиш"
 
-#: ../data/florence.glade.h:29
+#: ../data/florence.glade.h:31
 msgid ""
 "Move the keyboard to near the selected editable widget in auto-hide mode"
 msgstr ""
 "Перемещать клавиатуру рядом с выбранным редактируемым объектом в режиме "
 "автоскрытия"
 
-#: ../data/florence.glade.h:30
+#: ../data/florence.glade.h:32
 msgid "Move to near selected widget"
 msgstr "Перемещать рядом с выбранным виджетом"
 
-#: ../data/florence.glade.h:31
+#: ../data/florence.glade.h:33
 msgid "Normal key background color"
 msgstr "Цвет клавиш"
 
-#: ../data/florence.glade.h:32
+#: ../data/florence.glade.h:34
 msgid "Opacity"
 msgstr "Прозрачность"
 
-#: ../data/florence.glade.h:33
+#: ../data/florence.glade.h:35
 msgid "Put an intermediate icon before showing the actual keyboard"
 msgstr "Ставить вспомогательный значок перед показом фактической клавиатуры"
 
-#: ../data/florence.glade.h:34
+#: ../data/florence.glade.h:36
 msgid "Quit preferences"
 msgstr "Закрыть настройки"
 
-#: ../data/florence.glade.h:35
+#: ../data/florence.glade.h:37
 msgid "Ramble distance theshold for multiple press"
 msgstr "Дистанция перехода для множественного нажатия"
 
-#: ../data/florence.glade.h:36
+#: ../data/florence.glade.h:38
 msgid "Ramble distance theshold for simple press"
 msgstr "Дистанция перехода для одиночного нажатия"
 
-#: ../data/florence.glade.h:37
+#: ../data/florence.glade.h:39
 msgid ""
 "Rambling will start when the mouse button is pressed. Always activated "
 "otherwise."
@@ -180,71 +189,83 @@ msgstr ""
 "Переход начинается при зажатой кнопке мыши. В противном случае всегда "
 "активировано"
 
-#: ../data/florence.glade.h:38
+#: ../data/florence.glade.h:40
 msgid "Resizable"
 msgstr "Изменение размера"
 
-#: ../data/florence.glade.h:39
+#: ../data/florence.glade.h:41
 msgid "Select Florence layout"
 msgstr "Выбор раскладок Florence"
 
-#: ../data/florence.glade.h:40
+#: ../data/florence.glade.h:42
 msgid "Select input method"
 msgstr "Выбрать метод ввода"
 
-#: ../data/florence.glade.h:41
+#: ../data/florence.glade.h:43
 msgid "Sets the focus scaling factor"
 msgstr "Установить фокус фактора масштабирования"
 
-#: ../data/florence.glade.h:42
+#: ../data/florence.glade.h:44
 msgid "Style preview"
 msgstr "Предпросмотр"
 
-#: ../data/florence.glade.h:43
+#: ../data/florence.glade.h:45
 msgid "Task bar"
 msgstr "Панель задач"
 
-#: ../data/florence.glade.h:44
+#: ../data/florence.glade.h:46
 msgid "Time based"
 msgstr "По времени"
 
-#: ../data/florence.glade.h:45
+#: ../data/florence.glade.h:47
 msgid "Time threshold for time based ramble mode."
 msgstr "Временной порог для времени режима перехода."
 
-#: ../data/florence.glade.h:46
+#: ../data/florence.glade.h:48
 msgid "Transparent"
 msgstr "Прозрачность"
 
-#: ../data/florence.glade.h:47 ../data/florence.schemas.in.h:61
+#: ../data/florence.glade.h:49 ../data/florence.schemas.in.h:64
 msgid "Transparent mode"
 msgstr "Прозрачный режим"
 
-#: ../data/florence.glade.h:48
+#: ../data/florence.glade.h:50 ../data/florence.schemas.in.h:66
+msgid "Use system font"
+msgstr ""
+
+#: ../data/florence.glade.h:51
 msgid "behaviour"
 msgstr "Поведение"
 
-#: ../data/florence.glade.h:49
+#: ../data/florence.glade.h:52
 msgid "colors"
 msgstr "цвета"
 
-#: ../data/florence.glade.h:50
+#: ../data/florence.glade.h:53
 msgid "focus zoom"
 msgstr "Увеличение клавиш при наведении"
 
-#: ../data/florence.glade.h:51
+#: ../data/florence.glade.h:54
+msgid "font"
+msgstr ""
+
+#: ../data/florence.glade.h:55
 msgid "layout"
 msgstr "раскладка"
 
-#: ../data/florence.glade.h:52
+#: ../data/florence.glade.h:56
 msgid "shape"
 msgstr "форма"
 
-#: ../data/florence.glade.h:53
+#: ../data/florence.glade.h:57
+msgid "sounds"
+msgstr ""
+
+#: ../data/florence.glade.h:58
 msgid "style"
 msgstr "вид"
 
-#: ../data/florence.glade.h:54
+#: ../data/florence.glade.h:59
 msgid "window"
 msgstr "окно"
 
@@ -328,32 +349,42 @@ msgid "Florence will hide the keyboard window just after starting up."
 msgstr ""
 
 #: ../data/florence.schemas.in.h:22
+#, fuzzy
+msgid "Font used to display labels on the keyboard"
+msgstr "Видеть окна позади клавиатуры."
+
+#: ../data/florence.schemas.in.h:23
 msgid "Hide the keyboard automatically when not needed"
 msgstr "Скрывать клавиатуру автоматически, когда она не требуется"
 
-#: ../data/florence.schemas.in.h:23
+#: ../data/florence.schemas.in.h:24
 #, fuzzy
 msgid "Hide the keyboard when Florence starts"
 msgstr "Скрывать клавиатуру автоматически, когда она не требуется"
 
-#: ../data/florence.schemas.in.h:24
+#: ../data/florence.schemas.in.h:25
 msgid "Horizontal position of the keyboard window on the screen (in pixel)."
 msgstr "Горизонтальная позиция окна клавиатуры на экране (в пикселях)."
 
-#: ../data/florence.schemas.in.h:25
+#: ../data/florence.schemas.in.h:26
 #, fuzzy
 msgid "Horizontal scaling factor of the window"
 msgstr "Фактор масштабирования окна"
 
-#: ../data/florence.schemas.in.h:28
+#: ../data/florence.schemas.in.h:29
 msgid "Keep the keyboard window on top of other windows."
 msgstr "Окно клавиатуры поверх всех окон."
 
-#: ../data/florence.schemas.in.h:30
+#: ../data/florence.schemas.in.h:31
+#, fuzzy
+msgid "Keyboard font"
+msgstr "Показывать клавиатуру поверх всех окон"
+
+#: ../data/florence.schemas.in.h:32
 msgid "List of colon-separated (:) extension names"
 msgstr "Список разделенных двоеточиями (:) расширений имен"
 
-#: ../data/florence.schemas.in.h:31
+#: ../data/florence.schemas.in.h:33
 msgid ""
 "List of keyboard extensions names (colon-separated). extension names must be "
 "found in layout file"
@@ -361,15 +392,15 @@ msgstr ""
 "Список клавиатурных расширений имён (разделенных двоеточиями). расширени "
 "имен должны быть найдены в файл разметки"
 
-#: ../data/florence.schemas.in.h:32
+#: ../data/florence.schemas.in.h:34
 msgid "Make Florence appear in the task bar."
 msgstr "Показывать Florence в панели задач"
 
-#: ../data/florence.schemas.in.h:33
+#: ../data/florence.schemas.in.h:35
 msgid "Mouse over color"
 msgstr "Наведите курсор на цвет"
 
-#: ../data/florence.schemas.in.h:34
+#: ../data/florence.schemas.in.h:36
 msgid ""
 "Move the keyboard to near the selected editable widget in auto-hide mode. "
 "Only useful when auto_hide is activated."
@@ -377,27 +408,27 @@ msgstr ""
 "Перемещать клавиатуру рядом с выбранным редактируемым объектом в режиме "
 "автоскрытия. Используется только когда автоскрытие активно."
 
-#: ../data/florence.schemas.in.h:35
+#: ../data/florence.schemas.in.h:37
 msgid "Move the keyboard to near the selected widget"
 msgstr "Перемещать клавиатуру рядом с выбранным объектом"
 
-#: ../data/florence.schemas.in.h:36
+#: ../data/florence.schemas.in.h:38
 msgid "Opacity of the keyboard window"
 msgstr "Непрозрачность окна клавиатуры"
 
-#: ../data/florence.schemas.in.h:37
+#: ../data/florence.schemas.in.h:39
 msgid "Outline color"
 msgstr "Цвет контура"
 
-#: ../data/florence.schemas.in.h:38
+#: ../data/florence.schemas.in.h:40
 msgid "Path of the layout file"
 msgstr "Путь к файлу разметки"
 
-#: ../data/florence.schemas.in.h:39
+#: ../data/florence.schemas.in.h:41
 msgid "Path of the layout style file"
 msgstr "Путь файла разметки стиля"
 
-#: ../data/florence.schemas.in.h:40
+#: ../data/florence.schemas.in.h:42
 msgid ""
 "Periodically (each second) bring back the keyboard to top. This is useful "
 "for window managers not supporting the always_on_top hint."
@@ -405,56 +436,61 @@ msgstr ""
 "Периодически (каждую секунду) возвращать клавиатуру наверх. Полезно для "
 "менеджеров окон без поддержки автоскрытия."
 
-#: ../data/florence.schemas.in.h:41
+#: ../data/florence.schemas.in.h:43
 msgid "Position along the X axis"
 msgstr "Позиция по оси X"
 
-#: ../data/florence.schemas.in.h:42
+#: ../data/florence.schemas.in.h:44
 msgid "Position along the Y axis"
 msgstr "Позиция по оси Y"
 
-#: ../data/florence.schemas.in.h:43
+#: ../data/florence.schemas.in.h:45
 msgid "Ramble algorithm"
 msgstr "Алгоритм перехода"
 
-#: ../data/florence.schemas.in.h:44
+#: ../data/florence.schemas.in.h:46
 #, fuzzy
 msgid "Ramble path color"
 msgstr "Алгоритм перехода"
 
-#: ../data/florence.schemas.in.h:45
+#: ../data/florence.schemas.in.h:47
 msgid ""
 "Set the input method. Available input methods are button, timer and ramble."
 msgstr "Установить метод ввода. Доступные методы: кнопка, таймер и переход."
 
-#: ../data/florence.schemas.in.h:46
+#: ../data/florence.schemas.in.h:48
 msgid "Set the ramble algorithm used. Valid algorithms are distance and time."
 msgstr "Установить алгоритм перехода. Доступные алгоритмы: дистанция и время."
 
-#: ../data/florence.schemas.in.h:47
+#: ../data/florence.schemas.in.h:49
+msgid ""
+"Set to true to use gtk default font. Set to false to use the style font."
+msgstr ""
+
+#: ../data/florence.schemas.in.h:50
 #, fuzzy
 msgid "Sets the horizontal size of the window and of the keys"
 msgstr "Установить размер окна и клавиш"
 
-#: ../data/florence.schemas.in.h:48
+#: ../data/florence.schemas.in.h:51
 msgid ""
 "Sets the opacity of the keyboard window. Requires window manager compositing "
 "to work"
 msgstr ""
 "Установить прозрачность окна клавиатуры. Необходим композитный менеджер"
 
-#: ../data/florence.schemas.in.h:49
+#: ../data/florence.schemas.in.h:52
 #, fuzzy
 msgid "Sets the vertical size of the window and of the keys"
 msgstr "Установить размер окна и клавиш"
 
-#: ../data/florence.schemas.in.h:50
+#: ../data/florence.schemas.in.h:53
 msgid ""
 "Show an intermediate icon before showing the keyboard in auto-hide mode."
 msgstr ""
 "Показывать промежуточный значок до вызова клавиатуры в режиме автоскрытия."
 
-#: ../data/florence.schemas.in.h:51
+#: ../data/florence.schemas.in.h:54
 msgid ""
 "Show an intermediate icon when you click on an editable widget. Click on the "
 "icon to show the actual keyboard."
@@ -462,36 +498,36 @@ msgstr ""
 "Показывать промежуточный значок после нажатия на редактируемый объект. "
 "Нажмите на значок для показа текущей клавиатуры."
 
-#: ../data/florence.schemas.in.h:52
+#: ../data/florence.schemas.in.h:55
 msgid "Text color"
 msgstr "Цвет текста"
 
-#: ../data/florence.schemas.in.h:53
+#: ../data/florence.schemas.in.h:56
 msgid "Text outline color"
 msgstr "Цвет контура текста"
 
-#: ../data/florence.schemas.in.h:54
+#: ../data/florence.schemas.in.h:57
 msgid "The keyboard window can be resized with the mouse."
 msgstr "Окно клавиатуры может масштабироваться мышью."
 
-#: ../data/florence.schemas.in.h:55
+#: ../data/florence.schemas.in.h:58
 msgid "The layout file contains the layout of the keys on the keyboard"
 msgstr "Файл разметки содержит разметку клавиш клавиатуры"
 
-#: ../data/florence.schemas.in.h:56
+#: ../data/florence.schemas.in.h:59
 msgid ""
 "The layout style file contains the style to draw the keys of the keyboard"
 msgstr "Файл стиля содержит стиль для отрисовки клавиш клавиатуры"
 
-#: ../data/florence.schemas.in.h:57
+#: ../data/florence.schemas.in.h:60
 msgid "The window proportions are kept intact while resizing the window."
 msgstr "Пропорции окна сохраняются при изменении размера окна."
 
-#: ../data/florence.schemas.in.h:58
+#: ../data/florence.schemas.in.h:61
 msgid "Time threshold for timer based ramble mode."
 msgstr "Временной порог для времени режима перехода."
 
-#: ../data/florence.schemas.in.h:59
+#: ../data/florence.schemas.in.h:62
 msgid ""
 "Time, in milliseconds, to wait when the mouse is over a key before the key "
 "is automatically pressed (when timer input method is selected)"
@@ -499,24 +535,24 @@ msgstr ""
 "Время ожидания в миллисекундах, когда мышь находится над клавишей до её "
 "автоматического нажатия (когда выбран ввода таймер)"
 
-#: ../data/florence.schemas.in.h:60
+#: ../data/florence.schemas.in.h:63
 msgid "To see the windows behind the keyboard."
 msgstr "Видеть окна позади клавиатуры."
 
-#: ../data/florence.schemas.in.h:62
+#: ../data/florence.schemas.in.h:65
 msgid "Use button to activate rambling."
 msgstr "Используйте кнопку для активации перехода."
 
-#: ../data/florence.schemas.in.h:63
+#: ../data/florence.schemas.in.h:67
 msgid "Vertical position of the keyboard window on the screen (in pixel)."
 msgstr "Вертикальная позиция окна клавиатуры на экране (в пикселях)"
 
-#: ../data/florence.schemas.in.h:64
+#: ../data/florence.schemas.in.h:68
 #, fuzzy
 msgid "Vertical scaling factor of the window"
 msgstr "Фактор масштабирования окна"
 
-#: ../data/florence.schemas.in.h:65
+#: ../data/florence.schemas.in.h:69
 msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) before the key is pressed"
@@ -524,7 +560,7 @@ msgstr ""
 "Когда включен метод ввода переход, это дистанция возможного перемещения "
 "указателя по клавише (относительно её размера) до того, когда она нажмётся."
 
-#: ../data/florence.schemas.in.h:66
+#: ../data/florence.schemas.in.h:70
 msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) for pressing a key a "
@@ -533,7 +569,7 @@ msgstr ""
 "Когда выбран метод ввода переход, это дистанция передвижения по клавише (по "
 "сравнению с её размером) для нажатия второй и следующие разы."
 
-#: ../data/florence.schemas.in.h:67
+#: ../data/florence.schemas.in.h:71
 msgid ""
 "When this option is set, rambling starts on button push. No button is "
 "necessary when this option is unset."
@@ -541,19 +577,28 @@ msgstr ""
 "Когда эта опция установлена, переход начинается по нажатию на кнопку. Нет "
 "необходимости в кнопке, если эта опция не установлена."
 
-#: ../data/florence.schemas.in.h:68
+#: ../data/florence.schemas.in.h:72
 msgid "Window has a title bar and buttons."
 msgstr "Окно с заголовком и кнопками."
 
-#: ../data/florence.schemas.in.h:69
+#: ../data/florence.schemas.in.h:73
+#, fuzzy
+msgid "activate sound"
+msgstr "Активированный цвет"
+
+#: ../data/florence.schemas.in.h:74
+msgid "enable sound feedback when a key is hovered, pressed or released"
+msgstr ""
+
+#: ../data/florence.schemas.in.h:75
 msgid "key color"
 msgstr "цвет клавиши"
 
-#: ../data/florence.schemas.in.h:70
+#: ../data/florence.schemas.in.h:76
 msgid "latched color"
 msgstr "блокированный цвет"
 
-#: ../data/florence.schemas.in.h:71
+#: ../data/florence.schemas.in.h:77
 msgid "scaling factor of the focused key"
 msgstr "Фактор масштабирования выбранной клавиши"
 
@@ -734,46 +779,46 @@ msgstr "Невозможно получить аргументы.\n"
 msgid "Cannot initialize bonobo.\n"
 msgstr "Невозможно инициализировать bonobo.\n"
 
-#: ../src/florence.c:110
+#: ../src/florence.c:103
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Ошибка загрузки значка florence: %s"
 
-#: ../src/florence.c:115 ../src/view.c:328
+#: ../src/florence.c:108 ../src/view.c:328
 msgid "Unable to create mask"
 msgstr "Не удается создать маску"
 
-#: ../src/florence.c:313
+#: ../src/florence.c:306
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr "SPI выключен: невозможно включить автоскрытие."
 
-#: ../src/florence.c:338
+#: ../src/florence.c:331
 msgid "AT SPI: problem deregistering focus listener"
 msgstr ""
 
-#: ../src/florence.c:341
+#: ../src/florence.c:334
 msgid "AT SPI: problem deregistering window listener"
 msgstr ""
 
-#: ../src/florence.c:660
+#: ../src/florence.c:653
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Имя разметки: \"%s\""
 
-#: ../src/florence.c:662
+#: ../src/florence.c:655
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr "Версия разметки %s отличается от программной версии %s"
 
-#: ../src/florence.c:698
+#: ../src/florence.c:691
 msgid "Enable accessibility"
 msgstr "Включить доступность"
 
-#: ../src/florence.c:707
+#: ../src/florence.c:700
 msgid "gnome-session-save returned an error"
 msgstr ""
 
-#: ../src/florence.c:711
+#: ../src/florence.c:704
 msgid ""
 "at-spi registry daemon is not running. Events will be sent with Xtest "
 "instead and several functions are disabled, including auto-hide."
@@ -781,22 +826,22 @@ msgstr ""
 "Демон реестра at-spi не работает. События будут отправлены с XTEST и "
 "несколько функций будет не работать, в том числе автоматическое скрытие."
 
-#: ../src/florence.c:730
+#: ../src/florence.c:723
 msgid "Unable to allocate memory for florence"
 msgstr "Невозможно выделить память для florence"
 
-#: ../src/florence.c:734
+#: ../src/florence.c:727
 msgid "Old GLib version detected. Florence style will be working with a hack."
 msgstr ""
 "Обнаружена старая версия GLib. Стиль Florence будет работать со взломом."
 
-#: ../src/florence.c:748
+#: ../src/florence.c:741
 #, fuzzy
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."
 
-#: ../src/florence.c:752
+#: ../src/florence.c:745
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."
@@ -833,56 +878,56 @@ msgstr "Неизвестное размещение %s"
 msgid "Id %s was not found in layout file"
 msgstr "Id %s не найдено в файле разметки"
 
-#: ../src/layoutreader.c:451
+#: ../src/layoutreader.c:493
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr "Невозможно открыть файл %s, использую стандартный %s"
 
-#: ../src/layoutreader.c:463
+#: ../src/layoutreader.c:505
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr "%s является папкой и внутри не найдено файлов"
 
-#: ../src/layoutreader.c:472
+#: ../src/layoutreader.c:514
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Невозможно открыть файл %s."
 
-#: ../src/layoutreader.c:479
+#: ../src/layoutreader.c:521
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s не проверено по %s"
 
-#: ../src/layoutreader.c:480
+#: ../src/layoutreader.c:522
 #, c-format
 msgid "Using file %s"
 msgstr "Использую файл %s"
 
-#: ../src/layoutreader.c:488
+#: ../src/layoutreader.c:530
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Файл %s не содержит данных xml"
 
-#: ../src/main.c:82
+#: ../src/main.c:84
 #, c-format
 msgid "Florence version %s"
 msgstr "Версия Florence %s"
 
-#: ../src/main.c:84
+#: ../src/main.c:86
 msgid "XRECORD has been disabled at compile time."
 msgstr "XRECORD был отключен во время компиляции."
 
-#: ../src/main.c:157
+#: ../src/main.c:159
 #, c-format
 msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
 msgstr "%s - Florence - это простая виртуальная клавиатура для Gnome.\n"
 
-#: ../src/main.c:159
+#: ../src/main.c:161
 #, c-format
 msgid "Usage: %s [OPTION]...\n"
 msgstr "Использование: %s [ОПЦИЯ]...\n"
 
-#: ../src/main.c:160
+#: ../src/main.c:162
 #, fuzzy, c-format
 msgid ""
 "Options:\n"
@@ -909,47 +954,47 @@ msgstr ""
 "Написать об ошибке: <f.agrech@gmail.com>.\n"
 "Больше информации на <http://florence.sourceforge.net>.\n"
 
-#: ../src/settings.c:106
+#: ../src/settings.c:109
 #, c-format
 msgid "Settings/split: buffer overflow : %s"
 msgstr "Настройки/split: переполнение буфера: %s"
 
-#: ../src/settings.c:139 ../src/settings.c:324
+#: ../src/settings.c:142 ../src/settings.c:327
 #, c-format
 msgid "Unknown value type: %d"
 msgstr "Неизвестный тип значения : %d"
 
-#: ../src/settings.c:155
+#: ../src/settings.c:158
 #, c-format
 msgid "Settings/get_full_path: buffer overflow : %s/%s"
 msgstr "Настройки /get_full_path: переполнение буфера : %s/%s"
 
-#: ../src/settings.c:176
+#: ../src/settings.c:179
 #, c-format
 msgid "Unable to open file %s"
 msgstr "Невозможно открыть файл %s"
 
-#: ../src/settings.c:178
+#: ../src/settings.c:181
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Используется файл конфигурации %s"
 
-#: ../src/settings.c:200
+#: ../src/settings.c:203
 #, c-format
 msgid "Unable to save configuration to %s: %s"
 msgstr "Невозможно сохранить конфигурацию в %s: %s"
 
-#: ../src/settings.c:297
+#: ../src/settings.c:300
 #, c-format
 msgid "gconf error reading key %s"
 msgstr "Ошибка gconf чтения клавиши %s"
 
-#: ../src/settings.c:328
+#: ../src/settings.c:331
 #, c-format
 msgid "Error reading value for %s: %s"
 msgstr "Ошибка чтения значения для %s: %s"
 
-#: ../src/settings.c:335
+#: ../src/settings.c:338
 #, c-format
 msgid "No gconf value for %s. Using default."
 msgstr "Нет значения gconf для %s. Используется значение по умолчанию."
@@ -1046,12 +1091,12 @@ msgstr ""
 msgid "Xtest extension not compiled in and at-spi not working"
 msgstr "Xtest расширения не скомпилированы и at-spi не работает"
 
-#: ../src/style.c:73
+#: ../src/style.c:74
 #, c-format
 msgid "Unknown style color: %d"
 msgstr "Неизвестный стиль цвета: %d"
 
-#: ../src/style.c:74
+#: ../src/style.c:75
 msgid ""
 "You probably installed Florence in a location that is not in the gconf path. "
 "Please read the FAQ in Florence documentation to learn more about how to "
@@ -1061,58 +1106,68 @@ msgstr ""
 "Пожалуйста, прочтите FAQ в документации Florence, чтобы узнать больше о том, "
 "как правильно настроить gconf."
 
-#: ../src/style.c:91
+#: ../src/style.c:92
 #, c-format
 msgid "can't parse color %s"
 msgstr "невозможно анализирова цвет %s"
 
-#: ../src/style.c:112
+#: ../src/style.c:113
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Не удалось выделить память для чтения css буфера"
 
-#: ../src/style.c:165
+#: ../src/style.c:166
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr "Не хватает памяти. Некоторые символы могут отображаться неправильно."
 
-#: ../src/style.c:167
+#: ../src/style.c:168
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "Произошла ошибка cairo: %d"
 
-#: ../src/style.c:224 ../src/style.c:489
+#: ../src/style.c:225 ../src/style.c:508
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Невозможно проанализировать svg из файла: %s"
 
-#: ../src/style.c:225
+#: ../src/style.c:226
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Плохой символ: должен иметь svg или метку :%s"
 
-#: ../src/style.c:282
+#: ../src/style.c:287
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "Неизвестен наклон для шрифта %s: %d"
 
-#: ../src/style.c:354
+#: ../src/style.c:373
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Нет стиля символа для дейсткия клавиши %d"
 
-#: ../src/style.c:377
+#: ../src/style.c:396
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr "Невозможно проанализировать svg из файла: svg=\"%s\" ошибка=\"%s\""
 
-#: ../src/style.c:381
+#: ../src/style.c:400
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[новая форма] имя=%s svg=\"%s\""
 
-#: ../src/style.c:411
+#: ../src/style.c:430
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "Форма %s не существует для выбранного стиля."
+
+#: ../src/style.c:578
+#, c-format
+msgid "An error occured while playing sound: %s"
+msgstr ""
+
+#: ../src/style.c:670
+#, fuzzy, c-format
+msgid "Unknown sound type: %d"
+msgstr "Неизвестный тип значения : %d"
 
 #: ../src/trace.c:115
 #, fuzzy, c-format
@@ -1210,7 +1265,7 @@ msgstr ""
 "вместе с этой программой, а если нет, напишите в Free Software Foundation,\n"
 "Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA."
 
-#: ../src/trayicon.c:82 ../src/trayicon.c:85 ../src/settings-window.c:436
+#: ../src/trayicon.c:82 ../src/trayicon.c:85 ../src/settings-window.c:448
 #, c-format
 msgid "Unable to open %s"
 msgstr "Невозможно открыть %s"
@@ -1295,51 +1350,51 @@ msgstr "Не удалось получить компонент из досту�
 msgid "unable to allocate memory for string"
 msgstr "Не удалось выделить память для строки"
 
-#: ../src/key.c:63
+#: ../src/key.c:69
 #, c-format
 msgid "Unknown action key type %s"
 msgstr "Клавиша с действием неизвестного типа %s"
 
-#: ../src/key.c:167
+#: ../src/key.c:173
 msgid "Unreachable code"
 msgstr "Недоступный код"
 
-#: ../src/key.c:193
+#: ../src/key.c:199
 #, c-format
 msgid "key %p has no modification."
 msgstr "клавиша %p не имеет модификации."
 
-#: ../src/key.c:291
+#: ../src/key.c:308
 #, c-format
 msgid "unknown action key type pressed = %d"
 msgstr "нажата клавиша неизвестного типа = %d"
 
-#: ../src/key.c:294
+#: ../src/key.c:311
 msgid "unknown key type pressed."
 msgstr "нажата клавиша неизвестного типа."
 
-#: ../src/key.c:296
+#: ../src/key.c:313
 msgid "pressed key has no action associated."
 msgstr "нажатая клавиша не связана с каким-либо действием."
 
-#: ../src/key.c:332
+#: ../src/key.c:360
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr "освобождена клавиша неизвестного типа = %d"
 
-#: ../src/key.c:335
+#: ../src/key.c:363
 msgid "unknown key type released."
 msgstr "освобождена клавиша неизвестного типа."
 
-#: ../src/key.c:337
+#: ../src/key.c:365
 msgid "released key has no action associated."
 msgstr "освобождённая клавиша не связана с каким-либо действием."
 
-#: ../src/key.c:405
+#: ../src/key.c:433
 msgid "unknown key type to draw."
 msgstr "неизвестный тип клавиши для отрисовки"
 
-#: ../src/key.c:437
+#: ../src/key.c:465
 #, c-format
 msgid "unknown key type: %d"
 msgstr "неизвестный тип клавиш: %d"
@@ -1370,29 +1425,29 @@ msgstr "Переход"
 msgid "Unable to create preview for style %s"
 msgstr "Невозможно создать предварительный просмотр для стиля %s"
 
-#: ../src/settings-window.c:381
+#: ../src/settings-window.c:388
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "неизвестный тип настройки: %d"
 
-#: ../src/settings-window.c:432
+#: ../src/settings-window.c:444
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Невозможно открыть %s: %s"
 
-#: ../src/settings-window.c:537
+#: ../src/settings-window.c:549
 msgid "Can't get gconf value %"
 msgstr "Не удалось получить значение gconf %"
 
-#: ../src/settings-window.c:648
+#: ../src/settings-window.c:676
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: ../src/settings-window.c:649
+#: ../src/settings-window.c:677
 msgid "Discard changes?"
 msgstr "Отменить изменения?"
 
-#: ../src/settings-window.c:703
+#: ../src/settings-window.c:731
 #, c-format
 msgid "Couldn't load builder file: %s"
 msgstr "Не удалось загрузить файл компоновки: %s"
