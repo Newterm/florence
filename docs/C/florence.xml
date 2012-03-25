@@ -268,6 +268,9 @@ A Timer-based auto-click input method is available to help disabled people havin
 			<listitem><para>Symbol colour: set the colour of the symbol or text printed on keys.</para></listitem>
 			<listitem><para>Outline colour: set the colour surronding the key symbols. This color is used to improve visibility of the symbols. It should contrast with the symbol color.</para></listitem>
 			<listitem><para>Focus zoom: set the scaling factor of the focused key. Useful for visualy impaired people.</para></listitem>
+			<listitem><para>Enable sound: when this box is checked, the keyboard generates sound feedback when a key is hovered, pressed or released.</para></listitem>
+			<listitem><para>Use system font: when this box is checked, the labels on the keys use the default system font. When this box is unchecked, the font selected below is used instead.</para></listitem>
+			<listitem><para>Keyboard font: With this parameter you can select the font used to draw key labels and its size.</para></listitem>
 		</orderedlist>
 		</sect3><sect3><title>Window configuration</title>
 		<figure id="window">
