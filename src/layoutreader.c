@@ -479,6 +479,7 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 	xmlRelaxNGPtr rng;
 	xmlRelaxNGValidCtxtPtr validrng;
         gchar *layoutfile=NULL;
+        gchar *layoutdir=NULL;
 	gchar *tmp=NULL;
 	struct stat stat;
 	int file_error=0;
@@ -494,6 +495,20 @@ struct layout *layoutreader_new(char *layoutname, char *defaultname, char *relax
 			layoutfile, defaultname);
 		layoutfile=(gchar *)defaultname;
 	}
+	
+	/* get basepath */
+	lstat(layoutfile, &stat);
+	if (S_ISDIR(stat.st_mode)) chdir(layoutfile);
+	else if (strchr(layoutfile,'/')) {
+		layoutdir=layoutfile;
+		while (strchr(layoutdir+1,'/')) {
+			layoutdir=strchr(layoutdir+1,'/');
+		}
+		layoutdir=g_strndup(layoutfile, layoutdir-layoutfile);
+		chdir(layoutfile);
+		g_free(layoutdir);
+	}
+
 	/* if file is a directory, try to find a matching file in the directory */
 	if (!lstat(layoutfile, &stat) && S_ISDIR(stat.st_mode)) {
 		tmp=g_strdup_printf("%s/florence.style", layoutfile);

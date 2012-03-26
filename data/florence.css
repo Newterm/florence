@@ -1,7 +1,7 @@
 .shape {
 	fill: @SHAPE_COLOR@;
 	stroke: @BORDER_COLOR@;
-	stroke-opacity: 35%;
+	stroke-opacity: 0.35;
 	stroke-width: 4px;
 }
 

@@ -110,6 +110,7 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 	gchar *ret=NULL;
 	gchar *cur, *cur2, *color;
 
+	xmlNewProp(style, (xmlChar *)"type", (xmlChar *)"text/css");
 	if (!line) flo_warn(_("Unable to allocate memory for css read buffer"));
 	if (line && in) while ((line=fgets(line, 1024, in))) {
 		cur=cur2=line;
