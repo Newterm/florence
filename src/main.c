@@ -73,7 +73,6 @@ int main (int argc, char **argv)
 	gtk_init(&argc, &argv);
 	gconf_init(argc, argv, NULL);
 	g_type_init();
-	gst_init(&argc, &argv);
 
 	program_name=argv[0];
 	config=decode_switches (argc, argv);
@@ -85,6 +84,8 @@ int main (int argc, char **argv)
 #ifndef ENABLE_XRECORD
 	flo_info(_("XRECORD has been disabled at compile time."));
 #endif
+
+	gst_init(&argc, &argv);
 
 	if (config&1) {
 		settings_init(TRUE, config_file);
