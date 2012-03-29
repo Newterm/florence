@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Florence Gnome virtual keyboard 0.5.2\n"
+"Project-Id-Version: Florence Gnome virtual keyboard 0.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-24 16:04+0000\n"
-"PO-Revision-Date: 2012-03-24 16:04+0000\n"
+"POT-Creation-Date: 2012-03-29 17:46+0000\n"
+"PO-Revision-Date: 2012-03-29 17:47+0000\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "Language: fr\n"
@@ -894,35 +894,35 @@ msgstr "Placement inconnu %s"
 msgid "Id %s was not found in layout file"
 msgstr "L'identifiant %s n'a pas été trouvé dans le fichier d'agencement"
 
-#: ../src/layoutreader.c:493
+#: ../src/layoutreader.c:494
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr ""
 "Impossible d'ouvrir le fichier %s en lecture, utilisation du fichier par "
 "défaut %s"
 
-#: ../src/layoutreader.c:505
+#: ../src/layoutreader.c:520
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 "%s est un répertoire et aucun fichier correspondant n'a été trouvé dedans"
 
-#: ../src/layoutreader.c:514
+#: ../src/layoutreader.c:529
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Echec d'ouverture du fichier %s."
 
-#: ../src/layoutreader.c:521
+#: ../src/layoutreader.c:536
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s n'est pas validé par %s"
 
-#: ../src/layoutreader.c:522
+#: ../src/layoutreader.c:537
 #, c-format
 msgid "Using file %s"
 msgstr "Utilisation du fichier %s"
 
-#: ../src/layoutreader.c:530
+#: ../src/layoutreader.c:545
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Le fichier %s ne contient pas de donnée xml"
@@ -1134,64 +1134,64 @@ msgstr ""
 msgid "can't parse color %s"
 msgstr "Echec d'analyse de la couleur %s"
 
-#: ../src/style.c:113
+#: ../src/style.c:114
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
-#: ../src/style.c:166
+#: ../src/style.c:167
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr ""
 "Manque de mémoire pour afficher les symboles. Certains symboles pourraient "
 "ne pas être affichés correctement"
 
-#: ../src/style.c:168
+#: ../src/style.c:169
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "Une erreur de cairo est survenue: %d"
 
-#: ../src/style.c:225 ../src/style.c:508
+#: ../src/style.c:226 ../src/style.c:509
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Echec d'analyse du SVG depuis le ficher d'agencement: %s"
 
-#: ../src/style.c:226
+#: ../src/style.c:227
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Mauvais symbole: il devrait avoir soit un svg, soit un label: %s"
 
-#: ../src/style.c:287
+#: ../src/style.c:288
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "dérivation de la police %s inconnu: %d"
 
-#: ../src/style.c:373
+#: ../src/style.c:374
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Aucun symbole trouvé pour la touche d'acion %d dans le style"
 
-#: ../src/style.c:396
+#: ../src/style.c:397
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Echec de l'analyse du svg depuis le ficher d'agencement: svg=\"%s\" erreur="
 "\"%s\""
 
-#: ../src/style.c:400
+#: ../src/style.c:401
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nouvelle forme] nom=%s svg=\"%s\""
 
-#: ../src/style.c:430
+#: ../src/style.c:431
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "La forme %s n'existe pas pour le style sélectionné."
 
-#: ../src/style.c:578
+#: ../src/style.c:579
 #, c-format
 msgid "An error occured while playing sound: %s"
 msgstr "Erreur en jouant le son: %s"
 
-#: ../src/style.c:670
+#: ../src/style.c:671
 #, c-format
 msgid "Unknown sound type: %d"
 msgstr "type de son inconnu: %s"
@@ -1557,6 +1557,19 @@ msgstr "Touche %p (type %d): Evenement %d reçu : Changement d'état %d vers %d"
 #, c-format
 msgid "FSM state errorr: state=%d"
 msgstr "Erreur d'état de la FSM: état=%d"
+
+#: ../src/service.c:59
+#, c-format
+msgid "Unknown dbus method called: <%s>"
+msgstr "Méthode dbus inconnue: <%s>"
+
+#: ../src/service.c:86
+msgid "Service name lost."
+msgstr "Nom de service perdu."
+
+#: ../src/service.c:95
+msgid "Unable to allocate memory for dbus service"
+msgstr "Echec d'allocation de la mémoire pour le service dbus"
 
 #~ msgid ""
 #~ "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"

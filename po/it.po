@@ -5,9 +5,9 @@
 # François Agrech <f.agrech@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Florence Gnome virtual keyboard 0.5.2\n"
+"Project-Id-Version: Florence Gnome virtual keyboard 0.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-24 16:04+0000\n"
+"POT-Creation-Date: 2012-03-29 17:46+0000\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: Pietro Pilolli\n"
 "Language-Team: Italian\n"
@@ -887,35 +887,35 @@ msgstr "Locazione sconosciuta %s"
 msgid "Id %s was not found in layout file"
 msgstr ""
 
-#: ../src/layoutreader.c:493
+#: ../src/layoutreader.c:494
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr ""
 "Impossibile aprire il file %s in lettura, quindi utilizzo il default %s"
 
-#: ../src/layoutreader.c:505
+#: ../src/layoutreader.c:520
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr ""
 "%s è una directory e non è stato trovato alcun file corrispondente "
 "all'interno di essa"
 
-#: ../src/layoutreader.c:514
+#: ../src/layoutreader.c:529
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Impossibile aprire il file %s."
 
-#: ../src/layoutreader.c:521
+#: ../src/layoutreader.c:536
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s non valida contro %s"
 
-#: ../src/layoutreader.c:522
+#: ../src/layoutreader.c:537
 #, c-format
 msgid "Using file %s"
 msgstr "Utilizzo il file %s"
 
-#: ../src/layoutreader.c:530
+#: ../src/layoutreader.c:545
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Il file%s non contiene dati xml"
@@ -1125,64 +1125,64 @@ msgstr ""
 msgid "can't parse color %s"
 msgstr "Non posso parsificare il colore %s"
 
-#: ../src/style.c:113
+#: ../src/style.c:114
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossibile allocare memoria per il buffer in lettura del css"
 
-#: ../src/style.c:166
+#: ../src/style.c:167
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr ""
 "Manca memoria. Alcuni simboli potrebbero essere visualizzati non "
 "correttamente"
 
-#: ../src/style.c:168
+#: ../src/style.c:169
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "E' capitato un errore di cairo: %d"
 
-#: ../src/style.c:225 ../src/style.c:508
+#: ../src/style.c:226 ../src/style.c:509
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Impossibile parsificare il file svg specificato nel file di layout: %s"
 
-#: ../src/style.c:226
+#: ../src/style.c:227
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Simbolo errato: non dovresti avere assieme svg e etichette: %s"
 
-#: ../src/style.c:287
+#: ../src/style.c:288
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "Inclinazione del font  %s sconosciuta: %d"
 
-#: ../src/style.c:373
+#: ../src/style.c:374
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Nessun simbolo trovato per il tasto d'azione %d"
 
-#: ../src/style.c:396
+#: ../src/style.c:397
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Impossibile parsificare il file svg dal file di layout svg=\"%s\" errore=\"%s"
 "\""
 
-#: ../src/style.c:400
+#: ../src/style.c:401
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nuova forma] nome=%s svg=\"%s\""
 
-#: ../src/style.c:430
+#: ../src/style.c:431
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "La forma %s per lo stile selezionato non esiste."
 
-#: ../src/style.c:578
+#: ../src/style.c:579
 #, c-format
 msgid "An error occured while playing sound: %s"
 msgstr ""
 
-#: ../src/style.c:670
+#: ../src/style.c:671
 #, fuzzy, c-format
 msgid "Unknown sound type: %d"
 msgstr "Valore inserito sconosciuto: %s"
@@ -1548,6 +1548,20 @@ msgstr "Ricevuto evento %d  %d (type %d). Passo dallo stato %d a %d"
 #, fuzzy, c-format
 msgid "FSM state errorr: state=%d"
 msgstr "Errore nella FSM. codice del tasto=%d ; evento=%d ; stato=%d"
+
+#: ../src/service.c:59
+#, c-format
+msgid "Unknown dbus method called: <%s>"
+msgstr ""
+
+#: ../src/service.c:86
+msgid "Service name lost."
+msgstr ""
+
+#: ../src/service.c:95
+#, fuzzy
+msgid "Unable to allocate memory for dbus service"
+msgstr "Impossibile allocare la memoria per la vista"
 
 #~ msgid "Auto click"
 #~ msgstr "Click automatico"

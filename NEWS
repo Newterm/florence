@@ -1,22 +1,13 @@
-This release introduces the touch screen input method.
-There has been some improvements to the ramble input method.
-Modifier (Alt, Shift, Ctrl, etc...) keys + click now works.
-Florence strings has been partially translated in Italian by the Ardesia team:
-	http://code.google.com/p/ardesia/
-Some other minor improvements have been added and a lot of bugs have been fixed.
+This release introduces some interface improvements:
+There is now a sound feedback when pressing or releasing keys and the police is configurable.
+A new dbus interface has been added to control the keyboard from other processes.
 
 Changelog:
 
-2012-02-08 François Agrech <f.agrech@gmail.com>
-	* Version 0.5.2
+2012-03-29 François Agrech <f.agrech@gmail.com>
+	* Version 0.5.3
 	* A lot of bug fixes.
-	* Ramble mode improvements.
-	* Add libpanelapplet-4 support.
-	* Add italian partial translation.
-	* Fix xrecord for hardware keyboard feedback.
-	* Enable xrecord by default.
-	* New trace level: hidebug.
-	* Modifier(Alt/Ctrl/Shift...)+click now works.
-	* Added touch input method.
-	* Added man pages
+	* Add dbus interface to control the keyboard.
+	* Add sound feedback.
+	* Make keyboard police configurable.
 

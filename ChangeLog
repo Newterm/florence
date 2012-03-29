@@ -207,3 +207,10 @@
 	* Added touch input method.
 	* Added man pages
 
+2012-03-29 François Agrech <f.agrech@gmail.com>
+	* Version 0.5.3
+	* A lot of bug fixes.
+	* Add dbus interface to control the keyboard.
+	* Add sound feedback.
+	* Make keyboard police configurable.
+

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-24 16:04+0000\n"
+"POT-Creation-Date: 2012-03-29 17:46+0000\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -878,32 +878,32 @@ msgstr "Неизвестное размещение %s"
 msgid "Id %s was not found in layout file"
 msgstr "Id %s не найдено в файле разметки"
 
-#: ../src/layoutreader.c:493
+#: ../src/layoutreader.c:494
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr "Невозможно открыть файл %s, использую стандартный %s"
 
-#: ../src/layoutreader.c:505
+#: ../src/layoutreader.c:520
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr "%s является папкой и внутри не найдено файлов"
 
-#: ../src/layoutreader.c:514
+#: ../src/layoutreader.c:529
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Невозможно открыть файл %s."
 
-#: ../src/layoutreader.c:521
+#: ../src/layoutreader.c:536
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s не проверено по %s"
 
-#: ../src/layoutreader.c:522
+#: ../src/layoutreader.c:537
 #, c-format
 msgid "Using file %s"
 msgstr "Использую файл %s"
 
-#: ../src/layoutreader.c:530
+#: ../src/layoutreader.c:545
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Файл %s не содержит данных xml"
@@ -1111,60 +1111,60 @@ msgstr ""
 msgid "can't parse color %s"
 msgstr "невозможно анализирова цвет %s"
 
-#: ../src/style.c:113
+#: ../src/style.c:114
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Не удалось выделить память для чтения css буфера"
 
-#: ../src/style.c:166
+#: ../src/style.c:167
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr "Не хватает памяти. Некоторые символы могут отображаться неправильно."
 
-#: ../src/style.c:168
+#: ../src/style.c:169
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "Произошла ошибка cairo: %d"
 
-#: ../src/style.c:225 ../src/style.c:508
+#: ../src/style.c:226 ../src/style.c:509
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Невозможно проанализировать svg из файла: %s"
 
-#: ../src/style.c:226
+#: ../src/style.c:227
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Плохой символ: должен иметь svg или метку :%s"
 
-#: ../src/style.c:287
+#: ../src/style.c:288
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "Неизвестен наклон для шрифта %s: %d"
 
-#: ../src/style.c:373
+#: ../src/style.c:374
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Нет стиля символа для дейсткия клавиши %d"
 
-#: ../src/style.c:396
+#: ../src/style.c:397
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr "Невозможно проанализировать svg из файла: svg=\"%s\" ошибка=\"%s\""
 
-#: ../src/style.c:400
+#: ../src/style.c:401
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[новая форма] имя=%s svg=\"%s\""
 
-#: ../src/style.c:430
+#: ../src/style.c:431
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "Форма %s не существует для выбранного стиля."
 
-#: ../src/style.c:578
+#: ../src/style.c:579
 #, c-format
 msgid "An error occured while playing sound: %s"
 msgstr ""
 
-#: ../src/style.c:670
+#: ../src/style.c:671
 #, fuzzy, c-format
 msgid "Unknown sound type: %d"
 msgstr "Неизвестный тип значения : %d"
@@ -1523,6 +1523,20 @@ msgstr "Событие %d получено :тип %d. Переход из со�
 #, fuzzy, c-format
 msgid "FSM state errorr: state=%d"
 msgstr "FSM ошибка состояния. событие =%d ; состояние=%d"
+
+#: ../src/service.c:59
+#, c-format
+msgid "Unknown dbus method called: <%s>"
+msgstr ""
+
+#: ../src/service.c:86
+msgid "Service name lost."
+msgstr ""
+
+#: ../src/service.c:95
+#, fuzzy
+msgid "Unable to allocate memory for dbus service"
+msgstr "Не удалось выделить память для просмотра"
 
 #~ msgid ""
 #~ "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs http://"

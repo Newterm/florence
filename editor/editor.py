@@ -574,7 +574,7 @@ class Editor:
 		str = str + "\t<name>Unnamed</name>\n"
 		str = str + "\t<author>Anonymous</author>\n"
 		str = str + "\t<date>0000-00-00</date>\n"
-		str = str + "\t<florence_version>0.5.2</florence_version>\n"
+		str = str + "\t<florence_version>0.5.3</florence_version>\n"
 		str = str + "</informations>\n"
 		str = str + self.exts.__str__()
 		str = str + "</layout>"
