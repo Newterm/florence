@@ -55,7 +55,7 @@ gint tools_dialog(const gchar *title, GtkWindow *parent,
 	gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area(GTK_DIALOG(dialog))), label);
 	gtk_widget_show_all(dialog);
 	ret=gtk_dialog_run(GTK_DIALOG(dialog));
-	gtk_object_destroy(GTK_OBJECT(dialog));
+	g_object_unref(G_OBJECT(dialog));
 	END_FUNC
 	return ret;
 }

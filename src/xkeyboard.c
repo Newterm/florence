@@ -318,8 +318,10 @@ struct xkeyboard *xkeyboard_new()
 	}
 
 	xkeyboard_layout(xkeyboard);
-	XkbSelectEvents(GDK_DISPLAY(), XkbUseCoreKbd, XkbNewKeyboardNotifyMask, XkbNewKeyboardNotifyMask);
-	XkbSelectEventDetails(GDK_DISPLAY(), XkbUseCoreKbd, XkbStateNotify, XkbAllStateComponentsMask, XkbGroupStateMask);
+	XkbSelectEvents(gdk_x11_display_get_xdisplay(gdk_display_get_default()),
+		XkbUseCoreKbd, XkbNewKeyboardNotifyMask, XkbNewKeyboardNotifyMask);
+	XkbSelectEventDetails(gdk_x11_display_get_xdisplay(gdk_display_get_default()),
+		XkbUseCoreKbd, XkbStateNotify, XkbAllStateComponentsMask, XkbGroupStateMask);
 	gdk_window_add_filter(NULL, xkeyboard_event_handler, xkeyboard);
 
 	/* get the modifier map from xkb */

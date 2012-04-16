@@ -65,7 +65,6 @@ struct view {
 	struct style *style; /* Do it with style */
 	cairo_surface_t *background; /* contains the background image of florence */
 	cairo_surface_t *symbols; /* contains the symbols image of florence */
-	GdkRegion *redraw; /* region that needs to be redrawn */
 	gboolean hand_cursor; /* true when the cursor is a hand */
 #ifndef APPLET
 	gulong configure_handler; /* configure signal handler id */

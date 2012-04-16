@@ -23,8 +23,6 @@
 #include "trace.h"
 #include "service.h"
 
-#if GTK_CHECK_VERSION(2,26,0)
-
 /* Service interface */
 static const gchar service_introspection[]=
 	"<node>"
@@ -35,6 +33,7 @@ static const gchar service_introspection[]=
 	"      <arg type='u' name='y' direction='in'/>"
 	"    </method>"
 	"    <method name='hide'/>"
+	"    <method name='terminate'/>"
 	"  </interface>"
 	"</node>";
 
@@ -56,6 +55,7 @@ static void service_method_call (GDBusConnection *connection, const gchar *sende
 		g_variant_get(parameters, "(uu)", &x, &y);
 		gtk_window_move(GTK_WINDOW(view_window_get(service->view)), x, y);
 	} else if (g_strcmp0(method_name, "hide")==0) view_hide(service->view);
+	else if (g_strcmp0(method_name, "terminate")==0) service->quit();
 	else flo_error(_("Unknown dbus method called: <%s>"), method_name);
 	g_dbus_method_invocation_return_value(invocation, NULL);
 	END_FUNC
@@ -76,6 +76,7 @@ static void service_on_bus_acquired (GDBusConnection *connection, const gchar *n
 static void service_on_name_acquired (GDBusConnection *connection, const gchar *name, gpointer user_data)
 {
 	START_FUNC
+	flo_info(_("DBus name aquired: %s"), name);
 	END_FUNC
 }
 
@@ -88,7 +89,7 @@ static void service_on_name_lost (GDBusConnection *connection, const gchar *name
 }
 
 /* Create a service object */
-struct service *service_new(struct view *view)
+struct service *service_new(struct view *view, GCallback quit)
 {
 	START_FUNC
 	struct service *service=(struct service *)g_malloc(sizeof(struct service));
@@ -99,6 +100,7 @@ struct service *service_new(struct view *view)
 		G_BUS_NAME_OWNER_FLAGS_NONE, service_on_bus_acquired, service_on_name_acquired,
 		service_on_name_lost, service, NULL);
 	service->view=view;
+	service->quit=quit;
 	END_FUNC
 	return service;
 }
@@ -113,4 +115,10 @@ void service_free(struct service *service)
 	END_FUNC
 }
 
-#endif
+/* Send the terminate signal */
+void service_terminate(struct service *service)
+{
+//	g_dbus_connection_emit_signal(service->connection, NULL,
+	flo_info("terminate");
+}
+

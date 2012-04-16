@@ -37,6 +37,11 @@
 #define AT_SPI
 #include <cspi/spi.h>
 #endif
+#include <cairo-xlib.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/shape.h>
+
 
 /* bring the window back to front every seconds */
 #define FLO_TO_TOP_TIMEOUT 1000
@@ -44,8 +49,8 @@
 /* exit signal */
 static int flo_exit=FALSE;
 
-/* Called on destroy event (systray quit or close window) */
-void flo_destroy (void)
+/* terminate the program */
+void flo_terminate(void)
 {
 	START_FUNC
 #ifndef APPLET
@@ -55,13 +60,23 @@ void flo_destroy (void)
 	END_FUNC
 }
 
+/* Called on destroy event (systray quit or close window) */
+void flo_destroy (GtkWidget *widget, gpointer user_data)
+{
+	START_FUNC
+	struct florence *florence=(struct florence *)user_data;
+	service_terminate(florence->service);
+	flo_terminate();
+	END_FUNC
+}
+
 #ifdef AT_SPI
 /* Called to destroy the icon */
 void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
-	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+	if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
 	florence->obj=NULL;
 	florence->icon=NULL;
 	END_FUNC
@@ -72,7 +87,7 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
-	if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+	if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
 	florence->icon=NULL;
 	view_show(florence->view, florence->obj);
 	if (florence->obj) {
@@ -94,7 +109,9 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	RsvgHandle *handle;
 	GError *error=NULL;
 	gdouble w, h;
-	GdkBitmap *mask=NULL;
+	cairo_surface_t *mask=NULL;
+	Pixmap shape;
+	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
 
 	context=gdk_cairo_create(gtk_widget_get_window(window));
 	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
@@ -104,15 +121,18 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	else {
 		w=settings_double_get("window/scalex")*2;
 		h=settings_double_get("window/scaley")*2;
-		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, w, h, 1)))
-			flo_fatal(_("Unable to create mask"));
-		mask_context=gdk_cairo_create(mask);
+		shape=XCreatePixmap(disp, GDK_WINDOW_XID(gtk_widget_get_window(window)), w, h, 1);
+		mask=cairo_xlib_surface_create_for_bitmap(disp, shape,
+			DefaultScreenOfDisplay(disp), w, h);
+		mask_context=cairo_create(mask);
 		cairo_set_source_rgba(mask_context, 0.0, 0.0, 0.0, 0.0);
 		cairo_set_operator(mask_context, CAIRO_OPERATOR_SOURCE);
 		cairo_paint(mask_context);
 		cairo_set_operator(mask_context, CAIRO_OPERATOR_OVER);
 		style_render_svg(mask_context, handle, w, h, TRUE, NULL);
-		gdk_window_shape_combine_mask(gtk_widget_get_window(window), mask, 0, 0);
+		XShapeCombineMask(disp, GDK_WINDOW_XID(gtk_widget_get_window(window)),
+			ShapeBounding, 0, 0, cairo_xlib_surface_get_drawable(mask), ShapeSet);
+
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 100.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
@@ -206,7 +226,7 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 	}
 	if (hide) {
 		view_hide(florence->view);
-		if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+		if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
 #ifdef ENABLE_AT_SPI2
 		if (florence->obj) g_object_unref(florence->obj);
 #else
@@ -347,7 +367,7 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 		}
 #endif
 		view_show(florence->view, NULL);
-		if (florence->icon) gtk_object_destroy(GTK_OBJECT(florence->icon));
+		if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
 #ifdef ENABLE_AT_SPI
 		if (florence->obj) Accessible_unref(obj);
 #endif
@@ -755,7 +775,8 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	status_view_set(florence->status, florence->view);
 	flo_start_keep_on_top(florence, settings_get_bool("window/keep_on_top"));
 
-	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "destroy", G_CALLBACK(flo_destroy), NULL);
+	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "destroy",
+		G_CALLBACK(flo_destroy), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "motion-notify-event",
 		G_CALLBACK(flo_mouse_move_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "leave-notify-event",
@@ -777,9 +798,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	settings_changecb_register("layout/style", flo_layout_reload, florence);
 	settings_changecb_register("layout/file", flo_layout_reload, florence);
 
-#if GTK_CHECK_VERSION(2,26,0)
-	florence->service=service_new(florence->view);
-#endif
+	florence->service=service_new(florence->view, flo_terminate);
 	END_FUNC
 	return florence;
 }
@@ -809,9 +828,7 @@ void flo_free(struct florence *florence)
 	if (florence->ramble) ramble_free(florence->ramble);
 	florence->ramble=NULL;
 #endif
-#if GTK_CHECK_VERSION(2,26,0)
 	if (florence->service) service_free(florence->service);
-#endif
 	g_free(florence);
 	xmlCleanupParser();
 	xmlMemoryDump();

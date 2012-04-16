@@ -25,11 +25,6 @@
 #include "settings.h"
 #include <gtk/gtk.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
-#ifdef ENABLE_HELP
-#if !GTK_CHECK_VERSION(2,14,0)
-	#include <libgnome/gnome-help.h>
-#endif
-#endif
 #ifdef ENABLE_AT_SPI
 #define AT_SPI
 #endif
@@ -225,7 +220,7 @@ struct trayicon *trayicon_new(struct view *view, GCallback quit_cb)
 	g_signal_connect(G_OBJECT(trayicon->tray_icon), "popup-menu",
 		G_CALLBACK(trayicon_on_menu), (gpointer)trayicon);
 	gtk_status_icon_set_from_icon_name(trayicon->tray_icon, "florence");
-	gtk_status_icon_set_tooltip(trayicon->tray_icon, _("Florence Virtual Keyboard"));
+	gtk_status_icon_set_tooltip_text(trayicon->tray_icon, _("Florence Virtual Keyboard"));
 	gtk_status_icon_set_visible(trayicon->tray_icon, TRUE);
 
 #ifdef ENABLE_NOTIFICATION

@@ -22,18 +22,20 @@
 #include <gio/gio.h>
 #include "view.h"
 
-#if GTK_CHECK_VERSION(2,26,0)
-
 /* Service object */
 struct service {
+	GDBusConnection *connection;
 	guint owner_id;
 	GDBusNodeInfo *introspection_data;
 	struct view *view;
+	GCallback quit; /* Callback called to quit the applications (when the terminate method is called) */
 };
 
+/* Send the terminate signal */
+void service_terminate(struct service *service);
+
 /* Create a service object */
-struct service *service_new(struct view *view);
+struct service *service_new(struct view *view, GCallback quit);
 /* Destroy a service object */
 void service_free(struct service *service);
 
-#endif

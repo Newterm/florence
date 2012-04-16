@@ -29,10 +29,6 @@
 #include <glib/gprintf.h>
 #ifdef ENABLE_HELP
 	#include <gdk/gdkkeysyms.h>
-	#include <gtk/gtkversion.h>
-	#if !GTK_CHECK_VERSION(2,14,0)
-		#include <libgnome/gnome-help.h>
-	#endif
 #endif
 #include "settings.h"
 #include "trace.h"
@@ -42,11 +38,7 @@
 #include "tools.h"
 #include "settings-window.h"
 
-#if GTK_CHECK_VERSION(2,12,0)
 #define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_DISCARD
-#else
-#define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_CANCEL
-#endif
 
 static struct settings_window *settings_window=NULL;
 void settings_window_extension(GtkToggleButton *button, gchar *name);
@@ -438,16 +430,10 @@ void settings_window_help(GtkWidget *widget, GdkEventKey *event, gpointer user_d
 	START_FUNC
 #ifdef ENABLE_HELP
 	GError *error=NULL;
-	if (event->keyval==GDK_F1) {
-#if GTK_CHECK_VERSION(2,14,0)
+	if (event->keyval==GDK_KEY_F1) {
 		gtk_show_uri(NULL, "ghelp:florence?config", gtk_get_current_event_time(), &error);
 		if (error) flo_error(_("Unable to open %s: %s"), "ghelp:florence?config",
 			error->message);
-#else
-		if (!gnome_help_display_uri("ghelp:florence?config", NULL)) {
-			flo_error(_("Unable to open %s"), "ghelp:florence?config");
-		}
-#endif
 	}
 #endif
 	END_FUNC
@@ -684,10 +670,10 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 	closed=TRUE;
 	if (settings_window->style_list) g_object_unref(G_OBJECT(settings_window->style_list)); 
 	settings_window->style_list=NULL;
-	if (window) gtk_object_destroy(GTK_OBJECT(window));
+	if (window) g_object_unref(G_OBJECT(window));
 	if (settings_window->gconfchangeset) gconf_change_set_unref(settings_window->gconfchangeset);
 	if (settings_window->rollback) gconf_change_set_unref(settings_window->rollback);
-	if (settings_window->gtk_exit) gtk_exit(0);
+	if (settings_window->gtk_exit) exit(0);
 	closed=FALSE;
 	END_FUNC
 }

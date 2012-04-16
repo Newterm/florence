@@ -28,6 +28,11 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 #include <cairo/cairo-xlib.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/extensions/shape.h>
+#include <X11/extensions/Xcomposite.h>
+
 
 /* Show the view next to the accessible object if specified. */
 #ifdef AT_SPI
@@ -320,27 +325,33 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 void view_create_window_mask(struct view *view)
 {
 	START_FUNC
-	GdkBitmap *mask=NULL;
+	Pixmap shape;
+	cairo_surface_t *mask=NULL;
 	cairo_t *cairoctx=NULL;
+	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
 
 	if (settings_get_bool("window/transparent") && (!view->composite)) {
-		if (!(mask=(GdkBitmap*)gdk_pixmap_new(NULL, view->width, view->height, 1)))
-			flo_fatal(_("Unable to create mask"));
-		cairoctx=gdk_cairo_create(mask);
+		shape=XCreatePixmap(disp, GDK_WINDOW_XID(gtk_widget_get_window(GTK_WIDGET(view->window))),
+			view->width, view->height, 1);
+		mask=cairo_xlib_surface_create_for_bitmap(disp, shape,
+			DefaultScreenOfDisplay(disp), view->width, view->height);
+		cairoctx=cairo_create(mask);
 		view_background_draw(view, cairoctx);
 		cairo_set_source_rgba(cairoctx, 0.0, 0.0, 0.0, 0.0);
 		cairo_set_operator(cairoctx, CAIRO_OPERATOR_SOURCE);
 		cairo_paint(cairoctx);
 		cairo_set_source_surface(cairoctx, view->background, 0, 0);
 		cairo_paint(cairoctx);
-		gdk_window_shape_combine_mask(GTK_WIDGET(view->window)->window, mask, 0, 0);
+		XShapeCombineMask(disp, GDK_WINDOW_XID(gtk_widget_get_window(GTK_WIDGET(view->window))),
+			ShapeBounding, 0, 0, cairo_xlib_surface_get_drawable(mask), ShapeSet);
 		cairo_destroy(cairoctx);
 		cairo_surface_destroy(view->background);
 		view->background=NULL;
 		g_object_unref(G_OBJECT(mask));
 		status_focus_zoom_set(view->status, FALSE);
 	} else {
-		gdk_window_shape_combine_mask(GTK_WIDGET(view->window)->window, NULL, 0, 0);
+		XShapeCombineMask(disp, GDK_WINDOW_XID(gtk_widget_get_window(GTK_WIDGET(view->window))),
+			ShapeBounding, 0, 0, 0, ShapeSet);
 		status_focus_zoom_set(view->status, TRUE);
 	}
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
@@ -352,7 +363,7 @@ void view_set_transparent(GConfClient *client, guint xnxn_id, GConfEntry *entry,
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	gboolean shown=GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window));
+	gboolean shown=gtk_widget_get_visible(GTK_WIDGET(view->window));
 	gtk_widget_show(GTK_WIDGET(view->window));
 	view_create_window_mask(view);
 	if (!shown) gtk_widget_hide(GTK_WIDGET(view->window));
@@ -472,16 +483,14 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view *view)
 {
 	START_FUNC
-	GdkScreen *screen=gtk_widget_get_screen(widget);
-	GdkColormap *colormap=gdk_screen_get_rgba_colormap(screen);
-	if (colormap) {
+	int error_base;
+	int event_base;
+	if (XCompositeQueryExtension((Display *)gdk_x11_get_default_xdisplay(), &event_base, &error_base)) {
 		if (view) view->composite=TRUE;
 	} else { 
 		flo_info(_("Your screen does not support alpha channel. Semi-transparency is disabled"));
 		if (view) view->composite=FALSE;
-		colormap=gdk_screen_get_rgb_colormap(screen);
 	}
-	gtk_widget_set_colormap(widget, colormap);
 	END_FUNC
 }
 
@@ -492,7 +501,7 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	START_FUNC
 	GdkRectangle rect;
 	gint xpos, ypos;
-	if (!GTK_WIDGET_VISIBLE(GTK_WINDOW(view->window))) return;
+	if (!gtk_widget_get_visible(window)) return;
 
 	/* record window position */
 	if (gtk_window_get_decorated(GTK_WINDOW(view->window)))
@@ -525,10 +534,10 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 		view_create_window_mask(view);
 		rect.x=0; rect.y=0;
 		rect.width=pConfig->width; rect.height=pConfig->height;
-		gdk_window_invalidate_rect(GTK_WIDGET(view->window)->window, &rect, TRUE);
+		gdk_window_invalidate_rect(gtk_widget_get_window(GTK_WIDGET(view->window)), &rect, TRUE);
 	}
 
-	gdk_window_configure_finished (GTK_WIDGET(view->window)->window);
+	gdk_window_configure_finished (gtk_widget_get_window(GTK_WIDGET(view->window)));
 	END_FUNC
 }
 #endif
@@ -579,24 +588,11 @@ void view_draw_key (struct view *view, cairo_t *context, struct key *key)
 	END_FUNC
 }
 
-/* on expose event: draws the keyboards to the window */
-void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
+/* on draw event: draws the keyboards to the window */
+void view_expose (GtkWidget *window, cairo_t* context, struct view *view)
 {
 	START_FUNC
-	cairo_t *context;
 	enum key_state state;
-
-	/* Don't need to redraw several times in one chunk */
-	if (!view->redraw) view->redraw=gdk_region_new();
-	gdk_region_union(view->redraw, pExpose->region);
-	if (pExpose->count>0) return;
-
-	/* create the context */
-	context=gdk_cairo_create(gtk_widget_get_window(window));
-	gdk_cairo_region(context, view->redraw);
-	cairo_clip(context); 
-	gdk_region_destroy(view->redraw);
-	view->redraw=NULL;
 
 	/* clear the area */
 	if (settings_get_bool("window/transparent")) {
@@ -650,9 +646,6 @@ void view_expose (GtkWidget *window, GdkEventExpose* pExpose, struct view *view)
 #ifdef ENABLE_RAMBLE
 	if (view->ramble) ramble_draw(view->ramble, context);
 #endif
-
-	/* and free up drawing memory */
-	cairo_destroy(context);
 
 #ifndef APPLET
 	/* restore configure event handler. */
@@ -818,22 +811,14 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));
  	gtk_window_set_accept_focus(view->window, FALSE);
 	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool("window/task_bar"));
-#ifdef HAVE_RESIZE_GRIP
 	/* Remove resize grip since it is buggy */
 	gtk_window_set_has_resize_grip(view->window, FALSE);
 #endif
-#endif
 	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);
-#if GTK_CHECK_VERSION(2,12,0)
 	gtk_widget_set_events(GTK_WIDGET(view->window),
 		GDK_EXPOSURE_MASK|GDK_POINTER_MOTION_HINT_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|
 		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK|GDK_POINTER_MOTION_MASK);
-#else
-	gtk_widget_set_events(GTK_WIDGET(view->window),
-		GDK_EXPOSURE_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|
-		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK|GDK_POINTER_MOTION_MASK);
-#endif
 	gtk_widget_set_app_paintable(GTK_WIDGET(view->window), TRUE);
 #ifndef APPLET
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
@@ -846,7 +831,7 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 		G_CALLBACK(view_configure), view);
 #endif
-	g_signal_connect(G_OBJECT(view->window), "expose-event", G_CALLBACK(view_expose), view);
+	g_signal_connect(G_OBJECT(view->window), "draw", G_CALLBACK(view_expose), view);
 	g_signal_connect(G_OBJECT(view->window), "window-state-event", G_CALLBACK(view_window_state), view);
 	view_screen_changed(GTK_WIDGET(view->window), NULL, view);
 	gtk_widget_show(GTK_WIDGET(view->window));

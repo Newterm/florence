@@ -61,16 +61,15 @@ if test "x$with_docs" != "xno"; then
 fi
 
 # Checks for libraries.
-DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 gtk+-2.0 >= 2.12.0 gstreamer-0.10"
+DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gconf-2.0 gstreamer-0.10"
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
+
+PKG_CHECK_MODULES([GTK3], [gtk+-3.0], AC_DEFINE([ENABLE_GTK3], [], [GTK3 enabled.]),
+	AC_MSG_ERROR(gtk version 3.0 or superior required. Please install the dev package of gtk))
 
 if test "x$with_docs" != "xno"; then
 	PKG_CHECK_MODULES([GNOME_DOC_UTILS], [gnome-doc-utils], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find gnome-doc-utils.
 Please either install gnome-doc-utils package or disable docs: --without-docs configure option))
-	AM_PATH_GTK_2_0(2.14.0,LIBGNOME_REQUIRED=no,LIBGNOME_REQUIRED=yes)
-	if test "x$LIBGNOME_REQUIRED" = "xyes"; then
-		PKG_CHECK_MODULES([LIBGNOME], [libgnome-2.0], AC_DEFINE([ENABLE_HELP], [], [Help enabled.]), AC_MSG_ERROR(Couldn't find libgnome. Please either install libgnome package or disable docs: --without-docs configure option))
-	fi
 fi
 if test "x$with_notification" != "xno"; then
 	PKG_CHECK_MODULES([LIBNOTIFY], [libnotify], AC_DEFINE([ENABLE_NOTIFICATION], [], [Notification enabled.]), AC_MSG_ERROR(Could not configure libnotify. Please either install libnotify or disable notifications: --without-notification configure option))
@@ -105,8 +104,6 @@ AC_CHECK_LIB([m], [tan], AC_DEFINE(HAVE_LIBM, 1, Math lib) LIBM="-lm", AC_MSG_ER
 
 # X11 library
 PKG_CHECK_MODULES([X11], [x11])
-
-AC_CHECK_LIB([gtk-x11-2.0], [gtk_window_set_has_resize_grip], AC_DEFINE(HAVE_RESIZE_GRIP, 1, [gtk resize grip present]), [])
 
 AC_SUBST(GNOME_DOCS_UTILS_CFLAGS)
 AC_SUBST(GNOME_DOCS_UTILS_LIBS)
