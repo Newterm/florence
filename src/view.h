@@ -34,9 +34,6 @@
 #define AT_SPI
 #include <cspi/spi.h>
 #endif
-#ifdef APPLET
-#include <panel-applet.h>
-#endif
 
 #include "key.h"
 #include "style.h"
@@ -50,11 +47,7 @@ struct key;
 /* This represents a view of florence. */
 struct view {
 	struct status *status; /* the status being represented by the view */
-#ifdef APPLET
-        PanelApplet *window;
-#else
         GtkWindow *window; /* GTK window of the view */
-#endif
 	gboolean composite; /* true if the screen has composite extension */
 	guint width, height; /* dimensions of the view, in pixels */
 	gdouble vwidth, vheight; /* virtual dimensions of the view */
@@ -66,20 +59,14 @@ struct view {
 	cairo_surface_t *background; /* contains the background image of florence */
 	cairo_surface_t *symbols; /* contains the symbols image of florence */
 	gboolean hand_cursor; /* true when the cursor is a hand */
-#ifndef APPLET
 	gulong configure_handler; /* configure signal handler id */
-#endif
 #ifdef ENABLE_RAMBLE
 	struct ramble *ramble; /* Path of the mouse. */
 #endif
 };
 
 /* create a view of florence */
-#ifdef APPLET
-struct view *view_new (struct status *status, struct style *style, GSList *keyboards, PanelApplet *applet);
-#else
 struct view *view_new (struct status *status, struct style *style, GSList *keyboards);
-#endif
 /* liberate all the memory used by the view */
 void view_free (struct view *view);
 
@@ -108,11 +95,7 @@ struct key *view_hit_get (struct view *view, gint x, gint y, enum key_hit *hit);
 struct key *view_hit_get (struct view *view, gint x, gint y);
 #endif
 /* get gtk window of the view */
-#ifdef APPLET
-PanelApplet *view_window_get (struct view *view);
-#else
 GtkWindow *view_window_get (struct view *view);
-#endif
 /* get gtk window of the view */
 void view_status_set (struct view *view, struct status *status);
 

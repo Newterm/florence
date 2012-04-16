@@ -682,10 +682,8 @@ void status_set_moving(struct status *status, gboolean moving)
 {
 	START_FUNC
 	status->moving=moving;
-#ifndef APPLET
 	if (moving) gtk_window_set_gravity(view_window_get(status->view), GDK_GRAVITY_STATIC);
 	else gtk_window_set_gravity(view_window_get(status->view), GDK_GRAVITY_NORTH_WEST);
-#endif
 	END_FUNC
 }
 gboolean status_get_moving(struct status *status) { return status->moving; }

@@ -46,7 +46,6 @@ void view_show (struct view *view)
 #endif
 {
 	START_FUNC
-#ifndef APPLET
 	gtk_widget_show(GTK_WIDGET(view->window));
 	/* Some winwow managers forget it */
 	gtk_window_set_keep_above(view->window, TRUE);
@@ -58,9 +57,6 @@ void view_show (struct view *view)
 		settings_get_bool("behaviour/move_to_widget") && object) {
 		tools_window_move(view->window, object);
 	}
-#endif
-#else
-	gtk_widget_show(GTK_WIDGET(view->window));
 #endif
 	END_FUNC
 }
@@ -78,7 +74,6 @@ void view_resize (struct view *view)
 {
 	START_FUNC
 	GdkRectangle rect;
-#ifndef APPLET
 	GdkGeometry hints;
 	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
 	if (settings_get_bool("window/resizable")) {
@@ -100,12 +95,9 @@ void view_resize (struct view *view)
 		gtk_window_set_geometry_hints(view->window, NULL, &hints,
 			GDK_HINT_WIN_GRAVITY);
 		gtk_window_set_resizable(view->window, FALSE);
-#endif
 		gtk_widget_set_size_request(GTK_WIDGET(view->window),
 			view->width, view->height);
-#ifndef APPLET
 	}
-#endif
 	/* refresh the view */
 	if (view->window && gtk_widget_get_window(GTK_WIDGET(view->window))) {
 		rect.x=0; rect.y=0;
@@ -319,7 +311,6 @@ struct key *view_hit_get (struct view *view, gint x, gint y)
 	return key;
 }
 
-#ifndef APPLET
 /* Create a window mask for transparent window for non-composited screen */
 /* For composited screen, this function is useless, use alpha channel instead. */
 void view_create_window_mask(struct view *view)
@@ -412,7 +403,6 @@ void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, g
 	view_resize(view);
 	END_FUNC
 }
-#endif
 
 /* Triggered by gconf when a color parameter is changed. */
 void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
@@ -494,7 +484,6 @@ void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view 
 	END_FUNC
 }
 
-#ifndef APPLET
 /* on configure events: record window position */
 void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view *view)
 {
@@ -540,7 +529,6 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	gdk_window_configure_finished (gtk_widget_get_window(GTK_WIDGET(view->window)));
 	END_FUNC
 }
-#endif
 
 /* draw the background of the keyboard */
 void view_draw_background (struct view *view, cairo_t *context)
@@ -647,12 +635,10 @@ void view_expose (GtkWidget *window, cairo_t* context, struct view *view)
 	if (view->ramble) ramble_draw(view->ramble, context);
 #endif
 
-#ifndef APPLET
 	/* restore configure event handler. */
 	if (!view->configure_handler) 
 		view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 			G_CALLBACK(view_configure), view);
-#endif
 	END_FUNC
 }
 
@@ -688,11 +674,9 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 	GSList *list=view->keyboards;
 	struct keyboard *keyboard;
 
-#ifndef APPLET
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
-#endif
 
 	while (list)
 	{
@@ -707,9 +691,7 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 	view->background=NULL;
 	if (view->symbols) cairo_surface_destroy(view->symbols);
 	view->symbols=NULL;
-#ifndef APPLET
 	view_create_window_mask(view);
-#endif
 	status_focus_set(view->status, NULL);
 	gtk_widget_queue_draw(GTK_WIDGET(view->window));
 	END_FUNC
@@ -720,11 +702,9 @@ void view_set_scalex(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoi
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-#ifndef APPLET
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
-#endif
 	view->scalex=gconf_value_get_float(gconf_entry_get_value(entry));
 	if (settings_get_bool("window/keep_ratio")) view->scaley=view->scalex;
 	view_update_extensions(client, xnxn_id, entry, user_data);
@@ -736,11 +716,9 @@ void view_set_scaley(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpoi
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-#ifndef APPLET
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
-#endif
 	view->scaley=gconf_value_get_float(gconf_entry_get_value(entry));
 	if (settings_get_bool("window/keep_ratio")) view->scalex=view->scaley;
 	view_update_extensions(client, xnxn_id, entry, user_data);
@@ -757,11 +735,7 @@ void view_set_opacity(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpo
 }
 
 /* get gtk window of the view */
-#ifdef APPLET
-PanelApplet *view_window_get (struct view *view)
-#else
 GtkWindow *view_window_get (struct view *view)
-#endif
 {
 	START_FUNC
 	END_FUNC
@@ -787,11 +761,7 @@ void view_free(struct view *view)
 }
 
 /* create a view of florence */
-#ifdef APPLET
-struct view *view_new (struct status *status, struct style *style, GSList *keyboards, PanelApplet *applet)
-#else
 struct view *view_new (struct status *status, struct style *style, GSList *keyboards)
-#endif
 {
 	START_FUNC
 	struct view *view=g_malloc(sizeof(struct view));
@@ -804,49 +774,37 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	view->scalex=settings_double_get("window/scalex");
 	view->scaley=settings_double_get("window/scaley");
 	view_set_dimensions(view);
-#ifdef APPLET
-	view->window = applet;
-#else
 	view->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));
  	gtk_window_set_accept_focus(view->window, FALSE);
 	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool("window/task_bar"));
 	/* Remove resize grip since it is buggy */
 	gtk_window_set_has_resize_grip(view->window, FALSE);
-#endif
 	view_resize(view);
 	gtk_container_set_border_width(GTK_CONTAINER(view->window), 0);
 	gtk_widget_set_events(GTK_WIDGET(view->window),
 		GDK_EXPOSURE_MASK|GDK_POINTER_MOTION_HINT_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|
 		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK|GDK_POINTER_MOTION_MASK);
 	gtk_widget_set_app_paintable(GTK_WIDGET(view->window), TRUE);
-#ifndef APPLET
 	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
 	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
-#endif
 	/*g_signal_connect(gdk_keymap_get_default(), "keys-changed", G_CALLBACK(view_on_keys_changed), view);*/
 	xkeyboard_register_events(status->xkeyboard, view_on_keys_changed, (gpointer)view);
 	g_signal_connect(G_OBJECT(view->window), "screen-changed", G_CALLBACK(view_screen_changed), view);
-#ifndef APPLET
 	view->configure_handler=g_signal_connect(G_OBJECT(view->window), "configure-event",
 		G_CALLBACK(view_configure), view);
-#endif
 	g_signal_connect(G_OBJECT(view->window), "draw", G_CALLBACK(view_expose), view);
 	g_signal_connect(G_OBJECT(view->window), "window-state-event", G_CALLBACK(view_window_state), view);
 	view_screen_changed(GTK_WIDGET(view->window), NULL, view);
 	gtk_widget_show(GTK_WIDGET(view->window));
-#ifndef APPLET
 	view_create_window_mask(view);
-#endif
 
 	/* register settings callbacks */
-#ifndef APPLET
 	settings_changecb_register("window/transparent", view_set_transparent, view);
 	settings_changecb_register("window/decorated", view_set_decorated, view);
 	settings_changecb_register("window/resizable", view_set_resizable, view);
 	settings_changecb_register("window/always_on_top", view_set_always_on_top, view);
 	settings_changecb_register("window/task_bar", view_set_task_bar, view);
-#endif
 	settings_changecb_register("window/keep_ratio", view_set_keep_ratio, view);
 	settings_changecb_register("window/scalex", view_set_scalex, view);
 	settings_changecb_register("window/scaley", view_set_scaley, view);
@@ -861,10 +819,8 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	settings_changecb_register("style/system_font", view_redraw, view);
 	settings_changecb_register("style/font", view_redraw, view);
 
-#ifndef APPLET
 	/* set the window icon */
 	tools_set_icon(view->window);
-#endif
 	END_FUNC
 	return view;
 }
