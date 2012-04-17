@@ -473,10 +473,13 @@ void view_update(struct view *view, struct key *key, gboolean statechange)
 void view_screen_changed (GtkWidget *widget, GdkScreen *old_screen, struct view *view)
 {
 	START_FUNC
-	int error_base;
-	int event_base;
-	if (XCompositeQueryExtension((Display *)gdk_x11_get_default_xdisplay(), &event_base, &error_base)) {
+	GdkVisual *visual;
+	if (gtk_widget_is_composited(widget)) {
+		flo_info(_("X11 composite extension detected. Semi-transparency is enabled."));
 		if (view) view->composite=TRUE;
+		visual=gdk_screen_get_rgba_visual(gdk_screen_get_default());
+		if (visual==NULL) visual=gdk_screen_get_system_visual(gdk_screen_get_default());
+		gtk_widget_set_visual(widget, visual);
 	} else { 
 		flo_info(_("Your screen does not support alpha channel. Semi-transparency is disabled"));
 		if (view) view->composite=FALSE;

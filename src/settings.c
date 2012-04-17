@@ -276,7 +276,8 @@ void settings_commit(GConfChangeSet *cs)
 {
 	START_FUNC
 	if (settings_infos->gconfclient) {	
-		gconf_client_commit_change_set(settings_infos->gconfclient, cs, TRUE, NULL);
+		if (gconf_change_set_size(cs)>0)
+			gconf_client_commit_change_set(settings_infos->gconfclient, cs, TRUE, NULL);
 	} else {
 		gconf_change_set_foreach(cs, (GConfChangeSetForeachFunc)settings_value_set, NULL);
 	}
