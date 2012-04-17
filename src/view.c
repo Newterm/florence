@@ -526,10 +526,12 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 		view_create_window_mask(view);
 		rect.x=0; rect.y=0;
 		rect.width=pConfig->width; rect.height=pConfig->height;
+		gtk_widget_size_allocate(GTK_WIDGET(view->window), &rect);
 		gdk_window_invalidate_rect(gtk_widget_get_window(GTK_WIDGET(view->window)), &rect, TRUE);
+		gdk_window_process_updates(gtk_widget_get_window(GTK_WIDGET(view->window)), FALSE);
 	}
 
-	gdk_window_configure_finished (gtk_widget_get_window(GTK_WIDGET(view->window)));
+	gdk_window_configure_finished(gtk_widget_get_window(GTK_WIDGET(view->window)));
 	END_FUNC
 }
 
