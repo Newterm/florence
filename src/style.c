@@ -35,10 +35,6 @@
 #include "settings.h"
 #include "layoutreader.h"
 
-#if !GLIB_CHECK_VERSION(2,14,0)
-#include "tools.h"
-#endif
-
 /* Constants */
 static gchar *style_css_file_source=DATADIR "/florence.css";
 
