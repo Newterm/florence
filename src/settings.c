@@ -30,6 +30,27 @@
 #include "settings-window.h"
 #include "trace.h"
 
+/* Record key change registrations. */
+struct settings_registration {
+	enum settings_item item;
+	gchar *key;
+	gint id;
+	settings_callback cb;
+	gpointer user_data;
+	struct settings_registration *prev;
+	struct settings_registration *next;
+};
+
+/* general informations related to the settings */
+struct settings_info {
+	GSettings *settings[SETTINGS_NUM_CATS];
+	gboolean transaction; /* TRUE when a transaction is open. */
+	gboolean gtk_exit;
+	GKeyFile *config;
+	gchar *config_file;
+	GSList *registrations;
+};
+
 /* GSettings category names */
 static const gchar *settings_cat_names[]={
 	"org.florence",
@@ -216,7 +237,7 @@ void settings_changecb_register(enum settings_item item, settings_callback cb, g
 		registration=g_malloc(sizeof(struct settings_registration));
 		memset(registration, 0, sizeof(struct settings_registration));
 		registration->item=item;
-		registration->key=g_strdup_printf("change::%s", settings_defaults[item].settings_name);
+		registration->key=g_strdup_printf("changed::%s", settings_defaults[item].settings_name);
 		registration->id=g_signal_connect(G_OBJECT(settings_infos->settings[settings_defaults[item].cat]),
 			registration->key, G_CALLBACK(cb), user_data);
 		registration->cb=cb;
@@ -237,7 +258,7 @@ guint settings_register_all(settings_callback cb)
 	START_FUNC
 	guint ret;
 	if (settings_infos->settings[SETTINGS_ALL]) {
-		g_signal_connect(G_OBJECT(settings_infos->settings[SETTINGS_ALL]), "change", G_CALLBACK(cb), NULL);
+		g_signal_connect(G_OBJECT(settings_infos->settings[SETTINGS_ALL]), "changed", G_CALLBACK(cb), NULL);
 	} else { ret=1; }
 	END_FUNC
 	return ret;

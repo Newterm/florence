@@ -435,7 +435,7 @@ void settings_window_style_change (GtkIconView *iconview, gpointer user_data)
 		gtk_tree_model_get_iter(gtk_icon_view_get_model(iconview), &iter, (GtkTreePath *)list->data);
 		gtk_tree_model_get(gtk_icon_view_get_model(iconview), &iter, 1, &name, -1);
 		path=g_strdup_printf(DATADIR "/styles/%s", name);
-		settings_set_string(SETTINGS_STYLE, path);
+		settings_set_string(SETTINGS_STYLE_ITEM, path);
 		g_list_foreach(list, (GFunc)(gtk_tree_path_free), NULL);
 		g_list_free(list);
 		g_free(path);

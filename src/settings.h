@@ -104,27 +104,6 @@ struct settings_param {
 	} default_value;
 };
 
-/* Record key change registrations. */
-struct settings_registration {
-	enum settings_item item;
-	gchar *key;
-	gint id;
-	settings_callback cb;
-	gpointer user_data;
-	struct settings_registration *prev;
-	struct settings_registration *next;
-};
-
-/* general informations related to the settings */
-struct settings_info {
-	GSettings *settings[SETTINGS_NUM_CATS];
-	gboolean transaction; /* TRUE when a transaction is open. */
-	gboolean gtk_exit;
-	GKeyFile *config;
-	gchar *config_file;
-	GSList *registrations;
-};
-
 /* Initialize the settings module */
 void settings_init(gboolean exit, gchar *conf);
 /* Liberate memory used by the settings module */

@@ -385,7 +385,7 @@ void style_shape_new(struct style *style, char *name, char *svg)
 		shape->source=(guchar *)g_strdup(svg);
 	}
 	shape->svg=rsvg_handle_new();
-	default_uri=settings_get_string(SETTINGS_STYLE);
+	default_uri=settings_get_string(SETTINGS_STYLE_ITEM);
 	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
 	if (default_uri) g_free(default_uri);
 	rsvg_handle_write(shape->svg, (guchar *)source, (gsize)strlen(source), &error);
@@ -446,7 +446,7 @@ void style_shape_draw(struct style *style, struct shape *shape, cairo_t *cairoct
 		svg=rsvg_handle_new();
 		if (style->base_uri) rsvg_handle_set_base_uri(svg, style->base_uri);
 		else {
-			default_uri=settings_get_string(SETTINGS_STYLE);
+			default_uri=settings_get_string(SETTINGS_STYLE_ITEM);
 			rsvg_handle_set_base_uri(svg, default_uri);
 			if (default_uri) g_free(default_uri);
 		}
@@ -532,7 +532,7 @@ void style_update_colors (struct style *style)
 	}
 
 	list=style->shapes;
-	default_uri=settings_get_string(SETTINGS_STYLE);
+	default_uri=settings_get_string(SETTINGS_STYLE_ITEM);
 	while (list) {
 		shape=(struct shape *)list->data;
 		style_update_color((gchar *)shape->source, &(shape->svg),
@@ -684,7 +684,7 @@ struct style *style_new(gchar *base_uri)
 
 	memset(style, 0, sizeof(struct style));
 	style->base_uri=base_uri;
-	if (!uri) uri=settings_get_string(SETTINGS_STYLE);
+	if (!uri) uri=settings_get_string(SETTINGS_STYLE_ITEM);
 	layout=layoutreader_new(uri,
 		DATADIR "/styles/default/florence.style",
 		DATADIR "/relaxng/style.rng");
