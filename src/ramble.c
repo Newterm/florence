@@ -89,9 +89,9 @@ void ramble_distance(struct ramble *ramble)
 			list=NULL;
 		}
 	}
-	if (pt2->ev) threshold=settings_double_get("behaviour/ramble_threshold2");
-	else threshold=settings_double_get("behaviour/ramble_threshold1");
-	threshold*=(settings_double_get("window/scalex")+settings_double_get("window/scaley"))/2.0;
+	if (pt2->ev) threshold=settings_get_double(SETTINGS_RAMBLE_THRESHOLD2);
+	else threshold=settings_get_double(SETTINGS_RAMBLE_THRESHOLD1);
+	threshold*=(settings_get_double(SETTINGS_SCALEX)+settings_get_double(SETTINGS_SCALEY))/2.0;
 	if (d>=threshold) {
 		pt->ev=TRUE;
 		list=NULL;
@@ -115,7 +115,7 @@ void ramble_time(struct ramble *ramble)
 			else
 				ramble->timer=g_timer_new();
 		} else if (g_timer_elapsed(ramble->timer, NULL)>=
-			(settings_double_get("behaviour/ramble_timer")/1000.0)) {
+			(settings_get_double(SETTINGS_RAMBLE_TIMER)/1000.0)) {
 			pt->ev=TRUE;
 			g_timer_start(ramble->timer);
 			g_timer_stop(ramble->timer);
@@ -162,7 +162,7 @@ gboolean ramble_add(struct ramble *ramble, GdkWindow *window, gint x, gint y, st
 	if (!k) return FALSE;
 
 	/* Gesture detection */
-	val=settings_get_string("behaviour/ramble_algo");
+	val=settings_get_string(SETTINGS_RAMBLE_ALGO);
 	if (!strcmp("distance", val))
 		ramble_distance(ramble);
 	else if (!strcmp("time", val))
@@ -193,7 +193,7 @@ gboolean ramble_started(struct ramble *ramble)
 {
 	START_FUNC
 	END_FUNC
-	return (!settings_get_bool("behaviour/ramble_button")) || ramble->started;
+	return (!settings_get_bool(SETTINGS_RAMBLE_BUTTON)) || ramble->started;
 }
 
 /* Reset ramble path
@@ -264,11 +264,11 @@ void ramble_draw(struct ramble *ramble, cairo_t *ctx)
 }
 
 /* called when the input method changes */
-void ramble_input_method_check(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void ramble_input_method_check(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct ramble *ramble=(struct ramble *)user_data;
-	gchar *val=settings_get_string("behaviour/input_method");
+	gchar *val=settings_get_string(SETTINGS_INPUT_METHOD);
 	if (strcmp("ramble", val))
 		ramble_reset(ramble, NULL, NULL);
 	if (val) g_free(val);
@@ -282,7 +282,7 @@ struct ramble *ramble_new()
 	struct ramble *ramble=g_malloc(sizeof(struct ramble));
 	if (!ramble) flo_fatal(_("Unable to allocate memory for ramble"));
 	memset(ramble, 0, sizeof(struct ramble));
-	settings_changecb_register("behaviour/input_method", ramble_input_method_check, ramble);
+	settings_changecb_register(SETTINGS_INPUT_METHOD, ramble_input_method_check, ramble);
 	END_FUNC
 	return ramble;
 }

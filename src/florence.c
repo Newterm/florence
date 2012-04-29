@@ -119,8 +119,8 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	handle=rsvg_handle_new_from_file(ICONDIR "/florence.svg", &error);
 	if (error) flo_error(_("Error loading florence icon: %s"), error->message);
 	else {
-		w=settings_double_get("window/scalex")*2;
-		h=settings_double_get("window/scaley")*2;
+		w=settings_get_double(SETTINGS_SCALEX)*2;
+		h=settings_get_double(SETTINGS_SCALEY)*2;
 		shape=XCreatePixmap(disp, GDK_WINDOW_XID(gtk_widget_get_window(window)), w, h, 1);
 		mask=cairo_xlib_surface_create_for_bitmap(disp, shape,
 			DefaultScreenOfDisplay(disp), w, h);
@@ -158,7 +158,7 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 	START_FUNC
 	if (flo_exit || (!florence->view)) return;
 	if (gtk_widget_get_visible(GTK_WIDGET(florence->view->window))) view_hide(florence->view);
-	if (settings_get_bool("behaviour/intermediate_icon")) {
+	if (settings_get_bool(SETTINGS_INTERMEDIATE_ICON)) {
 #ifdef ENABLE_AT_SPI2
 		if (florence->obj) g_object_unref(florence->obj);
 #else
@@ -169,8 +169,8 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 			florence->icon=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
 			gtk_window_set_keep_above(florence->icon, TRUE);
 			gtk_window_set_skip_taskbar_hint(florence->icon, TRUE);
-			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_double_get("window/scalex")*2,
-				settings_double_get("window/scaley")*2);
+			gtk_widget_set_size_request(GTK_WIDGET(florence->icon), settings_get_double(SETTINGS_SCALEX)*2,
+				settings_get_double(SETTINGS_SCALEY)*2);
 			gtk_container_set_border_width(GTK_CONTAINER(florence->icon), 0);
 			gtk_window_set_decorated(florence->icon, FALSE);
 			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);
@@ -408,11 +408,11 @@ GSList *flo_keyboards_load(struct florence *florence, struct layout *layout)
 }
 
 /* Triggered by gconf when the "auto_hide" parameter is changed. */
-void flo_set_auto_hide(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void flo_set_auto_hide(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
-	flo_switch_mode(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	flo_switch_mode(florence, settings_get_bool(SETTINGS_AUTO_HIDE));
 	END_FUNC
 }
 
@@ -502,7 +502,7 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 #ifdef ENABLE_RAMBLE
 	if (ramble_started(florence->ramble) &&
 		status_im_get(florence->status)==STATUS_IM_RAMBLE &&
-		settings_get_bool("behaviour/ramble_button")) {
+		settings_get_bool(SETTINGS_RAMBLE_BUTTON)) {
 		if (ramble_reset(florence->ramble,
 				gtk_widget_get_window(GTK_WIDGET(florence->view->window)), key)) {
 			status_pressed_set(florence->status, key);
@@ -540,7 +540,7 @@ gboolean flo_to_top(gpointer data)
 	START_FUNC
 	struct florence *florence=data;
 	GtkWindow *window=GTK_WINDOW(view_window_get(florence->view));
-	if (!settings_get_bool("window/keep_on_top")) return FALSE;
+	if (!settings_get_bool(SETTINGS_KEEP_ON_TOP)) return FALSE;
 	if (gtk_widget_get_visible(GTK_WIDGET(window))) gtk_window_present(window);
 	END_FUNC
 	return TRUE;
@@ -550,7 +550,7 @@ gboolean flo_to_top(gpointer data)
 void flo_start_keep_on_top(struct florence *florence, gboolean keep_on_top)
 {
 	START_FUNC
-	if (settings_get_bool("window/keep_on_top")) {
+	if (settings_get_bool(SETTINGS_KEEP_ON_TOP)) {
 		g_timeout_add(FLO_TO_TOP_TIMEOUT, flo_to_top, florence);
 	}
 	END_FUNC
@@ -577,7 +577,7 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos, &hit);
 		if (status_im_get(florence->status)==STATUS_IM_RAMBLE) {
 			florence->view->ramble=florence->ramble;
-			algo=settings_get_string("behaviour/ramble_algo");
+			algo=settings_get_string(SETTINGS_RAMBLE_ALGO);
 			if ((hit==KEY_BORDER) &&
 				(status_focus_get(florence->status)==key) &&
 				(!strcmp("time", algo))) {
@@ -599,7 +599,7 @@ gboolean flo_mouse_move_event(GtkWidget *window, GdkEvent *event, gpointer user_
 		struct key *key=status_hit_get(florence->status, florence->xpos, florence->ypos);
 #endif
 		if (status_focus_get(florence->status)!=key) {
-			if (key && settings_double_get("behaviour/timer")>0.0 &&
+			if (key && settings_get_double(SETTINGS_TIMER)>0.0 &&
 				status_im_get(florence->status)==STATUS_IM_TIMER) {
 				status_timer_start(florence->status, flo_timer_update, (gpointer)florence);
 			} else status_timer_stop(florence->status);
@@ -631,11 +631,11 @@ gboolean flo_mouse_enter_event (GtkWidget *window, GdkEvent *event, gpointer use
 }
 
 /* Triggered by gconf when the "keep_on_top" parameter is changed. */
-void flo_set_keep_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void flo_set_keep_on_top(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct florence *florence=user_data;
-	flo_start_keep_on_top(florence, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	flo_start_keep_on_top(florence, settings_get_bool(SETTINGS_KEEP_ON_TOP));
 	END_FUNC
 }
 
@@ -664,7 +664,7 @@ void flo_layout_load(struct florence *florence)
 	gchar *layoutname;
 
 	/* get the informations about the layout */
-	layoutname=settings_get_string("layout/file");
+	layoutname=settings_get_string(SETTINGS_FILE);
 	layout=layoutreader_new(layoutname,
 		DATADIR "/layouts/florence.xml",
 		DATADIR "/relaxng/florence.rng");
@@ -687,7 +687,7 @@ void flo_layout_load(struct florence *florence)
 }
 
 /* reloads the layout file */
-void flo_layout_reload(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void flo_layout_reload(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
@@ -697,39 +697,6 @@ void flo_layout_reload(GConfClient *client, guint xnxn_id, GConfEntry *entry, gp
 	view_update_layout(florence->view, florence->style, florence->keyboards);
 	END_FUNC
 }
-
-#ifdef ENABLE_AT_SPI
-/* check if at-spi is enabled in gnome */
-gboolean flo_check_at_spi(void)
-{
-	START_FUNC
-	gboolean ret=FALSE;
-	GConfClient *gconfclient=gconf_client_get_default();
-	gconf_client_add_dir(gconfclient, "/desktop/gnome/interface",
-		GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
-	if (!gconf_client_get_bool(gconfclient, "/desktop/gnome/interface/accessibility", NULL)) {
-		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Enable accessibility"), NULL, 
-			GTK_STOCK_OK, GTK_STOCK_CANCEL, 
-			"GNOME Accessibility is disabled.\n"
-			"Click OK to enable accessibility and restart GNOME.\n"
-			"If you click CANCEL, auto-hide mode will be disabled.\n"
-			"Alternatively, you may enable accessibility with gnome-at-properties.")) {
-				gconf_client_set_bool(gconfclient,
-					"/desktop/gnome/interface/accessibility", TRUE, NULL);
-				if (system("gnome-session-save --kill")) {
-					flo_error(_("gnome-session-save returned an error"));
-				} else exit(EXIT_SUCCESS);
-			ret=TRUE;
-		}
-		flo_error(_("at-spi registry daemon is not running. "\
-		"Events will be sent with Xtest instead and several "\
-		"functions are disabled, including auto-hide."));
-		ret=FALSE;
-	}
-	END_FUNC
-	return ret;
-}
-#endif
 
 /* create a new instance of florence. */
 #ifndef APPLET
@@ -752,7 +719,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 #ifdef ENABLE_AT_SPI2
 	if (atspi_init()) {
 #else
-	if (SPI_init() && ((!gnome) || (!flo_check_at_spi()))) {
+	if (SPI_init() && (!gnome)) {
 #endif
 		flo_warn(_("AT-SPI has been disabled at run time: auto-hide mode is disabled."));
 		status_spi_disable(florence->status);
@@ -769,7 +736,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	florence->view=view_new(florence->status, florence->style, florence->keyboards);
 #endif
 	status_view_set(florence->status, florence->view);
-	flo_start_keep_on_top(florence, settings_get_bool("window/keep_on_top"));
+	flo_start_keep_on_top(florence, settings_get_bool(SETTINGS_KEEP_ON_TOP));
 
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "destroy",
 		G_CALLBACK(flo_destroy), florence);
@@ -784,15 +751,15 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
 #ifndef APPLET
-	if (settings_get_bool("behaviour/hide_on_start") && (!settings_get_bool("behaviour/auto_hide"))) view_hide(florence->view);
-	else flo_switch_mode(florence, settings_get_bool("behaviour/auto_hide"));
+	if (settings_get_bool(SETTINGS_HIDE_ON_START) && (!settings_get_bool(SETTINGS_AUTO_HIDE))) view_hide(florence->view);
+	else flo_switch_mode(florence, settings_get_bool(SETTINGS_AUTO_HIDE));
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
 #endif
-	settings_changecb_register("behaviour/auto_hide", flo_set_auto_hide, florence);
-	settings_changecb_register("window/keep_on_top", flo_set_keep_on_top, florence);
+	settings_changecb_register(SETTINGS_AUTO_HIDE, flo_set_auto_hide, florence);
+	settings_changecb_register(SETTINGS_KEEP_ON_TOP, flo_set_keep_on_top, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
-	settings_changecb_register("layout/style", flo_layout_reload, florence);
-	settings_changecb_register("layout/file", flo_layout_reload, florence);
+	settings_changecb_register(SETTINGS_STYLE_ITEM, flo_layout_reload, florence);
+	settings_changecb_register(SETTINGS_FILE, flo_layout_reload, florence);
 
 	florence->service=service_new(florence->view, flo_terminate);
 	END_FUNC

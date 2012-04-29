@@ -218,7 +218,7 @@ void key_extend(struct key_action *action) {
 	gchar *allextstr=NULL;
 	gchar **extstrs=NULL;
 	gchar **extstr=NULL;
-	if ((allextstr=settings_get_string("layout/extensions"))) {
+	if ((allextstr=settings_get_string(SETTINGS_EXTENSIONS))) {
 		extstrs=g_strsplit(allextstr, ":", -1);
 		extstr=extstrs;
 		while (extstr && *extstr) {
@@ -228,7 +228,7 @@ void key_extend(struct key_action *action) {
 		if (!activated) {
 			newexts=g_malloc(sizeof(gchar)*(strlen(allextstr)+strlen(action->argument)+2));
 			sprintf(newexts, "%s:%s", allextstr, action->argument);
-			settings_string_set("layout/extensions", newexts);
+			settings_set_string(SETTINGS_EXTENSIONS, newexts);
 			g_free(newexts);
 		}
 		g_free(allextstr);
@@ -246,7 +246,7 @@ void key_unextend(struct key_action *action) {
 	gchar *allextstr=NULL;
 	gchar **extstrs=NULL;
 	gchar **extstr=NULL;
-	if ((allextstr=settings_get_string("layout/extensions"))) {
+	if ((allextstr=settings_get_string(SETTINGS_EXTENSIONS))) {
 		newexts=g_malloc(sizeof(gchar)*(strlen(allextstr)));
 		newexts[0]='\0';
 		extstrs=g_strsplit(allextstr, ":", -1);
@@ -263,7 +263,7 @@ void key_unextend(struct key_action *action) {
 		}
 		g_strfreev(extstrs);
 		if (activated) {
-			settings_string_set("layout/extensions", newexts);
+			settings_set_string(SETTINGS_EXTENSIONS, newexts);
 		}
 		g_free(newexts);
 		g_free(allextstr);
@@ -281,7 +281,7 @@ void key_press(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
-				if (settings_get_bool("style/sounds") && status->view)
+				if (settings_get_bool(SETTINGS_SOUNDS) && status->view)
 					style_sound_play(status->view->style,
 						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
 							((struct key_code *)mod->data)->code,
@@ -300,7 +300,7 @@ void key_press(struct key *key, struct status *status)
 					case KEY_SWITCH:
 					case KEY_EXTEND:
 					case KEY_UNEXTEND:
-						if (settings_get_bool("style/sounds") && status->view)
+						if (settings_get_bool(SETTINGS_SOUNDS) && status->view)
 							style_sound_play(status->view->style,
 								key_actions[action->type],
 								STYLE_SOUND_PRESS);
@@ -324,7 +324,7 @@ void key_release(struct key *key, struct status *status)
 		switch (mod->type) {
 			case KEY_CODE:
 				key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
-				if (settings_get_bool("style/sounds") && status->view)
+				if (settings_get_bool(SETTINGS_SOUNDS) && status->view)
 					style_sound_play(status->view->style,
 						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
 							((struct key_code *)mod->data)->code,
@@ -338,21 +338,21 @@ void key_release(struct key *key, struct status *status)
 					case KEY_REDUCE: view_hide(status->view); break;
 					case KEY_CONFIG: settings(); break;
 					case KEY_MOVE: status_set_moving(status, FALSE); break;
-					case KEY_BIGGER: settings_double_set("window/scalex",
-							settings_double_get("window/scalex")*1.05, TRUE);
-						settings_double_set("window/scaley",
-							settings_double_get("window/scaley")*1.05, TRUE);
+					case KEY_BIGGER: settings_set_double(SETTINGS_SCALEX,
+							settings_get_double(SETTINGS_SCALEX)*1.05, TRUE);
+						settings_set_double(SETTINGS_SCALEY,
+							settings_get_double(SETTINGS_SCALEY)*1.05, TRUE);
 						break;
-					case KEY_SMALLER: settings_double_set("window/scalex",
-							settings_double_get("window/scalex")*0.95, TRUE);
-						settings_double_set("window/scaley",
-							settings_double_get("window/scaley")*0.95, TRUE);
+					case KEY_SMALLER: settings_set_double(SETTINGS_SCALEX,
+							settings_get_double(SETTINGS_SCALEX)*0.95, TRUE);
+						settings_set_double(SETTINGS_SCALEY,
+							settings_get_double(SETTINGS_SCALEY)*0.95, TRUE);
 						break;
 					case KEY_SWITCH:
 						xkeyboard_layout_change(status->xkeyboard); break;
 					case KEY_EXTEND: key_extend(action); break;
 					case KEY_UNEXTEND: key_unextend(action);
-						if (settings_get_bool("style/sounds") && status->view)
+						if (settings_get_bool(SETTINGS_SOUNDS) && status->view)
 							style_sound_play(status->view->style,
 								key_actions[action->type],
 								STYLE_SOUND_RELEASE);
@@ -443,7 +443,7 @@ void key_focus_draw(struct key *key, struct style *style, cairo_t *cairoctx,
 	START_FUNC
 	enum style_colours color;
 	cairo_matrix_t matrix;
-	gdouble focus_zoom=status_focus_zoom_get(status)?settings_double_get("style/focus_zoom"):1.0;
+	gdouble focus_zoom=status_focus_zoom_get(status)?settings_get_double(SETTINGS_FOCUS_ZOOM):1.0;
 	cairo_save(cairoctx);
 	cairo_translate(cairoctx, key->x-(key->w*focus_zoom/2.0), key->y-(key->h*focus_zoom/2.0));
 	cairo_scale(cairoctx, focus_zoom, focus_zoom);

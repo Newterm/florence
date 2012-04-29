@@ -50,11 +50,11 @@ void view_show (struct view *view)
 	/* Some winwow managers forget it */
 	gtk_window_set_keep_above(view->window, TRUE);
 	/* reposition the window */
-	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
+	gtk_window_move(view->window, settings_get_int(SETTINGS_XPOS), settings_get_int(SETTINGS_YPOS));
 #ifdef ENABLE_AT_SPI
 	/* positionnement intelligent */
-	if (settings_get_bool("behaviour/auto_hide") && 
-		settings_get_bool("behaviour/move_to_widget") && object) {
+	if (settings_get_bool(SETTINGS_AUTO_HIDE) && 
+		settings_get_bool(SETTINGS_MOVE_TO_WIDGET) && object) {
 		tools_window_move(view->window, object);
 	}
 #endif
@@ -76,9 +76,9 @@ void view_resize (struct view *view)
 	GdkRectangle rect;
 	GdkGeometry hints;
 	hints.win_gravity=GDK_GRAVITY_NORTH_WEST;
-	if (settings_get_bool("window/resizable")) {
+	if (settings_get_bool(SETTINGS_RESIZABLE)) {
 		gtk_window_set_resizable(view->window, TRUE);
-		if (settings_get_bool("window/keep_ratio")) {
+		if (settings_get_bool(SETTINGS_KEEP_RATIO)) {
 			hints.min_aspect=view->vwidth/view->vheight;
 			hints.max_aspect=view->vwidth/view->vheight;
 			gtk_window_set_geometry_hints(view->window, NULL, &hints,
@@ -321,7 +321,7 @@ void view_create_window_mask(struct view *view)
 	cairo_t *cairoctx=NULL;
 	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
 
-	if (settings_get_bool("window/transparent") && (!view->composite)) {
+	if (settings_get_bool(SETTINGS_TRANSPARENT) && (!view->composite)) {
 		shape=XCreatePixmap(disp, GDK_WINDOW_XID(gtk_widget_get_window(GTK_WIDGET(view->window))),
 			view->width, view->height, 1);
 		mask=cairo_xlib_surface_create_for_bitmap(disp, shape,
@@ -350,7 +350,7 @@ void view_create_window_mask(struct view *view)
 }
 
 /* Triggered by gconf when the "transparent" parameter is changed. Calls view_create_window_mask */
-void view_set_transparent(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_transparent(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
@@ -362,42 +362,42 @@ void view_set_transparent(GConfClient *client, guint xnxn_id, GConfEntry *entry,
 }
 
 /* Triggered by gconf when the "decorated" parameter is changed. Decorates or undecorate the window. */
-void view_set_decorated(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_decorated(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	gtk_window_set_decorated(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
-	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
+	gtk_window_set_decorated(view->window, settings_get_bool(SETTINGS_DECORATED));
+	gtk_window_move(view->window, settings_get_int(SETTINGS_XPOS), settings_get_int(SETTINGS_YPOS));
 	END_FUNC
 }
 
 /* Triggered by gconf when the "always_on_top" parameter is changed. 
    Change the window property to be always on top or not to be. */
-void view_set_always_on_top(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_always_on_top(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	gtk_window_set_keep_above(view->window, gconf_value_get_bool(gconf_entry_get_value(entry)));
+	gtk_window_set_keep_above(view->window, settings_get_bool(SETTINGS_ALWAYS_ON_TOP));
 	END_FUNC
 }
 
 /* Triggered by gconf when the "task_bar" parameter is changed. 
    Change the window hint to appear in the task bar or not. */
-void view_set_task_bar(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_task_bar(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	gtk_window_set_skip_taskbar_hint(view->window, !gconf_value_get_bool(gconf_entry_get_value(entry)));
+	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool(SETTINGS_TASK_BAR));
 	END_FUNC
 }
 
 /* Triggered by gconf when the "resizable" parameter is changed.
    makes the window (not)resizable the window. */
-void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_resizable(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	if (settings_get_bool("window/resizable")) {
+	if (settings_get_bool(SETTINGS_RESIZABLE)) {
 		gtk_widget_set_size_request(GTK_WIDGET(view->window), view->vwidth, view->vheight);
 	}
 	view_resize(view);
@@ -405,18 +405,18 @@ void view_set_resizable(GConfClient *client, guint xnxn_id, GConfEntry *entry, g
 }
 
 /* Triggered by gconf when a color parameter is changed. */
-void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_redraw(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	char *key;
-	key=strrchr(entry->key, '/');
-	key+=1;
+	char *k;
+	k=strrchr(key, '/');
+	k+=1;
 	style_update_colors(view->style);
-	if ((!strcmp(key, "key")) || (!strcmp(key, "outline"))) {
+	if ((!strcmp(k, "key")) || (!strcmp(k, "outline"))) {
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
-	} else if (!strncmp(key, "label", 5) || (!strcmp(key, "font")) || (!strcmp(key, "system_font"))) {
+	} else if (!strncmp(k, "label", 5) || (!strcmp(k, "font")) || (!strcmp(k, "system_font"))) {
 		if (view->symbols) cairo_surface_destroy(view->symbols);
 		view->symbols=NULL;
 	}
@@ -426,15 +426,15 @@ void view_redraw(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer
 
 /* Triggered by gconf when the "resizable" parameter is changed.
    makes the window (not)resizable the window. */
-void view_set_keep_ratio(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_keep_ratio(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	if (settings_get_bool("window/keep_ratio")) {
+	if (settings_get_bool(SETTINGS_KEEP_RATIO)) {
 		view->scaley=view->scalex;
 	}
 	view_resize(view);
-	view_redraw(client, xnxn_id, entry, user_data);
+	view_redraw(settings, key, user_data);
 	END_FUNC
 }
 
@@ -499,14 +499,14 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 	if (gtk_window_get_decorated(GTK_WINDOW(view->window)))
 		gtk_window_get_position(GTK_WINDOW(view->window), &xpos, &ypos);
 	else { xpos=pConfig->x; ypos=pConfig->y; }
-	if (settings_get_int("window/xpos")!=xpos)
-		settings_set_int("window/xpos", xpos);
-	if (settings_get_int("window/ypos")!=ypos)
-		settings_set_int("window/ypos", ypos);
+	if (settings_get_int(SETTINGS_XPOS)!=xpos)
+		settings_set_int(SETTINGS_XPOS, xpos);
+	if (settings_get_int(SETTINGS_YPOS)!=ypos)
+		settings_set_int(SETTINGS_YPOS, ypos);
 
 	/* handle resize events */
 	if ((pConfig->width!=view->width) || (pConfig->height!=view->height)) {
-		if (settings_get_bool("window/keep_ratio")) {
+		if (settings_get_bool(SETTINGS_KEEP_RATIO)) {
 			view->scalex=view->scaley=(gdouble)pConfig->width/view->vwidth;
 		} else {
 			view->scalex=(gdouble)pConfig->width/view->vwidth;
@@ -515,8 +515,8 @@ void view_configure (GtkWidget *window, GdkEventConfigure* pConfig, struct view 
 		if ((view->scalex>200.0)||(view->scaley>200.0))
 			flo_warn(_("Window size out of range :%d, %d"), view->scalex, view->scaley);
 		else {
-			settings_double_set("window/scalex", view->scalex, FALSE);
-			settings_double_set("window/scaley", view->scaley, FALSE);
+			settings_set_double(SETTINGS_SCALEX, view->scalex, FALSE);
+			settings_set_double(SETTINGS_SCALEY, view->scaley, FALSE);
 		}
 		view->width=pConfig->width; view->height=pConfig->height;
 		if (view->background) cairo_surface_destroy(view->background);
@@ -588,7 +588,7 @@ void view_expose (GtkWidget *window, cairo_t* context, struct view *view)
 	enum key_state state;
 
 	/* clear the area */
-	if (settings_get_bool("window/transparent")) {
+	if (settings_get_bool(SETTINGS_TRANSPARENT)) {
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0, 0.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
 		cairo_paint(context);
@@ -605,14 +605,14 @@ void view_expose (GtkWidget *window, cairo_t* context, struct view *view)
 
 	/* handle composited transparency */
 	/* TODO: check for transparency support in WM */
-	if (view->composite && settings_double_get("window/opacity")!=100.0) {
-		if (settings_double_get("window/opacity")>100.0 ||
-			settings_double_get("window/opacity")<1.0) {
+	if (view->composite && settings_get_double(SETTINGS_OPACITY)!=100.0) {
+		if (settings_get_double(SETTINGS_OPACITY)>100.0 ||
+			settings_get_double(SETTINGS_OPACITY)<1.0) {
 			flo_error(_("Window opacity out of range (1.0 to 100.0): %f"),
-				settings_double_get("window/opacity"));
+				settings_get_double(SETTINGS_OPACITY));
 		}
 		cairo_set_source_rgba(context, 0.0, 0.0, 0.0,
-			(100.0-settings_double_get("window/opacity"))/100.0);
+			(100.0-settings_get_double(SETTINGS_OPACITY))/100.0);
 		cairo_set_operator(context, CAIRO_OPERATOR_DEST_OUT);
 		cairo_paint(context);
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
@@ -672,7 +672,7 @@ void view_window_state (GtkWidget *window, GdkEventWindowState *event, struct vi
 
 
 /* Triggered by gconf when the "extensions" parameter is changed. */
-void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_update_extensions(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
@@ -703,35 +703,35 @@ void view_update_extensions(GConfClient *client, guint xnxn_id, GConfEntry *entr
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
-void view_set_scalex(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_scalex(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
-	view->scalex=gconf_value_get_float(gconf_entry_get_value(entry));
-	if (settings_get_bool("window/keep_ratio")) view->scaley=view->scalex;
-	view_update_extensions(client, xnxn_id, entry, user_data);
+	view->scalex=settings_get_double(SETTINGS_SCALEX);
+	if (settings_get_bool(SETTINGS_KEEP_RATIO)) view->scaley=view->scalex;
+	view_update_extensions(settings, key, user_data);
 	END_FUNC
 }
 
 /* Triggered by gconf when the "zoom" parameter is changed. */
-void view_set_scaley(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_scaley(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
 	/* Do not call configure signal handler */
 	if (view->configure_handler) g_signal_handler_disconnect(G_OBJECT(view->window), view->configure_handler);
 	view->configure_handler=0;
-	view->scaley=gconf_value_get_float(gconf_entry_get_value(entry));
-	if (settings_get_bool("window/keep_ratio")) view->scalex=view->scaley;
-	view_update_extensions(client, xnxn_id, entry, user_data);
+	view->scaley=settings_get_double(SETTINGS_SCALEY);
+	if (settings_get_bool(SETTINGS_KEEP_RATIO)) view->scalex=view->scaley;
+	view_update_extensions(settings, key, user_data);
 	END_FUNC
 }
 
 /* Triggered by gconf when the "opacity" parameter is changed. */
-void view_set_opacity(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void view_set_opacity(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
@@ -776,13 +776,13 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	view->status=status;
 	view->style=style;
 	view->keyboards=keyboards;
-	view->scalex=settings_double_get("window/scalex");
-	view->scaley=settings_double_get("window/scaley");
+	view->scalex=settings_get_double(SETTINGS_SCALEX);
+	view->scaley=settings_get_double(SETTINGS_SCALEY);
 	view_set_dimensions(view);
 	view->window=GTK_WINDOW(gtk_window_new(GTK_WINDOW_TOPLEVEL));
-	gtk_window_set_keep_above(view->window, settings_get_bool("window/always_on_top"));
+	gtk_window_set_keep_above(view->window, settings_get_bool(SETTINGS_ALWAYS_ON_TOP));
  	gtk_window_set_accept_focus(view->window, FALSE);
-	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool("window/task_bar"));
+	gtk_window_set_skip_taskbar_hint(view->window, !settings_get_bool(SETTINGS_TASK_BAR));
 	/* Remove resize grip since it is buggy */
 	gtk_window_set_has_resize_grip(view->window, FALSE);
 	view_resize(view);
@@ -791,8 +791,8 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 		GDK_EXPOSURE_MASK|GDK_POINTER_MOTION_HINT_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK|
 		GDK_ENTER_NOTIFY_MASK|GDK_LEAVE_NOTIFY_MASK|GDK_STRUCTURE_MASK|GDK_POINTER_MOTION_MASK);
 	gtk_widget_set_app_paintable(GTK_WIDGET(view->window), TRUE);
-	gtk_window_set_decorated(view->window, settings_get_bool("window/decorated"));
-	gtk_window_move(view->window, settings_get_int("window/xpos"), settings_get_int("window/ypos"));
+	gtk_window_set_decorated(view->window, settings_get_bool(SETTINGS_DECORATED));
+	gtk_window_move(view->window, settings_get_int(SETTINGS_XPOS), settings_get_int(SETTINGS_YPOS));
 	/*g_signal_connect(gdk_keymap_get_default(), "keys-changed", G_CALLBACK(view_on_keys_changed), view);*/
 	xkeyboard_register_events(status->xkeyboard, view_on_keys_changed, (gpointer)view);
 	g_signal_connect(G_OBJECT(view->window), "screen-changed", G_CALLBACK(view_screen_changed), view);
@@ -805,24 +805,24 @@ struct view *view_new (struct status *status, struct style *style, GSList *keybo
 	view_create_window_mask(view);
 
 	/* register settings callbacks */
-	settings_changecb_register("window/transparent", view_set_transparent, view);
-	settings_changecb_register("window/decorated", view_set_decorated, view);
-	settings_changecb_register("window/resizable", view_set_resizable, view);
-	settings_changecb_register("window/always_on_top", view_set_always_on_top, view);
-	settings_changecb_register("window/task_bar", view_set_task_bar, view);
-	settings_changecb_register("window/keep_ratio", view_set_keep_ratio, view);
-	settings_changecb_register("window/scalex", view_set_scalex, view);
-	settings_changecb_register("window/scaley", view_set_scaley, view);
-	settings_changecb_register("window/opacity", view_set_opacity, view);
-	settings_changecb_register("layout/extensions", view_update_extensions, view);
-	settings_changecb_register("colours/key", view_redraw, view);
-	settings_changecb_register("colours/outline", view_redraw, view);
-	settings_changecb_register("colours/label", view_redraw, view);
-	settings_changecb_register("colours/label_outline", view_redraw, view);
-	settings_changecb_register("colours/activated", view_redraw, view);
-	settings_changecb_register("colours/latched", view_redraw, view);
-	settings_changecb_register("style/system_font", view_redraw, view);
-	settings_changecb_register("style/font", view_redraw, view);
+	settings_changecb_register(SETTINGS_TRANSPARENT, view_set_transparent, view);
+	settings_changecb_register(SETTINGS_DECORATED, view_set_decorated, view);
+	settings_changecb_register(SETTINGS_RESIZABLE, view_set_resizable, view);
+	settings_changecb_register(SETTINGS_ALWAYS_ON_TOP, view_set_always_on_top, view);
+	settings_changecb_register(SETTINGS_TASK_BAR, view_set_task_bar, view);
+	settings_changecb_register(SETTINGS_KEEP_RATIO, view_set_keep_ratio, view);
+	settings_changecb_register(SETTINGS_SCALEX, view_set_scalex, view);
+	settings_changecb_register(SETTINGS_SCALEY, view_set_scaley, view);
+	settings_changecb_register(SETTINGS_OPACITY, view_set_opacity, view);
+	settings_changecb_register(SETTINGS_EXTENSIONS, view_update_extensions, view);
+	settings_changecb_register(SETTINGS_KEY, view_redraw, view);
+	settings_changecb_register(SETTINGS_OUTLINE, view_redraw, view);
+	settings_changecb_register(SETTINGS_LABEL, view_redraw, view);
+	settings_changecb_register(SETTINGS_LABEL_OUTLINE, view_redraw, view);
+	settings_changecb_register(SETTINGS_ACTIVATED, view_redraw, view);
+	settings_changecb_register(SETTINGS_LATCHED, view_redraw, view);
+	settings_changecb_register(SETTINGS_SYSTEM_FONT, view_redraw, view);
+	settings_changecb_register(SETTINGS_FONT, view_redraw, view);
 
 	/* set the window icon */
 	tools_set_icon(view->window);
@@ -836,7 +836,7 @@ void view_update_layout(struct view *view, struct style *style, GSList *keyboard
 	START_FUNC
 	view->style=style;
 	view->keyboards=keyboards;
-	view_update_extensions(NULL, 0, NULL, (gpointer)view);
+	view_update_extensions(NULL, NULL, (gpointer)view);
 	END_FUNC
 }
 

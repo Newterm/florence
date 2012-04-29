@@ -1,0 +1,214 @@
+<schemalist>
+  <schema id="org.florence" path="/apps/florence/">
+    <child name="behaviour" schema="org.florence.behaviour"/>
+    <child name="window" schema="org.florence.window"/>
+    <child name="colours" schema="org.florence.colours"/>
+    <child name="layout" schema="org.florence.layout"/>
+    <child name="style" schema="org.florence.style"/>
+  </schema>
+  <schema id="org.florence.behaviour" path="/apps/florence/behaviour/">
+    <key name="auto-hide" type="b">
+      <default>false</default>
+      <_summary>Hide the keyboard automatically when not needed</_summary>
+      <_description>Florence will hide automatically when no editable widget is selected.</_description>
+    </key>
+    <key name="hide-on-start" type="b">
+      <default>false</default>
+      <_summary>Hide the keyboard when Florence starts</_summary>
+      <_description>Florence will hide the keyboard window just after starting up.</_description>
+    </key>
+    <key name="move-to-widget" type="b">
+      <default>false</default>
+      <_summary>Move the keyboard to near the selected widget</_summary>
+      <_description>Move the keyboard to near the selected editable widget in auto-hide mode. Only useful when auto_hide is activated.</_description>
+    </key>
+    <key name="intermediate-icon" type="b">
+      <default>true</default>
+      <_summary>Show an intermediate icon before showing the keyboard in auto-hide mode.</_summary>
+      <_description>Show an intermediate icon when you click on an editable widget. Click on the icon to show the actual keyboard.</_description>
+    </key>
+    <key name="input-method" type="s">
+      <default>'button'</default>
+      <_summary>Input method</_summary>
+      <_description>Set the input method. Available input methods are button, timer and ramble.</_description>
+    </key>
+    <key name="timer" type="d">
+      <default>1300</default>
+      <_summary>Auto click timeout</_summary>
+      <_description>Time, in milliseconds, to wait when the mouse is over a key before the key is automatically pressed (when timer input method is selected)</_description>
+    </key>
+    <key name="ramble-algo" type="s">
+      <default>'distance'</default>
+      <_summary>Ramble algorithm</_summary>
+      <_description>Set the ramble algorithm used. Valid algorithms are distance and time.</_description>
+    </key>
+    <key name="ramble-threshold1" type="d">
+      <default>1.3</default>
+      <_summary>Distance threshold for distance based ramble mode for first key press.</_summary>
+      <_description>When ramble input method is selected, this the distance the pointer must move over a key (relative to the size of the key) before the key is pressed</_description>
+    </key>
+    <key name="ramble-threshold2" type="d">
+      <default>3</default>
+      <_summary>Distance threshold for distance based ramble mode for multiple key presses.</_summary>
+      <_description>When ramble input method is selected, this the distance the pointer must move over a key (relative to the size of the key) for pressing a key a second time and more.</_description>
+    </key>
+    <key name="ramble-timer" type="d">
+      <default>300</default>
+      <_summary>Time threshold for timer based ramble mode.</_summary>
+      <_description>Amount of time in milliseconds before the key is automatically pressed.</_description>
+    </key>
+    <key name="ramble-button" type="b">
+      <default>true</default>
+      <_summary>Use button to activate rambling.</_summary>
+      <_description>When this option is set, rambling starts on button push. No button is necessary when this option is unset.</_description>
+    </key>
+    <key name="startup-notification" type="b">
+      <default>true</default>
+      <_summary>Display a startup notification message.</_summary>
+      <_description>Display a notification message at startup explaining the basics.</_description>
+    </key>
+  </schema>
+  <schema id="org.florence.window" path="/apps/florence/window/">
+    <key name="xpos" type="i">
+      <default>0</default>
+      <_summary>Position along the X axis</_summary>
+      <_description>Horizontal position of the keyboard window on the screen (in pixel).</_description>
+    </key>
+    <key name="ypos" type="i">
+      <default>0</default>
+      <_summary>Position along the Y axis</_summary>
+      <_description>Vertical position of the keyboard window on the screen (in pixel).</_description>
+    </key>
+    <key name="scalex" type="d">
+      <default>20</default>
+      <_summary>Horizontal scaling factor of the window</_summary>
+      <_description>Sets the horizontal size of the window and of the keys</_description>
+    </key>
+    <key name="scaley" type="d">
+      <default>20</default>
+      <_summary>Vertical scaling factor of the window</_summary>
+      <_description>Sets the vertical size of the window and of the keys</_description>
+    </key>
+    <key name="transparent" type="b">
+      <default>false</default>
+      <_summary>Transparent mode</_summary>
+      <_description>To see the windows behind the keyboard.</_description>
+    </key>
+    <key name="decorated" type="b">
+      <default>true</default>
+      <_summary>Decorate window</_summary>
+      <_description>Window has a title bar and buttons.</_description>
+    </key>
+    <key name="resizable" type="b">
+      <default>true</default>
+      <_summary>Allow to resize window.</_summary>
+      <_description>The keyboard window can be resized with the mouse.</_description>
+    </key>
+    <key name="keep-ratio" type="b">
+      <default>true</default>
+      <_summary>Keep window ratio when resizing window.</_summary>
+      <_description>The window proportions are kept intact while resizing the window.</_description>
+    </key>
+    <key name="task-bar" type="b">
+      <default>false</default>
+      <_summary>Appear in the task bar</_summary>
+      <_description>Make Florence appear in the task bar.</_description>
+    </key>
+    <key name="always-on-top" type="b">
+      <default>true</default>
+      <_summary>Keep the keyboard on top.</_summary>
+      <_description>Keep the keyboard window on top of other windows.</_description>
+    </key>
+    <key name="keep-on-top" type="b">
+      <default>true</default>
+      <_summary>Bring back the keyboard to top.</_summary>
+      <_description>Periodically (each second) bring back the keyboard to top. This is useful for window managers not supporting the always_on_top hint.</_description>
+    </key>
+    <key name="opacity" type="d">
+      <default>100</default>
+      <_summary>Opacity of the keyboard window</_summary>
+      <_description>Sets the opacity of the keyboard window. Requires window manager compositing to work</_description>
+    </key>
+  </schema>
+  <schema id="org.florence.colours" path="/apps/florence/colours/">
+    <key name="key" type="s">
+      <default>'#000000'</default>
+      <_summary>key color</_summary>
+      <_description>Color of the keys</_description>
+    </key>
+    <key name="outline" type="s">
+      <default>'#808080'</default>
+      <_summary>Outline color</_summary>
+      <_description>Color of the outline of the keys</_description>
+    </key>
+    <key name="label" type="s">
+      <default>'#FFFFFF'</default>
+      <_summary>Text color</_summary>
+      <_description>Color of the labels of the keys</_description>
+    </key>
+    <key name="label-outline" type="s">
+      <default>'#000000'</default>
+      <_summary>Text outline color</_summary>
+      <_description>Color of the ouline of the labels. Must contrast with label color for better visibility.</_description>
+    </key>
+    <key name="activated" type="s">
+      <default>'#FF0000'</default>
+      <_summary>Activated color</_summary>
+      <_description>Color of the pressed keys</_description>
+    </key>
+    <key name="mouseover" type="s">
+      <default>'#0000FF'</default>
+      <_summary>Mouse over color</_summary>
+      <_description>Color of the key when the mouse is over</_description>
+    </key>
+    <key name="latched" type="s">
+      <default>'#00FF00'</default>
+      <_summary>latched color</_summary>
+      <_description>Color of the latched keys</_description>
+    </key>
+    <key name="ramble" type="s">
+      <default>'#FF00FFAA'</default>
+      <_summary>Ramble path color</_summary>
+      <_description>Color of the ramble path drawn in ramble mode.</_description>
+    </key>
+  </schema>
+  <schema id="org.florence.layout" path="/apps/florence/layout/">
+    <key name="file" type="s">
+      <default>''</default>
+      <_summary>Path of the layout file</_summary>
+      <_description>The layout file contains the layout of the keys on the keyboard</_description>
+    </key>
+    <key name="style" type="s">
+      <default>''</default>
+      <_summary>Path of the layout style file</_summary>
+      <_description>The layout style file contains the style to draw the keys of the keyboard</_description>
+    </key>
+    <key name="extensions" type="s">
+      <default>'actionkys'</default>
+      <_summary>List of colon-separated (:) extension names</_summary>
+      <_description>List of keyboard extensions names (colon-separated). extension names must be found in layout file</_description>
+    </key>
+  </schema>
+  <schema id="org.florence.style" path="/apps/florence/style/">
+    <key name="focus-zoom" type="d">
+      <default>1.3</default>
+      <_summary>scaling factor of the focused key</_summary>
+      <_description>scaling factor of the focused key</_description>
+    </key>
+    <key name="sounds" type="b">
+      <default>true</default>
+      <_summary>activate sound</_summary>
+      <_description>enable sound feedback when a key is hovered, pressed or released</_description>
+    </key>
+    <key name="system-font" type="b">
+      <default>true</default>
+      <_summary>Use system font</_summary>
+      <_description>Set to true to use gtk default font. Set to false to use the style font.</_description>
+    </key>
+    <key name="font" type="s">
+      <default>'sans 10'</default>
+      <_summary>Keyboard font</_summary>
+      <_description>Font used to display labels on the keyboard</_description>
+    </key>
+  </schema>
+</schemalist>

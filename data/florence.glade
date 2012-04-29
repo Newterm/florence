@@ -605,7 +605,7 @@
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="adjustment">adjustment2</property>
-                            <signal name="value-changed" handler="settings_window_opacity" swapped="no"/>
+                            <signal name="value-changed" handler="settings_window_set_double" swapped="no"/>
                           </object>
                         </child>
                       </object>

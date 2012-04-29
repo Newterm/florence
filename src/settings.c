@@ -24,61 +24,65 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>
+#define G_SETTINGS_ENABLE_BACKEND
+#include <gio/gsettingsbackend.h>
 #include "settings.h"
 #include "settings-window.h"
 #include "trace.h"
 
-#define FLO_SETTINGS_ROOT "/apps/florence"
-
-/* used to split key into group and key for gKeyFile */
-struct settings_key {
-	gchar *group;
-	gchar *key;
+/* GSettings category names */
+static const gchar *settings_cat_names[]={
+	"org.florence",
+	"org.florence.behaviour",
+	"org.florence.window",
+	"org.florence.colours",
+	"org.florence.layout",
+	"org.florence.style",
 };
 
-/* settings defaults. { "gtk builder name", "gconf name", "type", "default value" } */
+/* settings defaults. { "gtk builder name", "settings name", "type", "default value" } */
 /* C99 */
-static struct settings_param settings_defaults[] = {
-	{ "flo_resizable", "window/resizable", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_keep_ratio", "window/keep_ratio", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ "flo_decorated", "window/decorated", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ "flo_auto_hide", "behaviour/auto_hide", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ SETTINGS_NONE, "behaviour/hide_on_start", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ "flo_move_to_widget", "behaviour/move_to_widget", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_intermediate_icon", "behaviour/intermediate_icon", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_transparent", "window/transparent", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_task_bar", "window/task_bar", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ "flo_always_on_top", "window/always_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ SETTINGS_NONE, "window/keep_on_top", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ SETTINGS_NONE, "behaviour/startup_notification", SETTINGS_BOOL, { .vbool = FALSE } },
-	{ "flo_keys", "colours/key", SETTINGS_COLOR, { .vstring = "#000000" } },
-	{ SETTINGS_NONE, "colours/outline", SETTINGS_COLOR, { .vstring = "#808080" } },
-	{ "flo_labels", "colours/label", SETTINGS_COLOR, { .vstring = "#FFFFFF" } },
-	{ "flo_label_outline", "colours/label_outline", SETTINGS_COLOR, { .vstring = "#000000" } },
-	{ "flo_activated", "colours/activated", SETTINGS_COLOR, { .vstring = "#FF0000" } },
-	{ "flo_mouseover", "colours/mouseover", SETTINGS_COLOR, { .vstring = "#0000FF" } },
-	{ "flo_latched", "colours/latched", SETTINGS_COLOR, { .vstring = "#00FF00" } },
-	{ SETTINGS_NONE, "colours/ramble", SETTINGS_COLOR, { .vstring = "#FF00FFAA" } },
-	{ "flo_extensions", "layout/extensions", SETTINGS_STRING, { .vstring = "" } },
-	{ "flo_layouts", "layout/file", SETTINGS_STRING, { .vstring = DATADIR "/layouts/florence.xml" } },
-	{ "flo_preview", "layout/style", SETTINGS_STRING, { .vstring = DATADIR "/styles/default/florence.style" } },
-	{ "input_method_combo", "behaviour/input_method", SETTINGS_STRING, { .vstring = "button" } },
-	{ "flo_timer", "behaviour/timer", SETTINGS_DOUBLE, { .vdouble = 1300. } },
-	{ "ramble_threshold1", "behaviour/ramble_threshold1", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
-	{ "ramble_threshold2", "behaviour/ramble_threshold2", SETTINGS_DOUBLE, { .vdouble = 3.0 } },
-	{ "ramble_timer", "behaviour/ramble_timer", SETTINGS_DOUBLE, { .vdouble = 300.0 } },
-	{ "ramble_button", "behaviour/ramble_button", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "ramble_algo", "behaviour/ramble_algo", SETTINGS_STRING, { .vstring = "distance" } },
-	{ "flo_opacity", "window/opacity", SETTINGS_DOUBLE, { .vdouble = 100. } },
-	{ SETTINGS_NONE, "window/scalex", SETTINGS_DOUBLE, { .vdouble = 20. } },
-	{ SETTINGS_NONE, "window/scaley", SETTINGS_DOUBLE, { .vdouble = 20. } },
-	{ "flo_focus_zoom", "style/focus_zoom", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
-	{ "flo_sounds", "style/sounds", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_system_font", "style/system_font", SETTINGS_BOOL, { .vbool = TRUE } },
-	{ "flo_font", "style/font", SETTINGS_STRING, { .vstring = "sans 10" } },
-	{ SETTINGS_NONE, "window/xpos", SETTINGS_INTEGER, { .vinteger = 0 } },
-	{ SETTINGS_NONE, "window/ypos", SETTINGS_INTEGER, { .vinteger = 0 } },
-	{ NULL } };
+static const struct settings_param settings_defaults[] = {
+	{ SETTINGS_WINDOW, "flo_resizable", "resizable", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_WINDOW, "flo_keep_ratio", "keep-ratio", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_WINDOW, "flo_decorated", "decorated", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_BEHAVIOUR, "flo_auto_hide", "auto-hide", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_BEHAVIOUR, SETTINGS_NONE, "hide-on-start", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_BEHAVIOUR, "flo_move_to_widget", "move-to-widget", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_BEHAVIOUR, "flo_intermediate_icon", "intermediate-icon", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_WINDOW, "flo_transparent", "transparent", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_WINDOW, "flo_task_bar", "task-bar", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_WINDOW, "flo_always_on_top", "always-on-top", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_WINDOW, SETTINGS_NONE, "keep-on-top", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_BEHAVIOUR, SETTINGS_NONE, "startup-notification", SETTINGS_BOOL, { .vbool = FALSE } },
+	{ SETTINGS_COLORS, "flo_keys", "key", SETTINGS_COLOR, { .vstring = "#000000" } },
+	{ SETTINGS_COLORS, SETTINGS_NONE, "outline", SETTINGS_COLOR, { .vstring = "#808080" } },
+	{ SETTINGS_COLORS, "flo_labels", "label", SETTINGS_COLOR, { .vstring = "#FFFFFF" } },
+	{ SETTINGS_COLORS, "flo_label_outline", "label-outline", SETTINGS_COLOR, { .vstring = "#000000" } },
+	{ SETTINGS_COLORS, "flo_activated", "activated", SETTINGS_COLOR, { .vstring = "#FF0000" } },
+	{ SETTINGS_COLORS, "flo_mouseover", "mouseover", SETTINGS_COLOR, { .vstring = "#0000FF" } },
+	{ SETTINGS_COLORS, "flo_latched", "latched", SETTINGS_COLOR, { .vstring = "#00FF00" } },
+	{ SETTINGS_COLORS, SETTINGS_NONE, "ramble", SETTINGS_COLOR, { .vstring = "#FF00FFAA" } },
+	{ SETTINGS_LAYOUT, "flo_extensions", "extensions", SETTINGS_STRING, { .vstring = "" } },
+	{ SETTINGS_LAYOUT, "flo_layouts", "file", SETTINGS_STRING, { .vstring = DATADIR "/layouts/florence.xml" } },
+	{ SETTINGS_LAYOUT, "flo_preview", "style", SETTINGS_STRING, { .vstring = DATADIR "/styles/default/florence.style" } },
+	{ SETTINGS_BEHAVIOUR, "input_method_combo", "input-method", SETTINGS_STRING, { .vstring = "button" } },
+	{ SETTINGS_BEHAVIOUR, "flo_timer", "timer", SETTINGS_DOUBLE, { .vdouble = 1300. } },
+	{ SETTINGS_BEHAVIOUR, "ramble_threshold1", "ramble-threshold1", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
+	{ SETTINGS_BEHAVIOUR, "ramble_threshold2", "ramble-threshold2", SETTINGS_DOUBLE, { .vdouble = 3.0 } },
+	{ SETTINGS_BEHAVIOUR, "ramble_timer", "ramble-timer", SETTINGS_DOUBLE, { .vdouble = 300.0 } },
+	{ SETTINGS_BEHAVIOUR, "ramble_button", "ramble-button", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_BEHAVIOUR, "ramble_algo", "ramble-algo", SETTINGS_STRING, { .vstring = "distance" } },
+	{ SETTINGS_WINDOW, "flo_opacity", "opacity", SETTINGS_DOUBLE, { .vdouble = 100. } },
+	{ SETTINGS_WINDOW, SETTINGS_NONE, "scalex", SETTINGS_DOUBLE, { .vdouble = 20. } },
+	{ SETTINGS_WINDOW, SETTINGS_NONE, "scaley", SETTINGS_DOUBLE, { .vdouble = 20. } },
+	{ SETTINGS_STYLE, "flo_focus_zoom", "focus-zoom", SETTINGS_DOUBLE, { .vdouble = 1.3 } },
+	{ SETTINGS_STYLE, "flo_sounds", "sounds", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_STYLE, "flo_system_font", "system-font", SETTINGS_BOOL, { .vbool = TRUE } },
+	{ SETTINGS_STYLE, "flo_font", "font", SETTINGS_STRING, { .vstring = "sans 10" } },
+	{ SETTINGS_WINDOW, SETTINGS_NONE, "xpos", SETTINGS_INTEGER, { .vinteger = 0 } },
+	{ SETTINGS_WINDOW, SETTINGS_NONE, "ypos", SETTINGS_INTEGER, { .vinteger = 0 } },
+	{ 0, NULL } };
 
 static struct settings_info *settings_infos=NULL;
 
@@ -86,103 +90,65 @@ static struct settings_info *settings_infos=NULL;
 /* private functions */
 /*********************/
 
-/* returns the defaults table's index for gconf name */
-guint settings_default_idx(const gchar *gconf_name)
+/* liberate memory for a registration */
+void settings_registration_free(gpointer data, gpointer userdata)
 {
 	START_FUNC
-	guint ret=0;
-	while (settings_defaults[ret].builder_name &&
-		strcmp(gconf_name, settings_defaults[ret].gconf_name)) {
-		ret++;
-	}
+	struct settings_registration *registration=(struct settings_registration *)data;
+	if (registration->key) g_free(registration->key);
 	END_FUNC
+}
+
+/* get a registration record from key name */
+struct settings_registration *settings_registration_get(enum settings_item key)
+{
+	GSList *list;
+	struct settings_registration *ret=NULL;
+	if (settings_infos) {
+		list=settings_infos->registrations;
+		while (list) {
+			if (((struct settings_registration *)list->data)->item==key) {
+				ret=(struct settings_registration *)list->data;
+				break;
+			}
+			list=list->next;
+		}
+	}
+	if (ret) {
+		while (ret->prev) ret=ret->prev;
+	}
 	return ret;
 }
 
-/* split a key into group and key for gKeyFile */
-/* ! not thread safe */
-struct settings_key *settings_split(const gchar *key)
+/* Create a new GSettings object */
+GSettings *settings_new_object(gchar *file, const gchar *cat)
 {
-	START_FUNC
-	static struct settings_key ret;
-	if (strlen(key+1)>64) {
-		flo_fatal(_("Settings/split: buffer overflow : %s"), key);
+	GSettingsBackend *backend;
+	GSettings *ret;
+	if (file) {
+		backend=g_keyfile_settings_backend_new(file, cat, NULL);
+		ret=g_settings_new_with_backend(cat, backend);
+		flo_info(_("Using configuration file %s"), file);
+	} else {
+		ret=g_settings_new(cat);
 	}
-	strcpy(settings_infos->buffer, key);
-	ret.group=settings_infos->buffer;
-	ret.key=g_strrstr(settings_infos->buffer, "/");
-	*(ret.key++)='\0';
-	END_FUNC
-	return &ret;
-}
-
-/* called by settings_commit on each record of the changeset */
-void settings_value_set (GConfChangeSet *cs, const gchar *name, GConfValue *value, gpointer user_data)
-{
-	START_FUNC
-	struct settings_key *key;
-	key=settings_split(name+strlen(FLO_SETTINGS_ROOT)+1);
-	switch(value->type) {
-		case GCONF_VALUE_STRING:
-			g_key_file_set_string(settings_infos->config, key->group, key->key, 
-				gconf_value_get_string(value));
-			break;
-		case GCONF_VALUE_INT:
-			g_key_file_set_integer(settings_infos->config, key->group, key->key, 
-				gconf_value_get_int(value));
-			break;
-		case GCONF_VALUE_FLOAT:
-			g_key_file_set_double(settings_infos->config, key->group, key->key,
-				gconf_value_get_float(value));
-			break;
-		case GCONF_VALUE_BOOL:
-			g_key_file_set_boolean(settings_infos->config, key->group, key->key,
-				gconf_value_get_bool(value));
-			break;
-		default:flo_warn(_("Unknown value type: %d"), value->type);
-			break;
-	}
-	END_FUNC
+	return ret;
 }
 
 /********************/
 /* public functions */
 /********************/
 
-/* Returns the absolute gconf path from a path relative to florence root */
-/* ! not thread safe */
-char *settings_get_full_path(const char *path)
-{
-	START_FUNC
-	if ((strlen(FLO_SETTINGS_ROOT)+strlen(path)+2)>64) {
-		flo_fatal(_("Settings/get_full_path: buffer overflow : %s/%s"), FLO_SETTINGS_ROOT, path);
-	}
-	strcpy(settings_infos->buffer, FLO_SETTINGS_ROOT);
-	strcat(settings_infos->buffer, "/");
-	strcat(settings_infos->buffer, path);
-	END_FUNC
-	return settings_infos->buffer;
-}
-
 /* must be called before calling any settings function */
 void settings_init(gboolean exit, gchar *conf)
 {
 	START_FUNC
+	enum settings_cat cat;
 	settings_infos=g_malloc(sizeof(struct settings_info));
 	memset(settings_infos, 0, sizeof(struct settings_info));
 	settings_infos->gtk_exit=exit;
-	if (conf) {
-		settings_infos->config=g_key_file_new();
-		settings_infos->config_file=conf;
-		if (!g_key_file_load_from_file(settings_infos->config, conf,
-			G_KEY_FILE_KEEP_COMMENTS, NULL)) {
-			flo_fatal(_("Unable to open file %s"), conf);
-		}
-		flo_info(_("Using configuration file %s"), conf);
-	} else {
-		settings_infos->gconfclient=gconf_client_get_default();
-		gconf_client_add_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
-			GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
+	for (cat=0; cat<SETTINGS_NUM_CATS; cat++) {
+		settings_infos->settings[cat]=settings_new_object(conf, settings_cat_names[cat]);
 	}
 	END_FUNC
 }
@@ -194,8 +160,11 @@ void settings_exit(void)
 	GError *err=NULL;
 	gsize len;
 	gchar *data=NULL;
+	enum settings_cat cat;
 	if (settings_infos) {
-		if (settings_infos->gconfclient) g_object_unref(G_OBJECT(settings_infos->gconfclient));
+		for (cat=0; cat<SETTINGS_NUM_CATS; cat++)
+			if (settings_infos->settings[cat])
+				g_object_unref(G_OBJECT(settings_infos->settings[cat]));
 		if (settings_infos->config) {
 			data=g_key_file_to_data(settings_infos->config, &len, NULL);
 			if (data) {
@@ -207,6 +176,8 @@ void settings_exit(void)
 			}
 			g_key_file_free(settings_infos->config);
 		}
+		g_slist_foreach(settings_infos->registrations, settings_registration_free, NULL);
+		g_slist_free(settings_infos->registrations);
 		g_free(settings_infos);
 	}
 	settings_window_free();
@@ -214,48 +185,59 @@ void settings_exit(void)
 }
 
 /* get parameters table */
-struct settings_param *settings_defaults_get(void)
+const struct settings_param *settings_defaults_get(void)
 {
 	START_FUNC
 	END_FUNC
 	return settings_defaults;
 }
 
-/* Returns the gconf name of a gtk builder object option according to the name table */
-char *settings_get_gconf_name(GtkWidget *widget)
+/* Get the settings item from gtkbuilder name */
+enum settings_item settings_get_settings_name(GtkWidget *widget)
 {
 	START_FUNC
 	const gchar* widget_name=gtk_buildable_get_name(GTK_BUILDABLE(widget));
-	guint searchidx=0;
-	while (settings_defaults[searchidx].builder_name &&
+	enum settings_item item=0;
+	while (settings_defaults[item].builder_name &&
 		strcmp(widget_name,
-		settings_defaults[searchidx].builder_name)) {
-		searchidx++;
+		settings_defaults[item].builder_name)) {
+		item++;
 	}
 	END_FUNC
-	return settings_defaults[searchidx].gconf_name;
+	return item;
 }
 
-/* register for gconf events */
-void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data)
+/* register for settings changes */
+void settings_changecb_register(enum settings_item item, settings_callback cb, gpointer user_data)
 {
 	START_FUNC
-	if (settings_infos->gconfclient) {
-		gconf_client_notify_add(settings_infos->gconfclient,
-			settings_get_full_path(name), cb, user_data, NULL, NULL);
+	struct settings_registration *registration, *similar;
+	if (settings_infos->settings) {
+		registration=g_malloc(sizeof(struct settings_registration));
+		memset(registration, 0, sizeof(struct settings_registration));
+		registration->item=item;
+		registration->key=g_strdup_printf("change::%s", settings_defaults[item].settings_name);
+		registration->id=g_signal_connect(G_OBJECT(settings_infos->settings[settings_defaults[item].cat]),
+			registration->key, G_CALLBACK(cb), user_data);
+		registration->cb=cb;
+		registration->user_data=user_data;
+		similar=settings_registration_get(item);
+		if (similar) {
+			similar->prev=registration;
+			registration->next=similar;
+		}
+		settings_infos->registrations=g_slist_append(settings_infos->registrations, registration);
 	}
-	/* TODO: propagate key_file events? */
 	END_FUNC
 }
 
 /* register all events */
-guint settings_register_all(GConfClientNotifyFunc cb)
+guint settings_register_all(settings_callback cb)
 {
 	START_FUNC
 	guint ret;
-	if (settings_infos->gconfclient) {
-		ret=gconf_client_notify_add(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
-			cb, NULL, NULL, NULL);
+	if (settings_infos->settings[SETTINGS_ALL]) {
+		g_signal_connect(G_OBJECT(settings_infos->settings[SETTINGS_ALL]), "change", G_CALLBACK(cb), NULL);
 	} else { ret=1; }
 	END_FUNC
 	return ret;
@@ -265,205 +247,220 @@ guint settings_register_all(GConfClientNotifyFunc cb)
 void settings_unregister(guint notify_id)
 {
 	START_FUNC
-	if (settings_infos->gconfclient) {
-		gconf_client_notify_remove(settings_infos->gconfclient, notify_id);
+	if (settings_infos->settings[SETTINGS_ALL]) {
+		g_signal_handler_disconnect(settings_infos->settings[SETTINGS_ALL], notify_id);
 	}
 	END_FUNC
 }
 
-/* commit a changeset */
-void settings_commit(GConfChangeSet *cs)
+/* create a transaction */
+void settings_transaction()
 {
 	START_FUNC
-	if (settings_infos->gconfclient) {	
-		if (gconf_change_set_size(cs)>0)
-			gconf_client_commit_change_set(settings_infos->gconfclient, cs, TRUE, NULL);
-	} else {
-		gconf_change_set_foreach(cs, (GConfChangeSetForeachFunc)settings_value_set, NULL);
-	}
-	gconf_change_set_clear(cs);
+	enum settings_cat cat;
+	for (cat=0; cat<SETTINGS_NUM_CATS; cat++)
+		if (settings_infos->settings[cat]) {
+			g_settings_delay(settings_infos->settings[cat]);
+		}
+	settings_infos->transaction=TRUE;
 	END_FUNC
 }
 
-/* get a value from gconf */
-GConfValue *settings_value_get(const gchar *name)
+/* commit buffered changes */
+void settings_commit()
 {
 	START_FUNC
-	GError *err=NULL;
-	char *fullpath=settings_get_full_path(name);
-	GConfValue *ret;
+	enum settings_cat cat;
+	for (cat=0; cat<SETTINGS_NUM_CATS; cat++)
+		if (settings_infos->settings[cat]) {
+			g_settings_apply(settings_infos->settings[cat]);
+		}
+	settings_infos->transaction=FALSE;
+	END_FUNC
+}
+
+/* revert buffered changes */
+void settings_rollback()
+{
+	START_FUNC
+	enum settings_cat cat;
+	for (cat=0; cat<SETTINGS_NUM_CATS; cat++)
+		if (settings_infos->settings[cat]) {
+			g_settings_revert(settings_infos->settings[cat]);
+		}
+	settings_infos->transaction=FALSE;
+	END_FUNC
+}
+
+/* check if there is any uncommited change */
+gboolean settings_dirty()
+{
+	START_FUNC
+	enum settings_cat cat;
+	gboolean ret=FALSE;
+	for (cat=0; cat<SETTINGS_NUM_CATS; cat++)
+		ret |= (settings_infos->settings[cat] &&
+			g_settings_get_has_unapplied(settings_infos->settings[cat]));
+	END_FUNC
+	return ret;
+}
+
+/* get a value from gsettings */
+GVariant *settings_value_get(enum settings_item item)
+{
+	START_FUNC
+	GVariant *ret;
 	gchar *str=NULL;
-	struct settings_key *key;
+	gchar *name=settings_defaults[item].settings_name;
 
-	if (settings_infos->gconfclient) {
-		ret=gconf_client_get(settings_infos->gconfclient, fullpath, &err);
-		if (err) {
-			flo_error (_("gconf error reading key %s"), fullpath, err->message);
-		}
-	} else {
-		key=settings_split(name);
-		switch(settings_defaults[settings_default_idx(name)].type) {
-			case SETTINGS_BOOL:
-				ret=gconf_value_new(GCONF_VALUE_BOOL);
-				gconf_value_set_bool(ret, g_key_file_get_boolean(settings_infos->config,
-					key->group, key->key, &err));
-				break;
-			case SETTINGS_COLOR:
-			case SETTINGS_STRING:
-				ret=gconf_value_new(GCONF_VALUE_STRING);
-				gconf_value_set_string(ret, g_key_file_get_string(settings_infos->config,
-					key->group, key->key, &err));
-				break;
-			case SETTINGS_DOUBLE:
-				ret=gconf_value_new(GCONF_VALUE_FLOAT);
-				gconf_value_set_float(ret, g_key_file_get_double(settings_infos->config,
-					key->group, key->key, &err));
-				break;
-			case SETTINGS_INTEGER:
-				ret=gconf_value_new(GCONF_VALUE_INT);
-				gconf_value_set_int(ret, g_key_file_get_integer(settings_infos->config,
-					key->group, key->key, &err));
-				break;
-			default:
-				flo_error(_("Unknown value type: %d"),
-					settings_defaults[settings_default_idx(name)].type);
-				break;
-		}
-		if (err) flo_fatal (_("Error reading value for %s: %s"), name, err->message);
+	if (settings_infos->settings) {
+		ret=g_settings_get_value(settings_infos->settings[settings_defaults[item].cat], name);
 	}
 	if (ret) {
-		str=gconf_value_to_string(ret);
-		flo_debug_distinct(TRACE_DEBUG, "CONF:%s=<%s>", fullpath, str);
+		str=g_variant_print(ret, TRUE);
+		flo_debug_distinct(TRACE_DEBUG, "CONF:%s=<%s>", name, str);
 		if (str) g_free(str);
 	} else {
- 		flo_warn_distinct(_("No gconf value for %s. Using default."), fullpath);
+ 		flo_warn_distinct(_("No GSettings value for %s. Using default."), name);
 	}
 	END_FUNC
 	return ret;
 }
 
-/* get an integer from gconf */
-gint settings_get_int(const gchar *name)
+/* get an integer from gsettings */
+gint settings_get_int(enum settings_item item)
 {
 	START_FUNC
 	gint ret=0;
-	GConfValue *val=settings_value_get(name);;
+	GVariant *val=settings_value_get(item);
 	if (!val) {
-		ret=settings_defaults[settings_default_idx(name)].default_value.vinteger;
+		ret=settings_defaults[item].default_value.vinteger;
 	} else {
-		ret=gconf_value_get_int(val);
-		gconf_value_free(val);
+		ret=(gint)g_variant_get_int32(val);
+		g_variant_unref(val);
 	}
 	END_FUNC
 	return ret;
 }
 
-/* set a gconf integer */
-void settings_set_int(const gchar *name, gint value)
+/* set a gsettings integer */
+void settings_set_int(enum settings_item item, gint value)
 {
 	START_FUNC
-	struct settings_key *key;
-	if (settings_infos->gconfclient) {
-		gconf_client_remove_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT, NULL);
-		gconf_client_set_int(settings_infos->gconfclient, settings_get_full_path(name), value, NULL);
-		gconf_client_add_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
-			GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
-	} else {
-		key=settings_split(name);
-		g_key_file_set_integer(settings_infos->config, key->group, key->key, value);
+	gchar *name=settings_defaults[item].settings_name;
+	enum settings_cat cat=settings_defaults[item].cat;
+	struct settings_registration *registration, *list;
+	if (settings_infos->settings) {
+		registration=settings_registration_get(item);
+		list=registration;
+		while (list) {
+			g_signal_handler_disconnect(settings_infos->settings[cat], list->id);
+			list=list->next;
+		}
+		g_settings_set_int(settings_infos->settings[cat], name, value);
+		list=registration;
+		while (list) {
+			list->id=g_signal_connect(G_OBJECT(settings_infos->settings[cat]),
+				list->key, G_CALLBACK(list->cb), list->user_data);
+			list=list->next;
+		}
 	}
 	END_FUNC
 }
 
-/* get a double from gconf */
-gdouble settings_double_get(const gchar *name)
+/* get a double from gsettings */
+gdouble settings_get_double(enum settings_item item)
 {
 	START_FUNC
 	gdouble ret=0.0;
-	GConfValue *val=settings_value_get(name);;
+	GVariant *val=settings_value_get(item);
 	if (!val) {
-		ret=settings_defaults[settings_default_idx(name)].default_value.vdouble;
+		ret=settings_defaults[item].default_value.vdouble;
 	} else {
-		ret=gconf_value_get_float(val);
-		gconf_value_free(val);
+		ret=g_variant_get_double(val);
+		g_variant_unref(val);
 	}
 	END_FUNC
 	return ret;
 }
 
-/* set a gconf double */
-void settings_double_set(const gchar *name, gdouble value, gboolean b)
+/* set a gsettings double */
+void settings_set_double(enum settings_item item, double value, gboolean b)
 {
 	START_FUNC
-	struct settings_key *key;
-	if (settings_infos->gconfclient) {
-		if (!b) gconf_client_remove_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT, NULL);
-		gconf_client_set_float(settings_infos->gconfclient, settings_get_full_path(name), value, NULL);
-		if (!b) gconf_client_add_dir(settings_infos->gconfclient, FLO_SETTINGS_ROOT,
-			GCONF_CLIENT_PRELOAD_RECURSIVE, NULL);
-	} else {
-		key=settings_split(name);
-		g_key_file_set_double(settings_infos->config, key->group, key->key, value);
+	gchar *name=settings_defaults[item].settings_name;
+	enum settings_cat cat=settings_defaults[item].cat;
+	struct settings_registration *registration, *list;
+	if (settings_infos->settings) {
+		registration=settings_registration_get(item);
+		list=registration;
+		while (!b && list) {
+			g_signal_handler_disconnect(settings_infos->settings[cat], list->id);
+			list=list->next;
+		}
+		g_settings_set_double(settings_infos->settings[cat], name, value);
+		list=registration;
+		while (!b && list) {
+			list->id=g_signal_connect(G_OBJECT(settings_infos->settings[cat]),
+				list->key, G_CALLBACK(list->cb), list->user_data);
+			list=list->next;
+		}
 	}
 	END_FUNC
 }
 
-/* get a gconf string */
-gchar *settings_get_string(const gchar *name)
+/* get a string from gsettings */
+gchar *settings_get_string(enum settings_item item)
 {
 	START_FUNC
 	gchar *ret=NULL;
-	GConfValue *val=settings_value_get(name);;
+	GVariant *val=settings_value_get(item);
 	if (!val) {
-		ret=g_strdup(settings_defaults[settings_default_idx(name)].default_value.vstring);
+		ret=g_strdup(settings_defaults[item].default_value.vstring);
 	} else {
-		ret=g_strdup(gconf_value_get_string(val));
-		gconf_value_free(val);
+		ret=g_strdup(g_variant_get_string(val, NULL));
+		g_variant_unref(val);
 	}
 	END_FUNC
 	return ret;
 }
 
-/* set a gconf string */
-void settings_string_set(const gchar *name, const gchar *value)
+/* set a gsettings string */
+void settings_set_string(enum settings_item item, const gchar *value)
 {
 	START_FUNC
-	struct settings_key *key;
-	if (settings_infos->gconfclient) {
-		gconf_client_set_string(settings_infos->gconfclient, settings_get_full_path(name), value, NULL);
-	} else {
-		key=settings_split(name);
-		g_key_file_set_string(settings_infos->config, key->group, key->key, value);
+	gchar *name=settings_defaults[item].settings_name;
+	if (settings_infos->settings) {
+		g_settings_set_string(settings_infos->settings[settings_defaults[item].cat],
+			name, value);
 	}
 	END_FUNC
 }
 
-/* get a gconf boolean */
-gboolean settings_get_bool(const gchar *name)
+/* get a boolean from gsettings */
+gboolean settings_get_bool(enum settings_item item)
 {
 	START_FUNC
 	gboolean ret=FALSE;
-	GConfValue *val=settings_value_get(name);;
+	GVariant *val=settings_value_get(item);
 	if (!val) {
-		ret=settings_defaults[settings_default_idx(name)].default_value.vbool;
+		ret=settings_defaults[item].default_value.vbool;
 	} else {
-		ret=gconf_value_get_bool(val);
-		gconf_value_free(val);
+		ret=g_variant_get_boolean(val);
+		g_variant_unref(val);
 	}
 	END_FUNC
 	return ret;
 }
 
-/* set a gconf boolean */
-void settings_bool_set(const gchar *name, gboolean value)
+/* set a gsettings boolean */
+void settings_set_bool(enum settings_item item, gboolean value)
 {
 	START_FUNC
-	struct settings_key *key;
-	if (settings_infos->gconfclient) {
-		gconf_client_set_bool(settings_infos->gconfclient, settings_get_full_path(name), value, NULL);
-	} else {
-		key=settings_split(name);
-		g_key_file_set_boolean(settings_infos->config, key->group, key->key, value);
+	gchar *name=settings_defaults[item].settings_name;
+	if (settings_infos->settings) {
+		g_settings_set_boolean(settings_infos->settings[settings_defaults[item].cat],
+			name, value);
 	}
 	END_FUNC
 }
@@ -475,7 +472,7 @@ void settings(void)
 	if (settings_window_open()) {
 		settings_window_present();
 	} else {
-		settings_window_new(settings_infos->gconfclient, settings_infos->gtk_exit);
+		settings_window_new(settings_infos->gtk_exit);
 	}
 	END_FUNC
 }

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence Gnome virtual keyboard 0.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-16 18:14+0000\n"
+"POT-Creation-Date: 2012-04-26 21:53+0000\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: Pietro Pilolli\n"
 "Language-Team: Italian\n"
@@ -753,36 +753,6 @@ msgstr "slk"
 msgid "~"
 msgstr "~"
 
-#: ../src/applet.c:98 ../src/applet.c:105
-#, fuzzy
-msgid "_Preferences..."
-msgstr "_Preferenze"
-
-#: ../src/applet.c:98 ../src/applet.c:105
-#, fuzzy
-msgid "_About..."
-msgstr "_Informazioni"
-
-#: ../src/applet.c:98 ../src/applet.c:105
-#, fuzzy
-msgid "_Help..."
-msgstr "_Aiuto"
-
-#: ../src/applet.c:145
-#, c-format
-msgid "Cannot parse arguments: %s.\n"
-msgstr "Non riesco a parsificare gli argomenti: %s.\n"
-
-#: ../src/applet.c:149
-#, c-format
-msgid "Cannot parse arguments.\n"
-msgstr "Non riesco a parsificare gli argomenti.\n"
-
-#: ../src/applet.c:159
-#, c-format
-msgid "Cannot initialize bonobo.\n"
-msgstr "Impossibile inizializzare bonobo.\n"
-
 #: ../src/florence.c:120
 #, c-format
 msgid "Error loading florence icon: %s"
@@ -811,64 +781,42 @@ msgstr "Nome del layout: \"%s\""
 msgid "Layout version %s is different from program version %s"
 msgstr "La versione del layout %s  è diversa dalla versione del programma %s"
 
-#: ../src/florence.c:711
-msgid "Enable accessibility"
-msgstr "Attiva gli strumenti di accessibilità"
-
-#: ../src/florence.c:720
-msgid "gnome-session-save returned an error"
-msgstr ""
-
-#: ../src/florence.c:724
-msgid ""
-"at-spi registry daemon is not running. Events will be sent with Xtest "
-"instead and several functions are disabled, including auto-hide."
-msgstr ""
-"il demone at-spi non sta girando. Gli eventi verranno generati dcon Xtest e "
-"alcune funzionalità come la scomparsa automatica saranno disabilitate "
-
-#: ../src/florence.c:743
+#: ../src/florence.c:710
 msgid "Unable to allocate memory for florence"
 msgstr "Impossibile allocare memoria per florence"
 
-#: ../src/florence.c:747
-msgid "Old GLib version detected. Florence style will be working with a hack."
-msgstr ""
-"E' stata trovata una versione vecchia dele GLib. Il supporto agli stili di "
-"Florence funzioneranno con un hack."
-
-#: ../src/florence.c:761
+#: ../src/florence.c:724
 #, fuzzy
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI è stato disabilitato durante la compilazione; la modalità a scomparsa "
 "automatica è disabilitata"
 
-#: ../src/florence.c:765
+#: ../src/florence.c:728
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI è stato disabilitato durante la compilazione; la modalità a scomparsa "
 "automatica è disabilitata"
 
 #. onhide trigger
-#: ../src/keyboard.c:52
+#: ../src/keyboard.c:51
 msgid "No key associated with onhide trigger"
 msgstr ""
 
-#: ../src/keyboard.c:79
+#: ../src/keyboard.c:78
 #, c-format
 msgid "[new keyboard] name=%s id=%s"
 msgstr "[nuova tastiera] nome=%s id=%s"
 
-#: ../src/keyboard.c:85
+#: ../src/keyboard.c:84
 msgid "Unreachable code in keyboard_new"
 msgstr "Impossibile nel codice effettuare una keyboard_new"
 
-#: ../src/keyboard.c:116 ../src/keyboard.c:135
+#: ../src/keyboard.c:115 ../src/keyboard.c:134
 msgid "Unable to allocate memory for keyboard"
 msgstr "Impossibile allocare memoria per la tastiera"
 
-#: ../src/keyboard.c:143
+#: ../src/keyboard.c:142
 #, fuzzy
 msgid "Unable to allocate memory for keyboard trigger"
 msgstr "Impossibile allocare memoria per il trigget della tastiera"
@@ -916,26 +864,26 @@ msgstr "Utilizzo il file %s"
 msgid "File %s does not contain xml data"
 msgstr "Il file%s non contiene dati xml"
 
-#: ../src/main.c:83
+#: ../src/main.c:81
 #, c-format
 msgid "Florence version %s"
 msgstr "Florence version %s"
 
-#: ../src/main.c:85
+#: ../src/main.c:83
 msgid "XRECORD has been disabled at compile time."
 msgstr "XRECORD è stato disabilitato durante la compilazione."
 
-#: ../src/main.c:160
+#: ../src/main.c:158
 #, c-format
 msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
 msgstr "%s - Florence è una semplice tastiera virtuale per Gnome.\n"
 
-#: ../src/main.c:162
+#: ../src/main.c:160
 #, c-format
 msgid "Usage: %s [OPTION]...\n"
 msgstr "Utilizzo: %s [OPTION|...\n"
 
-#: ../src/main.c:163
+#: ../src/main.c:161
 #, fuzzy, c-format
 msgid ""
 "Options:\n"
@@ -945,7 +893,7 @@ msgid ""
 "  -d, --debug [level]     print debug information to stdout\n"
 "  -n, --no-gnome          use this flag if you are not using GNOME\n"
 "  -f, --focus [window]    give the focus to the window\n"
-"  -u, --use-config file   use the given config file instead of gconf\n"
+"  -u, --use-config file   use the given config file instead of gsettings\n"
 "\n"
 "Report bugs to <f.agrech@gmail.com>.\n"
 "More informations at <http://florence.sourceforge.net>.\n"
@@ -963,49 +911,19 @@ msgstr ""
 "Riporta i bug a <f.agrech@gmail.com>\n"
 "Per ulteriori informazioni guarda <http://florence.sourceforge.net>.\n"
 
-#: ../src/settings.c:109
-#, c-format
-msgid "Settings/split: buffer overflow : %s"
-msgstr "Settings/split: buffer overflow: %s"
-
-#: ../src/settings.c:142 ../src/settings.c:327
-#, c-format
-msgid "Unknown value type: %d"
-msgstr "Valore inserito sconosciuto: %s"
-
-#: ../src/settings.c:158
-#, c-format
-msgid "Settings/get_full_path: buffer overflow : %s/%s"
-msgstr "Settings/get_full_path: buffer overflow: %s/%s"
-
-#: ../src/settings.c:179
-#, c-format
-msgid "Unable to open file %s"
-msgstr "Impossibile aprire il file %s."
-
-#: ../src/settings.c:181
+#: ../src/settings.c:149
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Sto utilizzando il file di configurazione %s"
 
-#: ../src/settings.c:203
+#: ../src/settings.c:169
 #, c-format
 msgid "Unable to save configuration to %s: %s"
 msgstr "Impossibile salvare la configurazione in %s: %s"
 
-#: ../src/settings.c:300
-#, c-format
-msgid "gconf error reading key %s"
-msgstr "errore di gconf mentre sta leggendo la chiave %s"
-
-#: ../src/settings.c:331
-#, c-format
-msgid "Error reading value for %s: %s"
-msgstr "Errore di lettura del valore %s: %s"
-
-#: ../src/settings.c:338
-#, c-format
-msgid "No gconf value for %s. Using default."
+#: ../src/settings.c:309
+#, fuzzy, c-format
+msgid "No GSettings value for %s. Using default."
 msgstr "Nessun valore gconf %s. Utilizzo il default"
 
 #: ../src/status.c:38
@@ -1101,12 +1019,12 @@ msgstr ""
 msgid "Xtest extension not compiled in and at-spi not working"
 msgstr "l'estensione Xtest non è stata compilata e at-spi non funziona"
 
-#: ../src/style.c:74
+#: ../src/style.c:70
 #, c-format
 msgid "Unknown style color: %d"
 msgstr "Colore dello stile sconosciuto: %d"
 
-#: ../src/style.c:75
+#: ../src/style.c:71
 msgid ""
 "You probably installed Florence in a location that is not in the gconf path. "
 "Please read the FAQ in Florence documentation to learn more about how to "
@@ -1116,69 +1034,69 @@ msgstr ""
 "path.per favore leggi la FAQ nella documentazione di Florence e impara come "
 "configurare correttamente gconf."
 
-#: ../src/style.c:92
+#: ../src/style.c:88
 #, c-format
 msgid "can't parse color %s"
 msgstr "Non posso parsificare il colore %s"
 
-#: ../src/style.c:114
+#: ../src/style.c:110
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossibile allocare memoria per il buffer in lettura del css"
 
-#: ../src/style.c:167
+#: ../src/style.c:163
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr ""
 "Manca memoria. Alcuni simboli potrebbero essere visualizzati non "
 "correttamente"
 
-#: ../src/style.c:169
+#: ../src/style.c:165
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "E' capitato un errore di cairo: %d"
 
-#: ../src/style.c:226 ../src/style.c:509
+#: ../src/style.c:222 ../src/style.c:505
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Impossibile parsificare il file svg specificato nel file di layout: %s"
 
-#: ../src/style.c:227
+#: ../src/style.c:223
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Simbolo errato: non dovresti avere assieme svg e etichette: %s"
 
-#: ../src/style.c:288
+#: ../src/style.c:284
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "Inclinazione del font  %s sconosciuta: %d"
 
-#: ../src/style.c:374
+#: ../src/style.c:370
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Nessun simbolo trovato per il tasto d'azione %d"
 
-#: ../src/style.c:397
+#: ../src/style.c:393
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr ""
 "Impossibile parsificare il file svg dal file di layout svg=\"%s\" errore=\"%s"
 "\""
 
-#: ../src/style.c:401
+#: ../src/style.c:397
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[nuova forma] nome=%s svg=\"%s\""
 
-#: ../src/style.c:431
+#: ../src/style.c:427
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "La forma %s per lo stile selezionato non esiste."
 
-#: ../src/style.c:579
+#: ../src/style.c:575
 #, c-format
 msgid "An error occured while playing sound: %s"
 msgstr ""
 
-#: ../src/style.c:671
+#: ../src/style.c:667
 #, fuzzy, c-format
 msgid "Unknown sound type: %d"
 msgstr "Valore inserito sconosciuto: %s"
@@ -1329,23 +1247,27 @@ msgstr "Non mostrare più"
 msgid "Notification failed"
 msgstr "Notifica fallita"
 
-#: ../src/view.c:481
+#: ../src/view.c:478
+msgid "X11 composite extension detected. Semi-transparency is enabled."
+msgstr ""
+
+#: ../src/view.c:484
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr ""
 "Il tuo schermo non supporta il canale alfa. La trasparenza è disabilitata"
 
-#: ../src/view.c:513
+#: ../src/view.c:516
 #, fuzzy, c-format
 msgid "Window size out of range :%d, %d"
 msgstr "La dimensione della finestra è fuori dal dominio :%d"
 
-#: ../src/view.c:606
+#: ../src/view.c:611
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Opacità della finestra non è compresa tra 1.0 e 100.0: %f"
 
-#: ../src/view.c:768
+#: ../src/view.c:773
 msgid "Unable to allocate memory for view"
 msgstr "Impossibile allocare la memoria per la vista"
 
@@ -1361,10 +1283,6 @@ msgstr "Oggetto accessibile NULL, impossible spostare la finestra"
 #: ../src/tools.c:116
 msgid "Unable to get component from accessible object"
 msgstr "Impossibile ottenere il componente dall'oggetto accessibile"
-
-#: ../src/tools.c:188
-msgid "unable to allocate memory for string"
-msgstr "Impossible allocare la memoria per la stringa"
 
 #: ../src/key.c:69
 #, c-format
@@ -1417,55 +1335,51 @@ msgstr "tipo del tasto da disegnare sconosciuto: %d"
 msgid "unknown key type: %d"
 msgstr "tipo del tasto sconosciuto: %d"
 
-#: ../src/settings-window.c:106 ../src/settings-window.c:182
+#: ../src/settings-window.c:90 ../src/settings-window.c:166
 #, c-format
 msgid "Couldn't open directory %s"
 msgstr "Impossibile aprire la directory %s"
 
-#: ../src/settings-window.c:130
+#: ../src/settings-window.c:114
 msgid "Mouse"
 msgstr ""
 
-#: ../src/settings-window.c:132
+#: ../src/settings-window.c:116
 msgid "Touch screen"
 msgstr ""
 
-#: ../src/settings-window.c:134
+#: ../src/settings-window.c:118
 msgid "Timer"
 msgstr ""
 
-#: ../src/settings-window.c:137
+#: ../src/settings-window.c:121
 msgid "Ramble"
 msgstr ""
 
-#: ../src/settings-window.c:170
+#: ../src/settings-window.c:154
 #, c-format
 msgid "Unable to create preview for style %s"
 msgstr "Impossible creare la preview per lo stile %s"
 
-#: ../src/settings-window.c:380
+#: ../src/settings-window.c:364
 #, c-format
 msgid "unknown setting type: %d"
 msgstr "tipo di configurazione sconosciuta: %s"
 
-#: ../src/settings-window.c:435
+#: ../src/settings-window.c:419
 #, c-format
 msgid "Unable to open %s: %s"
 msgstr "Impossibile aprire %s: %s"
 
-#: ../src/settings-window.c:535
-msgid "Can't get gconf value %"
-msgstr "Impossibile ottenere il valore gconf %s"
-
-#: ../src/settings-window.c:662
+#: ../src/settings-window.c:604
 msgid "Confirm"
 msgstr "Conferma"
 
-#: ../src/settings-window.c:663
+#: ../src/settings-window.c:605
 msgid "Discard changes?"
 msgstr "Salva i cambiamenti?"
 
-#: ../src/settings-window.c:717
+#: ../src/settings-window.c:654
 #, fuzzy, c-format
 msgid "Couldn't load builder file: %s"
 msgstr "Impossibile aprire la directory %s"
@@ -1563,6 +1477,67 @@ msgstr ""
 #, fuzzy
 msgid "Unable to allocate memory for dbus service"
 msgstr "Impossibile allocare la memoria per la vista"
+
+#, fuzzy
+#~ msgid "_Preferences..."
+#~ msgstr "_Preferenze"
+
+#, fuzzy
+#~ msgid "_About..."
+#~ msgstr "_Informazioni"
+
+#, fuzzy
+#~ msgid "_Help..."
+#~ msgstr "_Aiuto"
+
+#~ msgid "Cannot parse arguments: %s.\n"
+#~ msgstr "Non riesco a parsificare gli argomenti: %s.\n"
+
+#~ msgid "Cannot parse arguments.\n"
+#~ msgstr "Non riesco a parsificare gli argomenti.\n"
+
+#~ msgid "Cannot initialize bonobo.\n"
+#~ msgstr "Impossibile inizializzare bonobo.\n"
+
+#~ msgid "Enable accessibility"
+#~ msgstr "Attiva gli strumenti di accessibilità"
+
+#~ msgid ""
+#~ "at-spi registry daemon is not running. Events will be sent with Xtest "
+#~ "instead and several functions are disabled, including auto-hide."
+#~ msgstr ""
+#~ "il demone at-spi non sta girando. Gli eventi verranno generati dcon Xtest "
+#~ "e alcune funzionalità come la scomparsa automatica saranno disabilitate "
+
+#~ msgid ""
+#~ "Old GLib version detected. Florence style will be working with a hack."
+#~ msgstr ""
+#~ "E' stata trovata una versione vecchia dele GLib. Il supporto agli stili "
+#~ "di Florence funzioneranno con un hack."
+
+#~ msgid "Settings/split: buffer overflow : %s"
+#~ msgstr "Settings/split: buffer overflow: %s"
+
+#~ msgid "Unknown value type: %d"
+#~ msgstr "Valore inserito sconosciuto: %s"
+
+#~ msgid "Settings/get_full_path: buffer overflow : %s/%s"
+#~ msgstr "Settings/get_full_path: buffer overflow: %s/%s"
+
+#~ msgid "Unable to open file %s"
+#~ msgstr "Impossibile aprire il file %s."
+
+#~ msgid "gconf error reading key %s"
+#~ msgstr "errore di gconf mentre sta leggendo la chiave %s"
+
+#~ msgid "Error reading value for %s: %s"
+#~ msgstr "Errore di lettura del valore %s: %s"
+
+#~ msgid "unable to allocate memory for string"
+#~ msgstr "Impossible allocare la memoria per la stringa"
+
+#~ msgid "Can't get gconf value %"
+#~ msgstr "Impossibile ottenere il valore gconf %s"
 
 #~ msgid "Unable to create mask"
 #~ msgstr "Impossibile creare la maschera"

@@ -38,28 +38,12 @@
 #include "tools.h"
 #include "settings-window.h"
 
-#define FLO_SETTINGS_ICON_CANCEL GTK_STOCK_DISCARD
-
 static struct settings_window *settings_window=NULL;
 void settings_window_extension(GtkToggleButton *button, gchar *name);
 
 /*********************/
 /* private functions */
 /*********************/
-
-/* update rollback changeset */
-void settings_window_save(const char *name)
-{
-	START_FUNC
-	GConfValue *value;
-	if (!gconf_change_set_check_value(settings_window->rollback,
-			settings_get_full_path(name), &value)) {
-		value=settings_value_get(name);
-		gconf_change_set_set(settings_window->rollback,
-			settings_get_full_path(name), value);
-	}
-	END_FUNC
-}
 
 /* Populate layout combobox with available layouts */
 void settings_window_layouts_populate()
@@ -197,7 +181,7 @@ GdkColor *settings_window_convert_color(gchar *strcolor)
 	return &ret;
 }
 
-/* update the extension check box list according to the layout and gconf */
+/* update the extension check box list according to the layout and GSettings */
 void settings_window_extensions_update(gchar *layoutname)
 {
 	START_FUNC
@@ -232,7 +216,7 @@ void settings_window_extensions_update(gchar *layoutname)
 		new=gtk_check_button_new_with_label(ext->name);
 		id=g_strdup(ext->identifiant);
 		settings_window->extensions=g_slist_append(settings_window->extensions, id);
-		temp=settings_get_string("layout/extensions");
+		temp=settings_get_string(SETTINGS_EXTENSIONS);
 		extstrs=extstr=g_strsplit(temp, ":", -1);
 		while (extstr && *extstr && strcmp(*extstr, id)) {
 			extstr++;
@@ -252,7 +236,7 @@ void settings_window_extensions_update(gchar *layoutname)
 	END_FUNC
 }
 
-/* update the layout settings according to gconf */
+/* update the layout settings according to GSettings */
 gchar *settings_window_combo_update(gchar *item)
 {
 	START_FUNC
@@ -266,7 +250,7 @@ gchar *settings_window_combo_update(gchar *item)
 	/* update the layout combo box */
 	model=gtk_combo_box_get_model(combo);
 	if (gtk_tree_model_get_iter_first(model, &iter)) {
-		val=settings_get_string(settings_get_gconf_name(GTK_WIDGET(combo)));
+		val=settings_get_string(settings_get_settings_name(GTK_WIDGET(combo)));
 		do {
 			gtk_tree_model_get(model, &iter, 1, &data, -1);
 			if ((out=(!strcmp(data, val))))
@@ -334,14 +318,14 @@ void settings_window_input_method_update(gchar *method)
 	END_FUNC
 }
 
-/* update the window according to gconf */
+/* update the window according to GSettings */
 void settings_window_update()
 {
 	START_FUNC
 	GObject *object;
 	gchar *color;
 	guint searchidx=0;
-	struct settings_param *params=settings_defaults_get();
+	const struct settings_param *params=settings_defaults_get();
 #ifdef ENABLE_RAMBLE
 	gchar *val;
 #endif
@@ -353,10 +337,10 @@ void settings_window_update()
 					gtk_toggle_button_set_active(
 						GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 							params[searchidx].builder_name)),
-						settings_get_bool(params[searchidx].gconf_name));
+						settings_get_bool(searchidx));
 					break;
 				case SETTINGS_COLOR:
-					color=settings_get_string(params[searchidx].gconf_name);
+					color=settings_get_string(searchidx);
 					gtk_color_button_set_color(
 						GTK_COLOR_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 							params[searchidx].builder_name)),
@@ -369,13 +353,13 @@ void settings_window_update()
 					if (GTK_IS_FONT_BUTTON(object))
 						gtk_font_button_set_font_name(
 							GTK_FONT_BUTTON(object),
-							settings_get_string(params[searchidx].gconf_name));
+							settings_get_string(searchidx));
 					break;
 				case SETTINGS_DOUBLE:
 					gtk_range_set_value(
 						GTK_RANGE(gtk_builder_get_object(settings_window->gtkbuilder,
 							params[searchidx].builder_name)),
-						settings_double_get(params[searchidx].gconf_name));
+						settings_get_double(searchidx));
 					break;
 				default:flo_error(_("unknown setting type: %d"),
 						params[searchidx].type);
@@ -385,7 +369,7 @@ void settings_window_update()
 	}
 
 #ifdef ENABLE_RAMBLE
-	val=settings_get_string("behaviour/ramble_algo");
+	val=settings_get_string(SETTINGS_RAMBLE_ALGO);
 	gtk_toggle_button_set_active(
 		GTK_TOGGLE_BUTTON(gtk_builder_get_object(settings_window->gtkbuilder,
 			"ramble_distance")),
@@ -398,13 +382,13 @@ void settings_window_update()
 #endif
 
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
-		"flo_move_to_widget")), settings_get_bool("behaviour/auto_hide"));
+		"flo_move_to_widget")), settings_get_bool(SETTINGS_AUTO_HIDE));
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
-		"flo_intermediate_icon")), settings_get_bool("behaviour/auto_hide"));
+		"flo_intermediate_icon")), settings_get_bool(SETTINGS_AUTO_HIDE));
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
-		"flo_font")), !settings_get_bool("style/system_font"));
+		"flo_font")), !settings_get_bool(SETTINGS_SYSTEM_FONT));
 	gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
-		"flo_font_label")), !settings_get_bool("style/system_font"));
+		"flo_font_label")), !settings_get_bool(SETTINGS_SYSTEM_FONT));
 
 	color=settings_window_combo_update("flo_layouts");
 	if (color) {
@@ -451,8 +435,7 @@ void settings_window_style_change (GtkIconView *iconview, gpointer user_data)
 		gtk_tree_model_get_iter(gtk_icon_view_get_model(iconview), &iter, (GtkTreePath *)list->data);
 		gtk_tree_model_get(gtk_icon_view_get_model(iconview), &iter, 1, &name, -1);
 		path=g_strdup_printf(DATADIR "/styles/%s", name);
-		settings_window_save("layout/style");
-		settings_string_set("layout/style", path);
+		settings_set_string(SETTINGS_STYLE, path);
 		g_list_foreach(list, (GFunc)(gtk_tree_path_free), NULL);
 		g_list_free(list);
 		g_free(path);
@@ -466,13 +449,12 @@ void settings_window_change_color(GtkColorButton *button)
 	START_FUNC
 	GdkColor color;
 	gchar strcolor[8];
-	char *name=settings_get_gconf_name(GTK_WIDGET(button));
+	enum settings_item item=settings_get_settings_name(GTK_WIDGET(button));
 	gtk_color_button_get_color(button, &color);
 	g_sprintf(strcolor, "#%02X%02X%02X", (color.red)>>8, (color.green)>>8, (color.blue)>>8);
-	settings_window_save(name);
-	settings_string_set(name, strcolor);
+	settings_set_string(item, strcolor);
 	/* update style preview */
-	if (!strcmp(name, "colours/key")) settings_window_preview_build();
+	if (item==SETTINGS_KEY) settings_window_preview_build();
 	END_FUNC
 }
 
@@ -487,9 +469,7 @@ void settings_window_combo(GtkComboBox *combo)
 	gtk_combo_box_get_active_iter(combo, &iter);
 	model=gtk_combo_box_get_model(combo);
 	gtk_tree_model_get(model, &iter, 1, &data, -1);
-	gconf_change_set_set_string(settings_window->gconfchangeset,
-		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(combo))),
-		data);
+	settings_set_string(settings_get_settings_name(GTK_WIDGET(combo)), data);
 	if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(combo)), "flo_layouts")) {
 		settings_window_extensions_update(data);
 	} else if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(combo)), "input_method_combo")) {
@@ -508,14 +488,9 @@ void settings_window_extension(GtkToggleButton *button, gchar *name)
         gchar **extstr=NULL;
         gchar **newextstrs=NULL;
         gchar **newextstr=NULL;
-	GConfValue *value=NULL;
+	gchar *new_value=NULL;
 
-	/* Get this from change set in case it's not commited */
-	if (gconf_change_set_check_value(settings_window->gconfchangeset,
-		settings_get_full_path("layout/extensions"), &value)) {
-		allextstr=(gchar *)gconf_value_get_string(value);
-	} else allextstr=settings_get_string("layout/extensions");
-	
+	allextstr=settings_get_string(SETTINGS_EXTENSIONS);
 	if (allextstr) {
                 extstrs=g_strsplit(allextstr, ":", -1);
                 extstr=extstrs;
@@ -526,33 +501,22 @@ void settings_window_extension(GtkToggleButton *button, gchar *name)
 			*(newextstr++)=name;
 		}
 		*newextstr=NULL;
-		gconf_change_set_set_string(settings_window->gconfchangeset,
-			settings_get_full_path("layout/extensions"),
-			g_strjoinv(":", newextstrs));
+		new_value=g_strjoinv(":", newextstrs);
+		settings_set_string(SETTINGS_EXTENSIONS, new_value);
                 g_strfreev(extstrs);
                 g_free(newextstrs);
-		if (!value) g_free(allextstr);
-        } else { flo_fatal(_("Can't get gconf value %"), settings_get_full_path("layout/extensions")); }
+		g_free(allextstr);
+        }
 	END_FUNC
 }
 
-/* Set a gconf double according to the state of the scale bar.
+/* Set a GSettings double according to the state of the scale bar.
  * Look for the gconf parameter name in the parameters table */
 void settings_window_set_double(GtkHScale *scale)
 {
 	START_FUNC
-	gconf_change_set_set_float(settings_window->gconfchangeset,
-		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(scale))),
-		gtk_range_get_value(GTK_RANGE(scale)));
-	END_FUNC
-}
-
-/* on opacity change: apply immediately */
-void settings_window_opacity(GtkHScale *scale)
-{
-	START_FUNC
-	settings_window_save("window/opacity");
-	settings_double_set("window/opacity", gtk_range_get_value(GTK_RANGE(scale)), TRUE);
+	settings_set_double(settings_get_settings_name(GTK_WIDGET(scale)),
+		gtk_range_get_value(GTK_RANGE(scale)), TRUE);
 	END_FUNC
 }
 
@@ -560,13 +524,12 @@ void settings_window_opacity(GtkHScale *scale)
 void settings_window_font(GtkFontButton *font)
 {
 	START_FUNC
-	settings_window_save("style/font");
-	settings_string_set("style/font", gtk_font_button_get_font_name(font));
+	settings_set_string(SETTINGS_FONT, gtk_font_button_get_font_name(font));
 	END_FUNC
 }
 
 /* set a gconf boolean according to the state of the toggle button.
- * Look for the gconf parameter name in the parameters table */
+ * Look for the GSettings parameter name in the parameters table */
 void settings_window_set_bool (GtkToggleButton *button)
 {
 	START_FUNC
@@ -575,9 +538,7 @@ void settings_window_set_bool (GtkToggleButton *button)
 		(!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_time"))) {
 		if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "ramble_distance") &&
 			gtk_toggle_button_get_active(button)) {
-			gconf_change_set_set_string(settings_window->gconfchangeset,
-				settings_get_full_path("behaviour/ramble_algo"),
-				"distance");
+			settings_set_string(SETTINGS_RAMBLE_ALGO, "distance");
 			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 				"ramble_threshold1")));
 			gtk_widget_show(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
@@ -585,9 +546,7 @@ void settings_window_set_bool (GtkToggleButton *button)
 			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 				"ramble_timer")));
 		} else {
-			gconf_change_set_set_string(settings_window->gconfchangeset,
-				settings_get_full_path("behaviour/ramble_algo"),
-				"time");
+			settings_set_string(SETTINGS_RAMBLE_ALGO, "time");
 			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 				"ramble_threshold1")));
 			gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
@@ -597,8 +556,7 @@ void settings_window_set_bool (GtkToggleButton *button)
 		}
 	} else {
 #endif
-	gconf_change_set_set_bool(settings_window->gconfchangeset,
-		settings_get_full_path(settings_get_gconf_name(GTK_WIDGET(button))),
+	settings_set_bool(settings_get_settings_name(GTK_WIDGET(button)),
 		gtk_toggle_button_get_active(button));
 	if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "flo_auto_hide")) {
 		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
@@ -606,9 +564,6 @@ void settings_window_set_bool (GtkToggleButton *button)
 		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 			"flo_intermediate_icon")), gtk_toggle_button_get_active(button));
 	} else if (!strcmp(gtk_buildable_get_name(GTK_BUILDABLE(button)), "flo_system_font")) {
-		/* apply immediately */
-		settings_window_save("style/system_font");
-		settings_bool_set("style/system_font", gtk_toggle_button_get_active(button));
 		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
 			"flo_font_label")), !gtk_toggle_button_get_active(button));
 		gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object(settings_window->gtkbuilder,
@@ -620,30 +575,20 @@ void settings_window_set_bool (GtkToggleButton *button)
 	END_FUNC
 }
 
-/* apply changes: apply the changeset and free the rollback one. */
+/* apply changes. */
 void settings_window_commit(GtkWidget *window, GtkWidget *button)
 {
 	START_FUNC
-	settings_commit(settings_window->gconfchangeset);
-	if (settings_window->rollback) gconf_change_set_clear(settings_window->rollback);
+	settings_commit();
 	END_FUNC
 }
 
-/* discard changes: apply the rollback changeset and clear it. */
+/* discard changes. */
 void settings_window_rollback(GtkWidget *window, GtkWidget *button)
 {
 	START_FUNC
-	GConfValue *value;
-	gboolean color_changed=gconf_change_set_check_value(settings_window->rollback,
-		settings_get_full_path("colours/key"), &value);
-	if (settings_window->gconfchangeset) {
-		if (settings_window->rollback)
-			settings_commit(settings_window->rollback);
-		gconf_change_set_clear(settings_window->gconfchangeset);
-	}
-	if (color_changed) {
-		if (window) settings_window_preview_build();
-	}
+	settings_rollback();
+	if (window) settings_window_preview_build();
 	settings_window_update();
 	END_FUNC
 }
@@ -655,12 +600,9 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 	START_FUNC
 	static gboolean closed=FALSE;
 	if (closed) return;
-	if ((settings_window->gconfchangeset &&
-		gconf_change_set_size(settings_window->gconfchangeset)>0)||
-		(settings_window->rollback &&
-		gconf_change_set_size(settings_window->rollback)>0)) {
+	if (settings_dirty()) {
 		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Confirm"), GTK_WINDOW(window),
-			GTK_STOCK_APPLY, FLO_SETTINGS_ICON_CANCEL, _("Discard changes?")))
+			GTK_STOCK_APPLY, GTK_STOCK_DISCARD, _("Discard changes?")))
 			settings_window_commit(NULL, NULL);
 		else settings_window_rollback(NULL, NULL);
 	}
@@ -671,8 +613,6 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 	if (settings_window->style_list) g_object_unref(G_OBJECT(settings_window->style_list)); 
 	settings_window->style_list=NULL;
 	if (window) g_object_unref(G_OBJECT(window));
-	if (settings_window->gconfchangeset) gconf_change_set_unref(settings_window->gconfchangeset);
-	if (settings_window->rollback) gconf_change_set_unref(settings_window->rollback);
 	if (settings_window->gtk_exit) exit(0);
 	closed=FALSE;
 	END_FUNC
@@ -700,7 +640,7 @@ void settings_window_present(void)
 }
 
 /* opens the settings window */
-void settings_window_new(GConfClient *gconfclient, gboolean exit)
+void settings_window_new(gboolean exit)
 {
 	START_FUNC
 	GError* error = NULL;
@@ -708,9 +648,6 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 	memset(settings_window, 0, sizeof(struct settings_window));
 
 	settings_window->gtk_exit=exit;
-	settings_window->gconfclient=gconfclient;
-	settings_window->gconfchangeset=gconf_change_set_new();
-	settings_window->rollback=gconf_change_set_new();
 	settings_window->gtkbuilder=gtk_builder_new();
 	if (!gtk_builder_add_from_file(settings_window->gtkbuilder, DATADIR "/florence.glade", &error))
 	{
@@ -725,7 +662,8 @@ void settings_window_new(GConfClient *gconfclient, gboolean exit)
 
 	settings_window_update();
 	settings_window->notify_id=settings_register_all(
-		(GConfClientNotifyFunc)settings_window_update);
+		(settings_callback)settings_window_update);
+	settings_transaction();
 
 	gtk_builder_connect_signals(settings_window->gtkbuilder, NULL);
 
@@ -746,7 +684,7 @@ void settings_window_free()
 			list=list->next;
 		}
 		if (settings_window->extensions) g_slist_free(settings_window->extensions);
-		if (settings_window->gtkbuilder) g_object_unref(settings_window->gtkbuilder);
+		if (settings_window->gtkbuilder) g_object_unref(G_OBJECT(settings_window->gtkbuilder));
 		if (settings_window) g_free(settings_window);
 	}
 	END_FUNC

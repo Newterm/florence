@@ -1,13 +1,12 @@
 data/florence.desktop.in.in
 data/florence.glade
-data/florence.schemas.in
+data/org.florence.gschema.xml.in
 data/layouts/florence.xml.in.in
 data/layouts/florence-alt.xml.in.in
 data/layouts/compact.xml.in.in
 data/layouts/compact-alt.xml.in.in
 data/styles/default/symbols.xml.in
 src/florence.server.in.in
-src/applet.c
 src/florence.c
 src/keyboard.c
 src/layoutreader.c

@@ -157,7 +157,7 @@ void trayicon_notification_stop(NotifyNotification *notification, gchar *action,
 {
 	START_FUNC
 	if (!strcmp(action, "STOP"))
-		settings_bool_set("behaviour/startup_notification", FALSE);
+		settings_set_bool(SETTINGS_STARTUP_NOTIFICATION, FALSE);
 	END_FUNC
 }
 
@@ -224,7 +224,7 @@ struct trayicon *trayicon_new(struct view *view, GCallback quit_cb)
 	gtk_status_icon_set_visible(trayicon->tray_icon, TRUE);
 
 #ifdef ENABLE_NOTIFICATION
-	if (settings_get_bool("behaviour/startup_notification"))
+	if (settings_get_bool(SETTINGS_STARTUP_NOTIFICATION))
 		g_timeout_add(2000, trayicon_notification_start, (gpointer)trayicon);
 #endif
 

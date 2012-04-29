@@ -19,10 +19,67 @@
 
 */
 
-#include <gconf/gconf-client.h>
 #include <gtk/gtk.h>
 
 #define SETTINGS_NONE "None"
+
+/* callback for registered events */
+typedef void (*settings_callback) (GSettings *settings, gchar *key, gpointer user_data);
+
+/* This is a settings catetory */
+enum settings_cat {
+	SETTINGS_ALL,
+	SETTINGS_BEHAVIOUR,
+	SETTINGS_WINDOW,
+	SETTINGS_COLORS,
+	SETTINGS_LAYOUT,
+	SETTINGS_STYLE,
+	SETTINGS_NUM_CATS
+};
+
+/* This is a settings key */
+enum settings_item {
+	SETTINGS_RESIZABLE,
+	SETTINGS_KEEP_RATIO,
+	SETTINGS_DECORATED,
+	SETTINGS_AUTO_HIDE,
+	SETTINGS_HIDE_ON_START,
+	SETTINGS_MOVE_TO_WIDGET,
+	SETTINGS_INTERMEDIATE_ICON,
+	SETTINGS_TRANSPARENT,
+	SETTINGS_TASK_BAR,
+	SETTINGS_ALWAYS_ON_TOP,
+	SETTINGS_KEEP_ON_TOP,
+	SETTINGS_STARTUP_NOTIFICATION,
+	SETTINGS_KEY,
+	SETTINGS_OUTLINE,
+	SETTINGS_LABEL,
+	SETTINGS_LABEL_OUTLINE,
+	SETTINGS_ACTIVATED,
+	SETTINGS_MOUSEOVER,
+	SETTINGS_LATCHED,
+	SETTINGS_RAMBLE,
+	SETTINGS_EXTENSIONS,
+	SETTINGS_FILE,
+	SETTINGS_STYLE_ITEM,
+	SETTINGS_INPUT_METHOD,
+	SETTINGS_TIMER,
+	SETTINGS_RAMBLE_THRESHOLD1,
+	SETTINGS_RAMBLE_THRESHOLD2,
+	SETTINGS_RAMBLE_TIMER,
+	SETTINGS_RAMBLE_BUTTON,
+	SETTINGS_RAMBLE_ALGO,
+	SETTINGS_OPACITY,
+	SETTINGS_SCALEX,
+	SETTINGS_SCALEY,
+	SETTINGS_FOCUS_ZOOM,
+	SETTINGS_SOUNDS,
+	SETTINGS_SYSTEM_FONT,
+	SETTINGS_FONT,
+	SETTINGS_XPOS,
+	SETTINGS_YPOS,
+	SETTINGS_NUM_ITEMS
+};
 
 /* This is a settings parameter type */
 enum settings_type {
@@ -35,8 +92,9 @@ enum settings_type {
 
 /* This is a settings parameter. */
 struct settings_param {
+	enum settings_cat cat;
 	gchar *builder_name;
-	gchar *gconf_name;
+	gchar *settings_name;
 	enum settings_type type;
 	union {
 		gboolean vbool;
@@ -46,50 +104,71 @@ struct settings_param {
 	} default_value;
 };
 
+/* Record key change registrations. */
+struct settings_registration {
+	enum settings_item item;
+	gchar *key;
+	gint id;
+	settings_callback cb;
+	gpointer user_data;
+	struct settings_registration *prev;
+	struct settings_registration *next;
+};
+
 /* general informations related to the settings */
 struct settings_info {
-	GConfClient *gconfclient;
+	GSettings *settings[SETTINGS_NUM_CATS];
+	gboolean transaction; /* TRUE when a transaction is open. */
 	gboolean gtk_exit;
 	GKeyFile *config;
 	gchar *config_file;
-	gchar buffer[64];
+	GSList *registrations;
 };
 
-/* Returns the absolute gconf path from a path relative to florence root */
-/* ! not thread safe */
-char *settings_get_full_path(const char *path);
+/* Initialize the settings module */
 void settings_init(gboolean exit, gchar *conf);
+/* Liberate memory used by the settings module */
 void settings_exit(void);
+/* Open the settings window */
 void settings(void);
-void settings_changecb_register(gchar *name, GConfClientNotifyFunc cb, gpointer user_data);
+
+/* register for settings changes */
+void settings_changecb_register(enum settings_item item, settings_callback cb, gpointer user_data);
 /* register all events */
-guint settings_register_all(GConfClientNotifyFunc cb);
+guint settings_register_all(settings_callback cb);
 /* unregister events */
 void settings_unregister(guint notify_id);
-/* commit a changeset */
-void settings_commit(GConfChangeSet *cs);
 
-/* get a value from gconf */
-GConfValue *settings_value_get(const gchar *name);
-/* get a gconf double */
-gdouble settings_double_get(const gchar *name);
-/* set a gconf double */
-void settings_double_set(const gchar *name, gdouble value, gboolean notify);
-/* get an integer from gconf */
-gint settings_get_int(const gchar *name);
-/* set a gconf integer */
-void settings_set_int(const gchar *name, gint value);
-/* get a gconf string */
-gchar *settings_get_string(const gchar *name);
-/* set a gconf string */
-void settings_string_set(const gchar *name, const gchar *value);
-/* get a gconf boolean */
-gboolean settings_get_bool(const gchar *name);
-/* set a gconf boolean */
-void settings_bool_set(const gchar *name, gboolean value);
+/* create a transaction */
+void settings_transaction();
+/* commit buffered changes */
+void settings_commit();
+/* revert buffered changes */
+void settings_rollback();
+/* check if there is any uncommited change */
+gboolean settings_dirty();
+
+/* get a value from GSettings */
+GVariant *settings_get_value(enum settings_item item);
+/* get a GSettings double */
+gdouble settings_get_double(enum settings_item item);
+/* set a GSettings double */
+void settings_set_double(enum settings_item item, gdouble value, gboolean notify);
+/* get an integer from GSettings */
+gint settings_get_int(enum settings_item item);
+/* set a GSettings integer */
+void settings_set_int(enum settings_item item, gint value);
+/* get a GSettings string */
+gchar *settings_get_string(enum settings_item item);
+/* set a GSettings string */
+void settings_set_string(enum settings_item item, const gchar *value);
+/* get a GSettings boolean */
+gboolean settings_get_bool(enum settings_item item);
+/* set a GSettings boolean */
+void settings_set_bool(enum settings_item item, gboolean value);
 
 /* get parameters table */
-struct settings_param *settings_defaults_get(void);
-/* Returns the gconf name of a builder object option according to the name table */
-char *settings_get_gconf_name(GtkWidget *widget);
+const struct settings_param *settings_defaults_get(void);
+/* Returns the GSettings name of a builder object option according to the name table */
+enum settings_item settings_get_settings_name(GtkWidget *widget);
 

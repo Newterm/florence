@@ -56,14 +56,14 @@ gchar *style_get_color(enum style_colours c)
 	START_FUNC
 	gchar *color=NULL;
 	switch(c) {
-		case STYLE_KEY_COLOR: color=(gchar *)settings_get_string("colours/key"); break;
-		case STYLE_OUTLINE_COLOR: color=(gchar *)settings_get_string("colours/outline"); break;
-		case STYLE_TEXT_COLOR: color=(gchar *)settings_get_string("colours/label"); break;
-		case STYLE_TEXT_OUTLINE_COLOR: color=(gchar *)settings_get_string("colours/label_outline"); break;
-		case STYLE_ACTIVATED_COLOR: color=(gchar *)settings_get_string("colours/activated"); break;
-		case STYLE_MOUSE_OVER_COLOR: color=(gchar *)settings_get_string("colours/mouseover"); break;
-		case STYLE_LATCHED_COLOR: color=(gchar *)settings_get_string("colours/latched"); break;
-		case STYLE_RAMBLE_COLOR: color=(gchar *)settings_get_string("colours/ramble"); break;
+		case STYLE_KEY_COLOR: color=(gchar *)settings_get_string(SETTINGS_KEY); break;
+		case STYLE_OUTLINE_COLOR: color=(gchar *)settings_get_string(SETTINGS_OUTLINE); break;
+		case STYLE_TEXT_COLOR: color=(gchar *)settings_get_string(SETTINGS_LABEL); break;
+		case STYLE_TEXT_OUTLINE_COLOR: color=(gchar *)settings_get_string(SETTINGS_LABEL_OUTLINE); break;
+		case STYLE_ACTIVATED_COLOR: color=(gchar *)settings_get_string(SETTINGS_ACTIVATED); break;
+		case STYLE_MOUSE_OVER_COLOR: color=(gchar *)settings_get_string(SETTINGS_MOUSEOVER); break;
+		case STYLE_LATCHED_COLOR: color=(gchar *)settings_get_string(SETTINGS_LATCHED); break;
+		case STYLE_RAMBLE_COLOR: color=(gchar *)settings_get_string(SETTINGS_RAMBLE); break;
 		default: color=NULL;
 	}
 	if (!color) {
@@ -270,10 +270,10 @@ void style_draw_text(struct style *style, cairo_t *cairoctx, gchar *text, gdoubl
 
 	style_cairo_status_check(cairoctx);
 
-	if (settings_get_bool("style/system_font")) {
+	if (settings_get_bool(SETTINGS_SYSTEM_FONT)) {
 		settings=gtk_settings_get_default();
 		g_object_get(settings, "gtk-font-name", &fontname, NULL);
-	} else fontname=settings_get_string("style/font");
+	} else fontname=settings_get_string(SETTINGS_FONT);
 	fontdesc=pango_font_description_from_string(fontname?fontname:"sans 10");
 	if (fontname) g_free(fontname);
 	fontfamilly=pango_font_description_get_family(fontdesc);
@@ -385,7 +385,7 @@ void style_shape_new(struct style *style, char *name, char *svg)
 		shape->source=(guchar *)g_strdup(svg);
 	}
 	shape->svg=rsvg_handle_new();
-	default_uri=settings_get_string("layout/style");
+	default_uri=settings_get_string(SETTINGS_STYLE);
 	rsvg_handle_set_base_uri(shape->svg, style->base_uri?style->base_uri:default_uri);
 	if (default_uri) g_free(default_uri);
 	rsvg_handle_write(shape->svg, (guchar *)source, (gsize)strlen(source), &error);
@@ -446,7 +446,7 @@ void style_shape_draw(struct style *style, struct shape *shape, cairo_t *cairoct
 		svg=rsvg_handle_new();
 		if (style->base_uri) rsvg_handle_set_base_uri(svg, style->base_uri);
 		else {
-			default_uri=settings_get_string("layout/style");
+			default_uri=settings_get_string(SETTINGS_STYLE);
 			rsvg_handle_set_base_uri(svg, default_uri);
 			if (default_uri) g_free(default_uri);
 		}
@@ -532,7 +532,7 @@ void style_update_colors (struct style *style)
 	}
 
 	list=style->shapes;
-	default_uri=settings_get_string("layout/style");
+	default_uri=settings_get_string(SETTINGS_STYLE);
 	while (list) {
 		shape=(struct shape *)list->data;
 		style_update_color((gchar *)shape->source, &(shape->svg),
@@ -684,7 +684,7 @@ struct style *style_new(gchar *base_uri)
 
 	memset(style, 0, sizeof(struct style));
 	style->base_uri=base_uri;
-	if (!uri) uri=settings_get_string("layout/style");
+	if (!uri) uri=settings_get_string(SETTINGS_STYLE);
 	layout=layoutreader_new(uri,
 		DATADIR "/styles/default/florence.style",
 		DATADIR "/relaxng/style.rng");

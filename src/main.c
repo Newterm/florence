@@ -24,7 +24,6 @@
 #include <getopt.h>
 #include <gtk/gtk.h>
 #include <gst/gst.h>
-#include <gconf/gconf-client.h>
 #include "system.h"
 #include "trace.h"
 #include "settings.h"
@@ -71,7 +70,6 @@ int main (int argc, char **argv)
 	textdomain (GETTEXT_PACKAGE);
 
 	gtk_init(&argc, &argv);
-	gconf_init(argc, argv, NULL);
 	g_type_init();
 
 	program_name=argv[0];
@@ -168,7 +166,7 @@ Options:\n\
   -d, --debug [level]     print debug information to stdout\n\
   -n, --no-gnome          use this flag if you are not using GNOME\n\
   -f, --focus [window]    give the focus to the window\n\
-  -u, --use-config file   use the given config file instead of gconf\n\n\
+  -u, --use-config file   use the given config file instead of gsettings\n\n\
 Report bugs to <f.agrech@gmail.com>.\n\
 More informations at <http://florence.sourceforge.net>.\n"));
 	exit (status);

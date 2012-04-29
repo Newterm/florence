@@ -475,7 +475,7 @@ gdouble status_timer_get(struct status *status)
 	START_FUNC
 	gdouble ret=0.0;
 	if (status->timer)
-		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_double_get("behaviour/timer");
+		ret=g_timer_elapsed(status->timer, NULL)*1000./settings_get_double(SETTINGS_TIMER);
 	END_FUNC
 	return ret;
 }
@@ -569,11 +569,11 @@ void status_im_set(struct status *status, gchar *val)
 }
 
 /* Called on input method change */
-void status_input_method(GConfClient *client, guint xnxn_id, GConfEntry *entry, gpointer user_data)
+void status_input_method(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct status *status=(struct status *)user_data;
-	status_im_set(status, (gchar *)gconf_value_get_string(gconf_entry_get_value(entry)));
+	status_im_set(status, settings_get_string(SETTINGS_INPUT_METHOD));
 	END_FUNC
 }
 
@@ -601,10 +601,10 @@ struct status *status_new(const gchar *focus_back)
 	if (focus_back) {
 		status->w_focus=status_find_window(focus_back);
 	}
-	im=settings_get_string("behaviour/input_method");
+	im=settings_get_string(SETTINGS_INPUT_METHOD);
 	status_im_set(status, im);
 	if (im) g_free(im);
-	settings_changecb_register("behaviour/input_method", status_input_method, status);
+	settings_changecb_register(SETTINGS_INPUT_METHOD, status_input_method, status);
 	END_FUNC
 	return status;
 }

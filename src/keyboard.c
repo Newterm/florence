@@ -21,7 +21,6 @@
 #include <stdio.h>
 #include <X11/XKBlib.h>
 #include <gtk/gtk.h>
-#include <gconf/gconf-client.h>
 #include "system.h"
 #include "trace.h"
 #include "keyboard.h"
@@ -38,7 +37,7 @@ void keyboard_status_update(struct keyboard *keyboard, struct status *status)
 	gchar **extstrs=NULL;
 	gchar **extstr=NULL;
 	if (keyboard->id) {
-		if ((allextstr=settings_get_string("layout/extensions"))) {
+		if ((allextstr=settings_get_string(SETTINGS_EXTENSIONS))) {
 			extstrs=g_strsplit(allextstr, ":", -1);
 			extstr=extstrs;
 			while (extstr && *extstr) {
@@ -288,16 +287,16 @@ GdkRectangle *keyboard_key_getrect(struct keyboard *keyboard, struct key *key, g
 	w=key->w;
 	h=key->h;
 	if (focus_zoom) {
-		xmargin=(w*settings_double_get("window/scalex")*(settings_double_get("style/focus_zoom")-1.0))+5.0;
-		ymargin=(h*settings_double_get("window/scaley")*(settings_double_get("style/focus_zoom")-1.0))+5.0;
+		xmargin=(w*settings_get_double(SETTINGS_SCALEX)*(settings_get_double(SETTINGS_FOCUS_ZOOM)-1.0))+5.0;
+		ymargin=(h*settings_get_double(SETTINGS_SCALEY)*(settings_get_double(SETTINGS_FOCUS_ZOOM)-1.0))+5.0;
 	} else {
 		xmargin=5.0;
 		ymargin=5.0;
 	}
-	rect.x=(x*settings_double_get("window/scalex"))-xmargin;
-	rect.y=(y*settings_double_get("window/scaley"))-ymargin;
-	rect.width=(w*settings_double_get("window/scalex"))+(xmargin*2);
-	rect.height=(h*settings_double_get("window/scaley"))+(ymargin*2);
+	rect.x=(x*settings_get_double(SETTINGS_SCALEX))-xmargin;
+	rect.y=(y*settings_get_double(SETTINGS_SCALEY))-ymargin;
+	rect.width=(w*settings_get_double(SETTINGS_SCALEX))+(xmargin*2);
+	rect.height=(h*settings_get_double(SETTINGS_SCALEY))+(ymargin*2);
 	END_FUNC
 	return &rect;
 }

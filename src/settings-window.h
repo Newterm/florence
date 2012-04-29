@@ -21,10 +21,7 @@
 
 /* all the informations related to the settings window */
 struct settings_window {
-	GConfClient *gconfclient;
 	GtkBuilder *gtkbuilder;
-	GConfChangeSet *gconfchangeset;
-	GConfChangeSet *rollback;
 	gboolean gtk_exit;
 	GtkListStore *style_list;
 	GtkListStore *layout_list;
@@ -38,7 +35,7 @@ gboolean settings_window_open(void);
 /* presents the settings window to the user */
 void settings_window_present(void);
 /* opens the settings window */
-void settings_window_new(GConfClient *gconfclient, gboolean exit);
+void settings_window_new(gboolean exit);
 /* liberate memory used by settings window */
 void settings_window_free();
 

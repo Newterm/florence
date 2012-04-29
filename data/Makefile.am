@@ -1,12 +1,11 @@
 
 SUBDIRS=styles layouts relaxng svg11
 
-GCONFTOOL=gconftool-2
-
-schemadir=@GCONF_SCHEMA_FILE_DIR@
-schemas_in_files=florence.schemas.in
-schema_DATA=$(schemas_in_files:.schemas.in=.schemas)
-@INTLTOOL_SCHEMAS_RULE@
+gsettings_in_files=org.florence.gschema.xml.in
+gsettings_SHEMAS=$(gsettings_in_files:.gshema.xml.in=.gschema.xml)
+@INTLTOOL_XML_NOMERGE_RULE@
+#gsettings_SCHEMAS=org.florence.gschema.xml
+@GSETTINGS_RULES@
 
 desktopdir=$(datadir)/applications
 desktop_in_files=florence.desktop.in
@@ -27,13 +26,7 @@ meta_DATA=florence.rnc florence.css
 configdir=$(datadir)/florence
 config_DATA=florence.conf
 
-install-data-local: $(schema_DATA)
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-install-rule $(builddir)/$(schema_DATA)
-
-uninstall-local: $(schema_DATA)
-	GCONF_CONFIG_SOURCE=$(GCONF_SCHEMA_CONFIG_SOURCE) $(GCONFTOOL) --makefile-uninstall-rule $(builddir)/$(schema_DATA)
-
 EXTRA_DIST = $(config_DATA) $(gtkbuilder_DATA) $(icons_DATA) $(meta_DATA)\
-	     $(schemas_in_files) $(desktop_in_files:.desktop.in=.desktop.in.in)
-DISTCLEANFILES = $(desktop_DATA) $(desktop_in_files) $(desktop_DATA) $(schema_DATA)
+	     $(gsettings_SCHEMAS) $(desktop_in_files:.desktop.in=.desktop.in.in)
+DISTCLEANFILES = $(desktop_DATA) $(desktop_in_files) $(desktop_DATA) $(gsettings_SCHEMAS)
 
