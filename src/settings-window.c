@@ -159,7 +159,7 @@ void settings_window_preview_build()
 				}
 				if (style) style_free(style);
 				g_free(name);
-				gdk_pixbuf_unref(pixbuf); 
+				g_object_unref(G_OBJECT(pixbuf)); 
 			}
 		}
 		closedir(dp);
@@ -600,6 +600,7 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 	START_FUNC
 	static gboolean closed=FALSE;
 	if (closed) return;
+	closed=TRUE;
 	if (settings_dirty()) {
 		if (GTK_RESPONSE_ACCEPT==tools_dialog(_("Confirm"), GTK_WINDOW(window),
 			GTK_STOCK_APPLY, GTK_STOCK_DISCARD, _("Discard changes?")))
@@ -609,10 +610,9 @@ void settings_window_close(GtkWidget *window, GtkWidget *button)
 	if (settings_window->notify_id>0) settings_unregister(settings_window->notify_id);
 	settings_window->notify_id=0;
 
-	closed=TRUE;
 	if (settings_window->style_list) g_object_unref(G_OBJECT(settings_window->style_list)); 
 	settings_window->style_list=NULL;
-	if (window) g_object_unref(G_OBJECT(window));
+	if (window) gtk_widget_destroy(GTK_WIDGET(window));
 	if (settings_window->gtk_exit) exit(0);
 	closed=FALSE;
 	END_FUNC
