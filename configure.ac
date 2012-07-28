@@ -60,7 +60,7 @@ if test "x$with_docs" != "xno"; then
 fi
 
 # Checks for libraries.
-DEP_MODULES="gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gstreamer-0.10"
+DEP_MODULES="xext gmodule-2.0 cairo librsvg-2.0 libxml-2.0 gstreamer-0.10"
 PKG_CHECK_MODULES(DEPS, $DEP_MODULES)
 
 PKG_CHECK_MODULES([GTK3], [gtk+-3.0], AC_DEFINE([ENABLE_GTK3], [], [GTK3 enabled.]),

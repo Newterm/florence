@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-04-26 21:53+0000\n"
+"POT-Creation-Date: 2012-07-28 13:03+0200\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -25,163 +25,163 @@ msgid "Florence Virtual Keyboard"
 msgstr "Виртуальная Клавиатура Florence"
 
 #: ../data/florence.glade.h:1
-msgid "Activate ramble on button press"
-msgstr "Активировать переход по нажатию кнопки"
-
-#: ../data/florence.glade.h:2
-msgid "Activated key background color"
-msgstr "Цвет активированной клавиши"
-
-#: ../data/florence.glade.h:3 ../data/florence.schemas.in.h:2
-msgid "Allow to resize window."
-msgstr "Разрешить изменение размера окна"
-
-#: ../data/florence.glade.h:4
-msgid "Always on top"
-msgstr "Всегда наверху"
-
-#: ../data/florence.glade.h:5
-msgid "Appear in task bar."
-msgstr "Видимость в панели задач"
-
-#: ../data/florence.glade.h:6
-msgid "Apply changes"
-msgstr "Применить"
-
-#: ../data/florence.glade.h:7 ../data/florence.schemas.in.h:5
-msgid "Auto click timeout"
-msgstr "Задержка авто-нажатия"
-
-#: ../data/florence.glade.h:8
-msgid "Auto hide"
-msgstr "Авто скрытие"
-
-#: ../data/florence.glade.h:9
-msgid "Auto hide (only show when an editable widget is selected)."
-msgstr ""
-"Автоматически скрывать (показывать только когда выбран редактируемый виджет)"
-
-#: ../data/florence.glade.h:10
-msgid "Cancel"
-msgstr "Отмена"
-
-#: ../data/florence.glade.h:11 ../data/florence.schemas.in.h:15
-msgid "Decorate window"
-msgstr "Показывать рамку окна"
-
-#: ../data/florence.glade.h:12
-msgid "Decorated"
-msgstr "Рамка окна"
-
-#: ../data/florence.glade.h:13
-msgid "Distance based"
-msgstr "Базовое расстояние"
-
-#: ../data/florence.glade.h:14
-msgid "Enable sound feedback\t"
-msgstr ""
-
-#: ../data/florence.glade.h:15
-msgid "Extensions"
-msgstr "Расширения"
-
-#: ../data/florence.glade.h:16
-msgid "Features"
-msgstr "Возможности"
-
-#: ../data/florence.glade.h:17
 msgid "Florence Settings"
 msgstr "Настройки Florence"
 
-#: ../data/florence.glade.h:18 ../data/florence.schemas.in.h:27
-msgid "Input method"
-msgstr "Метод ввода"
+#: ../data/florence.glade.h:2
+msgid "Style preview"
+msgstr "Предпросмотр"
 
-#: ../data/florence.glade.h:19
-msgid "Intermediate icon"
-msgstr "Промежуточный значок"
+#: ../data/florence.glade.h:3
+msgid "shape"
+msgstr "форма"
 
-#: ../data/florence.glade.h:20
-msgid "Keep ratio"
-msgstr "Сохранять пропорции"
+#: ../data/florence.glade.h:4
+msgid "Normal key background color"
+msgstr "Цвет клавиш"
 
-#: ../data/florence.glade.h:21 ../data/florence.schemas.in.h:28
-msgid "Keep the keyboard on top."
-msgstr "Показывать клавиатуру поверх всех окон"
-
-#: ../data/florence.glade.h:22 ../data/florence.schemas.in.h:30
-msgid "Keep window ratio when resizing window."
-msgstr "Сохранять пропорции окна при изменении его размеров."
-
-#: ../data/florence.glade.h:23
+#: ../data/florence.glade.h:5
 msgid "Key background color"
 msgstr "Цвет клавиш"
 
-#: ../data/florence.glade.h:24
-msgid "Key background color when the mouse is over"
-msgstr "Цвет клавиш при наведенной мыши"
+#: ../data/florence.glade.h:6
+msgid "Activated key background color"
+msgstr "Цвет активированной клавиши"
 
-#: ../data/florence.glade.h:25
+#: ../data/florence.glade.h:7
+msgid "Labels and symbols color"
+msgstr "Цвет букв и символов"
+
+#: ../data/florence.glade.h:8
+msgid "Labels and symbols outline color"
+msgstr "Цвет контура меток и символов"
+
+#: ../data/florence.glade.h:9
+msgid "Latched keys background color"
+msgstr "Цвет зажатых клавиш"
+
+#: ../data/florence.glade.h:10
+msgid "Latched keys color"
+msgstr "Цвет зажатых клавиш"
+
+#: ../data/florence.glade.h:11
 msgid "Key with mouve over background color"
 msgstr "Цвет фона клавиш при наведенной мыши"
 
-#: ../data/florence.glade.h:26
+#: ../data/florence.glade.h:12
+msgid "Key background color when the mouse is over"
+msgstr "Цвет клавиш при наведенной мыши"
+
+#: ../data/florence.glade.h:13
+msgid "colors"
+msgstr "цвета"
+
+#: ../data/florence.glade.h:14
+msgid "Sets the focus scaling factor"
+msgstr "Установить фокус фактора масштабирования"
+
+#: ../data/florence.glade.h:15
+msgid "focus zoom"
+msgstr "Увеличение клавиш при наведении"
+
+#: ../data/florence.glade.h:16
+msgid "Enable sound feedback\t"
+msgstr ""
+
+#: ../data/florence.glade.h:17
+msgid "sounds"
+msgstr ""
+
+#: ../data/florence.glade.h:18 ../data/org.florence.gschema.xml.in.h:74
+msgid "Use system font"
+msgstr ""
+
+#: ../data/florence.glade.h:19
 #, fuzzy
 msgid "Keyboard font: "
 msgstr "найденная раскладка клавиатуры: <%s>"
 
-#: ../data/florence.glade.h:27
-msgid "Labels and symbols color"
-msgstr "Цвет букв и символов"
+#: ../data/florence.glade.h:20
+msgid "font"
+msgstr ""
+
+#: ../data/florence.glade.h:21
+msgid "style"
+msgstr "вид"
+
+#: ../data/florence.glade.h:22
+msgid "Decorated"
+msgstr "Рамка окна"
+
+#: ../data/florence.glade.h:23 ../data/org.florence.gschema.xml.in.h:35
+msgid "Decorate window"
+msgstr "Показывать рамку окна"
+
+#: ../data/florence.glade.h:24
+msgid "Transparent"
+msgstr "Прозрачность"
+
+#: ../data/florence.glade.h:25 ../data/org.florence.gschema.xml.in.h:33
+msgid "Transparent mode"
+msgstr "Прозрачный режим"
+
+#: ../data/florence.glade.h:26
+msgid "Resizable"
+msgstr "Изменение размера"
+
+#: ../data/florence.glade.h:27 ../data/org.florence.gschema.xml.in.h:37
+msgid "Allow to resize window."
+msgstr "Разрешить изменение размера окна"
 
 #: ../data/florence.glade.h:28
-msgid "Labels and symbols outline color"
-msgstr "Цвет контура меток и символов"
+msgid "Keep ratio"
+msgstr "Сохранять пропорции"
 
-#: ../data/florence.glade.h:29
-msgid "Latched keys background color"
-msgstr "Цвет зажатых клавиш"
+#: ../data/florence.glade.h:29 ../data/org.florence.gschema.xml.in.h:39
+msgid "Keep window ratio when resizing window."
+msgstr "Сохранять пропорции окна при изменении его размеров."
 
 #: ../data/florence.glade.h:30
-msgid "Latched keys color"
-msgstr "Цвет зажатых клавиш"
+msgid "Task bar"
+msgstr "Панель задач"
 
 #: ../data/florence.glade.h:31
-msgid ""
-"Move the keyboard to near the selected editable widget in auto-hide mode"
-msgstr ""
-"Перемещать клавиатуру рядом с выбранным редактируемым объектом в режиме "
-"автоскрытия"
+msgid "Appear in task bar."
+msgstr "Видимость в панели задач"
 
 #: ../data/florence.glade.h:32
-msgid "Move to near selected widget"
-msgstr "Перемещать рядом с выбранным виджетом"
+msgid "Always on top"
+msgstr "Всегда наверху"
 
-#: ../data/florence.glade.h:33
-msgid "Normal key background color"
-msgstr "Цвет клавиш"
+#: ../data/florence.glade.h:33 ../data/org.florence.gschema.xml.in.h:43
+msgid "Keep the keyboard on top."
+msgstr "Показывать клавиатуру поверх всех окон"
 
 #: ../data/florence.glade.h:34
+msgid "Features"
+msgstr "Возможности"
+
+#: ../data/florence.glade.h:35
 msgid "Opacity"
 msgstr "Прозрачность"
 
-#: ../data/florence.glade.h:35
-msgid "Put an intermediate icon before showing the actual keyboard"
-msgstr "Ставить вспомогательный значок перед показом фактической клавиатуры"
-
 #: ../data/florence.glade.h:36
-msgid "Quit preferences"
-msgstr "Закрыть настройки"
+msgid "window"
+msgstr "окно"
 
 #: ../data/florence.glade.h:37
-msgid "Ramble distance theshold for multiple press"
-msgstr "Дистанция перехода для множественного нажатия"
+msgid "Select input method"
+msgstr "Выбрать метод ввода"
 
-#: ../data/florence.glade.h:38
-msgid "Ramble distance theshold for simple press"
-msgstr "Дистанция перехода для одиночного нажатия"
+#: ../data/florence.glade.h:38 ../data/org.florence.gschema.xml.in.h:11
+msgid "Auto click timeout"
+msgstr "Задержка авто-нажатия"
 
 #: ../data/florence.glade.h:39
+msgid "Activate ramble on button press"
+msgstr "Активировать переход по нажатию кнопки"
+
+#: ../data/florence.glade.h:40
 msgid ""
 "Rambling will start when the mouse button is pressed. Always activated "
 "otherwise."
@@ -189,218 +189,109 @@ msgstr ""
 "Переход начинается при зажатой кнопке мыши. В противном случае всегда "
 "активировано"
 
-#: ../data/florence.glade.h:40
-msgid "Resizable"
-msgstr "Изменение размера"
-
 #: ../data/florence.glade.h:41
-msgid "Select Florence layout"
-msgstr "Выбор раскладок Florence"
+msgid "Distance based"
+msgstr "Базовое расстояние"
 
 #: ../data/florence.glade.h:42
-msgid "Select input method"
-msgstr "Выбрать метод ввода"
-
-#: ../data/florence.glade.h:43
-msgid "Sets the focus scaling factor"
-msgstr "Установить фокус фактора масштабирования"
-
-#: ../data/florence.glade.h:44
-msgid "Style preview"
-msgstr "Предпросмотр"
-
-#: ../data/florence.glade.h:45
-msgid "Task bar"
-msgstr "Панель задач"
-
-#: ../data/florence.glade.h:46
 msgid "Time based"
 msgstr "По времени"
 
-#: ../data/florence.glade.h:47
+#: ../data/florence.glade.h:43
+msgid "Ramble distance theshold for simple press"
+msgstr "Дистанция перехода для одиночного нажатия"
+
+#: ../data/florence.glade.h:44
+msgid "Ramble distance theshold for multiple press"
+msgstr "Дистанция перехода для множественного нажатия"
+
+#: ../data/florence.glade.h:45
 msgid "Time threshold for time based ramble mode."
 msgstr "Временной порог для времени режима перехода."
 
+#: ../data/florence.glade.h:46 ../data/org.florence.gschema.xml.in.h:9
+msgid "Input method"
+msgstr "Метод ввода"
+
+#: ../data/florence.glade.h:47
+msgid "Auto hide"
+msgstr "Авто скрытие"
+
 #: ../data/florence.glade.h:48
-msgid "Transparent"
-msgstr "Прозрачность"
-
-#: ../data/florence.glade.h:49 ../data/florence.schemas.in.h:64
-msgid "Transparent mode"
-msgstr "Прозрачный режим"
-
-#: ../data/florence.glade.h:50 ../data/florence.schemas.in.h:66
-msgid "Use system font"
+msgid "Auto hide (only show when an editable widget is selected)."
 msgstr ""
+"Автоматически скрывать (показывать только когда выбран редактируемый виджет)"
+
+#: ../data/florence.glade.h:49
+msgid "Move to near selected widget"
+msgstr "Перемещать рядом с выбранным виджетом"
+
+#: ../data/florence.glade.h:50
+msgid ""
+"Move the keyboard to near the selected editable widget in auto-hide mode"
+msgstr ""
+"Перемещать клавиатуру рядом с выбранным редактируемым объектом в режиме "
+"автоскрытия"
 
 #: ../data/florence.glade.h:51
+msgid "Intermediate icon"
+msgstr "Промежуточный значок"
+
+#: ../data/florence.glade.h:52
+msgid "Put an intermediate icon before showing the actual keyboard"
+msgstr "Ставить вспомогательный значок перед показом фактической клавиатуры"
+
+#: ../data/florence.glade.h:53
 msgid "behaviour"
 msgstr "Поведение"
 
-#: ../data/florence.glade.h:52
-msgid "colors"
-msgstr "цвета"
-
-#: ../data/florence.glade.h:53
-msgid "focus zoom"
-msgstr "Увеличение клавиш при наведении"
-
 #: ../data/florence.glade.h:54
-msgid "font"
-msgstr ""
+msgid "Select Florence layout"
+msgstr "Выбор раскладок Florence"
 
 #: ../data/florence.glade.h:55
+msgid "Extensions"
+msgstr "Расширения"
+
+#: ../data/florence.glade.h:56
 msgid "layout"
 msgstr "раскладка"
 
-#: ../data/florence.glade.h:56
-msgid "shape"
-msgstr "форма"
-
 #: ../data/florence.glade.h:57
-msgid "sounds"
-msgstr ""
+msgid "Quit preferences"
+msgstr "Закрыть настройки"
 
 #: ../data/florence.glade.h:58
-msgid "style"
-msgstr "вид"
+msgid "Cancel"
+msgstr "Отмена"
 
 #: ../data/florence.glade.h:59
-msgid "window"
-msgstr "окно"
+msgid "Apply changes"
+msgstr "Применить"
 
-#: ../data/florence.schemas.in.h:1
-msgid "Activated color"
-msgstr "Активированный цвет"
+#: ../data/org.florence.gschema.xml.in.h:1
+msgid "Hide the keyboard automatically when not needed"
+msgstr "Скрывать клавиатуру автоматически, когда она не требуется"
 
-#: ../data/florence.schemas.in.h:3
-msgid "Amount of time in milliseconds before the key is automatically pressed."
-msgstr ""
-"Количество времени в миллисекундах перед автоматическим нажатием клавиши."
-
-#: ../data/florence.schemas.in.h:4
-msgid "Appear in the task bar"
-msgstr "Появляться в панели задач"
-
-#: ../data/florence.schemas.in.h:6
-msgid "Bring back the keyboard to top."
-msgstr "Вернуть клавиатуру наверх."
-
-#: ../data/florence.schemas.in.h:7
-msgid "Color of the key when the mouse is over"
-msgstr "Подсвечивать клавишу при наведении курсора мыши"
-
-#: ../data/florence.schemas.in.h:8
-msgid "Color of the keys"
-msgstr "Цвет клавиш"
-
-#: ../data/florence.schemas.in.h:9
-msgid "Color of the labels of the keys"
-msgstr "Цвет меток клавиш"
-
-#: ../data/florence.schemas.in.h:10
-msgid "Color of the latched keys"
-msgstr "Цвет запертых клавиш"
-
-#: ../data/florence.schemas.in.h:11
-msgid ""
-"Color of the ouline of the labels. Must contrast with label color for better "
-"visibility."
-msgstr ""
-"Цвет контура меток . Должен контрастировать с цветом метки для лучшей "
-"видимости."
-
-#: ../data/florence.schemas.in.h:12
-msgid "Color of the outline of the keys"
-msgstr "Цвет контура клавиш"
-
-#: ../data/florence.schemas.in.h:13
-msgid "Color of the pressed keys"
-msgstr "Цвет нажатой клавиши"
-
-#: ../data/florence.schemas.in.h:14
-msgid "Color of the ramble path drawn in ramble mode."
-msgstr ""
-
-#: ../data/florence.schemas.in.h:16
-msgid "Display a notification message at startup explaining the basics."
-msgstr "Показать уведомление при запуске для объяснения основ."
-
-#: ../data/florence.schemas.in.h:17
-msgid "Display a startup notification message."
-msgstr "Показать уведомление при запуске."
-
-#: ../data/florence.schemas.in.h:18
-msgid "Distance threshold for distance based ramble mode for first key press."
-msgstr "Порог дистанции перехода для первой нажатой клавиши."
-
-#: ../data/florence.schemas.in.h:19
-msgid ""
-"Distance threshold for distance based ramble mode for multiple key presses."
-msgstr "Порог дистанции перехода для нескольких нажатых клавиш."
-
-#: ../data/florence.schemas.in.h:20
+#: ../data/org.florence.gschema.xml.in.h:2
 msgid "Florence will hide automatically when no editable widget is selected."
 msgstr ""
 "Florence будет автоматически скрываться при выборе нередактируемого объекта."
 
-#: ../data/florence.schemas.in.h:21
-msgid "Florence will hide the keyboard window just after starting up."
-msgstr ""
-
-#: ../data/florence.schemas.in.h:22
-#, fuzzy
-msgid "Font used to display labels on the keyboard"
-msgstr "Видеть окна позади клавиатуры."
-
-#: ../data/florence.schemas.in.h:23
-msgid "Hide the keyboard automatically when not needed"
-msgstr "Скрывать клавиатуру автоматически, когда она не требуется"
-
-#: ../data/florence.schemas.in.h:24
+#: ../data/org.florence.gschema.xml.in.h:3
 #, fuzzy
 msgid "Hide the keyboard when Florence starts"
 msgstr "Скрывать клавиатуру автоматически, когда она не требуется"
 
-#: ../data/florence.schemas.in.h:25
-msgid "Horizontal position of the keyboard window on the screen (in pixel)."
-msgstr "Горизонтальная позиция окна клавиатуры на экране (в пикселях)."
-
-#: ../data/florence.schemas.in.h:26
-#, fuzzy
-msgid "Horizontal scaling factor of the window"
-msgstr "Фактор масштабирования окна"
-
-#: ../data/florence.schemas.in.h:29
-msgid "Keep the keyboard window on top of other windows."
-msgstr "Окно клавиатуры поверх всех окон."
-
-#: ../data/florence.schemas.in.h:31
-#, fuzzy
-msgid "Keyboard font"
-msgstr "Показывать клавиатуру поверх всех окон"
-
-#: ../data/florence.schemas.in.h:32
-msgid "List of colon-separated (:) extension names"
-msgstr "Список разделенных двоеточиями (:) расширений имен"
-
-#: ../data/florence.schemas.in.h:33
-msgid ""
-"List of keyboard extensions names (colon-separated). extension names must be "
-"found in layout file"
+#: ../data/org.florence.gschema.xml.in.h:4
+msgid "Florence will hide the keyboard window just after starting up."
 msgstr ""
-"Список клавиатурных расширений имён (разделенных двоеточиями). расширени "
-"имен должны быть найдены в файл разметки"
 
-#: ../data/florence.schemas.in.h:34
-msgid "Make Florence appear in the task bar."
-msgstr "Показывать Florence в панели задач"
+#: ../data/org.florence.gschema.xml.in.h:5
+msgid "Move the keyboard to near the selected widget"
+msgstr "Перемещать клавиатуру рядом с выбранным объектом"
 
-#: ../data/florence.schemas.in.h:35
-msgid "Mouse over color"
-msgstr "Наведите курсор на цвет"
-
-#: ../data/florence.schemas.in.h:36
+#: ../data/org.florence.gschema.xml.in.h:6
 msgid ""
 "Move the keyboard to near the selected editable widget in auto-hide mode. "
 "Only useful when auto_hide is activated."
@@ -408,89 +299,13 @@ msgstr ""
 "Перемещать клавиатуру рядом с выбранным редактируемым объектом в режиме "
 "автоскрытия. Используется только когда автоскрытие активно."
 
-#: ../data/florence.schemas.in.h:37
-msgid "Move the keyboard to near the selected widget"
-msgstr "Перемещать клавиатуру рядом с выбранным объектом"
-
-#: ../data/florence.schemas.in.h:38
-msgid "Opacity of the keyboard window"
-msgstr "Непрозрачность окна клавиатуры"
-
-#: ../data/florence.schemas.in.h:39
-msgid "Outline color"
-msgstr "Цвет контура"
-
-#: ../data/florence.schemas.in.h:40
-msgid "Path of the layout file"
-msgstr "Путь к файлу разметки"
-
-#: ../data/florence.schemas.in.h:41
-msgid "Path of the layout style file"
-msgstr "Путь файла разметки стиля"
-
-#: ../data/florence.schemas.in.h:42
-msgid ""
-"Periodically (each second) bring back the keyboard to top. This is useful "
-"for window managers not supporting the always_on_top hint."
-msgstr ""
-"Периодически (каждую секунду) возвращать клавиатуру наверх. Полезно для "
-"менеджеров окон без поддержки автоскрытия."
-
-#: ../data/florence.schemas.in.h:43
-msgid "Position along the X axis"
-msgstr "Позиция по оси X"
-
-#: ../data/florence.schemas.in.h:44
-msgid "Position along the Y axis"
-msgstr "Позиция по оси Y"
-
-#: ../data/florence.schemas.in.h:45
-msgid "Ramble algorithm"
-msgstr "Алгоритм перехода"
-
-#: ../data/florence.schemas.in.h:46
-#, fuzzy
-msgid "Ramble path color"
-msgstr "Алгоритм перехода"
-
-#: ../data/florence.schemas.in.h:47
-msgid ""
-"Set the input method. Available input methods are button, timer and ramble."
-msgstr "Установить метод ввода. Доступные методы: кнопка, таймер и переход."
-
-#: ../data/florence.schemas.in.h:48
-msgid "Set the ramble algorithm used. Valid algorithms are distance and time."
-msgstr "Установить алгоритм перехода. Доступные алгоритмы: дистанция и время."
-
-#: ../data/florence.schemas.in.h:49
-msgid ""
-"Set to true to use gtk default font. Set to false to use the style font."
-msgstr ""
-
-#: ../data/florence.schemas.in.h:50
-#, fuzzy
-msgid "Sets the horizontal size of the window and of the keys"
-msgstr "Установить размер окна и клавиш"
-
-#: ../data/florence.schemas.in.h:51
-msgid ""
-"Sets the opacity of the keyboard window. Requires window manager compositing "
-"to work"
-msgstr ""
-"Установить прозрачность окна клавиатуры. Необходим композитный менеджер"
-
-#: ../data/florence.schemas.in.h:52
-#, fuzzy
-msgid "Sets the vertical size of the window and of the keys"
-msgstr "Установить размер окна и клавиш"
-
-#: ../data/florence.schemas.in.h:53
+#: ../data/org.florence.gschema.xml.in.h:7
 msgid ""
 "Show an intermediate icon before showing the keyboard in auto-hide mode."
 msgstr ""
 "Показывать промежуточный значок до вызова клавиатуры в режиме автоскрытия."
 
-#: ../data/florence.schemas.in.h:54
+#: ../data/org.florence.gschema.xml.in.h:8
 msgid ""
 "Show an intermediate icon when you click on an editable widget. Click on the "
 "icon to show the actual keyboard."
@@ -498,36 +313,12 @@ msgstr ""
 "Показывать промежуточный значок после нажатия на редактируемый объект. "
 "Нажмите на значок для показа текущей клавиатуры."
 
-#: ../data/florence.schemas.in.h:55
-msgid "Text color"
-msgstr "Цвет текста"
-
-#: ../data/florence.schemas.in.h:56
-msgid "Text outline color"
-msgstr "Цвет контура текста"
-
-#: ../data/florence.schemas.in.h:57
-msgid "The keyboard window can be resized with the mouse."
-msgstr "Окно клавиатуры может масштабироваться мышью."
-
-#: ../data/florence.schemas.in.h:58
-msgid "The layout file contains the layout of the keys on the keyboard"
-msgstr "Файл разметки содержит разметку клавиш клавиатуры"
-
-#: ../data/florence.schemas.in.h:59
+#: ../data/org.florence.gschema.xml.in.h:10
 msgid ""
-"The layout style file contains the style to draw the keys of the keyboard"
-msgstr "Файл стиля содержит стиль для отрисовки клавиш клавиатуры"
+"Set the input method. Available input methods are button, timer and ramble."
+msgstr "Установить метод ввода. Доступные методы: кнопка, таймер и переход."
 
-#: ../data/florence.schemas.in.h:60
-msgid "The window proportions are kept intact while resizing the window."
-msgstr "Пропорции окна сохраняются при изменении размера окна."
-
-#: ../data/florence.schemas.in.h:61
-msgid "Time threshold for timer based ramble mode."
-msgstr "Временной порог для времени режима перехода."
-
-#: ../data/florence.schemas.in.h:62
+#: ../data/org.florence.gschema.xml.in.h:12
 msgid ""
 "Time, in milliseconds, to wait when the mouse is over a key before the key "
 "is automatically pressed (when timer input method is selected)"
@@ -535,24 +326,19 @@ msgstr ""
 "Время ожидания в миллисекундах, когда мышь находится над клавишей до её "
 "автоматического нажатия (когда выбран ввода таймер)"
 
-#: ../data/florence.schemas.in.h:63
-msgid "To see the windows behind the keyboard."
-msgstr "Видеть окна позади клавиатуры."
+#: ../data/org.florence.gschema.xml.in.h:13
+msgid "Ramble algorithm"
+msgstr "Алгоритм перехода"
 
-#: ../data/florence.schemas.in.h:65
-msgid "Use button to activate rambling."
-msgstr "Используйте кнопку для активации перехода."
+#: ../data/org.florence.gschema.xml.in.h:14
+msgid "Set the ramble algorithm used. Valid algorithms are distance and time."
+msgstr "Установить алгоритм перехода. Доступные алгоритмы: дистанция и время."
 
-#: ../data/florence.schemas.in.h:67
-msgid "Vertical position of the keyboard window on the screen (in pixel)."
-msgstr "Вертикальная позиция окна клавиатуры на экране (в пикселях)"
+#: ../data/org.florence.gschema.xml.in.h:15
+msgid "Distance threshold for distance based ramble mode for first key press."
+msgstr "Порог дистанции перехода для первой нажатой клавиши."
 
-#: ../data/florence.schemas.in.h:68
-#, fuzzy
-msgid "Vertical scaling factor of the window"
-msgstr "Фактор масштабирования окна"
-
-#: ../data/florence.schemas.in.h:69
+#: ../data/org.florence.gschema.xml.in.h:16
 msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) before the key is pressed"
@@ -560,7 +346,12 @@ msgstr ""
 "Когда включен метод ввода переход, это дистанция возможного перемещения "
 "указателя по клавише (относительно её размера) до того, когда она нажмётся."
 
-#: ../data/florence.schemas.in.h:70
+#: ../data/org.florence.gschema.xml.in.h:17
+msgid ""
+"Distance threshold for distance based ramble mode for multiple key presses."
+msgstr "Порог дистанции перехода для нескольких нажатых клавиш."
+
+#: ../data/org.florence.gschema.xml.in.h:18
 msgid ""
 "When ramble input method is selected, this the distance the pointer must "
 "move over a key (relative to the size of the key) for pressing a key a "
@@ -569,7 +360,20 @@ msgstr ""
 "Когда выбран метод ввода переход, это дистанция передвижения по клавише (по "
 "сравнению с её размером) для нажатия второй и следующие разы."
 
-#: ../data/florence.schemas.in.h:71
+#: ../data/org.florence.gschema.xml.in.h:19
+msgid "Time threshold for timer based ramble mode."
+msgstr "Временной порог для времени режима перехода."
+
+#: ../data/org.florence.gschema.xml.in.h:20
+msgid "Amount of time in milliseconds before the key is automatically pressed."
+msgstr ""
+"Количество времени в миллисекундах перед автоматическим нажатием клавиши."
+
+#: ../data/org.florence.gschema.xml.in.h:21
+msgid "Use button to activate rambling."
+msgstr "Используйте кнопку для активации перехода."
+
+#: ../data/org.florence.gschema.xml.in.h:22
 msgid ""
 "When this option is set, rambling starts on button push. No button is "
 "necessary when this option is unset."
@@ -577,60 +381,256 @@ msgstr ""
 "Когда эта опция установлена, переход начинается по нажатию на кнопку. Нет "
 "необходимости в кнопке, если эта опция не установлена."
 
-#: ../data/florence.schemas.in.h:72
+#: ../data/org.florence.gschema.xml.in.h:23
+msgid "Display a startup notification message."
+msgstr "Показать уведомление при запуске."
+
+#: ../data/org.florence.gschema.xml.in.h:24
+msgid "Display a notification message at startup explaining the basics."
+msgstr "Показать уведомление при запуске для объяснения основ."
+
+#: ../data/org.florence.gschema.xml.in.h:25
+msgid "Position along the X axis"
+msgstr "Позиция по оси X"
+
+#: ../data/org.florence.gschema.xml.in.h:26
+msgid "Horizontal position of the keyboard window on the screen (in pixel)."
+msgstr "Горизонтальная позиция окна клавиатуры на экране (в пикселях)."
+
+#: ../data/org.florence.gschema.xml.in.h:27
+msgid "Position along the Y axis"
+msgstr "Позиция по оси Y"
+
+#: ../data/org.florence.gschema.xml.in.h:28
+msgid "Vertical position of the keyboard window on the screen (in pixel)."
+msgstr "Вертикальная позиция окна клавиатуры на экране (в пикселях)"
+
+#: ../data/org.florence.gschema.xml.in.h:29
+#, fuzzy
+msgid "Horizontal scaling factor of the window"
+msgstr "Фактор масштабирования окна"
+
+#: ../data/org.florence.gschema.xml.in.h:30
+#, fuzzy
+msgid "Sets the horizontal size of the window and of the keys"
+msgstr "Установить размер окна и клавиш"
+
+#: ../data/org.florence.gschema.xml.in.h:31
+#, fuzzy
+msgid "Vertical scaling factor of the window"
+msgstr "Фактор масштабирования окна"
+
+#: ../data/org.florence.gschema.xml.in.h:32
+#, fuzzy
+msgid "Sets the vertical size of the window and of the keys"
+msgstr "Установить размер окна и клавиш"
+
+#: ../data/org.florence.gschema.xml.in.h:34
+msgid "To see the windows behind the keyboard."
+msgstr "Видеть окна позади клавиатуры."
+
+#: ../data/org.florence.gschema.xml.in.h:36
 msgid "Window has a title bar and buttons."
 msgstr "Окно с заголовком и кнопками."
 
-#: ../data/florence.schemas.in.h:73
+#: ../data/org.florence.gschema.xml.in.h:38
+msgid "The keyboard window can be resized with the mouse."
+msgstr "Окно клавиатуры может масштабироваться мышью."
+
+#: ../data/org.florence.gschema.xml.in.h:40
+msgid "The window proportions are kept intact while resizing the window."
+msgstr "Пропорции окна сохраняются при изменении размера окна."
+
+#: ../data/org.florence.gschema.xml.in.h:41
+msgid "Appear in the task bar"
+msgstr "Появляться в панели задач"
+
+#: ../data/org.florence.gschema.xml.in.h:42
+msgid "Make Florence appear in the task bar."
+msgstr "Показывать Florence в панели задач"
+
+#: ../data/org.florence.gschema.xml.in.h:44
+msgid "Keep the keyboard window on top of other windows."
+msgstr "Окно клавиатуры поверх всех окон."
+
+#: ../data/org.florence.gschema.xml.in.h:45
+msgid "Bring back the keyboard to top."
+msgstr "Вернуть клавиатуру наверх."
+
+#: ../data/org.florence.gschema.xml.in.h:46
+msgid ""
+"Periodically (each second) bring back the keyboard to top. This is useful "
+"for window managers not supporting the always_on_top hint."
+msgstr ""
+"Периодически (каждую секунду) возвращать клавиатуру наверх. Полезно для "
+"менеджеров окон без поддержки автоскрытия."
+
+#: ../data/org.florence.gschema.xml.in.h:47
+msgid "Opacity of the keyboard window"
+msgstr "Непрозрачность окна клавиатуры"
+
+#: ../data/org.florence.gschema.xml.in.h:48
+msgid ""
+"Sets the opacity of the keyboard window. Requires window manager compositing "
+"to work"
+msgstr ""
+"Установить прозрачность окна клавиатуры. Необходим композитный менеджер"
+
+#: ../data/org.florence.gschema.xml.in.h:49
+msgid "key color"
+msgstr "цвет клавиши"
+
+#: ../data/org.florence.gschema.xml.in.h:50
+msgid "Color of the keys"
+msgstr "Цвет клавиш"
+
+#: ../data/org.florence.gschema.xml.in.h:51
+msgid "Outline color"
+msgstr "Цвет контура"
+
+#: ../data/org.florence.gschema.xml.in.h:52
+msgid "Color of the outline of the keys"
+msgstr "Цвет контура клавиш"
+
+#: ../data/org.florence.gschema.xml.in.h:53
+msgid "Text color"
+msgstr "Цвет текста"
+
+#: ../data/org.florence.gschema.xml.in.h:54
+msgid "Color of the labels of the keys"
+msgstr "Цвет меток клавиш"
+
+#: ../data/org.florence.gschema.xml.in.h:55
+msgid "Text outline color"
+msgstr "Цвет контура текста"
+
+#: ../data/org.florence.gschema.xml.in.h:56
+msgid ""
+"Color of the ouline of the labels. Must contrast with label color for better "
+"visibility."
+msgstr ""
+"Цвет контура меток . Должен контрастировать с цветом метки для лучшей "
+"видимости."
+
+#: ../data/org.florence.gschema.xml.in.h:57
+msgid "Activated color"
+msgstr "Активированный цвет"
+
+#: ../data/org.florence.gschema.xml.in.h:58
+msgid "Color of the pressed keys"
+msgstr "Цвет нажатой клавиши"
+
+#: ../data/org.florence.gschema.xml.in.h:59
+msgid "Mouse over color"
+msgstr "Наведите курсор на цвет"
+
+#: ../data/org.florence.gschema.xml.in.h:60
+msgid "Color of the key when the mouse is over"
+msgstr "Подсвечивать клавишу при наведении курсора мыши"
+
+#: ../data/org.florence.gschema.xml.in.h:61
+msgid "latched color"
+msgstr "блокированный цвет"
+
+#: ../data/org.florence.gschema.xml.in.h:62
+msgid "Color of the latched keys"
+msgstr "Цвет запертых клавиш"
+
+#: ../data/org.florence.gschema.xml.in.h:63
+#, fuzzy
+msgid "Ramble path color"
+msgstr "Алгоритм перехода"
+
+#: ../data/org.florence.gschema.xml.in.h:64
+msgid "Color of the ramble path drawn in ramble mode."
+msgstr ""
+
+#: ../data/org.florence.gschema.xml.in.h:65
+msgid "Path of the layout file"
+msgstr "Путь к файлу разметки"
+
+#: ../data/org.florence.gschema.xml.in.h:66
+msgid "The layout file contains the layout of the keys on the keyboard"
+msgstr "Файл разметки содержит разметку клавиш клавиатуры"
+
+#: ../data/org.florence.gschema.xml.in.h:67
+msgid "Path of the layout style file"
+msgstr "Путь файла разметки стиля"
+
+#: ../data/org.florence.gschema.xml.in.h:68
+msgid ""
+"The layout style file contains the style to draw the keys of the keyboard"
+msgstr "Файл стиля содержит стиль для отрисовки клавиш клавиатуры"
+
+#: ../data/org.florence.gschema.xml.in.h:69
+msgid "List of colon-separated (:) extension names"
+msgstr "Список разделенных двоеточиями (:) расширений имен"
+
+#: ../data/org.florence.gschema.xml.in.h:70
+msgid ""
+"List of keyboard extensions names (colon-separated). extension names must be "
+"found in layout file"
+msgstr ""
+"Список клавиатурных расширений имён (разделенных двоеточиями). расширени "
+"имен должны быть найдены в файл разметки"
+
+#: ../data/org.florence.gschema.xml.in.h:71
+msgid "scaling factor of the focused key"
+msgstr "Фактор масштабирования выбранной клавиши"
+
+#: ../data/org.florence.gschema.xml.in.h:72
 #, fuzzy
 msgid "activate sound"
 msgstr "Активированный цвет"
 
-#: ../data/florence.schemas.in.h:74
+#: ../data/org.florence.gschema.xml.in.h:73
 msgid "enable sound feedback when a key is hovered, pressed or released"
 msgstr ""
 
-#: ../data/florence.schemas.in.h:75
-msgid "key color"
-msgstr "цвет клавиши"
+#: ../data/org.florence.gschema.xml.in.h:75
+msgid ""
+"Set to true to use gtk default font. Set to false to use the style font."
+msgstr ""
 
-#: ../data/florence.schemas.in.h:76
-msgid "latched color"
-msgstr "блокированный цвет"
+#: ../data/org.florence.gschema.xml.in.h:76
+#, fuzzy
+msgid "Keyboard font"
+msgstr "Показывать клавиатуру поверх всех окон"
 
-#: ../data/florence.schemas.in.h:77
-msgid "scaling factor of the focused key"
-msgstr "Фактор масштабирования выбранной клавиши"
+#: ../data/org.florence.gschema.xml.in.h:77
+#, fuzzy
+msgid "Font used to display labels on the keyboard"
+msgstr "Видеть окна позади клавиатуры."
 
 #: ../data/layouts/florence.xml.in.in.h:1
-#: ../data/layouts/florence-alt.xml.in.in.h:2
-#: ../data/layouts/compact.xml.in.in.h:2
-#: ../data/layouts/compact-alt.xml.in.in.h:2
-msgid "Florence keys"
-msgstr "Клавиши Florence"
+msgid "Standard keyboard"
+msgstr "Стандартная клавиатура"
 
 #: ../data/layouts/florence.xml.in.in.h:2
-#: ../data/layouts/florence-alt.xml.in.in.h:3
-#: ../data/layouts/compact.xml.in.in.h:3
-#: ../data/layouts/compact-alt.xml.in.in.h:3
-msgid "Function keys"
-msgstr "Функциональные клавиши"
-
-#: ../data/layouts/florence.xml.in.in.h:3
-#: ../data/layouts/florence-alt.xml.in.in.h:4
+#: ../data/layouts/florence-alt.xml.in.in.h:2
 msgid "Navigation keys"
 msgstr "Клавиши навигации"
 
-#: ../data/layouts/florence.xml.in.in.h:4
-#: ../data/layouts/florence-alt.xml.in.in.h:5
-#: ../data/layouts/compact.xml.in.in.h:4
-#: ../data/layouts/compact-alt.xml.in.in.h:4
+#: ../data/layouts/florence.xml.in.in.h:3
+#: ../data/layouts/florence-alt.xml.in.in.h:3
+#: ../data/layouts/compact.xml.in.in.h:3
+#: ../data/layouts/compact-alt.xml.in.in.h:3
 msgid "Numeric keys"
 msgstr "Числовые клавиши"
 
+#: ../data/layouts/florence.xml.in.in.h:4
+#: ../data/layouts/florence-alt.xml.in.in.h:4
+#: ../data/layouts/compact.xml.in.in.h:2
+#: ../data/layouts/compact-alt.xml.in.in.h:2
+msgid "Function keys"
+msgstr "Функциональные клавиши"
+
 #: ../data/layouts/florence.xml.in.in.h:5
-msgid "Standard keyboard"
-msgstr "Стандартная клавиатура"
+#: ../data/layouts/florence-alt.xml.in.in.h:5
+#: ../data/layouts/compact.xml.in.in.h:4
+#: ../data/layouts/compact-alt.xml.in.in.h:4
+msgid "Florence keys"
+msgstr "Клавиши Florence"
 
 #: ../data/layouts/florence-alt.xml.in.in.h:1
 msgid "Alternative keyboard"
@@ -645,112 +645,112 @@ msgid "Alternative Compact keyboard"
 msgstr "Альтернативная компактная клавиатура"
 
 #: ../data/styles/default/symbols.xml.in.h:1
-msgid "123"
-msgstr "123"
-
-#: ../data/styles/default/symbols.xml.in.h:2
-msgid "ABC"
-msgstr "АВС"
-
-#: ../data/styles/default/symbols.xml.in.h:3
-msgid "F1"
-msgstr "F1"
-
-#: ../data/styles/default/symbols.xml.in.h:4
-msgid "F10"
-msgstr "F10"
-
-#: ../data/styles/default/symbols.xml.in.h:5
-msgid "F11"
-msgstr "F11"
-
-#: ../data/styles/default/symbols.xml.in.h:6
-msgid "F12"
-msgstr "F12"
-
-#: ../data/styles/default/symbols.xml.in.h:7
-msgid "F2"
-msgstr "F2"
-
-#: ../data/styles/default/symbols.xml.in.h:8
-msgid "F3"
-msgstr "F3"
-
-#: ../data/styles/default/symbols.xml.in.h:9
-msgid "F4"
-msgstr "F4"
-
-#: ../data/styles/default/symbols.xml.in.h:10
-msgid "F5"
-msgstr "F5"
-
-#: ../data/styles/default/symbols.xml.in.h:11
-msgid "F6"
-msgstr "F6"
-
-#: ../data/styles/default/symbols.xml.in.h:12
-msgid "F7"
-msgstr "F7"
-
-#: ../data/styles/default/symbols.xml.in.h:13
-msgid "F8"
-msgstr "F8"
-
-#: ../data/styles/default/symbols.xml.in.h:14
-msgid "F9"
-msgstr "F9"
-
-#: ../data/styles/default/symbols.xml.in.h:15
-msgid "alt"
-msgstr "alt"
-
-#: ../data/styles/default/symbols.xml.in.h:16
-msgid "altGr"
-msgstr "altGr"
-
-#: ../data/styles/default/symbols.xml.in.h:17
-msgid "brk"
-msgstr "brk"
-
-#: ../data/styles/default/symbols.xml.in.h:18
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../data/styles/default/symbols.xml.in.h:19
-msgid "del"
-msgstr "del"
+#: ../data/styles/default/symbols.xml.in.h:2
+msgid "alt"
+msgstr "alt"
 
-#: ../data/styles/default/symbols.xml.in.h:20
-msgid "end"
-msgstr "end"
+#: ../data/styles/default/symbols.xml.in.h:3
+msgid "altGr"
+msgstr "altGr"
 
-#: ../data/styles/default/symbols.xml.in.h:21
-msgid "ent"
-msgstr "ent"
-
-#: ../data/styles/default/symbols.xml.in.h:22
-msgid "esc"
-msgstr "esc"
-
-#: ../data/styles/default/symbols.xml.in.h:23
+#: ../data/styles/default/symbols.xml.in.h:4
 msgid "ins"
 msgstr "ins"
 
-#: ../data/styles/default/symbols.xml.in.h:24
+#: ../data/styles/default/symbols.xml.in.h:5
+msgid "del"
+msgstr "del"
+
+#: ../data/styles/default/symbols.xml.in.h:6
+msgid "end"
+msgstr "end"
+
+#: ../data/styles/default/symbols.xml.in.h:7
+msgid "ent"
+msgstr "ent"
+
+#: ../data/styles/default/symbols.xml.in.h:8
 msgid "nlk"
 msgstr "nlk"
 
-#: ../data/styles/default/symbols.xml.in.h:25
+#: ../data/styles/default/symbols.xml.in.h:9
+msgid "esc"
+msgstr "esc"
+
+#: ../data/styles/default/symbols.xml.in.h:10
+msgid "F1"
+msgstr "F1"
+
+#: ../data/styles/default/symbols.xml.in.h:11
+msgid "F2"
+msgstr "F2"
+
+#: ../data/styles/default/symbols.xml.in.h:12
+msgid "F3"
+msgstr "F3"
+
+#: ../data/styles/default/symbols.xml.in.h:13
+msgid "F4"
+msgstr "F4"
+
+#: ../data/styles/default/symbols.xml.in.h:14
+msgid "F5"
+msgstr "F5"
+
+#: ../data/styles/default/symbols.xml.in.h:15
+msgid "F6"
+msgstr "F6"
+
+#: ../data/styles/default/symbols.xml.in.h:16
+msgid "F7"
+msgstr "F7"
+
+#: ../data/styles/default/symbols.xml.in.h:17
+msgid "F8"
+msgstr "F8"
+
+#: ../data/styles/default/symbols.xml.in.h:18
+msgid "F9"
+msgstr "F9"
+
+#: ../data/styles/default/symbols.xml.in.h:19
+msgid "F10"
+msgstr "F10"
+
+#: ../data/styles/default/symbols.xml.in.h:20
+msgid "F11"
+msgstr "F11"
+
+#: ../data/styles/default/symbols.xml.in.h:21
+msgid "F12"
+msgstr "F12"
+
+#: ../data/styles/default/symbols.xml.in.h:22
 msgid "psc"
 msgstr "psc"
 
-#: ../data/styles/default/symbols.xml.in.h:26
+#: ../data/styles/default/symbols.xml.in.h:23
 msgid "slk"
 msgstr "slk"
 
-#: ../data/styles/default/symbols.xml.in.h:27
+#: ../data/styles/default/symbols.xml.in.h:24
+msgid "brk"
+msgstr "brk"
+
+#: ../data/styles/default/symbols.xml.in.h:25
 msgid "~"
 msgstr "~"
+
+#: ../data/styles/default/symbols.xml.in.h:26
+msgid "123"
+msgstr "123"
+
+#: ../data/styles/default/symbols.xml.in.h:27
+msgid "ABC"
+msgstr "АВС"
 
 #: ../src/florence.c:120
 #, c-format
@@ -902,17 +902,17 @@ msgstr ""
 "Написать об ошибке: <f.agrech@gmail.com>.\n"
 "Больше информации на <http://florence.sourceforge.net>.\n"
 
-#: ../src/settings.c:149
+#: ../src/settings.c:152
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Используется файл конфигурации %s"
 
-#: ../src/settings.c:169
+#: ../src/settings.c:193
 #, c-format
 msgid "Unable to save configuration to %s: %s"
 msgstr "Невозможно сохранить конфигурацию в %s: %s"
 
-#: ../src/settings.c:309
+#: ../src/settings.c:345
 #, fuzzy, c-format
 msgid "No GSettings value for %s. Using default."
 msgstr "Нет значения gconf для %s. Используется значение по умолчанию."
