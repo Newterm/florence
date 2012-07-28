@@ -2,9 +2,9 @@
 SUBDIRS=styles layouts relaxng svg11
 
 gsettings_in_files=org.florence.gschema.xml.in
-gsettings_SHEMAS=$(gsettings_in_files:.gshema.xml.in=.gschema.xml)
-@INTLTOOL_XML_NOMERGE_RULE@
-#gsettings_SCHEMAS=org.florence.gschema.xml
+#gsettings_SHEMAS=$(gsettings_in_files:.gshema.xml.in=.gschema.xml)
+#@INTLTOOL_XML_NOMERGE_RULE@
+gsettings_SCHEMAS=org.florence.gschema.xml
 @GSETTINGS_RULES@
 
 desktopdir=$(datadir)/applications

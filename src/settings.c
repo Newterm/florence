@@ -258,8 +258,8 @@ guint settings_register_all(settings_callback cb)
 	START_FUNC
 	guint ret;
 	if (settings_infos->settings[SETTINGS_ALL]) {
-		g_signal_connect(G_OBJECT(settings_infos->settings[SETTINGS_ALL]), "changed", G_CALLBACK(cb), NULL);
-	} else { ret=1; }
+		ret=g_signal_connect(G_OBJECT(settings_infos->settings[SETTINGS_ALL]), "changed", G_CALLBACK(cb), NULL);
+	} else { ret=0; }
 	END_FUNC
 	return ret;
 }

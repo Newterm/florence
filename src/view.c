@@ -409,14 +409,11 @@ void view_redraw(GSettings *settings, gchar *key, gpointer user_data)
 {
 	START_FUNC
 	struct view *view=(struct view *)user_data;
-	char *k;
-	k=strrchr(key, '/');
-	k+=1;
 	style_update_colors(view->style);
-	if ((!strcmp(k, "key")) || (!strcmp(k, "outline"))) {
+	if ((!strcmp(key, "key")) || (!strcmp(key, "outline"))) {
 		if (view->background) cairo_surface_destroy(view->background);
 		view->background=NULL;
-	} else if (!strncmp(k, "label", 5) || (!strcmp(k, "font")) || (!strcmp(k, "system_font"))) {
+	} else if (!strncmp(key, "label", 5) || (!strcmp(key, "font")) || (!strcmp(key, "system_font"))) {
 		if (view->symbols) cairo_surface_destroy(view->symbols);
 		view->symbols=NULL;
 	}
