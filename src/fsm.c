@@ -188,8 +188,10 @@ void fsm_process(struct status *status, struct key *key, enum fsm_event event)
 		key_state_set(key, (*fsm)[event][type][state].new_state);
 		/* execute actions */
 		status_focus_window(status);
-		flo_debug(TRACE_DEBUG, _("Key %p (type %d): Event %d received : Switching from state %d to %d"),
-			key, type, event, state, (*fsm)[event][type][state].new_state);
+		flo_debug(TRACE_DEBUG, _("Key %p (type %d): Event %d received :"
+			" Switching from state %d to %d (fsm %d)"),
+			key, type, event, state, (*fsm)[event][type][state].new_state,
+			status_im_get(status));
 		if ((*fsm)[event][type][state].actions)
 			for (idx=0;(*fsm)[event][type][state].actions[idx];idx++)
 				(*fsm)[event][type][state].actions[idx](status, key);

@@ -158,35 +158,42 @@ void key_free(struct key *key)
 }
 
 /* send a simple event: press (pressed=TRUE) or release (pressed=FALSE) */
-void key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
+gboolean key_event(unsigned int code, gboolean pressed, gboolean spi_enabled)
 {
 	START_FUNC
+	gboolean ret=TRUE;
 #ifdef ENABLE_XTST
 	if (spi_enabled)
 #ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
-		atspi_generate_keyboard_event(code, NULL, pressed?ATSPI_KEY_PRESS:ATSPI_KEY_RELEASE, NULL);
+		ret=atspi_generate_keyboard_event(code, NULL, pressed?ATSPI_KEY_PRESS:ATSPI_KEY_RELEASE, NULL);
 #else
-		SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
+		ret=SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
 #endif
+	if (!ret) flo_warn(_("ATSPI doesn't work. Using Xtst instead."));
 #else
 		flo_fatal(_("Unreachable code"));
 #endif
-	else XTestFakeKeyEvent(
-		(Display *)gdk_x11_get_default_xdisplay(),
-		code, pressed, 0);
+	if (!(ret && spi_enabled)) {
+		XTestFakeKeyEvent(
+			(Display *)gdk_x11_get_default_xdisplay(),
+			code, pressed, 0);
+		ret=FALSE;
+	}
 #else
 #ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
-	atspi_generate_keyboard_event(code NULL, pressed?ATSPI_KEY_PRESS:ATSPI_KEY_RELEASE);
+	ret=atspi_generate_keyboard_event(code NULL, pressed?ATSPI_KEY_PRESS:ATSPI_KEY_RELEASE);
 #else
-	SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
+	ret=SPI_generateKeyboardEvent(code, NULL, pressed?SPI_KEY_PRESS:SPI_KEY_RELEASE);
 #endif
+	if (!ret) flo_warn(_("ATSPI doesn't work."));
 #else
 #error _("Neither at-spi nor Xtest is compiled. You should compile one.")
 #endif
 #endif
 	END_FUNC
+	return ret;
 }
 
 /* find the right modifier according to the global modifier */
@@ -280,7 +287,7 @@ void key_press(struct key *key, struct status *status)
 	if (mod) {
 		switch (mod->type) {
 			case KEY_CODE:
-				key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
+				status->spi=key_event(((struct key_code *)mod->data)->code, TRUE, status->spi);
 				if (settings_get_bool(SETTINGS_SOUNDS) && status->view)
 					style_sound_play(status->view->style,
 						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
@@ -323,7 +330,7 @@ void key_release(struct key *key, struct status *status)
 	if (mod) {
 		switch (mod->type) {
 			case KEY_CODE:
-				key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
+				status->spi=key_event(((struct key_code *)mod->data)->code, FALSE, status->spi);
 				if (settings_get_bool(SETTINGS_SOUNDS) && status->view)
 					style_sound_play(status->view->style,
 						gdk_keyval_name(xkeyboard_getKeyval(status->xkeyboard,
