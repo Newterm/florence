@@ -330,8 +330,10 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 #ifdef AT_SPI
 		view_hide(florence->view);
 #ifdef ENABLE_AT_SPI2
-		atspi_event_listener_register_from_callback(flo_focus_event, (void*)florence, NULL, "object:state-changed:focused", NULL);
-		atspi_event_listener_register_from_callback(flo_window_create_event, (void*)florence, NULL, "window:activate", NULL);
+		if (!atspi_event_listener_register_from_callback(flo_focus_event, (void*)florence, NULL, "object:state-changed:focused", NULL))
+			flo_error(_("ATSPI listener register failed"));
+		if (!atspi_event_listener_register_from_callback(flo_window_create_event, (void*)florence, NULL, "window:activate", NULL))
+			flo_error(_("ATSPI listener register failed"));
 #else
 		focus_listener=SPI_createAccessibleEventListener(flo_focus_event, (void*)florence);
 		SPI_registerGlobalEventListener(focus_listener, "object:state-changed:focused");

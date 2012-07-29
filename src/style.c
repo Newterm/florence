@@ -140,6 +140,7 @@ gchar *style_svg_css_insert(gchar *svg, enum style_colours c)
 	g_free(line);
 	fclose(in);
 
+	if (!root) flo_fatal(_("Can not parse style file."));
 	if (strcmp((char *)root->name, "svg"))
 		flo_error("element svg expected, but %s found instead", root->name);
 	xmlAddPrevSibling(root->children, style);

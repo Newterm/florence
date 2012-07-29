@@ -129,7 +129,8 @@ char *layoutreader_svg_get(xmlDocPtr doc, xmlNodePtr cur)
 	xmlOutputBufferPtr outputbuf=xmlOutputBufferCreateBuffer(buf,
 		xmlGetCharEncodingHandler(XML_CHAR_ENCODING_UTF8));
 	xmlNodeDumpOutput(outputbuf, doc, cur, 0, 1, NULL);
-	ret=g_strdup((char *)xmlBufferContent(outputbuf->buffer));
+	xmlOutputBufferFlush(outputbuf);
+	ret=g_strdup((char *)xmlBufferContent(buf));
 	xmlFree(outputbuf);
 	xmlBufferFree(buf);
 	END_FUNC
