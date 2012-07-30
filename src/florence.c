@@ -102,10 +102,10 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 }
 
 /* on expose event: display florence icon */
-void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata)
+void flo_icon_expose (GtkWidget *window, cairo_t* context, void *userdata)
 {
 	START_FUNC
-	cairo_t *context, *mask_context;
+	cairo_t *mask_context;
 	RsvgHandle *handle;
 	GError *error=NULL;
 	gdouble w, h;
@@ -113,7 +113,6 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 	Pixmap shape;
 	Display *disp=(Display *)gdk_x11_get_default_xdisplay();
 
-	context=gdk_cairo_create(gtk_widget_get_window(window));
 	cairo_set_operator(context, CAIRO_OPERATOR_SOURCE);
 
 	handle=rsvg_handle_new_from_file(ICONDIR "/florence.svg", &error);
@@ -142,8 +141,6 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 		g_object_unref(G_OBJECT(mask));
 		g_object_unref(G_OBJECT(handle));
 	}
-
-	cairo_destroy(context);
 	END_FUNC
 }
 
@@ -176,7 +173,7 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);
 			gtk_window_set_accept_focus(florence->icon, FALSE);
 			gtk_widget_set_events(GTK_WIDGET(florence->icon), GDK_ALL_EVENTS_MASK);
-			g_signal_connect(G_OBJECT(florence->icon), "expose-event", G_CALLBACK(flo_icon_expose), florence);
+			g_signal_connect(G_OBJECT(florence->icon), "draw", G_CALLBACK(flo_icon_expose), florence);
 			g_signal_connect(G_OBJECT(florence->icon), "button-press-event",
 				G_CALLBACK(flo_icon_press), florence);
 			g_signal_connect(G_OBJECT(florence->view->window), "show",
