@@ -240,7 +240,7 @@ void style_symbol_free(gpointer data, gpointer userdata)
 	if (symbol) {
 		if (symbol->id.name) g_regex_unref(symbol->id.name);
 		if (symbol->label) g_free(symbol->label);
-		if (symbol->svg) rsvg_handle_free(symbol->svg);
+		if (symbol->svg) g_object_unref(G_OBJECT(symbol->svg));
 		if (symbol->source) g_free(symbol->source);
 		g_free(symbol);
 	}
@@ -408,7 +408,7 @@ void style_shape_free(gpointer data, gpointer userdata)
 	if (shape) {
 		if (shape->name) g_free(shape->name);
 		if (shape->source) g_free(shape->source);
-		if (shape->svg) rsvg_handle_free(shape->svg);
+		if (shape->svg) g_object_unref(G_OBJECT(shape->svg));
 		if (shape->mask) cairo_surface_destroy(shape->mask);
 		g_free(shape);
 	}
@@ -456,7 +456,7 @@ void style_shape_draw(struct style *style, struct shape *shape, cairo_t *cairoct
 		rsvg_handle_close(svg, &error);
 		style_render_svg(cairoctx, svg, w, h, FALSE, NULL);
 		if (source) g_free(source);
-		if (svg) rsvg_handle_free(svg);
+		if (svg) g_object_unref(G_OBJECT(svg));
 	}
 	END_FUNC
 }
@@ -496,7 +496,7 @@ void style_update_color (gchar *source, RsvgHandle **svg, gchar *default_uri)
 	GError *error=NULL;
 	gchar *source_with_css;
 	if (*svg) {
-		rsvg_handle_free(*svg);
+		g_object_unref(G_OBJECT(*svg));
 		source_with_css=style_svg_css_insert(source, STYLE_KEY_COLOR);
 		*svg=rsvg_handle_new();
 		if (default_uri) rsvg_handle_set_base_uri(*svg, default_uri);
@@ -552,7 +552,7 @@ GdkPixbuf *style_pixbuf_draw(struct style *style)
 	struct shape *shape=style_shape_get(style, NULL);
 	GdkPixbuf *temp=rsvg_handle_get_pixbuf(shape->svg);
 	GdkPixbuf *ret=gdk_pixbuf_scale_simple(temp, 32, 32, GDK_INTERP_HYPER);
-	gdk_pixbuf_unref(temp);
+	g_object_unref(G_OBJECT(temp));
 	END_FUNC
 	return ret;
 }

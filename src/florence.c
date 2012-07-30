@@ -140,7 +140,7 @@ void flo_icon_expose (GtkWidget *window, GdkEventExpose* pExpose, void *userdata
 		style_render_svg(context, handle, w, h, TRUE, NULL);
 		cairo_destroy(mask_context);
 		g_object_unref(G_OBJECT(mask));
-		rsvg_handle_free(handle);
+		g_object_unref(G_OBJECT(handle));
 	}
 
 	cairo_destroy(context);
@@ -316,8 +316,6 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 	static AccessibleEventListener *focus_listener=NULL;
 	static AccessibleEventListener *window_listener=NULL;
 	Accessible *obj=NULL;
-#endif
-#ifdef AT_SPI
 	int i;
 #endif
 
@@ -495,9 +493,7 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 #ifdef ENABLE_RAMBLE
-	struct key *key=status_hit_get(florence->status,
-			(gint)((GdkEventButton*)event)->x,
-			(gint)((GdkEventButton*)event)->y, NULL);
+	struct key *key;
 #endif
 	status_pressed_set(florence->status, NULL);
 	status_timer_stop(florence->status);
@@ -505,6 +501,9 @@ gboolean flo_button_release_event (GtkWidget *window, GdkEvent *event, gpointer 
 	if (ramble_started(florence->ramble) &&
 		status_im_get(florence->status)==STATUS_IM_RAMBLE &&
 		settings_get_bool(SETTINGS_RAMBLE_BUTTON)) {
+		key=status_hit_get(florence->status,
+			(gint)((GdkEventButton*)event)->x,
+			(gint)((GdkEventButton*)event)->y, NULL);
 		if (ramble_reset(florence->ramble,
 				gtk_widget_get_window(GTK_WIDGET(florence->view->window)), key)) {
 			status_pressed_set(florence->status, key);

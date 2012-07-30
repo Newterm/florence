@@ -36,7 +36,7 @@ void tools_set_icon (GtkWindow *window)
 		ICONDIR "/florence.svg", error->message);
 	else {
 		gtk_window_set_icon(window, icon);
-		gdk_pixbuf_unref(icon);
+		g_object_unref(G_OBJECT(icon));
 	}
 	END_FUNC
 }
@@ -75,7 +75,7 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 #else
 	AccessibleComponent *component=NULL;
 #endif
-	long int x, y, w, h;
+	long int x, y, h;
 	gint screen_width, screen_height;
 	gint win_width, win_height;
 	GdkRectangle win_rect;
@@ -95,10 +95,10 @@ void tools_window_move(GtkWindow *window, Accessible *object)
 		screen_width=gdk_screen_get_width(gdk_screen_get_default());
 #ifdef ENABLE_AT_SPI2
 		rect=atspi_component_get_extents(component, ATSPI_COORD_TYPE_SCREEN, NULL);
-		x=rect->x; y=rect->y; w=rect->width; h=rect->height;
+		x=rect->x; y=rect->y; h=rect->height;
 		g_free(rect);
 #else
-		AccessibleComponent_getExtents(component, &x, &y, &w, &h, SPI_COORD_TYPE_SCREEN);
+		AccessibleComponent_getExtents(component, &x, &y, NULL, &h, SPI_COORD_TYPE_SCREEN);
 #endif
 		if (gtk_window_get_decorated(window)) {
 			gdk_window_get_frame_extents(gtk_widget_get_window(GTK_WIDGET(window)), &win_rect);
