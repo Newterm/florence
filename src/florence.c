@@ -56,7 +56,6 @@ void flo_terminate(void)
 #ifndef APPLET
 	gtk_main_quit();
 #endif
-	//gtk_exit (0);
 	END_FUNC
 }
 
@@ -76,9 +75,7 @@ void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
-	if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
-	florence->obj=NULL;
-	florence->icon=NULL;
+	if (florence->icon) gtk_widget_hide(GTK_WIDGET(florence->icon));
 	END_FUNC
 }
 
@@ -87,8 +84,9 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
-	if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
-	florence->icon=NULL;
+	if (florence->icon) {
+		gtk_widget_hide(GTK_WIDGET(florence->icon));
+	}
 	view_show(florence->view, florence->obj);
 	if (florence->obj) {
 #ifdef ENABLE_AT_SPI2
@@ -172,7 +170,8 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 			gtk_window_set_decorated(florence->icon, FALSE);
 			gtk_window_set_position(florence->icon, GTK_WIN_POS_MOUSE);
 			gtk_window_set_accept_focus(florence->icon, FALSE);
-			gtk_widget_set_events(GTK_WIDGET(florence->icon), GDK_ALL_EVENTS_MASK);
+			gtk_widget_set_events(GTK_WIDGET(florence->icon),
+				GDK_EXPOSURE_MASK|GDK_BUTTON_PRESS_MASK|GDK_BUTTON_RELEASE_MASK);
 			g_signal_connect(G_OBJECT(florence->icon), "draw", G_CALLBACK(flo_icon_expose), florence);
 			g_signal_connect(G_OBJECT(florence->icon), "button-press-event",
 				G_CALLBACK(flo_icon_press), florence);
@@ -226,13 +225,12 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 	}
 	if (hide) {
 		view_hide(florence->view);
-		if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
+		if (florence->icon) gtk_widget_hide(GTK_WIDGET(florence->icon));
 #ifdef ENABLE_AT_SPI2
 		if (florence->obj) g_object_unref(florence->obj);
 #else
 		if (florence->obj) Accessible_unref(florence->obj);
 #endif
-		florence->icon=NULL;
 		florence->obj=NULL;
 	}
 	END_FUNC
@@ -367,12 +365,11 @@ void flo_switch_mode (struct florence *florence, gboolean auto_hide)
 		}
 #endif
 		view_show(florence->view, NULL);
-		if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
+		if (florence->icon) gtk_widget_hide(GTK_WIDGET(florence->icon));
 #ifdef ENABLE_AT_SPI
 		if (florence->obj) Accessible_unref(obj);
 #endif
 		florence->obj=NULL;
-		florence->icon=NULL;
 #endif
 	}
 	END_FUNC
@@ -772,6 +769,9 @@ void flo_free(struct florence *florence)
 {
 	START_FUNC
 	flo_exit=TRUE;
+
+	if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
+	florence->icon=NULL;
 #ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
 	atspi_exit();
