@@ -138,7 +138,7 @@ void flo_icon_expose (GtkWidget *window, cairo_t* context, void *userdata)
 		cairo_set_operator(context, CAIRO_OPERATOR_OVER);
 		style_render_svg(context, handle, w, h, TRUE, NULL);
 		cairo_destroy(mask_context);
-		g_object_unref(G_OBJECT(mask));
+		cairo_surface_destroy(mask);
 		g_object_unref(G_OBJECT(handle));
 	}
 	END_FUNC
