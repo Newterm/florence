@@ -199,12 +199,15 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	gboolean hide=FALSE;
+	GError *error=NULL;
 
 #ifdef ENABLE_AT_SPI2
-	if (atspi_accessible_get_role(event->source, NULL)==ATSPI_ROLE_TERMINAL ||
-		(((atspi_accessible_get_role(event->source, NULL)==ATSPI_ROLE_TEXT) ||
-		(atspi_accessible_get_role(event->source, NULL)==ATSPI_ROLE_PASSWORD_TEXT)) &&
-		 atspi_state_set_contains(atspi_accessible_get_state_set(event->source), ATSPI_STATE_EDITABLE))) {
+	AtspiStateSet *state_set=atspi_accessible_get_state_set(event->source);
+	AtspiRole role=atspi_accessible_get_role(event->source, &error);
+	if (error) flo_error(_("Event error: %s"), error->message);
+	if (role==ATSPI_ROLE_TERMINAL ||
+		(((role==ATSPI_ROLE_TEXT) || (role==ATSPI_ROLE_PASSWORD_TEXT)) &&
+		 state_set && atspi_state_set_contains(state_set, ATSPI_STATE_EDITABLE))) {
 #else
 	if (Accessible_getRole(event->source)==SPI_ROLE_TERMINAL || Accessible_isEditableText(event->source)) {
 #endif

@@ -62,7 +62,6 @@ int main (int argc, char **argv)
 	struct florence *florence;
 	int ret=EXIT_FAILURE;
 	int config;
-	const char *modules;
 
 	setlocale (LC_ALL, "");
 	bindtextdomain (GETTEXT_PACKAGE, FLORENCELOCALEDIR);
@@ -92,8 +91,6 @@ int main (int argc, char **argv)
 		settings_exit();
 	} else {
 		settings_init(FALSE, config_file);
-	        modules = g_getenv("GTK_MODULES");
-		if (!modules||modules[0]=='\0') putenv("GTK_MODULES=gail:atk-bridge");
 		florence=flo_new(!(config&4), focus);
 
 		gtk_main();
