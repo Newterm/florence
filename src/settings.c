@@ -147,9 +147,14 @@ GSettings *settings_new_object(gchar *file, const gchar *cat)
 	GSettingsBackend *backend;
 	GSettings *ret;
 	if (file) {
-		backend=g_keyfile_settings_backend_new(file, cat, NULL);
-		ret=g_settings_new_with_backend(cat, backend);
-		flo_info(_("Using configuration file %s"), file);
+		backend=g_keyfile_settings_backend_new(file, "/apps/florence/", "toplevel");
+		if (!backend) {
+			flo_error(_("Unable to parse configuration file <%s>"), file);
+		} else {
+			ret=g_settings_new_with_backend(cat, backend);
+			if (ret) flo_info(_("Using configuration file %s"), file);
+			else flo_error(_("Unable to use configuration file %s"), file);
+		}
 	} else {
 		ret=g_settings_new(cat);
 	}
