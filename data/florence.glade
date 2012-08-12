@@ -75,6 +75,7 @@
                 <property name="border_width">4</property>
                 <child>
                   <object class="GtkFrame" id="shape_cadre">
+                    <property name="height_request">128</property>
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
                     <property name="label_xalign">0</property>
@@ -91,8 +92,9 @@
                             <property name="vscrollbar_policy">automatic</property>
                             <child>
                               <object class="GtkIconView" id="flo_preview">
-                                <property name="pixbuf_column">0</property>
-                                <property name="markup_column">1</property>
+				<property name="pixbuf_column">0</property>
+				<property name="markup_column">1</property>
+                                <property name="height_request">64</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="has_tooltip">True</property>
@@ -139,12 +141,12 @@
                             <property name="n_columns">3</property>
                             <child>
                               <object class="GtkColorButton" id="flo_keys">
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Normal key background color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Key background color</property>
                                 <property name="color">#000000000000</property>
                                 <signal name="color-set" handler="settings_window_change_color" swapped="no"/>
@@ -156,12 +158,12 @@
                             </child>
                             <child>
                               <object class="GtkColorButton" id="flo_activated">
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Activated key background color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Activated key background color</property>
                                 <property name="color">#000000000000</property>
                                 <signal name="color-set" handler="settings_window_change_color" swapped="no"/>
@@ -175,12 +177,12 @@
                             </child>
                             <child>
                               <object class="GtkColorButton" id="flo_labels">
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Labels and symbols color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Labels and symbols color</property>
                                 <property name="color">#000000000000</property>
                                 <signal name="color-set" handler="settings_window_change_color" swapped="no"/>
@@ -194,12 +196,12 @@
                             </child>
                             <child>
                               <object class="GtkColorButton" id="flo_label_outline">
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Labels and symbols outline color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Labels and symbols outline color</property>
                                 <property name="color">#000000000000</property>
                                 <signal name="color-set" handler="settings_window_change_color" swapped="no"/>
@@ -213,12 +215,12 @@
                             </child>
                             <child>
                               <object class="GtkColorButton" id="flo_latched">
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Latched keys background color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Latched keys color</property>
                                 <property name="color">#000000000000</property>
                                 <signal name="color-set" handler="settings_window_change_color" swapped="no"/>
@@ -234,12 +236,12 @@
                             </child>
                             <child>
                               <object class="GtkColorButton" id="flo_mouseover">
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Key with mouve over background color</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="title" translatable="yes">Key background color when the mouse is over</property>
                                 <property name="color">#000000000000</property>
                                 <signal name="color-set" handler="settings_window_change_color" swapped="no"/>
@@ -321,10 +323,10 @@
                         <child>
                           <object class="GtkCheckButton" id="flo_sounds">
                             <property name="label" translatable="yes">Enable sound feedback	</property>
+                            <property name="use_action_appearance">False</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="receives_default">False</property>
-                            <property name="use_action_appearance">False</property>
                             <property name="draw_indicator">True</property>
                             <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                           </object>
@@ -363,10 +365,10 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_system_font">
                                 <property name="label" translatable="yes">Use system font</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -394,10 +396,10 @@
                                 </child>
                                 <child>
                                   <object class="GtkFontButton" id="flo_font">
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">True</property>
-                                    <property name="use_action_appearance">False</property>
                                     <signal name="font-set" handler="settings_window_font" swapped="no"/>
                                   </object>
                                   <packing>
@@ -466,12 +468,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_decorated">
                                 <property name="label" translatable="yes">Decorated</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Decorate window</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -484,12 +486,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_transparent">
                                 <property name="label" translatable="yes">Transparent</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Transparent mode</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -502,12 +504,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_resizable">
                                 <property name="label" translatable="yes">Resizable</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Allow to resize window.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -520,12 +522,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_keep_ratio">
                                 <property name="label" translatable="yes">Keep ratio</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Keep window ratio when resizing window.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -538,12 +540,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_task_bar">
                                 <property name="label" translatable="yes">Task bar</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Appear in task bar.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -556,12 +558,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_always_on_top">
                                 <property name="label" translatable="yes">Always on top</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="has_tooltip">True</property>
                                 <property name="tooltip_text" translatable="yes">Keep the keyboard on top.</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -696,11 +698,11 @@
                                 <child>
                                   <object class="GtkCheckButton" id="ramble_button">
                                     <property name="label" translatable="yes">Activate ramble on button press</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
                                     <property name="tooltip_text" translatable="yes">Rambling will start when the mouse button is pressed. Always activated otherwise.</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                                   </object>
@@ -713,10 +715,10 @@
                                 <child>
                                   <object class="GtkRadioButton" id="ramble_distance">
                                     <property name="label" translatable="yes">Distance based</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
@@ -730,10 +732,10 @@
                                 <child>
                                   <object class="GtkRadioButton" id="ramble_time">
                                     <property name="label" translatable="yes">Time based</property>
+                                    <property name="use_action_appearance">False</property>
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
                                     <property name="receives_default">False</property>
-                                    <property name="use_action_appearance">False</property>
                                     <property name="active">True</property>
                                     <property name="draw_indicator">True</property>
                                     <property name="group">ramble_distance</property>
@@ -831,11 +833,11 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_auto_hide">
                                 <property name="label" translatable="yes">Auto hide</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">False</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Auto hide (only show when an editable widget is selected).</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="use_underline">True</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
@@ -849,12 +851,12 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_move_to_widget">
                                 <property name="label" translatable="yes">Move to near selected widget</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="sensitive">False</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Move the keyboard to near the selected editable widget in auto-hide mode</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -867,11 +869,11 @@
                             <child>
                               <object class="GtkCheckButton" id="flo_intermediate_icon">
                                 <property name="label" translatable="yes">Intermediate icon</property>
+                                <property name="use_action_appearance">False</property>
                                 <property name="visible">True</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">False</property>
                                 <property name="tooltip_text" translatable="yes">Put an intermediate icon before showing the actual keyboard</property>
-                                <property name="use_action_appearance">False</property>
                                 <property name="draw_indicator">True</property>
                                 <signal name="toggled" handler="settings_window_set_bool" swapped="no"/>
                               </object>
@@ -997,11 +999,11 @@
             <child>
               <object class="GtkButton" id="flo_close">
                 <property name="label">gtk-close</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Quit preferences</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="settings_window_close" object="flo_config_window" swapped="yes"/>
               </object>
@@ -1014,11 +1016,11 @@
             <child>
               <object class="GtkButton" id="flo_config_rollback">
                 <property name="label">gtk-cancel</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Cancel</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="settings_window_rollback" object="flo_config_window" swapped="yes"/>
               </object>
@@ -1031,11 +1033,11 @@
             <child>
               <object class="GtkButton" id="flo_config_commit">
                 <property name="label">gtk-apply</property>
+                <property name="use_action_appearance">False</property>
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
                 <property name="receives_default">False</property>
                 <property name="tooltip_text" translatable="yes">Apply changes</property>
-                <property name="use_action_appearance">False</property>
                 <property name="use_stock">True</property>
                 <signal name="clicked" handler="settings_window_commit" object="flo_config_window" swapped="yes"/>
               </object>
