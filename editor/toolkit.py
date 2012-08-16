@@ -576,12 +576,12 @@ class scene:
 		crctx.set_source_rgba(0.7, 0.7, 0.7, 1)
 		crctx.set_line_width(1)
 		if self.gridx != 0:
-			for x in range( 0, self.w, self.gridx ):
+			for x in range( 0, int(self.w), self.gridx ):
 				crctx.move_to( x, 0 )
 				crctx.line_to( x, self.h )
 				crctx.stroke()
 		if self.gridy != 0:
-			for y in range( 0, self.h, self.gridy ):
+			for y in range( 0, int(self.h), self.gridy ):
 				crctx.move_to( 0, y )
 				crctx.line_to( self.w, y )
 				crctx.stroke()
@@ -599,6 +599,12 @@ class scene:
 	def setSize(self, w, h):
 		self.w = w
 		self.h = h
+
+	def getWidth(self):
+		return self.w
+
+	def getHeight(self):
+		return self.h
 
 	def connect(self, widget):
 		self.handler1 = widget.connect("leave-notify-event", self.leave, self)

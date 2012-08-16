@@ -108,6 +108,8 @@ class Keyboard(toolkit.scene):
 		self.w = w
 		self.h = h
 		toolkit.scene.setSize( self, w, h )
+		self.builder.get_object("keyboard_width").set_value(w / 30.0)
+		self.builder.get_object("keyboard_height").set_value(h / 30.0)
 
 	def getSize(self):
 		return (self.w, self.h)
@@ -352,7 +354,6 @@ class Editor:
 		self.builder.get_object("exts").set_events(gtk.gdk.ALL_EVENTS_MASK)
 		self.builder.get_object("editor").show()
 		self.builder.get_object("extensions").show()
-		self.builder.get_object("properties").show()
 
 		self.kbd = Keyboard( self.builder )
 		if len( sys.argv ) > 1:
@@ -380,7 +381,7 @@ class Editor:
 		xmldoc = minidom.parse(file)
 		self.kbd.load(xmldoc.getElementsByTagName('keyboard')[0])
 		(w, h) = self.kbd.getSize()
-		self.builder.get_object("keyboard").set_size_request(w, h)
+		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
 		self.updateRulers()
 		if self.exts:
 			self.exts.reset(self.kbd)
@@ -398,7 +399,7 @@ class Editor:
 		else:
 			self.exts = Extensions( self.builder, self.kbd )
 		(w, h) = self.kbd.getSize()
-		self.builder.get_object("keyboard").set_size_request(w, h)
+		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
 		self.updateRulers()
 		self.builder.get_object("editor").set_title("Unsaved layout - Florence layout editor")
 		self.builder.get_object("extensions").set_title("Unsaved layout - Florence layout extensions")
@@ -545,11 +546,41 @@ class Editor:
 			self.kbd.setYpos( self.builder.get_object("keyboard"),
 				30 * self.builder.get_object("ypos").get_value() )
 
+	def keyboard_width_changed( self, widget ):
+		self.kbd.setSize( widget.get_value()*30, self.kbd.getHeight() )
+		(w, h) = self.kbd.getSize()
+		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
+
+	def keyboard_height_changed( self, widget ):
+		self.kbd.setSize( self.kbd.getWidth(), widget.get_value()*30 )
+		(w, h) = self.kbd.getSize()
+		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
+
+	def extensions_toggled( self, widget ):
+		if widget.get_active(): self.builder.get_object("extensions").show()
+		else: self.builder.get_object("extensions").hide()
+
+	def key_properties_toggled( self, widget ):
+		if widget.get_active(): self.builder.get_object("properties").show()
+		else: self.builder.get_object("properties").hide()
+
+	def keyboard_properties_toggled( self, widget ):
+		if widget.get_active(): self.builder.get_object("keyboard_properties").show()
+		else: self.builder.get_object("keyboard_properties").hide()
+
+	def keyboard_properties( self, widget ):
+		self.builder.get_object("keyboard_properties").show()
+		self.builder.get_object("keyboard_properties_menu").set_active(True)
+
+	def key_properties( self, widget ):
+		self.builder.get_object("properties").show()
+		self.builder.get_object("key_properties_menu").set_active(True)
+
 	def gg( self, widget ):
 		#print self.kbd
 		gtk.main_quit()
 
-	def selectExtension(self, widget, event, data):
+	def selectExtension( self, widget, event, data ):
 		self.kbd.resetSel()
 		kbd = self.exts.setSel(event.x, event.y)
 		if kbd:
