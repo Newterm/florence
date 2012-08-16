@@ -33,9 +33,6 @@
 #ifdef ENABLE_RAMBLE
 	#include "ramble.h"
 #endif
-#ifdef APPLET
-	#include <panel-applet.h>
-#endif
 #include "service.h"
 
 /* There is one florence structure which contains all global data in florence.c */
@@ -60,11 +57,7 @@ struct florence {
 };
 
 /* create a new instance of florence. */
-#ifdef APPLET
-struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *applet);
-#else
 struct florence *flo_new(gboolean gnome, const gchar *focus_back);
-#endif
 /* liberate all the memory used by florence */
 void flo_free(struct florence *florence);
 

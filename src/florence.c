@@ -53,9 +53,7 @@ static int flo_exit=FALSE;
 void flo_terminate(void)
 {
 	START_FUNC
-#ifndef APPLET
 	gtk_main_quit();
-#endif
 	END_FUNC
 }
 
@@ -63,8 +61,6 @@ void flo_terminate(void)
 void flo_destroy (GtkWidget *widget, gpointer user_data)
 {
 	START_FUNC
-	//struct florence *florence=(struct florence *)user_data;
-	//service_terminate(florence->service);
 	flo_terminate();
 	END_FUNC
 }
@@ -698,11 +694,7 @@ void flo_layout_reload(GSettings *settings, gchar *key, gpointer user_data)
 }
 
 /* create a new instance of florence. */
-#ifndef APPLET
 struct florence *flo_new(gboolean gnome, const gchar *focus_back)
-#else
-struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *applet)
-#endif
 {
 	START_FUNC
 	struct florence *florence=(struct florence *)g_malloc(sizeof(struct florence));
@@ -729,11 +721,7 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 #endif
 
 	flo_layout_load(florence);
-#ifdef APPLET
-	florence->view=view_new(florence->status, florence->style, florence->keyboards, applet);
-#else
 	florence->view=view_new(florence->status, florence->style, florence->keyboards);
-#endif
 	status_view_set(florence->status, florence->view);
 	flo_start_keep_on_top(florence, settings_get_bool(SETTINGS_KEEP_ON_TOP));
 
@@ -749,11 +737,9 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back, PanelApplet *a
 		G_CALLBACK(flo_button_press_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
-#ifndef APPLET
 	if (settings_get_bool(SETTINGS_HIDE_ON_START) && (!settings_get_bool(SETTINGS_AUTO_HIDE))) view_hide(florence->view);
 	else flo_switch_mode(florence, settings_get_bool(SETTINGS_AUTO_HIDE));
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
-#endif
 	settings_changecb_register(SETTINGS_AUTO_HIDE, flo_set_auto_hide, florence);
 	settings_changecb_register(SETTINGS_KEEP_ON_TOP, flo_set_keep_on_top, florence);
 	/* TODO: just reload the style, no need to reload the whole layout */
@@ -780,10 +766,8 @@ void flo_free(struct florence *florence)
 	SPI_exit();
 #endif
 #endif
-#ifndef APPLET
 	trayicon_free(florence->trayicon);
 	florence->trayicon=NULL;
-#endif
 	flo_layout_unload(florence);
 	if (florence->view) view_free(florence->view);
 	florence->view=NULL;
