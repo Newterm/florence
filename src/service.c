@@ -34,6 +34,7 @@ static const gchar service_introspection[]=
 	"    </method>"
 	"    <method name='hide'/>"
 	"    <method name='terminate'/>"
+	"    <signal name='terminate'/>"
 	"  </interface>"
 	"</node>";
 
@@ -69,6 +70,7 @@ static void service_on_bus_acquired (GDBusConnection *connection, const gchar *n
 	static const GDBusInterfaceVTable vtable={ service_method_call, NULL, NULL };
 	g_dbus_connection_register_object(connection, "/org/florence/Keyboard",
 		service->introspection_data->interfaces[0], &vtable, user_data, NULL, NULL);
+	service->connection=connection;
 	END_FUNC
 }
 
@@ -118,7 +120,9 @@ void service_free(struct service *service)
 /* Send the terminate signal */
 void service_terminate(struct service *service)
 {
-//	g_dbus_connection_emit_signal(service->connection, NULL,
-	flo_info("terminate");
+	GError *error=NULL;
+	g_dbus_connection_emit_signal(service->connection, NULL, "/org/florence/Keyboard",
+		"org.florence.Keyboard", "terminate", NULL, &error);
+	if (error) flo_error(_("Error emitting terminate signal: %s"), error->message);
 }
 

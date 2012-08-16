@@ -96,6 +96,7 @@ int main (int argc, char **argv)
 		gtk_main();
 
 		settings_exit();
+		service_terminate(florence->service);
 		flo_free(florence);
 		putenv("AT_BRIDGE_SHUTDOWN=1");
 		ret=EXIT_SUCCESS;
