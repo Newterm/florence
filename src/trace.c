@@ -140,6 +140,14 @@ void flo_info(char *s, ...)
 	va_end(ap);
 }
 
+void flo_info_distinct(char *s, ...)
+{
+	va_list ap;
+	va_start(ap, s);
+	trace_distinct_msg("", stdout, s, ap);
+	va_end(ap);
+}
+
 void flo_warn(char *s, ...)
 {
 	if (trace_debug_level>=TRACE_WARNING) {

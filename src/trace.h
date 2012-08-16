@@ -41,6 +41,7 @@ void flo_error(char *s, ...);
 void flo_warn(char *s, ...);
 void flo_warn_distinct(char *s, ...);
 void flo_info(char *s, ...);
+void flo_info_distinct(char *s, ...);
 void flo_debug(enum trace_level level, char *s, ...);
 void flo_debug_distinct(enum trace_level level, char *s, ...);
 

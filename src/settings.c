@@ -152,7 +152,7 @@ GSettings *settings_new_object(gchar *file, const gchar *cat)
 			flo_error(_("Unable to parse configuration file <%s>"), file);
 		} else {
 			ret=g_settings_new_with_backend(cat, backend);
-			if (ret) flo_info(_("Using configuration file %s"), file);
+			if (ret) flo_info_distinct(_("Using configuration file %s"), file);
 			else flo_error(_("Unable to use configuration file %s"), file);
 		}
 	} else {
