@@ -78,6 +78,18 @@ void flo_icon_destroy (GtkWidget *widget, gpointer user_data)
 	END_FUNC
 }
 
+/* Called to show the icon */
+void flo_icon_show (GtkWidget *widget, gpointer user_data)
+{
+	START_FUNC
+	struct florence *florence=(struct florence *)user_data;
+	if (florence->icon && florence->obj) {
+		g_object_ref(florence->obj);
+		flo_check_show(florence, florence->obj);
+	}
+	END_FUNC
+}
+
 /* on button-press events: destroy the icon and show the actual keyboard */
 void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_data)
 {
@@ -85,14 +97,6 @@ void flo_icon_press (GtkWidget *window, GdkEventButton *event, gpointer user_dat
 	struct florence *florence=(struct florence *)user_data;
 	flo_icon_destroy(NULL, (gpointer)florence);
 	view_show(florence->view, florence->obj);
-	if (florence->obj) {
-#ifdef ENABLE_AT_SPI2
-		g_object_unref(florence->obj);
-#else
-		Accessible_unref(florence->obj);
-#endif
-		florence->obj=NULL;
-	}
 	END_FUNC
 }
 
@@ -174,6 +178,8 @@ void flo_check_show (struct florence *florence, Accessible *obj)
 				G_CALLBACK(flo_icon_press), florence);
 			g_signal_connect(G_OBJECT(florence->view->window), "show",
 				G_CALLBACK(flo_icon_destroy), florence);
+			g_signal_connect(G_OBJECT(florence->view->window), "hide",
+				G_CALLBACK(flo_icon_show), florence);
 			g_signal_connect(G_OBJECT(florence->icon), "screen-changed",
 				G_CALLBACK(view_screen_changed), NULL);
 			view_screen_changed(GTK_WIDGET(florence->icon), NULL, NULL);
@@ -407,6 +413,10 @@ void flo_set_auto_hide(GSettings *settings, gchar *key, gpointer user_data)
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	flo_switch_mode(florence, settings_get_bool(SETTINGS_AUTO_HIDE));
+	if ((!settings_get_bool(SETTINGS_AUTO_HIDE)) && (florence->icon)) {
+		gtk_widget_destroy(GTK_WIDGET(florence->icon));
+		florence->icon=NULL;
+	}
 	END_FUNC
 }
 
@@ -737,7 +747,8 @@ struct florence *flo_new(gboolean gnome, const gchar *focus_back)
 		G_CALLBACK(flo_button_press_event), florence);
 	g_signal_connect(G_OBJECT(view_window_get(florence->view)), "button-release-event",
 		G_CALLBACK(flo_button_release_event), florence);
-	if (settings_get_bool(SETTINGS_HIDE_ON_START) && (!settings_get_bool(SETTINGS_AUTO_HIDE))) view_hide(florence->view);
+	if (settings_get_bool(SETTINGS_HIDE_ON_START) && (!settings_get_bool(SETTINGS_AUTO_HIDE)))
+		view_hide(florence->view);
 	else flo_switch_mode(florence, settings_get_bool(SETTINGS_AUTO_HIDE));
 	florence->trayicon=trayicon_new(florence->view, G_CALLBACK(flo_destroy));
 	settings_changecb_register(SETTINGS_AUTO_HIDE, flo_set_auto_hide, florence);
@@ -759,12 +770,12 @@ void flo_free(struct florence *florence)
 
 	if (florence->icon) gtk_widget_destroy(GTK_WIDGET(florence->icon));
 	florence->icon=NULL;
-#ifdef AT_SPI
 #ifdef ENABLE_AT_SPI2
+	if (florence->obj) g_object_unref(florence->obj);
 	atspi_exit();
 #else
+	if (florence->obj) Accessible_unref(florence->obj);
 	SPI_exit();
-#endif
 #endif
 	trayicon_free(florence->trayicon);
 	florence->trayicon=NULL;
