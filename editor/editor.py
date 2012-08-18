@@ -1,11 +1,8 @@
 #!/usr/bin/python
-import sys
-import io
-import os
+import sys, io, os, time
 from xml.dom import minidom
 import gtk
 import toolkit
-import traceback
 
 class Key(toolkit.object):
 	def __init__(self, code, x, y, w, h, action=None):
@@ -608,7 +605,7 @@ class Editor:
 		str = str + "<informations>\n"
 		str = str + "\t<name>Unnamed</name>\n"
 		str = str + "\t<author>Anonymous</author>\n"
-		str = str + "\t<date>0000-00-00</date>\n"
+		str = str + "\t<date>%s</date>\n"%(time.strftime("%Y-%m-%d", time.gmtime(time.time())))
 		str = str + "\t<florence_version>0.5.3</florence_version>\n"
 		str = str + "</informations>\n"
 		str = str + self.exts.__str__()

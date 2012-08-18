@@ -12,6 +12,9 @@
         <col id="0">move</col>
       </row>
       <row>
+        <col id="0">close</col>
+      </row>
+      <row>
         <col id="0">bigger</col>
       </row>
       <row>
@@ -28,6 +31,9 @@
       </row>
       <row>
         <col id="0">unextend</col>
+      </row>
+      <row>
+        <col id="0">switch</col>
       </row>
     </data>
   </object>
