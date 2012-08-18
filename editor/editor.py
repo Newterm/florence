@@ -198,6 +198,12 @@ class Extension:
 		self.name = node.getElementsByTagName('name')[0].firstChild.data
 		self.id = node.getElementsByTagName('identifiant')[0].firstChild.data
 		self.keyboard = Keyboard( self.builder, node.getElementsByTagName('keyboard')[0] )
+	
+	def loadKeyboard(self, kbd, placement, name, id):
+		self.keyboard = kbd
+		self.placement = placement
+		self.name = name
+		self.id = id
 
 	def getSize(self):
 		(w, h) = self.keyboard.getSize()
@@ -225,6 +231,9 @@ class Extension:
 		x2 = self.x + ( w/3.0 )
 		y2 = self.y + ( h/3.0 )
 		return ( x > self.x ) and ( y > self.y ) and ( x < x2 ) and ( y < y2 )
+
+	def getKeyboard(self):
+		return self.keyboard
 
 	def __str__(self):
 		str = ""
@@ -258,7 +267,9 @@ class Extensions:
 			local = Extension( self.builder )
 			local.load( ext )
 			self.exts.append( local )
+		self.arrange()
 
+	def arrange( self ):
 		tops = []
 		bots = []
 		lefts = []
@@ -312,6 +323,21 @@ class Extensions:
 
 		self.widget.set_size_request(int(ww), int(hh))
 		self.widget.queue_draw()
+	
+	def append(self, kbd):
+		ext = Extension( self.builder )
+		ext.loadKeyboard( kbd, "right", "noname", "noid" )
+		self.exts.append( ext )
+		self.arrange()
+	
+	def remove(self, kbd):
+		if kbd == self.main: return False
+		for ext in self.exts:
+			if ext.getKeyboard() == kbd:
+				self.exts.remove(ext)
+				break
+		self.arrange()
+		return True
 
 	def expose(self, widget, event, data):
 		crctx = widget.window.cairo_create()
@@ -333,6 +359,9 @@ class Extensions:
 		if sel:
 			self.select = sel
 		return self.select.keyboard
+
+	def getMain(self):
+		return self.main.getKeyboard()
 
 	def __str__(self):
 		str = self.main.__str__()
@@ -550,11 +579,13 @@ class Editor:
 		self.kbd.setSize( widget.get_value()*30, self.kbd.getHeight() )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
+		self.exts.arrange()
 
 	def keyboard_height_changed( self, widget ):
 		self.kbd.setSize( self.kbd.getWidth(), widget.get_value()*30 )
 		(w, h) = self.kbd.getSize()
 		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
+		self.exts.arrange()
 
 	def extensions_toggled( self, widget ):
 		if widget.get_active(): self.builder.get_object("extensions").show()
@@ -580,19 +611,34 @@ class Editor:
 		#print self.kbd
 		gtk.main_quit()
 
+	def update_kbd(self):
+		self.kbd.connect( self.builder.get_object("keyboard") )
+		(w, h) = self.kbd.getSize()
+		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
+		self.updateRulers()
+		self.builder.get_object("keyboard").queue_draw()
+		self.builder.get_object("extensions").queue_draw()
+		self.kbd.updateSize()
+
 	def selectExtension( self, widget, event, data ):
 		self.kbd.resetSel()
 		kbd = self.exts.setSel(event.x, event.y)
 		if kbd:
 			self.kbd.disconnect( self.builder.get_object("keyboard") )
 			self.kbd = kbd
-			self.kbd.connect( self.builder.get_object("keyboard") )
-			(w, h) = self.kbd.getSize()
-			self.builder.get_object("keyboard").set_size_request(int(w), int(h))
-			self.updateRulers()
-			self.builder.get_object("keyboard").queue_draw()
-			widget.queue_draw()
-			self.kbd.updateSize()
+			self.update_kbd()
+
+	def add_ext( self, widget ):
+		self.kbd.disconnect( self.builder.get_object("keyboard") )
+		self.kbd = Keyboard( self.builder )
+		self.update_kbd()
+		self.exts.append( self.kbd )
+
+	def remove_ext( self, widget ):
+		self.kbd.disconnect( self.builder.get_object("keyboard") )
+		self.exts.remove( self.kbd )
+		self.kbd = self.exts.getMain()
+		self.update_kbd()
 
 	def updateRulers(self):
 		(w, h) = self.kbd.getSize()
