@@ -495,6 +495,30 @@
             <child>
               <placeholder/>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -666,7 +690,7 @@
       <object class="GtkTable" id="table4">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="n_rows">2</property>
+        <property name="n_rows">3</property>
         <property name="n_columns">2</property>
         <child>
           <object class="GtkSpinButton" id="keyboard_width">
@@ -724,8 +748,60 @@
             <property name="bottom_attach">2</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="label7">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="label" translatable="yes">placement</property>
+          </object>
+          <packing>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkComboBox" id="placement">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="model">placementListStore</property>
+            <property name="sensitive">False</property>
+            <signal name="changed" handler="placement_changed" swapped="no"/>
+            <child>
+              <object class="GtkCellRendererText" id="placementList"/>
+              <attributes>
+                <attribute name="text">0</attribute>
+              </attributes>
+            </child>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">2</property>
+            <property name="bottom_attach">3</property>
+          </packing>
+        </child>
       </object>
     </child>
+  </object>
+  <object class="GtkListStore" id="placementListStore">
+    <columns>
+      <!-- column-name placement -->
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">top</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">bottom</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">right</col>
+      </row>
+      <row>
+        <col id="0" translatable="yes">left</col>
+      </row>
+    </data>
   </object>
   <object class="GtkWindow" id="properties">
     <property name="can_focus">False</property>
@@ -782,7 +858,6 @@
                     <property name="can_focus">False</property>
                     <property name="model">actions</property>
                     <property name="active">0</property>
-                    <property name="add_tearoffs">True</property>
                     <signal name="changed" handler="action_changed" swapped="no"/>
                     <child>
                       <object class="GtkCellRendererText" id="action"/>

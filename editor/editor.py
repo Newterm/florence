@@ -205,6 +205,15 @@ class Extension:
 		self.name = name
 		self.id = id
 
+	def getKeyboard(self):
+		return self.keyboard
+
+	def setPlacement(self, placement):
+		self.placement = placement
+	
+	def getPlacement(self):
+		return self.placement
+
 	def getSize(self):
 		(w, h) = self.keyboard.getSize()
 		return (w/3.0, h/3.0)
@@ -231,9 +240,6 @@ class Extension:
 		x2 = self.x + ( w/3.0 )
 		y2 = self.y + ( h/3.0 )
 		return ( x > self.x ) and ( y > self.y ) and ( x < x2 ) and ( y < y2 )
-
-	def getKeyboard(self):
-		return self.keyboard
 
 	def __str__(self):
 		str = ""
@@ -339,6 +345,15 @@ class Extensions:
 		self.arrange()
 		return True
 
+	def setPlacement(self, kbd, placement):
+		if kbd == self.main: return False
+		for ext in self.exts:
+			if ext.getKeyboard() == kbd:
+				ext.setPlacement( placement )
+				break
+		self.arrange()
+		return True
+
 	def expose(self, widget, event, data):
 		crctx = widget.window.cairo_create()
 		crctx.set_source_rgba(1, 1, 1, 1)
@@ -358,7 +373,7 @@ class Extensions:
 					break
 		if sel:
 			self.select = sel
-		return self.select.keyboard
+		return self.select
 
 	def getMain(self):
 		return self.main.getKeyboard()
@@ -420,6 +435,7 @@ class Editor:
 		self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
 		self.builder.get_object("extensions").set_title(os.path.basename(self.file) + " - Florence layout extensions")
 		self.kbd.updateSize()
+		self.builder.get_object("placement").set_sensitive( False )
 
 	def new( self, widget ):
 		self.kbd.reset()
@@ -432,6 +448,8 @@ class Editor:
 		self.updateRulers()
 		self.builder.get_object("editor").set_title("Unsaved layout - Florence layout editor")
 		self.builder.get_object("extensions").set_title("Unsaved layout - Florence layout extensions")
+		self.builder.get_object("placement").set_sensitive( False )
+
 
 	def open( self, widget ):
 		chooser = gtk.FileChooserDialog( title="Open layout file", action=gtk.FILE_CHOOSER_ACTION_OPEN,
@@ -587,6 +605,11 @@ class Editor:
 		self.builder.get_object("keyboard").set_size_request(int(w), int(h))
 		self.exts.arrange()
 
+	def placement_changed( self, widget ):
+		index = self.builder.get_object("placement").get_active()
+		self.exts.setPlacement( self.kbd, 
+				self.builder.get_object("placementListStore")[index][0] )
+
 	def extensions_toggled( self, widget ):
 		if widget.get_active(): self.builder.get_object("extensions").show()
 		else: self.builder.get_object("extensions").hide()
@@ -622,11 +645,18 @@ class Editor:
 
 	def selectExtension( self, widget, event, data ):
 		self.kbd.resetSel()
-		kbd = self.exts.setSel(event.x, event.y)
-		if kbd:
+		ext = self.exts.setSel(event.x, event.y)
+		if ext:
+			kbd = ext.getKeyboard()
 			self.kbd.disconnect( self.builder.get_object("keyboard") )
 			self.kbd = kbd
 			self.update_kbd()
+			index = 0
+			for placement in self.builder.get_object("placementListStore"):
+				if placement[0] == ext.getPlacement(): break
+				index += 1
+			self.builder.get_object("placement").set_active(index)
+			self.builder.get_object("placement").set_sensitive( index < 4 )
 
 	def add_ext( self, widget ):
 		self.kbd.disconnect( self.builder.get_object("keyboard") )
