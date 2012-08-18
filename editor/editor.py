@@ -5,6 +5,7 @@ import os
 from xml.dom import minidom
 import gtk
 import toolkit
+import traceback
 
 class Key(toolkit.object):
 	def __init__(self, code, x, y, w, h, action=None):
@@ -105,11 +106,7 @@ class Keyboard(toolkit.scene):
 			widget.queue_draw()
 
 	def setSize(self, w=20*30, h=10*30):
-		self.w = w
-		self.h = h
 		toolkit.scene.setSize( self, w, h )
-		self.builder.get_object("keyboard_width").set_value(w / 30.0)
-		self.builder.get_object("keyboard_height").set_value(h / 30.0)
 
 	def getSize(self):
 		return (self.w, self.h)
@@ -154,6 +151,10 @@ class Keyboard(toolkit.scene):
 		self.builder.get_object("ypos").set_sensitive(True)
 		self.builder.get_object("width").set_sensitive(True)
 		self.builder.get_object("height").set_sensitive(True)
+
+	def updateSize( self ):
+		self.builder.get_object("keyboard_width").set_value(self.w / 30.0)
+		self.builder.get_object("keyboard_height").set_value(self.h / 30.0)
 
 	def clearSel(self):
 		toolkit.scene.clearSel(self)
@@ -361,6 +362,7 @@ class Editor:
 		else:
 			self.new( None )
 		self.kbd.connect( self.builder.get_object("keyboard") )
+		self.kbd.updateSize()
 
 		self.builder.get_object("extensions").connect("button-press-event", self.selectExtension, self)
 		def onmousemove(widget, event, self):
@@ -391,6 +393,7 @@ class Editor:
 		self.exts.load(nodes)
 		self.builder.get_object("editor").set_title(os.path.basename(self.file) + " - Florence layout editor")
 		self.builder.get_object("extensions").set_title(os.path.basename(self.file) + " - Florence layout extensions")
+		self.kbd.updateSize()
 
 	def new( self, widget ):
 		self.kbd.reset()
@@ -592,6 +595,7 @@ class Editor:
 			self.updateRulers()
 			self.builder.get_object("keyboard").queue_draw()
 			widget.queue_draw()
+			self.kbd.updateSize()
 
 	def updateRulers(self):
 		(w, h) = self.kbd.getSize()

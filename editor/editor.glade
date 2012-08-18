@@ -35,10 +35,6 @@
     <property name="stock_id">gtk-add</property>
     <signal name="activate" handler="add" swapped="no"/>
   </object>
-  <object class="GtkAction" id="saveas">
-    <property name="stock_id">gtk-save-as</property>
-    <signal name="activate" handler="saveas" swapped="no"/>
-  </object>
   <object class="GtkAdjustment" id="adjCode">
     <property name="upper">255</property>
     <property name="step_increment">1</property>
@@ -49,10 +45,20 @@
     <property name="value">2</property>
     <property name="step_increment">0.10000000000000001</property>
   </object>
+  <object class="GtkAdjustment" id="adjHeightKeyboard">
+    <property name="lower">0.050000000000000003</property>
+    <property name="upper">200</property>
+    <property name="step_increment">0.10000000000000001</property>
+  </object>
   <object class="GtkAdjustment" id="adjWidth">
     <property name="lower">0.050000000000000003</property>
     <property name="upper">200</property>
     <property name="value">2</property>
+    <property name="step_increment">0.10000000000000001</property>
+  </object>
+  <object class="GtkAdjustment" id="adjWidthKeyboard">
+    <property name="lower">0.050000000000000003</property>
+    <property name="upper">200</property>
     <property name="step_increment">0.10000000000000001</property>
   </object>
   <object class="GtkAdjustment" id="adjXpos">
@@ -94,6 +100,10 @@
   <object class="GtkAction" id="save">
     <property name="stock_id">gtk-save</property>
     <signal name="activate" handler="save" swapped="no"/>
+  </object>
+  <object class="GtkAction" id="saveas">
+    <property name="stock_id">gtk-save-as</property>
+    <signal name="activate" handler="saveas" swapped="no"/>
   </object>
   <object class="GtkWindow" id="editor">
     <property name="can_focus">False</property>
@@ -462,6 +472,12 @@
             <child>
               <placeholder/>
             </child>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
           </object>
           <packing>
             <property name="expand">True</property>
@@ -488,6 +504,7 @@
     <property name="can_focus">False</property>
     <property name="title" translatable="yes">Florence layout extensions</property>
     <property name="resizable">False</property>
+    <property name="deletable">False</property>
     <child>
       <object class="GtkTable" id="table1">
         <property name="visible">True</property>
@@ -574,6 +591,12 @@
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
           </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+        <child>
+          <placeholder/>
         </child>
         <child>
           <placeholder/>
@@ -717,7 +740,7 @@
             <property name="secondary_icon_activatable">False</property>
             <property name="primary_icon_sensitive">True</property>
             <property name="secondary_icon_sensitive">True</property>
-            <property name="adjustment">adjWidth</property>
+            <property name="adjustment">adjWidthKeyboard</property>
             <property name="digits">2</property>
             <signal name="value-changed" handler="keyboard_width_changed" swapped="no"/>
           </object>
@@ -735,7 +758,7 @@
             <property name="secondary_icon_activatable">False</property>
             <property name="primary_icon_sensitive">True</property>
             <property name="secondary_icon_sensitive">True</property>
-            <property name="adjustment">adjHeight</property>
+            <property name="adjustment">adjHeightKeyboard</property>
             <property name="digits">2</property>
             <signal name="value-changed" handler="keyboard_height_changed" swapped="no"/>
           </object>
