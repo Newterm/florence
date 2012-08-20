@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-07-28 13:03+0200\n"
+"POT-Creation-Date: 2012-08-20 12:33+0200\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -644,152 +644,161 @@ msgstr "Компактная клавиатура"
 msgid "Alternative Compact keyboard"
 msgstr "Альтернативная компактная клавиатура"
 
-#: ../data/styles/default/symbols.xml.in.h:1
+#: ../data/styles/default/symbols.xml.in.in.h:1
 msgid "ctrl"
 msgstr "ctrl"
 
-#: ../data/styles/default/symbols.xml.in.h:2
+#: ../data/styles/default/symbols.xml.in.in.h:2
 msgid "alt"
 msgstr "alt"
 
-#: ../data/styles/default/symbols.xml.in.h:3
+#: ../data/styles/default/symbols.xml.in.in.h:3
 msgid "altGr"
 msgstr "altGr"
 
-#: ../data/styles/default/symbols.xml.in.h:4
+#: ../data/styles/default/symbols.xml.in.in.h:4
 msgid "ins"
 msgstr "ins"
 
-#: ../data/styles/default/symbols.xml.in.h:5
+#: ../data/styles/default/symbols.xml.in.in.h:5
 msgid "del"
 msgstr "del"
 
-#: ../data/styles/default/symbols.xml.in.h:6
+#: ../data/styles/default/symbols.xml.in.in.h:6
 msgid "end"
 msgstr "end"
 
-#: ../data/styles/default/symbols.xml.in.h:7
+#: ../data/styles/default/symbols.xml.in.in.h:7
 msgid "ent"
 msgstr "ent"
 
-#: ../data/styles/default/symbols.xml.in.h:8
+#: ../data/styles/default/symbols.xml.in.in.h:8
 msgid "nlk"
 msgstr "nlk"
 
-#: ../data/styles/default/symbols.xml.in.h:9
+#: ../data/styles/default/symbols.xml.in.in.h:9
 msgid "esc"
 msgstr "esc"
 
-#: ../data/styles/default/symbols.xml.in.h:10
+#: ../data/styles/default/symbols.xml.in.in.h:10
 msgid "F1"
 msgstr "F1"
 
-#: ../data/styles/default/symbols.xml.in.h:11
+#: ../data/styles/default/symbols.xml.in.in.h:11
 msgid "F2"
 msgstr "F2"
 
-#: ../data/styles/default/symbols.xml.in.h:12
+#: ../data/styles/default/symbols.xml.in.in.h:12
 msgid "F3"
 msgstr "F3"
 
-#: ../data/styles/default/symbols.xml.in.h:13
+#: ../data/styles/default/symbols.xml.in.in.h:13
 msgid "F4"
 msgstr "F4"
 
-#: ../data/styles/default/symbols.xml.in.h:14
+#: ../data/styles/default/symbols.xml.in.in.h:14
 msgid "F5"
 msgstr "F5"
 
-#: ../data/styles/default/symbols.xml.in.h:15
+#: ../data/styles/default/symbols.xml.in.in.h:15
 msgid "F6"
 msgstr "F6"
 
-#: ../data/styles/default/symbols.xml.in.h:16
+#: ../data/styles/default/symbols.xml.in.in.h:16
 msgid "F7"
 msgstr "F7"
 
-#: ../data/styles/default/symbols.xml.in.h:17
+#: ../data/styles/default/symbols.xml.in.in.h:17
 msgid "F8"
 msgstr "F8"
 
-#: ../data/styles/default/symbols.xml.in.h:18
+#: ../data/styles/default/symbols.xml.in.in.h:18
 msgid "F9"
 msgstr "F9"
 
-#: ../data/styles/default/symbols.xml.in.h:19
+#: ../data/styles/default/symbols.xml.in.in.h:19
 msgid "F10"
 msgstr "F10"
 
-#: ../data/styles/default/symbols.xml.in.h:20
+#: ../data/styles/default/symbols.xml.in.in.h:20
 msgid "F11"
 msgstr "F11"
 
-#: ../data/styles/default/symbols.xml.in.h:21
+#: ../data/styles/default/symbols.xml.in.in.h:21
 msgid "F12"
 msgstr "F12"
 
-#: ../data/styles/default/symbols.xml.in.h:22
+#: ../data/styles/default/symbols.xml.in.in.h:22
 msgid "psc"
 msgstr "psc"
 
-#: ../data/styles/default/symbols.xml.in.h:23
+#: ../data/styles/default/symbols.xml.in.in.h:23
 msgid "slk"
 msgstr "slk"
 
-#: ../data/styles/default/symbols.xml.in.h:24
+#: ../data/styles/default/symbols.xml.in.in.h:24
 msgid "brk"
 msgstr "brk"
 
-#: ../data/styles/default/symbols.xml.in.h:25
+#: ../data/styles/default/symbols.xml.in.in.h:25
 msgid "~"
 msgstr "~"
 
-#: ../data/styles/default/symbols.xml.in.h:26
+#: ../data/styles/default/symbols.xml.in.in.h:26
 msgid "123"
 msgstr "123"
 
-#: ../data/styles/default/symbols.xml.in.h:27
+#: ../data/styles/default/symbols.xml.in.in.h:27
 msgid "ABC"
 msgstr "АВС"
 
-#: ../src/florence.c:120
+#: ../src/florence.c:124
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Ошибка загрузки значка florence: %s"
 
-#: ../src/florence.c:326
+#: ../src/florence.c:215
+#, c-format
+msgid "Event error: %s"
+msgstr ""
+
+#: ../src/florence.c:331
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr "SPI выключен: невозможно включить автоскрытие."
 
-#: ../src/florence.c:351
+#: ../src/florence.c:339 ../src/florence.c:341
+msgid "ATSPI listener register failed"
+msgstr ""
+
+#: ../src/florence.c:358
 msgid "AT SPI: problem deregistering focus listener"
 msgstr ""
 
-#: ../src/florence.c:354
+#: ../src/florence.c:361
 msgid "AT SPI: problem deregistering window listener"
 msgstr ""
 
-#: ../src/florence.c:673
+#: ../src/florence.c:684
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Имя разметки: \"%s\""
 
-#: ../src/florence.c:675
+#: ../src/florence.c:686
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr "Версия разметки %s отличается от программной версии %s"
 
-#: ../src/florence.c:710
+#: ../src/florence.c:717
 msgid "Unable to allocate memory for florence"
 msgstr "Невозможно выделить память для florence"
 
-#: ../src/florence.c:724
+#: ../src/florence.c:731
 #, fuzzy
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."
 
-#: ../src/florence.c:728
+#: ../src/florence.c:735
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."
@@ -821,61 +830,61 @@ msgstr "Не удалось выделить память для триггер�
 msgid "Unknown placement %s"
 msgstr "Неизвестное размещение %s"
 
-#: ../src/layoutreader.c:344
+#: ../src/layoutreader.c:345
 #, c-format
 msgid "Id %s was not found in layout file"
 msgstr "Id %s не найдено в файле разметки"
 
-#: ../src/layoutreader.c:494
+#: ../src/layoutreader.c:495
 #, c-format
 msgid "Unable to open file %s, using default %s"
 msgstr "Невозможно открыть файл %s, использую стандартный %s"
 
-#: ../src/layoutreader.c:520
+#: ../src/layoutreader.c:521
 #, c-format
 msgid "%s is a directory and no matching file has been found inside"
 msgstr "%s является папкой и внутри не найдено файлов"
 
-#: ../src/layoutreader.c:529
+#: ../src/layoutreader.c:530
 #, c-format
 msgid "Unable to open file %s."
 msgstr "Невозможно открыть файл %s."
 
-#: ../src/layoutreader.c:536
+#: ../src/layoutreader.c:537
 #, c-format
 msgid "%s does not valdate against %s"
 msgstr "%s не проверено по %s"
 
-#: ../src/layoutreader.c:537
+#: ../src/layoutreader.c:538
 #, c-format
 msgid "Using file %s"
 msgstr "Использую файл %s"
 
-#: ../src/layoutreader.c:545
+#: ../src/layoutreader.c:546
 #, c-format
 msgid "File %s does not contain xml data"
 msgstr "Файл %s не содержит данных xml"
 
-#: ../src/main.c:81
+#: ../src/main.c:80
 #, c-format
 msgid "Florence version %s"
 msgstr "Версия Florence %s"
 
-#: ../src/main.c:83
+#: ../src/main.c:82
 msgid "XRECORD has been disabled at compile time."
 msgstr "XRECORD был отключен во время компиляции."
 
-#: ../src/main.c:158
+#: ../src/main.c:156
 #, c-format
 msgid "%s - Florence is a simple virtual keyboard for Gnome.\n"
 msgstr "%s - Florence - это простая виртуальная клавиатура для Gnome.\n"
 
-#: ../src/main.c:160
+#: ../src/main.c:158
 #, c-format
 msgid "Usage: %s [OPTION]...\n"
 msgstr "Использование: %s [ОПЦИЯ]...\n"
 
-#: ../src/main.c:161
+#: ../src/main.c:159
 #, fuzzy, c-format
 msgid ""
 "Options:\n"
@@ -903,16 +912,26 @@ msgstr ""
 "Больше информации на <http://florence.sourceforge.net>.\n"
 
 #: ../src/settings.c:152
+#, fuzzy, c-format
+msgid "Unable to parse configuration file <%s>"
+msgstr "Невозможно сохранить конфигурацию в %s: %s"
+
+#: ../src/settings.c:155
 #, c-format
 msgid "Using configuration file %s"
 msgstr "Используется файл конфигурации %s"
 
-#: ../src/settings.c:193
+#: ../src/settings.c:156
+#, fuzzy, c-format
+msgid "Unable to use configuration file %s"
+msgstr "Невозможно сохранить конфигурацию в %s: %s"
+
+#: ../src/settings.c:198
 #, c-format
 msgid "Unable to save configuration to %s: %s"
 msgstr "Невозможно сохранить конфигурацию в %s: %s"
 
-#: ../src/settings.c:345
+#: ../src/settings.c:350
 #, fuzzy, c-format
 msgid "No GSettings value for %s. Using default."
 msgstr "Нет значения gconf для %s. Используется значение по умолчанию."
@@ -1033,56 +1052,61 @@ msgstr "невозможно анализирова цвет %s"
 msgid "Unable to allocate memory for css read buffer"
 msgstr "Не удалось выделить память для чтения css буфера"
 
-#: ../src/style.c:163
+#: ../src/style.c:143
+#, fuzzy
+msgid "Can not parse style file."
+msgstr "Путь файла разметки стиля"
+
+#: ../src/style.c:164
 msgid "Out of memory. Some symbols may not be displayed correctly."
 msgstr "Не хватает памяти. Некоторые символы могут отображаться неправильно."
 
-#: ../src/style.c:165
+#: ../src/style.c:166
 #, c-format
 msgid "A cairo error occured: %d"
 msgstr "Произошла ошибка cairo: %d"
 
-#: ../src/style.c:222 ../src/style.c:505
+#: ../src/style.c:223 ../src/style.c:506
 #, c-format
 msgid "Unable to parse svg from layout file: %s"
 msgstr "Невозможно проанализировать svg из файла: %s"
 
-#: ../src/style.c:223
+#: ../src/style.c:224
 #, c-format
 msgid "Bad symbol: should have either svg or label :%s"
 msgstr "Плохой символ: должен иметь svg или метку :%s"
 
-#: ../src/style.c:284
+#: ../src/style.c:285
 #, c-format
 msgid "unknown slant for font %s: %d"
 msgstr "Неизвестен наклон для шрифта %s: %d"
 
-#: ../src/style.c:370
+#: ../src/style.c:371
 #, c-format
 msgid "No style symbol for action key %d"
 msgstr "Нет стиля символа для дейсткия клавиши %d"
 
-#: ../src/style.c:393
+#: ../src/style.c:394
 #, c-format
 msgid "Unable to parse svg from layout file: svg=\"%s\" error=\"%s\""
 msgstr "Невозможно проанализировать svg из файла: svg=\"%s\" ошибка=\"%s\""
 
-#: ../src/style.c:397
+#: ../src/style.c:398
 #, c-format
 msgid "[new shape] name=%s svg=\"%s\""
 msgstr "[новая форма] имя=%s svg=\"%s\""
 
-#: ../src/style.c:427
+#: ../src/style.c:428
 #, c-format
 msgid "Shape %s doesn't exist for selected style."
 msgstr "Форма %s не существует для выбранного стиля."
 
-#: ../src/style.c:575
+#: ../src/style.c:576
 #, c-format
 msgid "An error occured while playing sound: %s"
 msgstr ""
 
-#: ../src/style.c:667
+#: ../src/style.c:668
 #, fuzzy, c-format
 msgid "Unknown sound type: %d"
 msgstr "Неизвестный тип значения : %d"
@@ -1117,26 +1141,26 @@ msgstr ""
 "и отправьте вывод на f.agrech@gmail.com\n"
 "\n"
 
-#: ../src/trace.c:148 ../src/trace.c:158
+#: ../src/trace.c:156 ../src/trace.c:166
 msgid "WARNING: "
 msgstr ""
 
-#: ../src/trace.c:168
+#: ../src/trace.c:176
 #, fuzzy
 msgid "ERROR: "
 msgstr "КРИТИЧЕСКАЯ ОШИБКА: "
 
-#: ../src/trace.c:201
+#: ../src/trace.c:209
 #, c-format
 msgid "Too many function levels at function <%s>."
 msgstr ""
 
-#: ../src/trace.c:210
+#: ../src/trace.c:218
 #, c-format
 msgid "Trace function checksum error at function <%s>."
 msgstr ""
 
-#: ../src/trace.c:212
+#: ../src/trace.c:220
 #, c-format
 msgid "Trace indent error at function <%s>."
 msgstr ""
@@ -1232,26 +1256,26 @@ msgstr "Больше не показывать"
 msgid "Notification failed"
 msgstr "Уведомление неудачно"
 
-#: ../src/view.c:478
+#: ../src/view.c:475
 msgid "X11 composite extension detected. Semi-transparency is enabled."
 msgstr ""
 
-#: ../src/view.c:484
+#: ../src/view.c:481
 msgid ""
 "Your screen does not support alpha channel. Semi-transparency is disabled"
 msgstr "Ваш экран не поддерживает альфа-канал. Полупрозрачность отключена"
 
-#: ../src/view.c:516
+#: ../src/view.c:513
 #, fuzzy, c-format
 msgid "Window size out of range :%d, %d"
 msgstr "Размер окна вне диапазона :%d"
 
-#: ../src/view.c:611
+#: ../src/view.c:608
 #, c-format
 msgid "Window opacity out of range (1.0 to 100.0): %f"
 msgstr "Непрозрачность окна вне диапазона(от 1.0 до 100.0): %f"
 
-#: ../src/view.c:773
+#: ../src/view.c:770
 msgid "Unable to allocate memory for view"
 msgstr "Не удалось выделить память для просмотра"
 
@@ -1274,45 +1298,53 @@ msgid "Unknown action key type %s"
 msgstr "Клавиша с действием неизвестного типа %s"
 
 #: ../src/key.c:173
+msgid "ATSPI doesn't work. Using Xtst instead."
+msgstr ""
+
+#: ../src/key.c:175
 msgid "Unreachable code"
 msgstr "Недоступный код"
 
-#: ../src/key.c:199
+#: ../src/key.c:190
+msgid "ATSPI doesn't work."
+msgstr ""
+
+#: ../src/key.c:206
 #, c-format
 msgid "key %p has no modification."
 msgstr "клавиша %p не имеет модификации."
 
-#: ../src/key.c:308
+#: ../src/key.c:315
 #, c-format
 msgid "unknown action key type pressed = %d"
 msgstr "нажата клавиша неизвестного типа = %d"
 
-#: ../src/key.c:311
+#: ../src/key.c:318
 msgid "unknown key type pressed."
 msgstr "нажата клавиша неизвестного типа."
 
-#: ../src/key.c:313
+#: ../src/key.c:320
 msgid "pressed key has no action associated."
 msgstr "нажатая клавиша не связана с каким-либо действием."
 
-#: ../src/key.c:360
+#: ../src/key.c:367
 #, c-format
 msgid "unknown action key type released = %d"
 msgstr "освобождена клавиша неизвестного типа = %d"
 
-#: ../src/key.c:363
+#: ../src/key.c:370
 msgid "unknown key type released."
 msgstr "освобождена клавиша неизвестного типа."
 
-#: ../src/key.c:365
+#: ../src/key.c:372
 msgid "released key has no action associated."
 msgstr "освобождённая клавиша не связана с каким-либо действием."
 
-#: ../src/key.c:433
+#: ../src/key.c:440
 msgid "unknown key type to draw."
 msgstr "неизвестный тип клавиши для отрисовки"
 
-#: ../src/key.c:465
+#: ../src/key.c:472
 #, c-format
 msgid "unknown key type: %d"
 msgstr "неизвестный тип клавиш: %d"
@@ -1353,11 +1385,11 @@ msgstr "неизвестный тип настройки: %d"
 msgid "Unable to open %s: %s"
 msgstr "Невозможно открыть %s: %s"
 
-#: ../src/settings-window.c:604
+#: ../src/settings-window.c:605
 msgid "Confirm"
 msgstr "Подтвердить"
 
-#: ../src/settings-window.c:605
+#: ../src/settings-window.c:606
 msgid "Discard changes?"
 msgstr "Отменить изменения?"
 
@@ -1430,32 +1462,38 @@ msgstr "Невозможно выделить память на переход"
 
 #: ../src/fsm.c:191
 #, fuzzy, c-format
-msgid "Key %p (type %d): Event %d received : Switching from state %d to %d"
+msgid ""
+"Key %p (type %d): Event %d received : Switching from state %d to %d (fsm %d)"
 msgstr "Событие %d получено :тип %d. Переход из состояния %d в %d"
 
-#: ../src/fsm.c:204
+#: ../src/fsm.c:206
 #, fuzzy, c-format
 msgid "FSM state errorr: state=%d"
 msgstr "FSM ошибка состояния. событие =%d ; состояние=%d"
 
-#: ../src/service.c:59
+#: ../src/service.c:60
 #, c-format
 msgid "Unknown dbus method called: <%s>"
 msgstr ""
 
-#: ../src/service.c:79
+#: ../src/service.c:81
 #, c-format
 msgid "DBus name aquired: %s"
 msgstr ""
 
-#: ../src/service.c:87
+#: ../src/service.c:89
 msgid "Service name lost."
 msgstr ""
 
-#: ../src/service.c:96
+#: ../src/service.c:98
 #, fuzzy
 msgid "Unable to allocate memory for dbus service"
 msgstr "Не удалось выделить память для просмотра"
+
+#: ../src/service.c:126
+#, fuzzy, c-format
+msgid "Error emitting terminate signal: %s"
+msgstr "Ошибка загрузки значка florence: %s"
 
 #~ msgid "_Preferences..."
 #~ msgstr "_Параметры..."

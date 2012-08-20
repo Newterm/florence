@@ -6,6 +6,6 @@ style_DATA = florence.style florence.defs $(style_in_files:.xml.in=.xml)
 $(style_in_files): $(style_in_files:.xml.in=.xml.in.in)
 	sed -e "s|\@ICONDIR\@|$(ICONDIR)|" $< > $@
 
-EXTRA_DIST = $(style_DATA) $(style_in_files)
-DISTCLEANFILES = $(style_in_files:.xml.in=.xml)
+EXTRA_DIST = $(style_DATA) $(style_in_files:.xml.in=.xml.in.in)
+DISTCLEANFILES = $(style_in_files:.xml.in=.xml) $(style_in_files)
 

@@ -49,6 +49,12 @@
 /* exit signal */
 static int flo_exit=FALSE;
 
+#ifdef ENABLE_AT_SPI2
+void flo_check_show (struct florence *florence, AtspiAccessible *obj);
+#else
+void flo_check_show (struct florence *florence, Accessible *obj);
+#endif
+
 /* terminate the program */
 void flo_terminate(void)
 {

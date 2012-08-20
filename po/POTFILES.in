@@ -5,7 +5,7 @@ data/layouts/florence.xml.in.in
 data/layouts/florence-alt.xml.in.in
 data/layouts/compact.xml.in.in
 data/layouts/compact-alt.xml.in.in
-data/styles/default/symbols.xml.in
+data/styles/default/symbols.xml.in.in
 src/florence.server.in.in
 src/florence.c
 src/keyboard.c
