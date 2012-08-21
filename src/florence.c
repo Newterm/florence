@@ -90,7 +90,11 @@ void flo_icon_show (GtkWidget *widget, gpointer user_data)
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	if (florence->icon && florence->obj) {
+#ifdef ENABLE_AT_SPI2
 		g_object_ref(florence->obj);
+#else
+		Accessible_ref(florence->obj);
+#endif
 		flo_check_show(florence, florence->obj);
 	}
 	END_FUNC
