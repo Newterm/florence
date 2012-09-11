@@ -222,6 +222,9 @@ class Extension:
 		self.x = x
 		self.y = y
 
+	def getXPos(self): return self.x
+	def getYPos(self): return self.y
+
 	def draw(self, crctx, selected):
 		(w, h) = self.keyboard.getSize()
 		if selected:
@@ -320,7 +323,8 @@ class Extensions:
 			(w, h) = ext.getSize()
 			x += w
 			ww += w
-		x = 0
+		x = self.main.getXPos()
+		y = hh
 		for ext in bots:
 			ext.setPos(x, y)
 			(w, h) = ext.getSize()
@@ -332,8 +336,15 @@ class Extensions:
 	
 	def append(self, kbd):
 		ext = Extension( self.builder )
-		ext.loadKeyboard( kbd, "right", "noname", "noid" )
+		index = self.builder.get_object("placement").get_active()
+		if index > 3 or index < 0:
+			index = 0
+			self.builder.get_object("placement").set_active(0)
+			self.builder.get_object("placement").set_sensitive(True)
+		placement = self.builder.get_object("placementListStore")[index][0]
+		ext.loadKeyboard( kbd, placement, "noname", "noid" )
 		self.exts.append( ext )
+		self.select = ext
 		self.arrange()
 	
 	def remove(self, kbd):
@@ -690,4 +701,5 @@ class Editor:
 
 ed = Editor()
 gtk.main()
+
 

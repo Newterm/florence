@@ -671,3 +671,4 @@ class scene:
 	def clearSel(self):
 		self.sel.active = None
 
+
