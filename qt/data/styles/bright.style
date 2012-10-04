@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Florence - Florence is a simple virtual keyboard.
+
+  Copyright (C) 2011 François Agrech
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2, or (at your option)
+  any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software Foundation,
+  Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+-->
+
+<style xmlns="http://florence.sourceforge.net"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xi="http://www.w3.org/2001/XInclude">
+	<shapes>
+	<defs>
+		<linearGradient id="linearGradient" x1="50%" x2="50%" y1="40%" y2="0%">
+			<stop offset="0%" style="stop-color: white; stop-opacity: 0;"/>
+			<stop offset="100%" style="stop-color: white; stop-opacity: 0.75;"/>
+		</linearGradient>
+                <radialGradient id="radialGradient1" cx="0.5" cy="0.5" r="0.75" fx="0.5" fy="0">
+			<stop offset="0%" style="stop-color: white; stop-opacity: 0.75;"/>
+			<stop offset="50%" style="stop-color: rgb(218, 218, 218); stop-opacity: 0.5;"/>
+			<stop offset="51%" style="stop-color: rgb(189, 189, 189); stop-opacity: 0.5;"/>
+			<stop offset="65%" style="stop-color: rgb(222, 222, 222); stop-opacity: 0.5;"/>
+			<stop offset="100%" style="stop-color: white; stop-opacity: 0.75;"/>
+		</radialGradient>
+                <radialGradient id="radialGradient2" cx="0.5" cy="0.5" r="0.75" fx="0.5" fy="0.75">
+			<stop offset="0%" style="stop-color: black; stop-opacity: 0;"/>
+			<stop offset="50%" style="stop-color: black; stop-opacity: 0;"/>
+			<stop offset="100%" style="stop-color: black; stop-opacity: 0.5;"/>
+		</radialGradient>
+	</defs>
+	<shape>
+		<name>default</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>mini</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>tiny</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>small</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>Wide</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>XL</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>XXL</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>High</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>Space</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	<shape>
+		<name>Return</name>
+		<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+			<ellipse class="shape" cx="100" cy="100" rx="100" ry="100"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient1);"/>
+			<ellipse cx="100" cy="100" rx="100" ry="100" style="fill: url(#radialGradient2);"/>
+			<ellipse cx="100" cy="100" rx="80" ry="95" style="fill: url(#linearGradient);"/>
+		</svg>
+	</shape>
+	</shapes>
+        <symbols>
+                <symbol>
+                        <name>Control_[LR]</name>
+                        <label>ctrl</label>
+                        <label xml:lang="fr">ctrl</label>
+                </symbol>
+                <symbol>
+                        <name>Super_[LR]</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="M 50,22.5 C 34.841781,22.5 22.5,34.841781 22.5,50 22.5,65.158219 34.841781,77.5 50,77.5 65.158219,77.5 77.5,65.158219 77.5,50 77.5,34.841781 65.158219,22.5 50,22.5 z m 0,5 C 62.456018,27.5 72.5,37.543982 72.5,50 72.5,62.456018 62.456018,72.5 50,72.5 37.543982,72.5 27.5,62.456018 27.5,50 27.5,37.543982 37.543982,27.5 50,27.5 z" class="symbol"/>
+                                <ellipse transform="matrix(0.83333331,0,0,1,8.0000011,0)" ry="4" rx="6" cy="42" cx="42" class="symbol"/>
+                                <ellipse transform="matrix(0.83333334,0,0,1,8.6666665,0)" ry="4" rx="6" cy="42" cx="58" class="symbol"/>
+                                <path d="m 36.96875,55.46875 a 2.50025,2.50025 0 0 0 -1.75,4.3125 C 39.004424,63.566924 44.666667,64.5 50,64.5 c 5.333333,0 10.995576,-0.933076 14.78125,-4.71875 a 2.5190679,2.5190679 0 1 0 -3.5625,-3.5625 C 59.004424,58.433076 54.666667,59.5 50,59.5 c -4.666667,0 -9.004424,-1.066924 -11.21875,-3.28125 a 2.50025,2.50025 0 0 0 -1.8125,-0.75 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(Alt_[LR]|Meta_L)</name>
+                        <label>alt</label>
+                        <label xml:lang="fr">alt</label>
+                </symbol>
+                <symbol>
+                        <name>ISO_Level3_Shift</name>
+                        <label>altGr</label>
+                        <label xml:lang="fr">altGr</label>
+                </symbol>
+                <symbol>
+                        <name>BackSpace</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="M20 50 L35 35 L35 45 L75 45 L75 55 L35 55 L35 65 Z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>Tab</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="M65 35 L75 35 L75 65 L65 65 Z" class="symbol"/>
+                                <path d="M62.5 50 L50 35 L50 45 L28.875 45 L28.875 55 L50 55 L50 65 Z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>ISO_Left_Tab</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="M25 35 L35 35 L35 65 L25 65 Z" class="symbol"/>
+                                <path d="M37.5 50 L50 35 L50 45 L73.625 45 L73.625 55 L50 55 L50 65 Z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>Return</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="192" height="192" version="1.1" viewBox="0 0 192 192">
+				<path class="symbol" d="m 116,29 0,9 9,0 c 12.48782,0 12.48782,13 0,13 L 67,51 67,41 51.75,55.4375 67,70 l 0,-10 58,0 c 26.05752,0 26.05752,-31 0,-31 l -9,0 z"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>Caps_Lock</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="m 35,45 0,26 30,0 0,-26 -5,0 0,-9 c 0,-5 -2,-8 -10,-8 -8,0 -10,3 -10,8 l 0,9 -5,0 z m 20,0 -10,0 0,-9 c 0,-2 2,-3 5,-3 3,0 5,1 5,3 l 0,9 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(Shift_[LR]|(KP_|)Up)</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="M 45,45 35,45 50,30 65,45 55,45 55,70 45,70 45,45 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Insert</name>
+                        <label>ins</label>
+                        <label xml:lang="fr">ins</label>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Home</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="m 32.196699,38.232233 -7.071068,7.071068 0,-21.213204 21.213204,1e-6 -7.071068,7.071068 17.677669,17.677669 -7.071067,7.071068 -17.67767,-17.67767 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Page_Up</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="m 45,45 -10,0 15,-15 15,15 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 -10,0 0,1 -10,0 0,-1 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Delete</name>
+                        <label>del</label>
+                        <label xml:lang="fr">sup</label>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)End</name>
+                        <label>end</label>
+                        <label xml:lang="fr">fin</label>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Page_Down</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="m 45,55 -10,0 15,15 15,-15 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 -10,0 0,-4 10,0 0,-4 -10,0 0,-1 -10,0 0,1 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 -10,0 0,4 10,0 0,4 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Down</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="m 55,55 10,0 -15,15 -15,-15 10,0 0,-25 10,0 0,25 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Left</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="m 45,55 0,10 -15,-15 15,-15 0,10 25,0 0,10 -25,0 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>(KP_|)Right</name>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="100" viewBox="0 0 100 100" version="1.1" height="100">
+                                <path d="M 55,45 55,35 70,50 55,65 55,55 30,55 30,45 55,45 z" class="symbol"/>
+                        </svg>
+                </symbol>
+                <symbol>
+                        <name>KP_Enter</name>
+                        <label>ent</label>
+                        <label xml:lang="fr">ent</label>
+                </symbol>
+                <symbol>
+                        <name>Num_Lock</name>
+                        <label>nlk</label>
+                        <label xml:lang="fr">vnm</label>
+                </symbol>
+                <symbol>
+                        <name>Escape</name>
+                        <label>esc</label>
+                        <label xml:lang="fr">ech</label>
+                </symbol>
+                <symbol>
+                        <name>F1</name>
+                        <label>F1</label>
+                        <label xml:lang="fr">F1</label>
+                </symbol>
+                <symbol>
+                        <name>F2</name>
+                        <label>F2</label>
+                        <label xml:lang="fr">F2</label>
+                </symbol>
+                <symbol>
+                        <name>F3</name>
+                        <label>F3</label>
+                        <label xml:lang="fr">F3</label>
+                </symbol>
+                <symbol>
+                        <name>F4</name>
+                        <label>F4</label>
+                        <label xml:lang="fr">F4</label>
+                </symbol>
+                <symbol>
+                        <name>F5</name>
+                        <label>F5</label>
+                        <label xml:lang="fr">F5</label>
+                </symbol>
+                <symbol>
+                        <name>F6</name>
+                        <label>F6</label>
+                        <label xml:lang="fr">F6</label>
+                </symbol>
+                <symbol>
+                        <name>F7</name>
+                        <label>F7</label>
+                        <label xml:lang="fr">F7</label>
+                </symbol>
+                <symbol>
+                        <name>F8</name>
+                        <label>F8</label>
+                        <label xml:lang="fr">F8</label>
+                </symbol>
+                <symbol>
+                        <name>F9</name>
+                        <label>F9</label>
+                        <label xml:lang="fr">F9</label>
+                </symbol>
+                <symbol>
+                        <name>F10</name>
+                        <label>F10</label>
+                        <label xml:lang="fr">F10</label>
+                </symbol>
+                <symbol>
+                        <name>F11</name>
+                        <label>F11</label>
+                        <label xml:lang="fr">F11</label>
+                </symbol>
+                <symbol>
+                        <name>F12</name>
+                        <label>F12</label>
+                        <label xml:lang="fr">F12</label>
+                </symbol>
+                <symbol>
+                        <name>Print</name>
+                        <label>psc</label>
+                        <label xml:lang="fr">imp</label>
+                </symbol>
+                <symbol>
+                        <name>Scroll_Lock</name>
+                        <label>slk</label>
+                        <label xml:lang="fr">arr</label>
+                </symbol>
+                <symbol>
+                        <name>Pause</name>
+                        <label>brk</label>
+                        <label xml:lang="fr">pse</label>
+                </symbol>
+                <symbol>
+                        <name>(.*)tilde</name>
+                        <label>~</label>
+                        <label xml:lang="fr">~</label>
+                </symbol>
+        </symbols>
+</style>

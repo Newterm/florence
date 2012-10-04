@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="florence.xml">../data/layouts/florence.xml</file>
+        <file alias="us.xml">../data/keymaps/us.xml</file>
+        <file alias="default.style">../data/styles/default.style</file>
+    </qresource>
+</RCC>

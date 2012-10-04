@@ -1,0 +1,14 @@
+This is the Qt port of Florence Virtual Keyboard.
+
+This package contains:
+
+* The source code for the Florence widget in the src directory
+* One layout file in data/layouts
+* 3 style files in data/styles
+* Some language dependent keymap files in data/keymaps
+* A simple example of a QApplication using Florence in examples/helloworld
+* A demo application in examples/demo
+* A Tutorial in doc/tutorial
+* A reference documentation in doc/html
+
+You should start by reading the tutorial at doc/tutorial/tutorial.html

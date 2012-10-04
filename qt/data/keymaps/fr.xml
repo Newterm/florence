@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keymap>
+    <key code="9">
+        <symbol mod="0"><name>Escape</name></symbol>
+    </key>
+    <key code="10">
+        <symbol mod="0">&amp;</symbol>
+        <symbol mod="1">1</symbol>
+        <symbol mod="128">¹</symbol>
+        <symbol mod="129">¡</symbol>
+    </key>
+    <key code="11">
+        <symbol mod="0">é</symbol>
+        <symbol mod="1">2</symbol>
+        <symbol mod="2">É</symbol>
+        <symbol mod="128">~</symbol>
+        <symbol mod="129">⅛</symbol>
+    </key>
+    <key code="12">
+        <symbol mod="0">"</symbol>
+        <symbol mod="1">3</symbol>
+        <symbol mod="128">#</symbol>
+        <symbol mod="129">£</symbol>
+    </key>
+    <key code="13">
+        <symbol mod="0">'</symbol>
+        <symbol mod="1">4</symbol>
+        <symbol mod="128">{</symbol>
+        <symbol mod="129">$</symbol>
+    </key>
+    <key code="14">
+        <symbol mod="0">(</symbol>
+        <symbol mod="1">5</symbol>
+        <symbol mod="128">[</symbol>
+        <symbol mod="129">⅜</symbol>
+    </key>
+    <key code="15">
+        <symbol mod="0">-</symbol>
+        <symbol mod="1">6</symbol>
+        <symbol mod="128">|</symbol>
+        <symbol mod="129">⅝</symbol>
+    </key>
+    <key code="16">
+        <symbol mod="0">è</symbol>
+        <symbol mod="1">7</symbol>
+        <symbol mod="2">È</symbol>
+        <symbol mod="128">`</symbol>
+        <symbol mod="129">⅞</symbol>
+    </key>
+    <key code="17">
+        <symbol mod="0">_</symbol>
+        <symbol mod="1">8</symbol>
+        <symbol mod="128">\</symbol>
+        <symbol mod="129">™</symbol>
+    </key>
+    <key code="18">
+        <symbol mod="0">ç</symbol>
+        <symbol mod="1">9</symbol>
+        <symbol mod="2">Ç</symbol>
+        <symbol mod="128">^</symbol>
+        <symbol mod="129">±</symbol>
+    </key>
+    <key code="19">
+        <symbol mod="0">à</symbol>
+        <symbol mod="1">0</symbol>
+        <symbol mod="2">À</symbol>
+        <symbol mod="128">@</symbol>
+        <symbol mod="129">°</symbol>
+    </key>
+    <key code="20">
+        <symbol mod="0">)</symbol>
+        <symbol mod="1">°</symbol>
+        <symbol mod="128">]</symbol>
+        <symbol mod="129">¿</symbol>
+    </key>
+    <key code="21">
+        <symbol mod="0">=</symbol>
+        <symbol mod="1">+</symbol>
+        <symbol mod="128">}</symbol>
+        <symbol mod="129">˛</symbol>
+    </key>
+    <key code="22">
+        <symbol mod="0"><name>BackSpace</name></symbol>
+        <symbol mod="12"><name>Terminate_Server</name></symbol>
+    </key>
+    <key code="23">
+        <symbol mod="0"><name>Tab</name></symbol>
+        <symbol mod="1"><name>ISO_Left_Tab</name></symbol>
+    </key>
+    <key code="24">
+        <symbol mod="0">a</symbol>
+        <symbol mod="1">A</symbol>
+        <symbol mod="2">A</symbol>
+        <symbol mod="128">æ</symbol>
+        <symbol mod="129">Æ</symbol>
+    </key>
+    <key code="25">
+        <symbol mod="0">z</symbol>
+        <symbol mod="1">Z</symbol>
+        <symbol mod="2">Z</symbol>
+        <symbol mod="128">«</symbol>
+        <symbol mod="129">&lt;</symbol>
+    </key>
+    <key code="26">
+        <symbol mod="0">e</symbol>
+        <symbol mod="1">E</symbol>
+        <symbol mod="2">E</symbol>
+        <symbol mod="128">€</symbol>
+        <symbol mod="129">¢</symbol>
+    </key>
+    <key code="27">
+        <symbol mod="0">r</symbol>
+        <symbol mod="1">R</symbol>
+        <symbol mod="2">R</symbol>
+        <symbol mod="128">¶</symbol>
+        <symbol mod="129">®</symbol>
+    </key>
+    <key code="28">
+        <symbol mod="0">t</symbol>
+        <symbol mod="1">T</symbol>
+        <symbol mod="2">T</symbol>
+        <symbol mod="128">ŧ</symbol>
+        <symbol mod="129">Ŧ</symbol>
+    </key>
+    <key code="29">
+        <symbol mod="0">y</symbol>
+        <symbol mod="1">Y</symbol>
+        <symbol mod="2">Y</symbol>
+        <symbol mod="128">←</symbol>
+        <symbol mod="129">¥</symbol>
+    </key>
+    <key code="30">
+        <symbol mod="0">u</symbol>
+        <symbol mod="1">U</symbol>
+        <symbol mod="2">U</symbol>
+        <symbol mod="128">↓</symbol>
+        <symbol mod="129">↑</symbol>
+    </key>
+    <key code="31">
+        <symbol mod="0">i</symbol>
+        <symbol mod="1">I</symbol>
+        <symbol mod="2">I</symbol>
+        <symbol mod="128">→</symbol>
+        <symbol mod="129">ı</symbol>
+    </key>
+    <key code="32">
+        <symbol mod="0">o</symbol>
+        <symbol mod="1">O</symbol>
+        <symbol mod="2">O</symbol>
+        <symbol mod="128">œ</symbol>
+        <symbol mod="129">Œ</symbol>
+    </key>
+    <key code="33">
+        <symbol mod="0">p</symbol>
+        <symbol mod="1">P</symbol>
+        <symbol mod="2">P</symbol>
+        <symbol mod="128">þ</symbol>
+        <symbol mod="129">Þ</symbol>
+    </key>
+    <key code="34">
+        <symbol mod="0">^</symbol>
+        <symbol mod="1">¨</symbol>
+        <symbol mod="128">¨</symbol>
+        <symbol mod="129"><name>dead_abovering</name></symbol>
+    </key>
+    <key code="35">
+        <symbol mod="0">$</symbol>
+        <symbol mod="1">£</symbol>
+        <symbol mod="128">¤</symbol>
+        <symbol mod="129">¯</symbol>
+    </key>
+    <key code="36">
+        <symbol mod="0"><name>Return</name></symbol>
+    </key>
+    <key code="37" mod="4">
+        <symbol mod="0"><name>Control_L</name></symbol>
+    </key>
+    <key code="38">
+        <symbol mod="0">q</symbol>
+        <symbol mod="1">Q</symbol>
+        <symbol mod="2">Q</symbol>
+        <symbol mod="128">@</symbol>
+        <symbol mod="129">Ω</symbol>
+    </key>
+    <key code="39">
+        <symbol mod="0">s</symbol>
+        <symbol mod="1">S</symbol>
+        <symbol mod="2">S</symbol>
+        <symbol mod="128">ß</symbol>
+        <symbol mod="129">§</symbol>
+    </key>
+    <key code="40">
+        <symbol mod="0">d</symbol>
+        <symbol mod="1">D</symbol>
+        <symbol mod="2">D</symbol>
+        <symbol mod="128">ð</symbol>
+        <symbol mod="129">Ð</symbol>
+    </key>
+    <key code="41">
+        <symbol mod="0">f</symbol>
+        <symbol mod="1">F</symbol>
+        <symbol mod="2">F</symbol>
+        <symbol mod="128">đ</symbol>
+        <symbol mod="129">ª</symbol>
+        <symbol mod="130">Đ</symbol>
+    </key>
+    <key code="42">
+        <symbol mod="0">g</symbol>
+        <symbol mod="1">G</symbol>
+        <symbol mod="2">G</symbol>
+        <symbol mod="128">ŋ</symbol>
+        <symbol mod="129">Ŋ</symbol>
+    </key>
+    <key code="43">
+        <symbol mod="0">h</symbol>
+        <symbol mod="1">H</symbol>
+        <symbol mod="2">H</symbol>
+        <symbol mod="128">ħ</symbol>
+        <symbol mod="129">Ħ</symbol>
+    </key>
+    <key code="44">
+        <symbol mod="0">j</symbol>
+        <symbol mod="1">J</symbol>
+        <symbol mod="2">J</symbol>
+    </key>
+    <key code="45">
+        <symbol mod="0">k</symbol>
+        <symbol mod="1">K</symbol>
+        <symbol mod="2">K</symbol>
+        <symbol mod="128">ĸ</symbol>
+        <symbol mod="129">&amp;</symbol>
+    </key>
+    <key code="46">
+        <symbol mod="0">l</symbol>
+        <symbol mod="1">L</symbol>
+        <symbol mod="2">L</symbol>
+        <symbol mod="128">ł</symbol>
+        <symbol mod="129">Ł</symbol>
+    </key>
+    <key code="47">
+        <symbol mod="0">m</symbol>
+        <symbol mod="1">M</symbol>
+        <symbol mod="2">M</symbol>
+        <symbol mod="128">µ</symbol>
+        <symbol mod="129">º</symbol>
+    </key>
+    <key code="48">
+        <symbol mod="0">ù</symbol>
+        <symbol mod="1">%</symbol>
+        <symbol mod="2">Ù</symbol>
+        <symbol mod="128">^</symbol>
+        <symbol mod="129">ˇ</symbol>
+    </key>
+    <key code="49">
+        <symbol mod="0">²</symbol>
+        <symbol mod="1">~</symbol>
+        <symbol mod="128">¬</symbol>
+    </key>
+    <key code="50" mod="1">
+        <symbol mod="0"><name>Shift_L</name></symbol>
+    </key>
+    <key code="51">
+        <symbol mod="0">*</symbol>
+        <symbol mod="1">µ</symbol>
+        <symbol mod="128">`</symbol>
+        <symbol mod="129">˘</symbol>
+    </key>
+    <key code="52">
+        <symbol mod="0">w</symbol>
+        <symbol mod="1">W</symbol>
+        <symbol mod="2">W</symbol>
+        <symbol mod="128">ł</symbol>
+        <symbol mod="129">Ł</symbol>
+    </key>
+    <key code="53">
+        <symbol mod="0">x</symbol>
+        <symbol mod="1">X</symbol>
+        <symbol mod="2">X</symbol>
+        <symbol mod="128">»</symbol>
+        <symbol mod="129">&gt;</symbol>
+    </key>
+    <key code="54">
+        <symbol mod="0">c</symbol>
+        <symbol mod="1">C</symbol>
+        <symbol mod="2">C</symbol>
+        <symbol mod="128">¢</symbol>
+        <symbol mod="129">©</symbol>
+    </key>
+    <key code="55">
+        <symbol mod="0">v</symbol>
+        <symbol mod="1">V</symbol>
+        <symbol mod="2">V</symbol>
+        <symbol mod="128">“</symbol>
+        <symbol mod="129">‘</symbol>
+    </key>
+    <key code="56">
+        <symbol mod="0">b</symbol>
+        <symbol mod="1">B</symbol>
+        <symbol mod="2">B</symbol>
+        <symbol mod="128">”</symbol>
+        <symbol mod="129">’</symbol>
+    </key>
+    <key code="57">
+        <symbol mod="0">n</symbol>
+        <symbol mod="1">N</symbol>
+        <symbol mod="2">N</symbol>
+    </key>
+    <key code="58">
+        <symbol mod="0">,</symbol>
+        <symbol mod="1">?</symbol>
+        <symbol mod="128">´</symbol>
+        <symbol mod="129">˝</symbol>
+    </key>
+    <key code="59">
+        <symbol mod="0">;</symbol>
+        <symbol mod="1">.</symbol>
+        <symbol mod="128"><name>horizconnector</name></symbol>
+        <symbol mod="129">×</symbol>
+    </key>
+    <key code="60">
+        <symbol mod="0">:</symbol>
+        <symbol mod="1">/</symbol>
+        <symbol mod="128">·</symbol>
+        <symbol mod="129">÷</symbol>
+    </key>
+    <key code="61">
+        <symbol mod="0">!</symbol>
+        <symbol mod="1">§</symbol>
+        <symbol mod="128"><name>dead_belowdot</name></symbol>
+        <symbol mod="129">˙</symbol>
+    </key>
+    <key code="62" mod="1">
+        <symbol mod="0"><name>Shift_R</name></symbol>
+    </key>
+    <key code="63">
+        <symbol mod="0">*</symbol>
+        <symbol mod="12"><name>XF86_ClearGrab</name></symbol>
+    </key>
+    <key code="64" mod="8">
+        <symbol mod="0"><name>Alt_L</name></symbol>
+        <symbol mod="1"><name>Meta_L</name></symbol>
+    </key>
+    <key code="65">
+        <symbol mod="0"><![CDATA[ ]]></symbol>
+    </key>
+    <key code="66" mod="2" locker="yes">
+        <symbol mod="0"><name>Caps_Lock</name></symbol>
+    </key>
+    <key code="67">
+        <symbol mod="0"><name>F1</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_1</name></symbol>
+    </key>
+    <key code="68">
+        <symbol mod="0"><name>F2</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_2</name></symbol>
+    </key>
+    <key code="69">
+        <symbol mod="0"><name>F3</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_3</name></symbol>
+    </key>
+    <key code="70">
+        <symbol mod="0"><name>F4</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_4</name></symbol>
+    </key>
+    <key code="71">
+        <symbol mod="0"><name>F5</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_5</name></symbol>
+    </key>
+    <key code="72">
+        <symbol mod="0"><name>F6</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_6</name></symbol>
+    </key>
+    <key code="73">
+        <symbol mod="0"><name>F7</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_7</name></symbol>
+    </key>
+    <key code="74">
+        <symbol mod="0"><name>F8</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_8</name></symbol>
+    </key>
+    <key code="75">
+        <symbol mod="0"><name>F9</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_9</name></symbol>
+    </key>
+    <key code="76">
+        <symbol mod="0"><name>F10</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_10</name></symbol>
+    </key>
+    <key code="77" mod="16" locker="yes">
+        <symbol mod="0"><name>Num_Lock</name></symbol>
+        <symbol mod="1"><name>Pointer_EnableKeys</name></symbol>
+    </key>
+    <key code="78">
+        <symbol mod="0"><name>Scroll_Lock</name></symbol>
+    </key>
+    <key code="79">
+        <symbol mod="0"><name>KP_Home</name></symbol>
+        <symbol mod="1">7</symbol>
+        <symbol mod="16">7</symbol>
+    </key>
+    <key code="80">
+        <symbol mod="0"><name>KP_Up</name></symbol>
+        <symbol mod="1">8</symbol>
+        <symbol mod="16">8</symbol>
+    </key>
+    <key code="81">
+        <symbol mod="0"><name>KP_Page_Up</name></symbol>
+        <symbol mod="1">9</symbol>
+        <symbol mod="16">9</symbol>
+    </key>
+    <key code="82">
+        <symbol mod="0">-</symbol>
+        <symbol mod="12"><name>XF86_Prev_VMode</name></symbol>
+    </key>
+    <key code="83">
+        <symbol mod="0"><name>KP_Left</name></symbol>
+        <symbol mod="1">4</symbol>
+        <symbol mod="16">4</symbol>
+    </key>
+    <key code="84">
+        <symbol mod="0"><name>KP_Begin</name></symbol>
+        <symbol mod="1">5</symbol>
+        <symbol mod="16">5</symbol>
+    </key>
+    <key code="85">
+        <symbol mod="0"><name>KP_Right</name></symbol>
+        <symbol mod="1">6</symbol>
+        <symbol mod="16">6</symbol>
+    </key>
+    <key code="86">
+        <symbol mod="0">+</symbol>
+        <symbol mod="12"><name>XF86_Next_VMode</name></symbol>
+    </key>
+    <key code="87">
+        <symbol mod="0"><name>KP_End</name></symbol>
+        <symbol mod="1">1</symbol>
+        <symbol mod="16">1</symbol>
+    </key>
+    <key code="88">
+        <symbol mod="0"><name>KP_Down</name></symbol>
+        <symbol mod="1">2</symbol>
+        <symbol mod="16">2</symbol>
+    </key>
+    <key code="89">
+        <symbol mod="0"><name>KP_Page_Down</name></symbol>
+        <symbol mod="1">3</symbol>
+        <symbol mod="16">3</symbol>
+    </key>
+    <key code="90">
+        <symbol mod="0"><name>KP_Insert</name></symbol>
+        <symbol mod="1">0</symbol>
+        <symbol mod="16">0</symbol>
+    </key>
+    <key code="91">
+        <symbol mod="0"><name>KP_Delete</name></symbol>
+        <symbol mod="1">.</symbol>
+        <symbol mod="16">.</symbol>
+    </key>
+    <key code="92" mod="128">
+        <symbol mod="0"><name>ISO_Level3_Shift</name></symbol>
+    </key>
+    <key code="94">
+        <symbol mod="0">&lt;</symbol>
+        <symbol mod="1">&gt;</symbol>
+        <symbol mod="128">|</symbol>
+        <symbol mod="129">¦</symbol>
+    </key>
+    <key code="95">
+        <symbol mod="0"><name>F11</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_11</name></symbol>
+    </key>
+    <key code="96">
+        <symbol mod="0"><name>F12</name></symbol>
+        <symbol mod="12"><name>XF86_Switch_VT_12</name></symbol>
+    </key>
+    <key code="98">
+        <symbol mod="0"><name>Katakana</name></symbol>
+    </key>
+    <key code="99">
+        <symbol mod="0"><name>Hiragana</name></symbol>
+    </key>
+    <key code="100">
+        <symbol mod="0"><name>Henkan_Mode</name></symbol>
+    </key>
+    <key code="101">
+        <symbol mod="0"><name>Hiragana_Katakana</name></symbol>
+    </key>
+    <key code="102">
+        <symbol mod="0"><name>Muhenkan</name></symbol>
+    </key>
+    <key code="104">
+        <symbol mod="0"><name>KP_Enter</name></symbol>
+    </key>
+    <key code="105" mod="4">
+        <symbol mod="0"><name>Control_R</name></symbol>
+    </key>
+    <key code="106">
+        <symbol mod="0">/</symbol>
+        <symbol mod="12"><name>XF86_Ungrab</name></symbol>
+    </key>
+    <key code="107">
+        <symbol mod="0"><name>Print</name></symbol>
+        <symbol mod="8"><name>Sys_Req</name></symbol>
+    </key>
+    <key code="108" mod="128">
+        <symbol mod="0"><name>ISO_Level3_Shift</name></symbol>
+    </key>
+    <key code="109">
+        <symbol mod="0"><name>Linefeed</name></symbol>
+    </key>
+    <key code="110">
+        <symbol mod="0"><name>Home</name></symbol>
+    </key>
+    <key code="111">
+        <symbol mod="0"><name>Up</name></symbol>
+    </key>
+    <key code="112">
+        <symbol mod="0"><name>Page_Up</name></symbol>
+    </key>
+    <key code="113">
+        <symbol mod="0"><name>Left</name></symbol>
+    </key>
+    <key code="114">
+        <symbol mod="0"><name>Right</name></symbol>
+    </key>
+    <key code="115">
+        <symbol mod="0"><name>End</name></symbol>
+    </key>
+    <key code="116">
+        <symbol mod="0"><name>Down</name></symbol>
+    </key>
+    <key code="117">
+        <symbol mod="0"><name>Page_Down</name></symbol>
+    </key>
+    <key code="118">
+        <symbol mod="0"><name>Insert</name></symbol>
+    </key>
+    <key code="119">
+        <symbol mod="0"><name>Delete</name></symbol>
+    </key>
+    <key code="121">
+        <symbol mod="0"><name>XF86AudioMute</name></symbol>
+    </key>
+    <key code="122">
+        <symbol mod="0"><name>XF86AudioLowerVolume</name></symbol>
+    </key>
+    <key code="123">
+        <symbol mod="0"><name>XF86AudioRaiseVolume</name></symbol>
+    </key>
+    <key code="124">
+        <symbol mod="0"><name>XF86PowerOff</name></symbol>
+    </key>
+    <key code="125">
+        <symbol mod="0">=</symbol>
+    </key>
+    <key code="126">
+        <symbol mod="0">±</symbol>
+    </key>
+    <key code="127">
+        <symbol mod="0"><name>Pause</name></symbol>
+        <symbol mod="4"><name>Break</name></symbol>
+    </key>
+    <key code="129">
+        <symbol mod="0">.</symbol>
+    </key>
+    <key code="130">
+        <symbol mod="0"><name>Hangul</name></symbol>
+    </key>
+    <key code="131">
+        <symbol mod="0"><name>Hangul_Hanja</name></symbol>
+    </key>
+    <key code="133" mod="64">
+        <symbol mod="0"><name>Super_L</name></symbol>
+    </key>
+    <key code="134">
+        <symbol mod="0"><name>Multi_key</name></symbol>
+    </key>
+    <key code="135">
+        <symbol mod="0"><name>Menu</name></symbol>
+    </key>
+    <key code="136">
+        <symbol mod="0"><name>Cancel</name></symbol>
+    </key>
+    <key code="137">
+        <symbol mod="0"><name>Redo</name></symbol>
+    </key>
+    <key code="138">
+        <symbol mod="0"><name>SunProps</name></symbol>
+    </key>
+    <key code="139">
+        <symbol mod="0"><name>Undo</name></symbol>
+    </key>
+    <key code="140">
+        <symbol mod="0"><name>SunFront</name></symbol>
+    </key>
+    <key code="141">
+        <symbol mod="0"><name>XF86Copy</name></symbol>
+    </key>
+    <key code="142">
+        <symbol mod="0"><name>SunOpen</name></symbol>
+    </key>
+    <key code="143">
+        <symbol mod="0"><name>XF86Paste</name></symbol>
+    </key>
+    <key code="144">
+        <symbol mod="0"><name>Find</name></symbol>
+    </key>
+    <key code="145">
+        <symbol mod="0"><name>XF86Cut</name></symbol>
+    </key>
+    <key code="146">
+        <symbol mod="0"><name>Help</name></symbol>
+    </key>
+    <key code="147">
+        <symbol mod="0"><name>XF86MenuKB</name></symbol>
+    </key>
+    <key code="148">
+        <symbol mod="0"><name>XF86Calculator</name></symbol>
+    </key>
+    <key code="150">
+        <symbol mod="0"><name>XF86Sleep</name></symbol>
+    </key>
+    <key code="151">
+        <symbol mod="0"><name>XF86WakeUp</name></symbol>
+    </key>
+    <key code="152">
+        <symbol mod="0"><name>XF86Explorer</name></symbol>
+    </key>
+    <key code="153">
+        <symbol mod="0"><name>XF86Send</name></symbol>
+    </key>
+    <key code="155">
+        <symbol mod="0"><name>XF86Xfer</name></symbol>
+    </key>
+    <key code="156">
+        <symbol mod="0"><name>XF86Launch1</name></symbol>
+    </key>
+    <key code="157">
+        <symbol mod="0"><name>XF86Launch2</name></symbol>
+    </key>
+    <key code="158">
+        <symbol mod="0"><name>XF86WWW</name></symbol>
+    </key>
+    <key code="159">
+        <symbol mod="0"><name>XF86DOS</name></symbol>
+    </key>
+    <key code="160">
+        <symbol mod="0"><name>XF86ScreenSaver</name></symbol>
+    </key>
+    <key code="162">
+        <symbol mod="0"><name>XF86RotateWindows</name></symbol>
+    </key>
+    <key code="163">
+        <symbol mod="0"><name>XF86Mail</name></symbol>
+    </key>
+    <key code="164">
+        <symbol mod="0"><name>XF86Favorites</name></symbol>
+    </key>
+    <key code="165">
+        <symbol mod="0"><name>XF86MyComputer</name></symbol>
+    </key>
+    <key code="166">
+        <symbol mod="0"><name>XF86Back</name></symbol>
+    </key>
+    <key code="167">
+        <symbol mod="0"><name>XF86Forward</name></symbol>
+    </key>
+    <key code="169">
+        <symbol mod="0"><name>XF86Eject</name></symbol>
+    </key>
+    <key code="170">
+        <symbol mod="0"><name>XF86Eject</name></symbol>
+    </key>
+    <key code="171">
+        <symbol mod="0"><name>XF86AudioNext</name></symbol>
+    </key>
+    <key code="172">
+        <symbol mod="0"><name>XF86AudioPlay</name></symbol>
+        <symbol mod="1"><name>XF86AudioPause</name></symbol>
+    </key>
+    <key code="173">
+        <symbol mod="0"><name>XF86AudioPrev</name></symbol>
+    </key>
+    <key code="174">
+        <symbol mod="0"><name>XF86AudioStop</name></symbol>
+        <symbol mod="1"><name>XF86Eject</name></symbol>
+    </key>
+    <key code="175">
+        <symbol mod="0"><name>XF86AudioRecord</name></symbol>
+    </key>
+    <key code="176">
+        <symbol mod="0"><name>XF86AudioRewind</name></symbol>
+    </key>
+    <key code="177">
+        <symbol mod="0"><name>XF86Phone</name></symbol>
+    </key>
+    <key code="179">
+        <symbol mod="0"><name>XF86Tools</name></symbol>
+    </key>
+    <key code="180">
+        <symbol mod="0"><name>XF86HomePage</name></symbol>
+    </key>
+    <key code="181">
+        <symbol mod="0"><name>XF86Reload</name></symbol>
+    </key>
+    <key code="182">
+        <symbol mod="0"><name>XF86Close</name></symbol>
+    </key>
+    <key code="185">
+        <symbol mod="0"><name>XF86ScrollUp</name></symbol>
+    </key>
+    <key code="186">
+        <symbol mod="0"><name>XF86ScrollDown</name></symbol>
+    </key>
+    <key code="187">
+        <symbol mod="0">(</symbol>
+    </key>
+    <key code="188">
+        <symbol mod="0">)</symbol>
+    </key>
+    <key code="189">
+        <symbol mod="0"><name>XF86New</name></symbol>
+    </key>
+    <key code="190">
+        <symbol mod="0"><name>Redo</name></symbol>
+    </key>
+    <key code="200">
+        <symbol mod="0"><name>XF86TouchpadToggle</name></symbol>
+    </key>
+    <key code="203" mod="128">
+        <symbol mod="0"><name>Mode_switch</name></symbol>
+    </key>
+    <key code="204">
+        <symbol mod="1"><name>Alt_L</name></symbol>
+    </key>
+    <key code="205" mod="8">
+        <symbol mod="1"><name>Meta_L</name></symbol>
+    </key>
+    <key code="206" mod="64">
+        <symbol mod="1"><name>Super_L</name></symbol>
+    </key>
+    <key code="207" mod="64">
+        <symbol mod="1"><name>Hyper_L</name></symbol>
+    </key>
+    <key code="208">
+        <symbol mod="0"><name>XF86AudioPlay</name></symbol>
+    </key>
+    <key code="209">
+        <symbol mod="0"><name>XF86AudioPause</name></symbol>
+    </key>
+    <key code="210">
+        <symbol mod="0"><name>XF86Launch3</name></symbol>
+    </key>
+    <key code="211">
+        <symbol mod="0"><name>XF86Launch4</name></symbol>
+    </key>
+    <key code="213">
+        <symbol mod="0"><name>XF86Suspend</name></symbol>
+    </key>
+    <key code="214">
+        <symbol mod="0"><name>XF86Close</name></symbol>
+    </key>
+    <key code="215">
+        <symbol mod="0"><name>XF86AudioPlay</name></symbol>
+    </key>
+    <key code="216">
+        <symbol mod="0"><name>XF86AudioForward</name></symbol>
+    </key>
+    <key code="218">
+        <symbol mod="0"><name>Print</name></symbol>
+    </key>
+    <key code="220">
+        <symbol mod="0"><name>XF86WebCam</name></symbol>
+    </key>
+    <key code="223">
+        <symbol mod="0"><name>XF86Mail</name></symbol>
+    </key>
+    <key code="225">
+        <symbol mod="0"><name>XF86Search</name></symbol>
+    </key>
+    <key code="227">
+        <symbol mod="0"><name>XF86Finance</name></symbol>
+    </key>
+    <key code="229">
+        <symbol mod="0"><name>XF86Shop</name></symbol>
+    </key>
+    <key code="231">
+        <symbol mod="0"><name>Cancel</name></symbol>
+    </key>
+    <key code="232">
+        <symbol mod="0"><name>XF86MonBrightnessDown</name></symbol>
+    </key>
+    <key code="233">
+        <symbol mod="0"><name>XF86MonBrightnessUp</name></symbol>
+    </key>
+    <key code="234">
+        <symbol mod="0"><name>XF86AudioMedia</name></symbol>
+    </key>
+    <key code="235">
+        <symbol mod="0"><name>XF86Display</name></symbol>
+    </key>
+    <key code="236">
+        <symbol mod="0"><name>XF86KbdLightOnOff</name></symbol>
+    </key>
+    <key code="237">
+        <symbol mod="0"><name>XF86KbdBrightnessDown</name></symbol>
+    </key>
+    <key code="238">
+        <symbol mod="0"><name>XF86KbdBrightnessUp</name></symbol>
+    </key>
+    <key code="239">
+        <symbol mod="0"><name>XF86Send</name></symbol>
+    </key>
+    <key code="240">
+        <symbol mod="0"><name>XF86Reply</name></symbol>
+    </key>
+    <key code="241">
+        <symbol mod="0"><name>XF86MailForward</name></symbol>
+    </key>
+    <key code="242">
+        <symbol mod="0"><name>XF86Save</name></symbol>
+    </key>
+    <key code="243">
+        <symbol mod="0"><name>XF86Documents</name></symbol>
+    </key>
+    <key code="244">
+        <symbol mod="0"><name>XF86Battery</name></symbol>
+    </key>
+    <key code="245">
+        <symbol mod="0"><name>XF86Bluetooth</name></symbol>
+    </key>
+    <key code="246">
+        <symbol mod="0"><name>XF86WLAN</name></symbol>
+    </key>
+    <key code="247">
+        <symbol mod="0"><name>XF86UWB</name></symbol>
+    </key>
+</keymap>

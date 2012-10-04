@@ -1,0 +1,145 @@
+<html>
+<head>
+  <title>Florence Virtual Keyboard for Qt - Hello world tutorial</title>
+</head>
+<body>
+  <h1>Florence Virtual Keyboard for Qt - Hello world tutorial</h1>
+  Files:
+  <ul>
+    <li><a href="../../examples/helloworld/helloworld.pro">helloworld.pro</a></li>
+    <li><a href="../../examples/helloworld/main.cpp">main.cpp</a></li>
+    <li><a href="../../examples/helloworld/lineedit.h">lineedit.h</a></li>
+    <li><a href="../../examples/helloworld/lineedit.cpp">lineedit.cpp</a></li>
+  </ul>
+  This tutorial provides step by step instructions to integrate Florence in a Qt application.<br/>
+  By the end of this tutorial you should be able to type Hello world! in a text input widget.<br/>
+  The source code of this tutorial is available in the Florence archive under the examples/helloworld directory.<br/>
+  <br/>
+  <img src="helloworld.png"/>
+  <h2>Building Florence</h2>
+  The first thing to do is to build the widget library from the compressed archive.
+  <ul>
+    <li>Uncompress the archive: <pre><code>tar -xjvf florence-qt.tar.bz2</code></pre></li>
+    <li>Build the library: <pre><code>cd florence-qt/src<br/>qmake<br/>make</code></pre></li>
+    <li>Install the library: <pre><code>sudo make install</code></li></li>
+  </ul>
+  This will create and install a shared library called libflorence_qt.so.<br/>
+  This library contains the keyboard widget.
+  If you want to use this widget in Qt Designer or Qt Creator IDE, you need to build the plugin target:
+  <pre><code>qmake -config plugin
+make
+sudo make install</code></pre>
+  This will build and install the library in the relevant directory for use with the UI Designer.
+  <h2>Preparing the project</h2>
+  Now that you have build the shared library, it is ready to be used in your application.<br/>
+  Create a directory to contain your application:
+  <pre><code>cd ..<br/>mkdir tutorial<br/>cd tutorial</code></pre>
+  <h2>Writing the input widget</h2>
+  The virtual keyboard widget will be used to input text in a line edit widget.
+  The line edit widget must have slots connected to the input signals of the virtual keyboard.
+  We will write a class that implements the slots to receive input from the keyboard.
+  The class inherits from QLineEdit and implements the insertText() and backspace() slots.
+  Create the header file called lineedit.h with this content:
+  <pre><code>#include &lt;QLineEdit&gt;
+
+class LineEdit : public QLineEdit
+{
+    Q_OBJECT
+
+public:
+    LineEdit( QWidget *parent = 0 );
+
+public slots:
+    void insertText( const QString &amp;text );
+    void backSpace();
+
+};</code></pre>
+  The insertText slot will be called to insert the text input from the keyboard.
+  The backspace slot is used to delete the character before the cursor.
+  Create the source file called lineedit.cpp with the following class implementation:
+  <pre><code>#include "lineedit.h"
+
+LineEdit::LineEdit( QWidget *parent )
+    : QLineEdit( parent )
+{
+}
+
+void LineEdit::insertText( const QString &amp;text )
+{
+    insert( text );
+}
+
+void LineEdit::backSpace()
+{
+    backspace();
+}</pre></code>
+  That's it. Our LineEdit widget is ready to receive input from the keyboard.
+  <h2>Integrating Florence with the input widget in a QApplication.</h2>
+  Now that the input widget is ready, we just need to instantiate it in a QApplication and to connect it to a Florence widget. Create a file called main.cpp with that content:
+  <code><pre>#include &lt;QtGui/QApplication&gt;
+#include &lt;QVBoxLayout&gt;
+#include "lineedit.h"
+#include "florence.h"
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+
+    QWidget *widget = new QWidget();
+    widget-&gt;resize( 600, 230 );
+
+    LineEdit *input = new LineEdit( widget );
+
+    Florence *keyboard = new Florence( widget );
+    QObject::connect( keyboard, SIGNAL(inputText(QString)), input, SLOT(insertText(QString)) );
+    QObject::connect( keyboard, SIGNAL(backspace()), input, SLOT(backSpace()) );
+    keyboard-&gt;setFocusProxy( input );
+
+    QVBoxLayout *layout = new QVBoxLayout( widget );
+    layout-&gt;addWidget( input );
+    layout-&gt;addWidget( keyboard );
+
+    widget-&gt;setLayout( layout );
+    widget-&gt;show();
+
+    return a.exec();
+}</pre></code>
+  Line by line walkthrough:<br/>
+  <ul>
+    <li>Instantiate our input widget: <code><pre>LineEdit *input = new LineEdit( widget );</pre></code></li>
+    <li>Instantiate the virtual keyboard: <code><pre>Florence *keyboard = new Florence( widget );</pre></code></li>
+    <li>Connect the input widget slots to the virtual keyboard's signals: <code><pre>QObject::connect( keyboard, SIGNAL(inputText(QString)), input, SLOT(insertText(QString)) );
+QObject::connect( keyboard, SIGNAL(backspace()), input, SLOT(backSpace()) );</pre></code>
+    We just handle the basic signals that are relevant to our hello world application. Florence also emits the return(), tab() and leftTab() signals when the return, tab and left tab keys are activated, respectively.</li><br/>
+    <li>We must make sure our line edit widget does not loose the keyboard focus when the virtual keyboard is used or the cursor is no longer displayed. We do that by creating a focus proxy for the keyboard:<code><pre>keyboard->setFocusProxy( input );</pre></code></li>
+  </ul>
+  <h2>Building the application</h2>
+  Now we need to create a project file for our application.<br/>
+  Create a file named helloworld.pro with this content:
+<code><pre>QT += svg xml
+TARGET = helloworld
+TEMPLATE = app
+SOURCES += main.cpp lineedit.cpp
+HEADERS += lineedit.h
+INCLUDEPATH += ../src
+LIBS += -lflorence_qt</pre></code>
+  Line by line walkthrough:<br/>
+  <ul>
+    <li><code><pre>QT += svg xml</pre></code>Florence depends on the svg and xml modules of Qt. This line is required to build an application that uses Florence.</li>
+    <li><code><pre>TARGET = helloworld</pre></code>This is the name of the target executable we want to build.</li>
+    <li><code><pre>TEMPLATE = app</pre></code>This tells qmake to build an application.</li>
+    <li><code><pre>SOURCES += main.cpp lineedit.cpp
+HEADERS += lineedit.h</pre></code>This is the source files we want to compile.</li>
+    <li><code><pre>INCLUDEPATH += ../src</pre></code>Here we tell where to find the florence.h header file we included in main.cpp. This file is located in the src directory of the florence archive.</li>
+    <li><code><pre>LIBS += -lflorence_qt</pre></code>This line tells qmake to use the shared library we previously installed.</li>
+  </ul>
+  To build the application, you can now run those commands:
+  <code><pre>qmake<br/>make</pre></code>
+  Finally, we can launch the application and input the "Hello world!" text in our input widget:
+  <code><pre>./helloworld</pre></code>
+  <h2>Learning more</h2>
+  You can customize the keyboard to make it look and behave the way you want.<br/>
+  You can compile and run the demo application located in the examples/demo directory to make yourself a better idea of the customization possibilities.<br/>
+  Check the <a href="../html/index.html">reference documentation</a> for a complete list of Florence's member methods and signals.
+</body>
+</html>
