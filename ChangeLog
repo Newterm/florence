@@ -214,3 +214,11 @@
 	* Add sound feedback.
 	* Make keyboard police configurable.
 
+2012-10-06 François Agrech <f.agrech@gmail.com>
+	* Version 0.6.0
+	* A lot of bug fixes.
+	* Deprecate panelapplet.
+	* Move to gtk3 - deprecate gtk2.
+	* Migrate from gconf to gsettings.
+	* Editor improvements.
+

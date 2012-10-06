@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-20 12:33+0200\n"
+"POT-Creation-Date: 2012-10-06 11:58+0200\n"
 "PO-Revision-Date: 2010-11-06 00:15+0000\n"
 "Last-Translator: Alone197711 <gwoger@sibmail.com>\n"
 "Language-Team: Russian <ru@li.org>\n"
@@ -752,53 +752,53 @@ msgstr "123"
 msgid "ABC"
 msgstr "АВС"
 
-#: ../src/florence.c:124
+#: ../src/florence.c:128
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Ошибка загрузки значка florence: %s"
 
-#: ../src/florence.c:215
+#: ../src/florence.c:219
 #, c-format
 msgid "Event error: %s"
 msgstr ""
 
-#: ../src/florence.c:331
+#: ../src/florence.c:335
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr "SPI выключен: невозможно включить автоскрытие."
 
-#: ../src/florence.c:339 ../src/florence.c:341
+#: ../src/florence.c:343 ../src/florence.c:345
 msgid "ATSPI listener register failed"
 msgstr ""
 
-#: ../src/florence.c:358
+#: ../src/florence.c:362
 msgid "AT SPI: problem deregistering focus listener"
 msgstr ""
 
-#: ../src/florence.c:361
+#: ../src/florence.c:365
 msgid "AT SPI: problem deregistering window listener"
 msgstr ""
 
-#: ../src/florence.c:684
+#: ../src/florence.c:688
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Имя разметки: \"%s\""
 
-#: ../src/florence.c:686
+#: ../src/florence.c:690
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr "Версия разметки %s отличается от программной версии %s"
 
-#: ../src/florence.c:717
+#: ../src/florence.c:721
 msgid "Unable to allocate memory for florence"
 msgstr "Невозможно выделить память для florence"
 
-#: ../src/florence.c:731
+#: ../src/florence.c:735
 #, fuzzy
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."
 
-#: ../src/florence.c:735
+#: ../src/florence.c:739
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI было отключено во время компилирования: автоскрытие не работает."

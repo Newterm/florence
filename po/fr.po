@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Florence Gnome virtual keyboard 0.5.3\n"
+"Project-Id-Version: Florence Gnome virtual keyboard 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-20 12:33+0200\n"
-"PO-Revision-Date: 2012-03-29 17:47+0000\n"
+"POT-Creation-Date: 2012-10-06 11:58+0200\n"
+"PO-Revision-Date: 2012-10-06 12:03+0200\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
 "Language: fr\n"
@@ -764,55 +764,55 @@ msgstr "123"
 msgid "ABC"
 msgstr "ABC"
 
-#: ../src/florence.c:124
+#: ../src/florence.c:128
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Erreur de chargement du fichier icone: %s"
 
-#: ../src/florence.c:215
+#: ../src/florence.c:219
 #, c-format
 msgid "Event error: %s"
-msgstr ""
+msgstr "Erreur d'évènement: %s"
 
-#: ../src/florence.c:331
+#: ../src/florence.c:335
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr ""
 "SPI est désactivé: Impossible d'activer le mode 'cacher automatiquement'"
 
-#: ../src/florence.c:339 ../src/florence.c:341
+#: ../src/florence.c:343 ../src/florence.c:345
 msgid "ATSPI listener register failed"
-msgstr ""
+msgstr "Enregistrement de l'écouteur ATSPI échoué"
 
-#: ../src/florence.c:358
+#: ../src/florence.c:362
 msgid "AT SPI: problem deregistering focus listener"
 msgstr "AT SPI: problème de désenregistrement de l'auditeur du point focal"
 
-#: ../src/florence.c:361
+#: ../src/florence.c:365
 msgid "AT SPI: problem deregistering window listener"
 msgstr "AT SPI: problème de désenregistrement de l'auditeur de fenêtre"
 
-#: ../src/florence.c:684
+#: ../src/florence.c:688
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nom de l'agencement du clavier: \"%s\""
 
-#: ../src/florence.c:686
+#: ../src/florence.c:690
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr ""
 "La version de l'agencement %s est différente de la version du programme %s"
 
-#: ../src/florence.c:717
+#: ../src/florence.c:721
 msgid "Unable to allocate memory for florence"
 msgstr "Echec d'allocation de mémoire pour florence"
 
-#: ../src/florence.c:731
+#: ../src/florence.c:735
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI a été désactivé pendant l'exécution: le mode 'cacher automatiquement' "
 "est désactivé."
 
-#: ../src/florence.c:735
+#: ../src/florence.c:739
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI a été désactivé au moment de la compilation: le mode 'cacher "
@@ -903,7 +903,7 @@ msgid "Usage: %s [OPTION]...\n"
 msgstr "Utilisation: %s [OPTION|...\n"
 
 #: ../src/main.c:159
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Options:\n"
 "  -h, --help              display this help and exit\n"
@@ -927,15 +927,15 @@ msgstr ""
 "GNOME\n"
 "  -f, --focus [fenêtre]     sélectionne la fenêtre\n"
 "  -u, --use-config fichier  utilise le fichier de configuration donné en "
-"argument à la place de gconf\n"
+"argument à la place de gsettings\n"
 "\n"
 "Envoyez vos bugs à <f.agrech@gmail.com>\n"
 "Plus d'informations à <http://florence.sourceforge.net>.\n"
 
 #: ../src/settings.c:152
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to parse configuration file <%s>"
-msgstr "Impossible de sauvegarder la configuration dans le fichier %s: %s"
+msgstr "Impossible d'analyser le fichier de configuration <%s>"
 
 #: ../src/settings.c:155
 #, c-format
@@ -943,9 +943,9 @@ msgid "Using configuration file %s"
 msgstr "Utilisation du fichier de configuration %s"
 
 #: ../src/settings.c:156
-#, fuzzy, c-format
+#, c-format
 msgid "Unable to use configuration file %s"
-msgstr "Impossible de sauvegarder la configuration dans le fichier %s: %s"
+msgstr "Impossible d'utiliser le fichier de configuration %s"
 
 #: ../src/settings.c:198
 #, c-format
@@ -953,9 +953,9 @@ msgid "Unable to save configuration to %s: %s"
 msgstr "Impossible de sauvegarder la configuration dans le fichier %s: %s"
 
 #: ../src/settings.c:350
-#, fuzzy, c-format
+#, c-format
 msgid "No GSettings value for %s. Using default."
-msgstr "Pas de valeur gconf pour %s. Utilisation de la valeur par défaut"
+msgstr "Pas de valeur GSettings pour %s. Utilisation de la valeur par défaut"
 
 #: ../src/status.c:38
 msgid "Unable to focus window."
@@ -1075,9 +1075,8 @@ msgid "Unable to allocate memory for css read buffer"
 msgstr "Impossible d'allouer la mémoire pour le buffer de lecture css"
 
 #: ../src/style.c:143
-#, fuzzy
 msgid "Can not parse style file."
-msgstr "Chemin vers le fichier de style du layout"
+msgstr "Impossible d'analyser le fichier de style."
 
 #: ../src/style.c:164
 msgid "Out of memory. Some symbols may not be displayed correctly."
@@ -1285,7 +1284,7 @@ msgstr "Echec de notification"
 
 #: ../src/view.c:475
 msgid "X11 composite extension detected. Semi-transparency is enabled."
-msgstr ""
+msgstr "Extension composite de X11 détectée. La semi-transparence est activée."
 
 #: ../src/view.c:481
 msgid ""
@@ -1328,7 +1327,7 @@ msgstr "Type de touche action inconnu: %s"
 
 #: ../src/key.c:173
 msgid "ATSPI doesn't work. Using Xtst instead."
-msgstr ""
+msgstr "ATSPI ne marche pas. Utilisation de Xtst à la place."
 
 #: ../src/key.c:175
 msgid "Unreachable code"
@@ -1336,7 +1335,7 @@ msgstr "Code impossible à atteindre"
 
 #: ../src/key.c:190
 msgid "ATSPI doesn't work."
-msgstr ""
+msgstr "ATSPI ne marche pas."
 
 #: ../src/key.c:206
 #, c-format
@@ -1494,10 +1493,12 @@ msgid "Unable to allocate memory for ramble"
 msgstr "Echec d'allocation de la mémoire pour le mode balade"
 
 #: ../src/fsm.c:191
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Key %p (type %d): Event %d received : Switching from state %d to %d (fsm %d)"
-msgstr "Touche %p (type %d): Evenement %d reçu : Changement d'état %d vers %d"
+msgstr ""
+"Touche %p (type %d): Evenement %d reçu : Changement d'état depuis %d vers %d "
+"(fsm %d)"
 
 #: ../src/fsm.c:206
 #, c-format
@@ -1512,7 +1513,7 @@ msgstr "Méthode dbus inconnue: <%s>"
 #: ../src/service.c:81
 #, c-format
 msgid "DBus name aquired: %s"
-msgstr ""
+msgstr "Nom DBus acquis: %s"
 
 #: ../src/service.c:89
 msgid "Service name lost."
@@ -1523,9 +1524,9 @@ msgid "Unable to allocate memory for dbus service"
 msgstr "Echec d'allocation de la mémoire pour le service dbus"
 
 #: ../src/service.c:126
-#, fuzzy, c-format
+#, c-format
 msgid "Error emitting terminate signal: %s"
-msgstr "Erreur de chargement du fichier icone: %s"
+msgstr "Erreur en émettant le signal terminer: %s"
 
 #~ msgid "_Preferences..."
 #~ msgstr "_Préférences..."

@@ -1,13 +1,13 @@
-This release introduces some interface improvements:
-There is now a sound feedback when pressing or releasing keys and the police is configurable.
-A new dbus interface has been added to control the keyboard from other processes.
+This release is about GNOME3.
+GTK2, gconf and panelapplet are deprecated, replaced by GTK3 and gsettings.
+A new branch has been created for maintaining gtk2 code.
 
 Changelog:
 
-2012-03-29 François Agrech <f.agrech@gmail.com>
-	* Version 0.5.3
+2012-10-06 François Agrech <f.agrech@gmail.com>
+	* Version 0.6.0
 	* A lot of bug fixes.
-	* Add dbus interface to control the keyboard.
-	* Add sound feedback.
-	* Make keyboard police configurable.
-
+	* Deprecate panelapplet.
+	* Move to gtk3 - deprecate gtk2.
+	* Migrate from gconf to gsettings.
+	* Editor improvements.

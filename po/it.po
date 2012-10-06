@@ -5,9 +5,9 @@
 # François Agrech <f.agrech@gmail.com>, 2012.
 msgid ""
 msgstr ""
-"Project-Id-Version: Florence Gnome virtual keyboard 0.5.3\n"
+"Project-Id-Version: Florence Gnome virtual keyboard 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-08-20 12:33+0200\n"
+"POT-Creation-Date: 2012-10-06 11:58+0200\n"
 "PO-Revision-Date: 2010-04-07 18:45+0100\n"
 "Last-Translator: Pietro Pilolli\n"
 "Language-Team: Italian\n"
@@ -753,55 +753,55 @@ msgstr "F12"
 msgid "ABC"
 msgstr "ABC"
 
-#: ../src/florence.c:124
+#: ../src/florence.c:128
 #, c-format
 msgid "Error loading florence icon: %s"
 msgstr "Errore nel caricamento delle icone di florence: %s"
 
-#: ../src/florence.c:215
+#: ../src/florence.c:219
 #, c-format
 msgid "Event error: %s"
 msgstr ""
 
-#: ../src/florence.c:331
+#: ../src/florence.c:335
 msgid "SPI is disabled: Unable to switch auto-hide mode on."
 msgstr ""
 "SPI non è attivo: Impossibile attivare la modalità a scomparsa automatica.'"
 
-#: ../src/florence.c:339 ../src/florence.c:341
+#: ../src/florence.c:343 ../src/florence.c:345
 msgid "ATSPI listener register failed"
 msgstr ""
 
-#: ../src/florence.c:358
+#: ../src/florence.c:362
 msgid "AT SPI: problem deregistering focus listener"
 msgstr ""
 
-#: ../src/florence.c:361
+#: ../src/florence.c:365
 msgid "AT SPI: problem deregistering window listener"
 msgstr ""
 
-#: ../src/florence.c:684
+#: ../src/florence.c:688
 #, c-format
 msgid "Layout name: \"%s\""
 msgstr "Nome del layout: \"%s\""
 
-#: ../src/florence.c:686
+#: ../src/florence.c:690
 #, c-format
 msgid "Layout version %s is different from program version %s"
 msgstr "La versione del layout %s  è diversa dalla versione del programma %s"
 
-#: ../src/florence.c:717
+#: ../src/florence.c:721
 msgid "Unable to allocate memory for florence"
 msgstr "Impossibile allocare memoria per florence"
 
-#: ../src/florence.c:731
+#: ../src/florence.c:735
 #, fuzzy
 msgid "AT-SPI has been disabled at run time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI è stato disabilitato durante la compilazione; la modalità a scomparsa "
 "automatica è disabilitata"
 
-#: ../src/florence.c:735
+#: ../src/florence.c:739
 msgid "AT-SPI has been disabled at compile time: auto-hide mode is disabled."
 msgstr ""
 "AT-SPI è stato disabilitato durante la compilazione; la modalità a scomparsa "

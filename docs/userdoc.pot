@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2012-08-20 12:33+0200\n"
+"POT-Creation-Date: 2012-10-06 11:58+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -150,7 +150,7 @@ msgid "On Fedora, just use the package manager. From the command line, you can t
 msgstr ""
 
 #: C/florence.xml:45(para)
-msgid "Make sure you have the latest version of Florence (0.5.3 as of March, the 29 of 2012). You can get it at <ulink url=\"http://sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</ulink>"
+msgid "Make sure you have the latest version of Florence (0.6.0 as of March, the 29 of 2012). You can get it at <ulink url=\"http://sourceforge.net/project/platformdownload.php?group_id=217749\">Sourceforge</ulink>"
 msgstr ""
 
 #: C/florence.xml:47(title)
@@ -295,12 +295,12 @@ msgstr ""
 
 #: C/florence.xml:98(userinput)
 #, no-wrap
-msgid "tar -xjvf florence-0.5.3.tar.bz2"
+msgid "tar -xjvf florence-0.6.0.tar.bz2"
 msgstr ""
 
 #: C/florence.xml:99(userinput) C/florence.xml:120(userinput)
 #, no-wrap
-msgid "cd florence-0.5.3"
+msgid "cd florence-0.6.0"
 msgstr ""
 
 #: C/florence.xml:100(userinput)
@@ -968,154 +968,158 @@ msgid "Here is a list of known bugs. Those bugs do not have a fix yet. If you kn
 msgstr ""
 
 #: C/florence.xml:429(para)
-msgid "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs <ulink url=\"http://bugs.freedesktop.org/show_bug.cgi?id=20500\">http://bugs.freedesktop.org/show_bug.cgi?id=20500</ulink> and <ulink url=\"http://bugs.freedesktop.org/show_bug.cgi?id=21971\">http://bugs.freedesktop.org/show_bug.cgi?id=21971</ulink>. As a result, Florence does not track hardware keyboard changes as it should and does not work properly with recent Xorg releases. Workaround: please configure Florence without the xrecord extension (by not using the --with-xrecord option of the configure command)"
+msgid "Xorg RECORD extension is severely broken since Xorg 1.6: see bugs <ulink url=\"http://bugs.freedesktop.org/show_bug.cgi?id=20500\">http://bugs.freedesktop.org/show_bug.cgi?id=20500</ulink> and <ulink url=\"http://bugs.freedesktop.org/show_bug.cgi?id=21971\">http://bugs.freedesktop.org/show_bug.cgi?id=21971</ulink>. As a result, Florence does not track hardware keyboard changes as it should and does not work properly with Xorg 1.6. Workaround: please configure Florence without the xrecord extension (by not using the --with-xrecord option of the configure command). This bug has been fixed in latest Xorg versions."
 msgstr ""
 
-#: C/florence.xml:433(title)
+#: C/florence.xml:430(para)
+msgid "This bug: <ulink url=\"https://bugs.launchpad.net/ubuntu/+source/xorg-server/+bug/837456\">https://bugs.launchpad.net/ubuntu/+source/xorg-server/+bug/837456</ulink> makes the keyboard layout switch to US when a key is pressed in some circumstances. Workaround is to use setxkbmap or add a new layout, as explained in the bug report."
+msgstr ""
+
+#: C/florence.xml:434(title)
 msgid "Hacking"
 msgstr ""
 
-#: C/florence.xml:434(para)
+#: C/florence.xml:435(para)
 msgid "Some extra configuration options are available in GConf (under apps/florence). You can modify configuration parameters from the configuration menu as well as from gconftool-2 or gconf-editor. Each configuration element has a detailed description in Florence gconf schema."
 msgstr ""
 
-#: C/florence.xml:436(title)
+#: C/florence.xml:437(title)
 msgid "Create your own layout"
 msgstr ""
 
-#: C/florence.xml:437(para)
+#: C/florence.xml:438(para)
 msgid "It is possible to create your own keyboard layout if those available by default are not suitable for your needs."
 msgstr ""
 
-#: C/florence.xml:438(para)
+#: C/florence.xml:439(para)
 msgid "The layout files are available in the florence/layouts directory, under the installation data directory that is configured with the --datadir configure option, or the --prefix option if the datadir is not explicitly specified (in this case, it will be $prefix/share, most often this will be /usr/share, so /usr/share/florence/layouts would be the full path)."
 msgstr ""
 
-#: C/florence.xml:439(para)
+#: C/florence.xml:440(para)
 msgid "The easiest way to create one's own layout file is to copy an existing one and to adapt it. The existing ones are florence.xml and compact.xml. Those are XML files with several elements. Those files can be validated with the $datadir/florence/florence.rnc file (relaxng compact syntax), or the equivalent $datadir/florence/relaxng/florence.rng (extended XML relaxng syntax). One can use the xmllint program to validate the layout file against the extended relaxng validation file."
 msgstr ""
 
-#: C/florence.xml:440(para)
+#: C/florence.xml:441(para)
 msgid "The root element of the XML layout file is the &lt;layout&gt; element. It contains the elements &lt;informations&gt;, &lt;keyboard&gt; and several &lt;extension&gt; elements. The &lt;informations&gt; element contains important meta-data about the layout file. Inside, one can modify the date, the author name and the most important: the name of the layout with the &lt;name&gt; element. This is the name that will appear in Florence's settings dialog in order to make it selectable."
 msgstr ""
 
-#: C/florence.xml:441(para)
+#: C/florence.xml:442(para)
 msgid "The layout data are contained in the &lt;keyboard&gt; and &lt;extension&gt; elements."
 msgstr ""
 
-#: C/florence.xml:442(para)
+#: C/florence.xml:443(para)
 msgid "The &lt;keyboard&gt; element contains the main data of the layout. The sub-elements &lt;width&gt; and &lt;height&gt; contain respectively the relative width and height of the main keyboard. Every key must be inside the rectangle defined by those dimensions. Then, one can find a list of &lt;key&gt; elements, each corresponding to one key on the keyboard. each key has a &lt;code&gt; element that defines which key it is. The key code is the keycode of the X server. The keycodes of the real keyboard, as configured in the X server can be obtained with the xmodmap -pke command. The &lt;xpos&gt; and &lt;ypos&gt; elements give the position of the key inside the keyboard. This position is the center of the key. By default, a key has a width of 2 and a height of 2. One can change the size of the key with the optional &lt;width&gt; and &lt;height&gt; elements. The shape of the key will be defined by the selected style. By default, it will use the style element named \"default\". One can assign another shape to the key with the optional &lt;shape&gt; element, that must contain an existing shape name in the selected style."
 msgstr ""
 
-#: C/florence.xml:443(para)
+#: C/florence.xml:444(para)
 msgid "One can then define several &lt;extension&gt; elements. Each extension has a &lt;name&gt; element that will be displayed in the settings dialog to activate or deactivate this extension. The extensions must also define a &lt;identifiant&gt; element in order to identify the extension in a language independent manner. This allow to save the extension preferences in gconf. the &lt;placement&gt; element indicates where the extension must be placed, relatively to the main keyboard. It can take 4 different values: \"right\", \"left\", \"top\" and \"bottom\". If several extensions have the same placement, they will be ordered by the order in which they appear in the layout file. Then comes the &lt;keyboard&gt; element, that is the same as the keyboard element mentioned above and that defines the keys of the extension."
 msgstr ""
 
-#: C/florence.xml:444(para)
+#: C/florence.xml:445(para)
 msgid "The layout file so created in the $datadir/florence/layouts directory will automatically be selectable from the settings dialog of Florence."
 msgstr ""
 
-#: C/florence.xml:445(para)
+#: C/florence.xml:446(para)
 msgid "If you think that your layout file could be of any use to other people than yourself, please, consider sending it by email to f.agrech@gmail.com for future inclusion in Florence distribution."
 msgstr ""
 
-#: C/florence.xml:449(title)
+#: C/florence.xml:450(title)
 msgid "Alternatives"
 msgstr ""
 
-#: C/florence.xml:450(para)
+#: C/florence.xml:451(para)
 msgid "There are other alternative virtual keyboard for GNOME that may fit your needs better than Florence. Here is a list of the main keyboard alternatives."
 msgstr ""
 
-#: C/florence.xml:452(para)
+#: C/florence.xml:453(para)
 msgid "<ulink url=\"http://www.gok.ca/gok\">GOK</ulink> is the default GNOME onscreen keyboard. It provides more features than Florence for disabled people. It can be used with special devices like switches and joysticks. GOK provides complete access to the desktop. It can be used to move and resize windows and to use any widget. It is application aware and provides a predictive dictionary that make it an effcient keyboard. It is more focussed on accessibility than on aestetics. The high number of features makes it more complex. Florence is arguably prettier and easier to use for people who can easily use a pointing device. GOK is the only option for disabled people who can't use a pointing device."
 msgstr ""
 
-#: C/florence.xml:453(para)
+#: C/florence.xml:454(para)
 msgid "<ulink url=\"http://homepage3.nifty.com/tsato/xvkbd\">XVKBD</ulink> is a simple and very mature virtual keyboard. It does not depend on GNOME. Like GOK, it provides word completion. Like Florence, it has an auto-click feature but it lacks an auto-hide mode and does not integrate with GNOME as much as Florence. This is the perfect keyboard for simple window managers. Florence is arguably prettier and better integrated in GNOME."
 msgstr ""
 
-#: C/florence.xml:454(para)
+#: C/florence.xml:455(para)
 msgid "<ulink url=\"https://launchpad.net/onboard\">Onboard</ulink> is the default Ubuntu keyboard. It runs with python, which is common in modern linux distributions. It focuses on simplicity rather than features. It is pretty and easy to use. It is less customizable than Florence and does not provide an auto-hide feature. Perfect for casual usage on Ubuntu."
 msgstr ""
 
-#: C/florence.xml:457(title)
+#: C/florence.xml:458(title)
 msgid "Keyboards features"
 msgstr ""
 
-#: C/florence.xml:467(entry)
+#: C/florence.xml:468(entry)
 msgid "keyboard"
 msgstr ""
 
-#: C/florence.xml:468(entry)
+#: C/florence.xml:469(entry)
 msgid "transparency"
 msgstr ""
 
-#: C/florence.xml:469(entry)
+#: C/florence.xml:470(entry)
 msgid "auto hide"
 msgstr ""
 
-#: C/florence.xml:470(entry)
+#: C/florence.xml:471(entry)
 msgid "auto click"
 msgstr ""
 
-#: C/florence.xml:471(entry)
+#: C/florence.xml:472(entry)
 msgid "scanning"
 msgstr ""
 
-#: C/florence.xml:472(entry)
+#: C/florence.xml:473(entry)
 msgid "word completion"
 msgstr ""
 
-#: C/florence.xml:477(entry)
+#: C/florence.xml:478(entry)
 msgid "Florence"
 msgstr ""
 
-#: C/florence.xml:478(entry) C/florence.xml:479(entry) C/florence.xml:480(entry) C/florence.xml:487(entry) C/florence.xml:488(entry) C/florence.xml:489(entry) C/florence.xml:490(entry) C/florence.xml:496(entry) C/florence.xml:498(entry) C/florence.xml:504(entry)
+#: C/florence.xml:479(entry) C/florence.xml:480(entry) C/florence.xml:481(entry) C/florence.xml:488(entry) C/florence.xml:489(entry) C/florence.xml:490(entry) C/florence.xml:491(entry) C/florence.xml:497(entry) C/florence.xml:499(entry) C/florence.xml:505(entry)
 msgid "Yes"
 msgstr ""
 
-#: C/florence.xml:481(entry) C/florence.xml:482(entry) C/florence.xml:486(entry) C/florence.xml:494(entry) C/florence.xml:495(entry) C/florence.xml:497(entry) C/florence.xml:502(entry) C/florence.xml:503(entry) C/florence.xml:505(entry) C/florence.xml:506(entry)
+#: C/florence.xml:482(entry) C/florence.xml:483(entry) C/florence.xml:487(entry) C/florence.xml:495(entry) C/florence.xml:496(entry) C/florence.xml:498(entry) C/florence.xml:503(entry) C/florence.xml:504(entry) C/florence.xml:506(entry) C/florence.xml:507(entry)
 msgid "No"
 msgstr ""
 
-#: C/florence.xml:485(entry)
+#: C/florence.xml:486(entry)
 msgid "GOK"
 msgstr ""
 
-#: C/florence.xml:493(entry)
+#: C/florence.xml:494(entry)
 msgid "XVKBD"
 msgstr ""
 
-#: C/florence.xml:501(entry)
+#: C/florence.xml:502(entry)
 msgid "Onboard"
 msgstr ""
 
-#: C/florence.xml:511(para)
+#: C/florence.xml:512(para)
 msgid "There are other non-keyboard alternatives that can be used to input text."
 msgstr ""
 
-#: C/florence.xml:514(para)
+#: C/florence.xml:515(para)
 msgid "<ulink url=\"http://www.inference.phy.cam.ac.uk/dasher\">Dasher</ulink> provides a predictive gesture based method to input text. This is a very efficient and natural input method. It can be used to input text only with eye movements when combined with <ulink url=\"http://www.inference.phy.cam.ac.uk/opengazer\">opengazer</ulink>"
 msgstr ""
 
-#: C/florence.xml:517(para)
+#: C/florence.xml:518(para)
 msgid "<ulink url=\"http://risujin.org/cellwriter/\">CellWriter</ulink> is a hand writing recognition tool. It is a good text input method for tablets. CellWriter also provides a virtual keyboard."
 msgstr ""
 
-#: C/florence.xml:522(title)
+#: C/florence.xml:523(title)
 msgid "Getting help"
 msgstr ""
 
-#: C/florence.xml:523(para)
+#: C/florence.xml:524(para)
 msgid "You can get help on the <ulink url=\"https://sourceforge.net/forum/forum.php?forum_id=784280\">forum</ulink>, or you can ask for help by email at f.agrech@gmail.com"
 msgstr ""
 
-#: C/florence.xml:526(title)
+#: C/florence.xml:527(title)
 msgid "Contribute"
 msgstr ""
 
-#: C/florence.xml:527(para)
+#: C/florence.xml:528(para)
 msgid "If you want to help the Florence project, please send an email to f.agrech@gmail.com"
 msgstr ""
 

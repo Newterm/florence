@@ -693,7 +693,7 @@ class Editor:
 		str = str + "\t<name>Unnamed</name>\n"
 		str = str + "\t<author>Anonymous</author>\n"
 		str = str + "\t<date>%s</date>\n"%(time.strftime("%Y-%m-%d", time.gmtime(time.time())))
-		str = str + "\t<florence_version>0.5.3</florence_version>\n"
+		str = str + "\t<florence_version>0.6.0</florence_version>\n"
 		str = str + "</informations>\n"
 		str = str + self.exts.__str__()
 		str = str + "</layout>"
