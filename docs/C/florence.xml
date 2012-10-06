@@ -426,7 +426,8 @@ GtkModulesList=gail:atk-bridge:/usr/lib/gtk-2.0/modules/libkeymouselistener:/usr
 	<title>Known bugs</title>
 	<para>Here is a list of known bugs. Those bugs do not have a fix yet. If you know how to fix one of them, please email the author.</para>
 	<orderedlist>
-		<listitem><para>Xorg RECORD extension is severely broken since Xorg 1.6: see bugs <ulink url="http://bugs.freedesktop.org/show_bug.cgi?id=20500">http://bugs.freedesktop.org/show_bug.cgi?id=20500</ulink> and <ulink url="http://bugs.freedesktop.org/show_bug.cgi?id=21971">http://bugs.freedesktop.org/show_bug.cgi?id=21971</ulink>. As a result, Florence does not track hardware keyboard changes as it should and does not work properly with recent Xorg releases. Workaround: please configure Florence without the xrecord extension (by not using the --with-xrecord option of the configure command)</para></listitem>
+		<listitem><para>Xorg RECORD extension is severely broken since Xorg 1.6: see bugs <ulink url="http://bugs.freedesktop.org/show_bug.cgi?id=20500">http://bugs.freedesktop.org/show_bug.cgi?id=20500</ulink> and <ulink url="http://bugs.freedesktop.org/show_bug.cgi?id=21971">http://bugs.freedesktop.org/show_bug.cgi?id=21971</ulink>. As a result, Florence does not track hardware keyboard changes as it should and does not work properly with Xorg 1.6. Workaround: please configure Florence without the xrecord extension (by not using the --with-xrecord option of the configure command). This bug has been fixed in latest Xorg versions.</para></listitem>
+		<listitem><para>This bug: <ulink url="https://bugs.launchpad.net/ubuntu/+source/xorg-server/+bug/837456">https://bugs.launchpad.net/ubuntu/+source/xorg-server/+bug/837456</ulink> makes the keyboard layout switch to US when a key is pressed in some circumstances. Workaround is to use setxkbmap or add a new layout, as explained in the bug report.</para></listitem>
 	</orderedlist>
 </sect1>
 <sect1 id="hacking">

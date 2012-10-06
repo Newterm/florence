@@ -211,9 +211,9 @@ void flo_focus_event (const AccessibleEvent *event, void *user_data)
 	START_FUNC
 	struct florence *florence=(struct florence *)user_data;
 	gboolean hide=FALSE;
+#ifdef ENABLE_AT_SPI2
 	GError *error=NULL;
 
-#ifdef ENABLE_AT_SPI2
 	AtspiStateSet *state_set=atspi_accessible_get_state_set(event->source);
 	AtspiRole role=atspi_accessible_get_role(event->source, &error);
 	if (error) flo_error(_("Event error: %s"), error->message);
