@@ -8,10 +8,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-21 08:42+0100\n"
+"POT-Creation-Date: 2012-10-06 13:24+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,7 +27,7 @@ msgid ""
 "florence keyboard, linux keyboard"
 msgstr ""
 
-#: home.php:11 home.php:30 tools.php:35
+#: home.php:11 home.php:31 tools.php:35
 msgid "Florence Virtual Keyboard"
 msgstr ""
 
@@ -88,30 +89,37 @@ msgid ""
 "it can be used on any desktop environment."
 msgstr ""
 
-#: home.php:30
+#: home.php:28
+msgid ""
+"Florence is available for GNOME 2 and GNOME 3. Download florence-gtk2 if you "
+"are using GNOME 2. The master version of Florence uses some features of "
+"GNOME 3 that are not available on GNOME 2."
+msgstr ""
+
+#: home.php:31
 msgid "florence-us"
 msgstr ""
 
-#: home.php:33
+#: home.php:34
 msgid "You can browse the full documentation for more informations."
 msgstr ""
 
-#: home.php:36
+#: home.php:37
 msgid "Alternatives"
 msgstr ""
 
-#: home.php:38
+#: home.php:39
 msgid ""
 "If you are looking for an input method for your GNOME desktop, Florence may "
 "suit your needs or you may check the <a href=\"english/alternatives.html"
 "\">alternatives</a> section of the documentation."
 msgstr ""
 
-#: home.php:41
+#: home.php:42
 msgid "License"
 msgstr ""
 
-#: home.php:44
+#: home.php:45
 msgid ""
 "Florence is free software. You are free do use it for any purpose, to modify "
 "it or to hire someone to modify it for you. You are also free to distribute "
@@ -122,17 +130,17 @@ msgid ""
 "licenses/old-licenses/gpl-2.0.html</a>."
 msgstr ""
 
-#: home.php:47
+#: home.php:48
 msgid "Credits"
 msgstr ""
 
-#: home.php:49
+#: home.php:50
 msgid ""
 "Florence is integrated in the <a href=\"http://code.google.com/p/ardesia/"
 "\">Ardesia project</a>"
 msgstr ""
 
-#: home.php:53
+#: home.php:54
 msgid ""
 "Ardesia is the free digital sketchpad software that help you to make colored "
 "free-hand annotations with digital ink everywhere, record it and share on "
@@ -141,7 +149,7 @@ msgid ""
 "your work to the world. Let's create quick sketch and artwork."
 msgstr ""
 
-#: home.php:57
+#: home.php:58
 msgid ""
 "Pietro Pilolli &lt;alpha@paranoici.org&gt; of the Ardesia project has "
 "contributed back a significant amount of code to the Florence project, "
@@ -149,7 +157,7 @@ msgid ""
 "other patches that have yet to be merged."
 msgstr ""
 
-#: home.php:61
+#: home.php:62
 msgid ""
 "Arnaud Andoval &lt;arnaudsandoval@gmail.com&gt;, Stéphane Ancelot &lt;"
 "sancelot@free.fr&gt; and Laurent Bessard &lt;laurent.bessard@gmail.com&gt; "
@@ -157,22 +165,22 @@ msgid ""
 "applet implementation, bug fixes and more patches that have yet to be merged."
 msgstr ""
 
-#: home.php:65
+#: home.php:66
 msgid ""
 "Sourceforge.net is hosting the git repository, this web site, the bug "
 "tracker, the forum, the releases and other useful services at no charge."
 msgstr ""
 
-#: home.php:68
+#: home.php:69
 msgid "SourceForge.net Logo"
 msgstr ""
 
-#: home.php:74
+#: home.php:75
 msgid "Author:"
 msgstr ""
 
-#: home.php:75
-msgid "Last update: 5th of November, 2010"
+#: home.php:76
+msgid "Last update: 6th of October, 2012"
 msgstr ""
 
 #: tools.php:51 tools.php:53

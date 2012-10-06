@@ -25,6 +25,7 @@ echo '<?xml version="1.0" encoding="utf-8" standalone="no"?>'."\n";
 <?php echo _("Florence stays out of your way when you don't need it: it appears on the screen only when you need it. A timer-based auto-click input method is available to help disabled people having difficulties to click. You may also check the new efficient ramble method."); ?>
    <br/><br/>
 <?php echo _("Florence is primarily intended to be used with the GNOME desktop, although it can be used on any desktop environment."); ?>  
+<?php echo _("Florence is available for GNOME 2 and GNOME 3. Download florence-gtk2 if you are using GNOME 2. The master version of Florence uses some features of GNOME 3 that are not available on GNOME 2."); ?>  
 </div>
 <br/>
 	<center><img src="images/<?php echo _("florence-us"); ?>.png" alt="<?php echo _("Florence Virtual Keyboard"); ?>"/></center>
@@ -72,7 +73,7 @@ echo _("Sourceforge.net is hosting the git repository, this web site, the bug tr
 <hr>
 <center>
 <?php echo _("Author:"); ?> <a href="mailto:f.agrech@gmail.com">François Agrech</a><br>
-<?php echo _("Last update: 5th of November, 2010"); ?>
+<?php echo _("Last update: 6th of October, 2012"); ?>
 </center>
 </body>
 </html>

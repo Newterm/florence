@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: florence\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-03-20 19:20+0100\n"
+"POT-Creation-Date: 2012-10-06 13:22+0200\n"
 "PO-Revision-Date: 2011-01-03 11:31+0000\n"
 "Last-Translator: elzadj <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
 "X-Launchpad-Export-Date: 2011-09-03 10:00+0000\n"
 "X-Generator: Launchpad (build 13830)\n"
 
@@ -31,7 +31,7 @@ msgstr ""
 "виртуальная клавиатура, экранная клавиатура, виртуальная клавиатура, "
 "клавиатура GNOME, Флоренция клавиатуры, клавиатуры Linux"
 
-#: home.php:11 home.php:30 tools.php:35
+#: home.php:11 home.php:31 tools.php:35
 msgid "Florence Virtual Keyboard"
 msgstr "Виртуальная клавиатура Florence"
 
@@ -133,21 +133,28 @@ msgstr ""
 "GNOME, хотя она может быть использована на любом рабочем столе окружающей "
 "среды."
 
-#: home.php:30
+#: home.php:28
+msgid ""
+"Florence is available for GNOME 2 and GNOME 3. Download florence-gtk2 if you "
+"are using GNOME 2. The master version of Florence uses some features of "
+"GNOME 3 that are not available on GNOME 2."
+msgstr ""
+
+#: home.php:31
 msgid "florence-us"
 msgstr "florence-ru"
 
-#: home.php:33
+#: home.php:34
 msgid "You can browse the full documentation for more informations."
 msgstr ""
 "Вы можете просмотреть полную документацию для получения дополнительной "
 "информации."
 
-#: home.php:36
+#: home.php:37
 msgid "Alternatives"
 msgstr "Альтернативы"
 
-#: home.php:38
+#: home.php:39
 msgid ""
 "If you are looking for an input method for your GNOME desktop, Florence may "
 "suit your needs or you may check the <a href=\"english/alternatives.html"
@@ -157,11 +164,11 @@ msgstr ""
 "подойти вашим потребностям или вы можете проверить <a href=\"russian/"
 "alternatives.html\"> альтернативы</a> разделе документации."
 
-#: home.php:41
+#: home.php:42
 msgid "License"
 msgstr "Лицензия"
 
-#: home.php:44
+#: home.php:45
 msgid ""
 "Florence is free software. You are free do use it for any purpose, to modify "
 "it or to hire someone to modify it for you. You are also free to distribute "
@@ -177,14 +184,14 @@ msgstr ""
 "модифицированную версию, если вы не добавлять никаких других ограничений. "
 "Если вы хотите распространять это программное обеспечение, пожалуйста, "
 "убедитесь, что вы понимаете все последствия лицензии. Полная лицензия "
-"доступна по адресу <a href=\"http://www.gnu.org/licenses/old-licenses/gpl-"
-"2.0.html\">http://www.gnu.org/licenses/old-licenses/ GPL-2.0.html</a>"
+"доступна по адресу <a href=\"http://www.gnu.org/licenses/old-licenses/"
+"gpl-2.0.html\">http://www.gnu.org/licenses/old-licenses/ GPL-2.0.html</a>"
 
-#: home.php:47
+#: home.php:48
 msgid "Credits"
 msgstr "Благодарности"
 
-#: home.php:49
+#: home.php:50
 msgid ""
 "Florence is integrated in the <a href=\"http://code.google.com/p/ardesia/"
 "\">Ardesia project</a>"
@@ -192,7 +199,7 @@ msgstr ""
 "Флоренция интегрирована в <a href=\"http://code.google.com/p/ardesia/\"> "
 "проекта Ardesia</a>"
 
-#: home.php:53
+#: home.php:54
 msgid ""
 "Ardesia is the free digital sketchpad software that help you to make colored "
 "free-hand annotations with digital ink everywhere, record it and share on "
@@ -207,7 +214,7 @@ msgstr ""
 "импортировать изображения и комментировать ее и распространять вашу работу в "
 "мире. Давайте создадим быстрый набросок и произведений искусства."
 
-#: home.php:57
+#: home.php:58
 msgid ""
 "Pietro Pilolli &lt;alpha@paranoici.org&gt; of the Ardesia project has "
 "contributed back a significant amount of code to the Florence project, "
@@ -219,7 +226,7 @@ msgstr ""
 "оригинальные прогулки метод ввода осуществления, исправляет ошибку и другие "
 "обновления, которые еще не объединены"
 
-#: home.php:61
+#: home.php:62
 msgid ""
 "Arnaud Andoval &lt;arnaudsandoval@gmail.com&gt;, Stéphane Ancelot &lt;"
 "sancelot@free.fr&gt; and Laurent Bessard &lt;laurent.bessard@gmail.com&gt; "
@@ -232,7 +239,7 @@ msgstr ""
 "осуществления, исправляет ошибку и больше патчей, которые еще предстоит "
 "слияние"
 
-#: home.php:65
+#: home.php:66
 msgid ""
 "Sourceforge.net is hosting the git repository, this web site, the bug "
 "tracker, the forum, the releases and other useful services at no charge."
@@ -240,16 +247,17 @@ msgstr ""
 "Sourceforge.net имеет Git репозиторий, этот веб-сайт,  трекер ошибок, форум, "
 "релизы и другие полезные услуги на безвозмездной основе"
 
-#: home.php:68
+#: home.php:69
 msgid "SourceForge.net Logo"
 msgstr "Логотип SourceForge.net"
 
-#: home.php:74
+#: home.php:75
 msgid "Author:"
 msgstr "Автор:"
 
-#: home.php:75
-msgid "Last update: 5th of November, 2010"
+#: home.php:76
+#, fuzzy
+msgid "Last update: 6th of October, 2012"
 msgstr "Последнее обновление: 5 ноября 2010"
 
 #: tools.php:51 tools.php:53

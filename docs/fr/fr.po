@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Florence 0.6.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-10-06 11:58+0200\n"
+"POT-Creation-Date: 2012-10-06 13:21+0200\n"
 "PO-Revision-Date: 2012-10-06 12:07+0200\n"
 "Last-Translator: François Agrech <f.agrech@gmail.com>\n"
 "Language-Team: French <f.agrech@gmail.com>\n"
@@ -21,50 +21,58 @@ msgstr ""
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:179(None)
-msgid "@@image: 'figures/florence.png'; md5=bd13037fc7b66c7ca3661d89a952c53b"
+#, fuzzy
+msgid "@@image: 'figures/florence.png'; md5=a946c1b9b8b3908e0224d6dfc543dec5"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:193(None)
-msgid "@@image: 'figures/minimize.png'; md5=0fc2daf2013827eaf5c831ff6a25aa1a"
+#, fuzzy
+msgid "@@image: 'figures/minimize.png'; md5=cfb045dc8103c2d1c42be11f4bce6620"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:200(None)
+#, fuzzy
 msgid ""
-"@@image: 'figures/configuration.png'; md5=0ec2f7e1aad8378fec6d17f1c1a86ff1"
+"@@image: 'figures/configuration.png'; md5=136d611a5d262b19c4c50f1e41a0cb92"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:207(None)
-msgid "@@image: 'figures/move.png'; md5=32b0d52862e61975a6c39950978132d4"
+#, fuzzy
+msgid "@@image: 'figures/move.png'; md5=05a7b87398d77c963624c6ce151901f7"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:214(None)
-msgid "@@image: 'figures/bigger.png'; md5=ae4e1bdcddd63dba2a035f53377443e8"
+#, fuzzy
+msgid "@@image: 'figures/bigger.png'; md5=05734f9dc42ce905cb2d1ea5d292922e"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:221(None)
-msgid "@@image: 'figures/smaller.png'; md5=a7fdc9ab3652082471da8fd5074b4631"
+#, fuzzy
+msgid "@@image: 'figures/smaller.png'; md5=06d9806f7deba61bbf8c46561abcad8d"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:228(None)
-msgid "@@image: 'figures/close.png'; md5=037b5e344a3f64b91d95cba58d6f1589"
+#, fuzzy
+msgid "@@image: 'figures/close.png'; md5=2c33cb8805596b8d74c1097867c67eec"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
 #. It doesn't matter what you translate it to: it's not used at all.
 #: C/florence.xml:235(None)
-msgid "@@image: 'figures/switch.png'; md5=a413264c084193af6ad147c4c384d09d"
+#, fuzzy
+msgid "@@image: 'figures/switch.png'; md5=b55b9e66547c89be560f652b6585a509"
 msgstr "ok"
 
 #. When image changes, this message will be marked fuzzy or untranslated for you.
@@ -2212,7 +2220,10 @@ msgstr ""
 msgid "translator-credits"
 msgstr "François Agrech <f.agrech@gmail.com> 2008, 2009, 2010"
 
-#~ msgid "@@image: 'figures/style.png'; md5=2e56402545536919f65c2d9153425a52"
+#~ msgid "@@image: 'figures/bigger.png'; md5=ae4e1bdcddd63dba2a035f53377443e8"
+#~ msgstr "ok"
+
+#~ msgid "@@image: 'figures/switch.png'; md5=a413264c084193af6ad147c4c384d09d"
 #~ msgstr "ok"
 
 #~ msgid "2008,2009,2010"
