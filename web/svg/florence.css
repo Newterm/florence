@@ -1,13 +1,18 @@
 .shape {
-	fill: white;
+	fill: black;
 	stroke: gray;
 	stroke-opacity: 35%;
-	stroke-width: 4px;
+	stroke-width: 2px;
+}
+
+.selected {
+	fill: red;
+	stroke: gray;
+	stroke-opacity: 35%;
+	stroke-width: 2px;
 }
 
 .symbol {
 	fill: white;
-	stroke: white;
-	stroke-width: 0px;
 }
 

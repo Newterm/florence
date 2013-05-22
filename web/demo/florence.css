@@ -1,0 +1,41 @@
+.shape {
+	fill: black;
+	stroke: gray;
+	stroke-opacity: 0.35;
+	stroke-width: 2px;
+}
+
+.hover {
+	fill: blue;
+}
+
+.selected {
+	fill: red;
+	stroke: gray;
+	stroke-opacity: 0.35;
+	stroke-width: 2px;
+}
+
+.latched {
+	fill: yellow;
+	stroke: gray;
+	stroke-opacity: 0.35;
+	stroke-width: 2px;
+}
+
+.locked {
+	fill: #FF00FF;
+	stroke: gray;
+	stroke-opacity: 0.35;
+	stroke-width: 2px;
+}
+
+.symbol {
+	fill: white;
+}
+
+svg.symbol {
+	stroke: black;
+	stroke-width: 2px;
+}
+
