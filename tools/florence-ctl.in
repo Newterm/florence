@@ -1,0 +1,41 @@
+#!/usr/bin/python
+
+## 
+# @file florence-ctl.in
+# @brief simple python script that controls florence virtual keyboard over dbus
+# @author Jakub Kotur <qba@newterm.pl>
+# @version @VERSION@
+# @date 2013-07-12
+
+import sys
+import dbus
+
+sys.path.insert(1, '@pythondir@')
+
+def error( msg ) :
+	print msg
+	sys.exit(0)
+
+def get_interface() :
+	try :
+		bus = dbus.SessionBus()
+		florence = bus.get_object('org.florence.Keyboard','/org/florence/Keyboard')
+		iface = dbus.Interface(florence,dbus_interface='org.florence.Keyboard')
+	except dbus.exceptions.DBusException :
+		error('Dbus exception occured:( Florence not started?')
+	else :
+		return iface
+
+if __name__ == '__main__' :
+	if len(sys.argv) != 2 :
+		error( 'Invalid command line options' )
+
+	if sys.argv[1] == 'show' :
+		get_interface().show()
+
+	elif sys.argv[1] == 'hide' :
+		get_interface().hide()
+
+	else :
+		error( 'Uknown option' )
+
