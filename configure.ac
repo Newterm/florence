@@ -164,6 +164,7 @@ AC_CONFIG_FILES([Makefile
                  docs/Makefile
                  docs/florence.1
                  docs/florence_applet.1
+		 tools/Makefile
                  src/Makefile
 		 po/Makefile.in])
 AC_OUTPUT

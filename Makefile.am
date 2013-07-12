@@ -1,6 +1,6 @@
 AUTOMAKE_OPTIONS = dejagnu
 
-SUBDIRS = src data po
+SUBDIRS = src data po tools
 
 RUNTESTDEFAULTFLAGS = --tool style --srcdir $srcdir/testsuite
 
