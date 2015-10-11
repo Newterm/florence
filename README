@@ -11,7 +11,7 @@ It appears on the screen only when you need it.
 There is an auto-click functionality To help people having difficulties to use the 
 click button.
 
-DEPENDANCIES
+DEPENDENCIES
 ************
 
       * gtk >= 2.10
@@ -30,7 +30,7 @@ DEPENDANCIES
 QUICK INSTALL
 *************
 
-      * Make sure you have all the dependancies installed.
+      * Make sure you have all the dependencies installed.
 
         Mandriva:
 
@@ -58,7 +58,7 @@ UNINSTALL
 
       $ su
       # make uninstall
-      (for ubuntu, "sudo make uninstall")
+      (for Ubuntu, "sudo make uninstall")
 
 
 QUICK USAGE
